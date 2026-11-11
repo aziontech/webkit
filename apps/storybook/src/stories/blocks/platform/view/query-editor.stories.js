@@ -10,6 +10,8 @@ import State3 from '../../../../../../../packages/webkit/blocks/platform/view/qu
 import source3 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/query.vue?raw'
 import State4 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/templates.vue'
 import source4 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/templates.vue?raw'
+import State5 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/failed.vue'
+import source5 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/failed.vue?raw'
 
 export default {
   title: "Templates/Platform/View/QueryEditor",
@@ -45,4 +47,9 @@ export const Query = {
 export const Templates = {
   render: () => ({ components: { Block: State4 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "The Editor tab before anything ran, with the Results band ready to execute; the Templates button opens the SQL quick templates drawer, and choosing a card loads its SQL into the editor." }, source: { code: source4 } } }
+}
+
+export const Failed = {
+  render: () => ({ components: { Block: State5 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry." }, source: { code: source5 } } }
 }

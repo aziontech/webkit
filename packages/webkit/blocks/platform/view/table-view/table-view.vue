@@ -56,7 +56,8 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  const daysAgo = (days) => new Date(Date.now() - days * 86_400_000)
+  const referenceTime = Date.UTC(2026, 10, 10, 12)
+  const daysAgo = (days) => new Date(referenceTime - days * 86_400_000)
 
   const resource = (n, owner, days, lastModified, status = 'Live') => {
     const name = `resource-${String(n).padStart(2, '0')}`

@@ -90,6 +90,7 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - Default: live traffic with the summary, the chart and the log filled, and no filters applied.
 - Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a chip.
 - Empty: a workspace with no traffic yet; the summary reads zero, the chart is flat and the log shows No events yet.
+- Failed: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry.
 
 ## Related
 

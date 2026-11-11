@@ -123,6 +123,7 @@ The verdict of each row, in the same hue as its donut slice.
 - Default: results with verdicts, exceptions and the submissions table.
 - Loading: tiles, donut and bar list render their own `Skeleton`, the summary card holds Skeleton lines and the table shows Skeleton rows.
 - Empty: nothing submitted yet; tiles read zero, verdicts and sources keep their box with an `EmptyState`, and the Submissions card drops the filters and the table for one `EmptyState`.
+- Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

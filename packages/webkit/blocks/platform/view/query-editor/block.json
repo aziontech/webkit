@@ -55,6 +55,11 @@
       "name": "Templates",
       "summary": "The Editor tab before anything ran, with the Results band ready to execute; the Templates button opens the SQL quick templates drawer, and choosing a card loads its SQL into the editor.",
       "file": "variants/templates.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry.",
+      "file": "variants/failed.vue"
     }
   ]
 }

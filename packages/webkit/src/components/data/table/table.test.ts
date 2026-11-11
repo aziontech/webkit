@@ -707,6 +707,60 @@ describe('Table (composition + data-driven)', () => {
       expect(view.getAllByRole('row').length).toBeLessThan(60)
     })
 
+    it('under manual sorting, filtering and pagination selects and exports every row while rendering only the window', async () => {
+      const host = document.createElement('div')
+      host.style.width = '1024px'
+      document.body.appendChild(host)
+      const selection = ref<Record<string, boolean>>({})
+      const exported = vi.fn()
+      const tableRef = ref<{ exportCsv: (o?: object) => Promise<void> } | null>(null)
+      const view = render(
+        defineComponent({
+          setup: () => () =>
+            h(Table, {
+              ref: tableRef,
+              columns,
+              data: many,
+              virtual: true,
+              maxHeight: '480px',
+              enableRowSelection: true,
+              manualSorting: true,
+              manualFiltering: true,
+              manualPagination: true,
+              rowSelection: selection.value,
+              'onUpdate:rowSelection': (value: Record<string, boolean>) =>
+                (selection.value = value),
+              onExport: exported
+            })
+        }),
+        { container: host }
+      )
+      expect(view.getAllByRole('row').length - 1).toBeLessThan(60)
+      expect(view.getByTestId('data-table').getAttribute('aria-rowcount')).toBe('10001')
+
+      await fireEvent.click(view.getByLabelText('Select all rows'))
+      await nextTick()
+      expect(Object.keys(selection.value)).toHaveLength(10000)
+      expect(selection.value['9999']).toBe(true)
+
+      const { '42': _dropped, ...rest } = selection.value
+      selection.value = rest
+      await nextTick()
+      await fireEvent.click(view.getByLabelText('Select all rows'))
+      await nextTick()
+      expect(Object.keys(selection.value)).toHaveLength(10000)
+
+      await fireEvent.click(view.getByLabelText('Select all rows'))
+      await nextTick()
+      expect(Object.keys(selection.value)).toHaveLength(0)
+
+      await tableRef.value?.exportCsv({ scope: 'all' })
+      expect(exported).toHaveBeenCalledTimes(1)
+      expect((exported.mock.calls[0][0] as unknown[]).length).toBe(10000)
+      view.unmount()
+      host.remove()
+    })
+
     it('measures rows of mixed heights and keeps the rows in view still while scrolling', async () => {
       const long = 'wrapped text that runs over several lines '.repeat(6)
       const mixed = Array.from({ length: 2000 }, (_, i) => ({

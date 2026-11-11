@@ -106,6 +106,7 @@ crosshair on every card. A legend with totals appears only when a card has more 
 - Editing: handles and resize corners on every card, span tags in the headers, help line visible.
 - Loading: every chart renders its own `Skeleton` inside its card; the layout holds its shape.
 - Empty: nothing recorded yet; each card keeps its place and size and shows its empty state.
+- Failed: the request failed; every card keeps its place, size and header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

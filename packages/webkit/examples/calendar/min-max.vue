@@ -3,10 +3,10 @@
 
   import Calendar from '@aziontech/webkit/calendar'
 
-  const now = new Date()
-  const range = ref(null)
-  const min = new Date(now.getFullYear(), now.getMonth() - 2, now.getDate())
-  const max = new Date(now.getFullYear(), now.getMonth() + 2, now.getDate())
+  const today = new Date(2026, 10, 10)
+  const range = ref({ start: new Date(2026, 10, 3), end: today })
+  const min = new Date(today.getFullYear(), today.getMonth() - 2, today.getDate())
+  const max = new Date(today.getFullYear(), today.getMonth() + 2, today.getDate())
 </script>
 
 <template>

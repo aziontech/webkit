@@ -25,7 +25,7 @@
   const folderPath = ref(['20260622162046/'])
   const rootName = 'acme-assets'
 
-  const file = (size, ext) => ({ size, ext, lastModified: 'Jun 22, 2026, 07:21:21 PM' })
+  const file = (size, ext) => ({ size, ext, lastModified: '2026-06-22T19:21:21Z' })
 
   const SITE_BUILD = {
     'assets/': { children: {} },
@@ -94,8 +94,10 @@
     { label: 'Add folder', value: 'folder', icon: 'pi pi-folder-plus' }
   ]
 
+  const referenceTime = Date.UTC(2026, 10, 10, 12)
+
   const relativeTime = (input) => {
-    const days = Math.round((Date.now() - new Date(input).getTime()) / 86_400_000)
+    const days = Math.round((referenceTime - Date.parse(input)) / 86_400_000)
     if (days < 1) return 'today'
     if (days < 7) return `${days} ${days === 1 ? 'day' : 'days'} ago`
     if (days < 30) {

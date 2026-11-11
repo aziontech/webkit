@@ -393,9 +393,15 @@
     }))
   )
 
+  const leanRows = computed<boolean>(
+    () => props.manualSorting && props.manualFiltering && props.manualPagination
+  )
+  const rowKeyOf = (row: RowRecord): string => String(row[props.rowKey] ?? '')
+  const leanSource: { slice?: { readonly value: RowRecord[] } } = {}
+
   const table = useVueTable({
     get data() {
-      return props.data
+      return leanRows.value && leanSource.slice ? leanSource.slice.value : props.data
     },
     get columns() {
       return tableColumns.value
@@ -423,7 +429,7 @@
         return internalColumnOrder.value
       }
     },
-    getRowId: (row) => String((row as RowRecord)[props.rowKey] ?? ''),
+    getRowId: (row) => rowKeyOf(row as RowRecord),
     enableRowSelection: () => props.enableRowSelection,
     manualSorting: props.manualSorting,
     manualPagination: props.manualPagination,
@@ -469,16 +475,37 @@
   const headers = computed(() => table.getHeaderGroups()[0]?.headers ?? [])
   const visibleColumnKey = computed<string>(() => headers.value.map((h) => h.id).join('|'))
   const rows = computed(() => table.getRowModel().rows)
+  const sourceIds = computed<string[]>(() => (leanRows.value ? props.data.map(rowKeyOf) : []))
+  const rowTotal = computed<number>(() => (leanRows.value ? props.data.length : rows.value.length))
+  const rowIdAt = (index: number): string =>
+    leanRows.value ? (sourceIds.value[index] ?? '') : (rows.value[index]?.id ?? '')
 
   const RESIZE_FALLBACK_MIN_WIDTH = 40
   const resizeWidths = ref<Record<string, number>>({})
   const resizingColumnId = ref<string | null>(null)
   const autoWidths = ref<Record<string, number>>({})
 
-  const selectedRows = computed<RowRecord[]>(() =>
-    table.getSelectedRowModel().rows.map((row) => row.original)
-  )
-  const selectedCount = computed<number>(() => table.getSelectedRowModel().rows.length)
+  const selectedRows = computed<RowRecord[]>(() => {
+    if (!leanRows.value) return table.getSelectedRowModel().rows.map((row) => row.original)
+    const selection = table.getState().rowSelection
+    return props.data.filter((row) => selection[rowKeyOf(row)])
+  })
+  const selectedCount = computed<number>(() => selectedRows.value.length)
+  const pageSelection = computed<'all' | 'some' | 'none'>(() => {
+    const all = leanRows.value
+      ? selectedCount.value === props.data.length
+      : table.getIsAllPageRowsSelected()
+    const some = leanRows.value ? selectedCount.value > 0 : table.getIsSomePageRowsSelected()
+    return all && (some || !leanRows.value) ? 'all' : some ? 'some' : 'none'
+  })
+  const toggleAllPageRows = (value: boolean): void => {
+    if (!leanRows.value) return table.toggleAllPageRowsSelected(value)
+    table.setRowSelection((current) => {
+      const next = { ...current }
+      for (const id of sourceIds.value) value ? (next[id] = true) : delete next[id]
+      return next
+    })
+  }
   const clearSelection = () => table.resetRowSelection()
 
   const editingFilter = ref<AppliedFilter | null>(null)
@@ -521,6 +548,7 @@
   const hasExportListener = (): boolean =>
     Boolean((instance?.vnode.props as Record<string, unknown> | null | undefined)?.['onExport'])
   const resolveExportRows = (scope: 'page' | 'filtered' | 'all'): RowRecord[] => {
+    if (leanRows.value) return props.data
     if (scope === 'all') return table.getCoreRowModel().rows.map((row) => row.original)
     if (scope === 'page') return rows.value.map((row) => row.original)
     return table.getFilteredRowModel().rows.map((row) => row.original)
@@ -635,13 +663,15 @@
   const totalRows = computed<number>(() =>
     props.manualPagination && props.rowCount !== undefined
       ? props.rowCount
-      : table.getFilteredRowModel().rows.length
+      : leanRows.value
+        ? props.data.length
+        : table.getFilteredRowModel().rows.length
   )
   const pageIndex = computed<number>(() => table.getState().pagination.pageIndex)
   const currentPageSize = computed<number>(() => table.getState().pagination.pageSize)
   const skeletonRowCount = computed<number>(() => {
     const displayed = props.paginated
-      ? rows.value.length || currentPageSize.value
+      ? rowTotal.value || currentPageSize.value
       : props.data.length || props.pageSize
     return Math.max(displayed, 1)
   })
@@ -821,8 +851,8 @@
       !virtualActive.value &&
       dataDriven.value &&
       !props.loading &&
-      rows.value.length > LAZY_THRESHOLD &&
-      lazyLimit.value < rows.value.length
+      rowTotal.value > LAZY_THRESHOLD &&
+      lazyLimit.value < rowTotal.value
   )
 
   const rowHeights = new Map<string, number>()
@@ -833,11 +863,11 @@
   )
   const rowOffsets = computed<Float64Array>(() => {
     void heightsVersion.value
-    const list = rows.value
+    const total = rowTotal.value
     const estimate = rowHeight.value
-    const offsets = new Float64Array(list.length + 1)
-    for (let i = 0; i < list.length; i++)
-      offsets[i + 1] = offsets[i] + (rowHeights.get(list[i].id) ?? estimate)
+    const offsets = new Float64Array(total + 1)
+    for (let i = 0; i < total; i++)
+      offsets[i + 1] = offsets[i] + (rowHeights.get(rowIdAt(i)) ?? estimate)
     return offsets
   })
   const indexAt = (offsets: Float64Array, y: number): number => {
@@ -856,14 +886,19 @@
     return first - (first % 2)
   })
   const windowEnd = computed<number>(() => {
-    if (lazyActive.value) return Math.min(rows.value.length, lazyLimit.value)
-    if (!virtualActive.value) return rows.value.length
+    if (lazyActive.value) return Math.min(rowTotal.value, lazyLimit.value)
+    if (!virtualActive.value) return rowTotal.value
     const bottom = scrollTop.value + (viewportClientHeight.value || 640)
     const last = indexAt(rowOffsets.value, bottom) + 1
-    return Math.min(rows.value.length, Math.max(last, windowStart.value) + VIRTUAL_OVERSCAN)
+    return Math.min(rowTotal.value, Math.max(last, windowStart.value) + VIRTUAL_OVERSCAN)
   })
-  const renderedRows = computed(() =>
+  leanSource.slice = computed<RowRecord[]>(() =>
     virtualActive.value || lazyActive.value
+      ? props.data.slice(windowStart.value, windowEnd.value)
+      : props.data
+  )
+  const renderedRows = computed(() =>
+    !leanRows.value && (virtualActive.value || lazyActive.value)
       ? rows.value.slice(windowStart.value, windowEnd.value)
       : rows.value
   )
@@ -872,7 +907,7 @@
     const offsets = rowOffsets.value
     return {
       paddingBlockStart: `${offsets[windowStart.value]}px`,
-      paddingBlockEnd: `${offsets[rows.value.length] - offsets[windowEnd.value]}px`
+      paddingBlockEnd: `${offsets[rowTotal.value] - offsets[windowEnd.value]}px`
     }
   })
   const visibleHeightOf = (el: HTMLElement): number =>
@@ -885,7 +920,12 @@
   }
 
   const rowIndexById = computed<Map<string, number>>(
-    () => new Map(rows.value.map((row, index) => [row.id, index]))
+    () =>
+      new Map(
+        leanRows.value
+          ? sourceIds.value.map((id, index) => [id, index])
+          : rows.value.map((row, index) => [row.id, index])
+      )
   )
   const trackedRows = new Map<string, HTMLElement>()
   const trackedIds = new WeakMap<Element, string>()
@@ -964,7 +1004,7 @@
   )
 
   const lazyGap = computed<number>(() =>
-    lazyActive.value ? (rows.value.length - windowEnd.value) * rowHeight.value : 0
+    lazyActive.value ? (rowTotal.value - windowEnd.value) * rowHeight.value : 0
   )
   const windowed = computed<boolean>(() => virtualActive.value || lazyActive.value)
   const lazySentinel = ref<HTMLElement | null>(null)
@@ -975,7 +1015,7 @@
     const rootBottom = entry.rootBounds?.bottom ?? globalThis.innerHeight
     const reach = rootBottom + LAZY_MARGIN - entry.boundingClientRect.top
     const extra = Math.max(LAZY_CHUNK, Math.ceil(reach / rowHeight.value) + LAZY_CHUNK / 2)
-    lazyLimit.value = Math.min(rows.value.length, lazyLimit.value + extra)
+    lazyLimit.value = Math.min(rowTotal.value, lazyLimit.value + extra)
   }
   const observeSentinel = (): void => {
     lazyObserver?.disconnect()
@@ -1152,7 +1192,7 @@
     :data-density="density"
     :data-wrap="wrapLines || null"
     :aria-busy="loading || undefined"
-    :aria-rowcount="windowed ? rows.length + 1 : undefined"
+    :aria-rowcount="windowed ? rowTotal + 1 : undefined"
     :style="viewportHeightVar"
     class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-xxs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
   >
@@ -1229,10 +1269,10 @@
                 <Checkbox
                   v-if="!stacked"
                   binary
-                  :model-value="table.getIsAllPageRowsSelected()"
-                  :indeterminate="table.getIsSomePageRowsSelected()"
+                  :model-value="pageSelection === 'all'"
+                  :indeterminate="pageSelection === 'some'"
                   :aria-label="t('table.selectAll')"
-                  @update:model-value="(v) => table.toggleAllPageRowsSelected(!!v)"
+                  @update:model-value="(v) => toggleAllPageRows(!!v)"
                 />
               </TableHeadCell>
               <TableHeadCell
@@ -1255,13 +1295,15 @@
                   :name="'header-' + header.column.id"
                   :column="header.column"
                 />
-                <template v-else>{{ header.column.columnDef.header }}</template>
+                <template v-else-if="header.column.columnDef.header">{{
+                  header.column.columnDef.header
+                }}</template>
               </TableHeadCell>
             </TableRow>
           </TableHeader>
 
           <div
-            v-if="stacked && enableRowSelection && !loading && rows.length > 0"
+            v-if="stacked && enableRowSelection && !loading && rowTotal > 0"
             role="presentation"
             :data-testid="`${testId}__stacked-select-all`"
             class="flex min-h-10 items-center gap-(--spacing-xs) px-(--spacing-sm) pt-(--spacing-xs)"
@@ -1269,9 +1311,9 @@
             <Checkbox
               binary
               :input-id="selectAllId"
-              :model-value="table.getIsAllPageRowsSelected()"
-              :indeterminate="table.getIsSomePageRowsSelected()"
-              @update:model-value="(v) => table.toggleAllPageRowsSelected(!!v)"
+              :model-value="pageSelection === 'all'"
+              :indeterminate="pageSelection === 'some'"
+              @update:model-value="(v) => toggleAllPageRows(!!v)"
             />
             <label
               :for="selectAllId"
@@ -1333,7 +1375,7 @@
             @enter-cancelled="onBodyEntered"
           >
             <TableBody
-              v-if="!loading && rows.length > 0"
+              v-if="!loading && rowTotal > 0"
               key="rows"
               :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
               :style="virtualPadding"
@@ -1423,7 +1465,7 @@
             enter-to-class="opacity-100"
           >
             <div
-              v-if="!loading && rows.length === 0"
+              v-if="!loading && rowTotal === 0"
               role="presentation"
               :data-testid="`${testId}__empty`"
               class="w-full"

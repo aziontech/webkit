@@ -3,7 +3,7 @@
   "name": "AttributeEditor",
   "title": "Templates/Platform/Edit/AttributeEditor",
   "surface": "product",
-  "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. Each variable is entered as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `PageHeader`, `SettingsSection`, `TableRoot`, `Card`, `CopyButton`, `Avatar`, `DropdownMenu`, `Popover`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.",
+  "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer each variable is entered as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `CopyButton`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -24,9 +24,11 @@
     "key value editor",
     "attribute editor",
     ".env upload",
-    "editor de chave e valor"
+    "editor de chave e valor",
+    "delete variable",
+    "clone variable"
   ],
-  "skills": ["webkit-lists", "webkit-form", "webkit-create-surface"],
+  "skills": ["webkit-lists", "webkit-tables", "webkit-form", "webkit-create-surface"],
   "primary": {
     "name": "List",
     "file": "attribute-editor.vue"

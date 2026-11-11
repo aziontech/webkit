@@ -112,6 +112,7 @@ when it opened, and its band.
 - Default: the scored period.
 - Loading: the chart, rankings and trackers render their own `Skeleton`; incidents hold Skeleton rows.
 - Empty: a period with no samples; the score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
+- Failed: the request failed; the score shows a dash, and every region keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

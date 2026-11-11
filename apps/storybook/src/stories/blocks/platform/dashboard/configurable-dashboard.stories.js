@@ -8,6 +8,8 @@ import State2 from '../../../../../../../packages/webkit/blocks/platform/dashboa
 import source2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/configurable-dashboard/variants/loading.vue?raw'
 import State3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/configurable-dashboard/variants/empty.vue'
 import source3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/configurable-dashboard/variants/empty.vue?raw'
+import State4 from '../../../../../../../packages/webkit/blocks/platform/dashboard/configurable-dashboard/variants/failed.vue'
+import source4 from '../../../../../../../packages/webkit/blocks/platform/dashboard/configurable-dashboard/variants/failed.vue?raw'
 
 export default {
   title: "Templates/Platform/Dashboard/ConfigurableDashboard",
@@ -38,4 +40,9 @@ export const Loading = {
 export const Empty = {
   render: () => ({ components: { Block: State3 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "Nothing recorded yet. Each card keeps its place and size and shows its empty state, so the reader can still arrange the dashboard before any data arrives." }, source: { code: source3 } } }
+}
+
+export const Failed = {
+  render: () => ({ components: { Block: State4 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The request for the cards failed: every card keeps its place, size and header, with a danger Alert that names the card that did not load and offers Retry." }, source: { code: source4 } } }
 }

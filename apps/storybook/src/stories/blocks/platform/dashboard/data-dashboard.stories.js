@@ -6,6 +6,8 @@ import State1 from '../../../../../../../packages/webkit/blocks/platform/dashboa
 import source1 from '../../../../../../../packages/webkit/blocks/platform/dashboard/data-dashboard/variants/loading.vue?raw'
 import State2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/data-dashboard/variants/empty.vue'
 import source2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/data-dashboard/variants/empty.vue?raw'
+import State3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/data-dashboard/variants/failed.vue'
+import source3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/data-dashboard/variants/failed.vue?raw'
 
 export default {
   title: "Templates/Platform/Dashboard/DataDashboard",
@@ -31,4 +33,9 @@ export const Loading = {
 export const Empty = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "No usage recorded yet: each tile shows a dash, and every chart and the table explain that nothing was recorded in the period." }, source: { code: source2 } } }
+}
+
+export const Failed = {
+  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry." }, source: { code: source3 } } }
 }

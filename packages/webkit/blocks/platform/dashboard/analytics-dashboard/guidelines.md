@@ -127,6 +127,7 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - Default: the populated dashboard for the period.
 - Loading: every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
 - Empty: no traffic in the period; tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
+- Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

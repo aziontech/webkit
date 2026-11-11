@@ -61,14 +61,16 @@ the band is one `useCollection` call:
   import Table from '@aziontech/webkit/table'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
-  const { tableProps, propertyFilterProps, preferencesProps, status, clearFilters } = useCollection({
-    items: applications, // client mode; server mode passes `fetch` instead
-    columns,
-    propertyFiltering: { properties },
-    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-    preferences: { storageKey: 'applications-table' },
-    url: true
-  })
+  const { tableProps, propertyFilterProps, preferencesProps, status, clearFilters } = useCollection(
+    {
+      items: applications, // client mode; server mode passes `fetch` instead
+      columns,
+      propertyFiltering: { properties },
+      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+      preferences: { storageKey: 'applications-table' },
+      url: true
+    }
+  )
 </script>
 
 <template>
@@ -166,14 +168,14 @@ every page that keeps them in loose refs gets one of them wrong (a filter that l
 selection that forgets the other pages, a sort the URL does not carry). `useCollection` holds all five
 and returns props for every component that shows them:
 
-| Return               | Bind on                 | Carries                                                                  |
-| -------------------- | ----------------------- | ------------------------------------------------------------------------ |
-| `tableProps`         | `Table`                 | one page of rows, ordered/visible columns, sorting, pagination, selection, density, wrap, stripes |
-| `paginationProps`    | `Pagination`            | page, total, page size and its options                                   |
-| `propertyFilterProps`| `PropertyFilter`        | the query, the properties, the match count                               |
-| `filterProps`        | `Input`                 | free text only (`v-model`), for a list too small for properties          |
-| `preferencesProps`   | `CollectionPreferences` | the saved preferences, the columns, the page sizes                       |
-| `cardsProps`         | `Cards`                 | one page of items, the selection mode and keys                           |
+| Return                | Bind on                 | Carries                                                                                           |
+| --------------------- | ----------------------- | ------------------------------------------------------------------------------------------------- |
+| `tableProps`          | `Table`                 | one page of rows, ordered/visible columns, sorting, pagination, selection, density, wrap, stripes |
+| `paginationProps`     | `Pagination`            | page, total, page size and its options                                                            |
+| `propertyFilterProps` | `PropertyFilter`        | the query, the properties, the match count                                                        |
+| `filterProps`         | `Input`                 | free text only (`v-model`), for a list too small for properties                                   |
+| `preferencesProps`    | `CollectionPreferences` | the saved preferences, the columns, the page sizes                                                |
+| `cardsProps`          | `Cards`                 | one page of items, the selection mode and keys                                                    |
 
 Plus `status`, `totalCount`, `selectedCount`, `selectedItems`, `allMatchingSelected`, and the actions
 (`setQuery`, `clearFilters`, `setPage`, `selectPage`, `selectAllMatching`, `clearSelection`, `refresh`, …).

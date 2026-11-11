@@ -114,6 +114,7 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 - Default: the populated usage page.
 - Loading: `Skeleton`s hold every tile, chart and table row in place.
 - Empty: no usage recorded yet; each tile shows a dash, and every chart and the table explain that nothing was recorded.
+- Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

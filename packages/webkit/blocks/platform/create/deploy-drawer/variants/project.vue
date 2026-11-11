@@ -7,6 +7,7 @@
   import RadioButton from '@aziontech/webkit/radio-button'
   import Separator from '@aziontech/webkit/separator'
   import Drawer from '@aziontech/webkit/drawer'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
@@ -19,7 +20,6 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import Popover from '@aziontech/webkit/popover'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Tag from '@aziontech/webkit/tag'
   import { computed, reactive, ref, watch } from 'vue'
@@ -280,12 +280,12 @@
                           </Item.Description>
                         </Item.Content>
                         <Item.Actions v-if="!row.note">
-                          <Popover
+                          <DropdownMenu
                             v-model:open="versionOpen[row.key]"
                             placement="bottom-end"
-                            width="small"
+                            @select="(event, id) => pickVersion(row, String(id))"
                           >
-                            <Popover.Trigger>
+                            <DropdownMenu.Trigger>
                               <Button
                                 label="Change version"
                                 kind="outlined"
@@ -294,10 +294,10 @@
                                 icon-position="trailing"
                                 :disabled="!row.versions.length"
                               />
-                            </Popover.Trigger>
-                            <Popover.Content>
+                            </DropdownMenu.Trigger>
+                            <template #top>
                               <div
-                                class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
+                                class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
                               >
                                 <p class="text-label-sm text-(--text-muted)">
                                   {{ versionSummary(row) }}
@@ -316,57 +316,47 @@
                                   </template>
                                 </Input>
                               </div>
-
-                              <div
-                                class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
+                            </template>
+                            <DropdownMenu.Group>
+                              <DropdownMenu.Option
+                                v-for="entry in row.versions"
+                                :key="entry.id"
+                                :value="entry.id"
+                                :label="entry.name"
+                                :selected="entry.id === versionOf(row).id"
+                                :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
                               >
-                                <button
-                                  v-for="entry in row.versions"
-                                  :key="entry.id"
-                                  type="button"
-                                  :aria-current="entry.id === versionOf(row).id || undefined"
-                                  class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                  @click="pickVersion(row, entry.id)"
-                                >
-                                  <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
-                                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                      <span class="truncate text-body-sm text-(--text-default)">
-                                        {{ entry.name }}
-                                      </span>
-                                      <Tag
-                                        v-if="entry.active"
-                                        label="Active"
-                                        severity="success"
-                                        size="small"
-                                        class="shrink-0"
-                                      />
-                                    </span>
-                                    <span
-                                      class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
-                                    >
-                                      <Avatar
-                                        :alt="entry.author"
-                                        :label="entry.author"
-                                        size="small"
-                                        kind="square"
-                                        class="shrink-0"
-                                      />
-                                      <span class="truncate"
-                                        >{{ entry.author }} · {{ entry.createdAgo }}</span
-                                      >
-                                    </span>
-                                  </span>
-                                  <i
-                                    v-if="entry.id === versionOf(row).id"
-                                    class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
-                                    aria-hidden="true"
+                                <template #left>
+                                  <Avatar
+                                    :alt="entry.author"
+                                    :label="entry.author"
+                                    size="small"
+                                    kind="square"
                                   />
-                                </button>
-                              </div>
-
+                                </template>
+                                <span class="inline-flex min-w-0 items-center gap-(--spacing-xs)">
+                                  <span class="truncate">{{ entry.name }}</span>
+                                  <Tag
+                                    v-if="entry.active"
+                                    label="Active"
+                                    severity="success"
+                                    size="small"
+                                    class="shrink-0"
+                                  />
+                                </span>
+                                <template #right>
+                                  <span class="text-body-xs text-(--text-muted)">{{
+                                    entry.createdAgo
+                                  }}</span>
+                                </template>
+                              </DropdownMenu.Option>
+                            </DropdownMenu.Group>
+                            <template
+                              v-if="row.total > row.versions.length"
+                              #bottom
+                            >
                               <div
-                                v-if="row.total > row.versions.length"
-                                class="border-t border-(--border-default) p-(--spacing-xxs)"
+                                class="border-t border-(--border-default) px-(--spacing-xxs) pt-(--spacing-xxs)"
                               >
                                 <Button
                                   :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
@@ -375,14 +365,8 @@
                                   class="w-full"
                                 />
                               </div>
-
-                              <span
-                                class="sr-only"
-                                role="status"
-                                >{{ versionSummary(row) }}</span
-                              >
-                            </Popover.Content>
-                          </Popover>
+                            </template>
+                          </DropdownMenu>
                         </Item.Actions>
                       </Item>
                       <template v-if="row.owner">
@@ -446,12 +430,14 @@
                                         </Item.Description>
                                       </Item.Content>
                                       <Item.Actions v-if="!dependency.note">
-                                        <Popover
+                                        <DropdownMenu
                                           v-model:open="versionOpen[dependency.key]"
                                           placement="bottom-end"
-                                          width="small"
+                                          @select="
+                                            (event, id) => pickVersion(dependency, String(id))
+                                          "
                                         >
-                                          <Popover.Trigger>
+                                          <DropdownMenu.Trigger>
                                             <Button
                                               label="Change version"
                                               kind="outlined"
@@ -460,10 +446,10 @@
                                               icon-position="trailing"
                                               :disabled="!dependency.versions.length"
                                             />
-                                          </Popover.Trigger>
-                                          <Popover.Content>
+                                          </DropdownMenu.Trigger>
+                                          <template #top>
                                             <div
-                                              class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
+                                              class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
                                             >
                                               <p class="text-label-sm text-(--text-muted)">
                                                 {{ versionSummary(dependency) }}
@@ -482,66 +468,49 @@
                                                 </template>
                                               </Input>
                                             </div>
-
-                                            <div
-                                              class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
+                                          </template>
+                                          <DropdownMenu.Group>
+                                            <DropdownMenu.Option
+                                              v-for="entry in dependency.versions"
+                                              :key="entry.id"
+                                              :value="entry.id"
+                                              :label="entry.name"
+                                              :selected="entry.id === versionOf(dependency).id"
+                                              :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
                                             >
-                                              <button
-                                                v-for="entry in dependency.versions"
-                                                :key="entry.id"
-                                                type="button"
-                                                :aria-current="
-                                                  entry.id === versionOf(dependency).id || undefined
-                                                "
-                                                class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                                @click="pickVersion(dependency, entry.id)"
-                                              >
-                                                <span
-                                                  class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)"
-                                                >
-                                                  <span
-                                                    class="flex min-w-0 items-center gap-(--spacing-xs)"
-                                                  >
-                                                    <span
-                                                      class="truncate text-body-sm text-(--text-default)"
-                                                    >
-                                                      {{ entry.name }}
-                                                    </span>
-                                                    <Tag
-                                                      v-if="entry.active"
-                                                      label="Active"
-                                                      severity="success"
-                                                      size="small"
-                                                      class="shrink-0"
-                                                    />
-                                                  </span>
-                                                  <span
-                                                    class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
-                                                  >
-                                                    <Avatar
-                                                      :alt="entry.author"
-                                                      :label="entry.author"
-                                                      size="small"
-                                                      kind="square"
-                                                      class="shrink-0"
-                                                    />
-                                                    <span class="truncate"
-                                                      >{{ entry.author }} ·
-                                                      {{ entry.createdAgo }}</span
-                                                    >
-                                                  </span>
-                                                </span>
-                                                <i
-                                                  v-if="entry.id === versionOf(dependency).id"
-                                                  class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
-                                                  aria-hidden="true"
+                                              <template #left>
+                                                <Avatar
+                                                  :alt="entry.author"
+                                                  :label="entry.author"
+                                                  size="small"
+                                                  kind="square"
                                                 />
-                                              </button>
-                                            </div>
-
+                                              </template>
+                                              <span
+                                                class="inline-flex min-w-0 items-center gap-(--spacing-xs)"
+                                              >
+                                                <span class="truncate">{{ entry.name }}</span>
+                                                <Tag
+                                                  v-if="entry.active"
+                                                  label="Active"
+                                                  severity="success"
+                                                  size="small"
+                                                  class="shrink-0"
+                                                />
+                                              </span>
+                                              <template #right>
+                                                <span class="text-body-xs text-(--text-muted)">{{
+                                                  entry.createdAgo
+                                                }}</span>
+                                              </template>
+                                            </DropdownMenu.Option>
+                                          </DropdownMenu.Group>
+                                          <template
+                                            v-if="dependency.total > dependency.versions.length"
+                                            #bottom
+                                          >
                                             <div
-                                              v-if="dependency.total > dependency.versions.length"
-                                              class="border-t border-(--border-default) p-(--spacing-xxs)"
+                                              class="border-t border-(--border-default) px-(--spacing-xxs) pt-(--spacing-xxs)"
                                             >
                                               <Button
                                                 :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
@@ -550,14 +519,8 @@
                                                 class="w-full"
                                               />
                                             </div>
-
-                                            <span
-                                              class="sr-only"
-                                              role="status"
-                                              >{{ versionSummary(dependency) }}</span
-                                            >
-                                          </Popover.Content>
-                                        </Popover>
+                                          </template>
+                                        </DropdownMenu>
                                       </Item.Actions>
                                     </Item>
                                   </div>

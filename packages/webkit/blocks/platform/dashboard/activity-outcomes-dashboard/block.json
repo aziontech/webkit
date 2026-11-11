@@ -34,6 +34,11 @@
       "name": "Empty",
       "summary": "A time range with no request. The tiles show a dash with no delta, the chart and the breakdowns keep their box with an empty state, and the log says what fills it and to widen the time range.",
       "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+      "file": "variants/failed.vue"
     }
   ]
 }

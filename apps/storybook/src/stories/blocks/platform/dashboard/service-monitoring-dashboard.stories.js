@@ -6,6 +6,8 @@ import State1 from '../../../../../../../packages/webkit/blocks/platform/dashboa
 import source1 from '../../../../../../../packages/webkit/blocks/platform/dashboard/service-monitoring-dashboard/variants/loading.vue?raw'
 import State2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/service-monitoring-dashboard/variants/empty.vue'
 import source2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/service-monitoring-dashboard/variants/empty.vue?raw'
+import State3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/service-monitoring-dashboard/variants/failed.vue'
+import source3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/service-monitoring-dashboard/variants/failed.vue?raw'
 
 export default {
   title: "Templates/Platform/Dashboard/ServiceMonitoringDashboard",
@@ -31,4 +33,9 @@ export const Loading = {
 export const Empty = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "No traffic yet: the tiles show a dash, both charts explain that metrics appear once a service serves requests, and the rail reads No open alerts." }, source: { code: source2 } } }
+}
+
+export const Failed = {
+  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The request for the window failed: each service tile reads as a dash, and both charts and the Open alerts rail show a danger Alert that names what did not load and offers Retry." }, source: { code: source3 } } }
 }

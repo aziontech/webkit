@@ -368,7 +368,7 @@
     }, 900)
   }
 
-  const cancel = () => {
+  const discard = () => {
     Object.assign(form, saved.value)
     submitted.value = false
   }
@@ -970,11 +970,11 @@
             <template #actions>
               <Button
                 type="button"
-                label="Cancel"
+                label="Discard"
                 kind="outlined"
                 size="medium"
                 :disabled="submitting"
-                @click="cancel"
+                @click="discard"
               />
               <Button
                 label="Save"

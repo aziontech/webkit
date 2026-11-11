@@ -125,6 +125,7 @@ resource (`web-app share of total`). The bar is a visual aid; the number is the 
 - Default: the populated breakdown for the period.
 - Loading: every tile, both charts and the table hold their place with a `Skeleton`.
 - Empty: nothing billed in the period; tiles show a dash with no delta or trend, and the stacked chart, donut and table each keep their box with an `EmptyState` that names the reason.
+- Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

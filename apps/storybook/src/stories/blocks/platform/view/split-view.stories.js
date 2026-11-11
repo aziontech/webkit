@@ -6,6 +6,8 @@ import State1 from '../../../../../../../packages/webkit/blocks/platform/view/sp
 import source1 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/filtered.vue?raw'
 import State2 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/empty.vue'
 import source2 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/empty.vue?raw'
+import State3 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/failed.vue'
+import source3 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/failed.vue?raw'
 
 export default {
   title: "Templates/Platform/View/SplitView",
@@ -31,4 +33,9 @@ export const Filtered = {
 export const Empty = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "A workspace with no traffic yet: the summary reads zero, the chart is flat and the log shows its No events yet state." }, source: { code: source2 } } }
+}
+
+export const Failed = {
+  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The event log request failed: the fields panel stays, and the log pane shows a danger Alert that says the events did not load and offers Retry." }, source: { code: source3 } } }
 }

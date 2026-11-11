@@ -29,13 +29,13 @@ An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the servic
 
 `PanelContent` holds one `fieldset` of `SettingsSection` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches.
 
-### D. Resources card — `Card`, `Separator`, `Item`, `Tag`, `Popover`, `Input`, `Avatar`, `Button` (required)
+### D. Resources card — `Card`, `Separator`, `Item`, `Tag`, `DropdownMenu`, `Input`, `Avatar`, `Button` (required)
 
-`Card :padded="false"` with one small inline `Item` per resource, split by `Separator`s. Each row shows a small `Tag` reading Ready, or a warning tag when no version is ready, and the picked version. Change version, an outlined small `Button`, opens a `Popover` with a search `Input`, the versions with an Active `Tag` and the author `Avatar`, and a transparent Load more `Button`. Disable Change version when there is nothing to change to.
+`Card :padded="false"` with one small inline `Item` per resource, split by `Separator`s. Each row shows a small `Tag` reading Ready, or a warning tag when no version is ready, and the picked version. Change version, an outlined small `Button`, opens a `DropdownMenu`: the summary and a search `Input` in its top slot, one `DropdownMenu.Option` per version (the author `Avatar` on the left, the name with an Active `Tag`, the age on the right, the picked one `selected`), and a transparent Load more `Button` in its bottom slot. The menu gives the rows their roles, arrow-key movement, hover and focus, so the block never re-types them. Disable Change version when there is nothing to change to.
 
-### E. Dependencies — `Accordion`, `Item`, `Tag`, `Popover` (required)
+### E. Dependencies — `Accordion`, `Item`, `Tag`, `DropdownMenu` (required)
 
-A small `Accordion` below the resource rows, collapsed, listing the modules and integrations the service references, each with its own version and Change version popover. Dependencies go out with the deploy, so they are shown even when the user does not change them.
+A small `Accordion` below the resource rows, collapsed, listing the modules and integrations the service references, each with its own version and Change version menu. Dependencies go out with the deploy, so they are shown even when the user does not change them.
 
 ### F. Project — `ToggleGroup`, `Item`, `Tag`, `Tooltip`, `Popover`, `DropdownMenu` (required on a service)
 
@@ -80,7 +80,7 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 
 - The drawer traps focus while open and returns it to the Deploy trigger on close.
 - The `form` and the `ToggleGroup` carry `aria-label`s; the environment group is named by its `aria-label`.
-- The current version in a version popover carries `aria-current`; search inputs have an `aria-label` that matches the placeholder.
+- The version menu is a `role="menu"` moved with the arrow keys, each version a `menuitem` named by its version, author and age; the current one carries `aria-current`; search inputs have an `aria-label` that matches the placeholder.
 - Each impacted environment group has an `aria-label` with its count, e.g. "Projects impacted in Production (3)".
 - Faded sections during a build are `inert`, so keyboard users cannot reach controls that do nothing yet.
 - Glyphs in rows are decorative and carry `aria-hidden="true"`; tags give the state in words.

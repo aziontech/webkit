@@ -35,6 +35,11 @@
       "name": "Empty",
       "summary": "No usage recorded yet: each tile shows a dash, and every chart and the table explain that nothing was recorded in the period.",
       "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+      "file": "variants/failed.vue"
     }
   ]
 }

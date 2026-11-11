@@ -26219,7 +26219,7 @@
    "title": "Templates/Platform/Create/CreateInDrawer",
    "source": "blocks/platform/create/create-in-drawer/create-in-drawer.vue",
    "surface": "product",
-   "summary": "The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer that flags empty required fields only after it is pressed and shows its loading state while the save is in flight. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup` and `RadioButton` choice cards), `Label` and `HelperText` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, a list page whose Create Service drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Instance drawer whose Service select creates the missing service in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. The variants add `PageHeader`, `SettingRow`, the platform shell, `Card`, `Item` and `Switch`.",
+   "summary": "The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer that flags empty required fields only after it is pressed and shows its loading state while the save is in flight. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup` and `RadioButton` choice cards), `Label` and `HelperText` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Instance drawer whose Service select creates the missing service in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. The variants add `PageHeader`, `SettingRow`, the platform shell, `Card`, `Item` and `Switch`.",
    "intents": [
     "create domain",
     "add domain",
@@ -26245,7 +26245,7 @@
     "gaveta de formulário",
     "adicionar registro",
     "formulário lateral",
-    "create service drawer",
+    "add origin drawer",
     "form in drawer",
     "formulário em gaveta",
     "nested drawer",
@@ -26389,7 +26389,7 @@
     },
     {
      "name": "ItemRows",
-     "summary": "An in-context create whose body is the settings layout: a list page whose heading action opens a large right-side drawer, and inside it section-titled groups of `Item` rows, each a small heading over a flush `Card`, saved together by the one Create in the footer. Create service is the example, with General, Runtime and Options. The drawer clears its fields and errors each time it opens, so its content stays in place while it closes. Name and Runtime flag only after Create is pressed. Built from `PageHeader`, `SettingRow`, the platform shell, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Input`, `Select`, `Switch` and `HelperText`."
+     "summary": "An in-context add whose body is the settings layout: an Origins page inside the storefront resource whose heading action opens a large right-side drawer, and inside it section-titled groups of `Item` rows, each a small heading over a flush `Card`, saved together by the one Add Origin in the footer. An origin lives inside its resource, so it adds in a drawer; a first-level resource such as a service creates on a page instead. General, Connection and Options are the sections. The drawer clears its fields and errors each time it opens, so its content stays in place while it closes. Name and Protocol flag only after Add Origin is pressed. Built from `PageHeader`, `SettingRow`, the platform shell, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Input`, `Select`, `Switch` and `HelperText`."
     },
     {
      "name": "NestedDrawer",
@@ -26407,7 +26407,7 @@
    "title": "Templates/Platform/Create/DeployDrawer",
    "source": "blocks/platform/create/deploy-drawer/deploy-drawer.vue",
    "surface": "product",
-   "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version popover, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings publish to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also publish elsewhere. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `Field` choice cards with `RadioButton`, `Input`, `Avatar`, `Tag`, `Spinner`, `Alert`, `Tooltip` and `Button`.",
+   "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings publish to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also publish elsewhere. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `Field` choice cards with `RadioButton`, `Input`, `Avatar`, `Tag`, `Spinner`, `Alert`, `Tooltip` and `Button`.",
    "intents": [
     "deploy drawer",
     "deploy panel",
@@ -27167,6 +27167,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "BarList",
     "Chart",
     "ChartCard",
@@ -27183,6 +27184,7 @@
     "Tag"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/bar-list",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
@@ -27208,6 +27210,10 @@
     {
      "name": "Empty",
      "summary": "A time range with no request. The tiles show a dash with no delta, the chart and the breakdowns keep their box with an empty state, and the log says what fills it and to widen the time range."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/activity-outcomes-dashboard.json"
@@ -27235,6 +27241,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "BarList",
     "Card",
     "Chart",
@@ -27250,6 +27257,7 @@
     "Tag"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/bar-list",
     "@aziontech/webkit/card",
     "@aziontech/webkit/chart",
@@ -27274,6 +27282,10 @@
     {
      "name": "Empty",
      "summary": "A period with no alerts. The tiles show a dash with no delta, and every region keeps its box with an EmptyState that says why it is empty and what to do next."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/alerts-dashboard.json"
@@ -27306,6 +27318,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "Chart",
     "ChartCard",
     "DropdownMenu",
@@ -27321,6 +27334,7 @@
     "Tooltip"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
     "@aziontech/webkit/dropdown-menu",
@@ -27345,6 +27359,10 @@
     {
      "name": "Empty",
      "summary": "No traffic in the period. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that says nothing was recorded."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/analytics-dashboard.json"
@@ -27373,6 +27391,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "Button",
     "Chart",
     "ChartCard",
@@ -27390,6 +27409,7 @@
     "ToggleGroup"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
@@ -27416,6 +27436,10 @@
     {
      "name": "Empty",
      "summary": "Nothing was billed in the selected period. The tiles show a dash with no delta or trend, and the stacked chart, the donut and the table each keep their box with an EmptyState that names the reason."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/composition-dashboard.json"
@@ -27443,6 +27467,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "BarList",
     "Button",
     "Chart",
@@ -27453,6 +27478,7 @@
     "Tag"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/bar-list",
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
@@ -27476,6 +27502,10 @@
     {
      "name": "Empty",
      "summary": "Nothing recorded yet. Each card keeps its place and size and shows its empty state, so the reader can still arrange the dashboard before any data arrives."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the cards failed: every card keeps its place, size and header, with a danger Alert that names the card that did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/configurable-dashboard.json"
@@ -27504,6 +27534,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "Chart",
     "ChartCard",
     "DropdownMenu",
@@ -27519,6 +27550,7 @@
     "Tooltip"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
     "@aziontech/webkit/dropdown-menu",
@@ -27543,6 +27575,10 @@
     {
      "name": "Empty",
      "summary": "No usage recorded yet: each tile shows a dash, and every chart and the table explain that nothing was recorded in the period."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/data-dashboard.json"
@@ -27570,6 +27606,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "Avatar",
     "Button",
     "Card",
@@ -27586,6 +27623,7 @@
     "Tag"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
@@ -27611,6 +27649,10 @@
     {
      "name": "Empty",
      "summary": "A quarter with nothing reported. The tiles show a dash with no delta, every trend card keeps its box with an EmptyState that names the quarter and points to a later one, and the goals and commentary each say what fills them."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the quarter failed: the tiles read as dashes, and every trend card, the goals and the commentary keep their header with a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/executive-summary-dashboard.json"
@@ -27638,6 +27680,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "Button",
     "Chart",
     "ChartCard",
@@ -27651,6 +27694,7 @@
     "TableRoot"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
@@ -27673,6 +27717,10 @@
     {
      "name": "Empty",
      "summary": "The filters match nothing. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that names the filters as the reason and offers Clear filters, which resets the period and the segment."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/funnel-cohort-dashboard.json"
@@ -27699,6 +27747,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "BarList",
     "Card",
     "Chart",
@@ -27713,6 +27762,7 @@
     "Tracker"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/bar-list",
     "@aziontech/webkit/card",
     "@aziontech/webkit/chart",
@@ -27736,6 +27786,10 @@
     {
      "name": "Empty",
      "summary": "A period with no samples. The score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the period failed: the score shows a dash, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/health-score-dashboard.json"
@@ -27865,6 +27919,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "Avatar",
     "Button",
     "Chart",
@@ -27884,6 +27939,7 @@
     "Tag"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
@@ -27912,6 +27968,10 @@
     {
      "name": "Empty",
      "summary": "A project with no tasks yet. The tiles show a dash with no delta or trend, every card keeps its box with an EmptyState that says what will appear there, and the completion card carries the one setup action, Add tasks."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/project-status-dashboard.json"
@@ -27939,6 +27999,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "BarList",
     "Card",
     "ChartCard",
@@ -27956,6 +28017,7 @@
     "Tag"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/bar-list",
     "@aziontech/webkit/card",
     "@aziontech/webkit/chart-card",
@@ -27982,6 +28044,10 @@
     {
      "name": "Empty",
      "summary": "Nothing has been sent for analysis yet. The tiles read zero, the verdicts and sources keep their box with an EmptyState, and the Submissions card drops the filters and the table for one EmptyState that says what fills it."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/scan-results-dashboard.json"
@@ -28009,6 +28075,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "BarList",
     "Button",
     "Chart",
@@ -28029,6 +28096,7 @@
     "Tooltip"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/bar-list",
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
@@ -28058,6 +28126,10 @@
     {
      "name": "Empty",
      "summary": "No security rules set up yet: the tiles read as dashes, and one bordered EmptyState names the reason and offers Add rule set instead of a grid of empty charts."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/security-dashboard.json"
@@ -28085,6 +28157,7 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "Chart",
     "ChartCard",
     "EmptyState",
@@ -28097,6 +28170,7 @@
     "ToggleGroup"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
     "@aziontech/webkit/empty-state",
@@ -28118,6 +28192,10 @@
     {
      "name": "Empty",
      "summary": "No traffic yet: the tiles show a dash, both charts explain that metrics appear once a service serves requests, and the rail reads No open alerts."
+    },
+    {
+     "name": "Failed",
+     "summary": "The request for the window failed: each service tile reads as a dash, and both charts and the Open alerts rail show a danger Alert that names what did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/service-monitoring-dashboard.json"
@@ -28247,7 +28325,7 @@
    "title": "Templates/Platform/Detail/AttachedResources",
    "source": "blocks/platform/detail/attached-resources/attached-resources.vue",
    "surface": "product",
-   "summary": "An attached-resources card in a resource settings tab, here its domains: a borderless table of the addresses the resource answers on, each with its environment, deployment policy and certificate as medium rounded tags and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `TableRoot`, `Tag`, `DropdownMenuRoot`, `IconButton`, `Tooltip` and `Button`.",
+   "summary": "An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `TableRoot`, `Tag`, `DropdownMenuRoot`, `IconButton`, `Tooltip` and `Button`.",
    "intents": [
     "domains section",
     "domains card",
@@ -28273,12 +28351,7 @@
     "DropdownMenuRoot",
     "DropdownMenuTrigger",
     "IconButton",
-    "TableBody",
-    "TableCell",
-    "TableHeadCell",
-    "TableHeader",
     "TableRoot",
-    "TableRow",
     "Tag",
     "Tooltip"
    ],
@@ -28290,12 +28363,7 @@
     "@aziontech/webkit/dropdown-menu-root",
     "@aziontech/webkit/dropdown-menu-trigger",
     "@aziontech/webkit/icon-button",
-    "@aziontech/webkit/table-body",
-    "@aziontech/webkit/table-cell",
-    "@aziontech/webkit/table-head-cell",
-    "@aziontech/webkit/table-header",
     "@aziontech/webkit/table-root",
-    "@aziontech/webkit/table-row",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/tooltip"
    ],
@@ -28862,7 +28930,7 @@
    "title": "Templates/Platform/Edit/AttributeEditor",
    "source": "blocks/platform/edit/attribute-editor/attribute-editor.vue",
    "surface": "product",
-   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. Each variable is entered as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `PageHeader`, `SettingsSection`, `TableRoot`, `Card`, `CopyButton`, `Avatar`, `DropdownMenu`, `Popover`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.",
+   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer each variable is entered as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `CopyButton`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.",
    "intents": [
     "variables",
     "environment variables",
@@ -28879,18 +28947,24 @@
     "key value editor",
     "attribute editor",
     ".env upload",
-    "editor de chave e valor"
+    "editor de chave e valor",
+    "delete variable",
+    "clone variable"
    ],
    "skills": [
     "webkit-lists",
+    "webkit-tables",
     "webkit-form",
     "webkit-create-surface"
    ],
    "components": [
+    "Alert",
     "Avatar",
     "Button",
     "Card",
     "Checkbox",
+    "CollectionPreferences",
+    "ConfirmDialog",
     "CopyButton",
     "Drawer",
     "DrawerClose",
@@ -28900,6 +28974,7 @@
     "DrawerTitle",
     "DrawerTrigger",
     "DropdownMenu",
+    "EmptyState",
     "HelperText",
     "IconButton",
     "Input",
@@ -28910,19 +28985,23 @@
     "PanelContent",
     "PanelFooter",
     "PanelHeader",
-    "Popover",
+    "PropertyFilter",
     "SettingsSection",
     "Switch",
     "TableRoot",
     "Textarea",
     "ToggleGroup",
-    "Tooltip"
+    "Tooltip",
+    "use-collection"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/checkbox",
+    "@aziontech/webkit/collection-preferences",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-close",
@@ -28932,6 +29011,7 @@
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/drawer-trigger",
     "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/empty-state",
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
@@ -28942,13 +29022,14 @@
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
-    "@aziontech/webkit/popover",
+    "@aziontech/webkit/property-filter",
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
    ],
    "primary": "List",
    "guidelinesSummary": "A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step.",
@@ -29099,7 +29180,7 @@
    "title": "Templates/Platform/Edit/EditResource",
    "source": "blocks/platform/edit/edit-resource/edit-resource.vue",
    "surface": "product",
-   "summary": "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `Table`, `Tag`, `Tooltip`, `Alert`, `HelperText` and `Button`.",
+   "summary": "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `HelperText` and `Button`.",
    "intents": [
     "settings page",
     "resource settings",
@@ -29162,7 +29243,7 @@
     "Sidebar",
     "StatusIndicator",
     "Switch",
-    "Table",
+    "TableRoot",
     "Tabs",
     "Tag",
     "Textarea",
@@ -29203,7 +29284,7 @@
     "@aziontech/webkit/sidebar",
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/switch",
-    "@aziontech/webkit/table",
+    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
@@ -29328,7 +29409,7 @@
    "title": "Templates/Platform/Settings/SettingsForm",
    "source": "blocks/platform/settings/settings-form/settings-form.vue",
    "surface": "product",
-   "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, the platform shell with an unpadded scroll region, the form column opening with a small page heading, topic sections each a small heading over a flush `Card` of rows, and one full-bleed sticky footer with Cancel and Save; Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Saving one group or card disables just its own fieldset; the others stay editable. Built from `PageHeader`, `SettingRow`, `SaveBar`, the platform shell, `Card`, `Item`, `Alert`, `Label`, `Input`, `Select`, `Switch`, `Link`, `HelperText` and `Button`.",
+   "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, the platform shell with an unpadded scroll region, the form column opening with a small page heading, topic sections each a small heading over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save; Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Saving one group or card disables just its own fieldset; the others stay editable. Built from `PageHeader`, `SettingRow`, `SaveBar`, the platform shell, `Card`, `Item`, `Alert`, `Label`, `Input`, `Select`, `Switch`, `Link`, `HelperText` and `Button`.",
    "intents": [
     "save all",
     "single save for the page",
@@ -29434,7 +29515,7 @@
    "variants": [
     {
      "name": "Saving",
-     "summary": "While the save is in flight: the whole fieldset is disabled, Cancel is disabled and Save shows its loading state."
+     "summary": "While the save is in flight: the whole fieldset is disabled, Discard is disabled and Save shows its loading state."
     },
     {
      "name": "SavePerGroup",
@@ -30121,6 +30202,10 @@
     {
      "name": "Templates",
      "summary": "The Editor tab before anything ran, with the Results band ready to execute; the Templates button opens the SQL quick templates drawer, and choosing a card loads its SQL into the editor."
+    },
+    {
+     "name": "Failed",
+     "summary": "The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/view/query-editor.json"
@@ -30154,6 +30239,7 @@
    ],
    "components": [
     "Accordion",
+    "Alert",
     "Avatar",
     "Badge",
     "Brand",
@@ -30188,6 +30274,7 @@
    ],
    "imports": [
     "@aziontech/webkit/accordion",
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/badge",
     "@aziontech/webkit/brand",
@@ -30230,6 +30317,10 @@
     {
      "name": "Empty",
      "summary": "A workspace with no traffic yet: the summary reads zero, the chart is flat and the log shows its No events yet state."
+    },
+    {
+     "name": "Failed",
+     "summary": "The event log request failed: the fields panel stays, and the log pane shows a danger Alert that says the events did not load and offers Retry."
     }
    ],
    "file": "catalog/patterns/platform/view/split-view.json"

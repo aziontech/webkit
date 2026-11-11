@@ -39,6 +39,11 @@
       "name": "Empty",
       "summary": "A workspace with no traffic yet: the summary reads zero, the chart is flat and the log shows its No events yet state.",
       "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The event log request failed: the fields panel stays, and the log pane shows a danger Alert that says the events did not load and offers Retry.",
+      "file": "variants/failed.vue"
     }
   ]
 }

@@ -119,6 +119,7 @@ The author's initials beside each note.
 - Default: the reported quarter.
 - Loading: tiles and charts render their own `Skeleton`; goals and commentary hold Skeleton rows.
 - Empty: a quarter with nothing reported; tiles show a dash with no delta, every trend card keeps its box with an `EmptyState` that names the quarter, and goals and commentary say what fills them.
+- Failed: the request for the quarter failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

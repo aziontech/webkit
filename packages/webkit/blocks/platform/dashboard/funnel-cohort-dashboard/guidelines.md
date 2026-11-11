@@ -109,6 +109,7 @@ heatmap.
 - Default: the funnel and cohorts for the selected period and segment.
 - Loading: every tile, both charts and both tables hold their place with a `Skeleton`; the filter bar stays usable.
 - Empty: the filters match nothing; tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState` that names the filters and offers `Clear filters`.
+- Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 
