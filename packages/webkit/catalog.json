@@ -25361,6 +25361,111 @@
    ],
    "file": "catalog/patterns/platform/account/tokens.json"
   },
+  "platform/account/users": {
+   "name": "Users",
+   "title": "Templates/Platform/Account/Users",
+   "source": "blocks/platform/account/users/users.vue",
+   "surface": "product",
+   "summary": "The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over a search `Input` and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email, Owner marked, the email under it), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `Input`, `Card`, `Table`, `Avatar`, `MultiSelect`, `Tooltip`, `DropdownMenu`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `EmptyState`, `Alert` and `Toaster`.",
+   "intents": [
+    "users",
+    "users management",
+    "invite user",
+    "invite teammates",
+    "members",
+    "account members",
+    "assign teams",
+    "resend invitation",
+    "remove user",
+    "usuários",
+    "gerenciar usuários",
+    "convidar usuário",
+    "membros da conta",
+    "atribuir times"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Avatar",
+    "Button",
+    "Card",
+    "ConfirmDialog",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerDescription",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "DropdownMenu",
+    "EmptyState",
+    "Field",
+    "Input",
+    "MultiSelect",
+    "PageHeader",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "Table",
+    "toast",
+    "Tooltip",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-description",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/multi-select",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/table",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "Who can sign in to the account, and through which teams. An admin invites a teammate by email, chooses their teams, sees who has not accepted yet, resends or cancels an invitation, moves a person between teams and removes people who left. Permissions come only from teams (`platform/account/team-permissions`), so this page assigns teams; it never grants a permission to a person.",
+   "variants": [
+    {
+     "name": "Invite",
+     "summary": "The Invite User drawer open over the list: Email and Teams (Developers preselected), Cancel and Send invitation; Send with an empty, malformed or existing email or no team shows the error on that field and focuses it."
+    },
+    {
+     "name": "OnlyOwner",
+     "summary": "An account with only its owner: the owner's row, then a small EmptyState that invites the first teammate."
+    },
+    {
+     "name": "Loading",
+     "summary": "The first load: the search row and the table's loading rows."
+    },
+    {
+     "name": "Failed",
+     "summary": "The users did not load: a danger Alert with Retry replaces the table; Retry loads them."
+    }
+   ],
+   "file": "catalog/patterns/platform/account/users.json"
+  },
   "platform/ai/ai-action-approval": {
    "name": "AiActionApproval",
    "title": "Templates/Platform/AI/AiActionApproval",
