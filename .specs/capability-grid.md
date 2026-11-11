@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: b9635258310c42f50e3dd95ca7b1bf8e61234dbcbe3a093f70356b5d1ab21412
+checksum: 4d0044e66d1779b7c31a928aba691c48df30cf3bae237c4a93514d5adeedf811
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -65,15 +65,15 @@ A framed grid of product capabilities under an optional section title: each cell
 
 ## Props
 
-| Prop          | Type                     | Default | Required | JSDoc                                                                                                                   |
-| ------------- | ------------------------ | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `eyebrow`     | `string`                 | `''`    | false    | Overline above the title.                                                                                               |
-| `title`       | `string`                 | `''`    | false    | Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`.  |
-| `description` | `string`                 | `''`    | false    | One or two sentences under the title.                                                                                   |
-| `items`       | `CapabilityGridItem[]`   | `[]`    | false    | The capabilities, in order; each is `{ title, description, icon?, points? }`. The band renders nothing when empty.      |
-| `columns`     | `3 \\                    | 4`      | `3`      | false                                                                                                                   | Capabilities per row from the large breakpoint up. |
-| `actions`     | `CapabilityGridAction[]` | `[]`    | false    | Buttons under the section title; each is `{ label, href, trailing?, target? }`, the first secondary, the rest outlined. |
-| `anchor`      | `string`                 | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                |
+| Prop          | Type                     | Default | Required | JSDoc                                                                                                                                               |
+| ------------- | ------------------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`     | `string`                 | `''`    | false    | Overline above the title.                                                                                                                           |
+| `title`       | `string`                 | `''`    | false    | Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`.                              |
+| `description` | `string`                 | `''`    | false    | One or two sentences under the title.                                                                                                               |
+| `items`       | `CapabilityGridItem[]`   | `[]`    | false    | The capabilities, in order; each is `{ title, description, icon?, points? }`. The band renders nothing when empty.                                  |
+| `columns`     | `3 \\                    | 4`      | `3`      | false                                                                                                                                               | Capabilities per row from the large breakpoint up. |
+| `actions`     | `CapabilityGridAction[]` | `[]`    | false    | Buttons under the section title; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined. |
+| `anchor`      | `string`                 | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                            |
 
 ## Events
 

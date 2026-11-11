@@ -36,6 +36,8 @@
     trailing?: boolean
     /** Link target of the action. */
     target?: '_blank' | '_self'
+    /** Button kind; by default the first action is `secondary` and the rest `outlined`. */
+    kind?: 'secondary' | 'outlined'
   }
 
   interface Props {
@@ -49,7 +51,7 @@
     items?: CapabilityGridItem[]
     /** Capabilities per row from the large breakpoint up. */
     columns?: CapabilityGridColumns
-    /** Buttons under the section title; each is `{ label, href, trailing?, target? }`, the first secondary, the rest outlined. */
+    /** Buttons under the section title; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined. */
     actions?: CapabilityGridAction[]
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
@@ -105,7 +107,7 @@
               :label="action.label"
               :href="action.href"
               :target="action.target"
-              :kind="index === 0 ? 'secondary' : 'outlined'"
+              :kind="action.kind ?? (index === 0 ? 'secondary' : 'outlined')"
               size="large"
               :icon="action.trailing ? 'pi pi-chevron-right' : ''"
               icon-position="trailing"

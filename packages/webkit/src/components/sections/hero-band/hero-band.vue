@@ -84,7 +84,7 @@
     plain: false
   })
 
-  defineSlots<{
+  const slots = defineSlots<{
     /** A scene in the window above the copy (a `ShellMockup`, a `ProductWidget`, a diagram). */
     top?(): unknown
     /** A scene in the window under the copy, entering after it. */
@@ -213,14 +213,14 @@
       </HeroTitle>
 
       <template
-        v-if="$slots.top"
+        v-if="slots.top"
         #top
       >
         <slot name="top" />
       </template>
 
       <template
-        v-if="$slots.bottom"
+        v-if="slots.bottom"
         #bottom
       >
         <div class="@container">

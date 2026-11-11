@@ -45,7 +45,7 @@
 | `tabs` | `ConsolePanelTab[]` | `[]` | false | Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene. |
 | `tabsAriaLabel` | `string` | `''` | false | Accessible name of the tab control; empty uses the built-in "Console views". |
 | `crop` | `number` | `0` | false | Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up. |
-| `actions` | `ConsolePanelAction[]` | `[]` | false | Buttons under the headline; each is `{ label, href, trailing?, target? }`, the first secondary, the rest outlined. |
+| `actions` | `ConsolePanelAction[]` | `[]` | false | Buttons under the headline; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined. |
 
 ## Slots
 

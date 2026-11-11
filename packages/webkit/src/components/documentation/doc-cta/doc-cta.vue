@@ -31,9 +31,9 @@
     secondaryHref: ''
   })
 
-  defineSlots<{
+  const slots = defineSlots<{
     /** The offer's copy, set as the headline's subtitle. */
-    default(): unknown
+    default?(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -68,7 +68,7 @@
       </p>
 
       <p
-        v-if="$slots.default || label"
+        v-if="slots.default || label"
         class="m-0 mt-(--spacing-xxs) text-body-xs text-(--text-muted)"
       >
         <slot>{{ label }}</slot>

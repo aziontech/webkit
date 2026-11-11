@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useSlots } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import TabsContent from '../../navigation/tabs/tabs-content.vue'
   import TabsItem from '../../navigation/tabs/tabs-item.vue'
@@ -10,12 +10,11 @@
 
   defineOptions({ name: 'DocTabs', inheritAttrs: false })
 
-  defineSlots<{
+  const slots = defineSlots<{
     /** The `DocTab` children, in strip order. */
     default(): unknown
   }>()
 
-  const slots = useSlots()
   const attrs = useAttrs()
 
   const testId = computed(
@@ -23,10 +22,11 @@
   )
 
   const panels = computed(() =>
-    flattenSlot(slots.default?.() ?? []).map((child, position) => ({
+    flattenSlot((slots.default?.() as unknown[] | undefined) ?? []).map((child, position) => ({
       value: `tab-${position}`,
       title:
-        String((child.props as Record<string, unknown> | null)?.title ?? '') || `${position + 1}`,
+        String((child.props as Record<string, unknown> | null)?.['title'] ?? '') ||
+        `${position + 1}`,
       node: child
     }))
   )

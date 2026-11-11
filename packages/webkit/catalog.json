@@ -21406,7 +21406,7 @@
      "type": "CapabilityGridAction[]",
      "default": "[]",
      "required": "false",
-     "doc": "Buttons under the section title; each is `{ label, href, trailing?, target? }`, the first secondary, the rest outlined."
+     "doc": "Buttons under the section title; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined."
     },
     {
      "name": "anchor",
@@ -21524,7 +21524,7 @@
      "type": "ConsolePanelAction[]",
      "default": "[]",
      "required": "false",
-     "doc": "Buttons under the headline; each is `{ label, href, trailing?, target? }`, the first secondary, the rest outlined."
+     "doc": "Buttons under the headline; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined."
     }
    ],
    "slots": [

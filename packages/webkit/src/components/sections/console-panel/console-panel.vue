@@ -42,6 +42,8 @@
     trailing?: boolean
     /** Link target of the action. */
     target?: '_blank' | '_self'
+    /** Button kind; by default the first action is `secondary` and the rest `outlined`. */
+    kind?: 'secondary' | 'outlined'
   }
 
   interface Props {
@@ -71,7 +73,7 @@
     tabsAriaLabel?: string
     /** Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up. */
     crop?: number
-    /** Buttons under the headline; each is `{ label, href, trailing?, target? }`, the first secondary, the rest outlined. */
+    /** Buttons under the headline; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined. */
     actions?: ConsolePanelAction[]
   }
 
@@ -156,7 +158,7 @@
               :label="action.label"
               :href="action.href"
               :target="action.target"
-              :kind="index === 0 ? 'secondary' : 'outlined'"
+              :kind="action.kind ?? (index === 0 ? 'secondary' : 'outlined')"
               size="large"
               :icon="action.trailing ? 'pi pi-chevron-right' : ''"
               icon-position="trailing"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useSlots } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import Accordion from '../../content/accordion/accordion.vue'
   import AccordionContent from '../../content/accordion/accordion-content/accordion-content.vue'
@@ -16,12 +16,11 @@
 
   const props = withDefaults(defineProps<Props>(), { type: 'single' })
 
-  defineSlots<{
+  const slots = defineSlots<{
     /** The `DocAccordionItem` children, in order. */
     default(): unknown
   }>()
 
-  const slots = useSlots()
   const attrs = useAttrs()
 
   const testId = computed(
@@ -29,12 +28,12 @@
   )
 
   const entries = computed(() =>
-    flattenSlot(slots.default?.() ?? []).map((child, position) => {
+    flattenSlot((slots.default?.() as unknown[] | undefined) ?? []).map((child, position) => {
       const childProps = (child.props ?? {}) as Record<string, unknown>
-      const open = childProps.defaultOpen ?? childProps['default-open']
+      const open = childProps['defaultOpen'] ?? childProps['default-open']
       return {
         value: `entry-${position}`,
-        title: String(childProps.title ?? ''),
+        title: String(childProps['title'] ?? ''),
         open: open === '' || open === true,
         node: child
       }
