@@ -171,6 +171,10 @@ export const ptBR: Messages = {
     timezone: 'Fuso horário',
     localTimezone: 'Local'
   },
+  card: {
+    byVendor: 'por {vendor}',
+    installed: 'Instalado'
+  },
   cards: {
     label: 'Itens',
     selectAll: 'Selecionar todos os itens',

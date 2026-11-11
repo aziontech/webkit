@@ -44,6 +44,68 @@ const meta = {
         defaultValue: { summary: "''" }
       }
     },
+    kind: {
+      control: 'inline-radio',
+      options: ['default', 'integration'],
+      description:
+        '`integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot.',
+      table: {
+        category: 'props',
+        type: { summary: "'default' | 'integration'" },
+        defaultValue: { summary: "'default'" }
+      }
+    },
+    logo: {
+      control: 'text',
+      description: 'Integration kind: icon class for the logo mark.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    vendor: {
+      control: 'text',
+      description: 'Integration kind: who publishes the item, shown as "by {vendor}".',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    description: {
+      control: 'text',
+      description: 'Integration kind: one or two sentences on what the item does.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    badges: {
+      control: 'object',
+      description: 'Integration kind: small tags (`{ label, severity? }`).',
+      table: {
+        category: 'props',
+        type: { summary: 'CardBadge[]' },
+        defaultValue: { summary: '[]' }
+      }
+    },
+    installed: {
+      control: 'boolean',
+      description: 'Integration kind: shows the Installed tag.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+    },
+    href: {
+      control: 'text',
+      description:
+        'Integration kind: the title links here; otherwise it is a button that emits `select`.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    onSelect: {
+      action: 'select',
+      description: 'Integration kind without `href`: the tile was activated.',
+      table: { category: 'events', type: { summary: '(event: MouseEvent) => void' } }
+    },
+    logoSlot: {
+      name: 'logo',
+      control: false,
+      description: 'Integration kind: replaces the logo mark, for an `img` with an empty `alt`.',
+      table: { category: 'slots', type: { summary: 'VNode' } }
+    },
+    action: {
+      control: false,
+      description: 'Integration kind: one action at the end of the tile.',
+      table: { category: 'slots', type: { summary: 'VNode' } }
+    },
     padded: {
       control: 'boolean',
       description:
@@ -227,6 +289,75 @@ export const Flush = {
           'Set `padded=false` for edge-to-edge content such as an ItemList with full-width dividers.'
       },
       source: { code: toSfc(IMPORT, FLUSH_MARKUP) }
+    }
+  }
+}
+
+const INTEGRATION_MARKUP = `<Card
+  kind="integration"
+  title="Request Signer"
+  vendor="Northwind Labs"
+  logo="pi pi-key"
+  description="Sign every request at the edge with a rotating key, so the origin only answers traffic that passed through."
+  :badges="[{ label: 'Firewall' }]"
+  class="w-full max-w-[400px]"
+>
+  <template #action>
+    <Button label="Install" kind="outlined" size="small" />
+  </template>
+</Card>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Card>} */
+export const Integration = {
+  render: (args) => ({
+    components: { Card, Button },
+    setup() {
+      return { args }
+    },
+    template: INTEGRATION_MARKUP.replace('<Card', '<Card @select="args.onSelect"')
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          '`kind="integration"` builds a catalog tile from the logo, the name, the vendor, a short description and a badge. The whole tile emits `select`; the Install action in the `action` slot stays its own target.'
+      },
+      source: { code: toSfc([IMPORT, IMPORT_BUTTON], INTEGRATION_MARKUP) }
+    }
+  }
+}
+
+const INSTALLED_MARKUP = `<Card
+  kind="integration"
+  title="Waiting Room"
+  vendor="Tidewater"
+  logo="pi pi-hourglass"
+  description="Queue visitors during a traffic surge and let them in as capacity frees up."
+  :badges="[{ label: 'Application' }]"
+  installed
+  href="#waiting-room"
+  class="w-full max-w-[400px]"
+>
+  <template #action>
+    <Button label="Configure" kind="outlined" size="small" icon="pi pi-cog" />
+  </template>
+</Card>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Card>} */
+export const Installed = {
+  render: () => ({
+    components: { Card, Button },
+    template: INSTALLED_MARKUP
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'An installed integration shows the Installed tag and swaps Install for Configure; with `href` the tile is a link.'
+      },
+      source: { code: toSfc([IMPORT, IMPORT_BUTTON], INSTALLED_MARKUP) }
     }
   }
 }

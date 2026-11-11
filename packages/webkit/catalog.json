@@ -5338,7 +5338,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Heading rendered in the header when the `header` slot is empty."
+     "doc": "Heading rendered in the header when the `header` slot is empty; with `kind=\"integration\"`, the item name."
     },
     {
      "name": "padded",
@@ -5346,6 +5346,62 @@
      "default": "true",
      "required": "false",
      "doc": "Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers."
+    },
+    {
+     "name": "kind",
+     "type": "'default' | 'integration'",
+     "default": "'default'",
+     "required": "false",
+     "doc": "integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot."
+    },
+    {
+     "name": "logo",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: icon class for the logo mark. The `logo` slot takes an image instead."
+    },
+    {
+     "name": "vendor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: who publishes the item, shown as \"by {vendor}\"."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: one or two sentences on what the item does."
+    },
+    {
+     "name": "badges",
+     "type": "CardBadge[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity defaults to `info`)."
+    },
+    {
+     "name": "installed",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Integration kind: shows the Installed tag."
+    },
+    {
+     "name": "href",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: the title links here; without it the title is a button that emits `select`."
+    }
+   ],
+   "events": [
+    {
+     "name": "select",
+     "payload": "event: MouseEvent",
+     "notes": "Integration kind without `href`: the title (the whole tile) was activated."
     }
    ],
    "slots": [
@@ -5362,12 +5418,22 @@
     {
      "name": "content",
      "scope": "—",
-     "notes": "Main card body."
+     "notes": "Main card body; with `kind=\"integration\"` it renders under the description."
     },
     {
      "name": "footer",
      "scope": "—",
      "notes": "Footer actions or metadata; omitted when empty."
+    },
+    {
+     "name": "logo",
+     "scope": "—",
+     "notes": "Integration kind: replaces the logo mark, for an `img` with an empty `alt`."
+    },
+    {
+     "name": "action",
+     "scope": "—",
+     "notes": "Integration kind: one action at the end of the tile, above the stretched title target."
     }
    ],
    "surface": "product",

@@ -1,8 +1,14 @@
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
+import { defineComponent, h } from 'vue'
 
 import Default from '../../../../examples/card/default.vue'
+import Installed from '../../../../examples/card/installed.vue'
+import Integration from '../../../../examples/card/integration.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
+import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import Card from './card.vue'
 
 const TESTID = 'content-card'
@@ -158,5 +164,116 @@ describe('Card on devices', () => {
     expect(view.getByTestId('content-card__header-action').className).toContain(
       '[@media(hover:none)]:opacity-100'
     )
+  })
+})
+
+describe('Card integration kind', () => {
+  const integration = {
+    kind: 'integration' as const,
+    title: 'Request Signer',
+    vendor: 'Northwind Labs',
+    logo: 'pi pi-key',
+    description: 'Sign every request at the edge.',
+    badges: [{ label: 'Firewall' }, { label: 'Paid', severity: 'warning' as const }]
+  }
+
+  it('lays the tile out from props, with the title as an h3 and no header region', () => {
+    const view = render(Card, { props: integration })
+
+    expect(view.queryByTestId('content-card__header')).toBeNull()
+    expect(view.getByRole('heading', { level: 3 })).toHaveTextContent('Request Signer')
+    expect(view.getByTestId('content-card__vendor')).toHaveTextContent('by Northwind Labs')
+    expect(view.getByText('Sign every request at the edge.')).toBeTruthy()
+    expect(view.getByText('Firewall')).toBeTruthy()
+    expect(view.getByText('Paid')).toBeTruthy()
+    expect(view.getByTestId('content-card__logo').querySelector('.pi-key')).toBeTruthy()
+    expect(view.queryByTestId('content-card__installed')).toBeNull()
+  })
+
+  it('emits select from the title button, by click and by keyboard', async () => {
+    const view = render(Card, { props: integration })
+    const target = view.getByRole('button', { name: 'Request Signer' })
+
+    await fireEvent.click(target)
+    target.focus()
+    await userEvent.keyboard('{Enter}')
+
+    expect(view.emitted('select')).toHaveLength(2)
+  })
+
+  it('renders the title as a link when href is set', () => {
+    const view = render(Card, { props: { ...integration, href: '/marketplace/request-signer' } })
+
+    expect(view.getByRole('link', { name: 'Request Signer' })).toHaveAttribute(
+      'href',
+      '/marketplace/request-signer'
+    )
+    expect(view.queryByRole('button', { name: 'Request Signer' })).toBeNull()
+  })
+
+  it('keeps the action its own target above the stretched title', async () => {
+    const view = render(Card, {
+      props: integration,
+      slots: { action: '<button type="button">Install</button>' }
+    })
+
+    await fireEvent.click(view.getByRole('button', { name: 'Install' }))
+
+    expect(view.emitted('select')).toBeUndefined()
+    expect(view.getByTestId('content-card__action').className).toContain('relative')
+  })
+
+  it('shows the installed state', () => {
+    const view = render(Card, { props: { ...integration, installed: true } })
+
+    expect(view.getByTestId('content-card__installed')).toHaveTextContent('Installed')
+  })
+
+  it('takes an image in the logo slot', () => {
+    const view = render(Card, {
+      props: integration,
+      slots: { logo: '<img src="data:," alt="" />' }
+    })
+
+    expect(view.getByTestId('content-card__logo').querySelector('img')).toBeTruthy()
+    expect(view.getByTestId('content-card__logo').querySelector('.pi-key')).toBeNull()
+  })
+
+  it('reads its strings from the provider locale', () => {
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            WebkitProvider,
+            { locale: 'pt-BR', catalogs: LOCALES },
+            { default: () => h(Card, { ...integration, installed: true }) }
+          )
+      })
+    )
+
+    expect(view.getByTestId('content-card__vendor')).toHaveTextContent('por Northwind Labs')
+    expect(view.getByTestId('content-card__installed')).toHaveTextContent('Instalado')
+  })
+
+  it('keeps the layout under dir="rtl"', async () => {
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h('div', { dir: 'rtl' }, [
+            h(Card, integration, { action: () => h('button', { type: 'button' }, 'Install') })
+          ])
+      })
+    )
+
+    expect(view.getByTestId('content-card__action').className).toContain('ms-auto')
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('has no axe violations in the Integration and Installed examples', async () => {
+    const one = render(Integration)
+    await expectNoA11yViolations(one.container)
+    one.unmount()
+    const two = render(Installed)
+    await expectNoA11yViolations(two.container)
   })
 })
