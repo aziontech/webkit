@@ -76,6 +76,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CodeEditor (platform/edit/code-editor)](blocks/platform/edit/code-editor.md): The editing page of a service whose behavior lives in source code.
 - [EditResource (platform/edit/edit-resource)](blocks/platform/edit/edit-resource.md): The settings page of one existing resource.
 - [RuleBuilder (platform/edit/rule-builder)](blocks/platform/edit/rule-builder.md): A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match.
+- [SchemaEditor (platform/edit/schema-editor)](blocks/platform/edit/schema-editor.md): The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it.
 - [SettingsForm (platform/settings/settings-form)](blocks/platform/settings/settings-form.md): The place the user goes to change how an account or a project behaves.
 - [AsyncSubmit (platform/states/async-submit)](blocks/platform/states/async-submit.md): The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen.
 - [FirstUse (platform/states/first-use)](blocks/platform/states/first-use.md): What a first-level list shows before the account owns any resource of that kind.
@@ -205,6 +206,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Skeleton](components/skeleton.md): A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity.
 - [StatusIndicator](components/status-indicator.md): Communicates status, alerts, or progress to the user.
 - [Toast](components/toast.md): A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`…
+- [UploadProgress](components/upload-progress.md): A card that follows a file transfer to its end while the person keeps working: uploading files into a bucket, moving objects between folders or deleting them.
 
 ## Components: Inputs
 
@@ -216,6 +218,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DateRangePicker](components/date-range-picker.md): A time range for queries over time: logs, events, traces and metrics.
 - [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Checkbox`, `RadioButton`, `Switch`, `Slider` — with its…
 - [FileDropzone](components/file-dropzone.md): A FileDropzone is the target a user drags files from the operating system onto.
+- [FileTokenGroup](components/file-token-group.md): The files a person picked for upload, shown as removable tokens before or while they upload: each token names the file with a glyph for its type, its size and, when asked, its last-modified date, carries a progress ba…
 - [HelperText](components/helper-text.md): Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`).
 - [Hint](components/hint.md): Small info affordance — a muted `pi pi-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`.
 - [Input](components/input.md): Single-line text input for forms and inline editing.

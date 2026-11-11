@@ -363,6 +363,61 @@ export const fileDropzone = {
   title: 'Drop files to upload'
 } as const
 
+export const fileTokenGroup = {
+  label: 'Files',
+  remove: 'Remove {name}',
+  uploading: 'Uploading {name}',
+  modified: 'Modified {date}',
+  showMore: {
+    one: 'Show {count} more file',
+    other: 'Show {count} more files'
+  },
+  showFewer: 'Show fewer files'
+} as const
+
+export const uploadProgress = {
+  label: 'File transfers',
+  uploading: {
+    one: 'Uploading {done} of {count} file',
+    other: 'Uploading {done} of {count} files'
+  },
+  moving: {
+    one: 'Moving {done} of {count} file',
+    other: 'Moving {done} of {count} files'
+  },
+  deleting: {
+    one: 'Deleting {done} of {count} file',
+    other: 'Deleting {done} of {count} files'
+  },
+  uploaded: {
+    one: '{count} file uploaded',
+    other: '{count} files uploaded'
+  },
+  moved: {
+    one: '{count} file moved',
+    other: '{count} files moved'
+  },
+  deleted: {
+    one: '{count} file deleted',
+    other: '{count} files deleted'
+  },
+  failed: {
+    one: '{count} failed',
+    other: '{count} failed'
+  },
+  queued: 'Waiting',
+  done: 'Done',
+  canceled: 'Canceled',
+  cancelAll: 'Cancel all',
+  cancelItem: 'Cancel {name}',
+  retryItem: 'Retry {name}',
+  retryFailed: 'Retry failed',
+  close: 'Close',
+  expand: 'Show files',
+  collapse: 'Hide files',
+  itemProgress: '{name} progress'
+} as const
+
 export const footer = {
   label: 'Footer'
 } as const
@@ -976,6 +1031,8 @@ export const en = {
   errorBoundary,
   field,
   fileDropzone,
+  fileTokenGroup,
+  uploadProgress,
   footer,
   gaugeChart,
   globalHeader,

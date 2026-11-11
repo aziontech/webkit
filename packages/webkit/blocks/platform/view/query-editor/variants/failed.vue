@@ -6,6 +6,7 @@
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
+  import CodeEditor from '@aziontech/webkit/code-editor'
   import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -29,7 +30,6 @@
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
-  import Textarea from '@aziontech/webkit/textarea'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -549,6 +549,11 @@
     )
   )
 
+  const editorMarkers = computed(() =>
+    results.value?.type === 'error' && results.value.line
+      ? [{ line: results.value.line, severity: 'error', message: results.value.text }]
+      : []
+  )
   const applyTemplate = (sql) => {
     editorSql.value = sql
   }
@@ -590,6 +595,7 @@
       results.value = !SQL_VERBS.includes(verb)
         ? {
             type: 'error',
+            line: 1,
             text: `The statement wasn't executed: near "${verb}", a syntax error. Check the statement and run it again.`
           }
         : verb === 'SELECT'
@@ -1564,16 +1570,15 @@ LIMIT 3;`
                 </div>
               </div>
 
-              <div class="flex w-full min-h-(--container-3xs) font-code">
-                <Textarea
-                  v-model="editorSql"
-                  :disabled="running"
-                  resizable="vertical"
-                  class="w-full"
-                  aria-label="SQL editor"
-                  placeholder="Write your SQL query here"
-                />
-              </div>
+              <CodeEditor
+                v-model="editorSql"
+                language="sql"
+                path="query.sql"
+                height="14rem"
+                :readonly="running"
+                :markers="editorMarkers"
+                aria-label="SQL editor"
+              />
 
               <div
                 class="flex flex-col border-t-(length:--border-width-default) border-(--border-default)"

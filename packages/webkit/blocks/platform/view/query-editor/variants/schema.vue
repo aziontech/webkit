@@ -6,7 +6,7 @@
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
-  import Checkbox from '@aziontech/webkit/checkbox'
+  import CodeEditor from '@aziontech/webkit/code-editor'
   import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -30,7 +30,6 @@
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
-  import Textarea from '@aziontech/webkit/textarea'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -469,6 +468,25 @@
         )
     )
   })
+  const rowSelection = ref({})
+  const dataColumns = computed(() => [
+    ...(selectedTable.value?.columns ?? []).map((column) => ({
+      id: column.name,
+      accessorKey: column.name,
+      header: column.name,
+      enableSorting: true,
+      minWidth: 160
+    })),
+    { id: '__actions', kind: 'action', hideable: false }
+  ])
+  watch(selectedTableId, () => {
+    rowSelection.value = {}
+  })
+  const editorMarkers = computed(() =>
+    results.value?.type === 'error' && results.value.line
+      ? [{ line: results.value.line, severity: 'error', message: results.value.text }]
+      : []
+  )
   const isNull = (value) => value === null || value === undefined || value === ''
   const displayCell = (value) => (isNull(value) ? 'NULL' : String(value))
   const deleteRow = (row) => {
@@ -613,6 +631,7 @@
       results.value = !SQL_VERBS.includes(verb)
         ? {
             type: 'error',
+            line: 1,
             text: `The statement wasn't executed: near "${verb}", a syntax error. Check the statement and run it again.`
           }
         : verb === 'SELECT'
@@ -1397,152 +1416,96 @@ LIMIT 3;`
                   </div>
 
                   <div class="min-h-0 flex-1 overflow-auto">
-                    <div
-                      class="flex items-stretch border-b border-(--border-default) bg-(--bg-surface-raised)"
+                    <TableRoot
+                      v-model:row-selection="rowSelection"
+                      :data="filteredRows"
+                      :columns="dataColumns"
+                      row-key="__k"
+                      enable-row-selection
+                      enable-sorting
+                      paginated
+                      :page-size="25"
+                      :rows-per-page-options="[25, 50, 100]"
+                      density="compact"
+                      :bordered="false"
+                      :aria-label="`Rows of ${selectedTable.name}`"
                     >
-                      <div
-                        class="flex w-10 shrink-0 items-center justify-center border-e border-(--border-muted) py-(--spacing-xs)"
-                      >
-                        <Checkbox
-                          binary
-                          disabled
-                          aria-label="Select all rows"
-                        />
-                      </div>
-                      <div
+                      <template
                         v-for="column in selectedTable.columns"
                         :key="column.id"
-                        class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+                        #[`header-${column.name}`]
                       >
-                        <span class="truncate text-label-md text-(--text-default)">{{
-                          column.name
-                        }}</span>
-                        <span class="shrink-0 text-body-xs text-(--text-muted)">{{
-                          column.type
-                        }}</span>
-                        <i
-                          v-if="column.primaryKey"
-                          class="pi pi-key ms-auto shrink-0 ps-(--spacing-xs) text-(--primary)"
-                          role="img"
-                          aria-label="Primary key"
-                        />
-                      </div>
-                      <div class="flex shrink-0 items-center px-(--spacing-xs)">
-                        <Tooltip text="Add column">
-                          <IconButton
-                            icon="pi pi-plus"
-                            kind="transparent"
-                            size="small"
-                            aria-label="Add column"
+                        <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                          <span class="truncate">{{ column.name }}</span>
+                          <span class="shrink-0 text-body-xs text-(--text-muted)">{{
+                            column.type
+                          }}</span>
+                          <i
+                            v-if="column.primaryKey"
+                            class="pi pi-key shrink-0 text-(--primary)"
+                            role="img"
+                            aria-label="Primary key"
                           />
-                        </Tooltip>
-                      </div>
-                    </div>
-
-                    <div
-                      v-for="row in filteredRows"
-                      :key="row.__k"
-                      class="group flex items-stretch border-b border-(--border-muted) hover:bg-(--bg-hover)"
-                    >
-                      <div
-                        class="flex w-10 shrink-0 items-center justify-center border-e border-(--border-muted) py-(--spacing-xs)"
-                      >
-                        <Checkbox
-                          binary
-                          disabled
-                          :aria-label="`Select row ${row.__k}`"
-                        />
-                      </div>
-                      <div
+                        </span>
+                      </template>
+                      <template
                         v-for="column in selectedTable.columns"
                         :key="column.id"
-                        class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+                        #[`cell-${column.name}`]="{ value }"
                       >
                         <span
-                          class="truncate text-label-md"
+                          class="truncate font-code text-label-code-sm"
                           :class="
-                            isNull(row[column.name])
-                              ? 'italic text-(--text-muted)'
-                              : 'text-(--text-default)'
+                            isNull(value) ? 'italic text-(--text-muted)' : 'text-(--text-default)'
                           "
+                          >{{ displayCell(value) }}</span
                         >
-                          {{ displayCell(row[column.name]) }}
-                        </span>
-                      </div>
-                      <div class="flex shrink-0 items-center px-(--spacing-xs)">
+                      </template>
+                      <template #cell-__actions="{ row }">
                         <Tooltip text="Delete row">
+                          <IconButton
+                            icon="pi pi-trash"
+                            kind="transparent"
+                            size="small"
+                            aria-label="Delete row"
+                            @click="deleteRow(row)"
+                          />
+                        </Tooltip>
+                      </template>
+                      <template #empty>
+                        <div
+                          v-if="!tableRows.length"
+                          class="flex flex-col items-center justify-center gap-(--spacing-sm) p-(--spacing-xxl) text-center"
+                        >
+                          <p class="text-body-sm text-(--text-default)">This table is empty</p>
                           <div
-                            class="opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 motion-reduce:transition-none"
+                            class="flex flex-wrap items-center justify-center gap-(--spacing-xs)"
                           >
-                            <IconButton
-                              icon="pi pi-trash"
-                              kind="transparent"
-                              size="small"
-                              aria-label="Delete row"
-                              @click="deleteRow(row)"
+                            <Button
+                              label="Insert row"
+                              kind="secondary"
+                              size="medium"
+                              icon="pi pi-plus"
+                            />
+                            <Button
+                              label="Import data from CSV"
+                              kind="outlined"
+                              size="medium"
+                              icon="pi pi-upload"
                             />
                           </div>
-                        </Tooltip>
-                      </div>
-                    </div>
-
-                    <div
-                      v-if="!tableRows.length"
-                      class="flex flex-col items-center justify-center gap-(--spacing-sm) p-(--spacing-xxl) text-center"
-                    >
-                      <p class="text-body-sm text-(--text-default)">This table is empty</p>
-                      <div class="flex items-center gap-(--spacing-xs)">
-                        <Button
-                          label="Insert row"
-                          kind="secondary"
-                          size="medium"
-                          icon="pi pi-plus"
-                        />
-                        <Button
-                          label="Import data from CSV"
-                          kind="outlined"
-                          size="medium"
-                          icon="pi pi-upload"
-                        />
-                      </div>
-                      <p class="text-body-xs text-(--text-muted)">
-                        or drag and drop a CSV file here
-                      </p>
-                    </div>
-                    <p
-                      v-else-if="!filteredRows.length"
-                      class="p-(--spacing-xxl) text-center text-body-sm text-(--text-muted)"
-                    >
-                      No rows match "{{ rowFilter }}".
-                    </p>
-                  </div>
-
-                  <div
-                    class="flex items-center gap-(--spacing-sm) border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
-                  >
-                    <Tooltip text="Previous page">
-                      <IconButton
-                        icon="pi pi-chevron-left"
-                        kind="transparent"
-                        size="small"
-                        aria-label="Previous page"
-                        disabled
-                      />
-                    </Tooltip>
-                    <span>Page <span class="text-(--text-default)">1</span> of 1</span>
-                    <Tooltip text="Next page">
-                      <IconButton
-                        icon="pi pi-chevron-right"
-                        kind="transparent"
-                        size="small"
-                        aria-label="Next page"
-                        disabled
-                      />
-                    </Tooltip>
-                    <span class="ms-(--spacing-md)">100 rows</span>
-                    <span class="ms-auto"
-                      >{{ tableRows.length }} record{{ tableRows.length === 1 ? '' : 's' }}</span
-                    >
+                          <p class="text-body-xs text-(--text-muted)">
+                            or drag and drop a CSV file here
+                          </p>
+                        </div>
+                        <p
+                          v-else
+                          class="p-(--spacing-xxl) text-center text-body-sm text-(--text-muted)"
+                        >
+                          No rows match "{{ rowFilter }}".
+                        </p>
+                      </template>
+                    </TableRoot>
                   </div>
                 </div>
 
@@ -1725,16 +1688,15 @@ LIMIT 3;`
                 </div>
               </div>
 
-              <div class="flex w-full min-h-(--container-3xs) font-code">
-                <Textarea
-                  v-model="editorSql"
-                  :disabled="running"
-                  resizable="vertical"
-                  class="w-full"
-                  aria-label="SQL editor"
-                  placeholder="Write your SQL query here"
-                />
-              </div>
+              <CodeEditor
+                v-model="editorSql"
+                language="sql"
+                path="query.sql"
+                height="14rem"
+                :readonly="running"
+                :markers="editorMarkers"
+                aria-label="SQL editor"
+              />
 
               <div
                 class="flex flex-col border-t-(length:--border-width-default) border-(--border-default)"
