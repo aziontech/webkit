@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: e8e0f72fa55b8e2206a56810e0736e0590b70fc84410d42ab4354a2672c289ff
+checksum: 3fb4cb76b1c068d69a8038edc5933ee1295bcd129a660091be443285394d8f56
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -230,6 +230,7 @@ animation silently snaps. Only the positioner, whose placement is an inline
 - Keyboard: on a horizontal menu `ArrowRight`/`ArrowLeft` move to the next/previous trigger, swapped under `dir="rtl"` (`useDirection` passed to the root composable); vertical menus keep `ArrowDown`/`ArrowUp`.
 - Motion: the content slides in from the side the pointer came from; the forward/back direction is computed in reading order, so under `rtl` moving to a later trigger slides from the start edge.
 - User data: none.
+- Teleported content: the `NavigationMenu.Portal` wrapper binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Stories (Storybook)
 

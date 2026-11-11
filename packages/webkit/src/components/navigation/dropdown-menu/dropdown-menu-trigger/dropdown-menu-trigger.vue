@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, onMounted, useAttrs } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, onUpdated, ref, useAttrs, watch } from 'vue'
 
   import { useDropdownContext } from '../injection-key'
 
@@ -12,6 +12,9 @@
     default(scope: { isOpen: boolean }): unknown
   }>()
 
+  const CONTROL_SELECTOR =
+    'button, a[href], input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])'
+
   const attrs = useAttrs()
   const ctx = useDropdownContext()
 
@@ -22,24 +25,19 @@
   const isOpen = computed(() => ctx.isOpen.value)
   const isDisabled = computed(() => ctx.disabled.value)
 
-  function toggle() {
-    if (isDisabled.value) return
-    ctx.setOpen(!ctx.isOpen.value)
-  }
+  const hostRef = ref<globalThis.HTMLElement | null>(null)
+  let control: globalThis.HTMLElement | null = null
+  let ownsId = false
 
   function onClick() {
-    toggle()
+    if (!isDisabled.value) ctx.setOpen(!ctx.isOpen.value)
   }
 
   function onKeydown(event: globalThis.KeyboardEvent) {
     if (isDisabled.value) return
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      if (!ctx.isOpen.value) {
-        ctx.setOpen(true)
-      } else {
-        ctx.setOpen(false)
-      }
+      ctx.setOpen(!ctx.isOpen.value)
     } else if (event.key === 'ArrowDown') {
       event.preventDefault()
       ctx.setOpen(true)
@@ -53,27 +51,51 @@
     }
   }
 
-  function registerTrigger(el: globalThis.HTMLElement | null) {
-    ctx.triggerRef.value = el
+  function release(el: globalThis.HTMLElement) {
+    for (const name of ['haspopup', 'expanded', 'controls', 'disabled'])
+      el.removeAttribute(`aria-${name}`)
+    if (ownsId) el.removeAttribute('id')
+    if (el === hostRef.value) {
+      el.removeAttribute('role')
+      el.removeAttribute('tabindex')
+    }
   }
 
-  onMounted(() => {})
+  function sync() {
+    const host = hostRef.value
+    if (!host) return
+    const next = host.querySelector<globalThis.HTMLElement>(CONTROL_SELECTOR) ?? host
+    if (control && control !== next) release(control)
+    if (control !== next) ownsId = !next.id || next.id === ctx.triggerId
+    control = next
+    if (ownsId) next.id = ctx.triggerId
+    if (next === host) {
+      next.setAttribute('role', 'button')
+      next.setAttribute('tabindex', isDisabled.value ? '-1' : '0')
+    }
+    next.setAttribute('aria-haspopup', 'menu')
+    next.setAttribute('aria-expanded', String(isOpen.value))
+    next.setAttribute('aria-controls', ctx.panelId)
+    if (isDisabled.value) next.setAttribute('aria-disabled', 'true')
+    else next.removeAttribute('aria-disabled')
+    ctx.triggerRef.value = next
+  }
+
+  onMounted(sync)
+  onUpdated(sync)
+  watch([isOpen, isDisabled], sync, { flush: 'post' })
 
   onBeforeUnmount(() => {
+    if (control) release(control)
+    control = null
     if (ctx.triggerRef.value) ctx.triggerRef.value = null
   })
 </script>
 
 <template>
   <span
-    :ref="(el) => registerTrigger(el as globalThis.HTMLElement | null)"
-    :id="ctx.triggerId"
+    ref="hostRef"
     v-bind="attrs"
-    role="button"
-    tabindex="0"
-    :aria-haspopup="'menu'"
-    :aria-expanded="isOpen"
-    :aria-controls="ctx.panelId"
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-disabled="isDisabled || null"

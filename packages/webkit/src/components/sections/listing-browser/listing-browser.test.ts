@@ -236,7 +236,7 @@ describe('ListingBrowser', () => {
     globalThis.history.replaceState(null, '', '?area=Security')
     const { getByTestId, findByText } = band()
 
-    await findByText('Security', { selector: '[data-testid="select-trigger__value"]' })
+    await findByText('Security', { selector: '[data-testid="select-trigger__value"] bdi' })
     expect(tableRoles(getByTestId)).toEqual(['GRC Analyst'])
   })
 

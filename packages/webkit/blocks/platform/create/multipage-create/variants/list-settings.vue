@@ -12,6 +12,7 @@
   import Item from '@aziontech/webkit/item'
   import Alert from '@aziontech/webkit/alert'
   import PageHeader from '@aziontech/webkit/page-header'
+  import SaveBar from '@aziontech/webkit/save-bar'
   import RadioButton from '@aziontech/webkit/radio-button'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Stepper from '@aziontech/webkit/stepper'
@@ -594,17 +595,17 @@
           </div>
         </main>
 
-        <footer class="shrink-0 border-t border-(--border-default) bg-(--bg-surface)">
-          <div
-            class="layout-form-create layout-boundary-inline flex items-center justify-between gap-(--spacing-sm) py-(--spacing-md)"
-          >
-            <Button
-              type="button"
-              label="Cancel"
-              kind="transparent"
-              size="medium"
-            />
-            <div class="flex shrink-0 items-center gap-(--spacing-sm)">
+        <div class="shrink-0 [--layout-measure-form:var(--layout-measure-form-create)]">
+          <SaveBar kind="plain">
+            <template #leading>
+              <Button
+                type="button"
+                label="Cancel"
+                kind="transparent"
+                size="medium"
+              />
+            </template>
+            <template #actions>
               <Button
                 v-if="!isFirst"
                 type="button"
@@ -619,9 +620,9 @@
                 size="medium"
                 type="submit"
               />
-            </div>
-          </div>
-        </footer>
+            </template>
+          </SaveBar>
+        </div>
       </form>
     </div>
   </div>

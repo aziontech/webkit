@@ -41,3 +41,11 @@ Three Table entries changed in the same pass. The Table's parts use `useTranslat
 | table-root      | —        | 50            | —               | 49.64        | 50         | Kept: the `useTranslate` switch pays for the three new Table capabilities.       |
 | listing-table   | —        | 55            | —               | 55.54        | 55.65      | Raised: the section embeds the data-driven Table and its three new capabilities. |
 | listing-browser | —        | 63            | 63.10           | 64.13        | 64.25      | Raised: already over at the start (M1.9), plus the same Table growth as above.   |
+
+Three entries changed for M1.10 rows 41, 42 and 44. Overlays that teleport to `body` now read the `WebkitProvider`'s `dir` and `lang` (`usePortalLocale`) and bind them on their teleported root; `DropdownMenu.Trigger` forwards its ARIA onto the slotted control instead of wrapping it in a second tab stop; `SelectTrigger` isolates its value in a `<bdi>` with an optional `valueDir`. Each is a fix (overlays laid out left-to-right under an Arabic provider, a nested interactive control, `+55` read as `55+`), so the bytes stay.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                                                                |
+| --------------- | ------------- | --------------- | ------------ | ---------- | --------------------------------------------------------------------------------------------------- |
+| doc-page-header | 25.5          | 25.20           | 25.56        | 25.75      | Raised: its Breadcrumb overflow menu carries the as-child `DropdownMenu.Trigger` and portal locale. |
+| listing-browser | 64.25         | 64.13           | 64.26        | 64.5       | Raised: its Select and Popover panels bind the portal locale.                                       |
+| select          | 19.5          | 19.39           | 19.51        | 19.75      | Raised: the content binds the portal locale and the trigger isolates its value.                     |

@@ -61,6 +61,11 @@ const Host = defineComponent({
   }
 })
 
+const control = () =>
+  document.body.querySelector(
+    '[data-testid="navigation-dropdown-menu__trigger"] button'
+  ) as HTMLElement
+
 /** Query the Teleported panel from document.body (it escapes the container). */
 const getPanel = () =>
   document.body.querySelector(
@@ -116,18 +121,42 @@ describe('DropdownMenu (compound / overlay)', () => {
   })
 
   // ---- Trigger anatomy + a11y wiring (context-driven) -----------------------
-  it('renders the trigger as a role=button wired to aria-haspopup/expanded/controls', () => {
+  it('forwards aria-haspopup/expanded/controls onto the slotted button instead of wrapping it', () => {
     const { getByTestId } = render(Host)
 
     const trigger = getByTestId('navigation-dropdown-menu__trigger')
     expect(trigger.tagName).toBe('SPAN')
+    expect(trigger.hasAttribute('role')).toBe(false)
+    expect(trigger.hasAttribute('tabindex')).toBe(false)
+    expect(trigger.hasAttribute('aria-expanded')).toBe(false)
+    const button = control()
+    expect(button.getAttribute('aria-haspopup')).toBe('menu')
+    expect(button.getAttribute('aria-expanded')).toBe('false')
+    expect(button.getAttribute('aria-controls')).toBeTruthy()
+    expect(trigger.getAttribute('data-state')).toBe('closed')
+  })
+
+  it('becomes the button itself when the slot holds no focusable control', () => {
+    render(
+      defineComponent({
+        setup: () => () =>
+          h(DropdownMenu, null, () => [
+            h(DropdownMenuTrigger, null, () => h('span', 'Menu')),
+            h(DropdownMenuGroup, null, () => [
+              h(DropdownMenuOption, { value: 'profile', label: 'Profile' })
+            ])
+          ])
+      })
+    )
+    const trigger = screen.getByTestId('navigation-dropdown-menu__trigger')
     expect(trigger.getAttribute('role')).toBe('button')
     expect(trigger.getAttribute('tabindex')).toBe('0')
     expect(trigger.getAttribute('aria-haspopup')).toBe('menu')
-    expect(trigger.getAttribute('aria-expanded')).toBe('false')
-    // aria-controls points at the panel id supplied by the injected context.
-    expect(trigger.getAttribute('aria-controls')).toBeTruthy()
-    expect(trigger.getAttribute('data-state')).toBe('closed')
+  })
+
+  it('has no axe violations on the closed trigger', async () => {
+    const { container } = render(Host)
+    await expectNoA11yViolations(container)
   })
 
   // ---- Overlay open/close: trigger drives context -> panel teleports ---------
@@ -145,16 +174,14 @@ describe('DropdownMenu (compound / overlay)', () => {
     expect(panel.closest('[data-testid="navigation-dropdown-menu"]')).toBeNull()
     // aria-labelledby wires back to the trigger id (shared context).
     const trigger = getByTestId('navigation-dropdown-menu__trigger')
-    expect(panel.getAttribute('aria-labelledby')).toBe(trigger.id)
+    expect(panel.getAttribute('aria-labelledby')).toBe(control().id)
     // Trigger aria-expanded now reflects open via injected isOpen.
-    expect(trigger.getAttribute('aria-expanded')).toBe('true')
+    expect(control().getAttribute('aria-expanded')).toBe('true')
     expect(trigger.getAttribute('data-state')).toBe('open')
 
     await fireEvent.click(trigger)
     await waitFor(() => expect(getPanel()).toBeNull())
-    expect(getByTestId('navigation-dropdown-menu__trigger').getAttribute('aria-expanded')).toBe(
-      'false'
-    )
+    expect(control().getAttribute('aria-expanded')).toBe('false')
   })
 
   it('renders one role=menuitem per DropdownMenuOption through the injected panel body', async () => {
@@ -175,9 +202,7 @@ describe('DropdownMenu (compound / overlay)', () => {
     // Give any async teleport a chance; it must never appear.
     await Promise.resolve()
     expect(getPanel()).toBeNull()
-    expect(getByTestId('navigation-dropdown-menu__trigger').getAttribute('aria-expanded')).toBe(
-      'false'
-    )
+    expect(control().getAttribute('aria-expanded')).toBe('false')
   })
 
   // ---- Selection: emits select(event, value) + closes + returns focus -------
@@ -202,7 +227,7 @@ describe('DropdownMenu (compound / overlay)', () => {
     // Panel closes on select.
     await waitFor(() => expect(getPanel()).toBeNull())
     // Focus returns to the trigger.
-    expect(document.activeElement).toBe(getByTestId('navigation-dropdown-menu__trigger'))
+    expect(document.activeElement).toBe(control())
   })
 
   it('does not emit select when a disabled option is clicked', async () => {
@@ -258,7 +283,7 @@ describe('DropdownMenu (compound / overlay)', () => {
     await fireEvent.keyDown(getPanel() as HTMLElement, { key: 'Escape' })
 
     await waitFor(() => expect(getPanel()).toBeNull())
-    expect(document.activeElement).toBe(getByTestId('navigation-dropdown-menu__trigger'))
+    expect(document.activeElement).toBe(control())
   })
 
   it('opens from the trigger on ArrowDown, Enter and Space', async () => {

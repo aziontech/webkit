@@ -249,18 +249,23 @@ describe('SplitButton (joined command + menu overlay)', () => {
     const view = render(host())
     await openMenu(view)
 
-    // Scope to the Teleported menu panel (component-owned markup). The closed
-    // shell is skipped below — see the documented nested-interactive defect.
     await expectNoA11yViolations(panel() as HTMLElement)
   })
 
-  // Real component defect: DropdownMenu.Trigger renders a focusable role=button span
-  // and SplitButton nests the real IconButton <button> inside it — axe
-  // nested-interactive (focusable widget inside a widget). Suppressing the
-  // assertion would fake a pass; fixing it requires a component change.
-  it.skip('has no axe violations on the closed shell — BLOCKED by nested-interactive: DropdownMenu.Trigger[role=button] wraps IconButton <button> (split-button.vue:141-151)', async () => {
+  it('has no axe violations on the closed shell', async () => {
     const view = render(host())
     await expectNoA11yViolations(view.container)
+  })
+
+  it('puts the menu ARIA on the toggle button with a single tab stop', () => {
+    const view = render(host())
+    const toggle = view.getByTestId('actions-split-button__toggle')
+    const button = view.getByTestId('actions-split-button__toggle-button')
+    expect(toggle.hasAttribute('role')).toBe(false)
+    expect(toggle.hasAttribute('tabindex')).toBe(false)
+    expect(button.getAttribute('aria-haspopup')).toBe('menu')
+    expect(button.getAttribute('aria-expanded')).toBe('false')
+    expect(button.getAttribute('aria-controls')).toBeTruthy()
   })
 
   // ---- Story fixture ---------------------------------------------------------------

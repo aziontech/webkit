@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { cn } from '../../../utils/cn'
   import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
 
@@ -32,6 +33,8 @@
   const shouldMount = computed(() => props.keepMounted || root.menuPopupMounted.value)
 
   const portalClasses = computed(() => cn(attrs.class as string | undefined))
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -41,6 +44,8 @@
   >
     <div
       :class="portalClasses"
+      :dir="portalLocale.dir"
+      :lang="portalLocale.lang"
       :data-testid="testId"
     >
       <slot />

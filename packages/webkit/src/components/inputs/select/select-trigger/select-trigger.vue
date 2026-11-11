@@ -8,6 +8,13 @@
     inheritAttrs: false
   })
 
+  interface Props {
+    /** Base direction of the shown value, isolated from the trigger's own direction. Omitted, it follows the value's first strong character (`<bdi>`); pass `ltr` for values such as dial codes (`+55`) that have none. */
+    valueDir?: 'ltr' | 'rtl' | 'auto'
+  }
+
+  const props = defineProps<Props>()
+
   const ctx = inject(selectContextKey)
   if (!ctx) {
     throw new Error('SelectTrigger must be used inside <Select>.')
@@ -76,7 +83,11 @@
       :data-filled="ctx.filled.value"
       :data-testid="`${testId}__value`"
     >
-      <template v-if="ctx.filled.value">{{ ctx.displayValue.value }}</template>
+      <bdi
+        v-if="ctx.filled.value"
+        :dir="props.valueDir"
+        >{{ ctx.displayValue.value }}</bdi
+      >
       <template v-else>{{ ctx.placeholder.value }}</template>
     </span>
     <i

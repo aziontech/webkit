@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 10d8c643d6f04b11d0cc7ae7bdaf0c39ee40ea52ea1f750fe96aa4dbd9c024b6
+checksum: c4be3086bab18c20ba3d884873c1063ae5ad0ac6c331c5a4ee1b64b57eb08db1
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-11
 ---
 
 # DocFrame — Component Spec
@@ -130,6 +130,7 @@ The FLIP transform itself is an inline style because it is a measurement (the re
 - The lightbox Teleports to `body` and locks body scroll while open, so assistive tech and the pointer agree on what is interactive.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons) on all frame chrome tokens.
 - Touch target: the zoom trigger is the whole picture; the close control is a padded button at the viewport corner.
+- Teleported content: the teleported zoom dialog binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Stories (Storybook)
 

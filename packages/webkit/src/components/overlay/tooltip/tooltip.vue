@@ -2,6 +2,7 @@
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
+  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
 
   export type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left'
@@ -136,6 +137,8 @@
     clearHoverTimer()
     globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
   })
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -165,6 +168,8 @@
     >
       <div
         v-if="isOpen && text"
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
         :id="tooltipId"
         ref="panelRef"
         role="tooltip"

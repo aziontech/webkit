@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: b59ea62e0bfe63dc460278c44c1e8961e847deb1876bcc83f9fe53c8e295de61
+checksum: 7f699d111d62a6608fa5f8132b0b3c231c39690417fcfa59b2889bd139226455
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -155,6 +155,7 @@ _none_ — the field, the suggestions and the tokens are fixed parts.
 - Icons: the filter glyph is not mirrored.
 - Keyboard: `ArrowDown`/`ArrowUp` are not direction-dependent.
 - User data: suggestion labels sit in `<bdi>` so a value in another script does not reorder the line.
+- Teleported content: the teleported suggestions listbox binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Responsive
 

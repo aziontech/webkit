@@ -8,7 +8,7 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 498b0a4c788cd3d3986d83e3976cbebd97173512b4aef1c3a0b1b4ab72b5e60e
+checksum: 2d4b7315645ce6d79e5f750de3bfae0ad4c76bbd8270efdef13fb7ed0dbc4dda
 created: 2026-06-23
 last_updated: 2026-11-11
 ---
@@ -271,6 +271,7 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the muted description text and severity icons.
 - `motion-reduce:animate-none` on the enter/leave fades and `motion-reduce:transition-none` on the move transition.
 - Touch target ≥40×40 px on the action and close controls (from `Button` / `IconButton` `size="small"`).
+- Teleported content: each teleported toaster region binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Stories (Storybook)
 

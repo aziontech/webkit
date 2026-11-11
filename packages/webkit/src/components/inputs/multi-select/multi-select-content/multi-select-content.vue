@@ -2,6 +2,7 @@
   import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
   import LazyNodes from '../../../../composables/use-lazy-chunks/lazy-nodes'
+  import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../../composables/use-placement'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import { multiSelectContextKey } from '../injection-key'
@@ -108,6 +109,8 @@
   onBeforeUnmount(() => {
     document.removeEventListener('pointerdown', onDocumentPointerDown, true)
   })
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -118,6 +121,8 @@
     >
       <div
         v-if="ctx.open.value"
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
         ref="root"
         v-bind="$attrs"
         :id="ctx.contentId"

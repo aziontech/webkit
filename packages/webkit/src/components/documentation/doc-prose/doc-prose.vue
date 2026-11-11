@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
 
   defineOptions({ name: 'DocProse', inheritAttrs: false })
@@ -115,6 +115,8 @@
     globalThis.removeEventListener('resize', reanchor)
     clearReset()
   })
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -133,6 +135,8 @@
       >
         <span
           v-if="tipFor"
+          :dir="portalLocale.dir"
+          :lang="portalLocale.lang"
           role="tooltip"
           data-testid="documentation-doc-prose-copy-tip"
           :style="{ left: `${tipLeft}px`, top: `${tipTop}px` }"

@@ -11,7 +11,7 @@
   } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
@@ -458,6 +458,8 @@
     setTimezone,
     changeMonth
   })
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -633,6 +635,8 @@
       >
         <div
           v-if="isOpen"
+          :dir="portalLocale.dir"
+          :lang="portalLocale.lang"
           ref="panelRef"
           role="dialog"
           :aria-label="t('calendar.chooseDate')"
@@ -698,6 +702,8 @@
       >
         <div
           v-if="isPresetsOpen"
+          :dir="portalLocale.dir"
+          :lang="portalLocale.lang"
           ref="presetsPanelRef"
           role="menu"
           :aria-label="t('calendar.presets')"
@@ -705,7 +711,7 @@
           :data-state="isPresetsOpen ? 'open' : 'closed'"
           :data-placement="presetsPlacement"
           :style="presetsPanelStyle"
-          class="flex min-w-(--container-4xs) flex-col gap-(--spacing-xxs) overflow-y-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xxs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex min-w-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xxs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPresetsKeydown"
         >
           <slot name="presets">

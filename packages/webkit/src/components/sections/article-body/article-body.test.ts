@@ -211,7 +211,7 @@ describe('ArticleBody', () => {
     await expectNoA11yViolations(container)
   })
 
-  it.skip('has no a11y violations with the copy-page split button — BLOCKED by the split-button nested-interactive defect', async () => {
+  it('has no a11y violations with the copy-page split button', async () => {
     const { container } = band()
 
     await expectNoA11yViolations(container)

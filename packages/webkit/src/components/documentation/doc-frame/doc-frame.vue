@@ -4,7 +4,7 @@
   import { cloneVNode, computed, nextTick, ref, useAttrs, useSlots, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap/index.js'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { flattenSlot } from './flatten-slot'
 
@@ -141,6 +141,8 @@
     await nextTick()
     triggerRef.value?.focus()
   })
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -219,6 +221,8 @@
     <Teleport to="body">
       <div
         v-if="zoomed"
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
         ref="overlayRef"
         role="dialog"
         aria-modal="true"

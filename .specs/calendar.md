@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 5860c85f7857947d8faea101e18469fd9a371cb1aa12a6cf78874a831b6e4a2d
+checksum: c09506a8a087cb3b37c7b49f124be3d724a5a5a64498e749ecb20ba718cc6603
 created: 2026-06-25
 last_updated: 2026-11-11
 ---
@@ -211,6 +211,9 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 | spacing (gap)                           | `var(--spacing-xxs)`        |
 | spacing (sections)                      | `var(--spacing-md)`         |
 | ring                                    | `var(--ring-color)`         |
+| period list / presets menu min width    | `var(--container-3xs)`      |
+
+The period list and the presets menu take `min-w-(--container-3xs)` (256px), the first step of the theme's container scale and the same floor as the `Popover` and `Select` panels. The theme has no `--container-4xs`; a narrower step was not added because the longest preset labels ("Last 30 days", their `pt-BR` and `es` forms) plus the check icon need about 200px, and matching the other menu floors keeps every WebKit popup the same minimum width.
 
 ## Theme gaps
 
@@ -242,6 +245,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 - Motion: the month strip slide mirrors (`rtl:` swaps `translate-x-full` and `-translate-x-full`), so under `dir="rtl"` the next month enters from the left, the side its chevron points to.
 - Keyboard: in the day grid `ArrowRight`/`ArrowLeft` move one day later/earlier, swapped under `dir="rtl"` (`logicalArrowKey`): `ArrowLeft` moves to the next day. `ArrowUp`/`ArrowDown`, `PageUp`/`PageDown` and `Home`/`End` are unchanged.
 - User data: dates and times are printed by `Intl` in the active locale; the typed field value uses the `Input` `dir="auto"`.
+- Teleported content: the teleported date popover and presets menu bind `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Stories (Storybook)
 

@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: e28796c9014fca80b84be0f89692f42369e3b6507e45361f50052f15285188b1
+checksum: 027b8fbb44329a25e75ee5ecff8b839ab8975703217195a526bffc08abe6e8cc
 created: 2026-06-02
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Tooltip — Component Spec
@@ -134,6 +134,7 @@ The panel is positioned with the standalone **`translate`** property, never `top
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.
 - `motion-reduce:animate-none` on the panel; reduced-motion users get instant show/hide.
 - Touch target ≥40×40 px on the trigger (the consumer's responsibility — flag in docs).
+- Teleported content: the teleported `role="tooltip"` panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Stories (Storybook)
 

@@ -153,7 +153,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/documentation/doc-page-header/doc-page-header.vue",
-    "limit": "25.5 KB"
+    "limit": "25.75 KB"
   },
   {
     "name": "doc-on-this-page",
@@ -510,7 +510,7 @@
   {
     "name": "listing-browser",
     "path": "src/components/sections/listing-browser/listing-browser.vue",
-    "limit": "64.25 KB"
+    "limit": "64.5 KB"
   },
   {
     "name": "platform-directory",
@@ -910,7 +910,7 @@
   {
     "name": "select",
     "path": "src/components/inputs/select/index.ts",
-    "limit": "19.5 KB"
+    "limit": "19.75 KB"
   },
   {
     "name": "multi-select",

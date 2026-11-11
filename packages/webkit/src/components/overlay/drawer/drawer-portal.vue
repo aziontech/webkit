@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, provide, ref, watch } from 'vue'
 
+  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { useDrawerMotionState } from './composables/use-drawer-motion-state'
   import { DrawerInjectionKey, DrawerMotionInjectionKey } from './injection-key'
   import { DRAWER_EXIT_MS } from './presets/transitions'
@@ -17,6 +18,8 @@
   const ctx = inject(DrawerInjectionKey)
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
   const { motionState } = useDrawerMotionState(isOpen)
+
+  const portalLocale = usePortalLocale()
 
   provide(DrawerMotionInjectionKey, { motionState })
 
@@ -52,6 +55,12 @@
     v-if="isPresent"
     to="body"
   >
-    <slot />
+    <div
+      class="contents"
+      :dir="portalLocale.dir"
+      :lang="portalLocale.lang"
+    >
+      <slot />
+    </div>
   </Teleport>
 </template>

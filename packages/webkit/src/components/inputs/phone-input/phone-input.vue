@@ -227,6 +227,7 @@
       <SelectTrigger
         :id="triggerId"
         :aria-label="t('phoneInput.dialCode')"
+        value-dir="ltr"
         @keydown="onTriggerKeydown"
       />
       <SelectContent

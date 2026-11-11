@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { type ComponentPublicInstance } from 'vue'
 
+  import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
   import { usePopoverContext } from '../injection-key'
 
   defineOptions({
@@ -17,6 +18,8 @@
   const setPanelRef = (el: globalThis.Element | ComponentPublicInstance | null) => {
     ctx.panelRef.value = el instanceof HTMLElement ? el : null
   }
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -27,6 +30,8 @@
     >
       <div
         v-if="ctx.isOpen.value"
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
         :id="ctx.contentId"
         :ref="setPanelRef"
         role="dialog"

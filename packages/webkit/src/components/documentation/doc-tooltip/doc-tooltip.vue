@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs, useId } from 'vue'
 
+  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement/index.js'
   import Link from '../../navigation/link/link.vue'
 
@@ -166,6 +167,8 @@
     clearTimers()
     globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
   })
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -198,6 +201,8 @@
     >
       <div
         v-if="isOpen"
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
         :id="panelId"
         ref="panelRef"
         data-doc-chrome

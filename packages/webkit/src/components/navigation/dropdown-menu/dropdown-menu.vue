@@ -12,6 +12,7 @@
   } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
+  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
   import type {
     DropdownMenuOptionValue,
@@ -312,6 +313,8 @@
     focusPrevOption,
     focusTrigger
   })
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -333,11 +336,13 @@
       >
         <div
           v-if="isOpenRef"
+          :dir="portalLocale.dir"
+          :lang="portalLocale.lang"
           :id="panelId"
           ref="panelRef"
           role="menu"
           tabindex="-1"
-          :aria-labelledby="triggerId"
+          :aria-labelledby="triggerRef?.id || triggerId"
           :aria-hidden="!isOpenRef || undefined"
           :data-testid="`${testId}__panel`"
           :data-state="isOpenRef ? 'open' : 'closed'"

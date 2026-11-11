@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 4f5c86dff68aa1dc69c571b3e5b86b048c2ef048d298458ac5f6356d016aa7cf
+checksum: 9db5b73856f96ab8ef1e458e8939395b3fd57e7a4cac528734ff8f9ce2caa38f
 created: 2026-08-21
 last_updated: 2026-11-11
 ---
@@ -127,6 +127,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 - The chip copy adds **no tab stops**: it is a pointer shortcut over text that stays selectable the ordinary way, so a page of thirty chips does not become thirty stops. The tooltip is `role="tooltip"` and `pointer-events-none`.
 - `motion-reduce:transition-none` on the descendant link transition.
 - Touch target: not applicable; the container is not interactive.
+- Teleported content: the teleported copy tip binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Stories (Storybook)
 

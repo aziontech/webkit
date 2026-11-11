@@ -22,7 +22,7 @@
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import Toast, { toast } from '@aziontech/webkit/toast'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
   import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
   const navGroups = [
@@ -342,10 +342,6 @@
   })
 
   const RUN_TOAST = 'async-submit-run'
-
-  const edit = () => toast.dismiss(RUN_TOAST)
-
-  const redeploy = () => toast.loading(`Deploying ${REPO.name}…`, { id: RUN_TOAST })
 
   onBeforeUnmount(() => toast.dismiss(RUN_TOAST))
 </script>
@@ -1030,27 +1026,6 @@
       </DrawerPortal>
     </Drawer>
 
-    <Toast position="bottom-right">
-      <template #default="{ toast: entry, dismiss }">
-        <Toast.Item :type="entry.type">
-          <Toast.Title>{{ entry.message }}</Toast.Title>
-          <Toast.Description v-if="entry.description">{{ entry.description }}</Toast.Description>
-          <template
-            v-if="entry.type !== 'loading'"
-            #trailing
-          >
-            <Toast.Action
-              label="Edit"
-              @click="edit"
-            />
-            <Toast.Action
-              label="Redeploy"
-              @click="redeploy"
-            />
-            <Toast.Close @click="dismiss" />
-          </template>
-        </Toast.Item>
-      </template>
-    </Toast>
+    <Toaster position="bottom-right" />
   </div>
 </template>
