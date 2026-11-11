@@ -1,4 +1,5 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -118,6 +119,16 @@
 
   const statusSeverity = (value) => (value === 'Active' ? 'success' : 'secondary')
 
+  const loading = ref(false)
+  const loadFailed = ref(false)
+  const retryLoad = () => {
+    loadFailed.value = false
+    loading.value = true
+    setTimeout(() => {
+      loading.value = false
+    }, 700)
+  }
+
   const refreshing = ref(false)
   const refresh = () => {
     if (refreshing.value) return
@@ -185,7 +196,7 @@
 
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
         <header
-          v-if="status !== 'empty'"
+          v-if="!loadFailed && (loading || status !== 'empty')"
           class="flex items-center gap-(--layout-group-gap)"
         >
           <div class="min-w-0 grow">
@@ -218,8 +229,23 @@
           </Tooltip>
         </header>
 
+        <Alert
+          v-if="loadFailed"
+          severity="danger"
+        >
+          The teams could not be loaded. Nothing was changed; try again.
+          <template #action>
+            <Button
+              label="Retry"
+              kind="secondary"
+              size="small"
+              @click="retryLoad"
+            />
+          </template>
+        </Alert>
+
         <Card
-          v-if="status === 'empty'"
+          v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
           <template #content>
@@ -249,7 +275,7 @@
           <template #content>
             <Table
               v-bind="tableProps"
-              :loading="refreshing"
+              :loading="loading || refreshing"
               enable-sorting
               :bordered="false"
               aria-label="Teams"

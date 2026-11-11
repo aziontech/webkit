@@ -35,7 +35,11 @@ A search `Input` bound with `v-bind="filterProps"` (name, description, status) a
 
 `No matching teams` with Clear search in the table's `#empty` slot; `No teams yet` with Create Team in a flush `Card` when the account has none.
 
-### F. Outcomes — `Toaster` (required)
+### F. Load failure — `Alert` (conditional)
+
+When the teams do not load, a danger `Alert` with Retry takes the table's place and the heading stays.
+
+### G. Outcomes — `Toaster` (required)
 
 Duplicate and Delete end in a success toast. Team changes are not deploys, so the toast has no Edit or Redeploy.
 
@@ -74,6 +78,8 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 - Default: five teams (one with every permission, one inactive with no members) with search, refresh, sorting, row menus, duplicate and delete wired.
 - CreateTeam: the create page with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create.
 - Empty: no team yet; the heading and an empty state with Create Team.
+- Loading: the first load; the search row and the table's loading rows.
+- Failed: the teams did not load; a danger Alert with Retry.
 
 ## Related
 

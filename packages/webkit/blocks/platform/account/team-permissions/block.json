@@ -45,6 +45,16 @@
       "name": "Empty",
       "summary": "No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table.",
       "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: the search row and the table's loading rows.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The teams did not load: a danger Alert with Retry replaces the table; Retry loads them.",
+      "file": "variants/failed.vue"
     }
   ]
 }

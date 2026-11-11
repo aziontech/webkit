@@ -6,6 +6,10 @@ import State1 from '../../../../../../../packages/webkit/blocks/platform/account
 import source1 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/create-team.vue?raw'
 import State2 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/empty.vue'
 import source2 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/empty.vue?raw'
+import State3 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/loading.vue'
+import source3 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/loading.vue?raw'
+import State4 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/failed.vue'
+import source4 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/failed.vue?raw'
 
 export default {
   title: "Templates/Platform/Account/TeamPermissions",
@@ -31,4 +35,14 @@ export const CreateTeam = {
 export const Empty = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table." }, source: { code: source2 } } }
+}
+
+export const Loading = {
+  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The first load: the search row and the table's loading rows." }, source: { code: source3 } } }
+}
+
+export const Failed = {
+  render: () => ({ components: { Block: State4 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The teams did not load: a danger Alert with Retry replaces the table; Retry loads them." }, source: { code: source4 } } }
 }

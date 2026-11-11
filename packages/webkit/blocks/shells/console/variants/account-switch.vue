@@ -1219,14 +1219,10 @@
                           :disabled="Boolean(accountQuery.trim())"
                           @click="toggleAccount(row)"
                         />
-                        <span
-                          v-else
-                          class="size-7 shrink-0"
-                          aria-hidden="true"
-                        />
                         <i
                           :class="accountTypes[row.type].icon"
-                          class="shrink-0 text-body-sm text-(--text-muted)"
+                          :data-leaf="row.hasChildren ? null : ''"
+                          class="shrink-0 text-body-sm text-(--text-muted) data-[leaf]:ms-7"
                           aria-hidden="true"
                         />
                         <button

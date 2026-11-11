@@ -47,7 +47,11 @@ A search `Input` bound with `v-bind="filterProps"` (name, description, status) a
 
 `No matching teams` with Clear search in the table's `#empty` slot; `No teams yet` with Create Team in a flush `Card` when the account has none.
 
-### F. Outcomes — `Toaster` (required)
+### F. Load failure — `Alert` (conditional)
+
+When the teams do not load, a danger `Alert` with Retry takes the table's place and the heading stays.
+
+### G. Outcomes — `Toaster` (required)
 
 Duplicate and Delete end in a success toast. Team changes are not deploys, so the toast has no Edit or Redeploy.
 
@@ -86,6 +90,8 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 - Default: five teams (one with every permission, one inactive with no members) with search, refresh, sorting, row menus, duplicate and delete wired.
 - CreateTeam: the create page with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create.
 - Empty: no team yet; the heading and an empty state with Create Team.
+- Loading: the first load; the search row and the table's loading rows.
+- Failed: the teams did not load; a danger Alert with Retry.
 
 ## Related
 
@@ -99,6 +105,8 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 - `Default` — primary (the code below)
 - `CreateTeam` — The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Save in a SaveBar; errors on the name field and above the matrix.
 - `Empty` — No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table.
+- `Loading` — The first load: the search row and the table's loading rows.
+- `Failed` — The teams did not load: a danger Alert with Retry replaces the table; Retry loads them.
 
 Each variant is the same screen in another state: `get_pattern("platform/account/team-permissions", { variant })`, or the file under `blocks/platform/account/team-permissions/variants/`.
 
@@ -106,6 +114,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 
 ```vue
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -225,6 +234,16 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 
   const statusSeverity = (value) => (value === 'Active' ? 'success' : 'secondary')
 
+  const loading = ref(false)
+  const loadFailed = ref(false)
+  const retryLoad = () => {
+    loadFailed.value = false
+    loading.value = true
+    setTimeout(() => {
+      loading.value = false
+    }, 700)
+  }
+
   const refreshing = ref(false)
   const refresh = () => {
     if (refreshing.value) return
@@ -292,7 +311,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
         <header
-          v-if="status !== 'empty'"
+          v-if="!loadFailed && (loading || status !== 'empty')"
           class="flex items-center gap-(--layout-group-gap)"
         >
           <div class="min-w-0 grow">
@@ -325,8 +344,23 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </Tooltip>
         </header>
 
+        <Alert
+          v-if="loadFailed"
+          severity="danger"
+        >
+          The teams could not be loaded. Nothing was changed; try again.
+          <template #action>
+            <Button
+              label="Retry"
+              kind="secondary"
+              size="small"
+              @click="retryLoad"
+            />
+          </template>
+        </Alert>
+
         <Card
-          v-if="status === 'empty'"
+          v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
           <template #content>
@@ -356,7 +390,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           <template #content>
             <Table
               v-bind="tableProps"
-              :loading="refreshing"
+              :loading="loading || refreshing"
               enable-sorting
               :bordered="false"
               aria-label="Teams"
