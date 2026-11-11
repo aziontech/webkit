@@ -157,20 +157,60 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       expect(getAllByTestId('code-log-view__line')).toHaveLength(LINES.length)
     })
 
-    it('exposes the log body as a polite live region', () => {
+    it('keeps a polite log region that starts empty instead of the scrolling body', () => {
       const { Host } = makeHost({})
-      const { getByRole } = render(Host)
-      expect(getByRole('log').getAttribute('aria-live')).toBe('polite')
+      const { getByRole, getByTestId } = render(Host)
+      const log = getByRole('log')
+      expect(log.getAttribute('aria-live')).toBe('polite')
+      expect(log.textContent?.trim()).toBe('')
+      expect(getByTestId('code-log-view__content__body').hasAttribute('aria-live')).toBe(false)
+    })
+
+    it('announces appended lines only, not chunks that mount on scroll', async () => {
+      const lines = ref<LogViewLine[]>(
+        Array.from({ length: 2000 }, (_, i) => ({
+          id: String(i),
+          time: '13:47:33',
+          type: 'text' as const,
+          message: `Line ${i}`
+        }))
+      )
+      const Host = defineComponent({
+        setup() {
+          return () =>
+            h(LogView, { lines: lines.value, class: 'h-[480px]' }, () => [h(LogViewContent)])
+        }
+      })
+      const { container, getAllByTestId, getByRole } = render(Host)
+      const log = getByRole('log')
+      const before = getAllByTestId('code-log-view__line').length
+      container.querySelector('[data-chunk="19"]')?.scrollIntoView()
+      await vi.waitFor(() => {
+        expect(getAllByTestId('code-log-view__line').length).toBeGreaterThan(before)
+      })
+      expect(log.textContent?.trim()).toBe('')
+
+      lines.value = [
+        ...lines.value,
+        { id: 'new-1', time: '13:48:00', type: 'success', message: 'Deploy finished' }
+      ]
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      expect(log.textContent).toContain('Deploy finished')
+      expect(log.textContent).not.toContain('Line 0')
+
+      lines.value = [{ id: 'other', time: '00:00:00', type: 'text', message: 'Fresh log' }]
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      expect(log.textContent?.trim()).toBe('')
     })
 
     it('reflects the injected line count and warning-tag label in the header', () => {
       const { Host } = makeHost({})
       const { getByTestId } = render(Host)
-      // lineCountLabel = `${filteredLines.length} lines`; one warning line -> "1 Warning".
+      // lineCountLabel = `${filteredLines.length} lines`; one warning line -> "1 warning".
       // Header controls carry `${ctx.testId}__header__<part>` testids.
       expect(getByTestId('code-log-view__header__line-count').textContent?.trim()).toBe('4 lines')
       const filter = getByTestId('code-log-view__header__warnings-filter')
-      expect(filter.textContent).toContain('1 Warning')
+      expect(filter.textContent).toContain('1 warning')
       expect(filter.getAttribute('aria-pressed')).toBe('false')
     })
 

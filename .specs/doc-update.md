@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 6edb07607eadcb76e6083c5aade6855e7a2cace9c1bdc7d880d61a4812819639
+checksum: a2a17f43df83e2537ef2e38d1f289f9af0a81ddda00331f1e36312100ffde0a7
 created: 2026-08-22
-last_updated: 2026-10-05
+last_updated: 2026-11-11
 ---
 
 # DocUpdate — Component Spec
@@ -87,7 +87,7 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 - Heading navigation degrades gracefully: the anchor calls the handler a page provided via `provideHeadingNav`; outside a provider the injected default is a no-op — activation never throws, and native hash navigation handles the jump
 - `data-doc-block` + `data-doc-update` mark the entry for `DocProse` block rhythm and let an entry that follows another bridge the rule through the block gap; `data-doc-chrome` keeps prose rules off the label column
 - Below `md` the columns stack and the rule drops; from `md` up the label column sticks (`md:sticky`) while the notes scroll past
-- Titled (`title` set, `data-titled` on the root and notes column): the label renders as a date, not a heading, centred on the title's first line; a decorative node sits on the rule at the same line (`md` up); the title is the `h2` and self-link, the tags move under it, and consecutive titled entries are padded apart below the notes
+- Titled (`title` set, `data-titled` on the root and notes column): the label renders as a date, not a heading, centred on the title's first line; a decorative node sits on the rule at the same line (`md` up), centred on the rule in both directions (`-translate-x-1/2`, `rtl:translate-x-1/2`); the title is the `h2` and self-link, the tags move under it, and consecutive titled entries are padded apart below the notes
 
 ## Motion & Animations
 

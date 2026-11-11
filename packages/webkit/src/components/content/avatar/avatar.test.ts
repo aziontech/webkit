@@ -75,6 +75,14 @@ describe('Avatar', () => {
     expect(root).toHaveAttribute('aria-label', 'AB')
   })
 
+  it('names the initials and icon fallbacks with alt when it is given', () => {
+    const initials = render(Avatar, { props: { label: 'JD', alt: 'Jane Doe' } })
+    expect(initials.getByTestId('content-avatar')).toHaveAttribute('aria-label', 'Jane Doe')
+    initials.unmount()
+    const icon = render(Avatar, { props: { alt: 'Jane Doe' } })
+    expect(icon.getByTestId('content-avatar')).toHaveAttribute('aria-label', 'Jane Doe')
+  })
+
   it('treats a whitespace-only label as empty and falls through to the icon branch', () => {
     const { getByTestId, queryByTestId } = render(Avatar, { props: { label: '   ' } })
 

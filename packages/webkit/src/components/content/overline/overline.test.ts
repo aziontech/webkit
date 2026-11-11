@@ -143,3 +143,13 @@ describe('Overline on phones', () => {
     expect(view.getByTestId('content-overline').className).toContain('max-w-full')
   })
 })
+
+describe('Overline colors', () => {
+  it('paints the label and the prefix through real token utilities', () => {
+    const view = render(Overline, { props: { prefix: '//' }, slots: { default: 'LABEL' } })
+
+    expect(view.getByText('LABEL').className).toContain('text-(--primary)')
+    expect(view.getByText('//').className).toContain('text-(--text-default)')
+    expect(view.getByText('LABEL').className).not.toMatch(/(^|\s)text-primary(\s|$)/)
+  })
+})

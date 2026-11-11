@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 39761064606682b6a27818f473fc8f67b784742c4c6ef8ef1325a67ecfeda24c
+checksum: 57037c7b6a80d802121512e4d89c01be11a62f1eabf173db2021453fc9a4180e
 created: 2026-07-23
 last_updated: 2026-11-11
 ---
@@ -114,7 +114,7 @@ packages/webkit/src/components/overlay/command/
 ```
 
 - `command-input/command-input.vue` — the search field. Context-aware: reads and writes the injected `query` (no consumer `v-model`). Builds on the `Input` field (`size="large"`, full-width) with a leading search icon in its `iconLeft` slot and a decorative `Esc` `Kbd` hint (`key-name="escape"`, text from the locale catalog) in its `iconRight` slot, so the focus ring sits on the whole bar; the inner `<input>` carries `role="combobox"`. Autofocuses when the palette opens. Delegates `ArrowDown`/`ArrowUp`/`Enter`/`Home`/`End` to the context's roving navigation.
-  - Props: `placeholder: string` default `''` — input placeholder text; empty uses the locale catalog (`Search Everything` in English). `ariaLabel: string` default `''` — accessible name for the search field; when empty it falls back to `placeholder`, so the field keeps its name after the placeholder disappears on the first keystroke.
+  - Props: `placeholder: string` default `''` — input placeholder text; empty uses the locale catalog (`Search everything` in English). `ariaLabel: string` default `''` — accessible name for the search field; when empty it falls back to `placeholder`, so the field keeps its name after the placeholder disappears on the first keystroke.
   - Events: _none_ (the query lives in the injected context).
   - Slots: _none_.
 - `command-list/command-list.vue` — the scrollable results region. `role="listbox"`; wraps the groups/items and renders the `Empty` part when the filter yields no visible items.

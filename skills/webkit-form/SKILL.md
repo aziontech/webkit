@@ -852,6 +852,7 @@ its required feedback is the on-submit amber `HelperText` only.
 
 ```js
 const errors = reactive({ name: '', country: '' }) // "" = valid; populated ONLY by validate()
+const fieldRefs = reactive({ name: null, country: null }) // :ref="(el) => (fieldRefs.name = el)" on each control
 
 const validate = () => {
   // Empty → a required prompt; a non-empty bad value → an invalid message.
@@ -862,7 +863,13 @@ const validate = () => {
 
 const submit = async () => {
   if (submitting.value) return // re-entrancy lock
-  if (!validate()) return // errors now drive :required / :invalid — no focus dance, no summary
+  if (!validate()) {
+    // errors now drive :required / :invalid; focus lands on the first field in error, no summary
+    const first = Object.keys(errors).find((key) => errors[key])
+    await nextTick()
+    fieldRefs[first]?.$el?.querySelector('input, textarea, button')?.focus()
+    return
+  }
   submitting.value = true
   try {
     await save(form)

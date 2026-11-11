@@ -101,6 +101,13 @@
     normalizedOptions.value.findIndex((option) => option.value === selectedValue.value)
   )
 
+  const tabStopValue = computed(() => {
+    const options = normalizedOptions.value
+    const selected = options.find((option) => option.value === selectedValue.value)
+    if (selected && !selected.disabled) return selected.value
+    return options.find((option) => !option.disabled)?.value
+  })
+
   const indicatorTransitionStyle = computed(() => getSegmentedButtonIndicatorTransitionStyle())
 
   const indicatorTransformStyle = computed(() => ({
@@ -210,6 +217,7 @@
 
       if (!option.disabled) {
         setValue(option.value)
+        optionRefs.value[index]?.focus()
         return
       }
     }
@@ -341,6 +349,7 @@
       type="button"
       role="radio"
       :aria-checked="option.value === selectedValue"
+      :tabindex="option.value === tabStopValue ? 0 : -1"
       :disabled="option.disabled"
       :class="optionClasses(option.value, option.disabled)"
       :data-testid="`${testId}__option`"

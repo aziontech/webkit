@@ -116,7 +116,7 @@
     <ul
       v-if="expanded"
       role="group"
-      class="m-0 ms-(--spacing-sm) list-none border-s border-(--border-muted) p-0 ps-(--spacing-xxs)"
+      class="m-0 ms-(--spacing-md) list-none border-s border-(--border-muted) p-0"
     >
       <TreeNode
         v-for="(child, index) in children"

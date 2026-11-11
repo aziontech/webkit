@@ -167,6 +167,23 @@ describe('ToggleGroup', () => {
     expect(emitted()['update:modelValue'][1]).toEqual(['one'])
   })
 
+  it('is one tab stop and moves focus with the selection', async () => {
+    const { getAllByTestId } = render(ToggleGroup, {
+      props: { options: OPTIONS_WITH_DISABLED }
+    })
+
+    const [first, disabledOption, third] = getAllByTestId('actions-toggle-group__option')
+    expect(first.getAttribute('tabindex')).toBe('0')
+    expect(disabledOption.getAttribute('tabindex')).toBe('-1')
+    expect(third.getAttribute('tabindex')).toBe('-1')
+
+    first.focus()
+    await fireEvent.keyDown(first, { key: 'ArrowRight' })
+    expect(document.activeElement).toBe(third)
+    expect(third.getAttribute('tabindex')).toBe('0')
+    expect(first.getAttribute('tabindex')).toBe('-1')
+  })
+
   it('wraps ArrowLeft from the first option to the last option', async () => {
     const { getAllByTestId, emitted } = render(ToggleGroup, {
       props: { options: OPTIONS }

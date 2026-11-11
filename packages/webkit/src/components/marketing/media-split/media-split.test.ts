@@ -463,6 +463,17 @@ describe('MediaSplit', () => {
     expect(affordance.querySelector('button')).toBeNull()
   })
 
+  it('offsets the chevron affordance toward the closing side in both directions', () => {
+    const { getByTestId } = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, mediaHref: '/site/docs' }
+    })
+
+    const classes = getByTestId(`${TESTID}__media-affordance`).classList
+    expect(classes.contains('translate-x-1')).toBe(true)
+    expect(classes.contains('rtl:-translate-x-1')).toBe(true)
+    expect(classes.contains('rtl:group-hover/split:translate-x-0')).toBe(true)
+  })
+
   it('has no a11y violations with a linked media cell', async () => {
     const { container } = render(MediaSplit, {
       props: { title: TITLE, description: DESCRIPTION, src: SRC, alt: ALT, mediaHref: '/site/docs' }

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: ad599bb50433d228747ebee5ece28904b168658186b8a5b475fb3b3078f11c4b
+checksum: 92ba3af484578709fd5c60ff51b0b4c22e5f27ac24013b654566bc2d3faebf81
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -62,13 +62,13 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 
 ## Props
 
-| Prop            | Type                              | Default   | Required | JSDoc                                                                      |
-| --------------- | --------------------------------- | --------- | -------- | -------------------------------------------------------------------------- |
-| `items`         | `Record<string, unknown>[]`       | `[]`      | false    | The items, one card each.                                                  |
-| `trackBy`       | `string`                          | `'id'`    | false    | Field that identifies an item; selection keys read it.                     |
-| `selectionMode` | `'none' \| 'single' \| 'multi'`   | `'none'`  | false    | No selection, one card, or several cards with a select-all above them.     |
-| `loading`       | `boolean`                         | `false`   | false    | Shows placeholder cards and sets aria-busy while true.                     |
-| `ariaLabel`     | `string`                          | `''`      | false    | Accessible name of the list. Empty uses the locale catalog.                |
+| Prop            | Type                            | Default  | Required | JSDoc                                                                  |
+| --------------- | ------------------------------- | -------- | -------- | ---------------------------------------------------------------------- |
+| `items`         | `Record<string, unknown>[]`     | `[]`     | false    | The items, one card each.                                              |
+| `trackBy`       | `string`                        | `'id'`   | false    | Field that identifies an item; selection keys read it.                 |
+| `selectionMode` | `'none' \| 'single' \| 'multi'` | `'none'` | false    | No selection, one card, or several cards with a select-all above them. |
+| `loading`       | `boolean`                       | `false`  | false    | Shows placeholder cards and sets aria-busy while true.                 |
+| `ariaLabel`     | `string`                        | `''`     | false    | Accessible name of the list. Empty uses the locale catalog.            |
 
 ## v-model
 
@@ -80,11 +80,11 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 ## Slots
 
-| Slot      | Scope                                                         | Notes                                              |
-| --------- | ------------------------------------------------------------- | -------------------------------------------------- |
+| Slot      | Scope                                                                 | Notes                                                 |
+| --------- | --------------------------------------------------------------------- | ----------------------------------------------------- |
 | `header`  | `{ item: Record<string, unknown>; index: number; selected: boolean }` | Card title; names the card and its selection control. |
-| `default` | `{ item: Record<string, unknown>; index: number; selected: boolean }` | Card body: the item's fields.               |
-| `empty`   | —                                                             | Shown when there are no items.                     |
+| `default` | `{ item: Record<string, unknown>; index: number; selected: boolean }` | Card body: the item's fields.                         |
+| `empty`   | —                                                                     | Shown when there are no items.                        |
 
 ## States
 
@@ -100,15 +100,15 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 ## Tokens
 
-| Region           | Token (DESIGN.md)         |
-| ---------------- | ------------------------- |
-| card surface     | `var(--bg-surface)`       |
-| card border      | `var(--border-default)`   |
-| selected border  | `var(--border-selected)`  |
-| selected surface | `var(--bg-selected)`      |
-| padding          | `var(--spacing-md)`       |
-| gap              | `var(--spacing-sm)`       |
-| shape            | `var(--shape-elements)`   |
+| Region           | Token (DESIGN.md)        |
+| ---------------- | ------------------------ |
+| card surface     | `var(--bg-surface)`      |
+| card border      | `var(--border-default)`  |
+| selected border  | `var(--border-selected)` |
+| selected surface | `var(--bg-selected)`     |
+| padding          | `var(--spacing-md)`      |
+| gap              | `var(--spacing-sm)`      |
+| shape            | `var(--shape-card)`      |
 
 ## Theme gaps
 
@@ -126,12 +126,12 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 ## Internationalization
 
-| Key                       | English source                 | Override prop |
-| ------------------------- | ------------------------------ | ------------- |
-| `cards.label`             | Items                          | `ariaLabel`   |
-| `cards.selectAll`         | Select all items               | —             |
-| `cards.emptyTitle`        | No items yet                   | `empty` slot  |
-| `cards.emptyDescription`  | Items you create show here.    | `empty` slot  |
+| Key                      | English source              | Override prop |
+| ------------------------ | --------------------------- | ------------- |
+| `cards.label`            | Items                       | `ariaLabel`   |
+| `cards.selectAll`        | Select all items            | —             |
+| `cards.emptyTitle`       | No items yet                | `empty` slot  |
+| `cards.emptyDescription` | Items you create show here. | `empty` slot  |
 
 - Formatting: none; the slots format the item's fields.
 

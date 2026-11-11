@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: c7dd55a89e03c3c91105734e24368d414263eef9cb47c664fbee9ff6e7670dab
+checksum: 658fda4cc377ff892c270137c639ed3af964c712f878b70cc6a2fdd889fbfb54
 created: 2026-06-30
 last_updated: 2026-11-11
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-11
 
 ## Purpose
 
-A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a "default is the last selection" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.
+A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a "default is the last selection" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.
 
 ## When to use
 
@@ -26,13 +26,13 @@ A primary command button visually joined to a chevron toggle that opens an overl
 ## When NOT to use
 
 - A single action → use `button`.
-- A menu with no default action → use `dropdown`.
+- A menu with no default action → use `dropdown-menu`.
 - Picking one of a few visible, mutually exclusive options → use `toggle-group`.
 
 ## Related
 
 - `button` — the primary segment; `kind` here is limited to `primary`, `secondary` and `outlined`.
-- `dropdown` — the overlay menu the toggle composes; use it alone when there is no default action.
+- `dropdown-menu` — the overlay menu the toggle composes; use it alone when there is no default action.
 - `icon-button` — the chevron toggle segment.
 
 ## Best practices
@@ -108,7 +108,7 @@ A primary command button visually joined to a chevron toggle that opens an overl
 | ------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
 | hover/active state change | `transition-opacity` ghost layer (`duration-fast-02 ease-productive-entrance`) | semantic (matches `Button`)                       | `motion-reduce:transition-none` |
 | hover/focus state change  | `transition-colors duration-150 ease-out`                                      | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| menu open / close         | provided by the composed `navigation/dropdown` overlay                         | semantic (owned by `DropdownMenu`)                | owned by `DropdownMenu`         |
+| menu open / close         | provided by the composed `navigation/dropdown-menu` overlay                    | semantic (owned by `DropdownMenu`)                | owned by `DropdownMenu`         |
 
 ## Tokens
 

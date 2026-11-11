@@ -123,7 +123,7 @@
         <span
           aria-hidden="true"
           :data-testid="`${testId}__node`"
-          class="absolute top-[0.5lh] start-[calc(var(--spacing-xl)*-1)] hidden size-3 -translate-x-1/2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-strong) bg-(--bg-canvas) text-heading-md md:block"
+          class="absolute top-[0.5lh] start-[calc(var(--spacing-xl)*-1)] hidden size-3 -translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-strong) bg-(--bg-canvas) text-heading-md md:block"
         />
         <h2
           :id="`${anchorId}-label`"

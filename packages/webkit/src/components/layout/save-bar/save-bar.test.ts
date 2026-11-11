@@ -32,6 +32,26 @@ describe('SaveBar', () => {
   })
 
   it.each(['floating', 'docked', 'plain'] as const)(
+    'renders the leading slot in place of the icon and sentence (kind=%s)',
+    (kind) => {
+      const { getByTestId } = within(
+        render(SaveBar, {
+          props: { kind },
+          slots: {
+            leading: '<span data-testid="status">Saving…</span>',
+            default: 'You have unsaved changes.'
+          }
+        }).container
+      )
+
+      const message = getByTestId('layout-save-bar__message')
+      expect(message.contains(getByTestId('status'))).toBe(true)
+      expect(message.textContent).not.toContain('You have unsaved changes.')
+      expect(message.querySelector('.pi-info-circle')).toBeNull()
+    }
+  )
+
+  it.each(['floating', 'docked', 'plain'] as const)(
     'mirrors kind=%s and renders the actions',
     (kind) => {
       const { getByTestId, getByRole } = within(

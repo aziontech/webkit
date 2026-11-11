@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 8e381665216b25d71811a09f420b68eb4ec0a26e99d932896c1317268674fa0c
+checksum: 244976720ec9bbebdf4e056f2a3c8ce2b623d98ccc6b250028dd26309c090e2c
 created: 2026-05-23
 last_updated: 2026-11-11
 ---
@@ -138,7 +138,7 @@ Horizontal grid of selectable cards for mutually exclusive choices (plans, roles
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on each option.
 - Keyboard map: `Tab` / arrow keys move focus between options; `Enter` / `Space` selects the focused option.
-- ARIA: root `role="radiogroup"`; each option `role="radio"` with `aria-checked` and `aria-label` from `item.ariaLabel` or `item.label`.
+- ARIA: root `role="radiogroup"`; each option `role="radio"` with `aria-checked` and `aria-label` from `item.ariaLabel` or `item.label`. The `aria-label` replaces the option's text, so an item with a `description` also points `aria-describedby` at the rendered description, which would otherwise never be announced.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px via card padding.

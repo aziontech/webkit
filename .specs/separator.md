@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-886
   node_id: 479:886
-checksum: a38b9e278f8577a52ba79f890361db257b0eb3320e1e72d24b9506ba73049ff7
+checksum: 73ba27173019e47e5b99042c6dcf14bdbe4d7d88aab396f458f83bccabd496be
 created: 2026-06-25
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Separator — Component Spec
@@ -99,7 +99,7 @@ _none_
 
 - Visible focus: not applicable — the separator is non-interactive and not in the tab order.
 - Keyboard map: not applicable — no interactive controls.
-- ARIA: root carries `role="separator"` and `aria-orientation="{orientation}"`. A labelled divider keeps the `separator` role; the label is exposed as the separator's accessible content.
+- ARIA: root carries `role="separator"` and `aria-orientation="{orientation}"`. A labelled divider keeps the `separator` role and is named by its label through `aria-labelledby` (a separator's children are presentational, so the text alone would not reach assistive technology).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state — the muted label text meets the body-text ratio against canvas/surface.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states — not applicable; the component declares no motion.
 - Touch target ≥40×40 px — not applicable; the component is non-interactive.

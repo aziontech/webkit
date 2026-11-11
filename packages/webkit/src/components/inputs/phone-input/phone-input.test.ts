@@ -195,6 +195,15 @@ describe('PhoneInput', () => {
       expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+55')
     })
 
+    it('keeps the number and the dial codes left-to-right on an RTL page', async () => {
+      const { getByTestId } = render(PhoneInput, {})
+      expect(getByTestId('phone-input__input').getAttribute('dir')).toBe('ltr')
+      await fireEvent.click(getByTestId('select-trigger'))
+      expect(
+        getOptions()[0].querySelector('[data-testid="phone-input__dial-code"]')?.getAttribute('dir')
+      ).toBe('ltr')
+    })
+
     it("shows the picked country's dial code, not its ISO code", () => {
       const { getByTestId } = render(PhoneInput, {
         props: { country: 'US' }

@@ -17,7 +17,7 @@
     defineProps<{
       /** Image URL. When set, renders a photo and takes precedence over label and icon. */
       src?: string
-      /** Accessible description for the image. Use when `src` is set. */
+      /** Accessible name: the image's alt with `src`, and the name of the initials or icon fallback without it. */
       alt?: string
       /** Initials shown when no image (normalized to two uppercase characters). */
       label?: string
@@ -61,6 +61,7 @@
 
   const accessibleLabel = computed(() => {
     if (hasImage.value) return imageAlt.value
+    if (props.alt?.trim()) return props.alt.trim()
     if (normalizedLabel.value) return normalizedLabel.value
     return t('avatar.fallbackLabel')
   })

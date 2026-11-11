@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3211-220
   node_id: 3211:220
-checksum: 8a62f4365de59bd896df619e12424617a550a995109f132ac010b5730baabc26
+checksum: c5d3097632a057517a0d4fcd707b2295f9e7e50c0624f98e5b39d6987dd626fb
 created: 2026-06-01
 last_updated: 2026-11-11
 ---
@@ -37,7 +37,7 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 ## Best practices
 
 - Always set `href`; the default `'#'` is a placeholder and the control always renders as an anchor.
-- Replace the `'Learn More'` default `label` with text that says where the link goes.
+- Replace the `'Learn more'` default `label` with text that says where the link goes.
 - Keep the default `pi pi-external-link` icon for off-site targets with `target="_blank"` (`rel="noopener noreferrer"` is added for you); set `showIcon` to false otherwise.
 - Only `large` and `medium` sizes exist.
 
@@ -50,7 +50,7 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 
 <template>
   <MiniButton
-    label="Learn More"
+    label="Learn more"
     href="#"
     target="_blank"
   />
@@ -61,7 +61,7 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 
 | Prop       | Type                  | Default                 | Required | JSDoc                                                                                    |
 | ---------- | --------------------- | ----------------------- | -------- | ---------------------------------------------------------------------------------------- |
-| `label`    | `string`              | `''`                    | false    | Visible label rendered inside the control. Empty uses the locale catalog (`Learn More`). |
+| `label`    | `string`              | `''`                    | false    | Visible label rendered inside the control. Empty uses the locale catalog (`Learn more`). |
 | `size`     | `'large' \| 'medium'` | `'large'`               | false    | Size token; affects height, gap, and typography.                                         |
 | `disabled` | `boolean`             | `false`                 | false    | Disables interaction and applies disabled tokens.                                        |
 | `showIcon` | `boolean`             | `true`                  | false    | When true, renders the trailing icon.                                                    |

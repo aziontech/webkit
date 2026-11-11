@@ -57,7 +57,7 @@
     disabled?: boolean
     /** Controlled open state of the popover (v-model:open); omit for uncontrolled. */
     open?: boolean
-    /** Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a Date Range`). */
+    /** Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`). */
     placeholder?: string
     /** Data-driven shortcuts rendered in the presets rail; each is { label, value }. */
     presets?: CalendarPresetItem[]
@@ -77,7 +77,7 @@
     clearable?: boolean
     /** Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately. */
     showApply?: boolean
-    /** Enables the Select Period relative-time mode (relative-preset list + parsed text input). */
+    /** Enables the Select period relative-time mode (relative-preset list + parsed text input). */
     period?: boolean
     /** Renders the trigger as a split control with a separate chevron affordance. */
     split?: boolean

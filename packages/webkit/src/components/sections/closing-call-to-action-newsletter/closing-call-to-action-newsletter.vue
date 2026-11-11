@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useId } from 'vue'
+  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import Button from '../../actions/button/button.vue'
   import Overline from '../../content/overline/overline.vue'
@@ -26,9 +26,9 @@
     successMessage: string
     /** Alert shown under the form when the site reports the address could not be sent. */
     errorMessage?: string
-    /** Alert shown under the field when it is submitted empty. */
+    /** Message shown under the field when it is submitted empty. */
     requiredMessage: string
-    /** Alert shown under the field when the address is malformed. */
+    /** Message shown under the field when the address is malformed. */
     invalidMessage: string
   }
 
@@ -78,15 +78,22 @@
       (attrs['data-testid'] as string | undefined) ?? 'sections-closing-call-to-action-newsletter'
   )
 
+  const outcome = ref<HTMLElement | null>(null)
+
+  watch(
+    () => props.submitted,
+    (submitted) => {
+      if (!submitted || !outcome.value?.contains(document.activeElement)) return
+      nextTick(() => document.getElementById(`${inputId}-success`)?.focus())
+    }
+  )
+
   const subscribe = (event: Event) => {
     if (props.loading) return
     const value = email.value.trim()
-    if (!value) {
-      invalidMessage.value = props.form.requiredMessage
-      return
-    }
-    if (!EMAIL_PATTERN.test(value)) {
-      invalidMessage.value = props.form.invalidMessage
+    if (!value || !EMAIL_PATTERN.test(value)) {
+      invalidMessage.value = value ? props.form.invalidMessage : props.form.requiredMessage
+      nextTick(() => document.getElementById(inputId)?.focus())
       return
     }
     invalidMessage.value = ''
@@ -136,7 +143,10 @@
             </h2>
           </div>
 
-          <div class="flex flex-col gap-(--spacing-md)">
+          <div
+            ref="outcome"
+            class="flex flex-col gap-(--spacing-md)"
+          >
             <template v-if="submitted">
               <p
                 v-if="title"
@@ -145,6 +155,9 @@
                 {{ title }}
               </p>
               <Alert
+                :id="`${inputId}-success`"
+                tabindex="-1"
+                class="outline-none"
                 severity="success"
                 :label="form.successMessage"
               />
@@ -164,7 +177,8 @@
               >
                 <div class="min-w-0 flex-1">
                   <Field
-                    :invalid="Boolean(invalidMessage)"
+                    :required="Boolean(invalidMessage) && !email.trim()"
+                    :invalid="Boolean(invalidMessage) && Boolean(email.trim())"
                     :disabled="loading"
                   >
                     <Input
@@ -173,9 +187,10 @@
                       size="large"
                       type="email"
                       autocomplete="email"
+                      :spellcheck="false"
+                      :id="inputId"
                       :placeholder="form.placeholder"
                       @update:model-value="clearError"
-                      :id="inputId"
                     />
                     <FieldDescription v-if="invalidMessage">
                       {{ invalidMessage }}

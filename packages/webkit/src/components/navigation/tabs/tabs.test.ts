@@ -50,6 +50,20 @@ describe('Tabs (composition)', () => {
       expect(transition).toContain('translate ')
       expect(transition).toContain('opacity ')
     })
+
+    it('renders the initially active panel visible and runs the enter motion only on a change', async () => {
+      const { getByText } = render(Tree)
+      const first = getByText('Content one') as HTMLElement
+      expect(first.className).not.toContain('opacity-0')
+      expect(first.className).toContain('opacity-100')
+
+      await fireEvent.click(getByText('Second'))
+      const second = getByText('Content two') as HTMLElement
+      expect(second.className).toContain('opacity-0')
+      await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)))
+      await nextTick()
+      expect(second.className).toContain('opacity-100')
+    })
   })
 
   describe('compound API (index.js dot-notation)', () => {

@@ -20,7 +20,7 @@
     lines?: LogViewLine[]
     /** Draw the outer card border and corner radius around the log shell. On by default; set to false to render flush inside a surface that already frames it. */
     bordered?: boolean
-    /** Placeholder for the default header search field. Empty uses the locale catalog (`Find in Logs`). */
+    /** Placeholder for the default header search field. Empty uses the locale catalog (`Find in logs`). */
     searchPlaceholder?: string
     /** Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent). */
     copyable?: boolean
@@ -28,7 +28,7 @@
     disabled?: boolean
     /** Replaces the LogViewContent log body with a centered spinner and label. */
     loading?: boolean
-    /** Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading...`). */
+    /** Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`). */
     loadingLabel?: string
   }
 

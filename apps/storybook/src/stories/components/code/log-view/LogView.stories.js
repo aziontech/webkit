@@ -71,7 +71,7 @@ const meta = {
       table: {
         category: 'props',
         type: { summary: 'string' },
-        defaultValue: { summary: "'Find in Logs'" }
+        defaultValue: { summary: "'Find in logs'" }
       }
     },
     copyable: {
@@ -95,7 +95,7 @@ const meta = {
       table: {
         category: 'props',
         type: { summary: 'string' },
-        defaultValue: { summary: "'Loading...'" }
+        defaultValue: { summary: "'Loading…'" }
       }
     },
     search: {
@@ -132,11 +132,11 @@ const meta = {
   },
   args: {
     bordered: true,
-    searchPlaceholder: 'Find in Logs',
+    searchPlaceholder: 'Find in logs',
     copyable: true,
     disabled: false,
     loading: false,
-    loadingLabel: 'Loading...',
+    loadingLabel: 'Loading…',
     search: '',
     warningsOnly: false
   }

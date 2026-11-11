@@ -3,7 +3,7 @@ name: settings-section
 category: layout
 structure: monolithic
 status: implemented
-checksum: 2636bc6fa71ec15f5aab92057b26b474c346ecf3ee9a96d7bca41f196deabf1d
+checksum: 676e3e0fb83e6e0b884da2f78122a7dbad94eec6d57ace2c3bdfac563a61a665
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
@@ -144,7 +144,7 @@ _none_
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the copy-link and the disclosure button (plus `ring-offset` on the disclosure).
 - Keyboard map: `Tab` reaches the copy-link, the disclosure and then the body; `Enter`/`Space` toggles the disclosure.
-- ARIA: the disclosure is a `button` inside the h2 with `aria-expanded` and `aria-controls` pointing at the body (`useId`); a folded body is `inert` and `aria-hidden`. The copy-link button is named "Copy link to the {title} section".
+- ARIA: the disclosure is a `button` inside the h2 with `aria-expanded` and `aria-controls` pointing at the body (`useId`); a folded body is `inert` and `aria-hidden`. The copy-link button is named "Copy link to the {title} section"; after a successful copy its glyph turns into a check and its name into "Link copied" for two seconds, then both return.
 - Contrast ≥4.5:1 for the title.
 - `motion-reduce:transition-none` on every transition.
 

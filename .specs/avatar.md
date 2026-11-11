@@ -7,10 +7,11 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 5ba30b86965191c4ec3a167c2fb10f73535ab6ee7d95b077a41b12e9285762fc
+checksum: 0169c86fc317540318b98e67dbbbd52eb36e0aef4c0b52381c896281ad7db373
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
+
 # Avatar — Component Spec
 
 ## Purpose
@@ -37,7 +38,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 ## Best practices
 
 - Pass initials in `label` (`"JD"`); it keeps the first two characters, so a full name shows its first two letters, not initials.
-- Set `alt` whenever you set `src`; without it the image's name falls back to the initials or "Avatar".
+- Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
 - Content precedence is `src`, then `label`, then `icon` (default `pi pi-user`).
 - `size` maps to 24 / 32 / 48 px with `medium` as the default; `kind` is `circle` (default) or `square`.
 
@@ -45,26 +46,34 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 
 ```vue
 <script setup>
-import Avatar from '@aziontech/webkit/avatar'
+  import Avatar from '@aziontech/webkit/avatar'
 </script>
 
 <template>
   <Avatar label="JD" />
-  <Avatar src="https://example.com/jane.jpg" alt="Jane Doe" size="large" />
-  <Avatar icon="pi pi-users" kind="square" size="small" />
+  <Avatar
+    src="https://example.com/jane.jpg"
+    alt="Jane Doe"
+    size="large"
+  />
+  <Avatar
+    icon="pi pi-users"
+    kind="square"
+    size="small"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `src` | `string` | `undefined` | false | Image URL. When set, renders a photo and takes precedence over label and icon. |
-| `alt` | `string` | `undefined` | false | Accessible description for the image. Use when `src` is set. |
-| `label` | `string` | `undefined` | false | Initials shown when no image (normalized to two uppercase characters). |
-| `icon` | `string` | `'pi pi-user'` | false | Icon class for the fallback when no image or label (PrimeIcons class). |
-| `kind` | `AvatarKind` | `'circle'` | false | Visual shape of the avatar container. |
-| `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
+| Prop    | Type         | Default        | Required | JSDoc                                                                                                    |
+| ------- | ------------ | -------------- | -------- | -------------------------------------------------------------------------------------------------------- |
+| `src`   | `string`     | `undefined`    | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                           |
+| `alt`   | `string`     | `undefined`    | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it. |
+| `label` | `string`     | `undefined`    | false    | Initials shown when no image (normalized to two uppercase characters).                                   |
+| `icon`  | `string`     | `'pi pi-user'` | false    | Icon class for the fallback when no image or label (PrimeIcons class).                                   |
+| `kind`  | `AvatarKind` | `'circle'`     | false    | Visual shape of the avatar container.                                                                    |
+| `size`  | `AvatarSize` | `'medium'`     | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                               |
 
 ## Events
 
@@ -84,20 +93,20 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

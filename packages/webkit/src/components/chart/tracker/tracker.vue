@@ -133,7 +133,7 @@
     :aria-roledescription="t('tracker.roleDescription')"
     :aria-label="ariaLabel || undefined"
     tabindex="0"
-    class="relative w-full min-w-0 rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1"
+    class="relative w-full min-w-0 rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)"
     @keydown="onKeydown"
   >
     <Skeleton

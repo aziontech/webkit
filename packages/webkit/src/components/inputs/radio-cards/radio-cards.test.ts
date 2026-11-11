@@ -70,6 +70,15 @@ describe('RadioCards', () => {
     expect(options[2].getAttribute('aria-checked')).toBe('false')
   })
 
+  it('describes each radio by its description, which aria-label would otherwise hide', () => {
+    const { getAllByRole, getAllByTestId } = render(RadioCards, { props: { items } })
+    const radios = getAllByRole('radio')
+    const descriptions = getAllByTestId('input-radio-cards__description')
+    expect(radios[0].getAttribute('aria-describedby')).toBe(descriptions[0].id)
+    expect(radios[1].getAttribute('aria-describedby')).toBe(descriptions[1].id)
+    expect(radios[2].hasAttribute('aria-describedby')).toBe(false)
+  })
+
   it('uses ariaLabel when provided, falling back to label otherwise', () => {
     const { getAllByTestId } = render(RadioCards, {
       props: {

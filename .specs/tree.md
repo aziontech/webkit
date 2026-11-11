@@ -3,7 +3,7 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: d30398b53f74a7c8f4c4c8e58cd33527d6d7a88036efd28853cfacce146ffdb6
+checksum: d3f5bb45d810fd910775280897ec0f9745fe10987c3cf6fa4a493504fabf0070
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
@@ -142,23 +142,23 @@ The chevron transition names `rotate`, not `transform`: Tailwind v4 compiles `ro
 
 ## Tokens
 
-| Region                                                            | Token (DESIGN.md)                          |
-| ----------------------------------------------------------------- | ------------------------------------------ |
-| label                                                             | `.text-label-md`, `var(--text-default)`    |
-| description                                                       | `.text-label-sm`, `var(--text-muted)`      |
-| glyph (item icon) and chevron                                     | `var(--text-muted)`                        |
-| disabled label, description, glyph                                | `var(--text-disabled)`                     |
-| row hover (ghost layer)                                           | `var(--bg-hover)`                          |
-| row active (ghost layer)                                          | `var(--bg-active)`                         |
-| row selected                                                      | `var(--bg-selected)`                       |
-| row shape                                                         | `var(--shape-elements)`                    |
-| row padding-x, gap between chevron / glyph / label                | `var(--spacing-xs)`                        |
-| gap between label and description                                 | `var(--spacing-xxs)`                       |
-| indentation per level (nested group margin-start + padding-start) | `var(--spacing-sm)` + `var(--spacing-xxs)` |
-| indent guide line (nested group border-start)                     | `var(--border-muted)`                      |
-| focus ring / ring offset                                          | `var(--ring-color)` / `var(--bg-canvas)`   |
+| Region                                             | Token (DESIGN.md)                        |
+| -------------------------------------------------- | ---------------------------------------- |
+| label                                              | `.text-label-md`, `var(--text-default)`  |
+| description                                        | `.text-label-sm`, `var(--text-muted)`    |
+| glyph (item icon) and chevron                      | `var(--text-muted)`                      |
+| disabled label, description, glyph                 | `var(--text-disabled)`                   |
+| row hover (ghost layer)                            | `var(--bg-hover)`                        |
+| row active (ghost layer)                           | `var(--bg-active)`                       |
+| row selected                                       | `var(--bg-selected)`                     |
+| row shape                                          | `var(--shape-elements)`                  |
+| row padding-x, gap between chevron / glyph / label | `var(--spacing-xs)`                      |
+| gap between label and description                  | `var(--spacing-xxs)`                     |
+| indentation per level (nested group margin-start)  | `var(--spacing-md)`                      |
+| indent guide line (nested group border-start)      | `var(--border-muted)`                    |
+| focus ring / ring offset                           | `var(--ring-color)` / `var(--bg-canvas)` |
 
-Layout: each row is `min-h-8` (32px), full width of its group. The chevron and the glyph each sit in a 1rem box; a leaf reserves the chevron box empty so labels align across siblings. Each nested `role="group"` is indented by `ms-(--spacing-sm)` + `ps-(--spacing-xxs)`, which puts its hairline guide (`border-s`, `var(--border-muted)`) under the center of the parent's chevron and steps every level by 1rem; indentation accumulates through nesting, so no per-level arithmetic or inline style is needed. Label and description truncate with an ellipsis on one line.
+Layout: each row is `min-h-8` (32px), full width of its group. The chevron and the glyph each sit in a 1rem box; a leaf reserves the chevron box empty so labels align across siblings. Each nested `role="group"` is indented by `ms-(--spacing-md)` (the row's `--spacing-xs` inset plus half the 1rem chevron box), which puts its hairline guide (`border-s`, `var(--border-muted)`) under the center of the parent's chevron and steps every level by 1rem plus the guide's hairline; the guide sits in the gutter before the nested rows' box edge, never under their hover or selected surface; indentation accumulates through nesting, so no per-level arithmetic or inline style is needed. Label and description truncate with an ellipsis on one line.
 
 ## Theme gaps
 

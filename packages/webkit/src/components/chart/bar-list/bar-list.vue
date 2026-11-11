@@ -173,7 +173,7 @@
           :type="row.tag === 'button' ? 'button' : undefined"
           :data-interactive="row.interactive || null"
           :data-testid="`${testId}__row`"
-          class="flex w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-elements) pe-(--spacing-xs) text-start text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 data-[interactive]:cursor-pointer data-[interactive]:hover:bg-(--bg-hover)"
+          class="flex w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-elements) pe-(--spacing-xs) text-start text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface) data-[interactive]:cursor-pointer data-[interactive]:hover:bg-(--bg-hover)"
           @click="onRowClick($event, row.item, row.interactive)"
         >
           <span class="relative flex h-8 min-w-0 flex-1 items-center">

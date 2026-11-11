@@ -21,6 +21,8 @@ export interface ToastOptions {
   description?: string
   /** Inline action affordance. */
   action?: ToastAction
+  /** Up to two inline actions (the first two are rendered); takes precedence over `action`. */
+  actions?: ToastAction[]
   /** Auto-dismiss time in ms for this toast; `0` keeps it until dismissed. Falls back to the Toaster default. */
   duration?: number
   /** Anchor this single toast to a specific corner, overriding the Toaster's `position`. */
@@ -55,6 +57,8 @@ export interface ToastEntry {
   description?: string
   /** Inline action affordance. */
   action?: ToastAction
+  /** Up to two inline actions (the first two are rendered); takes precedence over `action`. */
+  actions?: ToastAction[]
   /** Resolved auto-dismiss time in ms; `0` means persist. */
   duration: number
   /** Per-toast anchor override (falls back to the Toaster's `position`). */
@@ -205,6 +209,7 @@ const raise = (type: ToastType, message: string, options: ToastOptions = {}): st
     message,
     description: options.description,
     action: options.action,
+    actions: options.actions,
     duration: options.duration,
     position: options.position,
     closable: options.closable,

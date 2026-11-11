@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 87be6472276b1d02e05fc4e2f703bd1f0f5872103de96a26145c5804e1c0c0b0
+checksum: 5d2fa18b4ad77091585b83ba7077c9af8e94f7fbabc219083758d54ceb42bdb5
 created: 2026-11-09
 last_updated: 2026-11-11
 ---
@@ -142,9 +142,9 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` with `focus-visible:outline-none` on each segment.
-- Keyboard map: `Tab` moves through every enabled segment (each is a native button in the tab order); `Enter` / `Space` select the focused segment; `ArrowRight` / `ArrowLeft` move the selection to the next / previous enabled segment, wrapping at the ends. Focus stays on the segment that had it while the selection moves.
+- Keyboard map: the group is one tab stop (roving `tabindex`): `Tab` lands on the selected segment, or on the first enabled one when nothing is selected, and the next `Tab` leaves the group; `Enter` / `Space` select the focused segment; `ArrowRight` / `ArrowLeft` move the selection to the next / previous enabled segment, wrapping at the ends, and focus moves with it so the newly checked radio is announced.
 - ARIA: root `role="radiogroup"` named by `ariaLabel` (`aria-label` is omitted when it is unset); each segment `role="radio"` with `aria-checked`; the indicator and the lock icon are `aria-hidden="true"`.
-- Disabled options use the native `disabled` attribute, so they are skipped by `Tab` and by arrow navigation and cannot be clicked.
+- Disabled options use the native `disabled` attribute, so they are skipped by arrow navigation, never take the tab stop and cannot be clicked.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): selected text uses `var(--text-default)` on `var(--bg-selected)`, unselected text `var(--text-muted)` on `var(--bg-surface)`.
 - `motion-reduce:transition-none` on the segment color transition; the indicator slide is set inline and is not suppressed by it.
 - Touch target: segments fill the group height minus its padding (40px group at `size="large"`).

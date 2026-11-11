@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs } from 'vue'
+  import { computed, ref, useAttrs, useId } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { cn } from '../../../utils/cn'
@@ -42,6 +42,7 @@
   }>()
 
   const attrs = useAttrs()
+  const uid = useId()
   const dir = useDirection()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-radio-cards')
@@ -153,6 +154,9 @@
       :data-disabled="disabled || null"
       :aria-checked="isSelected(item)"
       :aria-label="item.ariaLabel ?? item.label"
+      :aria-describedby="
+        item.description && !$slots['default'] ? `${uid}-description-${index}` : undefined
+      "
       :tabindex="optionTabIndex(index)"
       @click="select(item.value)"
       @keydown="onOptionKeydown($event, index)"
@@ -183,6 +187,7 @@
           </div>
           <p
             v-if="item.description"
+            :id="`${uid}-description-${index}`"
             class="text-body-xs text-(--text-muted)"
             :data-testid="`${testId}__description`"
           >

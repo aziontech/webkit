@@ -7,7 +7,7 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: ac9b5b47f27fad2e5ffb4be4dcc6591c375fcc00a625b0d3456bdd3fe7c0e215
+checksum: 5e65d2e47daa3c68155f43d63978832afe6a0cafabab2b69be0335cab2a89ef4
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -98,6 +98,8 @@ Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plai
 | ------------------ | -------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
 | track color change | `transition-colors duration-150 ease-out`    | inline (matches catalog)                          | `motion-reduce:transition-none`                              |
 | handle slide       | `transition-transform duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none motion-reduce:transform-none` |
+
+The handle slides toward the inline end when checked: `translate-x-3.5` in LTR, `-translate-x-3.5` under `rtl:`, so on a right-to-left page the on position is the left end.
 
 ## Tokens
 

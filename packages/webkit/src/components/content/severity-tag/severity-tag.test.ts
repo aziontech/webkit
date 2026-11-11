@@ -1,7 +1,9 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import SeverityTag from './severity-tag.vue'
 
 const LEVELS = [
@@ -66,6 +68,19 @@ describe('SeverityTag', () => {
     expect(root).toHaveTextContent('Sev 1')
     expect(root).not.toHaveTextContent('ignored')
     expect(root).not.toHaveTextContent('Critical')
+  })
+
+  it('reads the default level name from the active locale catalog', () => {
+    const Host = defineComponent({
+      setup: () => () =>
+        h(
+          WebkitProvider,
+          { locale: 'pt-BR' },
+          { default: () => h(SeverityTag, { severity: 'low' }) }
+        )
+    })
+    const { getByTestId } = render(Host)
+    expect(getByTestId('content-severity-tag__label')).toHaveTextContent('Baixa')
   })
 
   it('hides the four-bar glyph from assistive technology', () => {

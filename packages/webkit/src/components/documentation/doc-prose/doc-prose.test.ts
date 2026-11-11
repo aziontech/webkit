@@ -106,6 +106,32 @@ describe('DocProse', () => {
       await waitFor(() => expect(copyTip()?.textContent).toContain('to copy'))
     })
 
+    it('names the copy shortcut of the platform when the clipboard is refused', async () => {
+      const writeText = vi.fn().mockRejectedValue(new Error('denied'))
+      vi.stubGlobal('navigator', {
+        platform: 'Win32',
+        userAgent: 'Windows',
+        clipboard: { writeText }
+      })
+      const windows = render(DocProse, {
+        slots: { default: '<p>Run <code>azion deploy</code> to publish.</p>' }
+      })
+      await fireEvent.click(windows.getByText('azion deploy'))
+      await waitFor(() => expect(copyTip()?.textContent).toContain('Press Ctrl+C to copy'))
+      windows.unmount()
+
+      vi.stubGlobal('navigator', {
+        platform: 'MacIntel',
+        userAgent: 'Macintosh',
+        clipboard: { writeText }
+      })
+      const mac = render(DocProse, {
+        slots: { default: '<p>Run <code>azion deploy</code> to publish.</p>' }
+      })
+      await fireEvent.click(mac.getByText('azion deploy'))
+      await waitFor(() => expect(copyTip()?.textContent).toContain('Press ⌘C to copy'))
+    })
+
     it('offers the copy on hover and withdraws it on leave', async () => {
       stubClipboard()
       const { getByText } = render(DocProse, {

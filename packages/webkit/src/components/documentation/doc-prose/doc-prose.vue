@@ -12,16 +12,20 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ docProse: en.docProse })
+  const { t } = useLocale({ docProse: en.docProse, kbd: en.kbd })
 
   const proseRef = ref<HTMLElement | null>(null)
   const tipFor = ref<HTMLElement | null>(null)
   const tipState = ref<'copy' | 'copied' | 'manual'>('copy')
+  const copyShortcut = (): string =>
+    typeof navigator !== 'undefined' && /mac/i.test(navigator.platform || navigator.userAgent || '')
+      ? '⌘C'
+      : `${t('kbd.ctrl')}+C`
   const tipLabel = computed(() =>
     tipState.value === 'copied'
       ? t('docProse.copied')
       : tipState.value === 'manual'
-        ? t('docProse.copyManually')
+        ? t('docProse.copyManually', { shortcut: copyShortcut() })
         : t('docProse.copy')
   )
   const tipLeft = ref(0)

@@ -86,10 +86,18 @@
       >
         <i
           :data-validated="requirement.met || null"
-          class="pi pi-check flex h-[14px] w-0 shrink-0 -translate-x-1 items-center justify-center overflow-hidden opacity-0 transition-[width,margin,translate,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[validated]:me-(--spacing-xxs) data-[validated]:w-[14px] data-[validated]:translate-x-0 data-[validated]:opacity-100"
+          class="pi pi-check flex h-[14px] w-0 shrink-0 -translate-x-1 rtl:translate-x-1 items-center justify-center overflow-hidden opacity-0 transition-[width,margin,translate,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[validated]:me-(--spacing-xxs) data-[validated]:w-[14px] data-[validated]:translate-x-0 rtl:data-[validated]:translate-x-0 data-[validated]:opacity-100"
           aria-hidden="true"
         />
-        {{ requirement.label }}
+        {{ requirement.label
+        }}<span
+          class="sr-only"
+          :data-testid="`${testId}__chip-state`"
+          >,
+          {{
+            requirement.met ? t('passwordRequirements.met') : t('passwordRequirements.unmet')
+          }}</span
+        >
       </span>
     </div>
   </div>

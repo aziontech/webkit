@@ -203,7 +203,7 @@
       <div class="relative">
         <svg
           v-show="path"
-          class="pointer-events-none absolute top-0 start-0 overflow-visible"
+          class="pointer-events-none absolute top-0 start-0 overflow-visible rtl:-scale-x-100"
           :width="railWidth"
           :height="height"
           aria-hidden="true"

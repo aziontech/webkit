@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: c3bc2c70c3261cc22cf8933810352d100ec61b98f7600241e7b5d0f7ee31d10a
+checksum: c4d89f4da90b0c1d2426c5745ef9e5f7b5a5f37db854f2e6068e6dc8eb77a3f7
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -225,6 +225,7 @@ animation silently snaps. Only the positioner, whose placement is an inline
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: the trigger caret points down and does not mirror.
+- Arrow: the popup arrow is a rotated square that hides two of its borders through logical utilities (`border-e-0`, `border-s-0`); under `rtl` it also flips on its inline axis (`rtl:-scale-x-100`), so the visible corner still points at the trigger.
 - Keyboard: on a horizontal menu `ArrowRight`/`ArrowLeft` move to the next/previous trigger, swapped under `dir="rtl"` (`useDirection` passed to the root composable); vertical menus keep `ArrowDown`/`ArrowUp`.
 - Motion: the content slides in from the side the pointer came from; the forward/back direction is computed in reading order, so under `rtl` moving to a later trigger slides from the start edge.
 - User data: none.

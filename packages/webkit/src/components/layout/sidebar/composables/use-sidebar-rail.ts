@@ -11,6 +11,8 @@ import {
   toValue
 } from 'vue'
 
+import { type Direction, useDirection } from '../../../../composables/use-direction'
+
 const COLLAPSE_SNAP = 56
 
 export const SIDEBAR_NUDGE_STEP = 16
@@ -45,6 +47,7 @@ export interface UseSidebarRailReturn {
   tapToExpand: () => void
   nudge: (delta: number) => void
   measure: () => void
+  dir: Readonly<Ref<Direction>>
 }
 
 const readTokenPx = (token: string, fallback: number): number => {
@@ -70,6 +73,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
 
   const railEl = shallowRef<globalThis.HTMLElement | null>(null)
   const resizing = ref(false)
+  const dir = useDirection(railEl)
 
   const railMin = ref(256)
   const railMax = ref(408)
@@ -109,9 +113,10 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
   }
 
   const onPointerMove = (event: globalThis.PointerEvent) => {
-    const next = startWidth + (event.clientX - startX)
+    const travel = (event.clientX - startX) * (dir.value === 'rtl' ? -1 : 1)
+    const next = startWidth + travel
 
-    if (Math.abs(event.clientX - startX) > TAP_SLOP) dragMoved = true
+    if (Math.abs(travel) > TAP_SLOP) dragMoved = true
 
     pullProgress.value = Math.max(0, Math.min(1, next / railMin.value))
     peekWidth.value = Math.max(0, Math.min(next, railMin.value))
@@ -222,7 +227,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     if (!underMin.value) return { translate: '0%', opacity: '1', transition: 'none' }
     return {
       width: `${railMin.value}px`,
-      translate: `${peekWidth.value - railMin.value}px`,
+      translate: `${(peekWidth.value - railMin.value) * (dir.value === 'rtl' ? -1 : 1)}px`,
       opacity: String(RAIL_MIN_OPACITY + (1 - RAIL_MIN_OPACITY) * pullProgress.value),
       transition: 'none'
     }
@@ -242,6 +247,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     startResize,
     tapToExpand,
     nudge,
-    measure
+    measure,
+    dir
   }
 }

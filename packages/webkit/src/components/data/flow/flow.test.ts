@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -392,6 +394,35 @@ describe('Flow (composition compound)', () => {
         </Flow>
       `)
       await expectNoA11yViolations(getByTestId('data-flow'))
+    })
+  })
+
+  describe('right-to-left', () => {
+    it('draws connectors from the inline-end edge of a node to the inline-start edge of the next', async () => {
+      const { getByTestId } = renderTree(`
+        <div dir="rtl">
+          <Flow>
+            <FlowNode>Source</FlowNode>
+            <FlowNode>Sink</FlowNode>
+          </Flow>
+        </div>
+      `)
+      const root = getByTestId('data-flow')
+      const nodes = root.querySelectorAll<HTMLElement>('[data-flow-kind="node"]')
+      await waitFor(() => {
+        expect(root.querySelectorAll('svg path').length).toBe(1)
+      })
+      const d = root.querySelector('svg path')?.getAttribute('d') ?? ''
+      const [fromX, toX] = [...d.matchAll(/[ML](-?[\d.]+),/g)].map((m) => Number(m[1]))
+      const base = root.querySelector('svg')!.getBoundingClientRect().left
+      const source = nodes[0]!.getBoundingClientRect()
+      const sink = nodes[1]!.getBoundingClientRect()
+      expect(source.left).toBeGreaterThan(sink.left)
+      expect(Math.abs(fromX! - (source.left - base))).toBeLessThan(2)
+      expect(Math.abs(toX! - (sink.right - base))).toBeLessThan(2)
+
+      const port = nodes[0]!.querySelector<HTMLElement>('[data-flow-port="start"]')!
+      expect(port.getBoundingClientRect().right).toBeLessThanOrEqual(source.left + 1)
     })
   })
 })

@@ -4,7 +4,7 @@ category: content
 structure: composition
 status: implemented
 spec_version: 1
-checksum: ad2a14550c829ee87ca2e6ae79eb8247c9c29f921f58f749a6e22116091f16b8
+checksum: b46d2a35a1866fb04ddc7a463a4f1334fc420ed3d64f3f302ad2fc4a37b99e7b
 created: 2026-10-21
 last_updated: 2026-11-11
 ---
@@ -193,7 +193,7 @@ No `animate-*` keyframes: the entrance is a transition on a `data-*` flip, so ev
 
 ## Right-to-left
 
-- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`. The scaled frame is anchored at `start-0` and scales from its start corner (`origin-top-left`, `rtl:origin-top-right`), so it fits its host in both directions.
 - Icons: the breadcrumb angle mirrors (`rtl:-scale-x-100`); the `Kbd` search hint stays left to right.
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.

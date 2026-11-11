@@ -318,7 +318,7 @@
             v-for="heading in [t('donutChart.name'), t('donutChart.value'), t('donutChart.share')]"
             :key="heading"
             scope="col"
-            class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-start text-label-sm text-(--text-muted)"
+            class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-end text-label-sm text-(--text-muted) first:text-start"
           >
             {{ heading }}
           </th>
@@ -336,12 +336,12 @@
             {{ entry.name }}
           </th>
           <td
-            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) tabular-nums"
+            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) text-end tabular-nums"
           >
             {{ entry.value }}
           </td>
           <td
-            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) tabular-nums"
+            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) text-end tabular-nums"
           >
             {{ entry.share }}
           </td>

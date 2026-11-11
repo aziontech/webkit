@@ -63,13 +63,13 @@
 
   const monthsEnterFromClass = computed(() =>
     slideDirection.value === 'left'
-      ? 'motion-safe:-translate-x-full motion-safe:opacity-0'
-      : 'motion-safe:translate-x-full motion-safe:opacity-0'
+      ? 'motion-safe:-translate-x-full rtl:motion-safe:translate-x-full motion-safe:opacity-0'
+      : 'motion-safe:translate-x-full rtl:motion-safe:-translate-x-full motion-safe:opacity-0'
   )
   const monthsLeaveToClass = computed(() =>
     slideDirection.value === 'left'
-      ? 'motion-safe:translate-x-full motion-safe:opacity-0'
-      : 'motion-safe:-translate-x-full motion-safe:opacity-0'
+      ? 'motion-safe:translate-x-full rtl:motion-safe:-translate-x-full motion-safe:opacity-0'
+      : 'motion-safe:-translate-x-full rtl:motion-safe:translate-x-full motion-safe:opacity-0'
   )
 
   watch(

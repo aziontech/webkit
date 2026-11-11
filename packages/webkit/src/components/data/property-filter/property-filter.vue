@@ -401,7 +401,7 @@
             >
             <span
               v-else-if="groupLabel(item.group)"
-              class="shrink-0 text-label-xs text-(--text-muted)"
+              class="shrink-0 text-label-sm text-(--text-muted)"
               >{{ groupLabel(item.group) }}</span
             >
           </li>
@@ -440,6 +440,7 @@
         :model-value="operation"
         :options="operationOptions"
         :aria-label="t('propertyFilter.operation')"
+        :disabled="disabled"
         :data-testid="`${testId}__operation`"
         size="small"
         @update:model-value="setOperation"

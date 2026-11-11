@@ -5,15 +5,15 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-10
-checksum: 1f3cca425c3c2ce12a6b3832f31b98eb9c5231bca19cd1123b99ee3d2d8623e0
+last_updated: 2026-11-11
+checksum: 5714e5bfa16a86ed423114095656a38d933915a1c7625efdffa7dd79bd7f7d14
 ---
 
 # HeroForm — Component Spec
 
 ## Purpose
 
-The opening band of a lead-capture page, where the form is the reason for the page: the hero copy and a list of highlights on one side, the form on the other, above the fold, with the client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-form', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `topic`, `field`, `input`, `select`, `phone-input`, `textarea`, `button` and `message`. The fields are data: each entry of `fields` picks its control by `kind`, so the Contact page and the Under attack page are the same block with different `fields`. The block never sends: it validates the fields locally (required fields and the email format, with the messages from `messages`) and on a valid submit emits `submit` with the event and the values keyed by field `name`; the site posts them and reports the outcome back through `loading`, `submitted` and `error`.
+The opening band of a lead-capture page, where the form is the reason for the page: the hero copy and a list of highlights on one side, the form on the other, above the fold, with the client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-form', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `topic`, `field`, `input`, `select`, `phone-input`, `textarea`, `button` and `alert`. The fields are data: each entry of `fields` picks its control by `kind`, so the Contact page and the Under attack page are the same block with different `fields`. The block never sends: it validates the fields locally (required fields and the email format, with the messages from `messages`) and on a valid submit emits `submit` with the event and the values keyed by field `name`; the site posts them and reports the outcome back through `loading`, `submitted` and `error`.
 
 ## When to use
 
@@ -27,7 +27,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 ## Related
 
 - `closing-call-to-action-newsletter` — the other form section; same `submit` and state contract.
-- `message` — renders the success and failure messages.
+- `alert` — renders the success and failure messages.
 
 ## Best practices
 
@@ -123,9 +123,9 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 ## States
 
 - Visual states: `default`, `invalid`, `loading`, `submitted`, `error`
-- `invalid`: on submit, an empty required field shows `messages.missing` and a malformed email `messages.invalidEmail` under the field; editing the field clears it; nothing is emitted
-- `loading` (prop): the button shows its loading state and a submit emits nothing; `data-loading` on the root
-- `submitted` (prop): the form is replaced by a success `Alert` with `messages.success`; `data-submitted` on the root
+- `invalid`: on submit, an empty required field shows `messages.missing` and a malformed email `messages.invalidEmail` under the field; focus moves to the first field in error; editing the field clears it; nothing is emitted
+- `loading` (prop): the button shows its loading state, every field is disabled (the scope locks off the one flag) and a submit emits nothing; `data-loading` on the root
+- `submitted` (prop): the form is replaced by a success `Alert` with `messages.success`, which takes focus when focus was in the form; `data-submitted` on the root
 - `error` (prop): a danger `Alert` with `messages.error` shows under the button; the form stays editable; `data-error` on the root
 - Empty: when `title` is empty the band renders nothing but its root; when `items` is empty the list is omitted; when `carouselMarks` is empty the strip is omitted
 
@@ -149,7 +149,7 @@ _none_
 
 - Visible focus: owned by the field controls and `button`.
 - Keyboard map: `Tab` walks the fields in order then the button; `Enter` in a text field or on the button submits.
-- ARIA: the band is the `hero` `<section>` named by the title (`aria-label`); the root is a plain `div`. The fields sit in a `fieldset` whose visually hidden `legend` is `formAriaLabel`; each control is labelled through its own `Label` with an id from `useId`; each label is a `Label` rendered by the band, carrying the persistent Required tag of a `required` field from first render. Validation runs on submit only: a required field left empty takes the field's amber `required` state (warning border, `kind=required` helper, `aria-required`), a malformed email the red `invalid` state (`aria-invalid`), never both at once; the message is the field's helper text, and editing the field clears it. The success message is a `status` region and the failure message an `alert`.
+- ARIA: the band is the `hero` `<section>` named by the title (`aria-label`); the root is a plain `div`. The fields sit in a `fieldset` whose visually hidden `legend` is `formAriaLabel`; each control is labelled through its own `Label` with an id from `useId`; each label is a `Label` rendered by the band, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`. Validation runs on submit only: a required field left empty takes the field's amber `required` state (warning border, `kind=required` helper, `aria-required`), a malformed email the red `invalid` state (`aria-invalid`), never both at once; the message is the field's helper text, and editing the field clears it. The success message is a `status` region and the failure message an `alert`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the composed components carry their own fallback.
 - Touch target ≥40×40 px — the text fields and the button are large.

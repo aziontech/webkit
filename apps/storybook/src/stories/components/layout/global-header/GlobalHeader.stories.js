@@ -204,7 +204,7 @@ const SITE_TEMPLATE = `<div class="flex w-full flex-col bg-(--bg-canvas)">
       <a class="text-label-md text-(--text-default) no-underline" href="/pricing">Pricing</a>
     </GlobalHeader.Middle>
     <GlobalHeader.Right>
-      <Button label="Start for Free" kind="primary" size="medium" />
+      <Button label="Start for free" kind="primary" size="medium" />
     </GlobalHeader.Right>
   </GlobalHeader>
   <section class="mx-auto w-full max-w-(--layout-measure-site) px-(--layout-boundary-inline) py-(--spacing-xl)">

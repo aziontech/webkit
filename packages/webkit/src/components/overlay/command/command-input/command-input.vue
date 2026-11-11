@@ -14,7 +14,7 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Input placeholder text. Empty uses the locale catalog (`Search Everything`). */
+      /** Input placeholder text. Empty uses the locale catalog (`Search everything`). */
       placeholder?: string
       /** Accessible name for the search field. Falls back to the placeholder text. */
       ariaLabel?: string

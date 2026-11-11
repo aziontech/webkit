@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 2d557ffe77d10cccb6011971de44eaac0f23c608996b95b2d09b641e5d40e912
+checksum: 5860c85f7857947d8faea101e18469fd9a371cb1aa12a6cf78874a831b6e4a2d
 created: 2026-06-25
 last_updated: 2026-11-11
 ---
@@ -122,7 +122,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 | `max`          | `Date \| undefined`              | `undefined` | false    | Latest selectable date; later days render disabled.                                                                                                                                                  |
 | `disabled`     | `boolean`                        | `false`     | false    | Disables the trigger, grid, and all controls, applying disabled tokens.                                                                                                                              |
 | `open`         | `boolean \| undefined`           | `undefined` | false    | Controlled open state of the popover. Use with v-model:open; omit for uncontrolled.                                                                                                                  |
-| `placeholder`  | `string`                         | `''`        | false    | Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a Date Range`).                                                                                                |
+| `placeholder`  | `string`                         | `''`        | false    | Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`).                                                                                                |
 | `presets`      | `CalendarPresetItem[]`           | `[]`        | false    | Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets. |
 | `showFields`   | `boolean`                        | `true`      | false    | Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered.                                      |
 | `showTime`     | `boolean`                        | `false`     | false    | Shows Start/End time fields alongside the date fields.                                                                                                                                               |
@@ -132,7 +132,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 | `horizontal`   | `boolean`                        | `false`     | false    | Lays the fields/apply column beside the calendar instead of below it.                                                                                                                                |
 | `clearable`    | `boolean`                        | `false`     | false    | Shows a clear control on the trigger that empties the committed selection.                                                                                                                           |
 | `showApply`    | `boolean`                        | `true`      | false    | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately.                                                                                                    |
-| `period`       | `boolean`                        | `false`     | false    | Enables the "Select Period" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`.                                                               |
+| `period`       | `boolean`                        | `false`     | false    | Enables the "Select period" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`.                                                               |
 | `split`        | `boolean`                        | `false`     | false    | Renders the trigger as a split control with a separate chevron affordance.                                                                                                                           |
 
 ## Events
@@ -230,7 +230,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 
 ## Internationalization
 
-- Every built-in string comes from the `calendar` group of the locale catalog (`useLocale`): trigger placeholder, Period / Select Period, Start / End / Date / Time labels, Apply, preset labels, hint headings, timezone label, and the words that separate a typed range (`calendar.rangeSeparators`: `to|through`, `a|até`, `a|hasta`).
+- Every built-in string comes from the `calendar` group of the locale catalog (`useLocale`): trigger placeholder, Period / Select period, Start / End / Date / Time labels, Apply, preset labels, hint headings, timezone label, and the words that separate a typed range (`calendar.rangeSeparators`: `to|through`, `a|até`, `a|hasta`).
 - Printed text uses `Intl` in the active locale: the trigger label, the field values and their placeholders (`Jun 1, 2026` in `en`, `1 de jun. de 2026` in `pt-BR`), the time fields, weekday and month names.
 - Period hint chips are printed by `Intl` (`Intl.NumberFormat` units and `Intl.RelativeTimeFormat`): `12 hours` / `12 horas`, `yesterday` / `ontem`, `last month` / `mês passado`, and the fixed hints (`Jan 1` / `1 de jan.`, `1/1 - 1/2` / `01/01 - 02/01`). A chip applies exactly the text it shows.
 - Typing is parsed in the active locale with English always accepted as well: unit words and their abbreviations, `today`/`yesterday`/`last week`/`last month`/`last year`/`this month` and their translations, month names (long and short, accents optional), numeric dates in the locale's day/month order (`1/2/2026` is 2 January in `en`, 1 February in `pt-BR`), ISO `2026-01-05`, and ranges split by `-`, `–` or a separator word. Times accept `14:30`, `14h30` and `2:30 pm`.
@@ -239,6 +239,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: the previous/next month chevrons mirror (`rtl:-scale-x-100`); the clock and calendar trigger icons do not.
+- Motion: the month strip slide mirrors (`rtl:` swaps `translate-x-full` and `-translate-x-full`), so under `dir="rtl"` the next month enters from the left, the side its chevron points to.
 - Keyboard: in the day grid `ArrowRight`/`ArrowLeft` move one day later/earlier, swapped under `dir="rtl"` (`logicalArrowKey`): `ArrowLeft` moves to the next day. `ArrowUp`/`ArrowDown`, `PageUp`/`PageDown` and `Home`/`End` are unchanged.
 - User data: dates and times are printed by `Intl` in the active locale; the typed field value uses the `Input` `dir="auto"`.
 
@@ -248,7 +249,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 - Sizes — composite story rendering every `size` value side-by-side (canonical, the component declares a `size` prop).
 - Single — single-date mode (`mode="single"`). Justified: single is a distinct, mutually-exclusive mode the range default cannot show.
 - Horizontal — `horizontal` layout with fields beside the calendar. Justified: a distinct layout the default vertical story cannot show.
-- WithPresets — consumer `presets` (Last 3/7/14 Days, Last Month) driving the two-part trigger (preset dropdown + calendar). Justified: the two-part trigger and one-click preset behavior cannot be shown without it.
+- WithPresets — consumer `presets` (Last 3/7/14 days, Last month) driving the two-part trigger (preset dropdown + calendar). Justified: the two-part trigger and one-click preset behavior cannot be shown without it.
 - MinMax — `min`/`max` bounds that disable out-of-range days. Justified: the date-constraint behavior (disabled cells, clamped navigation) cannot be shown without it.
 - WithTime — `show-time` Start/End time fields. Justified: the time-field round-trip is a distinct capability.
 - WithTimezone — `show-timezone` selector. Justified: the timezone control is a distinct capability.

@@ -133,7 +133,7 @@
         v-for="n in SKELETONS"
         :key="n"
         :data-testid="`${testId}__skeleton`"
-        class="flex flex-col gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
+        class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
       >
         <Skeleton
           height="1rem"
@@ -159,7 +159,7 @@
         :data-testid="`${testId}__card`"
         :data-selected="isSelected(item) || null"
         :data-state="isSelected(item) ? 'selected' : 'unselected'"
-        class="flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) transition-colors duration-150 ease-out motion-reduce:transition-none data-[selected]:border-(--border-selected) data-[selected]:bg-(--bg-selected)"
+        class="flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) transition-colors duration-150 ease-out motion-reduce:transition-none data-[selected]:border-(--border-selected) data-[selected]:bg-(--bg-selected)"
       >
         <div class="flex min-w-0 items-start gap-(--spacing-sm)">
           <div

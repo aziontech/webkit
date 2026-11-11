@@ -1,6 +1,6 @@
 import { userEvent } from '@storybook/test'
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import HeroForm from './hero-form.vue'
@@ -151,6 +151,27 @@ describe('HeroForm', () => {
     expect(email.getAttribute('aria-required')).toBeNull()
   })
 
+  it('moves focus to the first field in error on an invalid submit', async () => {
+    const { getByLabelText, getByRole } = band()
+
+    await userEvent.type(getByLabelText(/First name/, { selector: 'input' }), 'Ada')
+    await userEvent.click(getByRole('button', { name: SUBMIT }))
+
+    await vi.waitFor(() =>
+      expect(document.activeElement).toBe(getByLabelText(/Work email/, { selector: 'input' }))
+    )
+  })
+
+  it('gives an email field the native email hints', () => {
+    const { getByLabelText } = band()
+
+    const email = getByLabelText(/Work email/, { selector: 'input' })
+    expect(email.getAttribute('type')).toBe('email')
+    expect(email.getAttribute('autocomplete')).toBe('email')
+    expect(email.getAttribute('spellcheck')).toBe('false')
+    expect(getByLabelText(/Website/, { selector: 'input' }).getAttribute('type')).toBe('text')
+  })
+
   it('tags required labels from the first render but holds the field states until a submit', () => {
     const { getByLabelText, getAllByText } = band()
 
@@ -173,15 +194,24 @@ describe('HeroForm', () => {
     ).not.toBe('true')
   })
 
-  it('suppresses submit while loading', async () => {
+  it('locks the fields and suppresses submit while loading', async () => {
     const { getByLabelText, getByRole, emitted } = band({ loading: true })
 
-    await userEvent.type(getByLabelText(/First name/, { selector: 'input' }), 'Ada')
-    await userEvent.type(getByLabelText(/Work email/, { selector: 'input' }), 'ada@example.com')
+    expect(getByLabelText(/First name/, { selector: 'input' })).toBeDisabled()
+    expect(getByLabelText(/How can we help/, { selector: 'textarea' })).toBeDisabled()
     getByRole('button', { name: SUBMIT }).closest('form')?.requestSubmit()
     await userEvent.click(getByRole('button', { name: SUBMIT }))
 
     expect(emitted('submit')).toBeUndefined()
+  })
+
+  it('moves focus to the success message when the form it replaces held focus', async () => {
+    const view = band()
+
+    view.getByRole('button', { name: SUBMIT }).focus()
+    await view.rerender({ submitted: true })
+
+    await vi.waitFor(() => expect(document.activeElement).toBe(view.getByRole('status')))
   })
 
   it('replaces the form with the success message when submitted', () => {

@@ -276,3 +276,12 @@ describe('ShellMockup (composition)', () => {
     await expectNoA11yViolations(interactive.container)
   })
 })
+
+describe('ShellMockup right-to-left', () => {
+  it('scales the frame from its start corner in both directions', () => {
+    const { container } = render(host())
+    const frame = container.querySelector('.origin-top-left')
+    expect(frame?.className).toContain('start-0')
+    expect(frame?.className).toContain('rtl:origin-top-right')
+  })
+})

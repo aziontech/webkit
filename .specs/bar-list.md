@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
-checksum: e4aacb3bd2f4a0f4772c5cde645c740fa7bb7a03115daa94dcdc1dac6d2ded01
+checksum: 9d2ba85e010f1086ece6bbccf6c41c037cb2bf55aca8faeb27124f97bb48e38f
 ---
 
 # BarList — Component Spec
@@ -121,7 +121,7 @@ _No slots — the rows are data (`items`); the empty state is the package's `Emp
 - The root is an `<ol>` named by `ariaLabel`; each row is an `<li>` whose text reads "name, value" in order. The bar is decorative.
 - A link row is a native `<a>`; a clickable row is a native `<button>`; a static row is neither, and is not focusable.
 - Keyboard map: Tab moves between interactive rows; Enter activates (Space too on buttons).
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1` on interactive rows.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on interactive rows (the offset takes the surface color, so it never shows as a white gap in the dark theme).
 - `aria-busy` on the root while `loading`.
 - Name and value text clear 4.5:1 on the tinted fill and on the bare surface in both themes.
 - Interactive rows are 32px tall and full width.

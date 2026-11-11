@@ -251,7 +251,7 @@
   >
     <div
       :data-kind="kind"
-      class="absolute top-0 start-0 flex origin-top-left flex-col data-[kind=window]:bg-(--bg-canvas)"
+      class="absolute top-0 start-0 flex origin-top-left rtl:origin-top-right flex-col data-[kind=window]:bg-(--bg-canvas)"
       :style="frameStyle"
     >
       <TextureMaterial

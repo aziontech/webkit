@@ -63,7 +63,7 @@
       class="whitespace-nowrap group-data-[loading]:text-(--text-muted)"
       :data-testid="`${testId}__label`"
     >
-      {{ loading ? `${text}...` : text }}
+      {{ loading ? `${text}…` : text }}
     </span>
   </div>
 </template>

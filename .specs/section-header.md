@@ -3,7 +3,7 @@ name: section-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: fd468fc96cbddc4fdf8cbaf2ea1f9a7911c28aaa97103414efbf4fca862ea99d
+checksum: 9b4aaa20b5b9b9ab730fcccd5f619e9c97d166a9cad8919f970eb58ccfc6e9dc
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
@@ -98,15 +98,15 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 
 ## Tokens
 
-| Region         | Token (DESIGN.md)                          |
-| -------------- | ------------------------------------------ |
-| title (medium) | `.text-heading-xs` · `var(--text-default)` |
-| title (small)  | `.text-label-md` · `var(--text-muted)`     |
-| description    | `.text-body-sm` · `var(--text-muted)`      |
-| inline padding | `var(--spacing-xs)`                        |
-| row gap        | `var(--spacing-md)`                        |
-| actions gap    | `var(--spacing-xs)`                        |
-| scroll margin  | `var(--spacing-xl)`                        |
+| Region         | Token (DESIGN.md)                           |
+| -------------- | ------------------------------------------- |
+| title (medium) | `.text-heading-xs` · `var(--text-default)`  |
+| title (small)  | `.text-heading-xxs` · `var(--text-default)` |
+| description    | `.text-body-sm` · `var(--text-muted)`       |
+| inline padding | `var(--spacing-xs)`                         |
+| row gap        | `var(--spacing-md)`                         |
+| actions gap    | `var(--spacing-xs)`                         |
+| scroll margin  | `var(--spacing-xl)`                         |
 
 ## Theme gaps
 

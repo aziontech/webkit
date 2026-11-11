@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: a325f34c027029288356b7e44602be9f9eb5ab1491f830fe8d78c8fcdd52e290
+checksum: f0102ce32f7b7ae49dd7705946a50ff383ce2cda1f872ed3361c0959b0770b16
 created: 2026-08-22
 last_updated: 2026-11-11
 ---
@@ -122,7 +122,7 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 
 - Visible focus: each entry takes the focus ring on `focus-visible`.
 - Keyboard map: `Tab` moves through the entries and then through each group's links; `Enter` activates. The rail owns no arrow-key model — it is a list of links, not a widget.
-- ARIA: the outline is a `nav` named by `title`, and **each complementary group is its own named `nav`**, so the three read as three landmarks rather than one long list. Entries are `li` children of a `ul` (the axe `list` rule requires that), and the active entry carries `aria-current="location"`. The rail path and the group glyphs are decorative (`aria-hidden`).
+- ARIA: the outline is a `nav` named by `title`, and **each complementary group is its own named `nav`**, so the three read as three landmarks rather than one long list. Entries are `li` children of a `ul` (the axe `list` rule requires that), and the active entry carries `aria-current="location"`. The rail path and the group glyphs are decorative (`aria-hidden`). Under `dir="rtl"` the rail svg is mirrored (`rtl:-scale-x-100`), so its depth bends step toward the inline end like the entries they follow.
 - The marker is never the only signal: the active entry also changes ink and carries `aria-current`, so the state does not depend on seeing the dash.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: entries are padded rows; the rail itself is not interactive.

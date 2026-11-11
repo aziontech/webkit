@@ -66,7 +66,7 @@
     name?: string
     /** Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). */
     searchPlaceholder?: string
-    /** Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found`). */
+    /** Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). */
     searchEmptyLabel?: string
   }
 
@@ -271,6 +271,7 @@
           {{ c.label }}
           <template #tag>
             <span
+              dir="ltr"
               :data-testid="`${testId}__dial-code`"
               class="shrink-0 text-label-code-sm text-(--text-muted)"
             >
@@ -292,6 +293,7 @@
       :id="resolvedInputId"
       :name="name"
       type="tel"
+      dir="ltr"
       inputmode="tel"
       autocomplete="tel-national"
       :value="displayValue"
@@ -303,7 +305,7 @@
       :aria-required="isRequired || undefined"
       :aria-describedby="describedBy"
       :data-testid="`${testId}__input`"
-      class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+      class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) rtl:text-end text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @input="onInput"
     />
   </InputGroup>

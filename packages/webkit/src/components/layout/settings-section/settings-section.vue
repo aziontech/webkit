@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useId } from 'vue'
+  import { computed, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 
   import { useLocale } from '../../../composables/use-locale'
   import * as en from '../../../i18n/messages/en'
@@ -49,11 +49,26 @@
 
   const expanded = computed(() => !props.collapsible || open.value)
 
+  const copied = ref(false)
+  let copiedTimer: ReturnType<typeof setTimeout> | null = null
+
   const copyLink = () => {
     globalThis.navigator?.clipboard
       ?.writeText(`${globalThis.location.href.split('#')[0]}#${props.anchor}`)
+      .then(() => {
+        copied.value = true
+        if (copiedTimer) clearTimeout(copiedTimer)
+        copiedTimer = setTimeout(() => {
+          copied.value = false
+          copiedTimer = null
+        }, 2000)
+      })
       .catch(() => undefined)
   }
+
+  onBeforeUnmount(() => {
+    if (copiedTimer) clearTimeout(copiedTimer)
+  })
 
   const toggle = () => {
     open.value = !open.value
@@ -72,12 +87,16 @@
         v-if="anchor"
         type="button"
         :data-testid="`${testId}__copy-link`"
-        :aria-label="t('settingsSection.copyLink', { title })"
+        :aria-label="
+          copied ? t('settingsSection.linkCopied') : t('settingsSection.copyLink', { title })
+        "
+        :data-state="copied ? 'copied' : undefined"
         class="absolute -start-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:static [@media(hover:none)]:order-last [@media(hover:none)]:opacity-100 motion-reduce:transition-none"
         @click="copyLink"
       >
         <i
-          class="pi pi-link text-body-xs"
+          :class="copied ? 'pi pi-check' : 'pi pi-link'"
+          class="text-body-xs"
           aria-hidden="true"
         />
       </button>

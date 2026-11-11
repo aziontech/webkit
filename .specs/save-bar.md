@@ -3,7 +3,7 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: c83a91ca673a5724eb4d3e87d8db1d49480ca4ca13cb34d3889868dcebafc278
+checksum: dd6ddb0514056f601f8bf429a6ddff5ffa9deaedf396294f0d14225620b7d6ac
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
@@ -78,10 +78,11 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 
 ## Slots
 
-| Slot      | Scope | Notes                                                              |
-| --------- | ----- | ------------------------------------------------------------------ |
-| `default` | —     | The status sentence on the left, such as You have unsaved changes. |
-| `actions` | —     | Discard or Cancel, then Save, on the right.                        |
+| Slot      | Scope | Notes                                                                                                                                                                                                |
+| --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The status sentence on the left, such as You have unsaved changes.                                                                                                                                   |
+| `leading` | —     | Replaces the whole leading region (the info icon and the sentence) with your own content, such as a `StatusIndicator` (Saving…, Saved) or an unsaved-changes count. Takes precedence over `default`. |
+| `actions` | —     | Discard or Cancel, then Save, on the right.                                                                                                                                                          |
 
 ## States
 

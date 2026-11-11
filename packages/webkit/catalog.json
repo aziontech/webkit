@@ -2419,7 +2419,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Visible label rendered inside the control. Empty uses the locale catalog (`Learn More`)."
+     "doc": "Visible label rendered inside the control. Empty uses the locale catalog (`Learn more`)."
     },
     {
      "name": "size",
@@ -2487,7 +2487,7 @@
    ],
    "bestPractices": [
     "Always set `href`; the default `'#'` is a placeholder and the control always renders as an anchor.",
-    "Replace the `'Learn More'` default `label` with text that says where the link goes.",
+    "Replace the `'Learn more'` default `label` with text that says where the link goes.",
     "Keep the default `pi pi-external-link` icon for off-site targets with `target=\"_blank\"` (`rel=\"noopener noreferrer\"` is added for you); set `showIcon` to false otherwise.",
     "Only `large` and `medium` sizes exist."
    ],
@@ -2840,19 +2840,19 @@
      "notes": "Fired when a menu action is selected. `event` is the pointer/keyboard event that activated the option; `item` is the matched `model` entry. The menu cannot open while `disabled` or `loading`, so it never fires in those states."
     }
    ],
-   "purpose": "A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a \"default is the last selection\" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.",
+   "purpose": "A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a \"default is the last selection\" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.",
    "useWhen": [
     "One default action with a few related alternatives (Save and Save as draft, Deploy and Deploy to staging).",
     "A \"repeat the last choice\" control: set `updateLabelOnSelect` so the primary segment mirrors the last action picked."
    ],
    "avoidWhen": [
     "A single action → use `button`.",
-    "A menu with no default action → use `dropdown`.",
+    "A menu with no default action → use `dropdown-menu`.",
     "Picking one of a few visible, mutually exclusive options → use `toggle-group`."
    ],
    "related": [
     "button` — the primary segment; `kind` here is limited to `primary`, `secondary` and `outlined`.",
-    "dropdown` — the overlay menu the toggle composes; use it alone when there is no default action.",
+    "dropdown-menu` — the overlay menu the toggle composes; use it alone when there is no default action.",
     "icon-button` — the chevron toggle segment."
    ],
    "bestPractices": [
@@ -4223,7 +4223,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Text of the tag; empty falls back to the level name in sentence case."
+     "doc": "Text of the tag. Empty uses the locale catalog (`Critical`, `High`, `Medium`, `Low`, `Info`)."
     },
     {
      "name": "size",
@@ -4256,7 +4256,7 @@
     "chip` — an interactive or removable token, for severity filters."
    ],
    "bestPractices": [
-    "Keep the default label (the level name) so the text always names the level; override `label` only to translate it.",
+    "Keep the default label (the level name from the locale catalog, translated under `WebkitProvider`) so the text always names the level; override `label` only when the product glossary names the level differently.",
     "Use one SeverityTag per row, in its own column, so the glyphs line up and the scale reads down the column.",
     "Do not pair the tag with a toned `tag` for the same level; the glyph and the ramp already carry it."
    ],
@@ -4283,7 +4283,7 @@
      "type": "string",
      "default": "undefined",
      "required": "false",
-     "doc": "Accessible description for the image. Use when `src` is set."
+     "doc": "Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it."
     },
     {
      "name": "label",
@@ -4331,7 +4331,7 @@
    ],
    "bestPractices": [
     "Pass initials in `label` (`\"JD\"`); it keeps the first two characters, so a full name shows its first two letters, not initials.",
-    "Set `alt` whenever you set `src`; without it the image's name falls back to the initials or \"Avatar\".",
+    "Set `alt` to the person's name (\"Jane Doe\"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role=\"img\"`), so a screen reader hears \"Jane Doe\", not \"JD\". Without `alt` the name falls back to the initials, then \"Avatar\" for an image or \"User avatar\" for the icon.",
     "Content precedence is `src`, then `label`, then `icon` (default `pi pi-user`).",
     "size` maps to 24 / 32 / 48 px with `medium` as the default; `kind` is `circle` (default) or `square`."
    ],
@@ -6383,7 +6383,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Placeholder for the default header search field. Empty uses the locale catalog (`Find in Logs`)."
+     "doc": "Placeholder for the default header search field. Empty uses the locale catalog (`Find in logs`)."
     },
     {
      "name": "copyable",
@@ -6411,7 +6411,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading...`)."
+     "doc": "Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`)."
     }
    ],
    "events": [
@@ -9638,7 +9638,7 @@
    "bestPractices": [
     "Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.",
     "Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens, `neutral` is muted, and `alt` uses the primary color.",
-    "With `loading`, pass the bare verb (`\"Deploying\"`). The component appends the ellipsis and swaps the dot for a spinner.",
+    "With `loading`, pass the bare verb (`\"Deploying\"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner.",
     "It is a non-interactive `role=\"status\"` element with no click or keyboard behavior. Don't attach handlers to it."
    ],
    "surface": "product",
@@ -9700,7 +9700,7 @@
     {
      "name": "default",
      "scope": "{ toast, dismiss }",
-     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry."
+     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, actions?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`."
     }
    ],
    "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Alert`](./alert.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface.",
@@ -9722,7 +9722,7 @@
    "bestPractices": [
     "Mount `Toaster` once near the app root, or install `ToastPlugin`. Don't mount one per page; the store renders only the first registered region.",
     "Use the typed shortcuts (`toast.success`, `toast.error`, …). The type sets the icon and the live-region urgency: `error` makes the region assertive, and `error` and `warning` items get `role=\"alert\"`.",
-    "Keep the message text to one line and move detail to `description`. Offer at most one `action`.",
+    "Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).",
     "duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.",
     "Don't make a toast the only path to an important action. It auto-dismisses and never takes focus."
    ],
@@ -9779,7 +9779,7 @@
     {
      "name": "default",
      "scope": "{ toast, dismiss }",
-     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry."
+     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, actions?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`."
     }
    ],
    "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Alert`](./alert.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface.",
@@ -9801,7 +9801,7 @@
    "bestPractices": [
     "Mount `Toaster` once near the app root, or install `ToastPlugin`. Don't mount one per page; the store renders only the first registered region.",
     "Use the typed shortcuts (`toast.success`, `toast.error`, …). The type sets the icon and the live-region urgency: `error` makes the region assertive, and `error` and `warning` items get `role=\"alert\"`.",
-    "Keep the message text to one line and move detail to `description`. Offer at most one `action`.",
+    "Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).",
     "duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.",
     "Don't make a toast the only path to an important action. It auto-dismisses and never takes focus."
    ],
@@ -10046,7 +10046,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a Date Range`)."
+     "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`)."
     },
     {
      "name": "presets",
@@ -10116,7 +10116,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Enables the \"Select Period\" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`."
+     "doc": "Enables the \"Select period\" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`."
     },
     {
      "name": "split",
@@ -10259,7 +10259,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a Date Range`)."
+     "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`)."
     },
     {
      "name": "presets",
@@ -10329,7 +10329,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Enables the \"Select Period\" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`."
+     "doc": "Enables the \"Select period\" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`."
     },
     {
      "name": "split",
@@ -11139,7 +11139,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found`)."
+     "doc": "Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`)."
     }
    ],
    "events": [
@@ -14010,6 +14010,11 @@
      "notes": "The status sentence on the left, such as You have unsaved changes."
     },
     {
+     "name": "leading",
+     "scope": "—",
+     "notes": "Replaces the whole leading region (the info icon and the sentence) with your own content, such as a `StatusIndicator` (Saving…, Saved) or an unsaved-changes count. Takes precedence over `default`."
+    },
+    {
      "name": "actions",
      "scope": "—",
      "notes": "Discard or Cancel, then Save, on the right."
@@ -16584,7 +16589,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Visible label rendered inside the link. Empty uses the locale catalog (`Learn More`)."
+     "doc": "Visible label rendered inside the link. Empty uses the locale catalog (`Learn more`)."
     },
     {
      "name": "size",
@@ -16652,7 +16657,7 @@
     "breadcrumb` — a trail of links for hierarchical location."
    ],
    "bestPractices": [
-    "Always set `href` and a `label` that names the destination; the defaults (`'#'`, `'Learn More'`) are placeholders.",
+    "Always set `href` and a `label` that names the destination; the defaults (`'#'`, `'Learn more'`) are placeholders.",
     "Keep the default `pi pi-external-link` icon for off-site targets with `target=\"_blank\"` (`rel=\"noopener noreferrer\"` is added for you); turn `showIcon` off for in-app destinations.",
     "Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).",
     "disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead."
@@ -17930,7 +17935,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows a spinner on the confirm button while the action runs."
+     "doc": "Shows a spinner on the confirm button while the action runs; Cancel, the close button, `Esc` and the overlay stop closing the dialog until it clears."
     },
     {
      "name": "disabled",
@@ -17949,7 +17954,7 @@
     {
      "name": "cancel",
      "payload": "void",
-     "notes": "The cancel button was activated; the dialog closes."
+     "notes": "The cancel button was activated; the dialog closes. Not emitted while `loading`."
     }
    ],
    "slots": [
@@ -17988,7 +17993,8 @@
    "bestPractices": [
     "The confirm label repeats the verb of the title (Remove Domain, Discard changes), never OK or Yes.",
     "kind=\"danger\"` only when the outcome removes or discards something; a commit is `primary`.",
-    "Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs."
+    "Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.",
+    "Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`."
    ],
    "surface": "product",
    "examplesFile": "catalog/examples/confirm-dialog.json"
@@ -22051,7 +22057,7 @@
    ],
    "related": [
     "closing-call-to-action` — the closing band whose ask is a link action.",
-    "message` — renders the success and failure messages."
+    "alert` — renders the success and failure messages."
    ],
    "bestPractices": [
     "Set `loading` while the address is sent, then `submitted` or `error` with the outcome.",
@@ -23149,7 +23155,7 @@
      "notes": "Fired on a valid submit, not while `loading`; `values` holds every field by `name`, trimmed, with a phone number prefixed by its dial code. The block never sends it."
     }
    ],
-   "purpose": "The opening band of a lead-capture page, where the form is the reason for the page: the hero copy and a list of highlights on one side, the form on the other, above the fold, with the client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-form', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `topic`, `field`, `input`, `select`, `phone-input`, `textarea`, `button` and `message`. The fields are data: each entry of `fields` picks its control by `kind`, so the Contact page and the Under attack page are the same block with different `fields`. The block never sends: it validates the fields locally (required fields and the email format, with the messages from `messages`) and on a valid submit emits `submit` with the event and the values keyed by field `name`; the site posts them and reports the outcome back through `loading`, `submitted` and `error`.",
+   "purpose": "The opening band of a lead-capture page, where the form is the reason for the page: the hero copy and a list of highlights on one side, the form on the other, above the fold, with the client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-form', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `topic`, `field`, `input`, `select`, `phone-input`, `textarea`, `button` and `alert`. The fields are data: each entry of `fields` picks its control by `kind`, so the Contact page and the Under attack page are the same block with different `fields`. The block never sends: it validates the fields locally (required fields and the email format, with the messages from `messages`) and on a valid submit emits `submit` with the event and the values keyed by field `name`; the site posts them and reports the outcome back through `loading`, `submitted` and `error`.",
    "useWhen": [
     "To open a page whose purpose is a lead form, such as Contact sales or Under attack."
    ],
@@ -23159,7 +23165,7 @@
    ],
    "related": [
     "closing-call-to-action-newsletter` — the other form section; same `submit` and state contract.",
-    "message` — renders the success and failure messages."
+    "alert` — renders the success and failure messages."
    ],
    "bestPractices": [
     "Give every field a unique `name`; it is the key of the submitted value.",

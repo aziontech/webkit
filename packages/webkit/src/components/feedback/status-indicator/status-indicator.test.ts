@@ -81,7 +81,7 @@ describe('StatusIndicator', () => {
     expect(getByTestId('feedback-status-indicator__spinner')).toBeTruthy()
     expect(queryByTestId('feedback-status-indicator__dot')).toBeNull()
     // Label appends the ellipsis in loading state.
-    expect(getByTestId('feedback-status-indicator__label').textContent?.trim()).toBe('Deploying...')
+    expect(getByTestId('feedback-status-indicator__label').textContent?.trim()).toBe('Deploying…')
   })
 
   it('merges a consumer-supplied class onto the root', () => {

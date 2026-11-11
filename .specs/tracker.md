@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
-checksum: abc1df15f1c23742750e05664fd717fae0e5f01d278abfff67d64082d38a8122
+checksum: 7c9821a30bc727a4a72ba1e50874d6c4d1930c49e39fadfb0ae4934e89f522b3
 ---
 
 # Tracker — Component Spec
@@ -116,7 +116,7 @@ _No slots._
 - Keyboard map: Left / Right move the active block, Home / End jump to the ends, Escape clears.
 - A polite live region reads the active block's `label`; the visual readout is `aria-hidden`.
 - Severity never rests on color alone: the label names the state.
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1` on the strip.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on the strip (the offset takes the surface color, so it never shows as a white gap in the dark theme).
 - Status colors clear 3:1 against the chart surfaces in both themes.
 
 ## Right-to-left
