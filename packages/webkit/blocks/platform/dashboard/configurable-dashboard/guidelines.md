@@ -1,0 +1,108 @@
+# Configurable dashboard
+
+A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it
+is, and keep that layout. It serves readers who come back to the same page every day and care about
+different cards than the default puts first. The page owns the layout (an array of id, span and
+height) and the order; `ChartCard` provides the drag handle, the resize corner and their keyboard
+model.
+
+## When to use
+
+- The same dashboard serves readers with different priorities, and each comes back often.
+- The cards are independent: none depends on its position to make sense.
+- The product has somewhere to store per-user preferences.
+
+## When not to use
+
+- A dashboard read once to answer one question, or one whose order tells a story: use a static
+  dashboard such as `platform/dashboard/analytics-dashboard` or
+  `platform/dashboard/executive-summary-dashboard`.
+- The reader needs to add or remove widgets from a palette; this block only rearranges and resizes the
+  cards it has.
+- A single chart with editable settings: use `ChartCard` alone.
+
+## Building blocks
+
+### A. Edit layout, Done and Reset layout — `Button` (required)
+
+`Edit layout` (outlined) turns editing on and becomes `Done` (primary) with `aria-pressed` reflecting
+the mode. `Reset layout` (transparent) appears only once the layout differs from the default. While
+editing, one line of help sits beside the buttons: how to drag, resize and use the keyboard.
+
+### B. Cards — `ChartCard` (required)
+
+Each card binds `v-model:span` and `v-model:height`, snaps to whole columns between 3 and 12 and to a
+height between 280 and 720 pixels, and turns on `draggable` and `resizable` only while editing. In edit
+mode the header shows `ChartCard.DragHandle` and the card shows `ChartCard.ResizeHandle`, each with an
+`aria-label` naming the card (`Move Requests over time`, `Resize Requests over time`). The header
+keeps only the title and its hint; no menus or toggles compete with the handles.
+
+### C. Card definitions — `Hint` (required)
+
+One sentence beside each title that defines the metric.
+
+### D. Span while editing — `Tag` (required in edit mode)
+
+Shows the card's span (`6/12`) in the header controls while editing, so a resize has a visible result
+without counting grid lines.
+
+### E. Split cards — `DonutChart` (optional)
+
+A share of a whole (for example requests by region). Renders its own loading and empty state inside
+the card.
+
+### F. Ranked cards — `BarList` (optional)
+
+A ranked list sorted descending (top sources). Renders its own loading and empty state.
+
+### G. Time series cards — `Chart` (optional)
+
+Bars, area or line over time. All time series share one `active-index`, so hovering a moment moves the
+crosshair on every card. A legend with totals appears only when a card has more than one series.
+
+## Do
+
+- Keep the layout as data (id, span, height, order) owned by the page, and persist it wherever the
+  product stores preferences.
+- After a keyboard move, return focus to the moved card's handle and announce the new position in the
+  polite live region (`Requests over time moved to position 2 of 6.`).
+- Announce a resize (`… resized to …`) and a reset (`Layout reset to the default.`).
+- Keep every card at its place and size in loading and empty states, so the reader can arrange it
+  before data arrives.
+
+## Don't
+
+- Don't show handles outside edit mode; a dashboard that can be dragged by accident is worse than a static one.
+- Don't let a card shrink below a span where its content stops reading (3 columns here).
+- Don't put card menus, toggles or exports in the header; they conflict with the drag handle.
+- Don't hide Reset layout behind a menu once the layout is customized.
+
+## Copy
+
+- **Mode button:** `Edit layout`, then `Done`. Never `Save`; changes apply as they happen.
+- **Reset:** `Reset layout`.
+- **Help line:** two short sentences on how, no layout positions. `Drag a card by its handle to move it, or by its corner to resize it. Focus a handle to use the arrow keys.`
+- **Handle labels:** verb plus card title. `Move Requests over time`, `Resize Requests over time`.
+- **Announcements:** full sentences with a period. `Layout reset to the default.`
+- **Empty state:** `No requests yet` / `Metrics appear here once a service serves requests.`
+
+## Accessibility
+
+- The drag handle moves a card with the arrow keys; the resize corner changes span with Left and Right and height with Up and Down.
+- Focus returns to the moved card's handle after a reorder.
+- Every move, resize and reset is announced in an `aria-live="polite"` `sr-only` region.
+- `Edit layout` exposes its mode with `aria-pressed`.
+- Charts carry an `aria-label` equal to the card title.
+
+## States
+
+- Default: the arranged dashboard, read-only.
+- Editing: handles and resize corners on every card, span tags in the headers, help line visible.
+- Loading: every chart renders its own `Skeleton` inside its card; the layout holds its shape.
+- Empty: nothing recorded yet; each card keeps its place and size and shows its empty state.
+
+## Related
+
+- `platform/dashboard/analytics-dashboard` — the static version of the same cards.
+- `platform/dashboard/data-dashboard` — a fixed dashboard when the order tells the story.
+- `ChartCard` — owns the drag and resize handles and their keyboard model.
