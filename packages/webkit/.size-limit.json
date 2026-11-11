@@ -1141,7 +1141,7 @@
   {
     "name": "otp-input",
     "path": "src/components/inputs/otp-input/otp-input.vue",
-    "limit": "3.5 KB"
+    "limit": "3.2 KB"
   },
   {
     "name": "table-cell-status",

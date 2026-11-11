@@ -341,3 +341,57 @@ Scope: `Card` `kind="integration"` (additive), new blocks `platform/view/templat
 - Finding (caught by `src/test/marketplace-block.test.ts`): the Installed variant called the success path without the run's application, so the `Alert` read "installed on .". Fixed: the success path records the application.
 - Finding: `class` on `Tabs.Root` and `Tabs.Content` (16 `no-style-override` hits over 8 SFCs). Fixed: the section step sits on a wrapper and the panel gap on the panel's first child.
 - Decision: the block opens on Integrations (the sample opens on Templates), because the template catalog has its own block and the Templates tab here only links to it.
+
+## WP account-org
+
+Sources: the design sample's `PersonalTokens.vue`, `panels/ActivityHistory.vue`, `panels/TeamsPermissions.vue`, `CreateTeam.vue`, `AccountSwitcher.vue`, `SwitchAccountDialog.vue` and `CardBrandMark.vue`; the Console Kit only where the sample has nothing (`mfa-setup-block`, `mfa-authenticate-block`, `checkout-block` terms, `card-flag-block` brand list). Data is fictional and product-neutral.
+
+### OtpInput
+
+- Decision: one real `input` laid over the boxes instead of the Console Kit's six inputs with hand-written focus moves. Autofill (`one-time-code`), password managers, paste and screen readers then see one field with one name and one value; auto-advance, Backspace and paste fall out of the native input. The caret stays at the end (arrows and Home do nothing), so the active box is always the next empty one.
+- Decision: the box row is `dir="ltr"` under RTL: a code is read left to right like a phone number.
+- `complete` fires once per full code (typed, pasted or autofilled), so a screen can submit without a press; the blocks keep a Verify button for keyboard users and retries.
+- Finding: the `Field` description registers one tick after mount; the test waits a tick before reading the accessible description. No component change.
+- Finding: Testing Library's `render` moves the mounted node, which drops focus taken in `onMounted`; the autofocus test mounts with `createApp` instead. In an app the field keeps focus.
+
+### PaymentBrand
+
+- Decision: monochrome marks in `currentColor` on `--bg-surface`, never the networks' fills (the sample's `#2548a0` Visa plate). They read in both themes and in forced colors, and they close the card-brand hex row (M2.11 0.5). The plate is a named image by default, so `Ending in 8888` reads `Visa, Ending in 8888`; `decorative` hides it when the row text names the brand.
+- Brands the API sends in other spellings (`American Express`, `american_express`, `Diners Club`) are normalized; a lookup by own key avoids `constructor` and friends.
+
+### platform/account/tokens
+
+- The sample's design, with three changes for safety: revoke asks first (the sample revoked on click), Delete is offered only for expired or revoked tokens, and the reveal clears the secret when it closes. The secret is masked by default (`PasswordInput` read-only with show), with a `CopyButton` and a polite "Copied" line; the footer button reads `I copied the token` until the copy, then `Done`.
+- The expiry select states the exact date it picks; a token within 7 days of expiry reads `Expires in N days` (warning) in the Status column.
+- Finding: axe `landmark-no-duplicate-contentinfo` with the reveal open while the drawer closes (`PanelFooter`'s bare `footer`). Fixed at `PanelFooter` with `role="none"`, and the same on `PanelHeader` for the banner (M2.10 row 18).
+- Finding: `no-style-override` on `Input`, `PasswordInput`, `PanelContent`, `PanelFooter` and `DialogDescription` (layout classes on webkit tags). Fixed with wrapper elements.
+
+### platform/account/activity-history
+
+- The sample is a table, not a timeline; the sample's design wins. Its FilterButton and chips become one `PropertyFilter`; the date filter is a `DateRangePicker` beside it (time is not a property token) and narrows the items before `useCollection`, newest first.
+- IP addresses are `dir="ltr"` with a copy button; categories are text in a tag, not colour alone.
+- An empty period is not an error: it offers the last 30 days.
+
+### platform/account/team-permissions
+
+- The permission matrix is a real `table` (caption, View and Edit column headers, one `tbody` per area with a `rowgroup` header holding the area checkbox, a row header per resource) instead of the sample's div grid with per-checkbox `aria-label`s; the checkboxes keep those names (`Edit Firewall`). A missing action is a dash with hidden "Not available", not an empty cell.
+- Decision: Edit implies View (checking Edit checks View, clearing View clears Edit), stated under the matrix.
+- Permissions in the list use `Table.CellTags` (the sample's first item plus a hand-made `+N` popover is now the preset); a team with every permission reads `All permissions`.
+
+### auth#MfaSetup and auth#MfaCode
+
+- Same card and frame as the other auth states; a rejected code is the field's reason (the field is cleared and keeps focus), a check that does not answer is the card's warning `Alert` with Retry, as the auth rule says. Never a toast.
+- MfaSetup always offers the setup key as text with a copy button beside the QR code. There is no QR renderer in WebKit, so the block shows the API's image and, in the demo, a named placeholder (M2.10 row 35).
+- MfaCode adds the recovery-code path (8 characters, alphanumeric, grouped by 4) and Sign in with another account; the form has no name of its own, so the code field is the only control named `Authentication code`.
+
+### shells/console#AccountSwitch
+
+- Built on the `AppLayout` console after merging workload-app. The switcher leads the header (square `Avatar`, name, chevron) with `aria-keyshortcuts` and the shortcut on its tooltip; Ctrl+O (⌘O on a Mac, detected after mount so server and client render the same tooltip) toggles the dialog.
+- Each account name in the tree is a button (the sample made the whole row clickable, which a keyboard cannot reach); expand and collapse carry `aria-expanded`, search expands every match's branch.
+- Finding: leaf rows reserved an empty 28 px box for the missing chevron (rule 5, "never reserve an empty glyph box"). Fixed: the type glyph carries the offset itself.
+
+### change-plan-drawer#Checkout
+
+- The upgrade drawer as the checkout step: Due today under the total, one note on taxes and renewal, and the terms as a required `Checkbox` whose label holds the two links. Upgrade without it marks the field invalid and focuses the checkbox; no toast.
+
+Not verified: a styled render in both themes and RTL at 320 px (M2.10 row 37).

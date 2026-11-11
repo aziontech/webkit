@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: fd9442ee07e6fe56ee4214cf474653a76c8a1ece0e51fab475c365140c01020d
+checksum: 3c4c2f27dac43a97d7bcbaf994ad69a26cea772c261448207862d87a20cc1b6e
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -150,7 +150,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 3.5 KB gzip for `./otp-input` in `.size-limit.json`.
+- Bundle budget: 3.2 KB gzip for `./otp-input` in `.size-limit.json`.
 - Runtime budget: one input, `length` boxes.
 - Heavy parts: none.
 

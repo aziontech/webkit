@@ -239,3 +239,15 @@ One new entry. `card` had no budget; measured 11.07 KB before the change (`cn` c
 | Entry | Budget before | Measured now | New budget | Why                                                        |
 | ----- | ------------- | ------------ | ---------- | ---------------------------------------------------------- |
 | card  | –             | 13.23        | 13.5       | New entry: integration kind adds `Tag` and `useTranslate`. |
+
+## M2.9 WP account-org
+
+`PaymentBrand` and `OtpInput` are new entries; both include `useTranslate` for their one catalog string. The `paymentBrand` and `otpInput` groups are one string each, so the provider and the two locale entries stay inside their list-kit budgets (measured after merging `feat/webkit-v6`). Budgets are measured + ~0.2 KB.
+
+| Entry           | Budget before | Measured now | New budget | Note                                                              |
+| --------------- | ------------- | ------------ | ---------- | ----------------------------------------------------------------- |
+| payment-brand   | new           | 3.82         | 4.05       | New: five inline monochrome marks and the generic card glyph.     |
+| otp-input       | new           | 2.99         | 3.2        | New: one input over the boxes, `useFieldControl`, `useTranslate`. |
+| webkit-provider | 8.4           | 8.25         | 8.4        | Unchanged: two one-string groups.                                 |
+| locales-pt-BR   | 7.8           | 7.64         | 7.8        | Unchanged.                                                        |
+| locales-es      | 7.9           | 7.73         | 7.9        | Unchanged.                                                        |
