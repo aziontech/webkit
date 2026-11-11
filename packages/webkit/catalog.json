@@ -17227,6 +17227,91 @@
         "Write `form.invalidMessage` with an example address so the fix is obvious."
       ]
     },
+    "closing-call-to-action-templates": {
+      "import": "@aziontech/webkit/closing-call-to-action-templates",
+      "target": "./src/components/sections/closing-call-to-action-templates/closing-call-to-action-templates.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/closing-call-to-action-templates",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered as its `h2` and naming its region; the band renders nothing when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Sentence under the headline."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ClosingCallToActionTemplatesAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The white button under the copy; `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "ClosingCallToActionTemplatesAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The outlined button beside the primary one; `{ label, href, trailing?, target? }`. Omitted when absent."
+        },
+        {
+          "name": "templates",
+          "type": "ClosingCallToActionTemplatesTemplate[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The template cards of the scrolling grid beside the copy, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped and the grid is omitted when none is left."
+        },
+        {
+          "name": "deployLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set."
+        },
+        {
+          "name": "templatesAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the scrolling grid of templates."
+        }
+      ],
+      "purpose": "The close for a page whose last ask is \"start from a template\": a framed split whose left cell carries the ask — headline, sentence and two actions, left-aligned — over the pixelated, waving texture of the `primary` close, and whose right cell is a scrolling two-column grid of deployable template cards, each with its mark, name, one line and a deploy button, its top and bottom fading out; then the tall hatched closing frame. Below `lg` the cells stack, the ask first. It merges the `primary` close of `closing-call-to-action` with the scrolling template wall of `template-gallery`. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-templates', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `scroll-area`, `card-grid`, `card-grid-cell`, `frame-box` and `texture-material`.",
+      "useWhen": [
+        "To close a framework, solution or developer page on a ready-to-deploy start rather than on a sign-up alone."
+      ],
+      "avoidWhen": [
+        "For a close on one or two link actions → use `closing-call-to-action` (`primary` for the same loud register without the templates).",
+        "For a mid-page band that browses many templates beside its copy → use `template-gallery`.",
+        "For a close whose reader may be an agent → use `closing-call-to-action-agents`."
+      ],
+      "related": [
+        "closing-call-to-action` — the `primary` close, centred, without the template grid.",
+        "template-gallery` — a scrolling wall of templates beside its copy, as a mid-page band."
+      ],
+      "bestPractices": [
+        "Give the grid six to eight templates so it overflows its height and reads as scrollable; an even count keeps its two columns full.",
+        "Keep each template line to one short sentence so the cards keep one height.",
+        "Give every card an `href` and set `deployLabel`, or no card shows its deploy button."
+      ]
+    },
     "code-split": {
       "import": "@aziontech/webkit/code-split",
       "target": "./src/components/sections/code-split/code-split.vue",
