@@ -548,9 +548,99 @@ export const wizard = {
   submit: 'Create'
 } as const
 
+export const actionConfirmation = {
+  approve: 'Approve',
+  deny: 'Deny',
+  approved: 'Approved',
+  denied: 'Denied',
+  expired: 'Request expired',
+  confirmLabel: 'Type {phrase} to confirm'
+} as const
+
+export const aiLoading = {
+  generating: 'Generating a response'
+} as const
+
+export const artifactPreview = {
+  open: 'Open',
+  openLabel: 'Open {title}',
+  download: 'Download {title}',
+  copy: 'Copy {title}'
+} as const
+
+export const chatMessage = {
+  user: 'You',
+  assistant: 'AI assistant',
+  system: 'System',
+  labelWithTime: '{author} at {time}',
+  actions: 'Message actions',
+  error: 'The response could not be generated.',
+  retry: 'Try again',
+  helpful: 'Helpful',
+  notHelpful: 'Not helpful',
+  feedback: 'Response feedback',
+  feedbackSubmitting: 'Submitting feedback',
+  feedbackSubmitted: 'Feedback submitted'
+} as const
+
+export const citation = {
+  label: 'Source {index}: {title}',
+  labelUntitled: 'Source {index}'
+} as const
+
+export const conversation = {
+  label: 'Conversation',
+  scrollToLatest: 'Scroll to the latest message',
+  announcement: '{author}: {text}'
+} as const
+
+export const promptInput = {
+  label: 'Prompt',
+  placeholder: 'Ask a question',
+  submit: 'Submit',
+  stop: 'Stop generating',
+  count: '{count}/{max}',
+  overLimit: '{count} characters over the limit'
+} as const
+
+export const reasoning = {
+  thinking: 'Thinking',
+  thoughtBriefly: 'Thought for a few seconds',
+  skip: 'Skip thinking',
+  thought: {
+    one: 'Thought for {count} second',
+    other: 'Thought for {count} seconds'
+  }
+} as const
+
+export const sources = {
+  label: 'Sources',
+  count: {
+    one: '{count} source',
+    other: '{count} sources'
+  }
+} as const
+
+export const suggestionGroup = {
+  label: 'Suggested prompts'
+} as const
+
+export const toolCall = {
+  pending: 'Waiting',
+  running: 'Running',
+  success: 'Completed',
+  error: 'Failed',
+  denied: 'Denied',
+  input: 'Input',
+  output: 'Output'
+} as const
+
 export const en = {
+  actionConfirmation,
+  aiLoading,
   alert,
   articleIndex,
+  artifactPreview,
   avatar,
   barList,
   breadcrumb,
@@ -560,12 +650,15 @@ export const en = {
   carousel,
   chart,
   chartCard,
+  chatMessage,
   chip,
+  citation,
   codeBlock,
   collectionPreferences,
   command,
   comparisonTable,
   confirmDialog,
+  conversation,
   copyButton,
   dialog,
   docFrame,
@@ -582,8 +675,8 @@ export const en = {
   globalHeader,
   helpPanel,
   heroForm,
-  keyValuePairs,
   kbd,
+  keyValuePairs,
   label,
   link,
   logoWall,
@@ -598,7 +691,9 @@ export const en = {
   phoneInput,
   pickList,
   popover,
+  promptInput,
   propertyFilter,
+  reasoning,
   resizable,
   sectionHeader,
   settingsSection,
@@ -606,11 +701,13 @@ export const en = {
   sidebar,
   siteFooter,
   siteNav,
+  sources,
   splitButton,
   statTile,
   statusIndicator,
   stepper,
   storyLibrary,
+  suggestionGroup,
   table,
   tableAppliedFilters,
   tableColumnSelector,
@@ -624,6 +721,7 @@ export const en = {
   themeSwitcher,
   toast,
   toggleGroup,
+  toolCall,
   tracker,
   tree,
   wizard

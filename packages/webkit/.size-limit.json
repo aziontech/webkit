@@ -899,7 +899,7 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "9.1 KB"
+    "limit": "10.6 KB"
   },
   {
     "name": "phone-input",
@@ -926,5 +926,80 @@
     "name": "log-view-content",
     "path": "src/components/code/log-view/log-view-content.vue",
     "limit": "22.75 KB"
+  },
+  {
+    "name": "action-confirmation",
+    "path": "src/components/ai/action-confirmation/action-confirmation.vue",
+    "limit": "11 KB"
+  },
+  {
+    "name": "ai-loading",
+    "path": "src/components/ai/ai-loading/ai-loading.vue",
+    "limit": "2.5 KB"
+  },
+  {
+    "name": "artifact-preview",
+    "path": "src/components/ai/artifact-preview/artifact-preview.vue",
+    "limit": "9.75 KB"
+  },
+  {
+    "name": "chat-message",
+    "path": "src/components/ai/chat-message/index.ts",
+    "limit": "24 KB"
+  },
+  {
+    "name": "chat-message-root",
+    "path": "src/components/ai/chat-message/chat-message.vue",
+    "limit": "17.75 KB"
+  },
+  {
+    "name": "chat-message-actions",
+    "path": "src/components/ai/chat-message/chat-message-actions/chat-message-actions.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "chat-message-feedback",
+    "path": "src/components/ai/chat-message/chat-message-feedback/chat-message-feedback.vue",
+    "limit": "8.5 KB"
+  },
+  {
+    "name": "citation",
+    "path": "src/components/ai/citation/citation.vue",
+    "limit": "6 KB"
+  },
+  {
+    "name": "conversation",
+    "path": "src/components/ai/conversation/conversation.vue",
+    "limit": "4.75 KB"
+  },
+  {
+    "name": "prompt-input",
+    "path": "src/components/ai/prompt-input/prompt-input.vue",
+    "limit": "5.5 KB"
+  },
+  {
+    "name": "reasoning",
+    "path": "src/components/ai/reasoning/reasoning.vue",
+    "limit": "4.5 KB"
+  },
+  {
+    "name": "sources",
+    "path": "src/components/ai/sources/sources.vue",
+    "limit": "2.75 KB"
+  },
+  {
+    "name": "streaming-response",
+    "path": "src/components/ai/streaming-response/streaming-response.vue",
+    "limit": "32 KB"
+  },
+  {
+    "name": "suggestion-group",
+    "path": "src/components/ai/suggestion-group/suggestion-group.vue",
+    "limit": "2 KB"
+  },
+  {
+    "name": "tool-call",
+    "path": "src/components/ai/tool-call/tool-call.vue",
+    "limit": "3.5 KB"
   }
 ]

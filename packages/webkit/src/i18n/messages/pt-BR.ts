@@ -1,6 +1,82 @@
 import type { Messages } from '../types'
 
 export const ptBR: Messages = {
+  actionConfirmation: {
+    approve: 'Aprovar',
+    deny: 'Negar',
+    approved: 'Aprovado',
+    denied: 'Negado',
+    expired: 'Pedido expirado',
+    confirmLabel: 'Digite {phrase} para confirmar'
+  },
+  aiLoading: {
+    generating: 'Gerando uma resposta'
+  },
+  artifactPreview: {
+    open: 'Abrir',
+    openLabel: 'Abrir {title}',
+    download: 'Baixar {title}',
+    copy: 'Copiar {title}'
+  },
+  chatMessage: {
+    user: 'Você',
+    assistant: 'Assistente de IA',
+    system: 'Sistema',
+    labelWithTime: '{author} às {time}',
+    actions: 'Ações da mensagem',
+    error: 'Não foi possível gerar a resposta.',
+    retry: 'Tentar novamente',
+    helpful: 'Útil',
+    notHelpful: 'Não foi útil',
+    feedback: 'Avaliação da resposta',
+    feedbackSubmitting: 'Enviando avaliação',
+    feedbackSubmitted: 'Avaliação enviada'
+  },
+  citation: {
+    label: 'Fonte {index}: {title}',
+    labelUntitled: 'Fonte {index}'
+  },
+  conversation: {
+    label: 'Conversa',
+    scrollToLatest: 'Ir para a última mensagem',
+    announcement: '{author}: {text}'
+  },
+  promptInput: {
+    label: 'Prompt',
+    placeholder: 'Faça uma pergunta',
+    submit: 'Enviar',
+    stop: 'Parar de gerar',
+    count: '{count}/{max}',
+    overLimit: '{count} caracteres acima do limite'
+  },
+  reasoning: {
+    thinking: 'Pensando',
+    thoughtBriefly: 'Pensou por alguns segundos',
+    skip: 'Pular raciocínio',
+    thought: {
+      one: 'Pensou por {count} segundo',
+      other: 'Pensou por {count} segundos'
+    }
+  },
+  sources: {
+    label: 'Fontes',
+    count: {
+      one: '{count} fonte',
+      other: '{count} fontes'
+    }
+  },
+  suggestionGroup: {
+    label: 'Prompts sugeridos'
+  },
+  toolCall: {
+    pending: 'Aguardando',
+    running: 'Executando',
+    success: 'Concluído',
+    error: 'Falhou',
+    denied: 'Negado',
+    input: 'Entrada',
+    output: 'Saída'
+  },
   alert: {
     close: 'Fechar mensagem'
   },

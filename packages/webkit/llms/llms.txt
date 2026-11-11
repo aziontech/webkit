@@ -33,6 +33,9 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [OnboardingForm (platform/account/onboarding-form)](blocks/platform/account/onboarding-form.md): The `/signup/onboarding` screen, frame included.
 - [PaymentMethodCard (platform/account/payment-method-card)](blocks/platform/account/payment-method-card.md): The Payment method card of the Upgrade to Pro drawer.
 - [Profile (platform/account/profile)](blocks/platform/account/profile.md): The profile page of a signed-in account, and the layout every account settings page follows.
+- [AiActionApproval (platform/ai/ai-action-approval)](blocks/platform/ai/ai-action-approval.md): The moment an assistant needs permission.
+- [AiChat (platform/ai/ai-chat)](blocks/platform/ai/ai-chat.md): A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question.
+- [AiChatDrawer (platform/ai/ai-chat-drawer)](blocks/platform/ai/ai-chat-drawer.md): The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page.
 - [Auth (platform/auth)](blocks/platform/auth.md): The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included.
 - [CreateHub (platform/create/create-hub)](blocks/platform/create/create-hub.md): The Creation Center, where a new project starts.
 - [CreateInDrawer (platform/create/create-in-drawer)](blocks/platform/create/create-in-drawer.md): The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule.
@@ -99,6 +102,21 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [MiniButton](components/mini-button.md): Compact text action with an optional trailing external-link icon and a ghost hover surface.
 - [SplitButton](components/split-button.md): A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array.
 - [ToggleGroup](components/toggle-group.md): ToggleGroup is a connected group of buttons that picks exactly one value out of a small set of related options, with a selection indicator that slides to the active segment.
+
+## Components: Ai
+
+- [ActionConfirmation](components/action-confirmation.md): A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader a…
+- [AiLoading](components/ai-loading.md): The loading state of a generative AI response (Cloudscape generative AI loading states and loading bar, AI Elements Loader): visible loading text — `Generating a response`, `Loading list of workloads` — paired with th…
+- [ArtifactPreview](components/artifact-preview.md): A card for something the assistant generated — a file, a code snippet, a table, a configuration (Cloudscape artifact previews, AI Elements Artifact).
+- [ChatMessage](components/chat-message.md): One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes…
+- [Citation](components/citation.md): An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL…
+- [Conversation](components/conversation.md): The scrolling message log of a generative AI chat.
+- [PromptInput](components/prompt-input.md): The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated,…
+- [Reasoning](components/reasoning.md): Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is…
+- [Sources](components/sources.md): The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line descript…
+- [StreamingResponse](components/streaming-response.md): Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely.
+- [SuggestionGroup](components/suggestion-group.md): A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clar…
+- [ToolCall](components/tool-call.md): One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Runnin…
 
 ## Components: Charts
 

@@ -1,0 +1,128 @@
+{
+ "name": "action-confirmation",
+ "binding": "ActionConfirmation",
+ "import": "@aziontech/webkit/action-confirmation",
+ "treeShakeableImport": "@aziontech/webkit/action-confirmation",
+ "category": "ai",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValuePairs` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`kind=\"danger\"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.",
+ "setup": null,
+ "useWhen": [
+  "One-time authorization of a consequential action proposed by an agent: a production deployment, a purge, a command.",
+  "An irreversible action (delete): add `confirmationPhrase`."
+ ],
+ "avoidWhen": [
+  "Tools already trusted for the session → record the call with `tool-call`, do not ask again.",
+  "A destructive action the reader started themselves in the UI → `confirm-dialog`.",
+  "A form → this card only approves or denies."
+ ],
+ "related": [
+  "tool-call` — the record of the call after it is approved (or `denied`).",
+  "confirm-dialog` — confirmation of the reader's own destructive action.",
+  "code-block`, `key-value-pairs` — what will run, in the body.",
+  "chat-message` — the assistant acknowledges the decision in the next message."
+ ],
+ "bestPractices": [
+  "Title is a question naming the action and target; put tool and command names in backticks (code).",
+  "Match the approve label to the title verb (`Deploy`, `Delete`) when it is not a generic tool call.",
+  "Never pre-focus or pre-select Approve for a risky action.",
+  "Do not leave a request pending forever: expire it (`state=\"expired\"`) and have the assistant say nothing ran.",
+  "After Deny, the assistant acknowledges in the conversation (\"Skipping that step.\")."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One or two sentences on what will happen and to what; backticks render as code."
+  },
+  {
+   "name": "state",
+   "type": "'pending' | 'approved' | 'denied' | 'expired'",
+   "default": "'pending'",
+   "required": "false",
+   "doc": "pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text."
+  },
+  {
+   "name": "kind",
+   "type": "'default' | 'danger'",
+   "default": "'default'",
+   "required": "false",
+   "doc": "danger` for an action that cannot be undone: the approve button turns destructive."
+  },
+  {
+   "name": "confirmationPhrase",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing."
+  },
+  {
+   "name": "approveLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`)."
+  },
+  {
+   "name": "denyLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Text of the deny button. Empty uses the locale catalog (`Deny`)."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "A decision is being sent; both buttons are inert and Approve shows its loading state."
+  }
+ ],
+ "events": [
+  {
+   "name": "approve",
+   "payload": "—",
+   "notes": ""
+  },
+  {
+   "name": "deny",
+   "payload": "—",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "What exactly will run: a `CodeBlock`, or `KeyValuePairs` with parameters."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Command",
+   "sfc": "<script setup>\n  import ActionConfirmation from '@aziontech/webkit/action-confirmation'\n  import CodeBlock from '@aziontech/webkit/code-block'\n  import { ref } from 'vue'\n\n  const state = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ActionConfirmation\n      title=\"Allow `azion deploy --env production`?\"\n      description=\"Deploys the current build of storefront to production. The previous version stays available for rollback.\"\n      approve-label=\"Deploy\"\n      :state=\"state\"\n      @approve=\"state = 'approved'\"\n      @deny=\"state = 'denied'\"\n    >\n      <CodeBlock\n        :tabs=\"[\n          {\n            label: 'Shell',\n            value: 'cmd',\n            code: 'azion deploy --env production --workload storefront',\n            language: 'bash'\n          }\n        ]\"\n        :show-line-numbers=\"false\"\n      />\n    </ActionConfirmation>\n  </div>\n</template>"
+  },
+  {
+   "name": "Irreversible",
+   "sfc": "<script setup>\n  import ActionConfirmation from '@aziontech/webkit/action-confirmation'\n  import { ref } from 'vue'\n\n  const state = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ActionConfirmation\n      title=\"Delete the domain `www.example.com`?\"\n      description=\"The domain stops answering at once and its certificate is revoked. This cannot be undone.\"\n      kind=\"danger\"\n      confirmation-phrase=\"www.example.com\"\n      approve-label=\"Delete\"\n      :state=\"state\"\n      @approve=\"state = 'approved'\"\n      @deny=\"state = 'denied'\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Resolved",
+   "sfc": "<script setup>\n  import ActionConfirmation from '@aziontech/webkit/action-confirmation'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <ActionConfirmation\n      title=\"Allow `purge_urls`?\"\n      description=\"Purges https://www.example.com/styles.css from every edge location.\"\n      state=\"approved\"\n    />\n    <ActionConfirmation\n      title=\"Approve deployment to production?\"\n      description=\"Deploys the current build of storefront to production.\"\n      state=\"denied\"\n    />\n    <ActionConfirmation\n      title=\"Allow `delete_cache_rule`?\"\n      description=\"Removes the rule that caches images for one day.\"\n      state=\"expired\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/action-confirmation.md"
+}

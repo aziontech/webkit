@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Inline",
+   "summary": "Processing: three pulsing dots beside `Generating a response`, shown only after the default one-second delay so a fast response never flickers.",
+   "sfc": "<script setup>\n  import AiLoading from '@aziontech/webkit/ai-loading'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <AiLoading />\n  </div>\n</template>"
+  },
+  {
+   "name": "Bar",
+   "summary": "Generating mixed content: an indeterminate bar under the loading text where a table is about to appear, with the text naming what is coming.",
+   "sfc": "<script setup>\n  import AiLoading from '@aziontech/webkit/ai-loading'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <AiLoading\n      kind=\"bar\"\n      label=\"Generating a table of cache hits by country\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

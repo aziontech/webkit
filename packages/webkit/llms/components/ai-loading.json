@@ -1,0 +1,69 @@
+{
+ "name": "ai-loading",
+ "binding": "AiLoading",
+ "import": "@aziontech/webkit/ai-loading",
+ "treeShakeableImport": "@aziontech/webkit/ai-loading",
+ "category": "ai",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The loading state of a generative AI response (Cloudscape generative AI loading states and loading bar, AI Elements Loader): visible loading text — `Generating a response`, `Loading list of workloads` — paired with three pulsing dots (`inline`, for text) or an indeterminate bar (`bar`, where a table, list or code block is about to appear). It waits `delay` milliseconds before showing anything, so a response that arrives within a second never flickers a loading state.",
+ "setup": null,
+ "useWhen": [
+  "Processing: the model has the prompt but has produced nothing yet (`ChatMessage` renders it for `state=\"pending\"`).",
+  "Generation of mixed content: a bar where a table or code block will appear while text streams."
+ ],
+ "avoidWhen": [
+  "Model reasoning with a trace → `reasoning`.",
+  "Loading a page or table of product data → `skeleton`, `spinner`, `progress`.",
+  "Determinate progress → `progress`."
+ ],
+ "related": [
+  "chat-message` — renders this while `pending`.",
+  "progress` — the indeterminate bar it draws.",
+  "reasoning` — thinking with a trace."
+ ],
+ "bestPractices": [
+  "Text says `[Generating|Loading] <what>` without end punctuation: `Generating a response`, `Loading list of workloads`.",
+  "Keep the default 1 s delay; set `delay` to 0 only when the owner already delayed.",
+  "Use the bar only for non-text content; stream text instead of loading it."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Visible loading text, `Generating <what>` or `Loading <what>`, with no end punctuation. Empty uses the locale catalog (`Generating a response`)."
+  },
+  {
+   "name": "kind",
+   "type": "'inline' | 'bar'",
+   "default": "'inline'",
+   "required": "false",
+   "doc": "inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear."
+  },
+  {
+   "name": "delay",
+   "type": "number",
+   "default": "1000",
+   "required": "false",
+   "doc": "Milliseconds to wait before showing anything, so a fast response never flickers a loading state."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Inline",
+   "sfc": "<script setup>\n  import AiLoading from '@aziontech/webkit/ai-loading'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <AiLoading />\n  </div>\n</template>"
+  },
+  {
+   "name": "Bar",
+   "sfc": "<script setup>\n  import AiLoading from '@aziontech/webkit/ai-loading'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <AiLoading\n      kind=\"bar\"\n      label=\"Generating a table of cache hits by country\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/ai-loading.md"
+}
