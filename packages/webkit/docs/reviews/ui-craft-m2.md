@@ -316,3 +316,33 @@ Scope: `shells/console` primary (ListPage) and DetailPage rebuilt on `AppLayout`
 
 - Nothing is written on drop; every line is previewed with its number, status `Tag` and reason in text (not colour alone); the counts are a polite status; errors raise one danger `Alert` that says the ready lines still import; Import is disabled at zero and the toast counts what was left out. The hidden file input is out of the tab order; Browse files is the keyboard path.
 - Note: axe best practice `empty-table-header` fires on the records table's action column, which predates this WP (its header is intentionally empty); the WCAG harness does not include that rule.
+
+## WP site-sections
+
+Scope: new sections `CapabilityGrid`, `ProcessScroll`, `StickyCarousel`, `ConsolePanel`, `CustomerSpotlight`, `SectionCommand`; the design sample's Heroes, QuoteBand and PlanMatrix as variants of `HeroBand`, `LogoWallQuote` and `ComparePlans`; docs parts `DocAccordionGroup`, `DocAccordionItem`, `DocCodeGroup`, `DocTabs`, `DocTab`, `DocHeading`, `DocCta`; `LineFigure` (engine and 25 figures); `BannerArt` (globe, map, network); every example under `examples/<name>/` for them. Source order: the design sample (`site/ui/sections/*`, `site/docs/ui/*`, `shared/ui/line-figure/*`, `shared/ui/banners/*`); the Console Kit and Cloudscape have nothing for marketing bands. ArticleIndex, CompareCompetitors and PlanMatrix already existed as `article-index-blog` / `article-index-resource-hub`, `comparison-table` and `compare-plans`, and were not rebuilt. A mechanical pass over every new SFC found no raw colours, palette classes, physical direction utilities or raw sizes, and every transition and animation carries a `motion-reduce` escape on the same class string. The rendered result was checked against the sample itself (`docs/reviews/m2.9-site-parity.md`).
+
+### Sections
+
+- Every section is a marketing band (rule `webkit-sections`): copy and actions arrive through props, no product-only parts (no `Table`, no form-error, no async toast). Built-in strings exist only where the band names a control: `ConsolePanel` tabs ("Console views"), `CustomerSpotlight` list and cue ("Customer stories", "Read story"), `SectionCommand` field and copy button; each is in en, pt-BR and es, and the first two take an override prop.
+- Finding: `ProcessScroll` and `StickyCarousel` rendered two regions with the same name (the band and its scroll row; axe `landmark-unique`). Fixed: the band root is a plain container and the scroll row is the one focusable, named region.
+- Finding: the parity check showed the sample's page data sets `kind` on each action (an outlined Docs beside the tabs); `ConsolePanel` and `CapabilityGrid` drew the first action filled. Fixed: actions take an optional `kind`, defaulting to the first secondary and the rest outlined.
+- `CustomerSpotlight`: the sample's `role="list"` on a `div` with `role="listitem"` frames became a real `ul`/`li` with the `FrameBox` inside each item; the link name is "<cue>, <client>: <story>", so the reversed logo is decorative. Focus opens a card exactly like hover. The arrow glyph mirrors under RTL.
+- `StickyCarousel`: the pinned row translates with the page scroll only under `motion-safe` from `lg`; the translation is inverted under `dir="rtl"`, and the sample's hard-coded `top-14` became `headerOffset` (default 3.5rem), so a page with a taller header does not hide the cards.
+- `ConsolePanel`: the sample's `SegmentedButton` is `ToggleGroup` here (renamed in M1); the scene is a slot (`#scene="{ tab }"`) instead of a component prop, which is the scene convention for every band (`HeroBand` `#top`/`#bottom` too).
+- `SectionCommand`: the command is `dir="ltr"` inside right-to-left pages; the `$` is decorative.
+- Decision: `HeroBand` `compact-band` uses the medium hero height; `Hero` has no `small` size and adding one is outside this package. The difference is one spacing step at the top and bottom of the band (`m2.9-site-parity.md`).
+- Decision: `LogoWallQuote` `kind="quote"` renders nothing without a quote; `kind="wall"` keeps its old behaviour exactly (an empty band still renders its section).
+
+### Docs parts
+
+- `DocAccordionGroup` keeps the sample's card (surface, rule, radius), the heading rung on the question, `text-wrap-style: pretty`, the inset focus ring and the padded panel body. `DocTabs` and `DocCodeGroup` sit on `Tabs` and `CodeBlock`, so keyboard and copy behaviour are the components'.
+- Decision: a tab or sample without a title is labelled by its position ("2"), not by a built-in "Tab 2", so the parts stay free of strings.
+- Decision: `DocHeading` without an `id` renders plain text; the sample drew a link to `#`.
+- Decision: `DocCta` has no default copy (the sample defaulted to "Ready to build?" and "Start for free"); a page passes its own offer, and an action without a label is not drawn.
+
+### LineFigure and BannerArt
+
+- `LineFigure` is the sample's engine (MIT, `LICENSE` kept) and figures, unchanged apart from imports; it takes `role="img"` only when it has a name, and the sample's `console.warn` on an unknown figure is gone (it draws nothing). The figure descriptions are English asset metadata used only without `aria-label`.
+- Decision: the inventory's "`Banner` `art` variants" is a sibling component, `BannerArt`, under `marketing/banner`. `Banner` is an announcement band with its own surfaces; a decorative backdrop for a hero's `background` slot is a different object. It draws WebKit's own `SpinningGlobe` and `NetworkMap`, so the system has one globe and one map. The sample's `MapMesh` traffic (rays and packets over the network map) is not drawn; it is an M2.10 row.
+
+Not verified by the unit tests: styled geometry (the tests run without CSS). The parity screenshots cover it for the cases listed in `m2.9-site-parity.md`.
