@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: f55f889aba9282c26f566cc910c90b6692b6a27bd85793d5d5a329f23df2cae2
+checksum: e1e49eec4abb4e4411b49fd8033dc7633a85b3802751c44ff7a1ba81ef342870
 created: 2026-09-22
 last_updated: 2026-11-11
 ---

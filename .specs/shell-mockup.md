@@ -4,7 +4,7 @@ category: content
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 852aed531867f2ac7b3fd6329c3b8dd9a95d146a936d89564d303cdec434ed34
+checksum: ad2a14550c829ee87ca2e6ae79eb8247c9c29f921f58f749a6e22116091f16b8
 created: 2026-10-21
 last_updated: 2026-11-11
 ---

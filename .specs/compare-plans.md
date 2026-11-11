@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-11
-checksum: b1948a37f4ff604feb8a90c041d06c421b9829364c669cfeb683520f4e0581a8
+checksum: 03b4c2beca8139daa4bc0de1ac42bd8e08d0f07cbc60c39c1c0e96896a6b628f
 ---
 
 # ComparePlans — Component Spec

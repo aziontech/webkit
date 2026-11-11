@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-11
-checksum: 512bf7ad72eccf642fcb4a7d57059bced878ecf3ed46e2277b35377094f2c2ab
+checksum: 23276d716e349a42673f9a007589f81478586d093532305b915a05c3f71933ce
 ---
 
 # ContactHub — Component Spec

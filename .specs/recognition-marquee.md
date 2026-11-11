@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-11
-checksum: b793313516b146197d2b39a844a96145ebbcb3ecb9ff5d8df8d61d9e80e45e36
+checksum: de7f1b1aceb7d9db7122e7d2ac4988165b9ec9ecaacd5d8d670e22a92ae21694
 ---
 
 # RecognitionMarquee — Component Spec

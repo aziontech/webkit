@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-11
-checksum: 765ee7677b9e6189634cf8cdce64c66a0809bdc943e1ed236772c88e88e892ba
+checksum: 47e833e2a0916e4115697aa914e9671465e3228ca403e6d74fcaf4eabfadca51
 ---
 
 # PhotoMarquee — Component Spec

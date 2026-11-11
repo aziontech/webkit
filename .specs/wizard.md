@@ -3,7 +3,7 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: 14edde0be82fe02af6ad4b1fd55dbbbeea9095e9058d7b3b6d7b272711ce0bcb
+checksum: 5e6e23a3415478c4e3dbfdfa0b8ec5897be60c8a6add93b101ce86fee1134a57
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-11
-checksum: a959efd1bde93b606605f18c5d2f8fbd53eed7da861e08915a19c12baa7005c4
+checksum: 3b91a06052c2557d7e42fef699d3d987e21ea0a249727b9259c9a1ba85a9c308
 ---
 
 # CompareSupportTiers — Component Spec

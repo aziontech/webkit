@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-11
-checksum: 733051a7c8a099b1ad17ee95c937c575cc4d791b3ab6fbac9b3a0d465861e9ac
+checksum: 1aa589ec59bcf46e85fcd3f7810b5df213505d428416d8ea8c3523872b513500
 ---
 
 # ComplianceBadges — Component Spec

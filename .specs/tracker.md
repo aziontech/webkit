@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
-checksum: 66f2908d55e371a06fe1a605c1da0b0a17f1a7ba2d4d048ad7bf12d9315e079d
+checksum: abc1df15f1c23742750e05664fd717fae0e5f01d278abfff67d64082d38a8122
 ---
 
 # Tracker — Component Spec
