@@ -38,7 +38,7 @@
               kind="outlined"
               icon="pi pi-external-link"
               size="medium"
-              href="https://status.azion.com/"
+              href="https://status.example.com"
               target="_blank"
             />
           </div>

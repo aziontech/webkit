@@ -141,7 +141,7 @@
           <HelpPanel.Links>
             <Link
               label="Services documentation"
-              href="https://www.azion.com/en/documentation/"
+              href="https://example.com/docs"
               target="_blank"
             />
           </HelpPanel.Links>

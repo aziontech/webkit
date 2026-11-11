@@ -135,7 +135,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
               kind="outlined"
               icon="pi pi-book"
               size="medium"
-              href="https://www.azion.com/en/documentation/"
+              href="https://example.com/docs"
               target="_blank"
             />
           </div>
