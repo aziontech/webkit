@@ -51,6 +51,9 @@ Every export carries a `surface`: `product` (console and apps), `marketing` (the
   `text-start`, `border-s`, `rounded-s`); directional icons mirror with `rtl:-scale-x-100`; arrow-key
   and drag logic reads `useDirection` (`@aziontech/webkit/use-direction`); code, URLs and IDs
   inside text sit in `dir="ltr"` or `<bdi>` (rule `webkit-direction`).
+- **Built-in strings stay built in.** Never re-type a string a webkit component already ships
+  (close, pagination, calendar, keycaps, wizard steps): set `locale` on `WebkitProvider` and rename
+  one with its `messages` prop. Product copy follows `/webkit-microcopy` (rule `webkit-strings`).
 - **Small bundles.** Prefer the `<name>-root` path (or specific sub-components), import icons
   individually, lazy-load heavy overlays.
 - **App-level setup at first use.** A few components declare a one-time wiring in their catalog

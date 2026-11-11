@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 6e5ce66142dede7d738b6ac12e78cdd8f0bfc1dea2dc77bec9e52e335a99477e
+checksum: 17b8d7a51dca318a004540a0968fa0106be09b7b0b38dcda31b4361d02908e3f
 created: 2026-05-26
 last_updated: 2026-11-11
 ---
@@ -182,6 +182,13 @@ the height of a single row the moment the root stopped stretching.
 - The loading state uses `role="status"` with `aria-live="polite"`; the spinner is `aria-hidden` (from the Spinner component) and the `loadingLabel` text conveys status.
 - `motion-reduce:transition-none` on every motion-bearing class.
 - Touch target: the warning control is ≥40×40 px; the copy control uses CopyButton `size="small"` (28×28 px) to match CodeBlock — a justified deviation for the compact overlay.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: no horizontal arrow-key logic.
+- Isolation: timestamps render `dir="ltr"`; each message renders `dir="auto"`, so a log line in another script keeps its own direction.
 
 ## Stories (Storybook)
 

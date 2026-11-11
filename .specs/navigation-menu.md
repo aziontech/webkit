@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: b2aebf215b473c77d32f770559aa47710c2273f248eea6323492e6a56dd4cb29
+checksum: c3bc2c70c3261cc22cf8933810352d100ec61b98f7600241e7b5d0f7ee31d10a
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -220,6 +220,14 @@ animation silently snaps. Only the positioner, whose placement is an inline
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the trigger caret points down and does not mirror.
+- Keyboard: on a horizontal menu `ArrowRight`/`ArrowLeft` move to the next/previous trigger, swapped under `dir="rtl"` (`useDirection` passed to the root composable); vertical menus keep `ArrowDown`/`ArrowUp`.
+- Motion: the content slides in from the side the pointer came from; the forward/back direction is computed in reading order, so under `rtl` moving to a later trigger slides from the start edge.
+- User data: none.
 
 ## Stories (Storybook)
 

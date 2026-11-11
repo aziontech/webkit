@@ -7,10 +7,11 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: bab3c6f18eb80f8f11f865ee2acf8725d2ad690b6df8ad17e81b0a092d66397d
+checksum: 1c64fcbc08ad84426e32a38c7e6b98181843b7d8b99deaa8863ad3e1f811d14c
 created: 2026-06-01
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
+
 # Button Highlight — Component Spec
 
 ## Purpose
@@ -45,30 +46,33 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 
 ```vue
 <script setup>
-import ButtonHighlight from '@aziontech/webkit/button-highlight'
+  import ButtonHighlight from '@aziontech/webkit/button-highlight'
 </script>
 
 <template>
-  <ButtonHighlight label="Ask Azion" icon="pi pi-sparkles" />
+  <ButtonHighlight
+    label="Ask Azion"
+    icon="pi pi-sparkles"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `—` | true | Visible label text. Required — use `IconButton` for icon-only controls. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
-| `icon` | `string` | `''` | false | PrimeIcons class for the leading icon. |
-| `href` | `string` | `''` | false | When set, renders as an anchor link. |
-| `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
+| Prop       | Type                             | Default   | Required | JSDoc                                                                   |
+| ---------- | -------------------------------- | --------- | -------- | ----------------------------------------------------------------------- |
+| `label`    | `string`                         | `—`       | true     | Visible label text. Required — use `IconButton` for icon-only controls. |
+| `size`     | `'small' \| 'medium' \| 'large'` | `'large'` | false    | Size token; affects height, padding, and typography.                    |
+| `disabled` | `boolean`                        | `false`   | false    | Disables interaction and applies disabled tokens.                       |
+| `loading`  | `boolean`                        | `false`   | false    | Shows loading state and disables activation.                            |
+| `icon`     | `string`                         | `''`      | false    | PrimeIcons class for the leading icon.                                  |
+| `href`     | `string`                         | `''`      | false    | When set, renders as an anchor link.                                    |
+| `target`   | `'_blank' \| '_self'`            | `'_self'` | false    | Link target when `href` is set.                                         |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event   | Payload      | Notes                                                         |
+| ------- | ------------ | ------------------------------------------------------------- |
 | `click` | `MouseEvent` | Fires on activation; suppressed when `disabled` or `loading`. |
 
 ## Slots
@@ -84,43 +88,43 @@ import ButtonHighlight from '@aziontech/webkit/button-highlight'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| hover / focus state change (border, text) | `transition-colors duration-fast-02 ease-productive-entrance` | semantic (110ms · productive-entrance) | `motion-reduce:transition-none` |
-| hover surface fade (violet base + dark scrim both fade to 25% to reveal the rotating glow) | `transition-opacity duration-300 ease-out` on the base and scrim layers | built-in (300ms · ease-out) — matches the `.3s ease` from `azion-console-kit` `.special-button-content` | `motion-reduce:transition-none` |
-| ambient glow rim (decorative) | `animate-spin [animation-duration:8s]` on a blurred multicolor gradient layer behind the surface | Tailwind built-in `animate-spin` + arbitrary 8s duration | `motion-reduce:animate-none` |
+| Trigger                                                                                    | Animation / Transition                                                                           | Token                                                                                                   | Reduced-motion fallback         |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| hover / focus state change (border, text)                                                  | `transition-colors duration-fast-02 ease-productive-entrance`                                    | semantic (110ms · productive-entrance)                                                                  | `motion-reduce:transition-none` |
+| hover surface fade (violet base + dark scrim both fade to 25% to reveal the rotating glow) | `transition-opacity duration-300 ease-out` on the base and scrim layers                          | built-in (300ms · ease-out) — matches the `.3s ease` from `azion-console-kit` `.special-button-content` | `motion-reduce:transition-none` |
+| ambient glow rim (decorative)                                                              | `animate-spin [animation-duration:8s]` on a blurred multicolor gradient layer behind the surface | Tailwind built-in `animate-spin` + arbitrary 8s duration                                                | `motion-reduce:animate-none`    |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (large) | `.text-button-lg` |
-| typography (medium/small) | `.text-button-md` |
-| text | `var(--color-base-white)` |
-| text (disabled) | `var(--text-disabled)` |
-| surface (disabled) | `var(--bg-disabled)` |
-| backdrop overlay | `var(--bg-backdrop)` |
-| gradient stop 1 | `var(--color-brand-accent-900)` |
-| gradient stop 2 | `var(--color-brand-accent-100)` |
-| gradient stop 3 | `var(--color-brand-accent-600)` |
-| glow stop 1 (decorative) | `var(--color-base-white)` |
-| glow stop 2 (decorative) | `var(--color-blue-500)` |
-| glow stop 3 (decorative) | `var(--color-brand-primary-500)` |
-| border | `var(--secondary-mask)` |
-| border width | `var(--border-width-default)` |
-| shape | `var(--shape-button)` |
-| spacing.x (large) | `var(--spacing-md)` |
-| spacing.x (medium) | `var(--spacing-sm)` |
-| spacing.x (small) | `var(--spacing-xs)` |
-| gap | `var(--spacing-xs)` |
-| ring | `var(--ring-color)` |
-| ring offset surface | `var(--bg-canvas)` |
+| Region                    | Token (DESIGN.md)                |
+| ------------------------- | -------------------------------- |
+| typography (large)        | `.text-button-lg`                |
+| typography (medium/small) | `.text-button-md`                |
+| text                      | `var(--color-base-white)`        |
+| text (disabled)           | `var(--text-disabled)`           |
+| surface (disabled)        | `var(--bg-disabled)`             |
+| backdrop overlay          | `var(--bg-backdrop)`             |
+| gradient stop 1           | `var(--color-brand-accent-900)`  |
+| gradient stop 2           | `var(--color-brand-accent-100)`  |
+| gradient stop 3           | `var(--color-brand-accent-600)`  |
+| glow stop 1 (decorative)  | `var(--color-base-white)`        |
+| glow stop 2 (decorative)  | `var(--color-blue-500)`          |
+| glow stop 3 (decorative)  | `var(--color-brand-primary-500)` |
+| border                    | `var(--secondary-mask)`          |
+| border width              | `var(--border-width-default)`    |
+| shape                     | `var(--shape-button)`            |
+| spacing.x (large)         | `var(--spacing-md)`              |
+| spacing.x (medium)        | `var(--spacing-sm)`              |
+| spacing.x (small)         | `var(--spacing-xs)`              |
+| gap                       | `var(--spacing-xs)`              |
+| ring                      | `var(--ring-color)`              |
+| ring offset surface       | `var(--bg-canvas)`               |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -130,6 +134,13 @@ import ButtonHighlight from '@aziontech/webkit/button-highlight'
 - Contrast: gradient passes ≥4.5:1 for the `--color-base-white` foreground due to the `--bg-backdrop` overlay; disabled state pairs `--bg-disabled` with `--text-disabled`.
 - `motion-reduce:transition-none` on every transition class.
 - Touch target ≥40×40 px at `size: 'large'`; smaller sizes are for dense toolbars and surface a larger hit area via the surrounding container.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: a directional glyph passed to `icon` (chevrons, angles, arrows, carets, `sign-in`/`sign-out`, `reply`, `undo`: the list in `utils/directional-icons.ts`) gets `rtl:-scale-x-100`; external-link arrows, media and brand glyphs do not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

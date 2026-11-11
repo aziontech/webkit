@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 25e95d3e6ec516baa8594bcf01b3e80e80fe42b816ac33fe56f05e549293b3c2
+last_updated: 2026-11-11
+checksum: e31520f52cd1ba39518aa424ec781def08afc6955e4bf27bc3c902645552b850
 ---
 
 # StoryLibrary — Component Spec
@@ -132,6 +132,13 @@ Every success story of a company as one filterable library. A left-aligned title
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — every card is a full-cell link.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the external-link arrow does not mirror; its hover nudge moves toward the end edge (`rtl:` flips the `translate-x`).
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

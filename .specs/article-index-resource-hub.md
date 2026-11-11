@@ -5,15 +5,15 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 4af7b30b7f4667332caf28824187cea75c795883467522e6f8c60ac0039f9d0a
+last_updated: 2026-11-11
+checksum: 89be3a66c3a8634860b94ebd6a5403f68731e5af5c06fb5f493ffe801da4e9d4
 ---
 
 # ArticleIndexResourceHub — Component Spec
 
 ## Purpose
 
-Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet (content type, category, industry) on one row. Each resource is a row — its cover on the left, and on the right its overline, headline and a two-line deck centred in the row; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The facets combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input` and `button`; the facet selections and each dropdown's option search are local state.
+Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet (content type, category, industry) on one row that wraps when it runs out of room. Each resource is a row — its cover on the left, and on the right its overline, headline and a two-line deck centred in the row; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The facets combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input` and `button`; the facet selections and each dropdown's option search are local state.
 
 ## When to use
 
@@ -130,6 +130,7 @@ Every resource of a hub as one ruled list, with a headline and one searchable dr
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — every row is a full-row link.
+- Reflow: from `sm` the facet dropdowns sit on one row that wraps (`flex-wrap`), so two or more `w-56` dropdowns never overflow a narrow box or a 200% zoom.
 
 ## Stories (Storybook)
 

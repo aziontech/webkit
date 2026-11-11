@@ -22,7 +22,7 @@ const noHardcodedMotion = (await import('../../src/eslint-plugin/rules/no-hardco
   .default
 const noPhysicalDirection = (await import('../../src/eslint-plugin/rules/no-physical-direction.js'))
   .default
-const { logicalClass, physicalDirectionClasses } =
+const { logicalClass, mirroredGradient, physicalDirectionClasses } =
   await import('../../src/eslint-plugin/direction-classes.js')
 const preferTreeShakeableRoot = (
   await import('../../src/eslint-plugin/rules/prefer-tree-shakeable-root.js')
@@ -37,6 +37,8 @@ const noStyleOverride = (await import('../../src/eslint-plugin/rules/no-style-ov
 const preferDefineModel = (await import('../../src/eslint-plugin/rules/prefer-define-model.js'))
   .default
 const authoringStandards = (await import('../../src/eslint-plugin/rules/authoring-standards.js'))
+  .default
+const containerNeedsWidth = (await import('../../src/eslint-plugin/rules/container-needs-width.js'))
   .default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
@@ -322,6 +324,21 @@ test('direction classes: physical → logical mapping', () => {
   )
 })
 
+test('physical gradients need an rtl: pair', () => {
+  assert.equal(mirroredGradient('bg-gradient-to-r'), 'rtl:bg-gradient-to-l')
+  assert.equal(mirroredGradient('bg-linear-to-tl'), 'rtl:bg-linear-to-tr')
+  assert.equal(mirroredGradient('after:bg-gradient-to-l'), 'rtl:after:bg-gradient-to-r')
+  assert.equal(mirroredGradient('bg-gradient-to-b'), null)
+  assert.equal(mirroredGradient('rtl:bg-gradient-to-l'), null)
+  assert.deepEqual(physicalDirectionClasses('bg-gradient-to-r from-(--a) rtl:bg-gradient-to-l'), [])
+  assert.deepEqual(physicalDirectionClasses('ltr:bg-linear-to-r rtl:bg-linear-to-l'), [])
+  assert.deepEqual(
+    physicalDirectionClasses('bg-linear-to-l to-transparent').map((h) => h.fix),
+    ['bg-linear-to-l rtl:bg-linear-to-r']
+  )
+  assert.deepEqual(physicalDirectionClasses('bg-gradient-to-r', { gradients: false }), [])
+})
+
 test('no-physical-direction (template + script + fix)', () => {
   vue.run('no-physical-direction', noPhysicalDirection, {
     valid: [
@@ -337,6 +354,16 @@ test('no-physical-direction (template + script + fix)', () => {
       {
         code: "<script setup>const side = 'left-edge'</script><template><i /></template>",
         filename: 'd.vue'
+      },
+      {
+        code: '<template><span class="bg-gradient-to-r rtl:bg-gradient-to-l">x</span></template>',
+        filename: 'j.vue'
+      },
+      { code: '<template><span class="bg-linear-to-b">x</span></template>', filename: 'k.vue' },
+      {
+        code: '<template><span class="bg-gradient-to-r">x</span></template>',
+        filename: 'l.vue',
+        options: [{ gradients: false }]
       }
     ],
     invalid: [
@@ -353,10 +380,86 @@ test('no-physical-direction (template + script + fix)', () => {
         errors: [{ messageId: 'physical' }, { messageId: 'physical' }]
       },
       {
+        code: '<template><div class="bg-gradient-to-r from-(--bg-canvas)">x</div></template>',
+        output:
+          '<template><div class="bg-gradient-to-r rtl:bg-gradient-to-l from-(--bg-canvas)">x</div></template>',
+        filename: 'h.vue',
+        errors: [{ messageId: 'physical' }]
+      },
+      {
+        code: `<template><div :class="open ? 'bg-linear-to-l' : ''">x</div></template>`,
+        output: `<template><div :class="open ? 'bg-linear-to-l rtl:bg-linear-to-r' : ''">x</div></template>`,
+        filename: 'i.vue',
+        errors: [{ messageId: 'physical' }]
+      },
+      {
         code: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-l-md', { 'mr-1': true })</script><template><i :class="c" /></template>`,
         output: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-s-md', { 'me-1': true })</script><template><i :class="c" /></template>`,
         filename: 'g.vue',
         errors: [{ messageId: 'physical' }, { messageId: 'physical' }]
+      }
+    ]
+  })
+})
+
+test('container-needs-width', () => {
+  const sfc = (template, from = '@aziontech/webkit/card', name = 'Card') =>
+    `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
+  vue.run('container-needs-width', containerNeedsWidth, {
+    valid: [
+      {
+        code: sfc('<div class="flex gap-4"><Card class="w-full">a</Card></div>'),
+        filename: 'a.vue'
+      },
+      {
+        code: sfc('<div class="flex"><div class="flex-1"><Card>a</Card></div></div>'),
+        filename: 'b.vue'
+      },
+      { code: sfc('<div class="flex flex-col gap-4"><Card>a</Card></div>'), filename: 'c.vue' },
+      { code: sfc('<div class="grid grid-cols-2"><Card>a</Card></div>'), filename: 'd.vue' },
+      { code: sfc('<div class="flex"><Card :class="width">a</Card></div>'), filename: 'e.vue' },
+      {
+        code: sfc('<div class="flex"><Card class="md:basis-1/2">a</Card></div>'),
+        filename: 'f.vue'
+      },
+      { code: '<template><div class="flex"><Card>a</Card></div></template>', filename: 'g.vue' },
+      {
+        code: sfc(
+          '<div class="flex"><StatTile class="grow" /></div>',
+          '@aziontech/webkit/stat-tile',
+          'StatTile'
+        ),
+        filename: 'h.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: sfc('<div class="flex gap-4"><Card>a</Card><Card>b</Card></div>'),
+        filename: 'i.vue',
+        errors: [{ messageId: 'collapses' }, { messageId: 'collapses' }]
+      },
+      {
+        code: sfc('<div class="flex flex-col items-start"><Card>a</Card></div>'),
+        filename: 'j.vue',
+        errors: [{ messageId: 'collapses' }]
+      },
+      {
+        code: sfc(
+          '<div class="inline-flex"><stat-tile /></div>',
+          '@aziontech/webkit/stat-tile',
+          'StatTile'
+        ),
+        filename: 'k.vue',
+        errors: [{ messageId: 'collapses', data: { tag: 'StatTile' } }]
+      },
+      {
+        code: sfc(
+          '<section class="flex"><ChartCard class="shrink-0" /></section>',
+          '../chart-card/chart-card.vue',
+          'ChartCard'
+        ),
+        filename: 'l.vue',
+        errors: [{ messageId: 'collapses' }]
       }
     ]
   })

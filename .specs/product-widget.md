@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 064c1720ef639d53096d927f0c42078e6759fb46aca0f46ea064b8b8e73a26e8
+checksum: c905773390e32b54141e1f924e0f1af7d2131ccae621346576ffe1aa84209e9d
 created: 2026-10-23
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # ProductWidget — Component Spec
@@ -134,6 +134,14 @@ The root declares no utility that resolves a token; each widget draws with the t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): widgets use the console's own text and surface pairs (`var(--text-default)` / `var(--text-muted)` on `var(--bg-canvas)` / `var(--bg-surface)`).
 - Every motion class inside a widget pairs with `motion-reduce:transition-none`.
 - Touch target: not applicable in an inert widget; `function-code` keeps the code block's own targets, and `functions-start` the segmented button's.
+- Reflow: the workload-topology node header wraps (`flex-wrap`), so a status tag moves under the node name in a narrow frame instead of overflowing it.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: every chevron and angle inside the widget fragments mirrors (`rtl:-scale-x-100`), the pagination angles included.
+- Keyboard: no horizontal arrow-key logic.
+- User data: domains, IDs and code samples in the mock data keep their own direction.
 
 ## Stories (Storybook)
 

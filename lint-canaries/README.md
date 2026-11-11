@@ -36,13 +36,13 @@ lint-canaries/
     typescript/           # §4 — @typescript-eslint/*, unused-imports/no-unused-vars
     import-hygiene/       # §5 — simple-import-sort/*, import/*, unused-imports/no-unused-imports
     clean-code/           # §6 — no-console, no-debugger, prefer-const
-    webkit/               # webkit/* rules from the package ESLint plugin (no-physical-direction)
+    webkit/               # webkit/* rules from the package ESLint plugin (no-physical-direction, its gradient case)
   stylelint/              # §7 — one .css per rule
   prettier/               # §8 — files that must stay "unformatted"
   commitlint/             # §10 — one wrong commit message per .txt
 ```
 
-58 canaries: 40 ESLint · 9 Stylelint · 2 Prettier · 7 commitlint.
+59 canaries: 41 ESLint · 9 Stylelint · 2 Prettier · 7 commitlint.
 
 ## Why these files never break the normal pipeline
 

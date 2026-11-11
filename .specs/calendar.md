@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: fdc491d46719afb1877179fefbe7ad2c879dcbf5936087e41f391a6f32595812
+checksum: 2d557ffe77d10cccb6011971de44eaac0f23c608996b95b2d09b641e5d40e912
 created: 2026-06-25
 last_updated: 2026-11-11
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-11
 
 ## Purpose
 
-Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields (suppressible with `show-fields`), an optional timezone selector, and an Apply action; it also offers a "Select Period" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones).
+Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields (suppressible with `show-fields`), an optional timezone selector, and an Apply action; it also offers a "Select Period" mode whose hint chips and typed text are read in the active locale (`45m`, `12 hours` / `12 horas`, `last month` / `mês passado`, `yesterday` / `ontem`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones).
 
 ## When to use
 
@@ -227,6 +227,20 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:animate-none` on the popover and `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px (or justified deviation): day cells use a 32×32 px (`small`), 36×36 px (`medium`), or 40×40 px (`large`) hit area; `small`/`medium` are a justified deviation for dense month-grid layouts, `large` meets the 40 px target.
+
+## Internationalization
+
+- Every built-in string comes from the `calendar` group of the locale catalog (`useLocale`): trigger placeholder, Period / Select Period, Start / End / Date / Time labels, Apply, preset labels, hint headings, timezone label, and the words that separate a typed range (`calendar.rangeSeparators`: `to|through`, `a|até`, `a|hasta`).
+- Printed text uses `Intl` in the active locale: the trigger label, the field values and their placeholders (`Jun 1, 2026` in `en`, `1 de jun. de 2026` in `pt-BR`), the time fields, weekday and month names.
+- Period hint chips are printed by `Intl` (`Intl.NumberFormat` units and `Intl.RelativeTimeFormat`): `12 hours` / `12 horas`, `yesterday` / `ontem`, `last month` / `mês passado`, and the fixed hints (`Jan 1` / `1 de jan.`, `1/1 - 1/2` / `01/01 - 02/01`). A chip applies exactly the text it shows.
+- Typing is parsed in the active locale with English always accepted as well: unit words and their abbreviations, `today`/`yesterday`/`last week`/`last month`/`last year`/`this month` and their translations, month names (long and short, accents optional), numeric dates in the locale's day/month order (`1/2/2026` is 2 January in `en`, 1 February in `pt-BR`), ISO `2026-01-05`, and ranges split by `-`, `–` or a separator word. Times accept `14:30`, `14h30` and `2:30 pm`.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the previous/next month chevrons mirror (`rtl:-scale-x-100`); the clock and calendar trigger icons do not.
+- Keyboard: in the day grid `ArrowRight`/`ArrowLeft` move one day later/earlier, swapped under `dir="rtl"` (`logicalArrowKey`): `ArrowLeft` moves to the next day. `ArrowUp`/`ArrowDown`, `PageUp`/`PageDown` and `Home`/`End` are unchanged.
+- User data: dates and times are printed by `Intl` in the active locale; the typed field value uses the `Input` `dir="auto"`.
 
 ## Stories (Storybook)
 

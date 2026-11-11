@@ -4,9 +4,9 @@ category: data
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 46ec4aef9f3c050e3f8c3abd6423383224a12b0ef6426903b68247757332198d
+checksum: 32343c711d562f5e11ab6ca91cbc2922fdce44f5d98529e1f70820ef79febc2c
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # PaginationButton — Component Spec
@@ -141,6 +141,13 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): `var(--text-default)` on `var(--bg-surface)` / `var(--bg-selected)`; disabled uses `var(--text-disabled)`.
 - `motion-reduce:transition-none`, `motion-reduce:before:transition-none` and `motion-reduce:after:transition-none` on the state transitions.
 - Touch target: 28×28, a justified deviation — the buttons are butted into the compact pagination strip that sits in a table footer, with no room to pad the hit area (see `pagination`).
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the previous/next chevrons mirror (`rtl:-scale-x-100`).
+- Keyboard: arrow keys are handled by `pagination`, swapped under `dir="rtl"`.
+- User data: none.
 
 ## Stories (Storybook)
 

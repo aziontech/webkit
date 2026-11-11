@@ -165,7 +165,7 @@
               class="flex min-w-0 flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) data-lead:border-(--primary)"
             >
               <div
-                class="flex items-center gap-(--spacing-xxs) px-(--spacing-sm) pt-(--spacing-xs)"
+                class="flex min-w-0 flex-wrap items-center gap-(--spacing-xxs) px-(--spacing-sm) pt-(--spacing-xs)"
               >
                 <i
                   :class="node.icon"

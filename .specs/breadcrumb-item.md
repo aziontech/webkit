@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
   node_id: 3374:6288
-checksum: 4af9ce45511272f8e8887ea5d3e041c93957e5bae281d2dd3b49ed7f1bb1fdec
+checksum: 89fd323d6976d455e9945d953e1743875fce4e297821c0c9de1ad8046c58053e
 created: 2026-05-25
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Breadcrumb Item — Component Spec
@@ -45,29 +45,34 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 
 ```vue
 <script setup>
-import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
+  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
 </script>
 
 <template>
-  <BreadcrumbItem label="Applications" href="/applications" show-icon icon="pi pi-box" />
+  <BreadcrumbItem
+    label="Applications"
+    href="/applications"
+    show-icon
+    icon="pi pi-box"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `'Page Name'` | false | Visible segment label. |
-| `href` | `string` | `'#'` | false | Destination when the segment is a link (ignored when `current` is true). |
-| `current` | `boolean` | `false` | false | Marks the current page (last segment); renders as span with `aria-current="page"`. |
-| `showIcon` | `boolean` | `false` | false | When true, renders a leading PrimeIcons icon before the label. |
-| `icon` | `string` | `'pi pi-box'` | false | PrimeIcons class for the leading icon when `showIcon` is true. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| Prop       | Type      | Default       | Required | JSDoc                                                                              |
+| ---------- | --------- | ------------- | -------- | ---------------------------------------------------------------------------------- |
+| `label`    | `string`  | `'Page Name'` | false    | Visible segment label.                                                             |
+| `href`     | `string`  | `'#'`         | false    | Destination when the segment is a link (ignored when `current` is true).           |
+| `current`  | `boolean` | `false`       | false    | Marks the current page (last segment); renders as span with `aria-current="page"`. |
+| `showIcon` | `boolean` | `false`       | false    | When true, renders a leading PrimeIcons icon before the label.                     |
+| `icon`     | `string`  | `'pi pi-box'` | false    | PrimeIcons class for the leading icon when `showIcon` is true.                     |
+| `disabled` | `boolean` | `false`       | false    | Disables interaction and applies disabled tokens.                                  |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event   | Payload                                                      | Notes                                                                                                                                                 |
+| ------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `click` | `(event: MouseEvent, item: { label: string; href: string })` | Fires when the segment's link is activated (the `current` segment renders a non-interactive `span`). `item` carries the segment's `label` and `href`. |
 
 ## Slots
@@ -82,30 +87,30 @@ import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger      | Animation / Transition                    | Token  | Reduced-motion fallback         |
+| ------------ | ----------------------------------------- | ------ | ------------------------------- |
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | `.text-label-lg` |
-| text (ancestor) | `var(--text-muted)` |
-| text (current / hover) | `var(--text-default)` |
-| surface (focus) | `var(--bg-mask)` |
-| border (focus) | `var(--border-default)` |
-| spacing gap | `var(--spacing-2)` |
-| padding x | `var(--spacing-2)` |
-| padding y | `var(--spacing-1)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region                 | Token (DESIGN.md)       |
+| ---------------------- | ----------------------- |
+| typography             | `.text-label-lg`        |
+| text (ancestor)        | `var(--text-muted)`     |
+| text (current / hover) | `var(--text-default)`   |
+| surface (focus)        | `var(--bg-mask)`        |
+| border (focus)         | `var(--border-default)` |
+| spacing gap            | `var(--spacing-2)`      |
+| padding x              | `var(--spacing-2)`      |
+| padding y              | `var(--spacing-1)`      |
+| shape                  | `var(--shape-elements)` |
+| ring                   | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -115,6 +120,13 @@ import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px on interactive segments (padding + min height).
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: a directional glyph passed to `icon` (chevrons, angles, arrows, carets, `sign-in`/`sign-out`, `reply`, `undo`: the list in `utils/directional-icons.ts`) gets `rtl:-scale-x-100`; external-link arrows, media and brand glyphs do not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

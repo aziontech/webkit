@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: b06798c158c116494644e5df488eb7b731b450a6d9540047c70321d5c866a814
+checksum: f55f889aba9282c26f566cc910c90b6692b6a27bd85793d5d5a329f23df2cae2
 created: 2026-09-22
-last_updated: 2026-09-25
+last_updated: 2026-11-11
 ---
 
 # Big Numbers — Component Spec
@@ -49,7 +49,7 @@ A band of headline figures — throughput, uptime, points of presence — set in
 
 ```vue
 <script setup>
-import BigNumbers from '@aziontech/webkit/big-numbers'
+  import BigNumbers from '@aziontech/webkit/big-numbers'
 </script>
 
 <template>
@@ -66,10 +66,10 @@ import BigNumbers from '@aziontech/webkit/big-numbers'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `BigNumberItem[]` | `[]` | false | The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; picks the big-number scale the figures are set at. |
+| Prop    | Type                             | Default    | Required | JSDoc                                                                                                                                                                                                      |
+| ------- | -------------------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items` | `BigNumberItem[]`                | `[]`       | false    | The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. |
+| `size`  | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token; picks the big-number scale the figures are set at.                                                                                                                                             |
 
 ## Events
 
@@ -91,26 +91,26 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (figure, small) | `.text-big-number-sm` |
-| typography (figure, medium) | `.text-big-number-md` |
-| typography (figure, large) | `.text-big-number-lg` |
-| typography (caption) | `.text-overline-sm` |
-| figure text | `var(--text-default)` |
-| prefix accent | `var(--primary)` |
-| suffix text | `var(--text-muted)` |
-| caption text | `var(--text-muted)` |
-| cell rules and marks | `var(--border-default)` |
-| spacing (cell padding) | `var(--spacing-xl)` |
-| spacing (figure to caption) | `var(--spacing-sm)` |
-| spacing (figure parts) | `var(--spacing-xxs)` |
+| Region                      | Token (DESIGN.md)       |
+| --------------------------- | ----------------------- |
+| typography (figure, small)  | `.text-big-number-sm`   |
+| typography (figure, medium) | `.text-big-number-md`   |
+| typography (figure, large)  | `.text-big-number-lg`   |
+| typography (caption)        | `.text-overline-sm`     |
+| figure text                 | `var(--text-default)`   |
+| prefix accent               | `var(--primary)`        |
+| suffix text                 | `var(--text-muted)`     |
+| caption text                | `var(--text-muted)`     |
+| cell rules and marks        | `var(--border-default)` |
+| spacing (cell padding)      | `var(--spacing-xl)`     |
+| spacing (figure to caption) | `var(--spacing-sm)`     |
+| spacing (figure parts)      | `var(--spacing-xxs)`    |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -120,6 +120,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the figure is `var(--text-default)` (17.65:1 light, 20.12:1 dark) and the accent prefix `var(--primary)` is large text (3.00:1 light, 6.71:1 dark). The caption is `var(--text-muted)` at overline scale — 5.32:1 on the dark canvas, but **3.78:1 on the light canvas, under AA for normal text**. This is a system-wide property of `--text-muted`, not of this component; it is carried as a theme-level follow-up and is not worked around here with an off-token colour.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
+- Reflow: the figure row wraps (`flex-wrap`), so the prefix and the suffix move under the value when a cell is narrow, and the value itself breaks (`wrap-anywhere`) rather than overflow at 200% zoom.
 
 ## Stories (Storybook)
 

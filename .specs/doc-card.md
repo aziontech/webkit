@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 9e26a4af2b4f376d2214bfe411458ffb7ecce60f7c9a741024131d48c936b2bb
+checksum: 9f6c3a94cdc152244f4125dae248dba7a3b9e63027d1f5367784d9622439677b
 created: 2026-08-22
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # DocCard — Component Spec
@@ -122,6 +122,13 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 - A card that leaves the documentation (absolute URL, `mailto:`, or explicit `target="_blank"`) carries `rel="noreferrer"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the whole tile is the hit area, comfortably over 40×40 px.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the chevron mirrors; the external-link arrow does not, but its hover nudge moves toward the end edge (`rtl:group-hover:-translate-x-0.5`).
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

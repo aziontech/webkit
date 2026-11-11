@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: 59623809aeab351892047aceaf49cd29c5f5dcbd1230530256e9260685d689be
+checksum: c7dd55a89e03c3c91105734e24368d414263eef9cb47c664fbee9ff6e7670dab
 created: 2026-06-30
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Split Button — Component Spec
@@ -147,6 +147,13 @@ A primary command button visually joined to a chevron toggle that opens an overl
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px at the large size.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: each menu item's directional `icon` mirrors (`directionalIconClass`); the caret toggle points down and does not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

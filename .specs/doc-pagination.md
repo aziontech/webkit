@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: f9f0712c984641e6e72bd306d69a0c2a7792e289118fd5ea5cc7bee9447d82eb
+checksum: 1bbdb4283dadd002e1236346796a65b73d3dc0a2d6841ddc101e36a87548ad90
 created: 2026-08-22
 last_updated: 2026-11-11
 ---
@@ -107,6 +107,13 @@ The previous / next pair that closes a documentation page. Each side is a link c
 - ARIA: the root is a `nav` labelled "Page navigation", so a screen reader announces it as a landmark distinct from the page's own nav. That name is **overridable** by passing `aria-label` — two nav landmarks may not share an accessible name (axe `landmark-unique`), so a page carrying two paginations must distinguish them. Each link's accessible name is its eyebrow plus the destination title; the chevrons are decorative (`aria-hidden`).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: each side is a padded block, comfortably over 40×40 px.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the previous/next chevrons mirror (`rtl:-scale-x-100`) and their hover nudges point away from the label (`rtl:` flips the `translate-x`).
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

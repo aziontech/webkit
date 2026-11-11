@@ -4,9 +4,9 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 04806fbfcf832773d171cfcfa4a367ca8c072b82d37a73d2775994f75b227096
+checksum: 46f3d076e97f390824d7f24925a674dc3cd5ee16e9e2aeef76f6caebf3c2de62
 created: 2026-09-22
-last_updated: 2026-09-26
+last_updated: 2026-11-11
 ---
 
 # Carousel — Component Spec
@@ -52,7 +52,7 @@ The unit is Carousel, then a `Carousel.Item` card, then its content — usually 
 
 ```vue
 <script setup>
-import Carousel from '@aziontech/webkit/carousel'
+  import Carousel from '@aziontech/webkit/carousel'
 </script>
 
 <template>
@@ -76,9 +76,9 @@ import Carousel from '@aziontech/webkit/carousel'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `ariaLabel` | `string` | `''` | false | Accessible name for the scrollable track, announced before its contents. |
+| Prop        | Type     | Default | Required | JSDoc                                                                    |
+| ----------- | -------- | ------- | -------- | ------------------------------------------------------------------------ |
+| `ariaLabel` | `string` | `''`    | false    | Accessible name for the scrollable track, announced before its contents. |
 
 ## Events
 
@@ -86,10 +86,10 @@ import Carousel from '@aziontech/webkit/carousel'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The slides, composed as `Carousel.Item` elements in reading order. |
-| `controls` | — | The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track. |
+| Slot       | Scope | Notes                                                                                             |
+| ---------- | ----- | ------------------------------------------------------------------------------------------------- |
+| `default`  | —     | The slides, composed as `Carousel.Item` elements in reading order.                                |
+| `controls` | —     | The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track. |
 
 ## States
 
@@ -105,34 +105,34 @@ import Carousel from '@aziontech/webkit/carousel'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| step control pressed | `scroll-smooth` on the track | native smooth scrolling | `motion-reduce:scroll-auto` (jumps instantly) |
-| control hover / focus | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
-| pointer drag | none — the track follows the pointer 1:1 (`data-[dragging]:scroll-auto` stands the smooth scroll down) | — | unaffected; the drag is direct manipulation, not motion |
+| Trigger               | Animation / Transition                                                                                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                 |
+| --------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------- |
+| step control pressed  | `scroll-smooth` on the track                                                                           | native smooth scrolling                           | `motion-reduce:scroll-auto` (jumps instantly)           |
+| control hover / focus | `transition-colors duration-150 ease-out`                                                              | inline (matches catalog)                          | `motion-reduce:transition-none`                         |
+| pointer drag          | none — the track follows the pointer 1:1 (`data-[dragging]:scroll-auto` stands the smooth scroll down) | —                                                 | unaffected; the drag is direct manipulation, not motion |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| control surface | `var(--bg-surface)` |
-| control border | `var(--border-default)` |
-| control glyph | `var(--text-muted)` |
-| control glyph (hover) | `var(--text-default)` |
-| control shape | `var(--shape-button)` |
-| card surface | `var(--bg-surface)` |
-| card border | `var(--border-default)` |
-| card padding | `var(--spacing-xl)` |
-| spacing (controls gap) | `var(--spacing-sm)` |
-| spacing (controls to track) | `var(--spacing-lg)` |
-| ring | `var(--ring-color)` |
-| focus ring offset | `var(--bg-canvas)` |
+| Region                      | Token (DESIGN.md)       |
+| --------------------------- | ----------------------- |
+| control surface             | `var(--bg-surface)`     |
+| control border              | `var(--border-default)` |
+| control glyph               | `var(--text-muted)`     |
+| control glyph (hover)       | `var(--text-default)`   |
+| control shape               | `var(--shape-button)`   |
+| card surface                | `var(--bg-surface)`     |
+| card border                 | `var(--border-default)` |
+| card padding                | `var(--spacing-xl)`     |
+| spacing (controls gap)      | `var(--spacing-sm)`     |
+| spacing (controls to track) | `var(--spacing-lg)`     |
+| ring                        | `var(--ring-color)`     |
+| focus ring offset           | `var(--bg-canvas)`      |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -142,6 +142,14 @@ import Carousel from '@aziontech/webkit/carousel'
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the control glyph is `var(--text-muted)` on `var(--bg-surface)` and darkens to `var(--text-default)` on hover; slide content carries its own colours.
 - `motion-reduce:scroll-auto` on the track and `motion-reduce:transition-none` on the controls. The track never auto-advances, so WCAG 2.2.2 (pause, stop, hide) does not apply by construction.
 - Touch target ≥40×40 px — each step control is a 40×40 button.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the previous/next chevrons mirror (`rtl:-scale-x-100`).
+- Keyboard and buttons: next scrolls toward the end edge; the scroll sign is inverted under `dir="rtl"` (`useDirection(track)`), and progress reads `Math.abs(scrollLeft)` because `scrollLeft` is zero or negative under `rtl`.
+- Edge fades: the start/end masks follow the reading direction.
+- User data: none.
 
 ## Stories (Storybook)
 

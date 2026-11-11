@@ -51,19 +51,26 @@ export default {
     fixable: 'code',
     docs: {
       description:
-        'Disallow physical direction utilities (ml-/mr-, pl-/pr-, left-/right-, text-left/right, border-l/r, rounded-l/r…) in class strings; use the logical ones so layouts mirror under dir="rtl". The left-1/2 -translate-x-1/2 centering pattern is allowed.'
+        'Disallow physical direction utilities (ml-/mr-, pl-/pr-, left-/right-, text-left/right, border-l/r, rounded-l/r…) in class strings; use the logical ones so layouts mirror under dir="rtl". A horizontal gradient (bg-gradient-to-l/r, bg-linear-to-l/r and the diagonals) needs an rtl: pair in the same class string. The left-1/2 -translate-x-1/2 centering pattern is allowed.'
     },
-    schema: [],
+    schema: [
+      {
+        type: 'object',
+        properties: { gradients: { type: 'boolean' } },
+        additionalProperties: false
+      }
+    ],
     messages: {
       physical:
-        'Physical direction utility {{found}} does not mirror under dir="rtl". Use the logical one: {{fixes}}.'
+        'Physical direction utility {{found}} does not mirror under dir="rtl". Use the logical one, or pair a gradient with its rtl: mirror: {{fixes}}.'
     }
   },
   create(context) {
     const sourceCode = context.sourceCode || context.getSourceCode()
+    const options = context.options[0] ?? {}
 
     function check(node, text) {
-      const hits = physicalDirectionClasses(text)
+      const hits = physicalDirectionClasses(text, options)
       if (!hits.length) return
       context.report({
         node,
@@ -74,7 +81,7 @@ export default {
         },
         fix(fixer) {
           const original = sourceCode.getText(node)
-          const replaced = original.replace(text, toLogicalClassString(text))
+          const replaced = original.replace(text, toLogicalClassString(text, options))
           return replaced === original ? null : fixer.replaceText(node, replaced)
         }
       })

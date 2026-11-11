@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import Command from './command.vue'
 import CommandEmpty from './command-empty/command-empty.vue'
 import CommandGroup from './command-group/command-group.vue'
@@ -390,5 +391,36 @@ describe('Command (overlay: wraps Dialog, composition + provide/inject)', () => 
       expect(panel()).not.toBeNull()
       await expectNoA11yViolations(document.body)
     })
+  })
+})
+
+describe('Command key names follow the locale', () => {
+  const localized = (locale: string) =>
+    defineComponent({
+      components: { WebkitProvider, Command, CommandInput, CommandList, CommandItem },
+      setup: () => ({ open: ref(true), locale }),
+      template: `
+        <WebkitProvider :locale="locale">
+          <Command v-model:open="open">
+            <CommandInput placeholder="Search" />
+            <CommandList>
+              <CommandItem value="run" shortcut="ctrl+enter">Run</CommandItem>
+              <CommandItem value="pause" shortcut="space">Pause</CommandItem>
+            </CommandList>
+          </Command>
+        </WebkitProvider>
+      `
+    })
+
+  it('prints Esc, Enter and Space from the catalog', async () => {
+    const view = render(localized('pt-BR'))
+    await settle()
+    const keycaps = [...document.body.querySelectorAll('[data-testid="content-kbd"]')].map((node) =>
+      node.textContent?.trim()
+    )
+    expect(keycaps).toContain('Esc')
+    expect(keycaps.some((text) => text?.endsWith('Enter'))).toBe(true)
+    expect(keycaps).toContain('Espaço')
+    view.unmount()
   })
 })

@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 3adb8704b06cce37e6fa9b18ecabddcf255a62cb230c3ba01d174afd43b00a66
+checksum: 46d11f894b629d99516d52d3125d4e3cd2c45589bb5a94c28b1f468e46fde694
 created: 2026-05-28
 last_updated: 2026-11-11
 ---
@@ -233,6 +233,14 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 - `motion-reduce:transition-none motion-reduce:transform-none` on indicator and panel motion.
 - When `animateLines` is enabled, line motion is disabled under `prefers-reduced-motion` (lines render fully visible immediately).
 - Copy control uses CopyButton `size="small"` (28×28 px).
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: `ArrowRight`/`ArrowLeft` move between the file tabs, swapped under `dir="rtl"` (`logicalArrowKey`); the tab indicator is anchored with a physical `left: 0` and moved by `offsetLeft`.
+- Motion: the panel slide between tabs mirrors (`rtl:` flips the `translate-x` presets).
+- User data: code lines render `dir="ltr"`: code always reads left to right.
 
 ## Stories (Storybook)
 

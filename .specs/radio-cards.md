@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 0bccc4caf77681add954d892fbf6ee020e1085ef801fdc2b3b7736a948726bf1
+checksum: 8e381665216b25d71811a09f420b68eb4ec0a26e99d932896c1317268674fa0c
 created: 2026-05-23
 last_updated: 2026-11-11
 ---
@@ -142,6 +142,13 @@ Horizontal grid of selectable cards for mutually exclusive choices (plans, roles
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px via card padding.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: in a horizontal row `ArrowRight`/`ArrowLeft` move to the next/previous card, swapped under `dir="rtl"` (`logicalArrowKey`); `ArrowDown`/`ArrowUp` are unchanged.
+- User data: none.
 
 ## Stories (Storybook)
 

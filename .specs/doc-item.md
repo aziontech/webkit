@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 85a13f274408b916d3795d1dd81177279da697ec5c794397b756e49932e75459
+checksum: 6018e66b64f6e58e3bb2ccf1ab31d217fff9a644c3e94d9d98510aea8d4f3b2c
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-11
 ---
 
 # DocItem — Component Spec
@@ -133,6 +133,13 @@ One row of the documentation's related-content list: a leading glyph in a framed
 - A row that leaves the documentation carries `rel="noreferrer"` on `target="_blank"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the full row is the hit area, comfortably over 40×40 px.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the chevron mirrors; the external-link arrow does not, but its hover nudge moves toward the end edge (`rtl:` flips the `translate-x`).
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

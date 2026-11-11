@@ -75,9 +75,9 @@
       <template #iconRight>
         <Kbd
           size="small"
+          key-name="escape"
           aria-hidden="true"
-          >ESC</Kbd
-        >
+        />
       </template>
     </Input>
   </div>

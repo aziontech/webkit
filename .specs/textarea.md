@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 1fc3f652df8dc3f99acb9c0802100d20e64bd8817c735ae24c2bda245196c165
+checksum: 4fec208d2620f59cc5cdcd5a19b58a7ee4b86aa9fba263b795c49056456042e4
 created: 2026-06-23
 last_updated: 2026-11-11
 ---
@@ -139,6 +139,13 @@ _No slots._
 - Contrast ≥4.5:1 (text) / ≥3:1 (border + icons), including disabled state.
 - `motion-reduce:transition-none` on animated state transitions.
 - Touch target: field min-height ≥80px ensures adequate hit area.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none.
+- Keyboard: no horizontal arrow-key logic.
+- User data: the `<textarea>` renders `dir="auto"`; a `dir` attribute overrides it.
 
 ## Stories (Storybook)
 

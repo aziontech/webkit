@@ -16,7 +16,7 @@
       >
         <div class="flex flex-col gap-(--spacing-md) p-(--spacing-lg)">
           <ShellMockup.Part :order="0">
-            <div class="flex items-center justify-between gap-(--spacing-md)">
+            <div class="flex flex-wrap items-center justify-between gap-(--spacing-md)">
               <span class="text-heading-sm text-(--text-default)">Workloads</span>
               <Button
                 label="Create workload"
@@ -92,7 +92,7 @@
       >
         <div class="flex flex-col gap-(--spacing-md) p-(--spacing-lg)">
           <ShellMockup.Part :order="0">
-            <div class="flex items-center justify-between gap-(--spacing-md)">
+            <div class="flex flex-wrap items-center justify-between gap-(--spacing-md)">
               <span class="text-heading-sm text-(--text-default)">Workloads</span>
               <Button
                 label="Create workload"

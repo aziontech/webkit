@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 0767c312f3294ef054e8925e9e5f45841c0bf535e0a604ddb101cc2ab79d8c1b
+checksum: 87be6472276b1d02e05fc4e2f703bd1f0f5872103de96a26145c5804e1c0c0b0
 created: 2026-11-09
 last_updated: 2026-11-11
 ---
@@ -148,6 +148,14 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): selected text uses `var(--text-default)` on `var(--bg-selected)`, unselected text `var(--text-muted)` on `var(--bg-surface)`.
 - `motion-reduce:transition-none` on the segment color transition; the indicator slide is set inline and is not suppressed by it.
 - Touch target: segments fill the group height minus its padding (40px group at `size="large"`).
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: item icons are the consumer's and do not mirror.
+- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous item, swapped under `dir="rtl"` (`useDirection(rootRef)` + `logicalArrowKey`): `ArrowLeft` moves forward.
+- Indicator: the selection pill is anchored with a physical `left: 0` and moved by the measured `offsetLeft`, which is already a physical distance, so it lands on the selected item in both directions.
+- User data: none.
 
 ## Stories (Storybook)
 

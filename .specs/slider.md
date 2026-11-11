@@ -3,7 +3,7 @@ name: slider
 category: inputs
 structure: monolithic
 status: implemented
-checksum: db1134d2cc1bd98b7d0f322db036dbf211c80c5a59c8d1865290268387688157
+checksum: 98c13d3b385b008c3c50f7b76a006c70548fcf5be07e27d118f0f5f0d232964b
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
@@ -161,6 +161,13 @@ The fill and the thumb position are not animated: they track the pointer every f
 - Contrast: thumb border and fill against the track ≥3:1 (non-text UI), reference labels ≥4.5:1, including the disabled state per the disabled tokens.
 - `motion-reduce:transition-none` on every transitioned pseudo-element class.
 - Touch target: the native input is 40 px tall and full width, so the whole track row is the hit area (≥40×40); the 16 px thumb is a visual, not the target.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none.
+- Keyboard: the track runs right to left under `dir="rtl"`; `ArrowLeft` adds `step` and `ArrowRight` subtracts it (`useDirection`); tick marks and labels are placed with `start-[…]`.
+- User data: none.
 
 ## Stories (Storybook)
 

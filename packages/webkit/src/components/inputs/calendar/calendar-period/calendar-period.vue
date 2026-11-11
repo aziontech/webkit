@@ -4,14 +4,14 @@
   import { useLocale } from '../../../../composables/use-locale'
   import * as en from '../../../../i18n/messages/en'
   import { CalendarInjectionKey } from '../injection-key'
-  import { parsePeriod } from '../parse-period'
+  import { fixedHints, parsePeriod, relativeHints } from '../parse-period'
 
   defineOptions({
     name: 'CalendarPeriod',
     inheritAttrs: false
   })
 
-  const { t } = useLocale({ calendar: en.calendar })
+  const { t, locale } = useLocale({ calendar: en.calendar })
 
   const ctx = inject(CalendarInjectionKey, null)
 
@@ -26,13 +26,16 @@
     { label: t('calendar.lastYear'), expr: 'last year' }
   ])
 
-  const RELATIVE_HINTS = ['45m', '12 hours', '10d', '2 weeks', 'last month', 'yesterday', 'today']
-  const FIXED_HINTS = ['Jan 1', '1/1 - 1/2', '36 hours', '48 hours']
+  const RELATIVE_HINTS = computed(() => relativeHints(locale.value))
+  const FIXED_HINTS = computed(() => fixedHints(locale.value))
 
   const activeExpr = ref('')
 
   const apply = (expr: string, label: string) => {
-    const range = parsePeriod(expr)
+    const range = parsePeriod(expr, new Date(), {
+      locale: locale.value,
+      separators: t('calendar.rangeSeparators').split('|')
+    })
     if (range) {
       activeExpr.value = expr
       ctx?.selectValue(range, label)

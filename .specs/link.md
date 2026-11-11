@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: d617cbec72241872ba8e8d8080a1fd184fddfb3fe54019187bd0d9407365f226
+checksum: d16621644c5278c1edf9d209648ff86794627f9e88001b0b0a2857f21d56eae6
 created: 2026-05-22
 last_updated: 2026-11-11
 figma:
@@ -122,6 +122,13 @@ Helps users move between views or sections. Migrated from the existing implement
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: a directional glyph passed to `icon` (chevrons, angles, arrows, carets, `sign-in`/`sign-out`, `reply`, `undo`: the list in `utils/directional-icons.ts`) gets `rtl:-scale-x-100`; external-link arrows, media and brand glyphs do not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: a URL printed as the link text is the consumer's; wrap it in `dir="ltr"` when it sits inside right-to-left prose.
 
 ## Stories (Storybook)
 

@@ -52,6 +52,7 @@ export const es: Messages = {
     lastYear: 'Último año',
     relativeHints: 'Escribe tiempos relativos',
     fixedHints: 'Escribe fechas fijas',
+    rangeSeparators: 'a|hasta',
     timezone: 'Zona horaria',
     localTimezone: 'Local'
   },
@@ -174,6 +175,17 @@ export const es: Messages = {
   },
   keyValuePairs: {
     notSet: 'Sin definir'
+  },
+  kbd: {
+    ctrl: 'Ctrl',
+    alt: 'Alt',
+    shift: 'Mayús',
+    escape: 'Esc',
+    enter: 'Intro',
+    space: 'Espacio',
+    tab: 'Tab',
+    backspace: 'Retroceso',
+    delete: 'Supr'
   },
   label: {
     required: '(Obligatorio)'

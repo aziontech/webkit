@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 586a23f51caba773675aa8f27617096323f683cc58cf4a5a1e5ff690eae061f6
+checksum: 5949b2ccbeab4a70070bae2670f77988fc0467ce5f9497a536068c6dc4340f85
 created: 2026-09-24
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Topic — Component Spec
@@ -48,7 +48,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 
 ```vue
 <script setup>
-import Topic from '@aziontech/webkit/topic'
+  import Topic from '@aziontech/webkit/topic'
 </script>
 
 <template>
@@ -63,13 +63,13 @@ import Topic from '@aziontech/webkit/topic'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `title` | `string` | `—` | true | The claim, rendered as the topic's heading. |
-| `description` | `string` | `''` | false | One sentence explaining the claim; overridden by the default slot. |
-| `icon` | `string` | `''` | false | Icon class for the glyph that leads the headline. |
-| `href` | `string` | `''` | false | When set, the whole claim renders as an anchor link to this URL and its headline closes on a trailing arrow. |
-| `headingLevel` | `TopicHeadingLevel` | `2` | false | Level of the heading element. Keep `2` when the band has no headline of its own; drop it to `3` when a `section-title` has already opened the section, so the document outline stays in order. |
+| Prop           | Type                | Default | Required | JSDoc                                                                                                                                                                                          |
+| -------------- | ------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`        | `string`            | `—`     | true     | The claim, rendered as the topic's heading.                                                                                                                                                    |
+| `description`  | `string`            | `''`    | false    | One sentence explaining the claim; overridden by the default slot.                                                                                                                             |
+| `icon`         | `string`            | `''`    | false    | Icon class for the glyph that leads the headline.                                                                                                                                              |
+| `href`         | `string`            | `''`    | false    | When set, the whole claim renders as an anchor link to this URL and its headline closes on a trailing arrow.                                                                                   |
+| `headingLevel` | `TopicHeadingLevel` | `2`     | false    | Level of the heading element. Keep `2` when the band has no headline of its own; drop it to `3` when a `section-title` has already opened the section, so the document outline stays in order. |
 
 ## Events
 
@@ -77,9 +77,9 @@ import Topic from '@aziontech/webkit/topic'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Description body; replaces the `description` prop when provided. |
+| Slot      | Scope | Notes                                                            |
+| --------- | ----- | ---------------------------------------------------------------- |
+| `default` | —     | Description body; replaces the `description` prop when provided. |
 
 ## States
 
@@ -93,33 +93,33 @@ import Topic from '@aziontech/webkit/topic'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover / focus on a linked claim | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                             | Animation / Transition                                                 | Token (see `.claude/docs/DESIGN.md` § Animations)      | Reduced-motion fallback         |
+| ----------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover / focus on a linked claim     | `transition-colors duration-150 ease-out`                              | inline (matches catalog)                               | `motion-reduce:transition-none` |
 | hover on a linked claim (its arrow) | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (heading) | `.text-heading-xs` |
-| typography (description) | `.text-body-md` |
-| typography (glyph size) | `.text-heading-xs` — the glyph sits on the headline's line, so it takes the headline's size |
-| typography (trailing arrow) | `.text-body-xs` |
-| glyph | `var(--primary)` |
-| heading ink | `var(--text-default)` |
-| heading ink (linked, hover) | `var(--primary)` |
-| description ink | `var(--text-muted)` |
-| focus ring | `var(--ring-color)` on `var(--bg-canvas)` |
-| spacing (headline row to sentence) | `var(--spacing-sm)` |
-| spacing (glyph to headline) | `var(--spacing-xs)` |
-| spacing (headline to arrow) | `var(--spacing-xxs)` |
+| Region                             | Token (DESIGN.md)                                                                           |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- |
+| typography (heading)               | `.text-heading-xs`                                                                          |
+| typography (description)           | `.text-body-md`                                                                             |
+| typography (glyph size)            | `.text-heading-xs` — the glyph sits on the headline's line, so it takes the headline's size |
+| typography (trailing arrow)        | `.text-body-xs`                                                                             |
+| glyph                              | `var(--primary)`                                                                            |
+| heading ink                        | `var(--text-default)`                                                                       |
+| heading ink (linked, hover)        | `var(--primary)`                                                                            |
+| description ink                    | `var(--text-muted)`                                                                         |
+| focus ring                         | `var(--ring-color)` on `var(--bg-canvas)`                                                   |
+| spacing (headline row to sentence) | `var(--spacing-sm)`                                                                         |
+| spacing (glyph to headline)        | `var(--spacing-xs)`                                                                         |
+| spacing (headline to arrow)        | `var(--spacing-xxs)`                                                                        |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -129,6 +129,13 @@ import Topic from '@aziontech/webkit/topic'
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and for the hovered headline — all against the fill the surrounding cell provides.
 - `motion-reduce:transition-none` on both transitions a linked claim carries.
 - Touch target ≥40×40 px — the whole claim is the target, so it is the cell's own height; a topic is never smaller than its heading plus its sentence.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the external-link arrow does not mirror; its hover nudge moves toward the end edge (`rtl:` flips the `translate-x`).
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

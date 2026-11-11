@@ -5,9 +5,10 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: 716e6f39f0143afd33352362bdb58dcec110b9cf96415f168123449329cda20f
+last_updated: 2026-11-11
+checksum: b793313516b146197d2b39a844a96145ebbcb3ecb9ff5d8df8d61d9e80e45e36
 ---
+
 # RecognitionMarquee — Component Spec
 
 ## Purpose
@@ -37,7 +38,7 @@ The analyst-recognition band: a section title over a framed strip of signed quot
 
 ```vue
 <script setup>
-import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
+  import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 </script>
 
 <template>
@@ -46,8 +47,21 @@ import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
     title="Recognized as a market leader"
     aria-label="Analyst recognitions"
     :items="[
-      { text: 'Named a Leader and Fast Mover.', reportName: 'GigaOm Radar for Full-Stack Edge Deployments', date: 'May 2026', firmName: 'GigaOm', logo: '/logos/gigaom-reversed.svg', logoLight: '/logos/gigaom-color.svg' },
-      { text: 'Recognized as a Leader in CDN.', reportName: 'G2 Reports', date: 'March 2026', firmName: 'G2', logo: '/logos/g2.svg' }
+      {
+        text: 'Named a Leader and Fast Mover.',
+        reportName: 'GigaOm Radar for Full-Stack Edge Deployments',
+        date: 'May 2026',
+        firmName: 'GigaOm',
+        logo: '/logos/gigaom-reversed.svg',
+        logoLight: '/logos/gigaom-color.svg'
+      },
+      {
+        text: 'Recognized as a Leader in CDN.',
+        reportName: 'G2 Reports',
+        date: 'March 2026',
+        firmName: 'G2',
+        logo: '/logos/g2.svg'
+      }
     ]"
   />
 </template>
@@ -55,13 +69,13 @@ import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the scrolling region. |
-| `duration` | `number` | `0` | false | Seconds one loop of the strip takes; `0` paces it at twelve seconds per item. |
-| `items` | `RecognitionMarqueeItem[]` | `[]` | false | The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme. |
+| Prop        | Type                       | Default | Required | JSDoc                                                                                                                                                                                       |
+| ----------- | -------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`   | `string`                   | `''`    | false    | Overline above the section title.                                                                                                                                                           |
+| `title`     | `string`                   | `''`    | false    | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty.                                                                                     |
+| `ariaLabel` | `string`                   | `''`    | false    | Accessible name of the scrolling region.                                                                                                                                                    |
+| `duration`  | `number`                   | `0`     | false    | Seconds one loop of the strip takes; `0` paces it at twelve seconds per item.                                                                                                               |
+| `items`     | `RecognitionMarqueeItem[]` | `[]`    | false    | The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme. |
 
 ## Events
 
@@ -79,25 +93,25 @@ import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| continuous scroll of the strip | `animate-brand-marquee` | semantic (brand-marquee) | `motion-reduce:animate-none` (the region becomes a horizontal scroller) |
+| Trigger                        | Animation / Transition  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                 |
+| ------------------------------ | ----------------------- | ------------------------------------------------- | ----------------------------------------------------------------------- |
+| continuous scroll of the strip | `animate-brand-marquee` | semantic (brand-marquee)                          | `motion-reduce:animate-none` (the region becomes a horizontal scroller) |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| card fill | `var(--bg-surface)` |
-| card inset | `var(--spacing-xl)` |
-| card width | `var(--container-md)` |
-| focus ring | `var(--ring-color)` |
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| card fill             | `var(--bg-surface)`     |
+| card inset            | `var(--spacing-xl)`     |
+| card width            | `var(--container-md)`   |
+| focus ring            | `var(--ring-color)`     |
 | frame rules and marks | `var(--border-default)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -107,6 +121,13 @@ import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `quote` on `var(--bg-surface)`.
 - `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.
 - Touch target ≥40×40 px — not applicable beyond the focusable region.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Motion: under `dir="rtl"` the marquee track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed; `motion-reduce` stops it in both.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

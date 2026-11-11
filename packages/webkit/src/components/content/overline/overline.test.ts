@@ -134,11 +134,11 @@ describe('Overline', () => {
 })
 
 describe('Overline on phones', () => {
-  it('lets a single-line label wrap below sm so it never overflows', () => {
+  it('lets a single-line label wrap at any width or zoom so it never overflows', () => {
     const view = render(Overline, { slots: { default: 'Trusted by mission-critical workloads' } })
 
-    expect(view.getByText('Trusted by mission-critical workloads').className).toContain(
-      'max-sm:whitespace-normal'
+    expect(view.getByText('Trusted by mission-critical workloads').className).not.toContain(
+      'whitespace-nowrap'
     )
     expect(view.getByTestId('content-overline').className).toContain('max-w-full')
   })

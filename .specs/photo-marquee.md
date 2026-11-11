@@ -5,9 +5,10 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: b37467c8f3882bd035f55b6dbcbf85eae17774ac5bde875546bf68fcd223b703
+last_updated: 2026-11-11
+checksum: 765ee7677b9e6189634cf8cdce64c66a0809bdc943e1ed236772c88e88e892ba
 ---
+
 # PhotoMarquee — Component Spec
 
 ## Purpose
@@ -35,7 +36,7 @@ The office band of the careers page: a horizontal section title over a framed st
 
 ```vue
 <script setup>
-import PhotoMarquee from '@aziontech/webkit/photo-marquee'
+  import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 </script>
 
 <template>
@@ -54,14 +55,14 @@ import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `title` | `string` | `''` | false | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
-| `description` | `string` | `''` | false | Paragraph beside the headline. |
-| `descriptionWidth` | `PhotoMarqueeDescriptionWidth` | `'narrow'` | false | Width the description is capped at: `narrow` or `wide`. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the scrolling region. |
-| `duration` | `number` | `0` | false | Seconds one loop of the strip takes; `0` paces it at ten seconds per photo. |
-| `photos` | `PhotoMarqueePhoto[]` | `[]` | false | The photographs, in order; each is `{ src, alt, width, height }`. |
+| Prop               | Type                           | Default    | Required | JSDoc                                                                                                              |
+| ------------------ | ------------------------------ | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
+| `title`            | `string`                       | `''`       | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
+| `description`      | `string`                       | `''`       | false    | Paragraph beside the headline.                                                                                     |
+| `descriptionWidth` | `PhotoMarqueeDescriptionWidth` | `'narrow'` | false    | Width the description is capped at: `narrow` or `wide`.                                                            |
+| `ariaLabel`        | `string`                       | `''`       | false    | Accessible name of the scrolling region.                                                                           |
+| `duration`         | `number`                       | `0`        | false    | Seconds one loop of the strip takes; `0` paces it at ten seconds per photo.                                        |
+| `photos`           | `PhotoMarqueePhoto[]`          | `[]`       | false    | The photographs, in order; each is `{ src, alt, width, height }`.                                                  |
 
 ## Events
 
@@ -79,23 +80,23 @@ import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| continuous scroll of the strip | `animate-brand-marquee` | semantic (brand-marquee) | `motion-reduce:animate-none` (the region becomes a horizontal scroller) |
+| Trigger                        | Animation / Transition  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                 |
+| ------------------------------ | ----------------------- | ------------------------------------------------- | ----------------------------------------------------------------------- |
+| continuous scroll of the strip | `animate-brand-marquee` | semantic (brand-marquee)                          | `motion-reduce:animate-none` (the region becomes a horizontal scroller) |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| photo gap | `var(--spacing-md)` |
-| focus ring | `var(--ring-color)` |
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| photo gap             | `var(--spacing-md)`     |
+| focus ring            | `var(--ring-color)`     |
 | frame rules and marks | `var(--border-default)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -105,6 +106,13 @@ import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`.
 - `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.
 - Touch target ≥40×40 px — not applicable beyond the focusable region.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Motion: under `dir="rtl"` the marquee track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed, so photos flow in reading order; `motion-reduce` stops it in both.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 
