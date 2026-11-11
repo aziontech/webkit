@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: df56682430941dc0eff7645f17d0ec8ea7ed32303231ce8671e5b3fed7816cfe
+checksum: e9e05bbc4c44fbe3654192a7344278ed2626205c66c43681dbd0b2d1fec0a0b6
 created: 2026-05-28
 last_updated: 2026-11-11
 ---
@@ -242,7 +242,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 - Icons: none mirror.
 - Keyboard: `ArrowRight`/`ArrowLeft` move between the file tabs, swapped under `dir="rtl"` (`logicalArrowKey`); the tab indicator is anchored with a physical `left: 0` and moved by `offsetLeft`.
 - Motion: the panel slide between tabs mirrors (`rtl:` flips the `translate-x` presets).
-- User data: code lines render `dir="ltr"`: code always reads left to right.
+- User data: code lines render `dir="ltr"`: code always reads left to right. The scroll area keeps the copy button's width free on its side (`pe-10` when `copyable`), so under `dir="rtl"` the button never covers the start of a line.
 
 ## Examples
 
