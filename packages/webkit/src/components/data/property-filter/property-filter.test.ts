@@ -287,7 +287,7 @@ describe('PropertyFilter', () => {
       const view = render({
         components: { PropertyFilter },
         setup() {
-          provideLocale({ locale: 'en', dir: 'rtl', catalogs: BUILT_IN_CATALOGS })
+          provideLocale({ locale: 'en', dir: 'rtl', catalogs: { en } })
           return { properties }
         },
         template: `<div dir="rtl"><PropertyFilter mode="query" text="stat = x" :properties="properties" :total-count="2" /></div>`

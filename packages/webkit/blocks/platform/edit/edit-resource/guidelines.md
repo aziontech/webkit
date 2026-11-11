@@ -46,7 +46,7 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 
 When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `Field` choice cards around `RadioButton`) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. In DataStream the workload scope is `Field` choice cards around `RadioButton`; the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
 
-### H. Template editor — `SettingRow`, `CodeEditor`, `HelperText` (optional)
+### H. Template editor — `SettingRow`, `HelperText` (optional)
 
 A setting whose value is a document (a JSON data set) gets a stacked row, under the `Select` that picks the template. A preset is read-only: its document shows in a `CodeBlock` with Copy, and the row says how to edit (choose Custom template). A custom document is a `CodeEditor` (`language="json"`, a fixed `height`), checked on Save (`Write the data set as a JSON object.`); a product passes its Monaco `loader` for JSON validation as you type.
 

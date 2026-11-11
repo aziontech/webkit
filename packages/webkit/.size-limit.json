@@ -38,7 +38,7 @@
   {
     "name": "date-range-picker",
     "path": "src/components/inputs/date-range-picker/date-range-picker.vue",
-    "limit": "26 KB"
+    "limit": "33.25 KB"
   },
   {
     "name": "table-root",
@@ -48,7 +48,7 @@
   {
     "name": "property-filter",
     "path": "src/components/data/property-filter/property-filter.vue",
-    "limit": "28 KB"
+    "limit": "28.75 KB"
   },
   {
     "name": "collection-preferences",
@@ -939,17 +939,17 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "6.7 KB"
+    "limit": "7.5 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "6.1 KB"
+    "limit": "6.9 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "6.15 KB"
+    "limit": "7 KB"
   },
   {
     "name": "phone-input",
@@ -980,7 +980,7 @@
   {
     "name": "trace",
     "path": "src/components/code/trace/trace.vue",
-    "limit": "20 KB"
+    "limit": "14.75 KB"
   },
   {
     "name": "action-confirmation",

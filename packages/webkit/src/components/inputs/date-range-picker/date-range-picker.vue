@@ -59,12 +59,8 @@
   })
 
   interface Props {
-    /** The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Supports v-model. */
-    modelValue?: DateRangeValue | null
     /** Quick ranges listed on the Relative tab. */
     relativeOptions?: RelativeOption[]
-    /** IANA time zone the absolute range is typed and shown in. Empty uses the local zone. Supports v-model:timeZone. */
-    timeZone?: string
     /** Zones offered by the selector. Empty falls back to the zones `Intl` supports. */
     timeZones?: string[]
     /** Shows the time zone selector in the panel. */
@@ -90,9 +86,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: null,
     relativeOptions: () => DEFAULT_RELATIVE_OPTIONS,
-    timeZone: '',
     timeZones: () => [],
     showTimeZone: true,
     showStep: false,
@@ -106,10 +100,8 @@
     size: 'medium'
   })
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: DateRangeValue | null]
-    'update:timeZone': [value: string]
-  }>()
+  const model = defineModel<DateRangeValue | null>({ default: null })
+  const timeZone = defineModel<string>('timeZone', { default: '' })
 
   const attrs = useAttrs()
   const { t, locale } = useTranslate({ dateRangePicker: en.dateRangePicker, calendar: en.calendar })
@@ -131,7 +123,7 @@
     mounted.value = true
   })
 
-  const zone = computed<string>(() => props.timeZone || (mounted.value ? localTimezone() : 'UTC'))
+  const zone = computed<string>(() => timeZone.value || (mounted.value ? localTimezone() : 'UTC'))
   const clock = (): Date => props.now ?? new Date()
 
   const relativeText = (amount: number, unit: DateRangeUnit): string =>
@@ -153,7 +145,7 @@
   const unitLabel = (unit: DateRangeUnit): string => t(unitKeys[unit])
 
   const triggerText = computed<string>(() => {
-    const value = props.modelValue
+    const value = model.value
     if (!value) return ''
     if (value.type === 'relative') {
       const option = props.relativeOptions.find((item) => sameRelative(value, item))
@@ -186,7 +178,7 @@
   const CUSTOM = '__custom'
 
   const resetDraft = (): void => {
-    const value = props.modelValue
+    const value = model.value
     draftZone.value = zone.value
     showError.value = false
     if (value?.type !== 'absolute' && offersRelative.value) {
@@ -276,18 +268,18 @@
       showError.value = true
       return
     }
-    if (draftZone.value !== zone.value) emit('update:timeZone', draftZone.value)
-    emit('update:modelValue', draftValue.value)
+    if (draftZone.value !== zone.value) timeZone.value = draftZone.value
+    model.value = draftValue.value
     close()
   }
 
   const step = (direction: -1 | 1): void => {
     if (props.disabled) return
-    const next = stepDateRange(props.modelValue, direction, clock())
-    if (next) emit('update:modelValue', next)
+    const next = stepDateRange(model.value, direction, clock())
+    if (next) model.value = next
   }
 
-  const resolvedNow = computed(() => resolveDateRange(props.modelValue, clock()))
+  const resolvedNow = computed(() => resolveDateRange(model.value, clock()))
 
   const canStepBack = computed<boolean>(() => {
     const range = resolvedNow.value
@@ -299,7 +291,7 @@
 
   const canStepForward = computed<boolean>(() => {
     const range = resolvedNow.value
-    if (!range || props.disabled || props.modelValue?.type === 'relative') return false
+    if (!range || props.disabled || model.value?.type === 'relative') return false
     const span = range.end.getTime() - range.start.getTime()
     const limit = props.max ?? clock()
     return range.end.getTime() + span <= limit.getTime()
@@ -464,7 +456,7 @@
         @click="setOpen(!isOpen)"
       >
         <i
-          :class="modelValue?.type === 'absolute' ? 'pi pi-calendar' : 'pi pi-clock'"
+          :class="model?.type === 'absolute' ? 'pi pi-calendar' : 'pi pi-clock'"
           class="shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
           aria-hidden="true"
         />

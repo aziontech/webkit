@@ -6,8 +6,8 @@ import Default from '../../../../examples/trace/default.vue'
 import Selected from '../../../../examples/trace/selected.vue'
 import WithError from '../../../../examples/trace/with-error.vue'
 import { BUILT_IN_CATALOGS, provideLocale } from '../../../composables/use-locale'
-import { LOCALES } from '../../../test/locales'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import Trace from './trace.vue'
 
 const spans = [

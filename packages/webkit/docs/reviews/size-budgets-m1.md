@@ -148,3 +148,16 @@ Temporary, as above; closed by the opt-in locale entries (M2.10).
 ### Locales merge with app-layout
 
 The app-layout strings (merged in parallel) grow the English catalog the provider ships and the two locale entries: webkit-provider 6.7 KB, locales-pt-BR 6.1 KB, locales-es 6.15 KB (measured + ~0.2 KB). These three entries grow with every component that adds built-in strings; that growth is expected.
+
+### M2.9 WP observability
+
+Two new entries and five raises. `DateRangePicker` composes the calendar parts (`CalendarGrid`, `CalendarFields`, `CalendarTimezone`), `Popover` placement and focus trap, `ToggleGroup`, `Select`, `Input` and `Button`, so it weighs about the `Calendar` (20.35 KB) plus the relative-range panel and the time-zone math. `PropertyFilter` gained query mode (the tokenizer and parser in `query-language.ts`, caret suggestions and the invalid-query message). The English catalog the provider ships, and the two opt-in locale entries, grew by the `dateRangePicker`, `propertyFilterQuery` and `trace` groups. Budgets are measured + ~0.2 KB.
+
+| Entry             | Budget before | Measured now | New budget | Why                                                                |
+| ----------------- | ------------- | ------------ | ---------- | ------------------------------------------------------------------ |
+| date-range-picker | new           | 33.05        | 33.25      | New: calendar parts, relative panel, time zone, step back/forward. |
+| trace             | new           | 14.57        | 14.75      | New: span waterfall, tree keyboard map, span details.              |
+| property-filter   | 28            | 28.45        | 28.75      | Raised: query mode (`mode="query"`).                               |
+| webkit-provider   | 6.7           | 7.27         | 7.5        | Raised: three new groups in the English catalog.                   |
+| locales-pt-BR     | 6.1           | 6.68         | 6.9        | Raised: the same three groups in Portuguese.                       |
+| locales-es        | 6.15          | 6.76         | 7          | Raised: the same three groups in Spanish.                          |
