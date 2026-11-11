@@ -4,6 +4,16 @@ export const es: Messages = {
   alert: {
     close: 'Cerrar mensaje'
   },
+  appLayout: {
+    navigation: 'Navegación',
+    tools: 'Ayuda',
+    closeTools: 'Cerrar ayuda',
+    splitPanel: 'Detalles',
+    closeSplitPanel: 'Cerrar panel',
+    resizeSplitPanel: 'Redimensionar panel',
+    showAtSide: 'Mostrar junto al contenido',
+    showAtBottom: 'Mostrar debajo del contenido'
+  },
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
@@ -15,6 +25,14 @@ export const es: Messages = {
   },
   barList: {
     emptyTitle: 'No hay datos disponibles'
+  },
+  board: {
+    label: 'Panel',
+    item: 'Elemento {position}',
+    moved: '{label} movido a la posición {position} de {total}.',
+    resized: '{label} redimensionado a {span} de {columns} columnas.',
+    resizedWithHeight:
+      '{label} redimensionado a {span} de {columns} columnas, {height} píxeles de alto.'
   },
   breadcrumb: {
     label: 'Ruta de navegación',
@@ -178,6 +196,12 @@ export const es: Messages = {
   drawer: {
     close: 'Cerrar'
   },
+  errorBoundary: {
+    title: 'No se pudo cargar esta sección',
+    description:
+      'Algo salió mal al mostrar esta parte de la página. El resto de la página sigue funcionando.',
+    retry: 'Reintentar'
+  },
   field: {
     required: '(Obligatorio)'
   },
@@ -202,6 +226,13 @@ export const es: Messages = {
   heroForm: {
     search: 'Buscar',
     empty: 'No se encontraron resultados.'
+  },
+  hotspot: {
+    label: 'Paso del tutorial: {title}',
+    stepOf: 'Paso {current} de {total}',
+    previous: 'Anterior',
+    next: 'Siguiente',
+    finish: 'Finalizar'
   },
   keyValuePairs: {
     notSet: 'Sin definir'
@@ -467,6 +498,21 @@ export const es: Messages = {
   },
   tree: {
     emptyTitle: 'No hay elementos'
+  },
+  tutorialPanel: {
+    title: 'Tutoriales',
+    description: 'Aprende el producto haciendo una tarea real, paso a paso.',
+    listLabel: 'Tutoriales disponibles',
+    empty: 'Aún no hay tutoriales.',
+    start: 'Iniciar tutorial',
+    restart: 'Reiniciar tutorial',
+    exit: 'Salir del tutorial',
+    back: 'Volver a los tutoriales',
+    completed: 'Completado',
+    completedTitle: 'Tutorial completado',
+    completedDescription: 'Terminaste {title}.',
+    taskCount: { one: '{count} tarea', other: '{count} tareas' },
+    stepCount: { one: '{count} paso', other: '{count} pasos' }
   },
   wizard: {
     stepOf: 'Paso {step} de {total}',

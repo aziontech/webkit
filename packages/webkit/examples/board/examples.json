@@ -1,0 +1,16 @@
+{
+  "component": "board",
+  "title": "Components/Primitives/Layout/Board",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Four cards on a 12-column board, read only. The page owns the layout: the order, and the span and height of each card.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Editing",
+      "summary": "Edit layout turns on the drag handle and resize corner of every card. Drag a card onto another to move it, or drag its corner to resize it; on the keyboard, the arrows on a handle move the card and the arrows on a corner resize it. Each change is announced, and Reset layout restores the default.",
+      "file": "editing.vue"
+    }
+  ]
+}
