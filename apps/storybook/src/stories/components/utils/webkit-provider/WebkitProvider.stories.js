@@ -9,7 +9,7 @@ import source2 from '../../../../../../../packages/webkit/examples/webkit-provid
 
 export default {
   title: 'Components/Primitives/Utils/WebkitProvider',
-  component: Provider,
+  component: WebkitProvider,
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
