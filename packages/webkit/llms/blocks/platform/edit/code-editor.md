@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/edit/code-editor/code-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/code-editor")`
-- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Link](../../../components/link.md), [Menu](../../../components/menu.md), [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Link](../../../components/link.md), [Menu](../../../components/menu.md), [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -41,13 +41,13 @@ A full-bleed `PageTabs` with Code and Settings as `Tabs.Item`s. Each tab keeps i
 
 A thin bar above the editor with a `ToggleGroup` labeled Editor document that switches between the Code and Arguments documents, and a muted line describing the active one, e.g. the runtime for Code.
 
-### D. Code document — `Textarea`, `HelperText` (required)
+### D. Code document — `CodeEditor`, `HelperText` (required)
 
-A flush `Textarea` with `resizable="none"` fills the pane in a code font; it is where a product embeds its code editor. An empty document on Save shows an invalid `HelperText` under the editor, cleared on the next keystroke.
+A `CodeEditor` with `fill` takes the pane: line numbers, Tab indents, and Escape then Tab leaves it. Here it runs as the plain editor; a product passes `loader: () => import('monaco-editor')` to get Monaco, themed from the tokens, with the plain editor as the server and no-JavaScript fallback. An empty document on Save shows an invalid `HelperText` under the editor, cleared on the next keystroke.
 
-### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `Textarea`, `Button` (required)
+### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button` (required)
 
-A count of fields and the outlined Add field and Remove form `Button`s sit above a `ResizableRoot`. The left `ResizablePane` holds the schema as JSON in a flush `Textarea`; it is `collapsible` with a minimum and maximum width. The `ResizableHandle` resizes it and collapses it past its minimum. The right pane holds the fields form; both panes describe the same argument form.
+A count of fields and the outlined Add field and Remove form `Button`s sit above a `ResizableRoot`. The left `ResizablePane` holds the schema as JSON in a `CodeEditor` (`language="json"`); it is `collapsible` with a minimum and maximum width. The `ResizableHandle` resizes it and collapses it past its minimum. The right pane holds the fields form; both panes describe the same argument form.
 
 ### F. No fields — `EmptyState`, `Button`, `Link` (optional)
 
@@ -138,6 +138,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/co
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
+  import CodeEditor from '@aziontech/webkit/code-editor'
   import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -1157,14 +1158,15 @@ export async function handleRequest(request, args = {}) {
                       >
                         <div class="flex min-h-0 w-full flex-1 flex-col">
                           <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-                            <div class="flex flex-1 font-code">
-                              <Textarea
+                            <div class="flex min-h-0 flex-1 flex-col">
+                              <CodeEditor
                                 id="service-source-code"
                                 v-model="form.code"
-                                resizable="none"
+                                language="javascript"
+                                path="index.js"
+                                fill
                                 :invalid="!!codeError"
                                 aria-label="Source code"
-                                class="w-full"
                                 @update:model-value="codeError = ''"
                               />
                             </div>
@@ -1223,12 +1225,13 @@ export async function handleRequest(request, args = {}) {
                               >
                                 <div class="flex min-h-0 w-full flex-1 flex-col">
                                   <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-                                    <div class="flex flex-1 font-code">
-                                      <Textarea
+                                    <div class="flex min-h-0 flex-1 flex-col">
+                                      <CodeEditor
                                         v-model="form.schema"
-                                        resizable="none"
+                                        language="json"
+                                        path="args.json"
+                                        fill
                                         aria-label="Argument form schema, as JSON"
-                                        class="w-full"
                                       />
                                     </div>
                                   </div>
