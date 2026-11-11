@@ -36,7 +36,6 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `string` | `''` | false | The code typed so far, without separators. |
 | `length` | `number` | `6` | false | How many characters the code has; one box each. |
 | `mode` | `'numeric' \| 'alphanumeric'` | `'numeric'` | false | numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case. |
 | `group` | `number` | `0` | false | Draw a separator after every `group` boxes (`3` gives `123 – 456`). `0` draws none. |
@@ -49,8 +48,13 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:modelValue` | `string` |  |
 | `complete` | `string` |  |
+
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                                     |
+| --------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The code typed so far, via `defineModel`, already filtered by `mode` and cut to `length`. |
 
 ## States
 

@@ -14,8 +14,6 @@
 
   const props = withDefaults(
     defineProps<{
-      /** The code typed so far, without separators. */
-      modelValue?: string
       /** How many characters the code has; one box each. */
       length?: number
       /** `numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case. */
@@ -32,7 +30,6 @@
       autofocus?: boolean
     }>(),
     {
-      modelValue: '',
       length: 6,
       mode: 'numeric',
       group: 0,
@@ -44,9 +41,11 @@
   )
 
   const emit = defineEmits<{
-    'update:modelValue': [value: string]
     complete: [value: string]
   }>()
+
+  /** The code typed so far, without separators. */
+  const model = defineModel<string>({ default: '' })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ otpInput: en.otpInput })
@@ -94,7 +93,7 @@
 
   const input = ref<HTMLInputElement | null>(null)
   const focused = ref<boolean>(false)
-  const value = computed<string>(() => clean(props.modelValue ?? ''))
+  const value = computed<string>(() => clean(model.value ?? ''))
 
   const boxes = computed(() =>
     Array.from({ length: size.value }, (_, index) => ({
@@ -119,7 +118,7 @@
 
   const commit = (next: string) => {
     if (input.value && input.value.value !== next) input.value.value = next
-    if (next !== props.modelValue) emit('update:modelValue', next)
+    if (next !== model.value) model.value = next
     if (next.length === size.value && next !== lastComplete) {
       lastComplete = next
       emit('complete', next)

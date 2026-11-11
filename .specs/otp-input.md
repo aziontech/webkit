@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 3c4c2f27dac43a97d7bcbaf994ad69a26cea772c261448207862d87a20cc1b6e
+checksum: 2b3eaf7c9e2704c15e616ccc93f4a4ba87d2b6cac0f8f83ae624649bcb831ba7
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -66,23 +66,27 @@ The field for a one-time code: the six digits an authenticator app shows, or a c
 
 ## Props
 
-| Prop         | Type                          | Default     | Required | JSDoc                                                                                                    |
-| ------------ | ----------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------- |
-| `modelValue` | `string`                      | `''`        | false    | The code typed so far, without separators.                                                               |
-| `length`     | `number`                      | `6`         | false    | How many characters the code has; one box each.                                                          |
-| `mode`       | `'numeric' \| 'alphanumeric'` | `'numeric'` | false    | `numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case. |
-| `group`      | `number`                      | `0`         | false    | Draw a separator after every `group` boxes (`3` gives `123 – 456`). `0` draws none.                      |
-| `disabled`   | `boolean`                     | `false`     | false    | Disables the field while a code is being checked.                                                        |
-| `invalid`    | `boolean`                     | `false`     | false    | Danger borders on every box and `aria-invalid`; set after a rejected code.                               |
-| `required`   | `boolean`                     | `false`     | false    | Native `required` and `aria-required`.                                                                   |
-| `autofocus`  | `boolean`                     | `false`     | false    | Focus the field on mount, for a screen whose only task is the code.                                      |
+| Prop        | Type                          | Default     | Required | JSDoc                                                                                                    |
+| ----------- | ----------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------- |
+| `length`    | `number`                      | `6`         | false    | How many characters the code has; one box each.                                                          |
+| `mode`      | `'numeric' \| 'alphanumeric'` | `'numeric'` | false    | `numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case. |
+| `group`     | `number`                      | `0`         | false    | Draw a separator after every `group` boxes (`3` gives `123 – 456`). `0` draws none.                      |
+| `disabled`  | `boolean`                     | `false`     | false    | Disables the field while a code is being checked.                                                        |
+| `invalid`   | `boolean`                     | `false`     | false    | Danger borders on every box and `aria-invalid`; set after a rejected code.                               |
+| `required`  | `boolean`                     | `false`     | false    | Native `required` and `aria-required`.                                                                   |
+| `autofocus` | `boolean`                     | `false`     | false    | Focus the field on mount, for a screen whose only task is the code.                                      |
+
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                                     |
+| --------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The code typed so far, via `defineModel`, already filtered by `mode` and cut to `length`. |
 
 ## Events
 
-| Event               | Payload  | When                                                                  |
-| ------------------- | -------- | --------------------------------------------------------------------- |
-| `update:modelValue` | `string` | Every change, already filtered by `mode` and cut to `length`.         |
-| `complete`          | `string` | The last box fills (typed, pasted or autofilled), once per full code. |
+| Event      | Payload  | When                                                                  |
+| ---------- | -------- | --------------------------------------------------------------------- |
+| `complete` | `string` | The last box fills (typed, pasted or autofilled), once per full code. |
 
 ## Slots
 

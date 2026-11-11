@@ -11358,13 +11358,6 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "modelValue",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "The code typed so far, without separators."
-    },
-    {
      "name": "length",
      "type": "number",
      "default": "6",
@@ -11415,11 +11408,6 @@
     }
    ],
    "events": [
-    {
-     "name": "update:modelValue",
-     "payload": "string",
-     "notes": ""
-    },
     {
      "name": "complete",
      "payload": "string",
