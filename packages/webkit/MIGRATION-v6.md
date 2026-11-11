@@ -264,11 +264,15 @@ user's locale:
 
 ```vue
 <script setup>
+  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
 </script>
 
 <template>
-  <WebkitProvider locale="pt-BR">
+  <WebkitProvider
+    locale="pt-BR"
+    :catalogs="{ 'pt-BR': ptBR }"
+  >
     <App />
   </WebkitProvider>
 </template>
@@ -278,6 +282,12 @@ Every built-in string (close buttons, pagination, empty states, sort state, assi
 comes from a message catalog in English, Brazilian Portuguese or Spanish, and dates, numbers, file
 sizes, relative times and plurals format with `Intl` for the locale. The root carries `lang` and
 `dir`; `dir` defaults to `auto`, which turns Arabic, Hebrew, Persian and Urdu right-to-left.
+
+English is built into the provider. Portuguese and Spanish are separate entries,
+`@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es`, so an app that runs only in
+English does not download them: import the ones your app offers and pass them through `catalogs`
+(`{ 'pt-BR': ptBR, es }`). A `pt-BR` or `es` locale with no registered catalog renders English and
+warns once in development. v5 had no provider, so there is nothing to rewrite and no codemod step.
 
 Without a provider nothing changes: components default to English. Label props you already pass still
 win. Props whose default was an English string (`ariaLabel: 'Close'`, `confirmLabel: 'Confirm'`,
@@ -348,16 +358,17 @@ The console does not build after the run, as expected: the `MANUAL` list is the 
 
 The MCP server, the ESLint plugin and the CLI read the new layout; this section matters only for your
 own scripts that open `node_modules/@aziontech/webkit/catalog.json`. The file is now metadata only
-(1.4 MB, was 7.5 MB); the source code moved next to it into `catalog/`:
+(1.0 MB, was 7.5 MB); the source code and the component prose moved next to it into `catalog/`:
 
-| v5 field                       | v6 location                                                                                             |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| `patterns[id].sfc`             | `catalog/patterns/<id>.json` → `sfc` (the path is in `patterns[id].file`)                               |
-| `patterns[id].variants[i].sfc` | `catalog/patterns/<id>.json` → `variants[i].sfc`; `catalog.json` keeps each variant's `name`, `summary` |
-| `patterns[id].guidelines`      | `catalog/patterns/<id>.json` → `guidelines`                                                             |
-| `imports[subpath].examples`    | `catalog/examples/<subpath>.json` → `examples` (the path is in `imports[subpath].examplesFile`)         |
+| v5 field                                                                       | v6 location                                                                                             |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `patterns[id].sfc`                                                             | `catalog/patterns/<id>.json` → `sfc` (the path is in `patterns[id].file`)                               |
+| `patterns[id].variants[i].sfc`                                                 | `catalog/patterns/<id>.json` → `variants[i].sfc`; `catalog.json` keeps each variant's `name`, `summary` |
+| `patterns[id].guidelines`                                                      | `catalog/patterns/<id>.json` → `guidelines`                                                             |
+| `imports[subpath].examples`                                                    | `catalog/examples/<subpath>.json` → `examples` (the path is in `imports[subpath].examplesFile`)         |
+| `imports[subpath].purpose`, `useWhen`, `avoidWhen`, `related`, `bestPractices` | `catalog/components/<subpath>.json` (the path is in `imports[subpath].docsFile`)                        |
 
-Paths in `file` and `examplesFile` are relative to the folder that holds `catalog.json`. The MCP tools
+Paths in `file`, `examplesFile` and `docsFile` are relative to the folder that holds `catalog.json`. The MCP tools
 (`get_pattern`, `get_component`, `get_usage_example`) return the same answers as before.
 
 ### Performance

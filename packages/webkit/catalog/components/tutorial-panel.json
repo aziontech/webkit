@@ -1,0 +1,29 @@
+{
+ "purpose": "The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`. The panel draws its views from `HelpPanel` parts (`Header`, `Tutorial`, `Task`), so a tutorial looks the same whether a product shows a static checklist with `HelpPanel.Tutorial` or a guided run with `TutorialPanel`. Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.",
+ "useWhen": [
+  "A reader learns a product task by doing it on the real screen, step by step, with the instructions pointing at the control they need next.",
+  "A product offers several tutorials in its help region and records which ones the reader finished.",
+  "A first-run or onboarding flow guides the reader through a real create and deploy, not a mock."
+ ],
+ "avoidWhen": [
+  "Static help beside the page, with no guided run → use `help-panel` (a `HelpPanel.Tutorial` checklist when the owner only reports progress).",
+  "A multi-step create flow whose steps are forms in one surface → use `wizard`.",
+  "Ordered steps the reader navigates inside a page → use `stepper`.",
+  "A single tip pinned to one control → use `popover` or `hint`.",
+  "An empty page that needs one call to action → use `empty-state`."
+ ],
+ "related": [
+  "hotspot` — the marker beside a real control; the current step opens from it. Every step names one by `hotspotId`.",
+  "help-panel` — the parts the panel draws with; use it alone for help without a guided run.",
+  "popover` — what a hotspot opens; the step's title, content and Previous / Next live in it.",
+  "drawer` — the host of the tools region on narrow screens; the panel goes inside it."
+ ],
+ "bestPractices": [
+  "Wrap the whole page in `TutorialPanel.Provider`, so the panel and every hotspot share one state.",
+  "Keep tutorials as data (`Tutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.",
+  "One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.",
+  "Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.",
+  "Set `completed` on a tutorial from what the product recorded (the `finish` event), not from a click.",
+  "Bind `v-model:active` and `v-model:step` and persist them when a tutorial must survive a navigation."
+ ]
+}

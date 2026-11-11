@@ -7,6 +7,7 @@ import { page } from 'vitest/browser'
 import { defineComponent, nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import { useWizardContext } from './composables/use-wizard-context'
 import Wizard, { WizardStep } from './index'
@@ -372,8 +373,8 @@ describe('Wizard on devices', () => {
   const inBox = (width: number, locale = 'en') =>
     defineComponent({
       components: { Flow, WebkitProvider },
-      setup: () => ({ width: `${width}px`, locale }),
-      template: `<WebkitProvider :locale="locale"><div :style="{ width }"><Flow /></div></WebkitProvider>`
+      setup: () => ({ width: `${width}px`, locale, catalogs: LOCALES }),
+      template: `<WebkitProvider :locale="locale" :catalogs="catalogs"><div :style="{ width }"><Flow /></div></WebkitProvider>`
     })
 
   const progressOf = (view: ReturnType<typeof render>) =>

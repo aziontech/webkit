@@ -1,0 +1,23 @@
+{
+ "purpose": "International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type=\"tel\"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `update:phone` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (it replaces the v5 `field-phone-number`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.",
+ "useWhen": [
+  "International phone entry where the user picks a country and types the national number with that country's mask.",
+  "Forms that need the full E.164 number and whether it is complete, without per-country length rules in the form."
+ ],
+ "avoidWhen": [
+  "The value may include characters the masks reject (extensions, free-form notes) → use `input`.",
+  "The input needs addons other than the dial code → use `input-group` and compose it yourself."
+ ],
+ "related": [
+  "field` — wraps the control with its label, description and error.",
+  "input-group` — the container this control renders around the dial-code select and the input.",
+  "select` — the dial-code picker inside the group."
+ ],
+ "bestPractices": [
+  "Put it in a `Field` with a `Field.Label`; the label targets the tel input.",
+  "v-model` holds the national digits only; read `number` from the `update:phone` payload when you need the E.164 value.",
+  "Use `complete` from `update:phone` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.",
+  "v-model:country` defaults to `'BR'`; seed it with the user's country when you know it.",
+  "searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs."
+ ]
+}

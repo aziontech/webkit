@@ -5,6 +5,7 @@
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
+  import CodeEditor from '@aziontech/webkit/code-editor'
   import Command from '@aziontech/webkit/command'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Drawer from '@aziontech/webkit/drawer'
@@ -1163,14 +1164,15 @@ export async function handleRequest(request, args = {}) {
                             <ResizablePane aria-label="Source code">
                               <div class="flex min-h-0 w-full flex-1 flex-col">
                                 <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-                                  <div class="flex flex-1 font-code">
-                                    <Textarea
+                                  <div class="flex min-h-0 flex-1 flex-col">
+                                    <CodeEditor
                                       id="service-source-code"
                                       v-model="form.code"
-                                      resizable="none"
+                                      language="javascript"
+                                      path="index.js"
+                                      fill
                                       :invalid="!!codeError"
                                       aria-label="Source code"
-                                      class="w-full"
                                       @update:model-value="codeError = ''"
                                     />
                                   </div>
@@ -1334,12 +1336,13 @@ export async function handleRequest(request, args = {}) {
                               >
                                 <div class="flex min-h-0 w-full flex-1 flex-col">
                                   <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-                                    <div class="flex flex-1 font-code">
-                                      <Textarea
+                                    <div class="flex min-h-0 flex-1 flex-col">
+                                      <CodeEditor
                                         v-model="form.schema"
-                                        resizable="none"
+                                        language="json"
+                                        path="args.json"
+                                        fill
                                         aria-label="Argument form schema, as JSON"
-                                        class="w-full"
                                       />
                                     </div>
                                   </div>

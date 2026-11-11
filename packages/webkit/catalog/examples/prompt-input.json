@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The composer with its disclaimer under it: Enter submits, Shift+Enter adds a line, and the text area grows up to six rows before it scrolls.",
+   "sfc": "<script setup>\n  import PromptInput from '@aziontech/webkit/prompt-input'\n  import { ref } from 'vue'\n\n  const prompt = ref('')\n  const last = ref('')\n\n  function send(text) {\n    last.value = text\n    prompt.value = ''\n  }\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <PromptInput\n      v-model=\"prompt\"\n      @submit=\"send\"\n    >\n      <template #hint>The AI assistant can make mistakes. Check important information.</template>\n    </PromptInput>\n    <p\n      v-if=\"last\"\n      class=\"text-body-sm text-(--text-muted)\"\n    >\n      Submitted: {{ last }}\n    </p>\n  </div>\n</template>"
+  },
+  {
+   "name": "Streaming",
+   "summary": "After a submit the Submit control becomes Stop while the response is generated; the reader can keep typing but cannot send until it ends or they stop it.",
+   "sfc": "<script setup>\n  import PromptInput from '@aziontech/webkit/prompt-input'\n  import { onBeforeUnmount, ref } from 'vue'\n\n  const prompt = ref('Why did my cache hit ratio drop?')\n  const state = ref('ready')\n  let timer\n\n  function send() {\n    prompt.value = ''\n    state.value = 'submitted'\n    timer = setTimeout(() => {\n      state.value = 'streaming'\n      timer = setTimeout(() => (state.value = 'ready'), 4000)\n    }, 800)\n  }\n\n  function stop() {\n    clearTimeout(timer)\n    state.value = 'ready'\n  }\n\n  onBeforeUnmount(() => clearTimeout(timer))\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <PromptInput\n      v-model=\"prompt\"\n      :state=\"state\"\n      @submit=\"send\"\n      @stop=\"stop\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "CharacterLimit",
+   "summary": "A 280-character limit: the counter shows how many are used, and over the limit the frame and counter turn danger and Submit disables.",
+   "sfc": "<script setup>\n  import PromptInput from '@aziontech/webkit/prompt-input'\n  import { ref } from 'vue'\n\n  const prompt = ref(\n    'Write a function that redirects every request from the old blog path to the new one, keeps the query string, answers with a permanent redirect and logs the original path so I can check later which links people still use. It should also skip the redirect for requests that already come from the new path, and it should run before the cache.'\n  )\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <PromptInput\n      v-model=\"prompt\"\n      :max-length=\"280\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

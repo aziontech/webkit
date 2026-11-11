@@ -1,0 +1,22 @@
+{
+ "purpose": "The \"On this page\" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community). The rail is a single path that bends inward as the outline nests, and the active marker is a dash cut from that same path, so moving between headings slides the marker **along** the line, through the bends, rather than jumping a separate bar between two positions.",
+ "useWhen": [
+  "Beside the body of a long documentation page, as in-page navigation over its `h2`/`h3` outline.",
+  "To carry a page's peer links (repository, community) under the outline, each as its own named group."
+ ],
+ "avoidWhen": [
+  "Expecting it to track scroll. It is presentation only: `activeId` is a prop, because the page owns the scroll container and therefore owns which heading is active.",
+  "For navigation _between_ pages — that is `DocPagination` at the foot, or the sidebar.",
+  "For an outline deeper than a couple of levels; the indent is legible for two, not for five."
+ ],
+ "related": [
+  "DocPageHeader` — the masthead above the body, whose `h1` is chrome, so the outline starts at `h2`.",
+  "DocPagination` — navigation between documents, where this is navigation within one.",
+  "use-heading-nav` — the composable a page uses to receive a rail activation and scroll its own container."
+ ],
+ "bestPractices": [
+  "Feed it depth 2 and 3 only; the rail indents each level by 8px and a third level reads as noise.",
+  "Own the active heading in the page (a scroll-spy) and pass it down; do not expect the rail to guess.",
+  "Keep the complementary groups to peers of the page, never sections of it — a reader must not read \"Join us on Discord\" as part of what they are reading."
+ ]
+}

@@ -1,0 +1,169 @@
+{
+ "name": "combobox",
+ "binding": "Combobox",
+ "import": "@aziontech/webkit/combobox",
+ "treeShakeableImport": "@aziontech/webkit/combobox",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed. It holds one string value, after the design sample's `ComboboxInput` and the ARIA 1.2 combobox pattern. It differs from `Select`, whose value must be one of its options and whose trigger is a button, and from `Command`, which runs commands from a palette instead of filling a form field.",
+ "setup": null,
+ "useWhen": [
+  "A form field whose usual values are known but a new one is valid: an environment variable name, a header, a path, a region tag, a branch.",
+  "A long option list the user would rather type than scroll, with the list as a reminder.",
+  "Options that come from the server as the user types (`search` event, `loading`, `filter: false`).",
+  "Suggestions grouped by origin (Recent, Suggested, System) in one field."
+ ],
+ "avoidWhen": [
+  "The value must be one of a short fixed list → use `select` (or `radio-group` for 2–5 visible choices).",
+  "Several values at once → use `multi-select`.",
+  "Searching and running commands or jumping to a page → use `command`.",
+  "Filtering a collection by properties → use `property-filter`.",
+  "Key/value pairs or tags → use `attribute-editor` or `tag-editor` (their key cells may hold a Combobox)."
+ ],
+ "related": [
+  "select` — closed list, button trigger, no free entry.",
+  "input` — the field Combobox is built on; use it alone when there are no suggestions.",
+  "field` — label, description and error around the Combobox; it reads id, invalid, disabled and required from it.",
+  "command` — palette of actions, not a form value.",
+  "property-filter` — token-based filtering with the same listbox look."
+ ],
+ "bestPractices": [
+  "Put the Combobox in a `Field` so it gets a visible label; use `ariaLabel` only where no label can be shown.",
+  "Keep `allowCustom` on only when a new value is genuinely valid; with it off, the field restores the last valid value when the typed text matches nothing.",
+  "Give options a `description` for what tells them apart (a scope, a count), not a second copy of the label.",
+  "For server data set `filter` to `false`, listen to `search` (debounce on your side), and drive `loading` from the request.",
+  "Validate the committed value (`update:modelValue`) in the form, not each keystroke; `search` is for suggestions only.",
+  "Use `group` when options come from distinct sources; keep group titles one or two words."
+ ],
+ "props": [
+  {
+   "name": "options",
+   "type": "ComboboxOption[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Suggestions: `{ value, label?, description?, group?, disabled? }`."
+  },
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder of the field."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name when no `Field` label names the field."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token, as `Input`: 28 / 32 / 40 px."
+  },
+  {
+   "name": "allowCustom",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Accepts a typed value that matches no option, offered as `Use \"…\"`."
+  },
+  {
+   "name": "filter",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Filters `options` by the typed text. Turn off when the server filters on `search`."
+  },
+  {
+   "name": "clearable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a clear button while the field has a value."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a spinner and the loading row while options are fetched."
+  },
+  {
+   "name": "emptyText",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Text of the list when nothing matches. Empty uses the locale catalog."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the field."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the value without the list or editing."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field required (`aria-required`)."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field invalid (`aria-invalid`, danger border)."
+  }
+ ],
+ "events": [
+  {
+   "name": "search",
+   "payload": "string",
+   "notes": "The typed text, on each keystroke while the list is open (server filters)."
+  },
+  {
+   "name": "create",
+   "payload": "string",
+   "notes": "A value that matches no option was committed (`allowCustom`)."
+  }
+ ],
+ "slots": [
+  {
+   "name": "option",
+   "scope": "{ option: ComboboxOption, active: boolean, selected: boolean }",
+   "notes": "Replaces the content of one option row."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Combobox from '@aziontech/webkit/combobox'\n  import Field from '@aziontech/webkit/field'\n  import { ref } from 'vue'\n\n  const name = ref('API_URL')\n\n  const options = [\n    { value: 'API_URL', description: 'Suggested' },\n    { value: 'API_TOKEN', description: 'Suggested' },\n    { value: 'NODE_ENV', description: 'System' },\n    { value: 'LOG_LEVEL' },\n    { value: 'CACHE_TTL' }\n  ]\n</script>\n\n<template>\n  <Field class=\"max-w-(--container-xs)\">\n    <Field.Label>Variable name</Field.Label>\n    <Combobox\n      v-model=\"name\"\n      :options=\"options\"\n      placeholder=\"Search or type a name\"\n      clearable\n    />\n    <Field.Description>Pick a known variable or type a new one.</Field.Description>\n  </Field>\n</template>"
+  },
+  {
+   "name": "Grouped",
+   "sfc": "<script setup>\n  import Combobox from '@aziontech/webkit/combobox'\n  import Field from '@aziontech/webkit/field'\n  import { ref } from 'vue'\n\n  const header = ref('')\n\n  const options = [\n    { value: 'X-Request-Id', group: 'Recent' },\n    { value: 'X-Tenant', group: 'Recent' },\n    { value: 'Cache-Control', group: 'Standard' },\n    { value: 'Content-Type', group: 'Standard' },\n    { value: 'Authorization', group: 'Standard', disabled: true, description: 'Managed' }\n  ]\n</script>\n\n<template>\n  <Field class=\"max-w-(--container-xs)\">\n    <Field.Label>Request header</Field.Label>\n    <Combobox\n      v-model=\"header\"\n      :options=\"options\"\n      placeholder=\"Header name\"\n    />\n  </Field>\n</template>"
+  },
+  {
+   "name": "Server",
+   "sfc": "<script setup>\n  import Combobox from '@aziontech/webkit/combobox'\n  import Field from '@aziontech/webkit/field'\n  import { onBeforeUnmount, ref } from 'vue'\n\n  const regions = [\n    { value: 'sa-east', label: 'South America (São Paulo)' },\n    { value: 'us-east', label: 'US East (Virginia)' },\n    { value: 'us-west', label: 'US West (Oregon)' },\n    { value: 'eu-west', label: 'Europe (Frankfurt)' },\n    { value: 'ap-south', label: 'Asia Pacific (Singapore)' }\n  ]\n\n  const region = ref('')\n  const options = ref(regions)\n  const loading = ref(false)\n  let timer\n\n  const search = (text) => {\n    clearTimeout(timer)\n    loading.value = true\n    timer = setTimeout(() => {\n      const needle = text.trim().toLowerCase()\n      options.value = regions.filter((item) => item.label.toLowerCase().includes(needle))\n      loading.value = false\n    }, 400)\n  }\n\n  onBeforeUnmount(() => clearTimeout(timer))\n</script>\n\n<template>\n  <Field class=\"max-w-(--container-xs)\">\n    <Field.Label>Region</Field.Label>\n    <Combobox\n      v-model=\"region\"\n      :options=\"options\"\n      :filter=\"false\"\n      :allow-custom=\"false\"\n      :loading=\"loading\"\n      placeholder=\"Search regions\"\n      @search=\"search\"\n    />\n    <Field.Description>Only listed regions are accepted.</Field.Description>\n  </Field>\n</template>"
+  }
+ ],
+ "docs": "components/combobox.md"
+}

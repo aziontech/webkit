@@ -1,5 +1,10 @@
 [
   {
+    "name": "app-layout",
+    "path": "src/components/layout/app-layout/app-layout.vue",
+    "limit": "23 KB"
+  },
+  {
     "name": "browser-frame",
     "path": "src/components/content/browser-frame/browser-frame.vue",
     "limit": "12.1 KB"
@@ -103,7 +108,7 @@
   {
     "name": "doc-callout",
     "path": "src/components/documentation/doc-callout/doc-callout.vue",
-    "limit": "6.3 KB"
+    "limit": "6.7 KB"
   },
   {
     "name": "doc-card",
@@ -684,7 +689,7 @@
   {
     "name": "chart-card",
     "path": "src/components/chart/chart-card/index.ts",
-    "limit": "4.7 KB"
+    "limit": "4.75 KB"
   },
   {
     "name": "chart-card-root",
@@ -700,6 +705,11 @@
     "name": "chart-card-resize-handle",
     "path": "src/components/chart/chart-card/chart-card-resize-handle/chart-card-resize-handle.vue",
     "limit": "2.45 KB"
+  },
+  {
+    "name": "board",
+    "path": "src/components/layout/board/index.ts",
+    "limit": "3.5 KB"
   },
   {
     "name": "bar-list",
@@ -720,6 +730,31 @@
     "name": "severity-tag",
     "path": "src/components/content/severity-tag/severity-tag.vue",
     "limit": "1.65 KB"
+  },
+  {
+    "name": "error-boundary",
+    "path": "src/components/feedback/error-boundary/error-boundary.vue",
+    "limit": "6.5 KB"
+  },
+  {
+    "name": "hotspot",
+    "path": "src/components/content/hotspot/hotspot.vue",
+    "limit": "11.25 KB"
+  },
+  {
+    "name": "tutorial-panel",
+    "path": "src/components/content/tutorial-panel/index.ts",
+    "limit": "8.75 KB"
+  },
+  {
+    "name": "tutorial-panel-root",
+    "path": "src/components/content/tutorial-panel/tutorial-panel.vue",
+    "limit": "8 KB"
+  },
+  {
+    "name": "tutorial-panel-provider",
+    "path": "src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue",
+    "limit": "1.1 KB"
   },
   {
     "name": "help-panel",
@@ -799,7 +834,7 @@
   {
     "name": "wizard-root",
     "path": "src/components/navigation/wizard/wizard.vue",
-    "limit": "6.3 KB"
+    "limit": "6.7 KB"
   },
   {
     "name": "wizard-step",
@@ -904,7 +939,17 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "9.1 KB"
+    "limit": "6.7 KB"
+  },
+  {
+    "name": "locales-pt-BR",
+    "path": "src/locales/pt-BR.ts",
+    "limit": "6.1 KB"
+  },
+  {
+    "name": "locales-es",
+    "path": "src/locales/es.ts",
+    "limit": "6.15 KB"
   },
   {
     "name": "phone-input",
@@ -936,5 +981,115 @@
     "name": "trace",
     "path": "src/components/code/trace/trace.vue",
     "limit": "20 KB"
+  },
+  {
+    "name": "action-confirmation",
+    "path": "src/components/ai/action-confirmation/action-confirmation.vue",
+    "limit": "11 KB"
+  },
+  {
+    "name": "ai-loading",
+    "path": "src/components/ai/ai-loading/ai-loading.vue",
+    "limit": "2.5 KB"
+  },
+  {
+    "name": "artifact-preview",
+    "path": "src/components/ai/artifact-preview/artifact-preview.vue",
+    "limit": "9.75 KB"
+  },
+  {
+    "name": "chat-message",
+    "path": "src/components/ai/chat-message/index.ts",
+    "limit": "24 KB"
+  },
+  {
+    "name": "chat-message-root",
+    "path": "src/components/ai/chat-message/chat-message.vue",
+    "limit": "17.75 KB"
+  },
+  {
+    "name": "chat-message-actions",
+    "path": "src/components/ai/chat-message/chat-message-actions/chat-message-actions.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "chat-message-feedback",
+    "path": "src/components/ai/chat-message/chat-message-feedback/chat-message-feedback.vue",
+    "limit": "8.5 KB"
+  },
+  {
+    "name": "citation",
+    "path": "src/components/ai/citation/citation.vue",
+    "limit": "6 KB"
+  },
+  {
+    "name": "conversation",
+    "path": "src/components/ai/conversation/conversation.vue",
+    "limit": "4.75 KB"
+  },
+  {
+    "name": "prompt-input",
+    "path": "src/components/ai/prompt-input/prompt-input.vue",
+    "limit": "5.5 KB"
+  },
+  {
+    "name": "reasoning",
+    "path": "src/components/ai/reasoning/reasoning.vue",
+    "limit": "4.5 KB"
+  },
+  {
+    "name": "sources",
+    "path": "src/components/ai/sources/sources.vue",
+    "limit": "2.75 KB"
+  },
+  {
+    "name": "streaming-response",
+    "path": "src/components/ai/streaming-response/streaming-response.vue",
+    "limit": "32 KB"
+  },
+  {
+    "name": "suggestion-group",
+    "path": "src/components/ai/suggestion-group/suggestion-group.vue",
+    "limit": "2 KB"
+  },
+  {
+    "name": "tool-call",
+    "path": "src/components/ai/tool-call/tool-call.vue",
+    "limit": "3.5 KB"
+  },
+  {
+    "name": "attribute-editor",
+    "path": "src/components/inputs/attribute-editor/attribute-editor.vue",
+    "limit": "14.25 KB"
+  },
+  {
+    "name": "code-editor",
+    "path": "src/components/code/code-editor/code-editor.vue",
+    "limit": "8 KB"
+  },
+  {
+    "name": "button-group",
+    "path": "src/components/actions/button-group/button-group.vue",
+    "limit": "13.25 KB"
+  },
+  {
+    "name": "combobox",
+    "path": "src/components/inputs/combobox/combobox.vue",
+    "limit": "10.75 KB"
+  },
+  {
+    "name": "tag-editor",
+    "path": "src/components/inputs/tag-editor/tag-editor.vue",
+    "limit": "16 KB"
+  },
+  {
+    "name": "schema-form",
+    "path": "src/components/inputs/schema-form/schema-form.vue",
+    "limit": "31 KB"
+  },
+  {
+    "name": "use-unsaved-changes",
+    "path": "src/composables/use-unsaved-changes/index.ts",
+    "limit": "1.75 KB"
   }
 ]

@@ -1,0 +1,31 @@
+{
+ "purpose": "The content of a help side region: a topic's title, a few sections of short guidance, and the \"Learn more\" links that leave for the documentation — or, in tutorial mode, an ordered list of tasks with the reader's progress through them. It is the thing that goes **inside** a side region, not the region itself: the consumer places it in a `Drawer` or in the page's side rail, and that host owns opening, closing and the close button. It owns no open state, so it has no `Trigger` / `Content` and no `data-state=\"open|closed\"`. Its anatomy is the anatomy of a help page — `Header`, `Section`, `Links`, `Tutorial`, `Task` — composed by hand, so a topic can omit the links, carry one section or five, or be a tutorial with no prose at all.",
+ "useWhen": [
+  "A Console screen needs contextual help beside the work: what this page is for, what a field means, where the docs are.",
+  "A guided, multi-task tutorial runs beside the real UI, and the reader needs to see which task they are on and how many are done.",
+  "The help content is loaded asynchronously and the region must reserve its space while it arrives (`loading`)."
+ ],
+ "avoidWhen": [
+  "A one-line hint attached to a single control → use `doc-tooltip` or the field's `helper-text`.",
+  "The region itself (overlay, slide-in, close button, focus trap) → use `drawer`; put `help-panel` inside it.",
+  "Ordered steps the reader navigates between, with the step's form filling the column beside it → use `stepper`.",
+  "Numbered instructions inside a documentation page, read all at once → use `doc-steps` + `doc-step`.",
+  "A page with nothing configured yet, which needs one call to action → use `empty-state`."
+ ],
+ "related": [
+  "drawer` — the host that opens, closes and traps focus around a help panel shown as an overlay.",
+  "stepper` — the same dot language for steps the reader navigates; tutorial tasks are reported, not navigated.",
+  "link` — the standalone link each `HelpPanel.Links` row is composed from.",
+  "button` — the Start / Continue / Restart controls the consumer composes into a tutorial's `actions` slot.",
+  "skeleton` — what the panel renders in place of its content while `loading`.",
+  "doc-prose` — long-form documentation prose; a help section is a few short paragraphs, not an article."
+ ],
+ "bestPractices": [
+  "One topic per panel. When the reader moves to another part of the page, swap the panel's content — do not stack two headers.",
+  "Keep each `Section` to a short paragraph or a short list. If the reader has to scroll a section, the content belongs in the docs and the panel should link to it.",
+  "Title sections with the question the reader is asking (`What is a workload?`), not with a noun (`Overview`).",
+  "Put links to the documentation in `HelpPanel.Links`, at the end, not inline in every section.",
+  "In tutorial mode, exactly one task is `current`. Mark a task `complete` only when the real UI confirms it, never on click.",
+  "Close affordances belong to the host. Do not put a close button in `HelpPanel.Header`; the `Drawer` or side rail already has one."
+ ]
+}

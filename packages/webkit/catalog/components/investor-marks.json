@@ -1,0 +1,16 @@
+{
+ "purpose": "The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a \"visit website\" line. It is a page section — the site places it from a `{ _id: 'investor-marks', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `bento-grid`.",
+ "useWhen": [
+  "On the company page, to name the investors with their marks."
+ ],
+ "avoidWhen": [
+  "For client marks → use `client-mosaic` or `logo-wall-quote`."
+ ],
+ "related": [
+  "bento-grid` — the grid the marks are laid in."
+ ],
+ "bestPractices": [
+  "Give each item a `logoLight` when its mark needs a different file on the light theme; otherwise one `logo` serves both.",
+  "Keep `linkLabel` short; it is revealed under the mark on hover and read before the investor name."
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "purpose": "The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `card-grid`, `card-pricing` and `button`; the picked period is local state.",
+ "useWhen": [
+  "At the top of Pricing, to lay the plans side by side with a price per billing period."
+ ],
+ "avoidWhen": [
+  "To compare plans feature by feature → use `compare-plans`."
+ ],
+ "related": [
+  "card-pricing` — the card each plan renders with.",
+  "compare-plans` — the matrix that sits under these cards."
+ ],
+ "bestPractices": [
+  "Give every plan one price per period, matched by `period`; a price without a `period` applies to every period.",
+  "Highlight one plan; it is raised and is the only card that shows its tag.",
+  "Keep `features` to five or so short labels led by an icon."
+ ]
+}

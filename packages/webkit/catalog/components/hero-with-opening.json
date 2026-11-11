@@ -1,0 +1,19 @@
+{
+ "purpose": "The opening band of a product page followed straight by its arguments: a large centered title band with the page `h1`, overline, sentence and up to two actions, then a frame grid of three-column argument cells in the page column, closed by a hatched gap. It is a page section — the site places it from a `{ _id: 'hero-with-opening', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button`, `section-container`, `section-module`, `frame-box`, `card-grid`, `topic` and `section-gap`. The grid starts at the hero floor with no gap, so the arguments read as the second half of the hero.",
+ "useWhen": [
+  "To open a product page that argues on three or six claims right under its headline."
+ ],
+ "avoidWhen": [
+  "For an opening band with no arguments → use `hero-band`.",
+  "For a reasons band further down the page → use `feature-tiles` or `use-cases`."
+ ],
+ "related": [
+  "hero-band` — the opening band without the argument grid.",
+  "topic` — the icon, heading and sentence each argument is rendered with."
+ ],
+ "bestPractices": [
+  "Use three or six items so every row of the grid is full.",
+  "Keep each item to a short title and one sentence.",
+  "A title longer than 45 characters widens the headline column so it breaks into two lines instead of three."
+ ]
+}

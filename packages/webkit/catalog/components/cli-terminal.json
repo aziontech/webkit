@@ -1,0 +1,18 @@
+{
+ "purpose": "The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal session on the pixelate texture that runs off the frame's bottom rule, its lines entering one after another. It is a page section — the site places it from a `{ _id: 'cli-terminal', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `texture-material` and `code-block`.",
+ "useWhen": [
+  "To close a product argument on how little it takes to ship from the terminal, like Functions and Workloads."
+ ],
+ "avoidWhen": [
+  "For a config file or handler beside the claim → use `code-split`.",
+  "For several capabilities, each with its own file → use `sticky-scroll-code`."
+ ],
+ "related": [
+  "code-block` — the terminal session the band shows.",
+  "code-split` — the sibling band with the sample beside the copy."
+ ],
+ "bestPractices": [
+  "Keep the session to a few commands and their output; comment the output lines so the copied text still runs.",
+  "Name the copy button with `copyAriaLabel` so a screen reader says what it copies."
+ ]
+}

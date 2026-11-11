@@ -1,0 +1,31 @@
+{
+  "component": "chat-message",
+  "title": "Components/Primitives/AI/ChatMessage",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One turn: the reader's question in a filled bubble at the inline end, and the AI assistant's response flat beside its mark, each with an author line and time.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Actions",
+      "summary": "A complete response with its inline actions always visible: Copy, Regenerate and the Helpful / Not helpful thumbs, which disable the other thumb and confirm Feedback submitted.",
+      "file": "actions.vue"
+    },
+    {
+      "name": "Lifecycle",
+      "summary": "The same response moving through pending (Generating a response), streaming (busy, caret, no actions) and complete (actions appear). Replay restarts it.",
+      "file": "lifecycle.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "A response that failed after streaming part of its text: the partial text stays, followed by the error line and Try again, which restarts the response.",
+      "file": "error.vue"
+    },
+    {
+      "name": "GroupedAndSystem",
+      "summary": "A system line centered in the thread, then two consecutive assistant messages where the second is grouped: no avatar or author line, so the two read as one turn.",
+      "file": "grouped-and-system.vue"
+    }
+  ]
+}

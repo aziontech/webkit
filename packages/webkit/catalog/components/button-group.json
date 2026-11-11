@@ -1,0 +1,32 @@
+{
+ "purpose": "A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group. Each item is an icon button that names itself in a tooltip: a plain action, an on / off toggle, or a menu of options. Items past `visibleCount` collapse into one More actions menu. The toolbar is one tab stop with roving focus, so a row of six icons costs the keyboard user one Tab, not six.",
+ "useWhen": [
+  "A row of icon actions on one surface: Copy, Format, Wrap lines, Download above a code editor.",
+  "Compact actions in a panel header where labels would not fit, each explained by its tooltip.",
+  "A mix of actions and on / off view toggles (wrap lines, show whitespace) that sit together.",
+  "More actions than the space allows: keep the frequent ones visible and move the rest into the overflow menu with `visibleCount`."
+ ],
+ "avoidWhen": [
+  "A choice of exactly one option among several (view mode, period) → use `toggle-group`.",
+  "One primary action with related alternatives → use `split-button`.",
+  "A single icon action → use `icon-button` (with a `tooltip`).",
+  "Page or form actions with text labels (Save, Cancel, Create) → use `button`s laid out by the page.",
+  "A long list of commands or navigation → use `dropdown-menu`."
+ ],
+ "related": [
+  "icon-button` — every item renders one; ButtonGroup adds the toolbar role, roving focus and overflow.",
+  "toggle-group` — a radiogroup of mutually exclusive options; ButtonGroup toggles are independent (`aria-pressed`).",
+  "split-button` — one main action plus a menu, with a visible text label.",
+  "dropdown-menu` — the menu behind menu items and the More actions overflow.",
+  "tooltip` — the visible name of each icon.",
+  "code-editor` — the usual host of an editor toolbar (`toolbar` slot)."
+ ],
+ "bestPractices": [
+  "Give the toolbar an `aria-label` that names the surface (\"Editor actions\"), and every item a `label` that says what it does (\"Copy code\", not \"Copy\").",
+  "Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.",
+  "Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.",
+  "Set `loading` on an action while its request runs instead of disabling the whole group.",
+  "Use `kind=\"transparent\"` on a surface that already has a border (a panel header) and `outlined` on the canvas.",
+  "Do not mix text buttons into the group; a text action belongs beside it as its own `Button`."
+ ]
+}

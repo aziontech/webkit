@@ -1,0 +1,27 @@
+{
+ "purpose": "One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Checkbox`, `RadioButton`, `Switch`, `Slider` — with its label, description and error. The root `Field` owns the field state (`invalid`, `disabled`, `required`) and the ids, and shares them through `provide`/`inject`: the control picks up its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from the Field, `Field.Label` points its `for` at the control and shows the Required marker, and `Field.Description` / `Field.Error` register themselves so the control is described by them. Grouping parts (`Field.Set`, `Field.Legend`, `Field.Group`, `Field.Content`, `Field.Title`, `Field.Separator`) build fieldsets, choice cards and settings rows. It replaces the v5 `field-*` family (`field-text`, `field-select`, `field-checkbox-block`, …), one wrapper per control, with a single anatomy.",
+ "useWhen": [
+  "Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.",
+  "A checkbox, radio or switch with its label beside it (`orientation=\"horizontal\"`).",
+  "A selectable choice card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants).",
+  "A group of related controls under one caption (`Field.Set` + `Field.Legend`), or a form section (`Field.Group`)."
+ ],
+ "avoidWhen": [
+  "A control with no visible label inside a toolbar or a table cell → render the control alone with an `aria-label`.",
+  "A group of mutually exclusive cards with icons → use `radio-cards`.",
+  "A static key/value read-out → use `key-value-pairs`."
+ ],
+ "related": [
+  "label` — the standalone label; `Field.Label` adds the `for` wiring and the Required marker from the Field.",
+  "helper-text` — the tone-aware helper line that `Field.Description` and `Field.Error` render.",
+  "input-group` — wraps an input with addons; put it inside a `Field` and use `InputGroup.Input` as the control.",
+  "phone-input`, `password-requirements` — the controls that replaced `field-phone-number` and the requirements row of `field-password`."
+ ],
+ "bestPractices": [
+  "Put the state on the `Field`, not on the control: `<Field invalid>` sets `aria-invalid` on the control and the invalid tone on `Field.Description`.",
+  "Let the Field own the ids. Pass an explicit `id` on the control and `for` on `Field.Label` only when another part of the page needs the id (focusing the first invalid field, an error summary link).",
+  "Render `Field.Description` for guidance and `Field.Error` for a validation message; both are announced through `aria-describedby`. `Field.Error` has `role=\"alert\"`, so render it only when there is an error.",
+  "Choice cards: `<Field.Label><Field orientation=\"horizontal\">control + Field.Content</Field></Field.Label>`. Never nest a choice card inside another `Field`; group cards with `Field.Set`.",
+  "Use `orientation=\"responsive\"` for settings rows that stack in a narrow container and sit side by side in a wide one; it follows the nearest container (a `Field.Group`, a Card, a dialog or drawer body)."
+ ]
+}

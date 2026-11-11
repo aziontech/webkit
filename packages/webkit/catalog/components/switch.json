@@ -1,0 +1,26 @@
+{
+ "purpose": "Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.",
+ "useWhen": [
+  "An on/off setting that takes effect as soon as it flips (enable a feature, turn a rule on).",
+  "A row that already names the setting outside the control, such as an `item` row whose title is the label.",
+  "A visibility or access toggle: `kind=\"privacy\"` shows a closed lock when off and an open lock when on."
+ ],
+ "avoidWhen": [
+  "The toggle needs its own label, description, or helper text in a form → wrap it in a horizontal `field` (`Field orientation=\"horizontal\"` + `Field.Content`).",
+  "The toggle should sit in a bordered card with a description → use a `field` choice card (`Field.Label` wrapping a horizontal `Field`).",
+  "A text value that only applies while a feature is on → compose a `Field` with an `InputGroup` (`InputGroup.Input` + an `InputGroup.Addon` holding the switch).",
+  "The choice is submitted with a form instead of applied immediately → use `checkbox`."
+ ],
+ "related": [
+  "field` — a horizontal `Field` gives the switch its label and description; a `Field.Label` wrapping it is a card-style option.",
+  "input-group` — a text input with a trailing switch addon that enables it, inside a `Field`.",
+  "checkbox` — boolean selection submitted with a form.",
+  "item` — list row whose title names a bare switch."
+ ],
+ "bestPractices": [
+  "The switch renders no text: give it an accessible name with `aria-label`, or `aria-labelledby` pointing at the visible label.",
+  "Set `disabled` on the switch itself; it renders a native disabled button, so it leaves the tab order and ignores clicks and keys.",
+  "focused` moves real focus and forces the ring; use it only to mirror an external focus state, never as decoration.",
+  "Keep `kind=\"default\"` unless the setting is about visibility or access."
+ ]
+}

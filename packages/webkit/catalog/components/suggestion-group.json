@@ -1,0 +1,24 @@
+{
+ "purpose": "A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the item, and the owner either sends it or places it in the prompt input to edit.",
+ "useWhen": [
+  "The empty state of an assistant, to show what it can do (vertical, up to five).",
+  "After a broad response, to narrow it (horizontal chips, up to five, most likely first).",
+  "A follow-up question with predefined answers."
+ ],
+ "avoidWhen": [
+  "Navigation or filters → `tabs`, `toggle-group`, `property-filter`.",
+  "Choices that are a form value → `radio-group` / `radio-cards`.",
+  "More than five options → let the reader type; the prompt input stays available."
+ ],
+ "related": [
+  "prompt-input` — the open-ended alternative that must stay reachable.",
+  "empty-state` — hosts the vertical support prompts before the first message.",
+  "chip`, `button` — visual cousins; prompts are their own control because they send text."
+ ],
+ "bestPractices": [
+  "Five or fewer, ordered by likelihood.",
+  "Write prompts as the reader would ask them, under 72 characters, sentence case, no end punctuation needed for questions you send verbatim.",
+  "Disable the group while a response is generating.",
+  "Remove follow-ups once the reader sends anything else."
+ ]
+}

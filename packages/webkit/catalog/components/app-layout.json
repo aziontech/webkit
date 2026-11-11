@@ -1,0 +1,32 @@
+{
+ "purpose": "The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shells/console` block) keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the frame to `AppLayout`.",
+ "useWhen": [
+  "A product shell needs a navigation rail, a global header and a scrolling content area that turn into a drawer-based layout on phones.",
+  "A page offers contextual help beside the work (`HelpPanel` in the tools region) that the reader opens and closes.",
+  "A list or table needs a resizable detail panel under it or beside it (the split panel), showing the selected item without leaving the page.",
+  "Page-level flash messages (`Alert`) must sit above the content and stay visible while the content scrolls."
+ ],
+ "avoidWhen": [
+  "A single resizable split inside a page, with no shell around it → use `resizable`.",
+  "A navigation rail on its own (resize, collapse, footer) → use `sidebar`; put it in the `navigation` slot.",
+  "A one-off overlay for a task (a create form, a detail preview) → use `drawer`.",
+  "Marketing and documentation pages → use the `shells/website` and `shells/documentation` blocks."
+ ],
+ "related": [
+  "sidebar` — the navigation rail that goes in the `navigation` slot; it owns its own width, resize and collapse.",
+  "global-header` — the bar that goes in the `header` slot.",
+  "help-panel` — the content of the tools region.",
+  "drawer` — what the navigation and tools regions become below `compactBelow`.",
+  "resizable` — a split between panes inside a page, without the shell.",
+  "alert` — the flash messages composed into the `notifications` slot."
+ ],
+ "bestPractices": [
+  "One `AppLayout` per page, at the root. Do not nest them.",
+  "Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer.",
+  "Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.",
+  "Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.",
+  "Use the split panel for the selected item of a collection. Close it when the selection clears.",
+  "Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.",
+  "Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background."
+ ]
+}

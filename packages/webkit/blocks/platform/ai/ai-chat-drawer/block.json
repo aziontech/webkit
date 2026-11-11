@@ -1,0 +1,47 @@
+{
+  "id": "platform/ai/ai-chat-drawer",
+  "name": "AiChatDrawer",
+  "title": "Templates/Platform/AI/AiChatDrawer",
+  "surface": "product",
+  "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Ask AI `Button`, a `Card` of `KeyValuePairs` with a `StatusIndicator`) behind a medium `Drawer` whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and `DrawerClose`. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "ai assistant drawer",
+    "ask ai about this page",
+    "contextual ai help",
+    "copilot panel",
+    "ai side panel",
+    "chat drawer",
+    "assistant over console page",
+    "ai help drawer",
+    "assistente de ia na gaveta",
+    "perguntar à ia",
+    "painel lateral de ia",
+    "asistente de ia en panel lateral"
+  ],
+  "skills": ["webkit-genai", "webkit-ui-states", "webkit-microcopy"],
+  "primary": {
+    "name": "Empty",
+    "file": "ai-chat-drawer.vue"
+  },
+  "variants": [
+    {
+      "name": "Streaming",
+      "summary": "The drawer open on a response streaming in about the 502 errors of the workload behind it, with the caret, Stop in the composer and the busy region.",
+      "file": "variants/streaming.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "A response that failed mid-stream inside the drawer: the partial text, the error line and Try again.",
+      "file": "variants/error.vue"
+    },
+    {
+      "name": "LongThread",
+      "summary": "Six earlier turns about the workload in the narrow drawer: the log opens on the newest response and Scroll to the latest message returns after scrolling up.",
+      "file": "variants/long-thread.vue"
+    }
+  ]
+}

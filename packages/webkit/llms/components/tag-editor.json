@@ -1,0 +1,127 @@
+{
+ "name": "tag-editor",
+ "binding": "TagEditor",
+ "import": "@aziontech/webkit/tag-editor",
+ "treeShakeableImport": "@aziontech/webkit/tag-editor",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`. It adds what tags need on top of the rows: key and value suggestions while typing, a tag limit (50 by default) that ignores tags marked for removal, the built-in key checks (required when the row has a value, unique, length, allowed characters, no reserved `azion:` prefix), and a removal that only marks a saved tag, with Undo, until the form is saved.",
+ "setup": null,
+ "useWhen": [
+  "The Tags section of a create or settings form of any resource.",
+  "Labels used for cost allocation, ownership or search, where keys repeat across resources and suggestions help keep them consistent."
+ ],
+ "avoidWhen": [
+  "Environment variables, headers or any pairs without tag rules → use `attribute-editor`.",
+  "Showing tags read-only → use `tag` (or `key-value-pairs`).",
+  "Picking from a fixed list of labels → use `multi-select`."
+ ],
+ "related": [
+  "attribute-editor` — the rows, Add, Remove, limit text, focus and announcements underneath.",
+  "input` — key and value controls; suggestions come from a native `datalist`.",
+  "tag` — how the saved tags read outside the editor.",
+  "platform/states/form-error` — the rule for server errors passed through `errors`."
+ ],
+ "bestPractices": [
+  "Mark saved tags with `existing: true`: their key is read-only, and Remove marks them `markedForRemoval` (Undo puts them back) so the save request knows what to delete.",
+  "Call the exposed `validate()` on Save; it also flags empty keys, which are not flagged while typing.",
+  "Feed `keySuggestions` with the keys already used in the account so tags stay consistent.",
+  "Pass server errors per row through `errors`; they replace the built-in message of that cell.",
+  "Keep the default `limit` unless the backend has another one."
+ ],
+ "props": [
+  {
+   "name": "tags",
+   "type": "TagEditorTag[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Tags being edited. Saved tags carry `existing`; Remove marks them `markedForRemoval` until Undo. Supports v-model:tags."
+  },
+  {
+   "name": "keySuggestions",
+   "type": "string[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Keys offered while typing a key, for example the keys already used in the account."
+  },
+  {
+   "name": "valueSuggestions",
+   "type": "Record<string, string[]>",
+   "default": "{}",
+   "required": "false",
+   "doc": "Values offered per key while typing a value."
+  },
+  {
+   "name": "limit",
+   "type": "number",
+   "default": "50",
+   "required": "false",
+   "doc": "Most tags allowed; tags marked for removal do not count."
+  },
+  {
+   "name": "keyMaxLength",
+   "type": "number",
+   "default": "128",
+   "required": "false",
+   "doc": "Longest key allowed, in characters."
+  },
+  {
+   "name": "valueMaxLength",
+   "type": "number",
+   "default": "256",
+   "required": "false",
+   "doc": "Longest value allowed, in characters."
+  },
+  {
+   "name": "reservedPrefix",
+   "type": "string",
+   "default": "'azion:'",
+   "required": "false",
+   "doc": "Prefix reserved for the platform; keys may not start with it. Empty allows every prefix."
+  },
+  {
+   "name": "errors",
+   "type": "TagEditorErrors",
+   "default": "[]",
+   "required": "false",
+   "doc": "Server errors per row, aligned with `tags`; shown in place of the built-in checks."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables every control."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list of tags. Empty uses the locale catalog."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:tags",
+   "payload": "TagEditorTag[]",
+   "notes": "A tag was added, edited, removed, marked for removal or restored."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import TagEditor from '@aziontech/webkit/tag-editor'\n  import { ref } from 'vue'\n\n  const tags = ref([\n    { key: 'team', value: 'payments', existing: true },\n    { key: 'cost-center', value: 'cc-1042', existing: true },\n    { key: 'environment', value: 'staging' }\n  ])\n\n  const keySuggestions = ['team', 'cost-center', 'environment', 'owner', 'project']\n  const valueSuggestions = { environment: ['production', 'staging', 'preview'] }\n</script>\n\n<template>\n  <TagEditor\n    v-model:tags=\"tags\"\n    :key-suggestions=\"keySuggestions\"\n    :value-suggestions=\"valueSuggestions\"\n    aria-label=\"Resource tags\"\n  />\n</template>"
+  },
+  {
+   "name": "Validation",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import TagEditor from '@aziontech/webkit/tag-editor'\n  import { ref } from 'vue'\n\n  const tags = ref([\n    { key: 'owner', value: 'platform-team', existing: true, markedForRemoval: true },\n    { key: 'azion:managed', value: 'true' },\n    { key: 'region', value: 'sa-east' },\n    { key: 'region', value: 'us-east' }\n  ])\n\n  const editor = ref(null)\n  const valid = ref(true)\n  const save = () => {\n    valid.value = editor.value?.validate() ?? false\n  }\n</script>\n\n<template>\n  <form\n    class=\"flex flex-col gap-(--spacing-md)\"\n    novalidate\n    @submit.prevent=\"save\"\n  >\n    <TagEditor\n      ref=\"editor\"\n      v-model:tags=\"tags\"\n      :limit=\"5\"\n      aria-label=\"Resource tags\"\n    />\n    <div>\n      <Button\n        type=\"submit\"\n        label=\"Save tags\"\n        kind=\"primary\"\n        size=\"medium\"\n      />\n    </div>\n  </form>\n</template>"
+  }
+ ],
+ "docs": "components/tag-editor.md"
+}

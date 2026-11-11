@@ -1,0 +1,16 @@
+{
+  "component": "tag-editor",
+  "title": "Components/Primitives/Inputs/TagEditor",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Two saved tags and a new one. Keys suggest the account's keys while typing and the environment value suggests its usual values; removing a saved tag marks it for removal with Undo, removing a new tag deletes the row.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Validation",
+      "summary": "A key with the reserved `azion:` prefix and a duplicated key show their errors as they are typed; Save runs `validate()`, which also flags empty keys. The saved tag marked for removal does not count toward the limit of five.",
+      "file": "validation.vue"
+    }
+  ]
+}

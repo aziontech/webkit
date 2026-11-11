@@ -1,0 +1,20 @@
+{
+ "purpose": "The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-band', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`. `kind` picks the layout only: `centered` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `pixel-floor` sets the copy at the start over an animated pixel floor, and `copy-beside-art` sets an illustration beside the copy; every layout takes the same copy, actions and client strip.",
+ "useWhen": [
+  "To open a home, solution, product, listing or contact page with its headline and main actions."
+ ],
+ "avoidWhen": [
+  "For a hero followed by a grid of arguments → use `hero-with-opening`.",
+  "For a hero with a topology scene under the copy → use `hero-copy-on-top-art`.",
+  "For a band inside the page column → use `section-module` or a sibling section."
+ ],
+ "related": [
+  "hero` — the band primitive every layout is rendered with.",
+  "hero-title` — the headline block rendered inside it."
+ ],
+ "bestPractices": [
+  "Use `title-band` with `size=\"large\"` for a product page and `size=\"medium\"` for a page whose bands start right under the headline.",
+  "Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.",
+  "Set `headerOffset` to the height of the site header so a band that fills a screen fills exactly the first screen with it."
+ ]
+}

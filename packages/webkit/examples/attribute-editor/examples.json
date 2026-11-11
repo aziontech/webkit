@@ -1,0 +1,21 @@
+{
+  "component": "attribute-editor",
+  "title": "Components/Primitives/Inputs/AttributeEditor",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Key and value rows with a per-cell error, a limit of ten rows and at least one row kept: Add focuses the new row's key, Remove moves focus to the next row and each change is announced.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Grouped",
+      "summary": "Rule criteria: conditions inside a group are joined by and, groups by or. Each group has its own Add condition; removing the last condition removes the group.",
+      "file": "grouped.vue"
+    },
+    {
+      "name": "CustomCells",
+      "summary": "A `Select` and a `Switch` replace the default inputs through the `cell-<key>` slots; each control still sits inside the cell's `Field` with its label.",
+      "file": "custom-cells.vue"
+    }
+  ]
+}

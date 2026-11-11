@@ -1,0 +1,24 @@
+{
+ "purpose": "A status strip: one block per period — a day, an hour, a deployment — colored by its severity, with a readout of the period's label on hover or keyboard focus. It shows the history of a state at a glance (uptime, health checks, build results), where a `chart` would plot a measure.",
+ "useWhen": [
+  "Uptime and availability history: ninety days of a service, a region or an origin.",
+  "Pass/fail history: health checks, scheduled jobs, deployments.",
+  "Any discrete sequence where each period has one state and the pattern of failures matters."
+ ],
+ "avoidWhen": [
+  "A measured value over time → use `chart` or `spark-chart`.",
+  "The current state of one thing → use `status-indicator`.",
+  "A ranking across categories → use `bar-list`."
+ ],
+ "related": [
+  "status-indicator` — the current state; a Tracker is that state's history.",
+  "spark-chart` — a measured trend rather than a sequence of states.",
+  "chart-card` — the box a Tracker sits in, with the uptime figure in its header."
+ ],
+ "bestPractices": [
+  "Write each `label` as period plus state (\"Nov 3 · Partial outage\"), so the readout stands alone.",
+  "Leave periods with no data without a severity; they render neutral rather than pretending to be healthy.",
+  "Keep the period count fixed for a given view (90 days, 24 hours) so strips stacked in a list line up.",
+  "Put the summary figure (99.98% uptime) beside the strip; the strip shows where, the figure shows how much."
+ ]
+}

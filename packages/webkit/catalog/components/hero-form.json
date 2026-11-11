@@ -1,0 +1,19 @@
+{
+ "purpose": "The opening band of a lead-capture page, where the form is the reason for the page: the hero copy and a list of highlights on one side, the form on the other, above the fold, with the client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-form', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `topic`, `field`, `input`, `select`, `phone-input`, `textarea`, `button` and `alert`. The fields are data: each entry of `fields` picks its control by `kind`, so the Contact page and the Under attack page are the same block with different `fields`. The block never sends: it validates the fields locally (required fields and the email format, with the messages from `messages`) and on a valid submit emits `submit` with the event and the values keyed by field `name`; the site posts them and reports the outcome back through `loading`, `submitted` and `error`.",
+ "useWhen": [
+  "To open a page whose purpose is a lead form, such as Contact sales or Under attack."
+ ],
+ "avoidWhen": [
+  "For a newsletter sign-up with one email field → use `closing-call-to-action-newsletter`.",
+  "For an opening band with calls to action and no form → use `hero-band` or `hero-with-opening`."
+ ],
+ "related": [
+  "closing-call-to-action-newsletter` — the other form section; same `submit` and state contract.",
+  "alert` — renders the success and failure messages."
+ ],
+ "bestPractices": [
+  "Give every field a unique `name`; it is the key of the submitted value.",
+  "Mark half-width fields in pairs so each row stays full.",
+  "Set `loading` while the values are sent, then `submitted` or `error` with the outcome."
+ ]
+}

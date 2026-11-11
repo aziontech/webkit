@@ -1,0 +1,30 @@
+{
+ "purpose": "An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`. It owns the row anatomy every hand-built editor repeats: a label per cell, one control per cell, a per-cell error under the field, Add and Remove, an item limit, the empty text, focus after add and remove, and a polite announcement of each change. A grouped mode lays rows out as AND groups joined by OR, the shape of rule criteria. It edits an array and validates nothing itself: the consumer passes `errors`.",
+ "useWhen": [
+  "Users add, edit and remove a variable number of pairs or tuples: environment variables, request headers, query arguments, labels, metadata.",
+  "Rule criteria: conditions inside a group must all match (and), groups are alternatives (or).",
+  "A bulk form where each row has the same two to four fields and a row-level error can occur."
+ ],
+ "avoidWhen": [
+  "Key and value tags with limits, reserved prefixes and removal of saved tags → use `tag-editor`, which is built on this component.",
+  "A fixed set of named settings on one resource → use `field` controls in a form.",
+  "Many records the user browses, filters and acts on → use `table` with row actions.",
+  "An ordered list of actions with drag and drop and per-type arguments → compose it by hand as in the `platform/edit/rule-builder` block."
+ ],
+ "related": [
+  "tag-editor` — key and value tags with limits and validation, on top of AttributeEditor.",
+  "field` — every cell is a `Field` with its label, control and error.",
+  "input` — the default control of a cell; any control can replace it through `cell-<key>`.",
+  "button`, `icon-button` — Add and Remove.",
+  "separator` — the \"or\" between groups in grouped mode.",
+  "platform/edit/rule-builder` (block) — its criteria editor is the grouped mode (AND rows inside a group, OR between groups); the block keeps its own markup until it moves onto this component."
+ ],
+ "bestPractices": [
+  "Keep two to four columns; more columns belong in a drawer per row.",
+  "Pass `errors` only after the first Save (rule of the form-error block), then keep them live while the user fixes the rows.",
+  "Use `minItems: 1` when the form needs at least one row, so the last row keeps its fields and loses its Remove.",
+  "Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.",
+  "Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.",
+  "Name the editor (`ariaLabel`) after what the rows are: \"Environment variables\", \"Request headers\"."
+ ]
+}

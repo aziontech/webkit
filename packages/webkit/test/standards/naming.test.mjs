@@ -38,6 +38,13 @@ test('conventional upper-case doc files stay allowed', () => {
   assert.deepEqual(run({ subpaths: [...subpaths, 'docs/README.md'] }), [])
 })
 
+test('a locale entry keeps its BCP 47 tag only under locales/', () => {
+  assert.deepEqual(run({ subpaths: [...subpaths, 'locales/pt-BR', 'locales/es'] }), [])
+  assert.deepEqual(run({ subpaths: [...subpaths, 'messages/pt-BR'] }), [
+    'export "./messages/pt-BR": segment "pt-BR" is not kebab-case'
+  ])
+})
+
 test('a block id must match its folder', () => {
   const errors = run({ blocks: [{ folder: 'platform/auth', id: 'platform/login' }] })
   assert.deepEqual(errors, [

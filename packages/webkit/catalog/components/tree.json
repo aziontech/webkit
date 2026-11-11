@@ -1,0 +1,28 @@
+{
+ "purpose": "A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron. It renders a nested `items` data structure on its own (recursively, through one internal row template) and follows the WAI-ARIA tree pattern, so it fits file and object browsers: the objects of a bucket, the source files of a deployment, the routes of an application. Unlike `menu` it navigates data, not the app, and unlike `accordion` its nodes are rows of the same kind at any depth, not panels of free content.",
+ "useWhen": [
+  "Browsing a hierarchy whose depth is not fixed: bucket objects under folders, the source tree of a deployment, functions grouped by application.",
+  "Picking one node out of a hierarchy (`selectable`) to show its detail beside the tree.",
+  "A hierarchy the user expands piece by piece, where showing every level at once would bury the node they are after."
+ ],
+ "avoidWhen": [
+  "Navigation between views of the app → use `menu` inside `sidebar`.",
+  "Flat records with several attributes each → use `table`.",
+  "A few sections of free content that open and close → use `accordion`.",
+  "A two- or three-level directory of destinations on a marketing page → use `column-navigation`."
+ ],
+ "related": [
+  "table` — the flat, multi-column view of the same records; switch to it when columns matter more than nesting.",
+  "menu` — the hierarchical list for app navigation, with routes and active state instead of selection.",
+  "accordion` — disclosure of free content panels rather than rows of one kind.",
+  "empty-state` — what the tree renders when `items` is empty.",
+  "skeleton` — the rows the tree renders while `loading`."
+ ],
+ "bestPractices": [
+  "Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:expanded`, `v-model:selected` and focus are keyed by it.",
+  "Seed `v-model:expanded` with the path to the node the user is most likely after (the open folder, the selected file), not with every parent.",
+  "Keep labels short and put secondary detail (size, count, modified date) in `description` so rows scan as names first.",
+  "Use `selectable` only when the selection drives something on the screen (a detail pane, a preview); for a tree whose rows only lead somewhere, listen to `item-click` instead.",
+  "Put per-row controls in the `actions` slot (an `IconButton` that opens a `dropdown`), never inside the `item` slot, so they do not take over the row's activation."
+ ]
+}

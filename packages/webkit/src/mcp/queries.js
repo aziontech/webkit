@@ -148,7 +148,7 @@ function aliasHits(catalog, query) {
 export function getComponent(catalog, name) {
   if (!catalog.available) return NOT_AVAILABLE
   const key = String(name || '').trim()
-  const e = catalog.getEntry(key)
+  const e = catalog.getDetails(key)
   if (!e) {
     const resolved = resolveAlias(catalog, key)
     if (resolved) {
@@ -212,7 +212,7 @@ function allowedClassesFor(entry) {
 export function getBestPractices(catalog, name) {
   if (!catalog.available) return NOT_AVAILABLE
   const key = String(name || '').trim()
-  const e = catalog.getEntry(key)
+  const e = catalog.getDetails(key)
   if (!e) {
     return {
       ok: false,
@@ -347,7 +347,7 @@ export function searchComponents(catalog, query, { surface } = {}) {
     .filter((sub) => catalog.getEntry(sub)?.kind === 'component')
     .filter((sub) => !wantedSurface || catalog.getEntry(sub)?.surface === wantedSurface)
     .map((sub) => {
-      const e = catalog.getEntry(sub)
+      const e = catalog.getDetails(sub)
       const score =
         scoreMatch(sub, e, q) + (aliases.get(sub)?.boost ?? 0) + (concepts.get(sub) ?? 0)
       return { sub, score }
@@ -816,7 +816,7 @@ function sectionSuggestion(catalog, need) {
       return e?.kind === 'component' && e.category === 'sections'
     })
     .map((sub) => {
-      const e = catalog.getEntry(sub)
+      const e = catalog.getDetails(sub)
       const name = normalize(sub)
       const prose = normalize([e.purpose || '', ...(e.useWhen || [])].join(' '))
       let score = 0

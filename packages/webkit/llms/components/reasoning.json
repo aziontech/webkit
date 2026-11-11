@@ -1,0 +1,100 @@
+{
+ "name": "reasoning",
+ "binding": "Reasoning",
+ "import": "@aziontech/webkit/reasoning",
+ "treeShakeableImport": "@aziontech/webkit/reasoning",
+ "category": "ai",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is done, with the trace inside. Collapsed by default in a chat, where the response is the main content. The duration comes from the server (`duration`) or is measured from `streaming` turning on to turning off, rounded to whole seconds. An optional `Skip thinking` lets the reader ask for the response now.",
+ "setup": null,
+ "useWhen": [
+  "The model performs extended reasoning before answering, and the trace helps the reader trust or check the response."
+ ],
+ "avoidWhen": [
+  "Ordinary loading with no reasoning → `ai-loading`.",
+  "Agent actions with side effects (calls, commands) → `tool-call` and `action-confirmation`.",
+  "Progressive steps of a long task → a `stepper` or a list of `tool-call`s."
+ ],
+ "related": [
+  "ai-loading` — loading without a trace.",
+  "tool-call` — what the agent did, rather than what it thought.",
+  "streaming-response` — renders a Markdown trace inside the slot."
+ ],
+ "bestPractices": [
+  "Keep it collapsed in chat; open it by default only where reasoning is the point (an editor, a review).",
+  "Never show secrets, token counts or system prompts in the trace.",
+  "Do not replace the label with trace text; the label stays `Thinking` until done.",
+  "Offer `skippable` only when the model can answer meaningfully without finishing."
+ ],
+ "props": [
+  {
+   "name": "streaming",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "The model is still reasoning: the label reads `Thinking` and pulses; when it turns false the label shows how long it took."
+  },
+  {
+   "name": "duration",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Controlled open state. Use with `v-model:open`."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled; collapsed is the default in a chat, where the response is the main content."
+  },
+  {
+   "name": "skippable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:open",
+   "payload": "boolean",
+   "notes": ""
+  },
+  {
+   "name": "skip",
+   "payload": "—",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The trace: short narration, steps, inline code. Kept as it was once thinking ends."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Reasoning from '@aziontech/webkit/reasoning'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <Reasoning :duration=\"14\">\n      <p>The reader asks why the cache hit ratio of storefront dropped this week.</p>\n      <p>\n        Checking the cache settings of <code>storefront</code>: query strings are part of the cache\n        key, and a campaign started on Monday adds <code>utm_source</code> to every link.\n      </p>\n      <p>Each campaign link is a new cache key, so most requests miss the cache.</p>\n    </Reasoning>\n  </div>\n</template>"
+  },
+  {
+   "name": "Streaming",
+   "sfc": "<script setup>\n  import Reasoning from '@aziontech/webkit/reasoning'\n  import { onBeforeUnmount, onMounted, ref } from 'vue'\n\n  const steps = [\n    'Reading the error rate of the workload over the last hour.',\n    'The 502 responses started at 14:05, when the origin certificate expired.',\n    'Checking whether a renewed certificate is already uploaded.'\n  ]\n\n  const shown = ref([])\n  const streaming = ref(true)\n  let timer\n\n  function stop() {\n    clearInterval(timer)\n    streaming.value = false\n  }\n\n  onMounted(() => {\n    timer = setInterval(() => {\n      if (shown.value.length < steps.length) shown.value = steps.slice(0, shown.value.length + 1)\n      else stop()\n    }, 1500)\n  })\n  onBeforeUnmount(() => clearInterval(timer))\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <Reasoning\n      :streaming=\"streaming\"\n      default-open\n      skippable\n      @skip=\"stop\"\n    >\n      <p\n        v-for=\"step in shown\"\n        :key=\"step\"\n      >\n        {{ step }}\n      </p>\n    </Reasoning>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/reasoning.md"
+}

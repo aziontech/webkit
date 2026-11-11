@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Command",
+   "summary": "The agent asks to run a deployment command: the question names it in code, the body shows exactly what will run, and Deny or Deploy decide; the card then shows the outcome in text.",
+   "sfc": "<script setup>\n  import ActionConfirmation from '@aziontech/webkit/action-confirmation'\n  import CodeBlock from '@aziontech/webkit/code-block'\n  import { ref } from 'vue'\n\n  const state = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ActionConfirmation\n      title=\"Allow `azion deploy --env production`?\"\n      description=\"Deploys the current build of storefront to production. The previous version stays available for rollback.\"\n      approve-label=\"Deploy\"\n      :state=\"state\"\n      @approve=\"state = 'approved'\"\n      @deny=\"state = 'denied'\"\n    >\n      <CodeBlock\n        :tabs=\"[\n          {\n            label: 'Shell',\n            value: 'cmd',\n            code: 'azion deploy --env production --workload storefront',\n            language: 'bash'\n          }\n        ]\"\n        :show-line-numbers=\"false\"\n      />\n    </ActionConfirmation>\n  </div>\n</template>"
+  },
+  {
+   "name": "Irreversible",
+   "summary": "A destructive request: the frame and the Delete button turn danger, and Delete stays disabled until the reader types the domain name.",
+   "sfc": "<script setup>\n  import ActionConfirmation from '@aziontech/webkit/action-confirmation'\n  import { ref } from 'vue'\n\n  const state = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ActionConfirmation\n      title=\"Delete the domain `www.example.com`?\"\n      description=\"The domain stops answering at once and its certificate is revoked. This cannot be undone.\"\n      kind=\"danger\"\n      confirmation-phrase=\"www.example.com\"\n      approve-label=\"Delete\"\n      :state=\"state\"\n      @approve=\"state = 'approved'\"\n      @deny=\"state = 'denied'\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Resolved",
+   "summary": "The three outcomes that stay in the thread after a decision: Approved, Denied and Request expired, each in text with its status dot.",
+   "sfc": "<script setup>\n  import ActionConfirmation from '@aziontech/webkit/action-confirmation'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <ActionConfirmation\n      title=\"Allow `purge_urls`?\"\n      description=\"Purges https://www.example.com/styles.css from every edge location.\"\n      state=\"approved\"\n    />\n    <ActionConfirmation\n      title=\"Approve deployment to production?\"\n      description=\"Deploys the current build of storefront to production.\"\n      state=\"denied\"\n    />\n    <ActionConfirmation\n      title=\"Allow `delete_cache_rule`?\"\n      description=\"Removes the rule that caches images for one day.\"\n      state=\"expired\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

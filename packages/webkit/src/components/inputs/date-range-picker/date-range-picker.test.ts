@@ -6,6 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/date-range-picker/default.vue'
 import TimeZone from '../../../../examples/date-range-picker/time-zone.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import { fromWallClock, resolveDateRange, stepDateRange, toWallClock } from './date-range'
 import DateRangePicker, { type DateRangeValue } from './date-range-picker.vue'
@@ -337,7 +338,7 @@ describe('DateRangePicker', () => {
       setup: () => () =>
         h(
           WebkitProvider,
-          { locale: 'pt-BR', dir: 'rtl' },
+          { locale: 'pt-BR', dir: 'rtl', catalogs: LOCALES },
           {
             default: () =>
               h(DateRangePicker, {

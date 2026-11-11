@@ -1,0 +1,20 @@
+{
+ "purpose": "Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer. Aligned with Figma frame `562:6774` (Webkit / Input).",
+ "useWhen": [
+  "Capture a single line of free-form text (names, titles, search terms)."
+ ],
+ "avoidWhen": [
+  "The value spans multiple lines → use `textarea`.",
+  "The value is strictly numeric → use `number-input`.",
+  "The user must choose from a fixed set → use `select` / `multi-select`."
+ ],
+ "related": [
+  "textarea` — multi-line free text.",
+  "number-input` — numeric input with stepper semantics.",
+  "field` — wraps this input with label, description and error; the input reads its id, `aria-describedby` and state from it."
+ ],
+ "bestPractices": [
+  "Prefer the `field-*` wrapper when you need a label, helper text, or validation message.",
+  "Set an appropriate `type`/`inputmode` for the content (email, url, …)."
+ ]
+}

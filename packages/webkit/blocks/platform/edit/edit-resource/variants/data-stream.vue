@@ -6,6 +6,7 @@
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
+  import CodeEditor from '@aziontech/webkit/code-editor'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
@@ -1351,16 +1352,15 @@
                           description="The variables sent to the destination, as a JSON object. Each value is a variable such as $host or $status."
                           kind="stacked"
                         >
-                          <div class="flex w-full font-code">
-                            <Textarea
+                          <div class="flex w-full flex-col">
+                            <CodeEditor
                               id="data-stream-dataSet"
                               v-model="form.dataSet"
-                              class="w-full"
-                              :rows="10"
+                              language="json"
+                              path="data-set.json"
+                              height="16rem"
                               aria-label="Data set"
-                              placeholder='{ "host": "$host", "status": "$status" }'
-                              :required="errors.dataSet?.kind === 'required'"
-                              :invalid="errors.dataSet?.kind === 'invalid'"
+                              :invalid="!!errors.dataSet"
                               :aria-describedby="
                                 errors.dataSet ? 'data-stream-dataSet-message' : undefined
                               "

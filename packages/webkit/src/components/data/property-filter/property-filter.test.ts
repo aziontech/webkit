@@ -5,8 +5,9 @@ import { nextTick } from 'vue'
 import Default from '../../../../examples/property-filter/default.vue'
 import QueryMode from '../../../../examples/property-filter/query-mode.vue'
 import WithCollection from '../../../../examples/property-filter/with-collection.vue'
-import { BUILT_IN_CATALOGS, provideLocale } from '../../../composables/use-locale'
+import { en, provideLocale } from '../../../composables/use-locale'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import PropertyFilter from './property-filter.vue'
 
 const properties = [
@@ -111,7 +112,7 @@ describe('PropertyFilter', () => {
     const view = render({
       components: { PropertyFilter },
       setup() {
-        provideLocale({ locale: 'pt-BR', catalogs: BUILT_IN_CATALOGS })
+        provideLocale({ locale: 'pt-BR', catalogs: { en, ...LOCALES } })
         return { properties }
       },
       template: `<PropertyFilter :properties="properties" :total-count="1" :query="{ tokens: [{ operator: ':', value: 'x' }], operation: 'and' }" />`

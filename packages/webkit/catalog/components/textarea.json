@@ -1,0 +1,17 @@
+{
+ "purpose": "Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resizable` prop (defaults to `vertical`). Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.",
+ "useWhen": [
+  "Capture multiple lines of free-form text (descriptions, comments, messages)."
+ ],
+ "avoidWhen": [
+  "The value is a single line → use `input`.",
+  "The value is strictly numeric → use `number-input`."
+ ],
+ "related": [
+  "input` — single-line sibling with the same field API."
+ ],
+ "bestPractices": [
+  "Give it a sensible default size; avoid auto-growing beyond the viewport.",
+  "Use the `field-*` wrapper for label/help/error."
+ ]
+}

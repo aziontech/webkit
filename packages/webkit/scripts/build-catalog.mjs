@@ -24,6 +24,7 @@ const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
 const PARTS_DIR = resolve(REPO_ROOT, 'packages/webkit/catalog')
 const PATTERN_HEAVY_KEYS = ['sfc', 'variants', 'guidelines']
+const COMPONENT_PROSE_KEYS = ['purpose', 'useWhen', 'avoidWhen', 'related', 'bestPractices']
 const V6_MIGRATION = resolve(PKG_ROOT, 'src/cli/migrations/v6.json')
 const V6_BLOCKS = resolve(PKG_ROOT, 'src/cli/migrations/v6-blocks.json')
 
@@ -133,6 +134,7 @@ function kindFromTarget(target) {
   if (target.startsWith('./src/svg/')) return 'svg'
   if (target.startsWith('./src/assets/')) return 'asset'
   if (target.startsWith('./src/styles/')) return 'style'
+  if (target.startsWith('./src/locales/')) return 'locale'
   if (target.startsWith('./src/vite/')) return 'other'
   if (/\.vue$/.test(target) || /\/index\.(ts|js)$/.test(target)) return 'component'
   return 'other'
@@ -292,7 +294,9 @@ export async function build() {
               ? 'util'
               : seg === 'styles'
                 ? 'style'
-                : 'component'
+                : seg === 'locales'
+                  ? 'locale'
+                  : 'component'
       entry.treeShakeableImport = importPath
     } else {
       entry.kind = kindFromTarget(target)
@@ -449,15 +453,24 @@ export function splitCatalog(full) {
   }
   const imports = {}
   for (const [subpath, e] of Object.entries(full.imports)) {
-    if (!e.examples) {
-      imports[subpath] = e
-      continue
+    const meta = {}
+    const prose = {}
+    for (const [k, v] of Object.entries(e)) {
+      if (k === 'examples') continue
+      if (COMPONENT_PROSE_KEYS.includes(k)) prose[k] = v
+      else meta[k] = v
     }
-    const { examples, ...meta } = e
-    const file = `catalog/examples/${subpath}.json`
-    meta.examplesFile = file
+    if (e.examples) {
+      const file = `catalog/examples/${subpath}.json`
+      meta.examplesFile = file
+      files[file] = { examples: e.examples }
+    }
+    if (Object.keys(prose).length) {
+      const file = `catalog/components/${subpath}.json`
+      meta.docsFile = file
+      files[file] = prose
+    }
     imports[subpath] = meta
-    files[file] = { examples }
   }
   return { catalog: { ...full, imports, patterns }, files }
 }

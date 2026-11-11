@@ -30,8 +30,8 @@ export interface ProvideLocaleOptions {
   messages?: MaybeRefOrGetter<PartialMessages | undefined>
   /** Explicit direction, or `auto` to derive it from the locale. */
   dir?: MaybeRefOrGetter<DirectionSetting | undefined>
-  /** Built-in catalogs the provider can pick from, keyed by locale tag. */
-  catalogs: Record<string, Messages>
+  /** Catalogs the provider can pick from, keyed by locale tag; English must be one of them. */
+  catalogs: MaybeRefOrGetter<Record<string, Messages>>
 }
 
 /** Plural forms passed to `plural`; `{count}` in a form is replaced by the formatted count. */
@@ -73,14 +73,31 @@ export function directionOf(locale: string): Direction {
   return RTL_LANGUAGES.has(language) ? 'rtl' : 'ltr'
 }
 
-export function pickCatalog(locale: string, catalogs: Record<string, Messages>): Messages {
+function findCatalog(locale: string, catalogs: Record<string, Messages>): Messages | undefined {
   const tag = locale.toLowerCase()
   const entries = Object.entries(catalogs)
   const exact = entries.find(([key]) => key.toLowerCase() === tag)
   if (exact) return exact[1]
   const language = tag.split(/[-_]/)[0]
-  const sameLanguage = entries.find(([key]) => key.toLowerCase().split(/[-_]/)[0] === language)
-  return sameLanguage ? sameLanguage[1] : (catalogs[DEFAULT_LOCALE] as Messages)
+  return entries.find(([key]) => key.toLowerCase().split(/[-_]/)[0] === language)?.[1]
+}
+
+export function pickCatalog(locale: string, catalogs: Record<string, Messages>): Messages {
+  return findCatalog(locale, catalogs) ?? (catalogs[DEFAULT_LOCALE] as Messages)
+}
+
+const SHIPPED_LOCALES = ['pt-BR', 'es']
+const warnedLocales = new Set<string>()
+
+function warnMissingCatalog(locale: string): void {
+  if ((import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV !== true) return
+  const language = locale.toLowerCase().split(/[-_]/)[0]
+  const shipped = SHIPPED_LOCALES.find((tag) => tag.toLowerCase().split('-')[0] === language)
+  if (!shipped || warnedLocales.has(locale)) return
+  warnedLocales.add(locale)
+  console.warn(
+    `[webkit] <WebkitProvider>: locale "${locale}" has no registered catalog, so built-in strings fall back to English. Import it from "@aziontech/webkit/locales/${shipped}" and pass it through \`catalogs\`.`
+  )
 }
 
 export function mergeMessages(base: Messages, overrides?: PartialMessages): Messages {
@@ -172,9 +189,12 @@ export function provideLocale(options: ProvideLocaleOptions): LocaleContext {
     const requested = toValue(options.dir) ?? 'auto'
     return requested === 'auto' ? directionOf(locale.value) : requested
   })
-  const messages = computed(() =>
-    mergeMessages(pickCatalog(locale.value, options.catalogs), toValue(options.messages))
-  )
+  const messages = computed(() => {
+    const catalogs = toValue(options.catalogs)
+    const found = findCatalog(locale.value, catalogs)
+    if (!found) warnMissingCatalog(locale.value)
+    return mergeMessages(found ?? (catalogs[DEFAULT_LOCALE] as Messages), toValue(options.messages))
+  })
   const context: LocaleContext = { locale, dir, messages }
   provide(LocaleInjectionKey, context)
   return context

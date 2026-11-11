@@ -2,10 +2,39 @@ export const alert = {
   close: 'Close message'
 } as const
 
+export const appLayout = {
+  navigation: 'Navigation',
+  tools: 'Help',
+  closeTools: 'Close help',
+  splitPanel: 'Details',
+  closeSplitPanel: 'Close panel',
+  resizeSplitPanel: 'Resize panel',
+  showAtSide: 'Show beside the content',
+  showAtBottom: 'Show under the content'
+} as const
+
 export const articleIndex = {
   search: 'Search',
   searchFacet: 'Search {facet}',
   empty: 'No results found.'
+} as const
+
+export const attributeEditor = {
+  add: 'Add new item',
+  remove: 'Remove item',
+  rowAction: '{label} {index}',
+  addGroup: 'Add OR group',
+  empty: 'No items yet.',
+  remaining: {
+    one: 'You can add {count} more item.',
+    other: 'You can add {count} more items.'
+  },
+  limitReached: 'You have reached the limit of {limit} items.',
+  added: 'Item {index} added.',
+  removed: 'Item {index} removed.',
+  group: 'Group {index}',
+  and: 'and',
+  or: 'or'
 } as const
 
 export const avatar = {
@@ -15,6 +44,14 @@ export const avatar = {
 
 export const barList = {
   emptyTitle: 'No data available'
+} as const
+
+export const board = {
+  label: 'Dashboard',
+  item: 'Item {position}',
+  moved: '{label} moved to position {position} of {total}.',
+  resized: '{label} resized to {span} of {columns} columns.',
+  resizedWithHeight: '{label} resized to {span} of {columns} columns, {height} pixels tall.'
 } as const
 
 export const breadcrumb = {
@@ -29,6 +66,11 @@ export const browserFrame = {
   resizeHeight: 'Resize preview height',
   widthValue: '{value} pixels wide',
   heightValue: '{value} pixels tall'
+} as const
+
+export const buttonGroup = {
+  moreActions: 'More actions',
+  pressed: 'On'
 } as const
 
 export const calendar = {
@@ -99,6 +141,25 @@ export const codeBlock = {
   copy: 'Copy code'
 } as const
 
+export const codeEditor = {
+  label: 'Code editor',
+  original: 'Original',
+  modified: 'Modified',
+  problems: 'Problems',
+  problemCount: {
+    zero: 'No problems',
+    one: '{count} problem',
+    other: '{count} problems'
+  },
+  line: 'Line {line}',
+  error: 'Error',
+  warning: 'Warning',
+  info: 'Info',
+  loading: 'Loading the full editor…',
+  loadFailed: 'The full editor could not load. You can keep editing here.',
+  tabHint: 'Press Escape, then Tab, to leave the editor.'
+} as const
+
 export const collectionPreferences = {
   trigger: 'Preferences',
   title: 'Preferences',
@@ -122,6 +183,18 @@ export const collectionPreferences = {
   density: 'Density',
   comfortable: 'Comfortable',
   compact: 'Compact'
+} as const
+
+export const combobox = {
+  empty: 'No matches',
+  loading: 'Loading options',
+  useValue: 'Use "{value}"',
+  clear: 'Clear',
+  suggestions: 'Suggestions',
+  count: {
+    one: '{count} option',
+    other: '{count} options'
+  }
 } as const
 
 export const command = {
@@ -255,6 +328,13 @@ export const drawer = {
   close: 'Close'
 } as const
 
+export const errorBoundary = {
+  title: 'This section failed to load',
+  description:
+    'Something went wrong while showing this part of the page. The rest of the page still works.',
+  retry: 'Try again'
+} as const
+
 export const field = {
   required: '(Required)'
 } as const
@@ -284,6 +364,14 @@ export const helpPanel = {
 export const heroForm = {
   search: 'Search',
   empty: 'No results found.'
+} as const
+
+export const hotspot = {
+  label: 'Tutorial step: {title}',
+  stepOf: 'Step {current} of {total}',
+  previous: 'Previous',
+  next: 'Next',
+  finish: 'Finish'
 } as const
 
 export const keyValuePairs = {
@@ -444,6 +532,27 @@ export const resizable = {
   handle: 'Resize panel'
 } as const
 
+export const schemaForm = {
+  required: 'This field is required.',
+  minLength: 'Use at least {min} characters.',
+  maxLength: 'Use at most {max} characters.',
+  pattern: "This value doesn't match the expected format.",
+  minimum: 'Enter {min} or more.',
+  maximum: 'Enter {max} or less.',
+  number: 'Enter a number.',
+  integer: 'Enter a whole number.',
+  enum: 'Choose one of the options.',
+  minItems: 'Add at least {min} values.',
+  maxItems: 'Add at most {max} values.',
+  listItem: 'Line {line}: {message}',
+  json: 'Enter valid JSON.',
+  selectPlaceholder: 'Select an option',
+  numberPlaceholder: 'A number',
+  numberFrom: 'From {min}',
+  listPlaceholder: 'One value per line',
+  jsonPlaceholder: 'A JSON value'
+} as const
+
 export const sectionHeader = {
   copyLink: 'Copy link to the {title} section',
   linkCopied: 'Link copied'
@@ -583,7 +692,32 @@ export const tableSortButton = {
 } as const
 
 export const tabs = {
-  close: 'Close tab'
+  close: 'Close tab',
+  unsaved: 'Unsaved changes'
+} as const
+
+export const tagEditor = {
+  label: 'Tags',
+  key: 'Key',
+  value: 'Value',
+  keyPlaceholder: 'Enter key',
+  valuePlaceholder: 'Enter value',
+  add: 'Add new tag',
+  remove: 'Remove tag',
+  undo: 'Undo',
+  undoLabel: 'Undo removal of tag {index}',
+  markedForRemoval: 'This tag will be removed when you save.',
+  empty: 'No tags associated with the resource.',
+  remaining: {
+    one: 'You can add {count} more tag.',
+    other: 'You can add {count} more tags.'
+  },
+  limitReached: 'You have reached the limit of {limit} tags.',
+  keyRequired: 'Enter a key.',
+  keyDuplicate: 'This key is already used by another tag.',
+  keyReserved: 'Keys cannot start with "{prefix}".',
+  keyInvalid: 'Use letters, numbers, spaces and + - = . _ : / @ only.',
+  tooLong: 'Use {max} characters or fewer.'
 } as const
 
 export const themeSwitcher = {
@@ -631,6 +765,32 @@ export const tree = {
   emptyTitle: 'No items'
 } as const
 
+export const unsavedChanges = {
+  title: 'Unsaved changes',
+  description: "This page has changes you haven't saved. If you leave now, they're discarded.",
+  descriptionSavable:
+    "This page has changes that haven't been saved yet. Save them before you leave, or discard them and continue.",
+  keepEditing: 'Keep editing',
+  discard: 'Discard changes',
+  save: 'Save changes'
+} as const
+
+export const tutorialPanel = {
+  title: 'Tutorials',
+  description: 'Learn the product by doing a real task, one step at a time.',
+  listLabel: 'Available tutorials',
+  empty: 'No tutorials yet.',
+  start: 'Start tutorial',
+  restart: 'Restart tutorial',
+  exit: 'Exit tutorial',
+  back: 'Back to tutorials',
+  completed: 'Completed',
+  completedTitle: 'Tutorial complete',
+  completedDescription: 'You finished {title}.',
+  taskCount: { one: '{count} task', other: '{count} tasks' },
+  stepCount: { one: '{count} step', other: '{count} steps' }
+} as const
+
 export const wizard = {
   stepOf: 'Step {step} of {total}',
   optional: 'Optional',
@@ -640,24 +800,123 @@ export const wizard = {
   submit: 'Create'
 } as const
 
+export const actionConfirmation = {
+  approve: 'Approve',
+  deny: 'Deny',
+  approved: 'Approved',
+  denied: 'Denied',
+  expired: 'Request expired',
+  confirmLabel: 'Type {phrase} to confirm'
+} as const
+
+export const aiLoading = {
+  generating: 'Generating a response'
+} as const
+
+export const artifactPreview = {
+  open: 'Open',
+  openLabel: 'Open {title}',
+  download: 'Download {title}',
+  copy: 'Copy {title}'
+} as const
+
+export const chatMessage = {
+  user: 'You',
+  assistant: 'AI assistant',
+  system: 'System',
+  labelWithTime: '{author} at {time}',
+  actions: 'Message actions',
+  error: 'The response could not be generated.',
+  retry: 'Try again',
+  helpful: 'Helpful',
+  notHelpful: 'Not helpful',
+  feedback: 'Response feedback',
+  feedbackSubmitting: 'Submitting feedback',
+  feedbackSubmitted: 'Feedback submitted'
+} as const
+
+export const citation = {
+  label: 'Source {index}: {title}',
+  labelUntitled: 'Source {index}'
+} as const
+
+export const conversation = {
+  label: 'Conversation',
+  scrollToLatest: 'Scroll to the latest message',
+  announcement: '{author}: {text}'
+} as const
+
+export const promptInput = {
+  label: 'Prompt',
+  placeholder: 'Ask a question',
+  submit: 'Submit',
+  stop: 'Stop generating',
+  count: '{count}/{max}',
+  overLimit: '{count} characters over the limit'
+} as const
+
+export const reasoning = {
+  thinking: 'Thinking',
+  thoughtBriefly: 'Thought for a few seconds',
+  skip: 'Skip thinking',
+  thought: {
+    one: 'Thought for {count} second',
+    other: 'Thought for {count} seconds'
+  }
+} as const
+
+export const sources = {
+  label: 'Sources',
+  count: {
+    one: '{count} source',
+    other: '{count} sources'
+  }
+} as const
+
+export const suggestionGroup = {
+  label: 'Suggested prompts'
+} as const
+
+export const toolCall = {
+  pending: 'Waiting',
+  running: 'Running',
+  success: 'Completed',
+  error: 'Failed',
+  denied: 'Denied',
+  input: 'Input',
+  output: 'Output'
+} as const
+
 export const en = {
+  actionConfirmation,
+  aiLoading,
   alert,
+  appLayout,
   articleIndex,
+  artifactPreview,
+  attributeEditor,
   avatar,
   barList,
+  board,
   breadcrumb,
   browserFrame,
+  buttonGroup,
   calendar,
   cards,
   carousel,
   chart,
   chartCard,
+  chatMessage,
   chip,
+  citation,
   codeBlock,
+  codeEditor,
   collectionPreferences,
+  combobox,
   command,
   comparisonTable,
   confirmDialog,
+  conversation,
   copyButton,
   dateRangePicker,
   dialog,
@@ -669,12 +928,14 @@ export const en = {
   docProse,
   donutChart,
   drawer,
+  errorBoundary,
   field,
   fileDropzone,
   footer,
   globalHeader,
   helpPanel,
   heroForm,
+  hotspot,
   keyValuePairs,
   kbd,
   label,
@@ -691,20 +952,25 @@ export const en = {
   phoneInput,
   pickList,
   popover,
+  promptInput,
   propertyFilter,
   propertyFilterQuery,
+  reasoning,
   resizable,
+  schemaForm,
   sectionHeader,
   settingsSection,
   severityTag,
   sidebar,
   siteFooter,
   siteNav,
+  sources,
   splitButton,
   statTile,
   statusIndicator,
   stepper,
   storyLibrary,
+  suggestionGroup,
   table,
   tableAppliedFilters,
   tableColumnSelector,
@@ -715,11 +981,15 @@ export const en = {
   tableSearch,
   tableSortButton,
   tabs,
+  tagEditor,
   themeSwitcher,
   toast,
   toggleGroup,
   trace,
+  toolCall,
   tracker,
   tree,
+  unsavedChanges,
+  tutorialPanel,
   wizard
 }

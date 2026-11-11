@@ -8,8 +8,14 @@ import test from 'node:test'
 import { build, splitCatalog } from '../../scripts/build-catalog.mjs'
 
 const { loadCatalog, _resetCatalogCache } = await import('../../src/mcp/catalog.js')
-const { getComponent, getPattern, getUsageExample, searchPatterns } =
-  await import('../../src/mcp/queries.js')
+const {
+  getBestPractices,
+  getComponent,
+  getPattern,
+  getUsageExample,
+  searchComponents,
+  searchPatterns
+} = await import('../../src/mcp/queries.js')
 
 const SPLIT_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
 const full = await build()
@@ -30,8 +36,14 @@ rmSync(dir, { recursive: true, force: true })
 const PATTERN_IDS = Object.keys(full.patterns)
 const COMPONENT_IDS = ['button', 'field', 'table', 'select', 'chart', 'dialog', 'overline']
 
-test('catalog.json stays under 1.5 MB once the SFCs and examples move to catalog/', () => {
-  assert.ok(statSync(SPLIT_PATH).size < 1_500_000, `${statSync(SPLIT_PATH).size} bytes`)
+test('catalog.json stays under 1.2 MB once the SFCs, examples and component prose move to catalog/', () => {
+  assert.ok(statSync(SPLIT_PATH).size < 1_200_000, `${statSync(SPLIT_PATH).size} bytes`)
+  for (const e of Object.values(split.imports)) {
+    for (const k of ['purpose', 'useWhen', 'avoidWhen', 'related', 'bestPractices']) {
+      assert.equal(k in e, false, `${e.import} keeps ${k}`)
+    }
+    if (e.docsFile) assert.match(e.docsFile, /^catalog\/components\/.+\.json$/)
+  }
   for (const p of Object.values(split.patterns)) {
     assert.equal('sfc' in p, false)
     assert.match(p.file, /^catalog\/patterns\/.+\.json$/)
@@ -40,7 +52,14 @@ test('catalog.json stays under 1.5 MB once the SFCs and examples move to catalog
 
 test('splitCatalog moves sfc, variants and guidelines and keeps everything else', () => {
   const { catalog, files } = splitCatalog({
-    imports: { x: { import: 'x', examples: [{ name: 'A', summary: '', sfc: '<template/>' }] } },
+    imports: {
+      x: {
+        import: 'x',
+        purpose: 'P',
+        useWhen: ['u'],
+        examples: [{ name: 'A', summary: '', sfc: '<template/>' }]
+      }
+    },
     patterns: {
       'a/b': {
         name: 'B',
@@ -62,7 +81,12 @@ test('splitCatalog moves sfc, variants and guidelines and keeps everything else'
     guidelines: '# B',
     variants: [{ name: 'Empty', summary: 's', sfc: '<template/>' }]
   })
-  assert.deepEqual(catalog.imports.x, { import: 'x', examplesFile: 'catalog/examples/x.json' })
+  assert.deepEqual(catalog.imports.x, {
+    import: 'x',
+    examplesFile: 'catalog/examples/x.json',
+    docsFile: 'catalog/components/x.json'
+  })
+  assert.deepEqual(files['catalog/components/x.json'], { purpose: 'P', useWhen: ['u'] })
   assert.deepEqual(files['catalog/examples/x.json'].examples[0].name, 'A')
 })
 
@@ -84,6 +108,17 @@ test('get_component and get_usage_example return the same examples from the spli
   for (const id of COMPONENT_IDS) {
     assert.deepEqual(getComponent(split, id), getComponent(monolith, id), id)
     assert.deepEqual(getUsageExample(split, id), getUsageExample(monolith, id), id)
+    assert.deepEqual(getBestPractices(split, id), getBestPractices(monolith, id), id)
   }
+  for (const q of [
+    'dropdown',
+    'date picker',
+    'botão',
+    'upload a file',
+    'confirm before deleting'
+  ]) {
+    assert.deepEqual(searchComponents(split, q), searchComponents(monolith, q), q)
+  }
+  assert.ok(getComponent(split, 'button').purpose)
   assert.ok(getComponent(split, 'field').examples[0].sfc.includes('<template>'))
 })

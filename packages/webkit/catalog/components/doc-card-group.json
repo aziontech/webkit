@@ -1,0 +1,21 @@
+{
+ "purpose": "The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `FrameBox` draws the perimeter and the four corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a 1px ring into them — so two neighbours share one hairline, an incomplete last row stays simply empty, and the set reads as one object the reader scans across rather than as loose tiles. `cols` names the widest column count; the grid always steps down toward one column on a phone unless a set of tiny cells opts into two with `mobileColumns`.",
+ "useWhen": [
+  "Around every `DocCard` set — a card outside a group has no frame and no cell ring.",
+  "The fan-out at the top of a landing or section-index page: product tiles, a framework grid, a \"what you can build\" band."
+ ],
+ "avoidWhen": [
+  "When each entry needs a full-measure sentence to be understood — use `DocItem` rows, one column, instead of cells.",
+  "As a general-purpose layout grid for application screens; it is documentation chrome, tied to the `DocProse` ladder."
+ ],
+ "related": [
+  "DocCard` — the cell this frames; the group draws the perimeter and the cells paint the internal rules.",
+  "FrameBox` — the layout primitive that draws the frame and the corner registration marks.",
+  "DocProse` — the contract around it; `data-doc-block` puts the group on the block rung of the prose ladder."
+ ],
+ "bestPractices": [
+  "Pick `cols` for the widest screen and let the breakpoints do the rest; do not wrap the group in another grid.",
+  "Leave `mobileColumns` at 1 unless every cell is a mark plus one word — a card with copy needs the whole phone width.",
+  "Let an incomplete last row be empty; do not stretch the last card to fill it."
+ ]
+}

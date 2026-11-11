@@ -1,0 +1,21 @@
+{
+  "component": "schema-form",
+  "title": "Components/Primitives/Inputs/SchemaForm",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A function's arguments from a JSON schema: a text field with a default, an `enum` as a `Select`, an integer with `minimum` and `maximum`, a boolean as a `Switch` and a list of paths, one per line. Defaults seed the value, required fields carry the marker, and each field checks itself when the user leaves it.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithValidation",
+      "summary": "`validate-on=\"submit\"`: nothing turns red until Save calls `validate()`, which shows every message and focuses the first invalid field. A nested object renders as a fieldset with its own legend, and a server message passed in `errors` by path (`origin.host`) stays on its field until the field is edited.",
+      "file": "with-validation.vue"
+    },
+    {
+      "name": "CustomField",
+      "summary": "A `field:<path>` slot replaces one control and keeps the label, description and messages; `ui` orders the keys and sets a placeholder. `x-multiline` turns a string into a `Textarea`.",
+      "file": "custom-field.vue"
+    }
+  ]
+}

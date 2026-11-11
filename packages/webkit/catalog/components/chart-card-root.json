@@ -1,0 +1,24 @@
+{
+ "purpose": "The box a dashboard chart lives in: a header with the title, the description and a controls zone, a content area padded or flush, an optional footer, and two optional handles that let the person move the card and resize it on a dashboard grid. The span (grid columns) and height are two-way models applied through custom properties, so the consumer's grid lays cards out with no script, and the reorder state stays with the page that owns the grid.",
+ "useWhen": [
+  "Every chart on a metrics dashboard, so title, description, menu and size read the same everywhere.",
+  "A dashboard the person arranges: drag a card to reorder it, drag a corner to make it wider or taller."
+ ],
+ "avoidWhen": [
+  "A KPI figure → use `stat-tile`, which is its own surface.",
+  "A general content card with no chart → use `card`.",
+  "A chart inline in a page section with its own heading → render `chart` alone."
+ ],
+ "related": [
+  "chart`, `donut-chart` — what goes inside the content area; a chart inside a card takes its accessible name from the card title.",
+  "card` — the general-purpose card; ChartCard shares its surface tokens.",
+  "dropdown` — the \"More options\" menu (Copy query, Export CSV) composed into the controls zone."
+ ],
+ "bestPractices": [
+  "Put the aggregation tag (Sum, Average) and the variation tag in `ChartCard.Controls`, before the menu.",
+  "Keep filters and the time range above the grid, never inside a card.",
+  "Use `flush` content for a plot that should run edge to edge, padded for everything else.",
+  "Give the page's grid `--chart-grid-columns` per breakpoint so a 6-column card never overflows a 1-column phone layout.",
+  "Persist `span` and `height` with the dashboard layout; they are plain numbers."
+ ]
+}

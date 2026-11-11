@@ -1,0 +1,38 @@
+{
+ "purpose": "A two-column band pairing a block of copy with a piece of media — a screenshot, diagram or short video — each holding half the frame. It is the workhorse section of a product page: one claim, one picture of the claim, repeated down the page with the sides alternating. It is a **sub-section**, not a section header, and its typography says so: the headline is `heading-md` against `section-title`'s `heading-xl`, because these bands sit _inside_ a section that a `section-title` has already opened. A band that needs the larger weight is opening a section, and wants `section-title`. Typographic weight and heading level are separate choices. The band sets its headline at `heading-md`, or `heading-xl` when `size` is `large`; `headingLevel` decides whether that headline is an `h2` or an `h3`, so a band nested under a section that already has its own `h2` does not open a second one at the same level. The seam between the two cells is the grid's own one-pixel gap over a rule fill, so neither cell draws a border and the hairline lands in the same place whichever side the media is on — horizontal while the band is stacked, vertical once it splits. `divided` drops it for a band whose two halves should read as one plate. Whether the band ever splits is `orientation`'s call. `horizontal` is the band proper: stacked below `lg`, two cells from `lg` up. `vertical` holds the stacked form at every width, and `kind` then picks whether the media sits above the copy or below it rather than left or right — the shape a band takes in a column too narrow to carry two halves.",
+ "useWhen": [
+  "To pair one capability's explanation with a screenshot or diagram of it.",
+  "Down a product page, alternating `kind` so consecutive bands mirror each other.",
+  "With `framed` off inside a page column that already draws the frame, and on when the band stands alone.",
+  "With `heading-level=\"3\"` whenever a `section-title` has already opened the section the band sits in.",
+  "With `orientation=\"vertical\"` in a column too narrow for two halves — a page aside, a grid cell — where the band would otherwise squeeze both.",
+  "Whenever the media carries as much of the message as the copy does."
+ ],
+ "avoidWhen": [
+  "For copy with no media → use `section-title`, which is the header band.",
+  "For the closing ask → use `call-to-action`; for a mid-page announcement → use `banner`.",
+  "For several short claims side by side → use `topic` in a `card-grid`.",
+  "For a picture with no explanation → use `illustration` directly."
+ ],
+ "related": [
+  "section-title` — the copy-only section header.",
+  "topic` — the smaller unit when a page needs several claims rather than one.",
+  "illustration` — the media itself; a scene dropped in the `media` slot is what the band's ground is drawn for.",
+  "texture-material` — the material the media half is grounded with; compose it yourself when a band needs a different one.",
+  "frame-box` — the frame the band is drawn with. With `framed` on, or inside a `band-stack`, each of the band's two cells is its own `frame-box`.",
+  "band-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws."
+ ],
+ "bestPractices": [
+  "By default the band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+  "A run of bands goes in a `band-stack`, not in a frame per band: the stack draws each band's rules and the band frames its two cells. Leave `framed` off there, or the band draws a second set of rules over the stack's.",
+  "Alternate `kind` down a page so consecutive bands mirror; two identical bands in a row read as one.",
+  "Reach for `orientation=\"vertical\"` when the column is too narrow to carry two halves, not to vary the rhythm of a wide page — a vertical band across a full-width page reads as a card that lost its grid.",
+  "Composed into a grid of cells, the band fills the cell it is given: the copy column floors its actions, so a row of vertical bands lines up on its buttons. Let the grid own the seams there — `divided` off, `framed` off.",
+  "Keep the seam unless the two halves are meant to read as one thing: `divided` off on a `surface` fill is a single plate with a picture in it, and on a `canvas` fill it is two cells that merely touch.",
+  "Keep the copy to a headline and a short paragraph — the media is the other half of the argument, not decoration beside a wall of text.",
+  "Give the media a real `alt` that says what it shows, not what it is. \"Deployment succeeded in 1.2s\" beats \"screenshot\".",
+  "Reach for an official `illustration` scene before a screenshot: it is vector, it follows the canvas the library is drawn on, and its transparent ground is what the band's lattice is there for. `src` is the plain-picture path — a raster covers the ground rather than sitting on it.",
+  "Use the `media` slot when the media is not a plain image — a video, a chart or a composed figure belongs there rather than in `src`.",
+  "Let the band's own ground carry a scene with a transparent canvas: an `illustration` needs nothing behind it. Quiet or kill the lattice from the call site with `--texture-ink`, which the layer inherits from the band's root; a media element that paints its own opaque backdrop covers it anyway."
+ ]
+}

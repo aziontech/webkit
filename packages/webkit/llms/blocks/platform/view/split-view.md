@@ -64,19 +64,27 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 
 The fields panel (E) is the `split-view#Fields` piece of the inventory; it lives in the primary and every variant, so it has no variant of its own.
 
-### I. Query bar — `PropertyFilter` (`mode="query"`), `DateRangePicker` (optional, Query)
+### I. Query bar — `Tooltip`, `IconButton` (optional)
+
+Variant Query only; it adds `PropertyFilter` (`mode="query"`) and `DateRangePicker` to the page, in place of the Filter popover and the search field.
 
 For people who type their questions. `DateRangePicker` replaces the Period field of the Filter popover: relative ranges (Last 15 minutes to Last 24 hours), an absolute range typed in the chosen time zone and bounded to the retained days, and Previous and Next, which move the window by its own length. The times in the log, the chart axis and the document follow that zone. `PropertyFilter` in query mode replaces both the Filter popover and the search field: one query string (`level = Error AND host = api.example.com`), suggestions for the word at the caret, the reason under the field when the query is invalid, and the match count. Enter applies it; a query that mixes AND and OR shows a message instead of guessing. A value picked in the fields panel adds or removes its `field = value` clause, so the panel and the query never disagree.
 
-### J. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Button`, `Tooltip` (optional, Query)
+### J. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Button`, `Tooltip` (optional)
+
+Variant Query only.
 
 Two outlined `IconButton`s beside the bar open a `Popover` each. Saved queries lists name and query text, applies one on click, deletes one with a small Delete button, and saves the applied query under a typed name. Recent queries lists the last eight queries run, newest first, with Clear history. Applying an entry fills the bar and runs it.
 
-### K. Investigation tabs — `Tabs`, `IconButton`, `DropdownMenu`, `Input`, `Tooltip` (optional, Sessions)
+### K. Investigation tabs — `IconButton`, `DropdownMenu`, `Input`, `Tooltip` (optional)
+
+Variant Sessions only; it adds `Tabs` to the page.
 
 Above the controls row, one tab per open investigation; each keeps its own filters, search and period, and switching tabs closes the open document. New investigation (a transparent `IconButton`) adds a tab, up to five; past the limit a status line says to close one. The actions `DropdownMenu` renames, duplicates or closes the active tab. Rename opens an inline `Input` over the tab (also F2 or a double click on it): Enter keeps the name, Escape restores it. Delete on a focused tab closes it; the last tab cannot be closed. A close button inside each tab waits for a `Tabs` item close control that is its own focusable element (the current `closable` nests a button inside the tab); it is listed in ROADMAP M2.10.
 
-### L. Document tools — `Input`, `CopyButton`, `IconButton`, `Tooltip`, `Chip` (optional, EventDocument)
+### L. Document tools — `Input`, `IconButton`, `Tooltip`, `Chip` (optional)
+
+Variant EventDocument only; it adds `CopyButton` to the page.
 
 The document lists every field of the event. Search in this event narrows the list to fields whose name or value matches and highlights the match. Each filterable value has Filter by (keep only events with it) and Exclude (hide them) buttons that apply to the log; an exclusion shows as a `Host is not legacy.example.com` chip with the other filters. Copy copies the fields shown as JSON; the full JSON document stays below.
 

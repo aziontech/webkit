@@ -6,6 +6,7 @@ import Default from '../../../../examples/trace/default.vue'
 import Selected from '../../../../examples/trace/selected.vue'
 import WithError from '../../../../examples/trace/with-error.vue'
 import { BUILT_IN_CATALOGS, provideLocale } from '../../../composables/use-locale'
+import { LOCALES } from '../../../test/locales'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Trace from './trace.vue'
 
@@ -170,7 +171,7 @@ describe('Trace', () => {
     const view = render({
       components: { Trace },
       setup() {
-        provideLocale({ locale: 'pt-BR', catalogs: BUILT_IN_CATALOGS })
+        provideLocale({ locale: 'pt-BR', catalogs: { ...BUILT_IN_CATALOGS, ...LOCALES } })
         return { spans }
       },
       template: `<Trace :spans="spans" selected="b" />`

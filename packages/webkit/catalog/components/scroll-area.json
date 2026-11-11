@@ -1,0 +1,23 @@
+{
+ "purpose": "Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling. With `fade`, the edges that still have content to scroll to fade out, each sized by the distance left on that side (capped at 64px or a sixth of the viewport), so a list reads as continuing past its frame. A sticky header inside the viewport keeps its full opacity; the top fade starts below it.",
+ "useWhen": [
+  "A region that must scroll inside a bounded box: a navigation list, a panel body, a wide table (`orientation=\"horizontal\"`), a code region (`orientation=\"both\"`).",
+  "A long list whose edges should fade while more content lies beyond them (`fade`)."
+ ],
+ "avoidWhen": [
+  "The region is one of several the reader resizes by dragging → use `resizable`, with a ScrollArea inside a pane if its content overflows.",
+  "It is an application navigation rail → use `sidebar`, which already scrolls its items.",
+  "It is a code sample → use `code-block`, which already scrolls its lines."
+ ],
+ "related": [
+  "sidebar` — scrolls its navigation inside a built-in ScrollArea.",
+  "code-block` — runs its code lines in a ScrollArea with `orientation=\"both\"`.",
+  "resizable` — draggable regions; each pane can hold a ScrollArea."
+ ],
+ "bestPractices": [
+  "Give it a bounded height, or a flex parent that constrains it. Without a limit the content never overflows and nothing scrolls.",
+  "The root is focusable (`tabindex` 0) and scrolls with the arrow keys, Page Up/Down and Home/End. Set `aria-label` when no visible heading names the region.",
+  "Pass `tabindex=\"-1\"` only when the content is itself focusable and keyboard users can already reach all of it.",
+  "Match `orientation` to the overflow axis: `vertical` clips horizontal overflow, and `horizontal` clips vertical overflow."
+ ]
+}

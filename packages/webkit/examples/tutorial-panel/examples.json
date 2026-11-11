@@ -1,0 +1,16 @@
+{
+  "component": "tutorial-panel",
+  "title": "Components/Primitives/Content/TutorialPanel",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A services page with the tutorial panel in its side region. Start a tutorial and hotspots appear beside the real controls; the current step opens in a popover with Previous, Next and Finish, and the panel follows the reader's place in the tasks.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Completed",
+      "summary": "The completion screen after the last step, with Restart, Back to tutorials and a feedback link in the completion slot.",
+      "file": "completed.vue"
+    }
+  ]
+}
