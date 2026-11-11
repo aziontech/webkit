@@ -86,7 +86,7 @@
     },
     {
       "name": "ServiceOverview",
-      "summary": "A service: the breadcrumb ends on its environment picker, the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the breadcrumb is hidden), the production checklist expands into a drawer, and the deployment topology runs from domains to storage with Bind controls on the open Policy and Error Page slots.",
+      "summary": "A service: the breadcrumb ends on its environment picker, the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the breadcrumb is hidden), the production checklist expands into a drawer, and the deployment topology is a `TopologyDiagram` from domains to storage: Policy, Error Page and Origin are bindable slots whose changes are staged, counted beside Deploy and listed in the deploy drawer, ending in the toast with Edit and Redeploy.",
       "file": "variants/service-overview.vue"
     },
     {
