@@ -10032,6 +10032,170 @@ The code of every state is in [blocks/platform/view/file-browser.md](blocks/plat
 
 ---
 
+<!-- blocks/platform/view/marketplace.md -->
+
+# Marketplace (`platform/view/marketplace`)
+
+> The marketplace page: a medium page heading with the outlined Documentation action over `Tabs` for Integrations and Templates. The Integrations tab shows a Featured row of three integration cards while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card kind="integration"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a medium right `Drawer`: name and publisher in the header, the description, `KeyValuePairs` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`platform/states/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. The Templates tab shows popular templates and links to the template browser. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons.
+
+- Surface: product
+- Source: `blocks/platform/view/marketplace/marketplace.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/view/marketplace")`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [DocProse](../../../components/doc-prose.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [Tabs](../../../components/tabs.md), [Toast](../../../components/toast.md), `use-collection`
+- Skills: `webkit-lists`, `webkit-form`, `webkit-errors`, `webkit-ui-states`
+
+## Asked as
+
+marketplace; integration catalog; integrations marketplace; install an integration; browse integrations; extensions catalog; plugin catalog; app store page; integration detail; installed integrations; configure integration; marketplace de integrações; catálogo de integrações; instalar integração; loja de extensões
+
+The page where people find something made by Azion or a partner and add it to what they run. Two kinds of item live here: integrations, installed into an existing application, and templates, which start a new project. People browse by need ("block bots", "split traffic"), compare by publisher and context, read what an integration does and what it may touch, then install it on one application and keep working while it installs. One `useCollection` call holds the search and the filters; one drawer holds the detail and the install; the install reports by toast wherever the person is.
+
+## When to use
+
+- A catalog of installable add-ons (integrations, extensions, plugins) with a publisher, a category and an installed state per account.
+- Installing means choosing a target (an application) and waiting for an asynchronous run.
+- The same page also points people at templates, the other way to start from someone else's work.
+
+## When not to use
+
+- Only templates, with a preview and a README: use `platform/view/template-browser`.
+- Deploying a chosen template: use `platform/create/deploy-template`.
+- The resources the account already created: use `platform/view/card-view` or `platform/view/table-view`.
+- Changing the settings of an installed integration on one application: use `platform/edit/edit-resource` from Configure.
+
+## Building blocks
+
+### A. Page heading — `PageHeader`, `Button` (required)
+
+`PageHeader` at its medium size: "Marketplace" and one sentence of purpose. The actions slot holds only the outlined medium Documentation `Button`, which opens the docs in a new tab.
+
+### B. Item kinds — `Tabs` (required)
+
+`Tabs.Root` with Integrations and Templates, starting on the tab the URL names (Integrations by default here). Each tab is a `Tabs.Panel`; the panels keep their own state when the person switches.
+
+### C. Featured — `Card` (required)
+
+While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `Card kind="integration"` tiles in a row (one a row on a phone). They carry the context as their badge and no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
+
+### D. Search and filter — `PropertyFilter` (required)
+
+Under the "All integrations" `h2`, one `PropertyFilter` bound with `v-bind="propertyFilterProps"`. Free text searches the name, the publisher and the description; Publisher and Category list the values in the catalog, Context is Application or Firewall, and Status is Installed or Available. Every token lives in the URL (`url: true`).
+
+### E. Integration tiles — `Card`, `Button` (required)
+
+A `ul` grid, one to three tiles a row by width, of `Card kind="integration"`: the logo, the name (the stretched target that emits `select`), "by" the publisher, two lines of description, the category as a secondary badge, the Installed tag from `installed`, and in the `action` slot an outlined small `Button`, Install for an available integration and Configure for an installed one, named with the integration (`Install Rate Guard`). Both the tile and its action open the drawer.
+
+### F. No matching integrations — `EmptyState`, `Button` (required)
+
+When `status` is `no-match`, the grid gives way to a medium `EmptyState` with the filter-slash glyph, "No matching integrations", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`.
+
+### G. Popular templates — `Card`, `Button` (required)
+
+The Templates tab: a "Popular templates" `h2` with a transparent small Browse all templates `Button` that leads to `platform/view/template-browser`, over a grid of small `Card` tiles (the mark, the name as a stretched link to the template's preview, the framework). The full catalog, its filter and the README live in the template browser.
+
+### H. Integration drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
+
+A medium right `Drawer` controlled by `v-model:open`. Its content is a `form` named `Install <name>` with `novalidate`. `PanelHeader` holds the logo, the name as `DrawerTitle`, "by" the publisher and `DrawerClose`. `PanelContent` scrolls; `PanelFooter` holds, at the end, Configure (outlined, a link to the integration's settings) when it is installed somewhere, and the primary submit Install while an application is left.
+
+### I. Install outcome — `Alert` (required)
+
+The inline half of the async-submit outcome, at the top of the drawer: a success `Alert` naming the application ("Rate Guard is installed on storefront. It runs from the next request."), or a danger `Alert` with the server's reason and a Reinstall action. Nothing shows while idle or running; the button and the toast carry the running state.
+
+### J. Integration facts — `KeyValuePairs` (required)
+
+A two-column `KeyValuePairs` named "Integration details": Publisher (in `bdi`), Category, Context, Version, Updated and Installed on (the applications, or "Not installed").
+
+### K. Overview — `DocProse` (required)
+
+An "Overview" `h3` over the publisher's text in `DocProse`, ending on what installing adds to the application. Then a "Permissions" `h3` with the list of what the integration may read or add, each line led by a check glyph.
+
+### L. Install form — `Field`, `Select` (required)
+
+An "Install" `h3` ("Install on another application" once installed somewhere) over a required `Field` labelled Application with a `Select` of the applications it is not installed on yet. Submitting without a choice marks the `Field` invalid and shows `Field.Error` ("Select the application to install Rate Guard on."); otherwise `Field.Description` says where it runs. While the run lasts the `Field` is disabled. When no application is left, the field gives way to one sentence and the footer drops Install.
+
+### M. Install toast — `Toaster` (required)
+
+One `Toaster` at `bottom-right`, raised through `toast` with one id for the install, so progress turns into the outcome in place. Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running if you close this panel."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it.
+
+## Do
+
+- Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`; derive the Status property from where each integration is installed.
+- Use `Card kind="integration"` for every integration tile, with the installed state as the `installed` prop and one action in the `action` slot.
+- Hide the Featured row while any filter is set.
+- Open the detail in a drawer so the catalog, the filter and the scroll stay put.
+- Show the permissions before the install form, and the target as a required field.
+- Treat install as an async run: `loading` on Install, a progress toast, then the outcome as a toast and an inline `Alert`, with actions that fit an integration (Configure, Open application; Edit, Reinstall).
+- Keep the failure toast until the person closes it.
+
+## Don't
+
+- Don't install from the tile in one click; the person must pick the application and see the permissions.
+- Don't point the outcome at a list of runs ("View installs", "View deployments"); the toast carries Configure or Edit and Reinstall.
+- Don't use "Retry" or "Try again" for a failed install; the action is Reinstall.
+- Don't show Install for an application that already runs the integration; filter it out of the `Select`.
+- Don't badge every tile with more than one tag beside Installed; the publisher and the category are enough to compare.
+- Don't rebuild the template browser inside the Templates tab; link to it.
+
+## Copy
+
+- **Title:** "Marketplace". Description: "Find integrations and templates that run on your applications."
+- **Tabs:** "Integrations", "Templates". **Sections:** "Featured", "All integrations", "Popular templates".
+- **Filter:** placeholder and `aria-label` "Search integrations".
+- **Tile action:** "Install" or "Configure"; its `aria-label` adds the name.
+- **Drawer:** the name, "by <publisher>", "Overview", "Permissions", "Install" or "Install on another application", the field "Application" with "Select an application".
+- **Validation:** "Select the application to install <name> on."
+- **Progress toast:** "Installing <name> on <application>…" / "It keeps running if you close this panel."
+- **Success:** toast "<name> is installed on <application>." / "It runs from the next request to the application.", actions "Configure" and "Open application"; the inline `Alert` says the same in one line.
+- **Failure:** toast "<name> wasn't installed on <application>." with the reason as a full sentence, actions "Edit" and "Reinstall"; the inline `Alert` carries the reason and "Reinstall".
+- **No match:** "No matching integrations", "No integration matches this search. Remove a filter to widen the results.", "Clear filters".
+- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+
+## Accessibility
+
+- One `main` landmark; the `PageHeader` title is the only `h1`, each section heading an `h2`, each tile name an `h3`.
+- The tabs follow the tablist pattern: arrow keys move between Integrations and Templates, and each panel is labelled by its tab.
+- Each tile's target is a real button named by the integration; the action button sits above it and is named with the integration, so "Install" is never ambiguous in a list.
+- The Installed state is text in a `Tag`, never colour alone.
+- The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name.
+- The Application field is required and labelled; its error is tied to the `Select` through the `Field`, and focus stays on Install so the person can correct and resubmit.
+- Toasts are announced politely and never take focus; the failure toast stays until closed and its actions are reachable by keyboard.
+
+## States
+
+- Default: the Integrations tab with Featured, All integrations, the filter and the tiles; a tile opens the drawer and Install runs and lands as a success toast and Alert.
+- Templates: the Templates tab with popular templates linking to the template browser.
+- Detail: the drawer is open on Request Signer with its details, overview, permissions and the install form.
+- Installing: Install is running on storefront; the button is `loading`, the field disabled and the progress toast says it keeps running.
+- Installed: Request Signer is installed on storefront; the success Alert, the Installed tag, Configure in the footer and the success toast with Configure and Open application.
+- InstallFailed: the install on checkout failed; the danger Alert with the reason and Reinstall, and the permanent toast with Edit and Reinstall.
+- NoMatch: the search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
+- Loading: the filter is disabled and six `Skeleton` tiles (logo, name, two lines, badge, action) hold the grid in a band that is `aria-busy`.
+
+## Related
+
+- `platform/view/template-browser` — the full template catalog the Templates tab leads to.
+- `platform/create/deploy-template` — where a template's Deploy leads.
+- `platform/states/async-submit` — the toast and inline outcome every install follows.
+- `platform/states/form-error` — the field, section and toast placement of a form error.
+- `Card` (`kind="integration"`) and `useCollection` — see `skills/webkit-lists`.
+
+## Variants
+
+- `Default` — primary (the code below)
+- `Templates` — The Templates tab: popular templates as tiles that open in the template browser, with Browse all templates.
+- `Detail` — The detail drawer open on Request Signer: details, overview, permissions and the install form.
+- `Installing` — Install is running on storefront: the button shows loading, the field is disabled and the progress toast says it keeps running if the panel closes.
+- `Installed` — The install succeeded: the success Alert in the drawer, the Installed tag on the tile, Configure in the footer and the success toast with Configure and Open application.
+- `InstallFailed` — The install failed on checkout: the danger Alert with the reason and Reinstall, and the permanent failure toast with Edit and Reinstall.
+- `NoMatch` — A search that matches no integration: the Featured row hides, the token stays and a medium EmptyState offers Clear filters.
+- `Loading` — The catalog is loading: the filter is disabled and skeleton tiles hold the grid.
+
+Each variant is the same screen in another state: `get_pattern("platform/view/marketplace", { variant })`, or the file under `blocks/platform/view/marketplace/variants/`.
+
+The code of every state is in [blocks/platform/view/marketplace.md](blocks/platform/view/marketplace.md) and `blocks/platform/view/marketplace/marketplace.vue`.
+
+---
+
 <!-- blocks/platform/view/query-editor.md -->
 
 # QueryEditor (`platform/view/query-editor`)
@@ -10644,6 +10808,139 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 Each variant is the same screen in another state: `get_pattern("platform/view/table-view", { variant })`, or the file under `blocks/platform/view/table-view/variants/`.
 
 The code of every state is in [blocks/platform/view/table-view.md](blocks/platform/view/table-view.md) and `blocks/platform/view/table-view/table-view.vue`.
+
+---
+
+<!-- blocks/platform/view/template-browser.md -->
+
+# TemplateBrowser (`platform/view/template-browser`)
+
+> The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card` with the framework mark, the name as a button that opens the preview, two lines of description and the framework `Tag`; the whole tile is the target. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `Tag`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`.
+
+- Surface: product
+- Source: `blocks/platform/view/template-browser/template-browser.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/view/template-browser")`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [DocProse](../../../components/doc-prose.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [Skeleton](../../../components/skeleton.md), [Tag](../../../components/tag.md), `use-collection`
+- Skills: `webkit-lists`, `webkit-create-surface`, `webkit-ui-states`
+
+## Asked as
+
+template browser; template gallery; template catalog; start from a template; browse templates; templates by framework; template preview; template readme; deploy a template; starter templates; galeria de templates; catálogo de templates; navegar templates; começar a partir de um template; pré-visualizar template
+
+The catalog of templates a person starts a project from. They arrive from the creation hub, the marketplace or a "Start from a template" link, already knowing roughly what they want (a framework, a kind of site, a small function) and needing to find it, check what it contains and start the deploy. The page is one heading over one band: a single search and filter control, then the templates grouped by category. A tile opens a preview drawer with the facts and the README, and the drawer's Deploy hands off to the deploy template flow, which owns the run and its outcome.
+
+## When to use
+
+- A gallery of starting points (framework starters, sample sites, small functions) people pick one of and deploy.
+- People choose by recognising a framework mark and a name, then confirm by reading what the template contains.
+- The catalog is tens of items, small enough to show every match grouped by category without paging.
+- The deploy itself happens elsewhere (`platform/create/deploy-template`), so this screen ends on a link.
+
+## When not to use
+
+- The first screen of creation, where templates are one option among import, upload and blank: use `platform/create/create-hub`.
+- Installing integrations or extensions into an existing resource: use `platform/view/marketplace`.
+- The resources a person already created, as cards: use `platform/view/card-view`.
+- Configuring and running the deploy of the chosen template: use `platform/create/deploy-template`.
+- Hundreds of items that need paging, sorting and saved preferences: use `platform/view/card-view` with `Cards`.
+
+## Building blocks
+
+### A. Page heading — `PageHeader`, `Button` (required)
+
+`PageHeader` at its medium size with the title "Templates" and one sentence of purpose. Its actions slot holds only the outlined medium Documentation `Button`, opening the docs in a new tab. There is no Create action: every template is its own way in.
+
+### B. Search and filter — `PropertyFilter` (required)
+
+One `PropertyFilter` bound with `v-bind="propertyFilterProps"` from `useCollection`, at full width above the sections. Free text searches the name and the description; Category and Framework are properties with `options`, in catalog order. Every token lives in the URL (`url: true`), so a filtered catalog survives a reload and can be shared. There is no second search field and no filter popover.
+
+### C. Category sections — `Card`, `Tag` (required)
+
+One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by width. A tile is a `Card` with the framework mark in a 40 px raised box (grey until hover, the `grayscale` to colour shift of the design), the name as an `h3` that holds a button with `aria-haspopup="dialog"`, two lines of description and a small secondary `Tag` with the framework. The button's stretched `after` box makes the whole tile one target, draws the translucent hover wash and the focus ring inside the tile, and leaves the `Card` surface untouched. Tiles in a row share a height.
+
+### D. No matching templates — `EmptyState`, `Button` (required)
+
+When `status` is `no-match`, the sections give way to a medium `EmptyState` with the filter-slash glyph, "No matching templates", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The filter keeps its tokens, so the person can see what hid the tiles.
+
+### E. Preview drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
+
+A medium right `Drawer` controlled by `v-model:open`, opened by the tile. `PanelHeader` carries the mark, the template name as `DrawerTitle` and `DrawerClose`; `PanelContent` scrolls; `PanelFooter` holds the actions at the end: View repository (outlined, trailing external-link icon, new tab) and the primary Deploy. Deploy is a link to the deploy template flow with the template's id; the drawer never runs the deploy itself.
+
+### F. Template facts — `KeyValuePairs` (required)
+
+Under the description, a two-column `KeyValuePairs` named "Template details": Framework, Category, Repository (in `bdi`) and Updated. Keep it to facts that help choose; settings belong to the deploy form.
+
+### G. README — `Card`, `DocProse` (required)
+
+A `section` labelled by its "README" heading, with the template's README in a `Card` through `DocProse`, so markdown rendered to plain HTML gets the documentation type scale. Headings inside start at `h4`, under the drawer's own headings.
+
+## Do
+
+- Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`, and bind `propertyFilterProps`.
+- Group the matches by category in a fixed order and drop a category with no match.
+- Make the tile's name the only interactive element, and stretch it over the tile.
+- Show the framework on the tile as text in a `Tag`, not only as the mark.
+- Open the preview in a drawer, so the catalog and the filter stay where they were.
+- End the preview on Deploy, a link into `platform/create/deploy-template`, and let that flow run the deploy and raise the async-submit toast.
+- Keep README headings below the drawer title (`h4` and down).
+
+## Don't
+
+- Don't deploy from the tile or the drawer without the deploy flow; the template needs a scope, a repository name and its settings.
+- Don't put a Deploy button on every tile; the preview is where a person confirms the choice.
+- Don't page the catalog or add preferences; a grouped list of tens of items reads better whole.
+- Don't colour the tile per framework; the mark carries the brand and the surface stays neutral.
+- Don't hide the filter while loading or after a failure; disable it, so the page keeps its shape.
+- Don't show the README as raw markdown or in a code block.
+
+## Copy
+
+- **Title:** "Templates". Description: one sentence with a period, e.g. "Start a project from a template and deploy it in a few steps."
+- **Filter:** placeholder and `aria-label` "Search templates".
+- **Sections:** the category in title case, plural: "Frameworks", "Starters", "Functions".
+- **Tile:** the template name as its owner writes it, e.g. "Next.js Starter"; a description of one sentence, under two lines.
+- **Drawer actions:** "View repository", "Deploy".
+- **No match:** "No matching templates", then "No template matches this search. Remove a filter to widen the results.", and "Clear filters".
+- **Failure:** "Couldn't load templates. Check your connection and retry." with "Retry"; the empty state "Templates are unavailable" with "Import from Git".
+- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+
+## Accessibility
+
+- One `main` landmark; the `PageHeader` title is the only `h1`, each category is an `h2`, each tile name an `h3`.
+- Each category is a `section` labelled by its heading and holds a `ul`, so the count of templates is announced.
+- The tile's target is a real `button` with `aria-haspopup="dialog"`, named by the template name; the description and the framework follow it in reading order.
+- The focus ring is drawn inside the tile on the stretched target, so it is never clipped by the grid.
+- The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to the tile that opened it.
+- The `PropertyFilter` is named by its `aria-label` and announces the match count after each change.
+- The loading band is `aria-busy`; the failure `Alert` is announced and its Retry is a button.
+
+## States
+
+- Default: the catalog is loaded; the filter, the three category sections of tiles and the preview drawer are wired, and filtering to nothing shows No matching templates with Clear filters.
+- Preview: the drawer is open on Next.js Starter with its details, the README, View repository and Deploy.
+- NoMatch: the search "kubernetes" matches nothing; the token stays and the empty state offers Clear filters.
+- Loading: the filter is disabled and two sections of `Skeleton` tiles (mark, name, two lines, tag) hold the layout in a band that is `aria-busy` and named Loading templates.
+- Failed: the catalog could not load; a danger `Alert` reads Couldn't load templates with Retry, and a medium empty state offers Import from Git so a project can still start.
+
+## Related
+
+- `platform/create/deploy-template` — where Deploy leads; it owns the form, the run and the async-submit toast.
+- `platform/states/async-submit` — the toast and inline outcome every deploy follows.
+- `platform/view/marketplace` — the marketplace page whose Templates tab opens this catalog, and its integrations.
+- `platform/create/create-hub` — the creation hub that links here for "Start from a template".
+- `Card` and `useCollection` — see `skills/webkit-lists`.
+
+## Variants
+
+- `Default` — primary (the code below)
+- `Preview` — The preview drawer open on Next.js Starter: details, the README and the Deploy entry into the deploy template flow.
+- `NoMatch` — A search that matches no template: the filter keeps the token and a medium EmptyState offers Clear filters.
+- `Loading` — The catalog is loading: the filter is disabled and two sections of skeleton tiles hold the layout.
+- `Failed` — The catalog failed to load: a danger Alert with Retry, and an EmptyState that points to Import from Git.
+
+Each variant is the same screen in another state: `get_pattern("platform/view/template-browser", { variant })`, or the file under `blocks/platform/view/template-browser/variants/`.
+
+The code of every state is in [blocks/platform/view/template-browser.md](blocks/platform/view/template-browser.md) and `blocks/platform/view/template-browser/template-browser.vue`.
 
 ---
 
@@ -16173,6 +16470,7 @@ The frame is static apart from its resize handles.
 - Group related console content into one bordered surface with a title header, a body and an optional footer, such as a settings block, a summary or a form section.
 - Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the `content` slot.
 - A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.
+- A catalog tile for an integration, an extension or a plugin: set `kind="integration"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.
 
 ## Do
 
@@ -16181,6 +16479,10 @@ The frame is static apart from its resize handles.
 - header-action` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
 - Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
 - The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.
+- kind="integration"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `action` slot; it sits above the stretched target and stays reachable on its own.
+- Keep the description to one or two sentences; the card clamps it to three lines.
+- Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
+- Integration cards sit under a section heading, so their title is an `h3`.
 
 ## Don’t
 
@@ -16188,6 +16490,8 @@ The frame is static apart from its resize handles.
 - It is one tier of a pricing comparison → use `card-pricing`.
 - It is a framed cell or band of a marketing page → use `frame-box` or `card-grid`.
 - It is a single row of title, description, media and actions → use `item`.
+- It is one record of a resource list shown as cards, with selection and fields → use `cards` (with `useCollection`).
+- It is a template tile in a gallery with no vendor, badge or install state → keep `kind="default"` with a `content` slot (see `platform/view/template-browser`).
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -16202,8 +16506,21 @@ The frame is static apart from its resize handles.
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `title` | `string` | `''` | false | Heading rendered in the header when the `header` slot is empty. |
+| `title` | `string` | `''` | false | Heading rendered in the header when the `header` slot is empty; with `kind="integration"`, the item name. |
 | `padded` | `boolean` | `true` | false | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers. |
+| `kind` | `'default' \| 'integration'` | `'default'` | false | integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot. |
+| `logo` | `string` | `''` | false | Integration kind: icon class for the logo mark. The `logo` slot takes an image instead. |
+| `vendor` | `string` | `''` | false | Integration kind: who publishes the item, shown as "by {vendor}". |
+| `description` | `string` | `''` | false | Integration kind: one or two sentences on what the item does. |
+| `badges` | `CardBadge[]` | `[]` | false | Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity defaults to `info`). |
+| `installed` | `boolean` | `false` | false | Integration kind: shows the Installed tag. |
+| `href` | `string` | `''` | false | Integration kind: the title links here; without it the title is a button that emits `select`. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `select` | `event: MouseEvent` | Integration kind without `href`: the title (the whole tile) was activated. |
 
 ## Slots
 
@@ -16211,14 +16528,17 @@ The frame is static apart from its resize handles.
 | --- | --- | --- |
 | `header` | — | Replaces the default header layout (title + header-action). |
 | `header-action` | — | Actions aligned to the end of the default header; visible on header hover. |
-| `content` | — | Main card body. |
+| `content` | — | Main card body; with `kind="integration"` it renders under the description. |
 | `footer` | — | Footer actions or metadata; omitted when empty. |
+| `logo` | — | Integration kind: replaces the logo mark, for an `img` with an empty `alt`. |
+| `action` | — | Integration kind: one action at the end of the tile, above the stretched title target. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Responsive: the content region is the `@container/card`, so `KeyValuePairs`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-action` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
+- Integration kind: `hover` shades the surface, `focus-visible` rings the whole tile (the ring sits on the stretched title target), `installed` adds the success Installed tag.
 
 ## Accessibility
 
@@ -16228,6 +16548,29 @@ The frame is static apart from its resize handles.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+
+## Right-to-left
+
+- Layout: logical utilities only; the logo sits at the start, the badges and the action at the end.
+- Icons: the logo is not mirrored.
+- Keyboard: no arrow-key navigation of its own.
+- User data: the vendor and the title render in `<bdi>`.
+
+## Internationalization
+
+| Key              | English source | Override prop |
+| ---------------- | -------------- | ------------- |
+| `card.byVendor`  | by {vendor}    | —             |
+| `card.installed` | Installed      | —             |
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: the content region is `@container/card`; the integration layout does not change with width, the description wraps and clamps to three lines.
+- Narrow (≤ 640 px or a narrow container): the badges wrap under the title row; the action stays at the end of its own row.
+- Touch: the whole tile is the target; the action is a regular `Button`.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Examples
 

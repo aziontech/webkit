@@ -56,6 +56,11 @@
     "limit": "32 KB"
   },
   {
+    "name": "card",
+    "path": "src/components/content/card/card.vue",
+    "limit": "13.5 KB"
+  },
+  {
     "name": "cards",
     "path": "src/components/data/cards/cards.vue",
     "limit": "19 KB"

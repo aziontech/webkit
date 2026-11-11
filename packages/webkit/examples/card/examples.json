@@ -21,6 +21,16 @@
       "name": "Flush",
       "summary": "Set `padded=false` for edge-to-edge content such as an ItemList with full-width dividers.",
       "file": "flush.vue"
+    },
+    {
+      "name": "Integration",
+      "summary": "`kind=\"integration\"` builds a catalog tile from the logo, the name, the vendor, a short description and a badge; the whole tile opens the detail through `select`, and the Install action in the `action` slot stays its own target.",
+      "file": "integration.vue"
+    },
+    {
+      "name": "Installed",
+      "summary": "An installed integration shows the Installed tag and swaps Install for Configure; with `href` the tile is a link to the integration's page.",
+      "file": "installed.vue"
     }
   ]
 }

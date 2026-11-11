@@ -5338,7 +5338,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Heading rendered in the header when the `header` slot is empty."
+     "doc": "Heading rendered in the header when the `header` slot is empty; with `kind=\"integration\"`, the item name."
     },
     {
      "name": "padded",
@@ -5346,6 +5346,62 @@
      "default": "true",
      "required": "false",
      "doc": "Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers."
+    },
+    {
+     "name": "kind",
+     "type": "'default' | 'integration'",
+     "default": "'default'",
+     "required": "false",
+     "doc": "integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot."
+    },
+    {
+     "name": "logo",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: icon class for the logo mark. The `logo` slot takes an image instead."
+    },
+    {
+     "name": "vendor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: who publishes the item, shown as \"by {vendor}\"."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: one or two sentences on what the item does."
+    },
+    {
+     "name": "badges",
+     "type": "CardBadge[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity defaults to `info`)."
+    },
+    {
+     "name": "installed",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Integration kind: shows the Installed tag."
+    },
+    {
+     "name": "href",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: the title links here; without it the title is a button that emits `select`."
+    }
+   ],
+   "events": [
+    {
+     "name": "select",
+     "payload": "event: MouseEvent",
+     "notes": "Integration kind without `href`: the title (the whole tile) was activated."
     }
    ],
    "slots": [
@@ -5362,12 +5418,22 @@
     {
      "name": "content",
      "scope": "—",
-     "notes": "Main card body."
+     "notes": "Main card body; with `kind=\"integration\"` it renders under the description."
     },
     {
      "name": "footer",
      "scope": "—",
      "notes": "Footer actions or metadata; omitted when empty."
+    },
+    {
+     "name": "logo",
+     "scope": "—",
+     "notes": "Integration kind: replaces the logo mark, for an `img` with an empty `alt`."
+    },
+    {
+     "name": "action",
+     "scope": "—",
+     "notes": "Integration kind: one action at the end of the tile, above the stretched title target."
     }
    ],
    "surface": "product",
@@ -29120,6 +29186,119 @@
    ],
    "file": "catalog/patterns/platform/view/file-browser.json"
   },
+  "platform/view/marketplace": {
+   "name": "Marketplace",
+   "title": "Templates/Platform/View/Marketplace",
+   "source": "blocks/platform/view/marketplace/marketplace.vue",
+   "surface": "product",
+   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over `Tabs` for Integrations and Templates. The Integrations tab shows a Featured row of three integration cards while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card kind=\"integration\"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a medium right `Drawer`: name and publisher in the header, the description, `KeyValuePairs` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`platform/states/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. The Templates tab shows popular templates and links to the template browser. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons.",
+   "intents": [
+    "marketplace",
+    "integration catalog",
+    "integrations marketplace",
+    "install an integration",
+    "browse integrations",
+    "extensions catalog",
+    "plugin catalog",
+    "app store page",
+    "integration detail",
+    "installed integrations",
+    "configure integration",
+    "marketplace de integrações",
+    "catálogo de integrações",
+    "instalar integração",
+    "loja de extensões"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-form",
+    "webkit-errors",
+    "webkit-ui-states"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "DocProse",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "EmptyState",
+    "Field",
+    "KeyValuePairs",
+    "PageHeader",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "PropertyFilter",
+    "Select",
+    "Skeleton",
+    "Tabs",
+    "toast",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/doc-prose",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/tabs",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The page where people find something made by Azion or a partner and add it to what they run. Two kinds of item live here: integrations, installed into an existing application, and templates, which start a new project. People browse by need (\"block bots\", \"split traffic\"), compare by publisher and context, read what an integration does and what it may touch, then install it on one application and keep working while it installs. One `useCollection` call holds the search and the filters; one drawer holds the detail and the install; the install reports by toast wherever the person is.",
+   "variants": [
+    {
+     "name": "Templates",
+     "summary": "The Templates tab: popular templates as tiles that open in the template browser, with Browse all templates."
+    },
+    {
+     "name": "Detail",
+     "summary": "The detail drawer open on Request Signer: details, overview, permissions and the install form."
+    },
+    {
+     "name": "Installing",
+     "summary": "Install is running on storefront: the button shows loading, the field is disabled and the progress toast says it keeps running if the panel closes."
+    },
+    {
+     "name": "Installed",
+     "summary": "The install succeeded: the success Alert in the drawer, the Installed tag on the tile, Configure in the footer and the success toast with Configure and Open application."
+    },
+    {
+     "name": "InstallFailed",
+     "summary": "The install failed on checkout: the danger Alert with the reason and Reinstall, and the permanent failure toast with Edit and Reinstall."
+    },
+    {
+     "name": "NoMatch",
+     "summary": "A search that matches no integration: the Featured row hides, the token stays and a medium EmptyState offers Clear filters."
+    },
+    {
+     "name": "Loading",
+     "summary": "The catalog is loading: the filter is disabled and skeleton tiles hold the grid."
+    }
+   ],
+   "file": "catalog/patterns/platform/view/marketplace.json"
+  },
   "platform/view/query-editor": {
    "name": "QueryEditor",
    "title": "Templates/Platform/View/QueryEditor",
@@ -29718,6 +29897,100 @@
     }
    ],
    "file": "catalog/patterns/platform/view/table-view.json"
+  },
+  "platform/view/template-browser": {
+   "name": "TemplateBrowser",
+   "title": "Templates/Platform/View/TemplateBrowser",
+   "source": "blocks/platform/view/template-browser/template-browser.vue",
+   "surface": "product",
+   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card` with the framework mark, the name as a button that opens the preview, two lines of description and the framework `Tag`; the whole tile is the target. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `Tag`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`.",
+   "intents": [
+    "template browser",
+    "template gallery",
+    "template catalog",
+    "start from a template",
+    "browse templates",
+    "templates by framework",
+    "template preview",
+    "template readme",
+    "deploy a template",
+    "starter templates",
+    "galeria de templates",
+    "catálogo de templates",
+    "navegar templates",
+    "começar a partir de um template",
+    "pré-visualizar template"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-create-surface",
+    "webkit-ui-states"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "DocProse",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "EmptyState",
+    "KeyValuePairs",
+    "PageHeader",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "PropertyFilter",
+    "Skeleton",
+    "Tag",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/doc-prose",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The catalog of templates a person starts a project from. They arrive from the creation hub, the marketplace or a \"Start from a template\" link, already knowing roughly what they want (a framework, a kind of site, a small function) and needing to find it, check what it contains and start the deploy. The page is one heading over one band: a single search and filter control, then the templates grouped by category. A tile opens a preview drawer with the facts and the README, and the drawer's Deploy hands off to the deploy template flow, which owns the run and its outcome.",
+   "variants": [
+    {
+     "name": "Preview",
+     "summary": "The preview drawer open on Next.js Starter: details, the README and the Deploy entry into the deploy template flow."
+    },
+    {
+     "name": "NoMatch",
+     "summary": "A search that matches no template: the filter keeps the token and a medium EmptyState offers Clear filters."
+    },
+    {
+     "name": "Loading",
+     "summary": "The catalog is loading: the filter is disabled and two sections of skeleton tiles hold the layout."
+    },
+    {
+     "name": "Failed",
+     "summary": "The catalog failed to load: a danger Alert with Retry, and an EmptyState that points to Import from Git."
+    }
+   ],
+   "file": "catalog/patterns/platform/view/template-browser.json"
   },
   "platform/view/waf-tuning": {
    "name": "WafTuning",
