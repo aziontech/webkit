@@ -44,7 +44,7 @@ describe('CardGrid', () => {
     expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
   })
 
-  it.each([2, 3, 4] as const)('carries %i columns on data-columns', (columns) => {
+  it.each([2, 3, 4, 5] as const)('carries %i columns on data-columns', (columns) => {
     const { getByTestId } = render(CardGrid, { props: { columns } })
     expect(getByTestId(TESTID)).toHaveAttribute('data-columns', String(columns))
   })

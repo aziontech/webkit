@@ -43,9 +43,9 @@ const meta = {
     },
     columns: {
       control: 'inline-radio',
-      options: [2, 3, 4],
+      options: [2, 3, 4, 5],
       description: 'How many columns the grid fans out to at the large breakpoint.',
-      table: { category: 'props', type: { summary: '2 | 3 | 4' }, defaultValue: { summary: '3' } }
+      table: { category: 'props', type: { summary: '2 | 3 | 4 | 5' }, defaultValue: { summary: '3' } }
     },
     mobileColumns: {
       control: 'inline-radio',
