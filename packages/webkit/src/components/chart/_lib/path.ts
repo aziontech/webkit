@@ -138,7 +138,7 @@ export function areaPath(
     .join('')
 }
 
-export type BarEnd = 'top' | 'right'
+export type BarEnd = 'top' | 'right' | 'left'
 
 export function barPath(
   x: number,
@@ -160,5 +160,8 @@ export function barPath(
   if (end === 'top') {
     return `M${x0},${y1}L${x0},${round(y + r)}Q${x0},${y0} ${round(x + r)},${y0}L${round(x1 - r)},${y0}Q${x1},${y0} ${x1},${round(y + r)}L${x1},${y1}Z`
   }
-  return `M${x0},${y0}L${round(x1 - r)},${y0}Q${x1},${y0} ${x1},${round(y + r)}L${x1},${round(y1 - r)}Q${x1},${y1} ${round(x1 - r)},${y1}L${x0},${y1}Z`
+  if (end === 'right') {
+    return `M${x0},${y0}L${round(x1 - r)},${y0}Q${x1},${y0} ${x1},${round(y + r)}L${x1},${round(y1 - r)}Q${x1},${y1} ${round(x1 - r)},${y1}L${x0},${y1}Z`
+  }
+  return `M${x1},${y0}L${round(x0 + r)},${y0}Q${x0},${y0} ${x0},${round(y + r)}L${x0},${round(y1 - r)}Q${x0},${y1} ${round(x0 + r)},${y1}L${x1},${y1}Z`
 }

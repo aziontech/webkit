@@ -1,0 +1,25 @@
+{
+ "purpose": "The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content. Every side and every corner is addressable on its own, so frames stack and abut without doubling a rule or a mark. It is the container every framed page section is built from — a section title, the gap between two sections, a cell of a divider grid — so a page's rules and corner marks come from one component instead of from per-screen borders.",
+ "useWhen": [
+  "Wrapping a page section, band, or grid cell that should read as a framed module.",
+  "Building a page whose vertical rhythm is drawn by rules rather than by margins: stack frames and let `flush` collapse each junction to a single hairline.",
+  "Adding the corner registration marks (and optionally the hatch texture) to an area that already has its rules drawn by a surrounding grid — set `borders=\"none\"` and keep `marks`."
+ ],
+ "avoidWhen": [
+  "For a card-shaped surface with padding, a header and a footer → use `card` instead.",
+  "For a single separating line between two blocks → use `divider` instead.",
+  "For the empty framed band that separates two sections → use `section-gap`, which is this frame configured for that one job."
+ ],
+ "related": [
+  "section-gap` — an empty `frame-box` that holds the air between two sections.",
+  "section-title` — a `frame-box` around a centered section header.",
+  "card` — a padded surface with header/content/footer regions; a card, not a frame.",
+  "divider` — one hairline with optional centered label; no corners, no content."
+ ],
+ "bestPractices": [
+  "Stack or abut frames with `flush` so a shared edge reads as one hairline instead of two. It subtracts the named sides from this frame's own set, so it works vertically (`flush`, i.e. `top`) and horizontally (`flush=\"left\"`) with the same mechanic.",
+  "Use `borders` rather than overriding the border utilities from the call site: `y` for a full-bleed band that keeps only its top and bottom rules, `none` for a cell of a `gap-px` divider grid whose edges are already drawn by the grid's seams.",
+  "Keep `marks` on: the corner squares are the frame's identity, and they cost nothing when the rules are handed over to a grid. On a shared edge, pair `flush` with the opposite `marks` keyword (`flush` + `marks=\"bottom\"`, `flush=\"left\"` + `marks=\"right\"`) so the junction carries one rule and one mark per corner.",
+  "Reach for `hatch` sparingly — one hatched frame per view reads as texture; several read as noise. For a ruled ground, compose `texture-material` at its `lines` kind inside the frame instead: it is the system's texture layer, and its ink and pitch are tunable from the call site."
+ ]
+}

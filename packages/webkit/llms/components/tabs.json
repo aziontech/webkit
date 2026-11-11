@@ -13,7 +13,8 @@
  "useWhen": [
   "A page or panel holds several peer views and only one is shown at a time (Overview / Settings / Logs on a resource page).",
   "The tab row may outgrow its container — `Tabs.List` scrolls horizontally with edge fades instead of wrapping.",
-  "Tabs that the user can close: set `closable` on the item and remove it from your data on `@close`."
+  "Tabs that the user can close: set `closable` on the item and remove it from your data on `@close`.",
+  "A tab whose form holds unsaved changes: set `dirty` on the item (bind it to `useUnsavedChanges().isDirty`) so the reader sees which section still needs a save."
  ],
  "avoidWhen": [
   "Several sections may need to be open at once, or the content should expand inline → use `accordion`.",
@@ -29,6 +30,7 @@
   "Give each `Tabs.Item` and its `Tabs.Panel` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility.",
   "Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.",
   "closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.",
+  "dirty` only marks the tab (a dot after the label, \"Unsaved changes\" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.",
   "Use the item's `selected` prop only for a standalone `Tabs.Item` outside a root; inside a root the selection comes from the root's value.",
   "Put spacing between the list and the panels on `Tabs.Content` (e.g. a top margin), not inside each panel."
  ],

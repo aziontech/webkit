@@ -1,0 +1,101 @@
+{
+ "name": "schema-form",
+ "binding": "SchemaForm",
+ "import": "@aziontech/webkit/schema-form",
+ "treeShakeableImport": "@aziontech/webkit/schema-form",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend. It edits one value object through `v-model`, seeds the schema's defaults, validates the supported draft-07 keywords with built-in messages (on leaving a field, or only after `validate()`), and shows server messages passed by field path. It is for forms whose fields are data (a function's arguments, an integration's settings), not for forms a designer lays out by hand.",
+ "setup": null,
+ "useWhen": [
+  "A function, template or integration declares its own arguments as a JSON schema and the console must ask for them.",
+  "The same settings form must follow a schema the server sends (fields added or removed without a release).",
+  "A form of typed values (text, choices, numbers, switches, lists) with constraints that already live in a schema."
+ ],
+ "avoidWhen": [
+  "A form with a fixed, designed layout (settings sections, create pages) → compose `field`, `input`, `select` and `switch` by hand (`platform/edit/edit-resource`, `platform/create/single-page-create`).",
+  "Rows of key/value pairs the user adds and removes → use `attribute-editor`.",
+  "Editing the schema itself, or raw JSON → use `code-editor`.",
+  "A single choice or value → use the control directly inside a `field`."
+ ],
+ "related": [
+  "field` — the wrapper every generated field uses; SchemaForm adds no field chrome of its own.",
+  "input`, `select`, `switch`, `textarea` — the controls it renders per type.",
+  "attribute-editor` — user-defined key/value rows, where SchemaForm renders a fixed set of keys.",
+  "code-editor` — the JSON view of the same value, when the user prefers to type it."
+ ],
+ "bestPractices": [
+  "Give every property a `title` and a one-sentence `description`; the key is only the fallback label.",
+  "Put limits in the schema (`minimum`, `maxLength`, `pattern`, `enum`) so the form checks them; say the rule in the `description` when it is a `pattern`, since the built-in message cannot name it.",
+  "Keep the default `validate-on=\"blur\"` for short forms; use `submit` when the form sits in a drawer or dialog with one Save.",
+  "Call `validate()` on submit and stop when it returns `valid: false`; it shows every message and focuses the first invalid field.",
+  "Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-error rule). Put a section-level failure in an `Alert` above the form, not in `errors`.",
+  "Use a `field:<path>` slot for a control the schema cannot express (`RadioCards`, a resource picker); the slot keeps the label, description and messages.",
+  "Do not rely on unsupported keywords (`$ref`, `oneOf`, `anyOf`, `allOf`, `if`/`then`, `const`, `format`, `uniqueItems`, `multipleOf`, `additionalProperties`): they are ignored, so validate them on the server."
+ ],
+ "props": [
+  {
+   "name": "schema",
+   "type": "SchemaFormSchema",
+   "default": "—",
+   "required": "true",
+   "doc": "JSON schema of an object (draft-07 subset); each property becomes a Field."
+  },
+  {
+   "name": "errors",
+   "type": "Record<string, string>",
+   "default": "{}",
+   "required": "false",
+   "doc": "Server or external messages by field path; a field shows its message until it is edited."
+  },
+  {
+   "name": "ui",
+   "type": "Record<string, SchemaFormUi>",
+   "default": "{}",
+   "required": "false",
+   "doc": "Presentation overrides by field path: widget, placeholder, hidden, and key order (`''` is the root)."
+  },
+  {
+   "name": "validateOn",
+   "type": "'blur' | 'submit'",
+   "default": "'blur'",
+   "required": "false",
+   "doc": "When fields first show their validation message: on leaving the field, or only after `validate()`."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables every field."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows every value without letting it change."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import SchemaForm from '@aziontech/webkit/schema-form'\n  import { ref } from 'vue'\n\n  const schema = {\n    type: 'object',\n    required: ['greeting', 'region'],\n    properties: {\n      greeting: {\n        type: 'string',\n        title: 'Greeting',\n        description: 'The text the function returns on every request.',\n        default: 'Hello from the edge',\n        maxLength: 80\n      },\n      region: {\n        type: 'string',\n        title: 'Region',\n        description: 'Where the function reads its data from.',\n        enum: ['sa-east', 'us-east', 'eu-west']\n      },\n      timeout: {\n        type: 'integer',\n        title: 'Timeout (ms)',\n        description: 'How long the function waits for its origin.',\n        minimum: 100,\n        maximum: 30000,\n        default: 3000\n      },\n      debug: {\n        type: 'boolean',\n        title: 'Debug headers',\n        description: 'Adds timing headers to every response.',\n        default: false\n      },\n      allowedPaths: {\n        type: 'array',\n        title: 'Allowed paths',\n        description: 'Requests to other paths return 404.',\n        items: { type: 'string', pattern: '^/' }\n      }\n    }\n  }\n\n  const args = ref({})\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-sm) flex-col gap-(--spacing-lg)\">\n    <SchemaForm\n      v-model=\"args\"\n      :schema=\"schema\"\n    />\n    <pre\n      class=\"m-0 overflow-auto rounded-(--shape-elements) bg-(--bg-surface) p-(--spacing-sm) font-code text-body-xs text-(--text-muted)\"\n      >{{ JSON.stringify(args, null, 2) }}</pre>\n  </div>\n</template>"
+  },
+  {
+   "name": "WithValidation",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SchemaForm from '@aziontech/webkit/schema-form'\n  import { ref } from 'vue'\n\n  const schema = {\n    type: 'object',\n    required: ['name', 'origin'],\n    properties: {\n      name: {\n        type: 'string',\n        title: 'Name',\n        description: 'Lowercase letters, numbers and hyphens.',\n        pattern: '^[a-z0-9-]+$',\n        minLength: 3\n      },\n      origin: {\n        type: 'object',\n        title: 'Origin',\n        description: 'Where requests go when the cache misses.',\n        required: ['host'],\n        properties: {\n          host: { type: 'string', title: 'Host', default: 'origin.example.com' },\n          port: { type: 'integer', title: 'Port', minimum: 1, maximum: 65535, default: 443 }\n        }\n      }\n    }\n  }\n\n  const value = ref({ name: 'shop' })\n  const form = ref(null)\n  const saving = ref(false)\n  const serverErrors = ref({})\n\n  const save = async () => {\n    const { valid } = await form.value.validate()\n    if (!valid) return\n    saving.value = true\n    setTimeout(() => {\n      saving.value = false\n      serverErrors.value = { 'origin.host': 'This host does not answer on the chosen port.' }\n    }, 600)\n  }\n</script>\n\n<template>\n  <form\n    class=\"flex w-full max-w-(--container-sm) flex-col gap-(--spacing-lg)\"\n    novalidate\n    @submit.prevent=\"save\"\n  >\n    <SchemaForm\n      ref=\"form\"\n      v-model=\"value\"\n      :schema=\"schema\"\n      :errors=\"serverErrors\"\n      :disabled=\"saving\"\n      validate-on=\"submit\"\n    />\n    <div class=\"flex justify-end\">\n      <Button\n        type=\"submit\"\n        label=\"Save\"\n        kind=\"primary\"\n        size=\"medium\"\n        :loading=\"saving\"\n      />\n    </div>\n  </form>\n</template>"
+  },
+  {
+   "name": "CustomField",
+   "sfc": "<script setup>\n  import RadioCards from '@aziontech/webkit/radio-cards'\n  import SchemaForm from '@aziontech/webkit/schema-form'\n  import { ref } from 'vue'\n\n  const schema = {\n    type: 'object',\n    properties: {\n      mode: {\n        type: 'string',\n        title: 'Cache mode',\n        enum: ['honor', 'override'],\n        default: 'honor'\n      },\n      ttl: { type: 'integer', title: 'TTL (seconds)', minimum: 0, default: 3600 },\n      notes: { type: 'string', title: 'Notes', 'x-multiline': true }\n    }\n  }\n\n  const ui = { '': { order: ['ttl', 'mode'] }, notes: { placeholder: 'Why this cache policy' } }\n  const settings = ref({})\n</script>\n\n<template>\n  <SchemaForm\n    v-model=\"settings\"\n    :schema=\"schema\"\n    :ui=\"ui\"\n    class=\"max-w-(--container-sm)\"\n  >\n    <template #field:mode=\"{ value, setValue, disabled }\">\n      <RadioCards\n        :model-value=\"value\"\n        aria-label=\"Cache mode\"\n        :items=\"[\n          {\n            value: 'honor',\n            label: 'Honor origin headers',\n            description: 'Cache for as long as the origin says.'\n          },\n          {\n            value: 'override',\n            label: 'Override with TTL',\n            description: 'Cache for the TTL below, whatever the origin says.'\n          }\n        ]\"\n        :disabled=\"disabled\"\n        @update:model-value=\"setValue\"\n      />\n    </template>\n  </SchemaForm>\n</template>"
+  }
+ ],
+ "docs": "components/schema-form.md"
+}

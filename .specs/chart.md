@@ -3,8 +3,9 @@ name: chart
 category: chart
 structure: composition
 status: approved
-checksum: 51c956f525430180db1c54b5704395a4a4942ba621860adcc3e928d9e060bf76
-spec_version: 1
+checksum: cbb6b2a4f84a1a7320fded06b4bdc8dcc73cb2b9803b2d4e9f912d7f2a893066
+spec_version: 2
+template: 2
 created: 2026-10-20
 last_updated: 2026-11-11
 ---
@@ -13,7 +14,7 @@ last_updated: 2026-11-11
 
 ## Purpose
 
-A cartesian chart — lines, areas and bars over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.
+A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.
 
 ## When to use
 
@@ -21,6 +22,9 @@ A cartesian chart — lines, areas and bars over one category axis — composed 
 - Comparing magnitudes across ordered categories — top countries, attack families — as vertical or horizontal bars.
 - Parts of a total over time — allowed / blocked / logged — as stacked areas or stacked bars.
 - Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals.
+- Two measures of one unit where one is the total and one a part — requests as bars, cached requests as a line (mixed).
+- How one measure spreads against another — response time by object size — as scatter dots on a `linear` label scale.
+- A volume histogram that filters a log or a table to a time span: add `Chart.Brush` and read `v-model:range`.
 
 ## When NOT to use
 
@@ -28,6 +32,8 @@ A cartesian chart — lines, areas and bars over one category axis — composed 
 - Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.
 - More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.
 - Two measures on different scales → two charts side by side; this component never draws a second value axis.
+- One reading against its range (CPU, cache hit ratio) → use `gauge-chart`.
+- Values by country or location → use `map-chart`.
 
 ## Related
 
@@ -45,6 +51,8 @@ A cartesian chart — lines, areas and bars over one category axis — composed 
 - Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.
 - Keep filters and the time range in one row above the dashboard, never inside a chart.
 - While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton.
+- Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.
+- Use `labelScale="linear"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.
 
 ## Usage
 
@@ -74,9 +82,11 @@ A cartesian chart — lines, areas and bars over one category axis — composed 
     <Chart.Grid />
     <Chart.Axis kind="y" />
     <Chart.Axis kind="x" />
+    <Chart.Brush />
     <Chart.Area :ids="['allowed']" />
     <Chart.Bar :ids="['threat']" />
     <Chart.Line :ids="['blocked']" />
+    <Chart.Scatter :ids="['threat']" />
     <Chart.Crosshair />
     <Chart.Tooltip />
     <Chart.Legend totals />
@@ -119,6 +129,14 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `labeled?: boolean` (default `false` — the formatted value at each bar end, for ordered bars).
   - Events: _none_.
   - Slots: _none_.
+- `chart-scatter/chart-scatter.vue` — one dot per value (r 4, a 1.5px `var(--bg-surface)` ring), r 6 at the active index; no connecting line. With `labelScale="linear"` the dots sit at their label value, so it reads as a scatter plot.
+  - Props: `ids?: string[]` (default `[]`).
+  - Events: _none_.
+  - Slots: _none_.
+- `chart-brush/chart-brush.vue` — turns on range selection and paints the selected span as a band in `var(--bg-selected)` edged with `var(--border-selected)`. Drag across the plot, or Shift + arrows then Enter; the root reports the span through `v-model:range`.
+  - Props: _none_.
+  - Events: _none_ (the span flows through the root's `v-model:range`).
+  - Slots: _none_.
 - `chart-crosshair/chart-crosshair.vue` — the hairline at the active index in `var(--chart-crosshair)`.
   - Props: _none_.
   - Events: _none_.
@@ -146,6 +164,8 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
       ├── chart-line/chart-line.vue
       ├── chart-area/chart-area.vue
       ├── chart-bar/chart-bar.vue
+      ├── chart-scatter/chart-scatter.vue
+      ├── chart-brush/chart-brush.vue
       ├── chart-crosshair/chart-crosshair.vue
       ├── chart-tooltip/chart-tooltip.vue
       └── chart-legend/chart-legend.vue
@@ -158,6 +178,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 | `series`           | `ChartSeries[]`                 | `[]`            | false    | Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other.                                                     |
 | `labels`           | `ChartLabel[]`                  | `[]`            | false    | One category label per index: a string, a number, or a Date.                                                                                           |
 | `orientation`      | `'vertical' \| 'horizontal'`    | `'vertical'`    | false    | Value axis direction. Horizontal lays categories down the side, for ordered bars.                                                                      |
+| `labelScale`       | `'category' \| 'linear'`        | `'category'`    | false    | How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets.                       |
 | `min`              | `number`                        | `0`             | false    | Floor of the value axis. Marks grow from one baseline.                                                                                                 |
 | `max`              | `number`                        | `undefined`     | false    | Ceiling of the value axis. When absent, the nice ceiling of the visible data.                                                                          |
 | `cap`              | `number`                        | `6`             | false    | Series kept before the rest fold into Other.                                                                                                           |
@@ -176,10 +197,11 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ## v-model
 
-| Model                  | Type             | Default | Emits                 | Notes                                                                                             |
-| ---------------------- | ---------------- | ------- | --------------------- | ------------------------------------------------------------------------------------------------- |
-| `v-model:activeIndex`  | `number \| null` | `null`  | `update:activeIndex`  | The category index under the pointer or keyboard focus. Bind it to sync crosshairs across charts. |
-| `v-model:hiddenSeries` | `string[]`       | `[]`    | `update:hiddenSeries` | Ids of series the legend has hidden. A hidden series keeps its color slot.                        |
+| Model                  | Type                       | Default | Emits                 | Notes                                                                                             |
+| ---------------------- | -------------------------- | ------- | --------------------- | ------------------------------------------------------------------------------------------------- |
+| `v-model:activeIndex`  | `number \| null`           | `null`  | `update:activeIndex`  | The category index under the pointer or keyboard focus. Bind it to sync crosshairs across charts. |
+| `v-model:hiddenSeries` | `string[]`                 | `[]`    | `update:hiddenSeries` | Ids of series the legend has hidden. A hidden series keeps its color slot.                        |
+| `v-model:range`        | `[number, number] \| null` | `null`  | `update:range`        | The selected span of category indexes, first to last, when a `Chart.Brush` is placed.             |
 
 ## Events
 
@@ -192,7 +214,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 | Slot            | Scope | Notes                                                                                                                   |
 | --------------- | ----- | ----------------------------------------------------------------------------------------------------------------------- |
-| `default`       | —     | The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order.                                     |
+| `default`       | —     | The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order.                     |
 | `empty`         | —     | Replaces the default EmptyState.                                                                                        |
 | `empty-actions` | —     | Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it. |
 | `error`         | —     | Replaces the default danger Alert.                                                                                      |
@@ -202,6 +224,8 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - Visual states: `default`, `loading` (Skeleton), `error` (Alert), `empty` (EmptyState with a chart icon, the title, the optional description and actions, filling the plot height), `refetching` (marks at reduced opacity), `table-view`, `active` (an index is hovered or focused)
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view`, `data-active` on the root mirror the state; priority loading, then error, then empty, then marks
 - `data-orientation`: `vertical` | `horizontal`
+- `data-label-scale`: `category` | `linear`
+- `data-brushing` on the root and the brush layer while a span is being dragged or extended from the keyboard
 - `data-entered` on each mark flips after two animation frames to run its entrance transition
 - `data-dimmed` on a series when another series is emphasized from the legend
 - Reflow: the visually hidden table twin sits inside an `sr-only` box so its intrinsic width never adds horizontal overflow at 320 px.
@@ -230,6 +254,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 | gridlines                      | `var(--chart-grid)`                                                                                                         |
 | axis rule                      | `var(--chart-axis)`                                                                                                         |
 | tick labels                    | `var(--chart-label)`, `.text-label-sm`                                                                                      |
+| brush band                     | `var(--bg-selected)`, `var(--border-selected)`                                                                              |
 | crosshair                      | `var(--chart-crosshair)`                                                                                                    |
 | tooltip surface                | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-muted)`, `var(--chart-tooltip-border)`         |
 | tooltip label and series names | `.text-label-md`                                                                                                            |
@@ -248,7 +273,8 @@ The entrance is a composition assembling on first paint with a per-series stagge
 ## Accessibility (WCAG 2.1 AA)
 
 - Root is a `<figure>` named by `ariaLabel` or by the enclosing ChartCard title (`aria-labelledby`) and described by its ChartCard description or a generated summary.
-- The plot cell is one tab stop: `role="group"` with `aria-roledescription="chart"`. Keyboard map: Left / Right (Up / Down when horizontal) move the active index, Home / End jump to the ends, Enter / Space fire `point-click`, Escape clears. The tooltip follows keyboard focus exactly as it follows the pointer.
+- The plot cell is one tab stop: `role="group"` with `aria-roledescription="chart"`. Keyboard map: Left / Right (Up / Down when horizontal) move the active index, Home / End jump to the ends, Up / Down (Left / Right when horizontal) move the focus from series to series so the live region reads only that series and the others dim, Enter / Space fire `point-click`, Escape clears the draft span, then the focused series, then the active index, then the range. With a `Chart.Brush`: Shift with the index keys extends a span from the active index, Enter commits it (or the active index alone) to `v-model:range`. The tooltip follows keyboard focus exactly as it follows the pointer.
+- A polite live region announces the span while it is drawn (`Selecting from … to …`) and once committed (`Selected from … to …`).
 - A polite live region announces the label and every visible series value at the active index.
 - A data table twin (labels by series) is always rendered, visually hidden unless `tableView`; every value is reachable without hover. Above 1,000 categories the hidden twin keeps an even sample of at most 1,000 rows (the first and last category included) so a 10k-point chart mounts within its runtime budget; every value stays reachable with the arrow keys and the live region, and `tableView` shows every row.
 - Every SVG part is `aria-hidden`; identity never rests on color alone — the legend names each series and the tooltip pairs each value with its name.
@@ -256,6 +282,42 @@ The entrance is a composition assembling on first paint with a per-series stagge
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the plot and every legend button.
 - Series colors clear 3:1 on the chart surfaces and on the tooltip in both themes (pinned by `packages/theme/test/chart-role.test.mjs`).
 - `motion-reduce:transition-none` on every transition.
+
+## Internationalization
+
+| Key                     | English source                                 | Override prop         |
+| ----------------------- | ---------------------------------------------- | --------------------- |
+| `chart.emptyTitle`      | `No data available`                            | `emptyTitle`          |
+| `chart.noData`          | `no data`                                      | —                     |
+| `chart.label`           | `Label`                                        | —                     |
+| `chart.roleDescription` | `chart`                                        | —                     |
+| `chart.summary`         | `{series} series over {points} points{range}.` | `ariaLabel` (caption) |
+| `chart.summaryRange`    | `, from {from} to {to}`                        | —                     |
+| `chart.otherSeries`     | `Other`                                        | `otherLabel`          |
+| `chart.rangeDraft`      | `Selecting from {from} to {to}`                | —                     |
+| `chart.rangeSelected`   | `Selected from {from} to {to}`                 | —                     |
+
+- Formatting: `Intl.NumberFormat` (compact values) and `Intl.DateTimeFormat` (Date labels, in `timeZone`) with the locale from `WebkitProvider`.
+
+## Right-to-left
+
+- Layout: the category axis runs from the right (index 0 at the inline start), the value axis and its labels sit at the right edge, horizontal bars grow from the right and round their left end. SVG coordinates are physical, so the parts mirror by computing positions, and the SVG text layers set `direction="ltr"` so `text-anchor` stays physical; the tooltip is placed with a physical `left` for the same reason. The legend wraps with logical flow.
+- Icons: none.
+- Keyboard: ArrowLeft moves to the next index under rtl and ArrowRight to the previous (`logicalArrowKey`); series focus keeps Up / Down.
+- User data: series names and labels render as given; no `bdi`.
+
+## Responsive
+
+- Container queries: none; the plot measures its own box and fills its container (`height` is a minimum).
+- Narrow (≤ 640 px or a narrow container): category labels thin to the width they have; the legend wraps.
+- Touch: legend buttons ≥ 24 px; with a brush the plot sets `touch-action: pan-y`, so a horizontal drag selects and a vertical drag scrolls the page. Hover-only readings are reachable from the keyboard and in the table twin.
+- Reflow: no horizontal scroll at 320 px; the hidden twin sits in an `sr-only` box.
+
+## Performance
+
+- Bundle budget: `chart` 22.5 KB, `chart-root` 15.5 KB, `chart-scatter` 2 KB, `chart-brush` 1.5 KB gzip (`.size-limit.json`).
+- Runtime budget: a 10k-point line mounts within the chart perf budget; the hidden twin samples to 1,000 rows.
+- Heavy parts: none; in-house SVG, no chart dependency.
 
 ## Stories (Storybook)
 
@@ -266,6 +328,9 @@ The stories share one WAF fixture so every canvas tells the same story.
 - Stacked — stacked areas and stacked bars of allowed / blocked / logged.
 - MultiSeries — seven hosts, so the seventh folds into Other; legend with totals.
 - Horizontal — ordered horizontal bars with value labels (top countries).
+- Mixed — requests as bars and cached requests as a line on one axis.
+- Scatter — response time by object size on a linear label scale.
+- Brush — a stacked event-volume histogram whose selected span filters a log.
 - Loading — `loading`.
 - Empty — composite: the three reasons a range comes back empty, each with its own copy: nothing in the range, filters that match nothing (with a Clear filters action), and a source not set up yet (with a setup link).
 - Error — `error` set.

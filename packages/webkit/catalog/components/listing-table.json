@@ -1,0 +1,19 @@
+{
+ "purpose": "A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `table` and, below `sm`, `item`. Each row is one link named by its first column; the whole row is clickable with the pointer and the first column's link is the keyboard and screen-reader path. Below `sm` the same rows become a list of items, the first column as the title and the second as the description, with the button going full width.",
+ "useWhen": [
+  "To preview the latest entries of a listing (open roles, releases, events) with a way into the full list."
+ ],
+ "avoidWhen": [
+  "For a filterable or paginated listing → use `listing-browser`.",
+  "For a comparison of plans or features → use the pricing matrix."
+ ],
+ "related": [
+  "table` — the composition table the wide layout renders.",
+  "listing-browser` — the full listing this band links into."
+ ],
+ "bestPractices": [
+  "Keep three columns at most; the first names the row and the second describes it on phones.",
+  "Give the wide columns `grow: 2` and align a short trailing column to `end`.",
+  "Keep the preview to a handful of rows and point `primaryAction` at the full listing."
+ ]
+}

@@ -22,7 +22,12 @@
     "menu lateral",
     "console",
     "console layout",
-    "layout do console"
+    "layout do console",
+    "notifications panel",
+    "notifications drawer",
+    "notification center",
+    "central de notificações",
+    "painel de notificações"
   ],
   "skills": ["webkit-navigation", "webkit-layout"],
   "primary": {
@@ -34,6 +39,11 @@
       "name": "DetailPage",
       "summary": "A resource detail page: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it.",
       "file": "variants/detail-page.vue"
+    },
+    {
+      "name": "Notifications",
+      "summary": "The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up.",
+      "file": "variants/notifications.vue"
     }
   ]
 }

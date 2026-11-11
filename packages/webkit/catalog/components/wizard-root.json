@@ -1,0 +1,33 @@
+{
+ "purpose": "A multi-step create flow in one surface. It puts the step rail on the start side, the current step's header and fields in the content column, and a fixed footer with Cancel, Previous and Next. On the last step, Next becomes the submit action. It owns the order, which steps can be reached and where focus goes. The consumer owns the fields, the validation and the request. It differs from its siblings by owning the **whole flow**. `stepper` is only the rail and leaves layout, actions and gating to the caller. `tabs` switches between peer views that have no order and no completion.",
+ "useWhen": [
+  "Creating a resource takes several ordered decisions, and showing them all at once would overwhelm the",
+  "The reader has to finish a step before moving on. Validation runs on Next and can stop the move.",
+  "The flow needs a review step before the final submit, and earlier steps must stay reachable to fix"
+ ],
+ "avoidWhen": [
+  "A short form that fits one screen. A wizard adds clicks without adding clarity → use a plain form",
+  "A confirmation or a single decision → use `dialog`.",
+  "Peer views with no order and no completion → use `tabs`.",
+  "A custom multi-step layout where the caller needs its own actions or a different arrangement → compose",
+  "Numbered instructions inside documentation → use `doc-steps` + `doc-step`."
+ ],
+ "related": [
+  "stepper` — the rail this component composes. Reach for it alone when the footer and gating must be",
+  "tabs` — unordered peer views with no completion state.",
+  "dialog` — a single, short decision on an overlay.",
+  "drawer` — a single-step create or edit form beside the page.",
+  "message` — the inline error to show inside a step when Next is blocked."
+ ],
+ "bestPractices": [
+  "Keep step state in the consumer (refs or a form store). Only the active step renders its content, so a",
+  "Validate in the `next` handler and call `event.preventDefault()` synchronously to block the move. For",
+  "Show why Next was blocked inside the step (an inline `message` or the field's `invalid` +",
+  "Give every step a title that names the decision (`Settings`, `Review`) and keep it short. The same",
+  "Make the last step a review of the answers when the resource is costly to change after creation, and",
+  "Bind `loading` to the submit request. It disables Cancel, Previous and the rail, so the handler needs no",
+  "Mark a step `optional` only when Next works with every field in it empty.",
+  "Always pass `ariaLabel` naming the task (`Create edge application`). Without it, the root is an",
+  "The wizard sets no page width. Place it inside the page's create container"
+ ]
+}

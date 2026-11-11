@@ -1,0 +1,18 @@
+{
+ "purpose": "The close for a reader who may be a person or an agent: one centred ask in the loud `primary` register of the call to action, under a pixelated, waving texture, with a small segmented switch under the title that picks the way in. Each audience carries an optional copyable line and its actions; under them, a line types its words one after another behind a blinking cursor, then a closing sentence, both the same for every audience so the band keeps its height when the switch changes. The hatched closing frame follows. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-agents', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `toggle-group`, `input-group`, `copy-button`, `button`, `frame-box` and `texture-material`. The switch and the typed word are local state.",
+ "useWhen": [
+  "To close a developer page whose reader may be a person or the person's agent."
+ ],
+ "avoidWhen": [
+  "For a close on one or two link actions → use `closing-call-to-action` (`primary` for the same loud register without the switch).",
+  "For a newsletter sign-up → use `closing-call-to-action-newsletter`."
+ ],
+ "related": [
+  "closing-call-to-action` — the same close without the audience switch."
+ ],
+ "bestPractices": [
+  "Keep two audiences; the first one opens.",
+  "Keep each copyable line short enough to fit the field; the copy button copies exactly what it shows.",
+  "Keep `typedWords` to a few short words; screen readers and reduced motion get the whole list at once."
+ ]
+}

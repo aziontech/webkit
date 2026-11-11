@@ -8,6 +8,10 @@ import State2 from '../../../../../../../packages/webkit/blocks/platform/create/
 import source2 from '../../../../../../../packages/webkit/blocks/platform/create/deploy-drawer/variants/service-project-first.vue?raw'
 import State3 from '../../../../../../../packages/webkit/blocks/platform/create/deploy-drawer/variants/project.vue'
 import source3 from '../../../../../../../packages/webkit/blocks/platform/create/deploy-drawer/variants/project.vue?raw'
+import State4 from '../../../../../../../packages/webkit/blocks/platform/create/deploy-drawer/variants/environment.vue'
+import source4 from '../../../../../../../packages/webkit/blocks/platform/create/deploy-drawer/variants/environment.vue?raw'
+import State5 from '../../../../../../../packages/webkit/blocks/platform/create/deploy-drawer/variants/dependencies.vue'
+import source5 from '../../../../../../../packages/webkit/blocks/platform/create/deploy-drawer/variants/dependencies.vue?raw'
 
 export default {
   title: "Templates/Platform/Create/DeployDrawer",
@@ -38,4 +42,14 @@ export const ServiceProjectFirst = {
 export const Project = {
   render: () => ({ components: { Block: State3 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "Deploy on a project: the Resources card with the service it serves and its dependencies, then its storage, which is not versioned; Production and Preview below, with a warning that shared-storefront also publishes to project-05 and project-09." }, source: { code: source3 } } }
+}
+
+export const Environment = {
+  render: () => ({ components: { Block: State4 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The environment decision at its edges: Staging is locked by Strict Deployment Settings (a disabled choice card with a Strict tag and the reason), Preview is tagged Also deploys because Production's shared settings reach it, an info Alert says the deploy replaces legacy-web on the chosen project and a warning Alert says it goes live in two environments at once. Projects impacted are grouped per environment with a heading and a count, and switching environment reloads them with Skeleton rows, aria-busy and a status line. Deploy closes the drawer and reports through one toast that turns from Deploying… into the outcome with Edit and Redeploy." }, source: { code: source4 } } }
+}
+
+export const Dependencies = {
+  render: () => ({ components: { Block: State5 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The Dependencies disclosure open: each module and integration with its own version and Change version menu, auth-gateway tagged Shared with a Tooltip naming the services that also reference it and one info Alert saying a shared dependency deploys at one version, payments-api not versioned (a note instead of the menu), and geo-redirect with no ready version, which disables Deploy with the reason in the footer. Changing the service version reloads the dependencies with Skeleton rows, aria-busy and a status line; a second resource that references nothing says so. The first run fails and its toast carries Edit and Redeploy; Redeploy succeeds." }, source: { code: source5 } } }
 }

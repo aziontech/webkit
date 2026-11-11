@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, provide, readonly, ref, useAttrs, useId } from 'vue'
+  import { computed, inject, provide, readonly, ref, useAttrs, useId } from 'vue'
 
+  import { BoardItemInjectionKey } from '../../layout/board/injection-key'
   import {
     ChartCardInjectionKey,
     type ChartCardMeasure,
@@ -53,6 +54,7 @@
   }>()
 
   const attrs = useAttrs()
+  const boardItem = inject(BoardItemInjectionKey, null)
   const uid = useId()
   const rootRef = ref<globalThis.HTMLElement | null>(null)
   const armed = ref(false)
@@ -71,10 +73,16 @@
   const hasDescription = computed(() => descriptions.value > 0)
   const labelledBy = computed(() => (!props.ariaLabel && hasTitle.value ? titleId : undefined))
   const describedBy = computed(() => (hasDescription.value ? descriptionId : undefined))
-  const sizeVars = computed(() => ({
-    '--chart-card-span': `${span.value}`,
-    ...(height.value === undefined ? {} : { '--chart-card-height': `${height.value}px` })
-  }))
+  const canDrag = computed(() => props.draggable || (boardItem?.editing.value ?? false))
+  const canResize = computed(() => props.resizable || (boardItem?.editing.value ?? false))
+  const sizeVars = computed(() =>
+    boardItem
+      ? { '--chart-card-height': '100%' }
+      : {
+          '--chart-card-span': `${span.value}`,
+          ...(height.value === undefined ? {} : { '--chart-card-height': `${height.value}px` })
+        }
+  )
 
   const clamp = (value: number, low: number, high: number) => Math.min(Math.max(value, low), high)
 
@@ -115,6 +123,7 @@
     if (!armed.value) return
     dragging.value = true
     if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move'
+    boardItem?.dragStart(event)
     emit('drag-start', event)
   }
 
@@ -122,6 +131,7 @@
     if (!dragging.value) return
     dragging.value = false
     armed.value = false
+    boardItem?.dragEnd(event)
     emit('drag-end', event)
   }
 
@@ -131,32 +141,37 @@
     descriptionId,
     hasTitle,
     hasDescription,
-    draggable: computed(() => props.draggable),
-    resizable: computed(() => props.resizable),
-    span: readonly(span),
-    height: readonly(height),
-    minSpan: computed(() => props.minSpan),
-    maxSpan: computed(() => props.maxSpan),
-    minHeight: computed(() => props.minHeight),
-    maxHeight: computed(() => props.maxHeight),
+    draggable: canDrag,
+    resizable: canResize,
+    span: boardItem?.span ?? readonly(span),
+    height: boardItem?.height ?? readonly(height),
+    minSpan: boardItem?.minSpan ?? computed(() => props.minSpan),
+    maxSpan: boardItem?.maxSpan ?? computed(() => props.maxSpan),
+    minHeight: boardItem?.minHeight ?? computed(() => props.minHeight),
+    maxHeight: boardItem?.maxHeight ?? computed(() => props.maxHeight),
     registerTitle: () => register(titles),
     registerDescription: () => register(descriptions),
     armDrag: () => {
-      if (props.draggable) armed.value = true
+      if (canDrag.value) armed.value = true
     },
     disarmDrag: () => {
       if (!dragging.value) armed.value = false
     },
-    move: (event, direction) => emit('move', event, direction),
-    measure,
-    setSpan,
-    setHeight,
+    move: (event, direction) => {
+      boardItem?.move(event, direction)
+      emit('move', event, direction)
+    },
+    measure: boardItem?.measure ?? measure,
+    setSpan: boardItem?.setSpan ?? setSpan,
+    setHeight: boardItem?.setHeight ?? setHeight,
     startResize: (event) => {
       resizing.value = true
+      boardItem?.startResize()
       emit('resize-start', event)
     },
     endResize: (event) => {
       resizing.value = false
+      boardItem?.endResize()
       emit('resize-end', event)
     }
   })
@@ -168,8 +183,8 @@
     v-bind="$attrs"
     :data-testid="testId"
     :draggable="armed ? 'true' : undefined"
-    :data-draggable="draggable || null"
-    :data-resizable="resizable || null"
+    :data-draggable="canDrag || null"
+    :data-resizable="canResize || null"
     :data-dragging="dragging || null"
     :data-resizing="resizing || null"
     :aria-label="ariaLabel || undefined"

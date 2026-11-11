@@ -1,11 +1,13 @@
 import { render } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { createSSRApp, defineComponent, h, nextTick, ref } from 'vue'
+import { renderToString } from 'vue/server-renderer'
 
 import CustomMessages from '../../../../examples/webkit-provider/custom-messages.vue'
 import Default from '../../../../examples/webkit-provider/default.vue'
 import RightToLeft from '../../../../examples/webkit-provider/right-to-left.vue'
 import { useLocale } from '../../../composables/use-locale'
+import { ptBR } from '../../../locales/pt-BR'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Pagination from '../../data/pagination/pagination.vue'
 import Chip from '../../inputs/chip/chip.vue'
@@ -17,8 +19,12 @@ import DialogPortal from '../../overlay/dialog/dialog-portal.vue'
 import DialogTitle from '../../overlay/dialog/dialog-title.vue'
 import WebkitProvider from './webkit-provider.vue'
 
+const catalogs = { 'pt-BR': ptBR }
+
 const withProvider = (props: Record<string, unknown>, child: () => ReturnType<typeof h>) =>
-  defineComponent({ setup: () => () => h(WebkitProvider, props, { default: child }) })
+  defineComponent({
+    setup: () => () => h(WebkitProvider, { catalogs, ...props }, { default: child })
+  })
 
 const settle = async () => {
   await nextTick()
@@ -140,6 +146,48 @@ describe('WebkitProvider', () => {
       expect(ja.getByLabelText('Next page')).toBeTruthy()
     })
 
+    it('an unregistered pt-BR falls back to English with a dev warning naming the locale entry', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      try {
+        const view = render(
+          withProvider({ locale: 'pt-BR', catalogs: {} }, () => h(Pagination, { total: 5 }))
+        )
+        expect(view.getByLabelText('Next page')).toBeTruthy()
+        expect(view.getByTestId('utils-webkit-provider').getAttribute('lang')).toBe('pt-BR')
+        expect(warn.mock.calls.map((c) => String(c[0])).join('\n')).toContain(
+          '@aziontech/webkit/locales/pt-BR'
+        )
+      } finally {
+        warn.mockRestore()
+      }
+    })
+
+    it('a registered pt-BR renders Portuguese on the server and hydrates without mismatches', async () => {
+      const App = withProvider({ locale: 'pt-BR' }, () => h(Pagination, { total: 1200 }))
+      const html = await renderToString(createSSRApp(App))
+      expect(html).toContain('Próxima página')
+      expect(html).toContain('Mostrando 1 a 10 de 1.200 registros')
+      const host = document.createElement('div')
+      host.innerHTML = html
+      document.body.appendChild(host)
+      const messages: string[] = []
+      const collect = (...args: unknown[]) => messages.push(args.map(String).join(' '))
+      const warn = vi.spyOn(console, 'warn').mockImplementation(collect)
+      const error = vi.spyOn(console, 'error').mockImplementation(collect)
+      try {
+        const app = createSSRApp(App)
+        app.mount(host)
+        await settle()
+        expect(messages.filter((m) => /hydration/i.test(m))).toEqual([])
+        expect(host.querySelector('[aria-label="Próxima página"]')).toBeTruthy()
+        app.unmount()
+      } finally {
+        warn.mockRestore()
+        error.mockRestore()
+        host.remove()
+      }
+    })
+
     it('messages overrides one string and keeps the rest of the catalog', () => {
       const { getByLabelText } = render(
         withProvider({ locale: 'pt-BR', messages: { pagination: { next: 'Seguinte' } } }, () =>
@@ -156,7 +204,7 @@ describe('WebkitProvider', () => {
         setup: () => () =>
           h(
             WebkitProvider,
-            { locale: locale.value },
+            { locale: locale.value, catalogs },
             { default: () => h(Pagination, { total: 5 }) }
           )
       })

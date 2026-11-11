@@ -77,7 +77,7 @@
       const length = Math.abs(to - from)
       return isVertical
         ? barPath(start, low, thickness, length, RADIUS, 'top')
-        : barPath(low, start, length, thickness, RADIUS, 'right')
+        : barPath(low, start, length, thickness, RADIUS, ctx.rtl.value ? 'left' : 'right')
     }
 
     const delayOf = (index: number) => `calc(${duration['fast-01']} * ${Math.min(index, 12) / 2})`
@@ -154,7 +154,12 @@
     function labelAt(index: number, center: number, end: number, value: number): BarLabel {
       return isVertical
         ? { key: index, x: center, y: end - LABEL_OFFSET, text: ctx.formatValue(value) }
-        : { key: index, x: end + LABEL_OFFSET, y: center, text: ctx.formatValue(value) }
+        : {
+            key: index,
+            x: ctx.rtl.value ? end - LABEL_OFFSET : end + LABEL_OFFSET,
+            y: center,
+            text: ctx.formatValue(value)
+          }
     }
 
     return { bars, labels }
@@ -176,6 +181,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     aria-hidden="true"
+    direction="ltr"
     :width="ctx.size.value.width"
     :height="ctx.size.value.height"
     class="pointer-events-none col-start-1 row-start-1 overflow-visible"
@@ -193,7 +199,8 @@
         :data-orientation="ctx.orientation.value"
         :data-entered="ctx.entered.value || null"
         :style="{ '--chart-bar-from': growFrom, transitionDelay: bar.delay }"
-        class="origin-bottom [scale:var(--chart-bar-from)] [transform-box:fill-box] transition-[scale] duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:[scale:1] data-[orientation=horizontal]:origin-left"
+        :data-rtl="ctx.rtl.value || null"
+        class="origin-bottom [scale:var(--chart-bar-from)] [transform-box:fill-box] transition-[scale] duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:[scale:1] data-[orientation=horizontal]:origin-[0%_50%] data-[orientation=horizontal]:data-[rtl]:origin-[100%_50%]"
       />
     </g>
     <text
@@ -202,7 +209,7 @@
       :x="label.x"
       :y="label.y"
       :dy="vertical ? undefined : '0.32em'"
-      :text-anchor="vertical ? 'middle' : 'start'"
+      :text-anchor="vertical ? 'middle' : ctx.rtl.value ? 'end' : 'start'"
       fill="var(--chart-label)"
       class="text-label-sm tabular-nums"
     >

@@ -1,0 +1,17 @@
+{
+ "purpose": "The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action. It is a page section — the site places it from a `{ _id: 'logo-wall-quote', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `logo-wall`, `quote` and `button`.",
+ "useWhen": [
+  "To prove adoption with marks and let one customer speak, early on a home or solution page."
+ ],
+ "avoidWhen": [
+  "For several quotes in turn → use `client-quotes`.",
+  "For marks with photos and stories in a mosaic → use `client-mosaic`."
+ ],
+ "related": [
+  "logo-wall` — the wall the marks are laid in, with the quote in its aside."
+ ],
+ "bestPractices": [
+  "Eight or nine logos fill the rectangle wall beside the aside.",
+  "Set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `invert-light` for a reversed mark that must flip on the light theme, `as-is` for a colour mark; give a `logoLight` file instead when the light theme needs a different drawing."
+ ]
+}

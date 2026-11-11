@@ -1,0 +1,27 @@
+{
+ "purpose": "PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `kind=\"more\"` — an inert, decorative overflow ellipsis (`span`, `aria-hidden`), selected by `kind`. It is the part `pagination` renders in data-driven mode and the one consumers compose by hand in composition mode, where it is reached as `Pagination.Button` (or imported standalone from `@aziontech/webkit/pagination-button`). It owns the segment's surface, current-page (`selected`) and `disabled` treatment, but not the strip's frame, border or the page state, which belong to the `pagination` root and the consumer.",
+ "useWhen": [
+  "Compose a custom page strip inside `pagination`'s default slot (composition mode), one button per Previous, page number, overflow and Next.",
+  "Render the current page of a hand-wired pagination with `selected`, and the unavailable Previous / Next ends with `disabled`."
+ ],
+ "avoidWhen": [
+  "You know the item count → pass `total` to `pagination` and bind `v-model:page`; it renders and wires every PaginationButton itself.",
+  "The rows live in a data-driven `table` → set `paginated` on the table instead.",
+  "The control is a previous / next link between documentation pages → use `doc-pagination`.",
+  "It is a standalone action outside a pagination strip → use `button` or `icon-button`; this button has no radius or frame of its own except at the strip's ends.",
+  "It is a \"Load more\" control at the end of a list → use `button`."
+ ],
+ "related": [
+  "pagination` — the root that frames the strip and, in data-driven mode, renders these buttons; re-exports this component as `Pagination.Button`.",
+  "pagination-info` — the page-info text that sits beside the strip.",
+  "pagination-page-size` — the rows-per-page selector placed in the pagination's `controls` slot.",
+  "icon-button` — a standalone icon-only action with its own frame and radius."
+ ],
+ "bestPractices": [
+  "Place it only inside `pagination`'s default slot: the strip's border and frame come from the root, and the outer radius is applied through `first:` / `last:`, so only the first and last buttons of the strip round their corners.",
+  "Pass `aria-label` on every `previous` and `next` button: those kinds render an `aria-hidden` icon only and have no accessible name otherwise. `more` is decorative and hidden from assistive tech, so it takes no `aria-label`.",
+  "Put the page number in the default slot of `kind=\"number\"` only; the other kinds ignore the slot.",
+  "Set `selected` on exactly one number button (it sets `aria-current=\"page\"`), and `disabled` on Previous at the first page and Next at the last.",
+  "In composition mode you own every click: listen to `click` and update the page yourself; a `disabled` button never emits it."
+ ]
+}

@@ -22,6 +22,8 @@
     disabled?: boolean
     /** Shows a close affordance (Figma variant set). */
     closable?: boolean
+    /** Marks the tab as holding unsaved changes: a dot after the label and a hidden "Unsaved changes". */
+    dirty?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -29,7 +31,8 @@
     label: 'Tab Item',
     selected: false,
     disabled: false,
-    closable: false
+    closable: false,
+    dirty: false
   })
 
   const emit = defineEmits<{
@@ -161,6 +164,7 @@
     :data-testid="testId"
     :data-state="isSelected ? 'active' : 'inactive'"
     :data-disabled="isDisabled ? '' : undefined"
+    :data-dirty="dirty ? '' : undefined"
     :aria-selected="isSelected"
     :aria-controls="panelId"
     :tabindex="tabIndex"
@@ -178,6 +182,17 @@
     <span :data-testid="`${testId}__label`">
       <slot>{{ label }}</slot>
     </span>
+    <span
+      v-if="dirty"
+      class="size-1.5 shrink-0 rounded-full bg-(--warning-contrast) forced-colors:bg-[CanvasText]"
+      aria-hidden="true"
+      :data-testid="`${testId}__dirty`"
+    />
+    <span
+      v-if="dirty"
+      class="sr-only"
+      >{{ t('tabs.unsaved') }}</span
+    >
     <span
       v-if="$slots['trailing']"
       :class="iconClasses"

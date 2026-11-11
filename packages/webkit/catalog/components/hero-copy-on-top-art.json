@@ -1,0 +1,18 @@
+{
+ "purpose": "The opening band of a product page whose copy sits centered on top of a topology scene: the page `h1` with its overline, sentence and up to two actions over columns of status cards wired left to right. It is a page section — the site places it from a `{ _id: 'hero-copy-on-top-art', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button`, `flow` and `tag`. It is a separate section from `hero-band` because the scene is a data model of its own: levels of cards, each with a status and an optional focus.",
+ "useWhen": [
+  "To open a product page whose object is best shown as a small topology (domains feeding a workload that binds an application and a firewall)."
+ ],
+ "avoidWhen": [
+  "For an opening band with no scene → use `hero-band`.",
+  "For an opening band followed by a grid of arguments → use `hero-with-opening`."
+ ],
+ "related": [
+  "hero-band` — the sibling opening band with the same copy and actions and no scene.",
+  "flow` — the diagram primitive the scene is rendered with."
+ ],
+ "bestPractices": [
+  "Keep three levels of one or two cards so the scene fits the column on a tablet.",
+  "Mark exactly one card `lit`, the focus of the scene."
+ ]
+}

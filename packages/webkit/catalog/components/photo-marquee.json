@@ -1,0 +1,16 @@
+{
+ "purpose": "The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover or focus. It is a page section — the site places it from a `{ _id: 'photo-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `frame-box`.",
+ "useWhen": [
+  "To show a place or a team in pictures without a grid."
+ ],
+ "avoidWhen": [
+  "For quotes → use `recognition-marquee`."
+ ],
+ "related": [
+  "recognition-marquee` — the sibling strip of quotes with the same loop."
+ ],
+ "bestPractices": [
+  "Give every photo its `width` and `height` so the strip reserves each slot before the picture loads.",
+  "Leave `duration` at `0` to let the strip pace itself (ten seconds per photo)."
+ ]
+}

@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Two controls wrapped in hotspots while a tutorial runs: the current step's marker pulses and its popover is open, the other marker is static and opens its step on click.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Hotspot from '@aziontech/webkit/hotspot'\n  import TutorialPanel from '@aziontech/webkit/tutorial-panel'\n  import { ref } from 'vue'\n\n  const tutorials = [\n    {\n      id: 'publish',\n      title: 'Publish a change',\n      tasks: [\n        {\n          title: 'Review and deploy',\n          steps: [\n            {\n              title: 'Preview the change',\n              content: 'Open the preview to check the change before anyone else sees it.',\n              hotspotId: 'preview'\n            },\n            {\n              title: 'Deploy',\n              content: 'Select Deploy to send the change to production.',\n              hotspotId: 'deploy'\n            }\n          ]\n        }\n      ]\n    }\n  ]\n\n  const active = ref('publish')\n  const step = ref(0)\n</script>\n\n<template>\n  <TutorialPanel.Provider\n    v-model:active=\"active\"\n    v-model:step=\"step\"\n    :tutorials=\"tutorials\"\n  >\n    <div class=\"flex min-h-(--container-3xs) flex-wrap items-start gap-(--spacing-sm)\">\n      <Hotspot hotspot-id=\"preview\">\n        <Button\n          label=\"Preview\"\n          kind=\"outlined\"\n          size=\"medium\"\n        />\n      </Hotspot>\n      <Hotspot hotspot-id=\"deploy\">\n        <Button\n          label=\"Deploy\"\n          kind=\"primary\"\n          size=\"medium\"\n        />\n      </Hotspot>\n    </div>\n  </TutorialPanel.Provider>\n</template>"
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+{
+  "component": "reasoning",
+  "title": "Components/Primitives/AI/Reasoning",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Finished reasoning, collapsed under `Thought for 14 seconds`; expanding it shows the short trace with identifiers in code.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Streaming",
+      "summary": "Reasoning in progress: the label reads Thinking and pulses, the trace grows inside, and Skip thinking ends it early so the label shows how long it took.",
+      "file": "streaming.vue"
+    }
+  ]
+}

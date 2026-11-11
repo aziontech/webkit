@@ -1,0 +1,87 @@
+{
+ "name": "sources",
+ "binding": "Sources",
+ "import": "@aziontech/webkit/sources",
+ "treeShakeableImport": "@aziontech/webkit/sources",
+ "category": "ai",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line description. Item `n` carries the id `<anchor>-source-<n>`, the target of the `[n]` citations `StreamingResponse` renders; following a citation opens the list and brings the item into view.",
+ "setup": null,
+ "useWhen": [
+  "A response is grounded in documents, pages or records the reader may want to open or verify."
+ ],
+ "avoidWhen": [
+  "Related links that the response did not use → `help-panel` links or a plain list.",
+  "A single source → cite it inline with a link; a list of one is noise."
+ ],
+ "related": [
+  "citation` — the inline `[n]` that points here.",
+  "streaming-response` — renders the citations; share the `anchor`.",
+  "chat-message` — sources sit inside the assistant message, under the response."
+ ],
+ "bestPractices": [
+  "Order items as the response first cites them, so `[1]` is item 1.",
+  "Use the page title, not the URL, as the title; add the site or section as the description.",
+  "Keep the list collapsed by default; the inline citations are the primary path."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "AiSource[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The sources behind the response, in citation order; item `n` is what `[n]` points at."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Heading of the disclosure. Empty uses the locale catalog (`3 sources`)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Controlled open state. Use with `v-model:open`."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:open",
+   "payload": "boolean",
+   "notes": ""
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Sources from '@aziontech/webkit/sources'\n\n  const items = [\n    {\n      title: 'Real-Time Purge',\n      href: 'https://www.azion.com/en/documentation/',\n      description: 'Azion documentation · Cache'\n    },\n    {\n      title: 'Cache settings',\n      href: 'https://www.azion.com/en/documentation/',\n      description: 'Azion documentation · Applications'\n    },\n    {\n      title: 'Purge by wildcard',\n      href: 'https://www.azion.com/en/documentation/',\n      description: 'Azion documentation · Cache'\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <Sources\n      :items=\"items\"\n      anchor=\"purge-answer\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Open",
+   "sfc": "<script setup>\n  import Sources from '@aziontech/webkit/sources'\n\n  const items = [\n    {\n      title: 'Real-Time Purge',\n      href: 'https://www.azion.com/en/documentation/',\n      description: 'Azion documentation · Cache'\n    },\n    {\n      title: 'Cache settings',\n      href: 'https://www.azion.com/en/documentation/',\n      description: 'Azion documentation · Applications'\n    },\n    {\n      title: 'Purge by wildcard',\n      href: 'https://www.azion.com/en/documentation/',\n      description: 'Azion documentation · Cache'\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <Sources\n      :items=\"items\"\n      anchor=\"purge-answer\"\n      default-open\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/sources.md"
+}

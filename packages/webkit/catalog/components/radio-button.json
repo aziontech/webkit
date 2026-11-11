@@ -1,0 +1,25 @@
+{
+ "purpose": "Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper). Wrap it in a horizontal `Field`, or a `Field.Label` choice card, for labeled layouts.",
+ "useWhen": [
+  "One choice from a small set of mutually exclusive options whose labels are laid out separately (a table row, a custom option row).",
+  "A custom radio layout that the horizontal `Field` and the `Field.Label` choice card do not cover."
+ ],
+ "avoidWhen": [
+  "A radio option in a form that needs its own label, description, or helper text → wrap it in a horizontal `field` (`Field orientation=\"horizontal\"` + `Field.Content`).",
+  "Options that need visual weight, such as plans or tiers → use a `field` choice card (`Field.Label` wrapping a horizontal `Field`), or `radio-cards` for a horizontal grid of cards.",
+  "More than one option may be selected → use `checkbox`.",
+  "The options are many or loaded from data → use `select`."
+ ],
+ "related": [
+  "field` — a horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.",
+  "radio-cards` — horizontal grid of selectable cards with its own model.",
+  "checkbox` — the multi-pick counterpart.",
+  "select` — single choice from a dropdown when the options do not fit inline."
+ ],
+ "bestPractices": [
+  "Bind every radio in a group to the same `v-model` and give them the same `name`; each one emits its own `value` when selected.",
+  "value` and `modelValue` are strings; map numeric or object ids to strings before binding.",
+  "Give each radio an accessible name: point a `label` element's `for` at `inputId`, or pass `aria-label`.",
+  "Wrap the group in a `fieldset` with a `legend` so the question itself is announced."
+ ]
+}

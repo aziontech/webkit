@@ -1,0 +1,26 @@
+{
+ "purpose": "Horizontal grid of selectable cards for mutually exclusive choices (plans, roles, feature tiers). Each option shows label, optional icon and description, with optional trailing content via the `tag` slot. Migrated from the legacy `radio-cards` core component into the webkit inputs layer.",
+ "useWhen": [
+  "One choice among a few options where each option needs a label plus an optional icon or one-line description: usage intent, role, plan tier.",
+  "Options laid out side by side as cards that wrap onto new rows, bound to one `v-model` value for the whole group.",
+  "A card needs small trailing content under its text, such as a price or a \"Recommended\" tag, through the `tag` slot."
+ ],
+ "avoidWhen": [
+  "You place each card-style radio by hand, or the choice must submit through a native form `name` → use `field` choice cards (`Field.Label` wrapping a horizontal `Field` with a `radio-button`).",
+  "The options don't need card weight and read fine as inline rows → use horizontal `field`s with a `radio-button`.",
+  "There are more options than fit in a row or two, or the choice sits in a compact form → use `select` inside a `field`.",
+  "More than one option can be picked → use `field` choice cards with a `checkbox`."
+ ],
+ "related": [
+  "field` — a `Field.Label` choice card is a single card-style radio (or checkbox) with title and description; compose several by hand with a shared `name`, or use a horizontal `Field` for an inline labelled row.",
+  "select` — dropdown for long option lists.",
+  "onboarding-form` — uses this component for its usage-intent question."
+ ],
+ "bestPractices": [
+  "Give every item a unique `value`; it is both the `v-model` payload and the render key.",
+  "Name the group by passing `aria-labelledby` or `aria-label` on the component: it renders a `role=\"radiogroup\"` with no visible label of its own. Set an item's `ariaLabel` when its `label` alone is ambiguous.",
+  "disabled` applies to the whole group; there is no per-item disabled state, so leave unavailable options out of `items`.",
+  "Use the `tag` slot for trailing content. The `default` slot replaces the whole card body (icon, label, description and `tag`), so use it only when the card needs a different layout.",
+  "Arrow keys move and select in one step, as in any radio group, so `update:modelValue` fires while a keyboard user browses. Don't trigger navigation or requests on every change."
+ ]
+}

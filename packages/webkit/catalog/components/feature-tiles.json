@@ -1,0 +1,19 @@
+{
+ "purpose": "The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `kind` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.",
+ "useWhen": [
+  "To state three or four reasons to buy, each with a picture, under a product or pricing argument."
+ ],
+ "avoidWhen": [
+  "For linked use cases → use `use-case-links`.",
+  "For a scroll-driven walkthrough with one screen per feature → use `feature-scroll`."
+ ],
+ "related": [
+  "media-tile` — the picture-over-copy cell each tile is rendered with.",
+  "feature-widgets` — the sibling band whose cells carry an action each."
+ ],
+ "bestPractices": [
+  "Match the tile count to the kind: four tiles for `artwork`, three for `illustrated`.",
+  "Give a tile either `image` (a URL) or `illustration` (a registry name), not both; `scale` only matters with `illustration`.",
+  "Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band."
+ ]
+}

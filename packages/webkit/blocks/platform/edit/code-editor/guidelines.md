@@ -29,13 +29,13 @@ A full-bleed `PageTabs` with Code and Settings as `Tabs.Item`s. Each tab keeps i
 
 A thin bar above the editor with a `ToggleGroup` labeled Editor document that switches between the Code and Arguments documents, and a muted line describing the active one, e.g. the runtime for Code.
 
-### D. Code document — `Textarea`, `HelperText` (required)
+### D. Code document — `CodeEditor`, `HelperText` (required)
 
-A flush `Textarea` with `resizable="none"` fills the pane in a code font; it is where a product embeds its code editor. An empty document on Save shows an invalid `HelperText` under the editor, cleared on the next keystroke.
+A `CodeEditor` with `fill` takes the pane: line numbers, Tab indents, and Escape then Tab leaves it. Here it runs as the plain editor; a product passes `loader: () => import('monaco-editor')` to get Monaco, themed from the tokens, with the plain editor as the server and no-JavaScript fallback. An empty document on Save shows an invalid `HelperText` under the editor, cleared on the next keystroke.
 
-### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `Textarea`, `Button` (required)
+### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button` (required)
 
-A count of fields and the outlined Add field and Remove form `Button`s sit above a `ResizableRoot`. The left `ResizablePane` holds the schema as JSON in a flush `Textarea`; it is `collapsible` with a minimum and maximum width. The `ResizableHandle` resizes it and collapses it past its minimum. The right pane holds the fields form; both panes describe the same argument form.
+A count of fields and the outlined Add field and Remove form `Button`s sit above a `ResizableRoot`. The left `ResizablePane` holds the schema as JSON in a `CodeEditor` (`language="json"`); it is `collapsible` with a minimum and maximum width. The `ResizableHandle` resizes it and collapses it past its minimum. The right pane holds the fields form; both panes describe the same argument form.
 
 ### F. No fields — `EmptyState`, `Button`, `Link` (optional)
 

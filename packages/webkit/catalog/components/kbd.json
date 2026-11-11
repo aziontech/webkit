@@ -1,0 +1,21 @@
+{
+ "purpose": "Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, the catalog's `Ctrl` elsewhere), and named keys (`keyName`) print their localized name, so consumers never hardcode platform symbols or English key names. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`).",
+ "useWhen": [
+  "Show a keyboard shortcut or a single key inline (a ⌘K hint on a search button, an `Esc` hint in a dialog, `/` to focus search).",
+  "Present a modifier combination whose glyph should adapt to the user's OS."
+ ],
+ "avoidWhen": [
+  "The token is a status/category label, not a key → use `tag` or `badge`.",
+  "You need an interactive control that fires on click → use `button` / `icon-button`; Kbd is a presentational hint only."
+ ],
+ "related": [
+  "command` — consumes Kbd for its per-item shortcut hints and its ⌘K trigger affordance.",
+  "badge` — compact non-interactive indicator for counts/status; Kbd is specifically for keyboard keys."
+ ],
+ "bestPractices": [
+  "Keep the default slot to a single key or glyph (`K`, `7`, `Enter`, `Esc`, `/`); avoid lowercase words or sentences.",
+  "Pass modifiers as boolean props rather than hardcoding `⌘`/`⇧` so the glyph adapts to the OS.",
+  "Name a key with `key-name` (`<Kbd key-name=\"escape\" />`) instead of typing `Esc` or `Enter`: the text comes from the locale catalog (`kbd.*`), so it follows `WebkitProvider` (`Espaço` in pt-BR, `Intro` in es) and a consumer renames it with `messages` (`{ kbd: { ctrl: 'Strg' } }`). The macOS symbols `⌘`, `⌃`, `⌥` and `⇧` are never translated.",
+  "Place surrounding punctuation outside the element, not inside the keycap."
+ ]
+}

@@ -1,0 +1,20 @@
+{
+ "purpose": "The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line description. Item `n` carries the id `<anchor>-source-<n>`, the target of the `[n]` citations `StreamingResponse` renders; following a citation opens the list and brings the item into view.",
+ "useWhen": [
+  "A response is grounded in documents, pages or records the reader may want to open or verify."
+ ],
+ "avoidWhen": [
+  "Related links that the response did not use → `help-panel` links or a plain list.",
+  "A single source → cite it inline with a link; a list of one is noise."
+ ],
+ "related": [
+  "citation` — the inline `[n]` that points here.",
+  "streaming-response` — renders the citations; share the `anchor`.",
+  "chat-message` — sources sit inside the assistant message, under the response."
+ ],
+ "bestPractices": [
+  "Order items as the response first cites them, so `[1]` is item 1.",
+  "Use the page title, not the URL, as the title; add the site or section as the description.",
+  "Keep the list collapsed by default; the inline citations are the primary path."
+ ]
+}

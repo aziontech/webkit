@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Two saved tags and a new one. Keys suggest the account's keys while typing and the environment value suggests its usual values; removing a saved tag marks it for removal with Undo, removing a new tag deletes the row.",
+   "sfc": "<script setup>\n  import TagEditor from '@aziontech/webkit/tag-editor'\n  import { ref } from 'vue'\n\n  const tags = ref([\n    { key: 'team', value: 'payments', existing: true },\n    { key: 'cost-center', value: 'cc-1042', existing: true },\n    { key: 'environment', value: 'staging' }\n  ])\n\n  const keySuggestions = ['team', 'cost-center', 'environment', 'owner', 'project']\n  const valueSuggestions = { environment: ['production', 'staging', 'preview'] }\n</script>\n\n<template>\n  <TagEditor\n    v-model:tags=\"tags\"\n    :key-suggestions=\"keySuggestions\"\n    :value-suggestions=\"valueSuggestions\"\n    aria-label=\"Resource tags\"\n  />\n</template>"
+  },
+  {
+   "name": "Validation",
+   "summary": "A key with the reserved `azion:` prefix and a duplicated key show their errors as they are typed; Save runs `validate()`, which also flags empty keys. The saved tag marked for removal does not count toward the limit of five.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import TagEditor from '@aziontech/webkit/tag-editor'\n  import { ref } from 'vue'\n\n  const tags = ref([\n    { key: 'owner', value: 'platform-team', existing: true, markedForRemoval: true },\n    { key: 'azion:managed', value: 'true' },\n    { key: 'region', value: 'sa-east' },\n    { key: 'region', value: 'us-east' }\n  ])\n\n  const editor = ref(null)\n  const valid = ref(true)\n  const save = () => {\n    valid.value = editor.value?.validate() ?? false\n  }\n</script>\n\n<template>\n  <form\n    class=\"flex flex-col gap-(--spacing-md)\"\n    novalidate\n    @submit.prevent=\"save\"\n  >\n    <TagEditor\n      ref=\"editor\"\n      v-model:tags=\"tags\"\n      :limit=\"5\"\n      aria-label=\"Resource tags\"\n    />\n    <div>\n      <Button\n        type=\"submit\"\n        label=\"Save tags\"\n        kind=\"primary\"\n        size=\"medium\"\n      />\n    </div>\n  </form>\n</template>"
+  }
+ ]
+}

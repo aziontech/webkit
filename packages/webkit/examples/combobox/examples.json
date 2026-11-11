@@ -1,0 +1,21 @@
+{
+  "component": "combobox",
+  "title": "Components/Primitives/Inputs/Combobox",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A variable name field inside `Field`: typing filters the suggestions, a pick fills the field, and a name that is not listed is offered as `Use \"…\"` and accepted as typed. The clear button empties it.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Grouped",
+      "summary": "Options with `group` sit under their titles (Recent, Standard); a `disabled` option stays visible with its reason but cannot be picked.",
+      "file": "grouped.vue"
+    },
+    {
+      "name": "Server",
+      "summary": "Server filtering: `filter` off, `search` starts a request and `loading` shows the spinner and the loading row. With `allowCustom` off, text that matches no region restores the last valid value.",
+      "file": "server.vue"
+    }
+  ]
+}

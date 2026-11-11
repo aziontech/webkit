@@ -41,27 +41,31 @@ A right-side `Drawer` whose content is one `form` labeled Create Variable or Edi
 
 A `SettingsSection` titled Variables with a hint that says what variables are for. Its toolbar holds an outlined Upload `Button` that reads a `.env` or text file into rows, and a medium `ToggleGroup` that switches between the Form and JSON views of the same data.
 
-### G. Key and value rows — `InputGroupRoot`, `InputGroupAddon`, `Input`, `Tooltip`, `IconButton`, `Checkbox`, `HelperText` (required)
+### G. Key and value rows — `AttributeEditor`, `InputGroupRoot`, `InputGroupAddon`, `Input`, `Tooltip`, `IconButton`, `Checkbox`, `HelperText` (required)
 
-Each variable is two large `InputGroupRoot` rows. The Key row joins a Key label addon, a code-font field that turns spaces into underscores, and a Remove variable `IconButton` (hidden while only one pair is left). The Value row joins a Value label addon, the field, a Show value `IconButton` and a Secret `Checkbox` named by a `Tooltip`. Errors render as `HelperText` under the pair. An outlined Add variable `Button` below the list is enabled only when the last pair is filled. Pasting `.env` or JSON contents into an empty key creates one row per variable.
+The rows are one `AttributeEditor` (`v-model:items`, `min-items` 1, `add-disabled` until the last pair is filled), which owns the list semantics, Add variable, Remove, the focus after each, the polite "Item n added / removed" announcement and, while editing one variable, the limit of 1 with the note "Edit one variable at a time.". Its `row` slot draws each variable as two large `InputGroupRoot` rows. The Key row joins a Key label addon, a code-font field that turns spaces into underscores, and a Remove variable `IconButton` (hidden while only one pair is left). The Value row joins a Value label addon, the field, a Show value `IconButton` and a Secret `Checkbox` named by a `Tooltip`. Errors render as `HelperText` under the pair. The editor's outlined Add variable button is enabled only when the last pair is filled, and its `info` slot carries the hint that pasting `.env` or JSON contents into an empty key creates one row per variable. Remove is named with the row number ("Remove variable 2").
 
-### H. JSON view — `Textarea`, `HelperText` (optional)
+### H. Paste .env panel — `Button`, `Textarea`, `HelperText` (optional)
+
+In the PasteEnv state an outlined Paste .env `Button` (with `aria-expanded`) beside Upload opens an inline panel above the rows: a labelled monospace `Textarea`, a report of what the text holds ("3 variables found.", the lines that are not `KEY=value` and will be skipped, keys repeated in the text, keys already in the list whose value will be replaced), and a primary Add N variables `Button` beside Cancel. Applying merges the pairs into the rows (replace by key, append the rest), closes the panel, announces the count and returns focus to Paste .env. Parsing follows the design sample: blank lines and `#` comments are ignored, `export` is accepted, quotes are removed, the last value of a repeated key wins.
+
+### I. JSON view — `Textarea`, `HelperText` (optional)
 
 The JSON view replaces the rows with one `Textarea` labeled Variables JSON over the same entries; a `HelperText` reports a parse error in place. Switching back to Form keeps what was typed.
 
-### I. Scope — `SettingsSection`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `HelperText` (required)
+### J. Scope — `SettingsSection`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `HelperText` (required)
 
 A `SettingsSection` titled Scope with one large `InputGroupRoot` per scope type: a label addon, a `MultiSelect` of resources with a search `Input` (Global shows "The entire account" instead), and an enable `Switch`. Global turns off when any specific scope turns on. An enabled scope with no resource selected shows a required `HelperText`.
 
-### J. Drawer footer — `PanelFooter`, `Button` (required)
+### K. Drawer footer — `PanelFooter`, `Button` (required)
 
 `PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving.
 
-### K. List states — `EmptyState`, `Button` (required)
+### L. List states — `EmptyState`, `Button` (required)
 
 With no variables at all, the card holds a first-use `EmptyState` (`No variables yet`) with Create Variable and Documentation. When the filter matches nothing, the table's `#empty` slot holds a no-match `EmptyState` (`No matching variables`) with an outlined Clear filters `Button`.
 
-### L. Delete confirmation — `ConfirmDialog`, `Alert`, `Input`, `Button` (required)
+### M. Delete confirmation — `ConfirmDialog`, `Alert`, `Input`, `Button` (required)
 
 The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable: a warning `Alert`, one sentence on the consequence, and an `Input` where the user types the key. The danger Delete variable `Button` stays disabled until the trimmed value equals the key; Cancel closes the dialog.
 
@@ -69,7 +73,9 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 
 - Validate only after Save is pressed; then flag each empty, malformed or duplicated key under its own pair and move focus to the first field in error.
 - Keep secret values masked in the list and in the drawer, and say in the hint that secrets are write-only once saved.
-- Let users bring pairs in bulk: Upload, paste into a key, or edit as JSON.
+- Let users bring pairs in bulk: Upload, Paste .env, paste into a key, or edit as JSON.
+- Before pasted pairs land, say how many were found, which lines are skipped and which keys will be replaced.
+- Build the rows on `AttributeEditor` so add, remove, focus and announcements behave the same on every key and value editor.
 - Keep the label of each field inside its `InputGroupAddon`, tied to the field by `for`.
 - Reset the drawer on open so a closed and reopened drawer never shows stale rows.
 - Follow `skills/webkit-form` for required states and `skills/webkit-lists` for the list page.
@@ -78,6 +84,7 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 
 - Don't show required errors on first render or while the user is still typing the first pair.
 - Don't offer Remove on the last remaining pair.
+- Don't drop invalid pasted lines silently, and don't add duplicate keys from a paste: replace the existing value and say so.
 - Don't reveal a saved secret value in the table, a tooltip or the copy control.
 - Don't add a Cancel button beside Save; `DrawerClose` and the overlay close the drawer.
 - Don't keep Global on together with a specific scope.
@@ -90,6 +97,7 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 - **Field placeholders:** show the format, e.g. "MY_VARIABLE" for the key, "my-variable-value" for the value.
 - **Errors:** short and specific, e.g. "Key is required.", "Use only uppercase letters, numbers, and underscores.", "Select at least one resource for this scope."
 - **Secret control:** "Mark as secret" and "Unmark as secret"; the hint states the rule, e.g. "Secret values are hidden and write-only after saving."
+- **Paste panel:** label "Paste .env contents"; report "3 variables found. Lines starting with # are ignored.", "Line 5 is not KEY=value with an uppercase key and will be skipped.", "CACHE_TTL is already in the list; its value will be replaced."; buttons "Paste .env", "Add 3 variables", "Cancel".
 - **Buttons:** verb first, three words or fewer, e.g. "Upload", "Add variable", "Save".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
@@ -99,7 +107,8 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 - Icon-only controls (Remove variable, Show value, Hide value, row actions, toolbar) carry an `aria-label` that matches their `Tooltip`.
 - The Secret `Checkbox` and each scope `Switch` have an `aria-label` naming what they toggle, e.g. "Enable Project scope".
 - The `ToggleGroup` is labeled "Variables view"; the hidden file input is removed from the tab order and the Upload button triggers it.
-- Adding a pair moves focus to its new Key field.
+- Adding a pair moves focus to its new Key field; removing one moves focus to the pair now in its place (or Add variable); both are announced in a polite live region by `AttributeEditor`.
+- The paste panel's `Textarea` is described by its report, so skipped lines and replaced keys are read with the field; Paste .env exposes `aria-expanded`, and applying announces how many variables were added.
 - The drawer traps focus while open and returns it to Create Variable on close.
 
 ## States
@@ -110,6 +119,7 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 - Edit: a row's Edit opens the drawer on that variable; Save replaces it in the list.
 - Delete: a row's Delete opens the typed confirmation; confirming removes the row.
 - Create: the drawer open with one empty pair, the Form view and Global on; errors appear only after Save.
+- PasteEnv: Create Variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
 
 ## Related
 
@@ -118,3 +128,4 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 - `platform/edit/rule-builder` — a drawer for ordered conditions and behaviors instead of free pairs.
 - `platform/states/form-validation` — when and how errors appear after Save.
 - `InputGroupRoot` — joins label, field and actions into one row; see `skills/webkit-form`.
+- `AttributeEditor` and `TagEditor` — the components behind the rows; `TagEditor` for resource tags.

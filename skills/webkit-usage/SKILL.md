@@ -38,7 +38,8 @@ Structure and states first, polish last:
   (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation`
 - **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
 - **Foundation:** `/webkit-baseline-ui` (tokens, typography, spacing rhythm)
-- **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz`
+- **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-genai` (AI chat
+  and agent actions)
 - **Polish:** `/webkit-motion-polish` → `/webkit-impeccable-polish`
 - **Verify:** `/webkit-ui-verify` (real browser, both themes, several widths, axe)
 - **Adopting WebKit in an existing app:** `/webkit-ds-adoption`
@@ -59,16 +60,23 @@ A few components need **one-time wiring in the app entry before first use** — 
 
 - **Toast**: fire-from-anywhere (`toast.success('Saved')`) only renders if a region is mounted. Wire the service once in the entry — `import { ToastPlugin } from '@aziontech/webkit/toast'` and chain `.use(ToastPlugin)` onto `createApp()`; the plugin mounts the region automatically (options: `app.use(ToastPlugin, { position: 'top-right' })`). A manually mounted Toaster also counts — never add both blindly (the store keeps only the first region active, but one wiring is enough). `npx webkit doctor` flags toast usage with no wired region.
 
-- **WebkitProvider (languages)**: mount it once at the app root with the user's locale. Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the `en`, `pt-BR` or `es` catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). With no provider every component falls back to English. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import WebkitProvider from '@aziontech/webkit/webkit-provider'`.
+- **WebkitProvider (languages)**: mount it once at the app root with the user's locale. Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component falls back to English. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import WebkitProvider from '@aziontech/webkit/webkit-provider'`.
 
 ```vue
 <!-- App.vue -->
 <script setup>
+  import { es } from '@aziontech/webkit/locales/es'
+  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
+
+  const catalogs = { 'pt-BR': ptBR, es }
 </script>
 
 <template>
-  <WebkitProvider :locale="user.locale">
+  <WebkitProvider
+    :locale="user.locale"
+    :catalogs="catalogs"
+  >
     <RouterView />
   </WebkitProvider>
 </template>
@@ -80,7 +88,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 
 - ✅ Flat import: `import Button from '@aziontech/webkit/button'`.
 - ✅ PascalCase binding matching the last path segment: `@aziontech/webkit/mini-button` -> `MiniButton`.
-- ✅ One `WebkitProvider` at the app root with the user's locale.
+- ✅ One `WebkitProvider` at the app root with the user's locale and the catalogs of every language the app offers.
 - ✅ Color, spacing, radius, and typography from `@aziontech/theme` tokens (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`).
 - ✅ `import '@aziontech/theme'` and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
@@ -156,4 +164,4 @@ Before you finish UI work in this project:
 - [ ] Root-only usage takes the `-root` path; heavy overlays are lazy-loaded.
 - [ ] No custom component reinvents something webkit already provides (checked via MCP or `catalog.json`).
 - [ ] `@aziontech/theme` and `@aziontech/icons` are imported once at the app entry.
-- [ ] `WebkitProvider` wraps the app once with the user's locale.
+- [ ] `WebkitProvider` wraps the app once with the user's locale, and `catalogs` registers every non-English language the app offers.

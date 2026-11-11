@@ -1,4 +1,5 @@
 <script setup>
+  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import Pagination from '@aziontech/webkit/pagination'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
@@ -10,6 +11,7 @@
 <template>
   <WebkitProvider
     locale="pt-BR"
+    :catalogs="{ 'pt-BR': ptBR }"
     :messages="messages"
   >
     <Pagination :total="48" />

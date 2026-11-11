@@ -1,0 +1,28 @@
+{
+ "purpose": "Guards one region of a page. When a component inside the region throws while it renders, sets up or runs a lifecycle hook, the boundary catches the error, reports it through its `error` event, and puts a recoverable message in the region's place: a danger `Alert` that says the section failed and offers **Try again**, which mounts the region again. The rest of the page keeps working. A `fallback` slot replaces the built-in message when the region needs a different shape (a card-sized `EmptyState`, for example).",
+ "useWhen": [
+  "A dashboard card, a side panel, a tab body or any region whose failure should not take the whole page down.",
+  "A region that renders data you do not control (a third-party widget, a chart fed by a remote response, a plugin).",
+  "Around each route's content inside the app shell, so a failing page leaves the navigation usable (pass the route path as `resetKey`).",
+  "When the app reports render errors to a monitoring service: the `error` event carries the error and where it was thrown."
+ ],
+ "avoidWhen": [
+  "A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `platform/states/form-error` and `skills/webkit-ui-states` describe.",
+  "A whole page that cannot be shown (missing route, no access, server failure) → use the `platform/states/not-found` block.",
+  "A field that failed validation → use `field` with its error message.",
+  "Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`."
+ ],
+ "related": [
+  "alert` — the built-in fallback; also what a failed request shows inside a region that rendered fine.",
+  "empty-state` — a common custom fallback for a card-sized region.",
+  "skeleton` — what the region shows while it loads; the boundary only covers the failed case.",
+  "toast` — reports the outcome of an action; never use it for a region that failed to render."
+ ],
+ "bestPractices": [
+  "Wrap regions, not the whole app. One boundary per card, panel or route body keeps the blast radius small.",
+  "Report every error: listen to `error` and send it to your monitoring service. The boundary stops the error from reaching the app error handler unless `propagate` is set.",
+  "Make Retry mean something. Listen to `retry` and reset the state that broke the region (refetch, clear the bad value) before it mounts again; a retry that renders the same bad data fails again.",
+  "Pass `resetKey` when the region shows different content for different keys (route path, record id), so moving on from a failed record clears the fallback.",
+  "Keep the fallback the size of the region. In a card, use a small `EmptyState`; in a page body, the built-in `Alert` is right."
+ ]
+}

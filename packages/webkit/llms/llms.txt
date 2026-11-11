@@ -33,6 +33,9 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [OnboardingForm (platform/account/onboarding-form)](blocks/platform/account/onboarding-form.md): The `/signup/onboarding` screen, frame included.
 - [PaymentMethodCard (platform/account/payment-method-card)](blocks/platform/account/payment-method-card.md): The Payment method card of the Upgrade to Pro drawer.
 - [Profile (platform/account/profile)](blocks/platform/account/profile.md): The profile page of a signed-in account, and the layout every account settings page follows.
+- [AiActionApproval (platform/ai/ai-action-approval)](blocks/platform/ai/ai-action-approval.md): The moment an assistant needs permission.
+- [AiChat (platform/ai/ai-chat)](blocks/platform/ai/ai-chat.md): A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question.
+- [AiChatDrawer (platform/ai/ai-chat-drawer)](blocks/platform/ai/ai-chat-drawer.md): The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page.
 - [Auth (platform/auth)](blocks/platform/auth.md): The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included.
 - [CreateHub (platform/create/create-hub)](blocks/platform/create/create-hub.md): The Creation Center, where a new project starts.
 - [CreateInDrawer (platform/create/create-in-drawer)](blocks/platform/create/create-in-drawer.md): The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule.
@@ -78,6 +81,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [FirstUse (platform/states/first-use)](blocks/platform/states/first-use.md): What a first-level list shows before the account owns any resource of that kind.
 - [FormError (platform/states/form-error)](blocks/platform/states/form-error.md): The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section.
 - [FormValidation (platform/states/form-validation)](blocks/platform/states/form-validation.md): Every state a submit can land in, on one create form.
+- [NotFound (platform/states/not-found)](blocks/platform/states/not-found.md): The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500).
 - [PageWires (platform/states/page-wires)](blocks/platform/states/page-wires.md): The skeleton wires an app paints while a page is still arriving.
 - [ProjectIntake (platform/states/project-intake)](blocks/platform/states/project-intake.md): The surfaces a project passes through when the user drops it on the page.
 - [CardView (platform/view/card-view)](blocks/platform/view/card-view.md): The first-level index of one resource type, in cards.
@@ -95,6 +99,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Components: Actions
 
 - [Button](components/button.md): Interactive control for user actions.
+- [ButtonGroup](components/button-group.md): A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group.
 - [ButtonHighlight](components/button-highlight.md): Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button).
 - [CopyButton](components/copy-button.md): Icon-only control that copies a string to the clipboard and briefly confirms success.
 - [IconButton](components/icon-button.md): Interactive control for user actions.
@@ -102,11 +107,28 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SplitButton](components/split-button.md): A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array.
 - [ToggleGroup](components/toggle-group.md): ToggleGroup is a connected group of buttons that picks exactly one value out of a small set of related options, with a selection indicator that slides to the active segment.
 
+## Components: Ai
+
+- [ActionConfirmation](components/action-confirmation.md): A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader a…
+- [AiLoading](components/ai-loading.md): The loading state of a generative AI response (Cloudscape generative AI loading states and loading bar, AI Elements Loader): visible loading text — `Generating a response`, `Loading list of workloads` — paired with th…
+- [ArtifactPreview](components/artifact-preview.md): A card for something the assistant generated — a file, a code snippet, a table, a configuration (Cloudscape artifact previews, AI Elements Artifact).
+- [ChatMessage](components/chat-message.md): One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes…
+- [Citation](components/citation.md): An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL…
+- [Conversation](components/conversation.md): The scrolling message log of a generative AI chat.
+- [PromptInput](components/prompt-input.md): The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated,…
+- [Reasoning](components/reasoning.md): Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is…
+- [Sources](components/sources.md): The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line descript…
+- [StreamingResponse](components/streaming-response.md): Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely.
+- [SuggestionGroup](components/suggestion-group.md): A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clar…
+- [ToolCall](components/tool-call.md): One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Runnin…
+
 ## Components: Charts
 
 - [BarList](components/bar-list.md): A ranked list of named values: each row is a tinted bar whose length is the value against the largest one, with the name inside the bar and the formatted value in a right-aligned column.
-- [Chart](components/chart.md): A cartesian chart — lines, areas and bars over one category axis — composed from parts the consumer places by hand.
+- [Chart](components/chart.md): A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand.
 - [DonutChart](components/donut-chart.md): A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per series, the total in the center, a legend beside it.
+- [GaugeChart](components/gauge-chart.md): One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it.
+- [MapChart](components/map-chart.md): Values by place on the dotted world map of `NetworkMap`: countries shaded on a five-step sequential scale (a choropleth on the dot grid) and locations drawn as bubbles whose area follows the value.
 - [SparkChart](components/spark-chart.md): A word-sized chart: one series drawn as an area, a line or bars, with no axes, grid, legend or tooltip, filling the width of its container at a fixed height.
 - [StatTile](components/stat-tile.md): A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom.
 - [Tracker](components/tracker.md): A status strip: one block per period — a day, an hour, a deployment — colored by its severity, with a readout of the period's label on hover or keyboard focus.
@@ -114,6 +136,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Components: Code
 
 - [CodeBlock](components/code-block.md): Read-only code viewer for docs, API examples, and configuration previews.
+- [CodeEditor](components/code-editor.md): An editable code surface with line numbers, diagnostics and a read-only and a diff mode.
 - [LogView](components/log-view.md): Composition-based terminal log viewer for CI/deploy output.
 
 ## Components: Content
@@ -127,6 +150,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CardPricing](components/card-pricing.md): One tier of a pricing table: what it is called, what it costs, what that price includes, and the one action that moves the account onto it.
 - [Currency](components/currency.md): Typesets one monetary amount as three separately-styled parts — the currency symbol, the figure, and a trailing period or unit — so money reads the same everywhere in the product instead of being a formatted string ea…
 - [HelpPanel](components/help-panel.md): The content of a help side region: a topic's title, a few sections of short guidance, and the "Learn more" links that leave for the documentation — or, in tutorial mode, an ordered list of tasks with the reader's prog…
+- [Hotspot](components/hotspot.md): Marks a real control as a step of a tutorial.
 - [Illustration](components/illustration.md): Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package.
 - [Item](components/item.md): Versatile flex row for title, description, media, and actions.
 - [Kbd](components/kbd.md): Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap.
@@ -137,6 +161,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SeverityTag](components/severity-tag.md): SeverityTag labels an item with its place on an ordered severity scale: critical, high, medium, low or info.
 - [ShellMockup](components/shell-mockup.md): A scaled, inert picture of an Azion Console screen, for marketing bands that show the product.
 - [Tag](components/tag.md): Compact status or category label with severity-based color coding.
+- [TutorialPanel](components/tutorial-panel.md): The guide that runs tutorials beside the real product.
 
 ## Components: Data
 
@@ -171,6 +196,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [Alert](components/alert.md): Inline feedback banner that communicates status, alerts, or progress.
 - [EmptyState](components/empty-state.md): Centered placeholder shown when a resource list or section has no content yet.
+- [ErrorBoundary](components/error-boundary.md): Guards one region of a page.
 - [OutcomeMark](components/outcome-mark.md): A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run).
 - [Progress](components/progress.md): Communicates the progress of an ongoing task as a horizontal bar.
 - [Skeleton](components/skeleton.md): A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity.
@@ -179,9 +205,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Components: Inputs
 
+- [AttributeEditor](components/attribute-editor.md): An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`.
 - [Calendar](components/calendar.md): Date-range picker.
 - [Checkbox](components/checkbox.md): Binary selection control.
 - [Chip](components/chip.md): A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view.
+- [Combobox](components/combobox.md): A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed.
 - [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Checkbox`, `RadioButton`, `Switch`, `Slider` — with its…
 - [FileDropzone](components/file-dropzone.md): A FileDropzone is the target a user drags files from the operating system onto.
 - [HelperText](components/helper-text.md): Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`).
@@ -196,14 +224,18 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [PhoneInput](components/phone-input.md): International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly…
 - [RadioButton](components/radio-button.md): Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper).
 - [RadioCards](components/radio-cards.md): Horizontal grid of selectable cards for mutually exclusive choices (plans, roles, feature tiers).
+- [SchemaForm](components/schema-form.md): A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend.
 - [Select](components/select.md): Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list.
 - [Slider](components/slider.md): Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled.
 - [Switch](components/switch.md): Control-only pill toggle `Switch` (36×20 px).
+- [TagEditor](components/tag-editor.md): Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`.
 - [Textarea](components/textarea.md): Collects multi-line free-form text from the user.
 - [ThemeSwitcher](components/theme-switcher.md): A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments.
 
 ## Components: Layout
 
+- [AppLayout](components/app-layout.md): The frame every signed-in product page renders inside.
+- [Board](components/board.md): A configurable dashboard grid: the reader arranges the cards.
 - [Footer](components/footer.md): Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`.
 - [FrameBox](components/frame-box.md): The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content.
 - [GlobalHeader](components/global-header.md): Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants.

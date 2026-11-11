@@ -1,0 +1,25 @@
+{
+ "purpose": "One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes on it (copy, regenerate, thumbs up / down). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `complete` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). User messages sit in a filled bubble; assistant messages are flat, full width, beside the assistant mark; system messages are a muted centered line. Alignment comes from the enclosing `Conversation`.",
+ "useWhen": [
+  "Every turn of a chat with the generative AI assistant: the person's prompt, the assistant's response, a system note (\"Conversation restarted\").",
+  "A response that must show its lifecycle (loading, streaming, failure) and its actions."
+ ],
+ "avoidWhen": [
+  "A generated block outside a conversation (a summary on a page) → `StreamingResponse` alone.",
+  "A notification or toast about the product → `alert` / `toast`.",
+  "A comment thread between people → not this component; it carries AI semantics (feedback thumbs, regenerate)."
+ ],
+ "related": [
+  "conversation` — the log that holds messages, sets alignment and announces finished ones.",
+  "streaming-response` — the safe Markdown renderer for assistant content.",
+  "reasoning`, `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.",
+  "copy-button`, `icon-button` — the actions composed into `ChatMessage.Actions`.",
+  "ai-loading` — what `pending` renders."
+ ],
+ "bestPractices": [
+  "Pass `state` from your request: `pending` until the first token, `streaming` while tokens arrive, then `complete` or `error`.",
+  "Keep actions to five or fewer, always visible (no hover-only): copy, regenerate, feedback.",
+  "Use `grouped` for a second message by the same author so stacked bubbles read as one turn (only the first shows the avatar).",
+  "Never put the feedback thumbs on non-AI content."
+ ]
+}

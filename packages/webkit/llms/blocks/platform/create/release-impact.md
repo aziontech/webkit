@@ -436,6 +436,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
         </header>
 
         <Alert
+          key="alert-1"
           v-if="outcome === 'failed'"
           severity="danger"
           label="The release wasn't deployed. edge-policy was refused: a rule points at an integration that does not exist. Nothing changed in traffic."
@@ -459,6 +460,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           </template>
         </Alert>
         <Alert
+          key="alert-2"
           v-else-if="outcome === 'succeeded'"
           severity="success"
           :label="`Release deployed. ${releaseLine} serve ${plural(projects.length, 'project', 'projects')} now.`"
@@ -520,6 +522,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                 </span>
                 <span class="flex shrink-0 items-center gap-(--spacing-xs)">
                   <Tag
+                    key="tag-1"
                     v-if="card.readonly"
                     label="Read-only"
                     severity="secondary"
@@ -527,6 +530,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                     size="small"
                   />
                   <Tag
+                    key="tag-2"
                     v-else-if="card.required"
                     label="Required"
                     severity="warning"

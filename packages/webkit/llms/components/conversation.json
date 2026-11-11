@@ -1,0 +1,75 @@
+{
+ "name": "conversation",
+ "binding": "Conversation",
+ "import": "@aziontech/webkit/conversation",
+ "treeShakeableImport": "@aziontech/webkit/conversation",
+ "category": "ai",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a \"Scroll to the latest message\" button brings them back. It is a `role=\"log\"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. It also sets where messages sit for the whole thread (`alignment`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).",
+ "setup": null,
+ "useWhen": [
+  "Any surface where a person and the generative AI assistant exchange messages: the assistant page, the assistant drawer, an in-flow helper.",
+  "A transcript that grows while the reader watches it (streaming responses, tool calls appearing)."
+ ],
+ "avoidWhen": [
+  "A one-shot generated block on a page (a summary card, an explanation beside a chart) → render `StreamingResponse` in place.",
+  "A log of system events with timestamps and filtering → use `log-view`.",
+  "A list of past conversations → a `table` or `item` list; this is one thread."
+ ],
+ "related": [
+  "chat-message` — the item the log holds; announces itself through this component.",
+  "prompt-input` — the composer pinned under the log (outside it; only the log scrolls).",
+  "suggestion-group` — follow-up questions after the last response, or support prompts in the empty state.",
+  "empty-state` — what the panel shows before the first message (the block renders it instead of the log).",
+  "log-view` — machine logs, not conversations."
+ ],
+ "bestPractices": [
+  "Pin the prompt input under the conversation; only the log scrolls.",
+  "Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.",
+  "Use `alignment=\"start\"` in drawers and side panels, `split` on a full page.",
+  "Keep one conversation per surface; a second thread is a second page or a history list."
+ ],
+ "props": [
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the message log. Empty uses the locale catalog (`Conversation`)."
+  },
+  {
+   "name": "alignment",
+   "type": "'split' | 'start'",
+   "default": "'split'",
+   "required": "false",
+   "doc": "split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card)."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ChatMessage from '@aziontech/webkit/chat-message'\n  import Conversation from '@aziontech/webkit/conversation'\n  import StreamingResponse from '@aziontech/webkit/streaming-response'\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n\n  const followUps = [\n    { id: 'wildcard', label: 'How do I purge a whole folder?' },\n    { id: 'ttl', label: 'What TTL should my images use?' }\n  ]\n</script>\n\n<template>\n  <div\n    class=\"flex h-[28rem] w-full max-w-(--container-3xl) flex-col rounded-(--shape-card) border border-(--border-default)\"\n  >\n    <Conversation>\n      <ChatMessage\n        from=\"user\"\n        timestamp=\"10:41\"\n      >\n        How do I purge the cache of one URL?\n      </ChatMessage>\n      <ChatMessage timestamp=\"10:41\">\n        <StreamingResponse\n          content=\"Open **Real-Time Purge**, choose *URL* as the purge type and paste the address.\"\n        />\n      </ChatMessage>\n      <ChatMessage\n        from=\"user\"\n        timestamp=\"10:43\"\n      >\n        Can I do it from the CLI?\n      </ChatMessage>\n      <ChatMessage timestamp=\"10:43\">\n        <StreamingResponse\n          :content=\"'Yes:\\n\\n```bash\\nazion purge urls --urls https://www.example.com/styles.css\\n```'\"\n        />\n      </ChatMessage>\n      <SuggestionGroup\n        :items=\"followUps\"\n        aria-label=\"Follow-up questions\"\n      />\n    </Conversation>\n  </div>\n</template>"
+  },
+  {
+   "name": "StartAlignment",
+   "sfc": "<script setup>\n  import ChatMessage from '@aziontech/webkit/chat-message'\n  import Conversation from '@aziontech/webkit/conversation'\n  import StreamingResponse from '@aziontech/webkit/streaming-response'\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n\n  const followUps = [\n    { id: 'wildcard', label: 'How do I purge a whole folder?' },\n    { id: 'ttl', label: 'What TTL should my images use?' }\n  ]\n</script>\n\n<template>\n  <div\n    class=\"flex h-[28rem] w-full max-w-(--container-xs) flex-col rounded-(--shape-card) border border-(--border-default)\"\n  >\n    <Conversation alignment=\"start\">\n      <ChatMessage\n        from=\"user\"\n        timestamp=\"10:41\"\n      >\n        How do I purge the cache of one URL?\n      </ChatMessage>\n      <ChatMessage timestamp=\"10:41\">\n        <StreamingResponse\n          content=\"Open **Real-Time Purge**, choose *URL* as the purge type and paste the address.\"\n        />\n      </ChatMessage>\n      <ChatMessage\n        from=\"user\"\n        timestamp=\"10:43\"\n      >\n        Can I do it from the CLI?\n      </ChatMessage>\n      <ChatMessage timestamp=\"10:43\">\n        <StreamingResponse\n          :content=\"'Yes:\\n\\n```bash\\nazion purge urls --urls https://www.example.com/styles.css\\n```'\"\n        />\n      </ChatMessage>\n      <SuggestionGroup\n        :items=\"followUps\"\n        aria-label=\"Follow-up questions\"\n      />\n    </Conversation>\n  </div>\n</template>"
+  },
+  {
+   "name": "LongThread",
+   "sfc": "<script setup>\n  import ChatMessage from '@aziontech/webkit/chat-message'\n  import Conversation from '@aziontech/webkit/conversation'\n\n  const questions = [\n    'Which domains does storefront answer on?',\n    'Is the certificate of shop.example.com valid?',\n    'When does it expire?',\n    'Can it renew on its own?',\n    'What is the cache hit ratio today?',\n    'Which paths miss the cache most?'\n  ]\n  const answers = [\n    'storefront answers on www.example.com and shop.example.com.',\n    'Yes, it is a valid Let’s Encrypt certificate.',\n    'On 14 January, in 64 days.',\n    'Yes. Automatic renewal is on for both domains.',\n    '91% over the last 24 hours.',\n    'The search pages, because every query is a new cache key.'\n  ]\n</script>\n\n<template>\n  <div\n    class=\"flex h-[24rem] w-full max-w-(--container-3xl) flex-col rounded-(--shape-card) border border-(--border-default)\"\n  >\n    <Conversation>\n      <template\n        v-for=\"(question, index) in questions\"\n        :key=\"question\"\n      >\n        <ChatMessage from=\"user\">{{ question }}</ChatMessage>\n        <ChatMessage>{{ answers[index] }}</ChatMessage>\n      </template>\n    </Conversation>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/conversation.md"
+}

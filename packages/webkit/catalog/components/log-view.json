@@ -1,0 +1,25 @@
+{
+ "purpose": "Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **LogViewHeader**, **LogViewContent**, and **LogViewFooter** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer.",
+ "useWhen": [
+  "Showing build, deploy or CI output as timestamped lines the reader can search, filter to warnings, and copy.",
+  "A log shell whose toolbar and footer vary by screen — compose `LogViewHeader`, `LogViewContent` and `LogViewFooter` in the order you need, or drop the ones you don't.",
+  "A log that is still loading from the server — set `loading` to show a spinner and `loading-label` in place of the body."
+ ],
+ "avoidWhen": [
+  "Static, read-only code or configuration snippets → use `code-block`.",
+  "An animated terminal session on a marketing page → use `cli-terminal`.",
+  "Rows of structured records with columns, sorting or paging → use `table`."
+ ],
+ "related": [
+  "code-block` — highlighted source code with a copy action, not a stream of typed log lines.",
+  "cli-terminal` — marketing band that plays a scripted terminal session.",
+  "deploy-success` — the post-deploy screen that embeds `log-view` for the build log."
+ ],
+ "bestPractices": [
+  "Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`, `warning`); the type drives the line's rendering and the warnings filter.",
+  "Bind `v-model:search` and `v-model:warnings-only` when the app needs the filter state; otherwise leave them unbound and the header manages them.",
+  "Set `:bordered=\"false\"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).",
+  "The copy control hides while `disabled` or `loading`, or when there is nothing to copy; listen to `@copy` for the copied text instead of reading the clipboard.",
+  "Use the header's `left` / `right` / `search` slots and the footer's default slot to add actions, rather than rebuilding the toolbar."
+ ]
+}

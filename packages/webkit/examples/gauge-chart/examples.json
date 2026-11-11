@@ -1,0 +1,21 @@
+{
+  "component": "gauge-chart",
+  "title": "Components/Primitives/Chart/GaugeChart",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One reading against its range. The bands name what the value means: the arc takes the color of the band it falls in and the name is read after the value.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Dials 160, 224 and 288 pixels wide, for a KPI row, a card and a detail page.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "States",
+      "summary": "Loading holds the dial footprint; empty says why there is no reading; error replaces the dial with a danger Alert.",
+      "file": "states.vue"
+    }
+  ]
+}

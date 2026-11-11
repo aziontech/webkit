@@ -1,0 +1,26 @@
+{
+ "purpose": "A configurable dashboard grid: the reader arranges the cards. `Board` owns the layout, an array of `{ id, span, height? }` bound with `v-model:layout`, and lays one `Board.Item` per entry on a column grid that collapses to one column in a narrow container. While `editing`, the `ChartCard` inside each item shows its drag handle and resize corner, and those handles report to the board instead of to the page: drag a card onto another or press the arrow keys on its handle to reorder, drag its corner or press the arrow keys on it to resize. Every move and resize is clamped, written back to the layout and announced in a polite live region. Taken from Cloudscape's board and board item, on top of the existing `ChartCard` handles.",
+ "useWhen": [
+  "A dashboard whose reader chooses the order and the size of its cards, and the product keeps that layout as a preference.",
+  "A grid of cards that must be reorderable from the keyboard and announced to screen readers, not only by mouse."
+ ],
+ "avoidWhen": [
+  "A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `platform/dashboard/analytics-dashboard` block).",
+  "Two or three panes whose boundary the reader drags → use `resizable`.",
+  "Reordering the rows of a list or a table → use the table's reorderable rows or `pick-list`.",
+  "A grid of resources the reader selects, not arranges → use `cards`."
+ ],
+ "related": [
+  "chart-card` — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.",
+  "resizable` — split panes with a draggable divider, not a grid of cards.",
+  "cards` — a selectable collection of item cards with a fixed layout.",
+  "page-header` — the title over the board, with the Edit layout and Reset layout actions beside it."
+ ],
+ "bestPractices": [
+  "Keep the layout in the page and persist it wherever the product stores preferences; the board never stores it.",
+  "Offer an explicit Edit layout toggle (`aria-pressed`) and turn `editing` on with it, so handles do not crowd the read-only view.",
+  "Give every `Board.Item` a `label` (the card's title): it is the name the live region announces.",
+  "Offer Reset layout once the layout differs from the default.",
+  "Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable."
+ ]
+}

@@ -170,8 +170,15 @@ function link(from, to) {
 function loadCatalog() {
   const catalog = JSON.parse(readFileSync(CATALOG_PATH, 'utf-8'))
   const part = (file) => JSON.parse(readFileSync(resolve(PKG_ROOT, file), 'utf-8'))
+  const imports = Object.fromEntries(
+    Object.entries(catalog.imports).map(([name, e]) => {
+      const { docsFile, ...meta } = e
+      return [name, docsFile ? { ...meta, ...part(docsFile) } : meta]
+    })
+  )
   return {
     ...catalog,
+    imports,
     pattern(id) {
       const { file, ...meta } = catalog.patterns[id]
       return file ? { ...meta, ...part(file) } : meta
@@ -535,7 +542,7 @@ function foundations(catalog) {
       summary:
         'Built-in strings in en, pt-BR and es, the provider, useLocale and locale-aware formatting.',
       body: [
-        'WebKit ships every built-in string in three catalogs: `en` (default), `pt-BR` and `es`. Wrap the app in `WebkitProvider` with a `locale` and every component follows it; `useLocale()` from `@aziontech/webkit/use-locale` gives your own code the same `t`, `dir` and `Intl` formatters.',
+        'WebKit ships every built-in string in three catalogs: `en` (built into the provider), `pt-BR` and `es` (opt-in entries `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es`). Wrap the app in `WebkitProvider` with a `locale` and the catalogs it offers (`:catalogs="{ \'pt-BR\': ptBR, es }"`) and every component follows it; `useLocale()` from `@aziontech/webkit/use-locale` gives your own code the same `t`, `dir` and `Intl` formatters.',
         section(usage, /^## App-level setup/),
         rule('webkit-strings')
       ]

@@ -1,0 +1,18 @@
+{
+ "purpose": "The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the \"On this page\" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `section-container` instead of sitting in the page column. The prose arrives as markdown: blank-line separated blocks render as `##` / `###` headings (each with an id slugged from its text, feeding the outline), `-` lists and paragraphs. It is a page section — the site places it from a `{ _id: 'article-body', props }` entry and binds `props` straight onto it — and it composes `section-container`, `section-module`, `frame-box`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button` and `doc-on-this-page`; copying to the clipboard is local behaviour.",
+ "useWhen": [
+  "To open every blog post and every success story page."
+ ],
+ "avoidWhen": [
+  "For a list of articles → use `article-index-blog`.",
+  "For a closing row of related articles → use `article-cards`."
+ ],
+ "related": [
+  "doc-prose` — the reading-measure typography the body renders in.",
+  "doc-on-this-page` — the outline rail fed by the body's headings."
+ ],
+ "bestPractices": [
+  "Write the body as plain blocks — headings, paragraphs and `-` lists separated by blank lines; inline markdown is rendered as text.",
+  "Mark the last breadcrumb entry `current`."
+ ]
+}
