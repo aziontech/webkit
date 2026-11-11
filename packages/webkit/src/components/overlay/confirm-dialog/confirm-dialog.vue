@@ -87,6 +87,7 @@
   }
 
   const cancel = () => {
+    if (props.loading) return
     emit('cancel')
     close()
   }
@@ -102,6 +103,7 @@
     v-model:open="open"
     :data-testid="testId"
     :size="size"
+    :dismissible="!loading"
   >
     <DialogTrigger v-if="$slots['trigger']">
       <slot name="trigger" />
@@ -120,7 +122,7 @@
         <PanelFooter>
           <div
             :data-testid="`${testId}__actions`"
-            class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
+            class="flex w-full flex-col-reverse gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
           >
             <slot
               name="actions"
@@ -131,6 +133,7 @@
                 :label="cancelLabel || t('confirmDialog.cancel')"
                 kind="transparent"
                 size="medium"
+                :disabled="loading"
                 @click="cancel"
               />
               <Button

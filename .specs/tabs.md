@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 226b05ad47e26b9761136e987583f7697b2d4b0126b7beb5d6ca54f326bc0239
+checksum: 2fe04f9687b08b2b68ad4dd194cddc7af709721b252d13a1c2158a8b7ca027d2
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -116,11 +116,11 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 
 ## Motion & Animations
 
-| Trigger                           | Animation / Transition                                                                                                   | Token                                                                                       | Reduced-motion fallback         |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- | ------------------------------- |
-| scroll edge fade appears / leaves | `animate-fade-in` / `animate-fade-out`                                                                                   | semantic                                                                                    | `motion-reduce:animate-none`    |
-| state change                      | `transition-colors duration-150 ease-out`                                                                                | inline                                                                                      | `motion-reduce:transition-none` |
-| panel change                      | the incoming panel slides in from the side being navigated toward (`translate-x-(--spacing-md)` / negative) while fading | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog | `motion-reduce:transition-none` |
+| Trigger                           | Animation / Transition                                                                                                                                                                                                                                   | Token                                                                                       | Reduced-motion fallback         |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------- |
+| scroll edge fade appears / leaves | `animate-fade-in` / `animate-fade-out`                                                                                                                                                                                                                   | semantic                                                                                    | `motion-reduce:animate-none`    |
+| state change                      | `transition-colors duration-150 ease-out`                                                                                                                                                                                                                | inline                                                                                      | `motion-reduce:transition-none` |
+| panel change                      | the incoming panel slides in from the side being navigated toward (`translate-x-(--spacing-md)` / negative) while fading; the panel active at first render is visible at once (also on the server, without JS), so the motion runs only on later changes | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog | `motion-reduce:transition-none` |
 
 ## Tokens
 

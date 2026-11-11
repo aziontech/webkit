@@ -21,6 +21,8 @@
   defineSlots<{
     /** The status sentence on the left, such as You have unsaved changes. */
     default(): unknown
+    /** Replaces the leading region (icon and sentence) with custom content, such as a status. */
+    leading(): unknown
     /** Discard or Cancel, then Save, on the right. */
     actions(): unknown
   }>()
@@ -45,17 +47,19 @@
         class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) py-(--spacing-md) @max-md/save-bar:flex-col @max-md/save-bar:items-stretch"
       >
         <div
-          v-if="$slots['default']"
+          v-if="$slots['leading'] || $slots['default']"
           :data-testid="`${testId}__message`"
           class="me-auto flex min-w-0 items-start gap-(--spacing-xs) @max-md/save-bar:me-0"
         >
-          <i
-            class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
-            aria-hidden="true"
-          />
-          <p class="min-w-0 text-body-sm text-(--text-default)">
-            <slot />
-          </p>
+          <slot name="leading">
+            <i
+              class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
+              aria-hidden="true"
+            />
+            <p class="min-w-0 text-body-sm text-(--text-default)">
+              <slot />
+            </p>
+          </slot>
         </div>
         <div
           :data-testid="`${testId}__actions`"
@@ -69,17 +73,19 @@
         class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) pt-(--spacing-sm) pb-[max(var(--spacing-sm),env(safe-area-inset-bottom))] @xl/save-bar:h-full @xl/save-bar:flex-row @xl/save-bar:flex-wrap @xl/save-bar:items-center @xl/save-bar:justify-between @xl/save-bar:gap-x-(--spacing-xl) @xl/save-bar:py-0"
       >
         <div
-          v-if="$slots['default']"
+          v-if="$slots['leading'] || $slots['default']"
           :data-testid="`${testId}__message`"
           class="flex min-w-0 items-start gap-(--spacing-xs)"
         >
-          <i
-            class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
-            aria-hidden="true"
-          />
-          <p class="min-w-0 text-body-sm text-(--text-default)">
-            <slot />
-          </p>
+          <slot name="leading">
+            <i
+              class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
+              aria-hidden="true"
+            />
+            <p class="min-w-0 text-body-sm text-(--text-default)">
+              <slot />
+            </p>
+          </slot>
         </div>
         <div
           :data-testid="`${testId}__actions`"

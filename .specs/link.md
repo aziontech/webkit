@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: d16621644c5278c1edf9d209648ff86794627f9e88001b0b0a2857f21d56eae6
+checksum: 9476a7941a451016592d891d092a25a8a6d240aa138b7e97e6943a5dfb54f705
 created: 2026-05-22
 last_updated: 2026-11-11
 figma:
@@ -37,7 +37,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Best practices
 
-- Always set `href` and a `label` that names the destination; the defaults (`'#'`, `'Learn More'`) are placeholders.
+- Always set `href` and a `label` that names the destination; the defaults (`'#'`, `'Learn more'`) are placeholders.
 - Keep the default `pi pi-external-link` icon for off-site targets with `target="_blank"` (`rel="noopener noreferrer"` is added for you); turn `showIcon` off for in-app destinations.
 - Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
 - `disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead.
@@ -68,7 +68,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 | Prop       | Type                             | Default                 | Required | JSDoc                                                                                             |
 | ---------- | -------------------------------- | ----------------------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `label`    | `string`                         | `''`                    | false    | Visible label rendered inside the link. Empty uses the locale catalog (`Learn More`).             |
+| `label`    | `string`                         | `''`                    | false    | Visible label rendered inside the link. Empty uses the locale catalog (`Learn more`).             |
 | `size`     | `'small' \| 'medium' \| 'large'` | `'large'`               | false    | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
 | `disabled` | `boolean`                        | `false`                 | false    | Disables interaction and applies disabled tokens.                                                 |
 | `showIcon` | `boolean`                        | `true`                  | false    | When true, renders the trailing icon.                                                             |

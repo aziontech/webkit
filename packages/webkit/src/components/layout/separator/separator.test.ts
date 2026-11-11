@@ -58,6 +58,11 @@ describe('Separator', () => {
     expect(label).toHaveTextContent('OR')
   })
 
+  it('names a labelled separator by its label for assistive technology', () => {
+    const { getByRole } = render(Separator, { props: { label: 'Or' } })
+    expect(getByRole('separator', { name: 'Or' })).toBeTruthy()
+  })
+
   it('renders default slot content in the label span, overriding the label prop', () => {
     const { getByTestId } = render(Separator, {
       props: { label: 'ignored' },

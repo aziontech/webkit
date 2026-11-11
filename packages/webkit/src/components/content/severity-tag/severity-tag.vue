@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
+
   defineOptions({ name: 'SeverityTag', inheritAttrs: false })
 
   /** Ordered severity level, from most to least severe. */
@@ -12,7 +15,7 @@
   interface Props {
     /** Severity level; sets how many glyph bars fill, their colour and the default label. */
     severity?: SeverityTagSeverity
-    /** Text of the tag; empty falls back to the level name in sentence case. */
+    /** Text of the tag. Empty uses the locale catalog (`Critical`, `High`, `Medium`, `Low`, `Info`). */
     label?: string
     /** Size token; `medium` is 24px tall, `small` is 20px. */
     size?: SeverityTagSize
@@ -35,9 +38,9 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'content-severity-tag'
   )
 
-  const displayLabel = computed<string>(
-    () => props.label || props.severity.charAt(0).toUpperCase() + props.severity.slice(1)
-  )
+  const { t } = useTranslate({ severityTag: en.severityTag })
+
+  const displayLabel = computed<string>(() => props.label || t(`severityTag.${props.severity}`))
 </script>
 
 <template>

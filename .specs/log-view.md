@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 48c2fc392c2cfd58af5d2d2a39d96ae3495d6d846f5a13ab8923d2b7737913ea
+checksum: 3fa016dbd9219273c0b6d59ab97ad3fa21791d30d6b1291bc11bdbd46f751cbb
 created: 2026-05-26
 last_updated: 2026-11-11
 ---
@@ -88,11 +88,11 @@ LogView ships flat, individually importable sub-components (each from its own `@
 | ------------------- | --------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `lines`             | `LogViewLine[]` | `[]`    | false    | Log entries; filtered in LogViewContent by search and warnings-only.                                                                                                                                                                                                |
 | `bordered`          | `boolean`       | `true`  | false    | Draw the outer card border and corner radius around the log shell. On by default; set `:bordered="false"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected. |
-| `searchPlaceholder` | `string`        | `''`    | false    | Placeholder for the default header search field. Empty uses the locale catalog (`Find in Logs`).                                                                                                                                                                    |
+| `searchPlaceholder` | `string`        | `''`    | false    | Placeholder for the default header search field. Empty uses the locale catalog (`Find in logs`).                                                                                                                                                                    |
 | `copyable`          | `boolean`       | `true`  | false    | Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent).                                                                                                                                                         |
 | `disabled`          | `boolean`       | `false` | false    | Disables toolbar controls in LogViewHeader.                                                                                                                                                                                                                         |
 | `loading`           | `boolean`       | `false` | false    | Replaces the LogViewContent log body with a centered spinner and label.                                                                                                                                                                                             |
-| `loadingLabel`      | `string`        | `''`    | false    | Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading...`).                                                                                                                                                                      |
+| `loadingLabel`      | `string`        | `''`    | false    | Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`).                                                                                                                                                                        |
 
 ## v-model
 
@@ -178,7 +178,7 @@ the height of a single row the moment the root stopped stretching.
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus on the interactive controls in the header/footer.
-- LogViewContent uses `role="log"` with `aria-live="polite"`.
+- LogViewContent carries a visually hidden `role="log"` region (`aria-live="polite"`) that holds only the lines appended to `lines` since the last update (filtered by the current search and warnings-only view). The scrolling log body is not a live region, so the lines already present at mount and the chunks that mount on scroll are never announced; replacing `lines` with a different log clears the region.
 - The warning filter exposes `aria-pressed`; the copy control (a CopyButton in LogViewContent) uses `aria-label="Copy logs"` at rest, switching to `"Copied logs"` after a successful copy.
 - The loading state uses `role="status"` with `aria-live="polite"`; the spinner is `aria-hidden` (from the Spinner component) and the `loadingLabel` text conveys status.
 - `motion-reduce:transition-none` on every motion-bearing class.

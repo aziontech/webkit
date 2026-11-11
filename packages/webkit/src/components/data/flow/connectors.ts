@@ -8,7 +8,7 @@ export interface FlowPath {
   faded: boolean
 }
 
-/** An attachment point on the left (incoming) or right (outgoing) edge of a node. */
+/** An attachment point on the inline-start (incoming) or inline-end (outgoing) edge of a node. */
 interface Endpoint {
   x: number
   y: number
@@ -24,15 +24,22 @@ interface Origin {
 
 /** A direct child of the flow container: a single node or a group of parallel branches. */
 interface FlowChild {
-  /** Points where outgoing connectors originate (right edge / `start` anchors). */
+  /** Points where outgoing connectors originate (inline-end edge / `start` anchors). */
   exits: Endpoint[]
-  /** Points where incoming connectors terminate (left edge / `end` anchors). */
+  /** Points where incoming connectors terminate (inline-start edge / `end` anchors). */
   entries: Endpoint[]
 }
 
 const CORNER = 10
 
-const elbow = (fromX: number, fromY: number, toX: number, toY: number, busX: number): string => {
+const elbow = (
+  fromX: number,
+  fromY: number,
+  toX: number,
+  toY: number,
+  busX: number,
+  sign: 1 | -1
+): string => {
   if (Math.abs(fromY - toY) < 0.5) {
     return `M${fromX},${fromY} L${toX},${toY}`
   }
@@ -45,10 +52,10 @@ const elbow = (fromX: number, fromY: number, toX: number, toY: number, busX: num
 
   return [
     `M${fromX},${fromY}`,
-    `H${busX - radius}`,
+    `H${busX - sign * radius}`,
     `Q${busX},${fromY} ${busX},${fromY + dir * radius}`,
     `V${toY - dir * radius}`,
-    `Q${busX},${toY} ${busX + radius},${toY}`,
+    `Q${busX},${toY} ${busX + sign * radius},${toY}`,
     `H${toX}`
   ].join(' ')
 }
@@ -64,7 +71,8 @@ const measureRect = (el: HTMLElement, base: Origin) => {
 
 const readNode = (
   nodeEl: HTMLElement,
-  base: Origin
+  base: Origin,
+  rtl: boolean
 ): { entry: Endpoint; exit: Endpoint; terminal: boolean } => {
   const disabled = nodeEl.dataset['flowDisabled'] === 'true'
   const terminal = nodeEl.dataset['flowTerminal'] === 'true'
@@ -78,17 +86,17 @@ const readNode = (
   const startRect = measureRect(startEl, base)
 
   return {
-    entry: { x: endRect.left, y: endRect.cy, disabled },
-    exit: { x: startRect.right, y: startRect.cy, disabled },
+    entry: { x: rtl ? endRect.right : endRect.left, y: endRect.cy, disabled },
+    exit: { x: rtl ? startRect.left : startRect.right, y: startRect.cy, disabled },
     terminal
   }
 }
 
-const readChild = (el: HTMLElement, base: Origin): FlowChild => {
+const readChild = (el: HTMLElement, base: Origin, rtl: boolean): FlowChild => {
   if (el.dataset['flowKind'] === 'parallel') {
     const branches = Array.from(
       el.querySelectorAll<HTMLElement>(':scope > [data-flow-kind="node"]')
-    ).map((branch) => readNode(branch, base))
+    ).map((branch) => readNode(branch, base, rtl))
 
     return {
       exits: branches.filter((b) => !b.terminal).map((b) => b.exit),
@@ -96,7 +104,7 @@ const readChild = (el: HTMLElement, base: Origin): FlowChild => {
     }
   }
 
-  const { entry, exit, terminal } = readNode(el, base)
+  const { entry, exit, terminal } = readNode(el, base, rtl)
   return { exits: terminal ? [] : [exit], entries: [entry] }
 }
 
@@ -136,7 +144,9 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
       el.toggleAttribute('data-flow-trailing', index === elements.length - 1)
     })
 
-    const children = elements.map((el) => readChild(el, base))
+    const rtl = getComputedStyle(container).direction === 'rtl'
+    const sign = rtl ? -1 : 1
+    const children = elements.map((el) => readChild(el, base, rtl))
 
     const out: FlowPath[] = []
 
@@ -147,13 +157,13 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
         continue
       }
 
-      const fromRight = Math.max(...from.exits.map((e) => e.x))
-      const toLeft = Math.min(...to.entries.map((e) => e.x))
-      const busX = fromRight + (toLeft - fromRight) / 2
+      const fromEdge = sign * Math.max(...from.exits.map((e) => sign * e.x))
+      const toEdge = sign * Math.min(...to.entries.map((e) => sign * e.x))
+      const busX = fromEdge + (toEdge - fromEdge) / 2
 
       for (const [exit, entry] of pairEndpoints(from.exits, to.entries)) {
         out.push({
-          d: elbow(exit.x, exit.y, entry.x, entry.y, busX),
+          d: elbow(exit.x, exit.y, entry.x, entry.y, busX, sign),
           faded: exit.disabled || entry.disabled
         })
       }

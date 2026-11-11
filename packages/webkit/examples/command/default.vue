@@ -54,7 +54,7 @@
         <CommandItem
           value="search"
           shortcut="meta+k"
-          >Search Everything</CommandItem
+          >Search everything</CommandItem
         >
         <CommandItem
           value="new-app-cmd"

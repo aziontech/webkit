@@ -153,3 +153,11 @@ describe('DocOnThisPage', () => {
     })
   })
 })
+
+describe('DocOnThisPage right-to-left', () => {
+  it('mirrors the rail so its depth bends follow the inline direction', () => {
+    const { getByTestId } = render(DocOnThisPage, { props: { items: ITEMS, activeId: 'deploy' } })
+    const rail = getByTestId('documentation-doc-on-this-page__marker').closest('svg')
+    expect(rail?.getAttribute('class')).toContain('rtl:-scale-x-100')
+  })
+})

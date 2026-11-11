@@ -5,8 +5,15 @@ import Default from '../../../../examples/password-requirements/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import PasswordRequirements, { DEFAULT_PASSWORD_REQUIREMENTS } from './index'
 
+const labelOf = (chip: HTMLElement) =>
+  Array.from(chip.childNodes)
+    .filter((node) => node.nodeType === Node.TEXT_NODE)
+    .map((node) => node.textContent)
+    .join('')
+    .trim()
+
 const validated = (chips: HTMLElement[]) =>
-  chips.map((chip) => [chip.textContent?.trim(), chip.hasAttribute('data-validated')])
+  chips.map((chip) => [labelOf(chip), chip.hasAttribute('data-validated')])
 
 describe('PasswordRequirements', () => {
   it('renders the caption and one chip per built-in rule', () => {
@@ -33,6 +40,17 @@ describe('PasswordRequirements', () => {
       ['Number', true],
       ['Lowercase letter', true]
     ])
+  })
+
+  it('states each rule as met or not met in text, not only in colour', () => {
+    const { getAllByTestId } = render(PasswordRequirements, { props: { value: 'abcdefgh1' } })
+    const states = getAllByTestId('input-password-requirements__chip-state').map((el) =>
+      el.textContent?.trim()
+    )
+    expect(states).toEqual([', met', ', not met', ', not met', ', met', ', met'])
+    expect(getAllByTestId('input-password-requirements__chip')[1].textContent).toContain(
+      'Uppercase letter, not met'
+    )
   })
 
   it('accepts a custom rule set with predicates and global regexes', () => {

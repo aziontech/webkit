@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: ae2e65cf6f27408aa33f0aef0ccd7a988b5539616e70600c92ffbc6ecc2e8b07
+checksum: 3430b14402314e49e78ed0ecf6a85f0424e2f18d63ea3fa28f9ebadd3dd8b6fe
 created: 2026-06-25
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Flow — Component Spec
@@ -50,21 +50,25 @@ Composition mode — one import of the root; every part is reached via dot-notat
 
 ```vue
 <script setup>
-import Flow from '@aziontech/webkit/flow'
+  import Flow from '@aziontech/webkit/flow'
 </script>
 
 <template>
   <Flow align="center">
     <Flow.Node>Load balancer</Flow.Node>
     <Flow.Node unstyled>
-      <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-overlay)">
+      <div
+        class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-overlay)"
+      >
         <Flow.Anchor type="end">
           <div class="flex h-10 items-center px-(--spacing-sm) text-label-md text-(--text-muted)">
             my-worker
           </div>
         </Flow.Anchor>
         <Flow.Anchor type="start">
-          <div class="m-(--spacing-xxs) mt-0 rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-label-md text-(--text-default)">
+          <div
+            class="m-(--spacing-xxs) mt-0 rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-label-md text-(--text-default)"
+          >
             Bindings
           </div>
         </Flow.Anchor>
@@ -110,9 +114,9 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `align` | `'start' \| 'center'` | `'start'` | false | Vertical alignment of nodes within the diagram. |
+| Prop    | Type                  | Default   | Required | JSDoc                                           |
+| ------- | --------------------- | --------- | -------- | ----------------------------------------------- |
+| `align` | `'start' \| 'center'` | `'start'` | false    | Vertical alignment of nodes within the diagram. |
 
 ## Events
 
@@ -120,9 +124,9 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Diagram content: `flow-node` and `flow-parallel`, in flow order. |
+| Slot      | Scope | Notes                                                            |
+| --------- | ----- | ---------------------------------------------------------------- |
+| `default` | —     | Diagram content: `flow-node` and `flow-parallel`, in flow order. |
 
 ## States
 
@@ -140,38 +144,38 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger                                              | Animation / Transition                                                                                                                                                                                | Token                         | Reduced-motion fallback      |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ---------------------------- |
 | connector at rest (always, on every drawn connector) | `stroke-dasharray="4 4"` + `animate-flow-dash` — marching dashes along the stroke (`stroke-dashoffset` 24 → 0, 700ms linear infinite), so a connection reads as a live link rather than a static rule | `animate-flow-dash` (catalog) | `motion-reduce:animate-none` |
-| connector whose endpoint node is `disabled` | motion suppressed via `data-[faded]:animate-none` — the dashes stay, the flow stops, because a disabled step is not carrying anything | — | already static |
+| connector whose endpoint node is `disabled`          | motion suppressed via `data-[faded]:animate-none` — the dashes stay, the flow stops, because a disabled step is not carrying anything                                                                 | —                             | already static               |
 
 > The dash cycle (8) divides the keyframe's travel (24), so the loop repeats seamlessly. A `stroke-dasharray` whose cycle does not divide 24 would visibly jump on each repeat. `linear` is deliberate: an endlessly looping animation must not accelerate, or the seam between repeats becomes visible (same reasoning as `spin` / `shimmer` in the catalog).
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (node label) | `.text-label-md` |
-| node surface | `var(--bg-surface-raised)` |
-| node border | `var(--border-default)` |
-| node elevation | `var(--shadow-xs)` |
-| node text | `var(--text-default)` |
-| connector stroke | `var(--accent)` |
-| connector port fill | `var(--accent)` |
-| connector port border | `var(--border-muted)` |
-| connector port shape | `var(--radius-sm)` |
-| border width | `var(--border-width-default)` |
-| disabled text | `var(--text-disabled)` |
-| spacing | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xl)` |
-| shape | `var(--shape-button)` |
-| ring | `var(--ring-color)` |
+| Region                  | Token (DESIGN.md)                                             |
+| ----------------------- | ------------------------------------------------------------- |
+| typography (node label) | `.text-label-md`                                              |
+| node surface            | `var(--bg-surface-raised)`                                    |
+| node border             | `var(--border-default)`                                       |
+| node elevation          | `var(--shadow-xs)`                                            |
+| node text               | `var(--text-default)`                                         |
+| connector stroke        | `var(--accent)`                                               |
+| connector port fill     | `var(--accent)`                                               |
+| connector port border   | `var(--border-muted)`                                         |
+| connector port shape    | `var(--radius-sm)`                                            |
+| border width            | `var(--border-width-default)`                                 |
+| disabled text           | `var(--text-disabled)`                                        |
+| spacing                 | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xl)` |
+| shape                   | `var(--shape-button)`                                         |
+| ring                    | `var(--ring-color)`                                           |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `flow-dash` animation | added to `primitives/animations/{keyframes,animate}.js` (`--animate-flow-dash`) | done (this change) — the catalog had no stroke-dash animation |
-| raised node surface (`bg-surface-raised`) | `var(--bg-surface-raised)` | TODO: confirm `--bg-surface-raised` is the canonical raised token |
+| Figma variable                            | Temporary primitive                                                             | Follow-up                                                         |
+| ----------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `flow-dash` animation                     | added to `primitives/animations/{keyframes,animate}.js` (`--animate-flow-dash`) | done (this change) — the catalog had no stroke-dash animation     |
+| raised node surface (`bg-surface-raised`) | `var(--bg-surface-raised)`                                                      | TODO: confirm `--bg-surface-raised` is the canonical raised token |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -181,6 +185,7 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` not required — the component is static (no motion).
 - Touch target ≥40×40 px where a node is interactive.
+- Right-to-left: under `dir="rtl"` the flow runs from the inline start (right) to the inline end (left). Connectors leave a node's inline-end edge and enter the next node's inline-start edge, the elbow bus sits between them, and the ports (`data-flow-port`) sit outside the node on the edge they mark.
 
 ## Stories (Storybook)
 

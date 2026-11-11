@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: ba0896a8875d8df80936175a7fdfe040756ece9c7589960d10e9639f976928c6
+checksum: a52955356b7e4dd435a0ca38fc9f88d5ea757bd3d051a0f0d2902a4b691df674
 created: 2026-11-10
 last_updated: 2026-11-11
 ---
@@ -119,7 +119,8 @@ Live checklist of password rules shown under a `PasswordInput`: a caption follow
 
 - Visible focus: not focusable; the checklist is read-only.
 - Keyboard map: _none_.
-- ARIA: root `role="group"` named by the caption through `aria-labelledby`; the check icons are `aria-hidden`.
+- ARIA: root `role="group"` named by the caption through `aria-labelledby`; the check icons are `aria-hidden`, so each chip ends with visually hidden state text from the locale catalog (`passwordRequirements.met` / `passwordRequirements.unmet`: `met` / `not met`) and the state is never conveyed by colour and icon alone.
+- Direction: the check icon slides in from the inline start (`-translate-x-1`, mirrored under `rtl:`).
 - Contrast ≥4.5:1 for chip text in both tones.
 - `motion-reduce:transition-none` on every transition.
 

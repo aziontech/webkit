@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useId } from 'vue'
+  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import Button from '../../actions/button/button.vue'
   import Alert from '../../feedback/alert/alert.vue'
@@ -55,9 +55,9 @@
 
   /** Copy of the form outcomes. */
   export type HeroFormMessages = {
-    /** Alert under a required field submitted empty. */
+    /** Message under a required field submitted empty. */
     missing: string
-    /** Alert under an email field holding a malformed address. */
+    /** Message under an email field holding a malformed address. */
     invalidEmail: string
     /** Alert shown in place of the form once the site reports the values were sent. */
     success: string
@@ -163,6 +163,16 @@
     return ''
   }
 
+  const outcome = ref<HTMLElement | null>(null)
+
+  watch(
+    () => props.submitted,
+    (submitted) => {
+      if (!submitted || !outcome.value?.contains(document.activeElement)) return
+      nextTick(() => document.getElementById(`${baseId}-success`)?.focus())
+    }
+  )
+
   const send = (event: Event) => {
     if (props.loading) return
     const collected: Record<string, string> = {}
@@ -174,7 +184,11 @@
       if (message) found[field.name] = message
     }
     errors.value = found
-    if (Object.keys(found).length > 0) return
+    const first = props.fields.find((field) => found[field.name])
+    if (first) {
+      nextTick(() => document.getElementById(fieldId(first))?.focus())
+      return
+    }
     emit('submit', event as SubmitEvent, collected)
   }
 </script>
@@ -229,9 +243,15 @@
           </li>
         </ul>
 
-        <div class="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        <div
+          ref="outcome"
+          class="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1"
+        >
           <Alert
             v-if="submitted"
+            :id="`${baseId}-success`"
+            tabindex="-1"
+            class="outline-none"
             severity="success"
             :label="messages.success"
           />
@@ -256,6 +276,7 @@
                 :key="field.name"
                 :required="emptyRequired(field)"
                 :invalid="malformed(field)"
+                :disabled="loading"
                 :data-half="field.half || null"
                 class="min-w-0 sm:col-span-2 sm:data-[half]:col-span-1"
               >
@@ -297,6 +318,9 @@
                   :model-value="values[field.name] ?? ''"
                   :name="field.name"
                   :placeholder="field.placeholder"
+                  :type="field.kind === 'email' ? 'email' : 'text'"
+                  :autocomplete="field.kind === 'email' ? 'email' : undefined"
+                  :spellcheck="field.kind === 'email' ? false : undefined"
                   size="large"
                   @update:model-value="setValue(field, $event)"
                 />

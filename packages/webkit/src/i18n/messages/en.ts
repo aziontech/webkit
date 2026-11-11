@@ -5,7 +5,7 @@ export const alert = {
 export const articleIndex = {
   search: 'Search',
   searchFacet: 'Search {facet}',
-  empty: 'No results found'
+  empty: 'No results found.'
 } as const
 
 export const avatar = {
@@ -32,13 +32,13 @@ export const browserFrame = {
 } as const
 
 export const calendar = {
-  placeholder: 'Select a Date Range',
+  placeholder: 'Select a date range',
   period: 'Period',
-  selectPeriod: 'Select Period',
+  selectPeriod: 'Select period',
   clear: 'Clear selection',
   open: 'Open calendar',
   chooseDate: 'Choose date',
-  apply: 'Apply Range',
+  apply: 'Apply range',
   presets: 'Presets',
   previousMonth: 'Previous month',
   nextMonth: 'Next month',
@@ -48,11 +48,11 @@ export const calendar = {
   time: 'Time',
   startTime: 'Start time',
   endTime: 'End time',
-  last3Days: 'Last 3 Days',
-  lastWeek: 'Last Week',
-  lastMonth: 'Last Month',
-  lastQuarter: 'Last Quarter',
-  lastYear: 'Last Year',
+  last3Days: 'Last 3 days',
+  lastWeek: 'Last week',
+  lastMonth: 'Last month',
+  lastQuarter: 'Last quarter',
+  lastYear: 'Last year',
   relativeHints: 'Type relative times',
   fixedHints: 'Type fixed times',
   rangeSeparators: 'to|through',
@@ -126,7 +126,7 @@ export const collectionPreferences = {
 
 export const command = {
   empty: 'No results found.',
-  placeholder: 'Search Everything',
+  placeholder: 'Search everything',
   title: 'Command menu'
 } as const
 
@@ -181,7 +181,7 @@ export const docPrompt = {
 export const docProse = {
   copy: 'Copy',
   copied: 'Copied',
-  copyManually: 'Press ⌘C to copy'
+  copyManually: 'Press {shortcut} to copy'
 } as const
 
 export const donutChart = {
@@ -227,7 +227,7 @@ export const helpPanel = {
 
 export const heroForm = {
   search: 'Search',
-  empty: 'No results found'
+  empty: 'No results found.'
 } as const
 
 export const keyValuePairs = {
@@ -251,16 +251,16 @@ export const label = {
 } as const
 
 export const link = {
-  label: 'Learn More'
+  label: 'Learn more'
 } as const
 
 export const logView = {
-  searchPlaceholder: 'Find in Logs',
+  searchPlaceholder: 'Find in logs',
   search: 'Search logs',
-  loading: 'Loading...',
+  loading: 'Loading…',
   lines: { one: '{count} line', other: '{count} lines' },
   warnings: 'Warnings',
-  warningCount: { one: '{count} Warning', other: '{count} Warnings' },
+  warningCount: { one: '{count} warning', other: '{count} warnings' },
   gzip: 'gzip:',
   empty: 'No log lines match the current filters.',
   copy: 'Copy logs',
@@ -284,7 +284,7 @@ export const menu = {
 } as const
 
 export const miniButton = {
-  label: 'Learn More'
+  label: 'Learn more'
 } as const
 
 export const navigationMenu = {
@@ -315,13 +315,15 @@ export const passwordRequirements = {
   uppercase: 'Uppercase letter',
   special: 'Special character',
   number: 'Number',
-  lowercase: 'Lowercase letter'
+  lowercase: 'Lowercase letter',
+  met: 'met',
+  unmet: 'not met'
 } as const
 
 export const phoneInput = {
   dialCode: 'Country dial code',
   search: 'Search country',
-  empty: 'No country found'
+  empty: 'No country found.'
 } as const
 
 export const pickList = {
@@ -377,7 +379,16 @@ export const sectionHeader = {
 } as const
 
 export const settingsSection = {
-  copyLink: 'Copy link to the {title} section'
+  copyLink: 'Copy link to the {title} section',
+  linkCopied: 'Link copied'
+} as const
+
+export const severityTag = {
+  critical: 'Critical',
+  high: 'High',
+  medium: 'Medium',
+  low: 'Low',
+  info: 'Info'
 } as const
 
 export const sidebar = {
@@ -403,7 +414,7 @@ export const siteNav = {
 
 export const splitButton = {
   moreActions: 'More actions',
-  moreActionsFor: '{label} — more actions'
+  moreActionsFor: 'More actions for {label}'
 } as const
 
 export const statTile = {
@@ -430,7 +441,7 @@ export const stepper = {
 export const storyLibrary = {
   search: 'Search',
   searchFacet: 'Search {facet}',
-  empty: 'No results found'
+  empty: 'No results found.'
 } as const
 
 export const table = {
@@ -591,6 +602,7 @@ export const en = {
   resizable,
   sectionHeader,
   settingsSection,
+  severityTag,
   sidebar,
   siteFooter,
   siteNav,

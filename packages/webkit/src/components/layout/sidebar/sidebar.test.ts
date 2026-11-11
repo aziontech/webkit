@@ -411,6 +411,31 @@ describe('Sidebar', () => {
       expect(emitted()['update:width']?.at(-1)).toEqual([300])
     })
 
+    it('mirrors the arrow keys and the drag in a right-to-left subtree', async () => {
+      const host = document.createElement('div')
+      host.setAttribute('dir', 'rtl')
+      document.body.appendChild(host)
+      const { getByTestId, emitted } = render(Sidebar, {
+        container: host,
+        props: { resizable: true, width: 300 },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const handle = getByTestId('layout-sidebar__handle')
+      handle.focus()
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(emitted()['update:width']?.at(-1)).toEqual([316])
+
+      await userEvent.keyboard('{ArrowRight}')
+      expect(emitted()['update:width']?.at(-1)).toEqual([300])
+
+      await fireEvent.pointerDown(handle, { clientX: 500 })
+      window.dispatchEvent(new PointerEvent('pointermove', { clientX: 460 }))
+      window.dispatchEvent(new PointerEvent('pointerup'))
+      expect(emitted()['update:width']?.at(-1)).toEqual([340])
+      host.remove()
+    })
+
     it('the nudge clamps to the token bounds instead of running past them', async () => {
       const { getByTestId, emitted } = render(Sidebar, {
         props: { resizable: true, width: 400 },

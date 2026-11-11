@@ -70,7 +70,7 @@ export const navigationMenuBackdropClasses = [
   'data-[ending-style]:opacity-0'
 ]
 export const navigationMenuArrowClasses = [
-  'absolute size-3 rotate-45 border border-solid border-(--border-default)',
+  'absolute size-3 rotate-45 rtl:-scale-x-100 border border-solid border-(--border-default)',
   'bg-(--bg-surface-raised)',
   'data-[side=bottom]:-top-1.5 data-[side=bottom]:border-b-0 data-[side=bottom]:border-e-0',
   'data-[side=top]:-bottom-1.5 data-[side=top]:border-s-0 data-[side=top]:border-t-0'

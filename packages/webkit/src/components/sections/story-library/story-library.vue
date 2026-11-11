@@ -73,7 +73,7 @@
 
   /** The no-match state. */
   export type StoryLibraryEmpty = {
-    /** Alert of the empty state. */
+    /** Message of the empty state. */
     title: string
     /** Label of the button that clears every filter. */
     action: string

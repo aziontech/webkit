@@ -67,7 +67,9 @@
   provide(DialogInjectionKey, {
     testId: testId.value,
     isOpen: computed(() => isOpen.value),
-    dismissible: props.dismissible,
+    get dismissible() {
+      return props.dismissible
+    },
     size: props.size,
     open: openDialog,
     close: closeDialog,

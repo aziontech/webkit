@@ -181,7 +181,7 @@
     </span>
 
     <span
-      v-if="disabled"
+      v-if="isDisabled"
       class="relative z-(--z-input-field) flex items-center pe-(--spacing-md) text-(--text-disabled)"
       aria-hidden="true"
     >

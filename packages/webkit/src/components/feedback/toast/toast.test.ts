@@ -184,6 +184,27 @@ describe('Toast (composition + imperative store)', () => {
       // Payload is the MouseEvent (ToastAction emits click[event]).
       expect(onClick.mock.calls[0][0]).toBeInstanceOf(MouseEvent)
     })
+
+    it('renders up to two actions from `actions`, each firing its own onClick', async () => {
+      await mountToaster({ position: 'bottom-right', duration: 0 })
+      const onEdit = vi.fn()
+      const onRedeploy = vi.fn()
+
+      toast.error('Deploy failed', {
+        action: { label: 'Ignored', onClick: () => {} },
+        actions: [
+          { label: 'Edit', onClick: onEdit },
+          { label: 'Redeploy', onClick: onRedeploy },
+          { label: 'Third', onClick: () => {} }
+        ]
+      })
+      const region = await regionFor('bottom-right')
+      const buttons = within(region!).getAllByTestId('feedback-toast__action')
+      expect(buttons.map((button) => button.textContent?.trim())).toEqual(['Edit', 'Redeploy'])
+      buttons[1].click()
+      expect(onRedeploy).toHaveBeenCalledTimes(1)
+      expect(onEdit).not.toHaveBeenCalled()
+    })
   })
 
   describe('close control (ToastClose) dismisses the toast', () => {

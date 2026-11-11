@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 147e96dbd6c01907e9442c025469aaa7b71601f1ebd30e23ebacff951c4e3a62
+checksum: d4229ffe5cab72b29e5e0cdba4bff1804cb2d954b9b547f6cb460fb945e12717
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -553,6 +553,9 @@ canvas the tokens fall back to.
   `ArrowLeft` / `ArrowRight` nudge the width, `ArrowLeft` past the snap boundary collapses, and
   `ArrowRight` from the collapsed splitter brings the rail back. Pointer-wise that same collapsed
   splitter is click-to-restore as well as drag-to-size, so the edge is never a drag-only control.
+  Right-to-left: the rail sits on the inline start, so in an `rtl` subtree the keys and the drag
+  mirror (`ArrowLeft` and a leftward drag widen it, `ArrowRight` narrows it), the expand affordance
+  slides in from the right, and its tooltip opens on the left.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component. Each
   separator is named (`resizeAriaLabel` / `expandAriaLabel`) because a bare separator announces
   nothing about what it sizes; the collapse trigger is named by `collapseAriaLabel`.

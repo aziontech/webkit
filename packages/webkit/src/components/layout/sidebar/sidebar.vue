@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, provide, ref, useAttrs, useSlots } from 'vue'
 
+  import { logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
@@ -87,7 +88,8 @@
     startResize,
     tapToExpand,
     nudge,
-    measure
+    measure,
+    dir
   } = useSidebarRail({
     collapsed,
     width,
@@ -95,6 +97,14 @@
     maxWidthToken: () => props.maxWidthToken,
     enabled: railEnabled
   })
+
+  const onHandleKey = (event: globalThis.KeyboardEvent, expandOnly = false) => {
+    const key = logicalArrowKey(event.key, dir.value)
+    if (key === 'ArrowRight') nudge(SIDEBAR_NUDGE_STEP)
+    else if (key === 'ArrowLeft' && !expandOnly) nudge(-SIDEBAR_NUDGE_STEP)
+    else return
+    event.preventDefault()
+  }
 
   defineExpose({ measure })
 
@@ -164,7 +174,7 @@
 
   const INNER_CLASS = cn(
     'flex h-full min-h-0 w-full flex-col',
-    'w-[calc(var(--sidebar-width)-1px)] translate-x-0 has-[>input:checked]:-translate-x-full opacity-100 has-[>input:checked]:opacity-20',
+    'w-[calc(var(--sidebar-width)-1px)] translate-x-0 has-[>input:checked]:-translate-x-full rtl:has-[>input:checked]:translate-x-full opacity-100 has-[>input:checked]:opacity-20',
     INNER_MOTION_CLASS
   )
 
@@ -286,8 +296,7 @@
       :data-testid="`${testId}__handle`"
       class="group absolute inset-y-0 end-0 z-10 w-(--spacing-xs) cursor-col-resize touch-none outline-none"
       @pointerdown="startResize"
-      @keydown.left.prevent="nudge(-SIDEBAR_NUDGE_STEP)"
-      @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
+      @keydown="onHandleKey($event)"
       @dblclick="collapsed = true"
     >
       <span
@@ -325,15 +334,15 @@
         class="absolute inset-y-0 start-0 w-full cursor-col-resize touch-none outline-none"
         @pointerdown="startResize"
         @click="tapToExpand"
-        @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
+        @keydown="onHandleKey($event, true)"
       />
 
       <div
-        class="pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] ps-(--spacing-xxs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
+        class="pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] rtl:translate-x-(--size-10) ps-(--spacing-xxs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 rtl:group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 rtl:group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
       >
         <Tooltip
           :text="labels.expand"
-          placement="right"
+          :placement="dir === 'rtl' ? 'left' : 'right'"
         >
           <IconButton
             icon="pi pi-angle-double-right"

@@ -4,7 +4,7 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: a140620ff790ed94a925c3b678dea3117a8c90333c6387e218ddbe7cbf5ee327
+checksum: 7a25a7ae36ae7981ec6572afade3c63c2f43011aff720c4ed5d30b39c6c015ac
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -38,7 +38,7 @@ Communicates status, alerts, or progress to the user. Lives at `packages/webkit/
 
 - Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.
 - Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens, `neutral` is muted, and `alt` uses the primary color.
-- With `loading`, pass the bare verb (`"Deploying"`). The component appends the ellipsis and swaps the dot for a spinner.
+- With `loading`, pass the bare verb (`"Deploying"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner.
 - It is a non-interactive `role="status"` element with no click or keyboard behavior. Don't attach handlers to it.
 
 ## Usage

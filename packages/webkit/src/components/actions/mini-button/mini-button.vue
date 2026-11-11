@@ -14,7 +14,7 @@
   })
 
   interface Props {
-    /** Visible label rendered inside the control. Empty uses the locale catalog (`Learn More`). */
+    /** Visible label rendered inside the control. Empty uses the locale catalog (`Learn more`). */
     label?: string
     /** Size token; affects height, gap, and typography. */
     size?: MiniButtonSize

@@ -78,7 +78,7 @@
   {
     "name": "password-requirements",
     "path": "src/components/inputs/password-requirements/index.ts",
-    "limit": "4 KB"
+    "limit": "3.7 KB"
   },
   {
     "name": "chip",
@@ -93,7 +93,7 @@
   {
     "name": "doc-prose",
     "path": "src/components/documentation/doc-prose/doc-prose.vue",
-    "limit": "3.25 KB"
+    "limit": "3.5 KB"
   },
   {
     "name": "doc-callout",
@@ -714,7 +714,7 @@
   {
     "name": "severity-tag",
     "path": "src/components/content/severity-tag/severity-tag.vue",
-    "limit": "1.25 KB"
+    "limit": "1.65 KB"
   },
   {
     "name": "help-panel",
@@ -925,6 +925,6 @@
   {
     "name": "log-view-content",
     "path": "src/components/code/log-view/log-view-content.vue",
-    "limit": "22.25 KB"
+    "limit": "22.75 KB"
   }
 ]

@@ -70,12 +70,14 @@ export const drawerPanelStateClasses = {
   left: [
     ...bottomSheetPanelStateClasses,
     'md:data-[state=closed]:-translate-x-full',
+    'rtl:md:data-[state=closed]:translate-x-full',
     'md:data-[state=open]:translate-x-0',
     'md:translate-y-0'
   ] as const,
   right: [
     ...bottomSheetPanelStateClasses,
     'md:data-[state=closed]:translate-x-full',
+    'rtl:md:data-[state=closed]:-translate-x-full',
     'md:data-[state=open]:translate-x-0',
     'md:translate-y-0'
   ] as const

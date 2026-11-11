@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useSlots } from 'vue'
+  import { computed, useAttrs, useId, useSlots } from 'vue'
 
   defineOptions({
     name: 'Separator',
@@ -29,6 +29,8 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-separator')
 
+  const labelId = useId()
+
   const hasContent = computed<boolean>(() => Boolean(slots['default']) || props.label.length > 0)
 </script>
 
@@ -37,6 +39,7 @@
     v-bind="$attrs"
     role="separator"
     :aria-orientation="orientation"
+    :aria-labelledby="hasContent ? labelId : undefined"
     :data-testid="testId"
     :data-orientation="orientation"
     :data-labelled="hasContent || null"
@@ -44,6 +47,7 @@
   >
     <span
       v-if="hasContent"
+      :id="labelId"
       :data-testid="`${testId}__label`"
     >
       <slot v-if="slots['default']" />

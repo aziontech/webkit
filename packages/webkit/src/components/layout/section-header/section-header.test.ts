@@ -45,6 +45,8 @@ describe('SectionHeader', () => {
     )
 
     expect(getByTestId('layout-section-header__title').getAttribute('data-size')).toBe(size)
+    expect(getByTestId('layout-section-header__title').className).toContain('text-(--text-default)')
+    expect(getByTestId('layout-section-header__title').className).not.toContain('text-label')
   })
 
   it('renders description and actions only when given', () => {

@@ -285,12 +285,16 @@
                 <fieldset
                   v-else-if="section === 'columns'"
                   :data-testid="`${testId}__columns`"
+                  :aria-describedby="`${uid}-columns-description`"
                   class="flex min-w-0 flex-col gap-(--spacing-xs)"
                 >
                   <legend class="text-label-md text-(--text-default)">
                     {{ t('collectionPreferences.columns') }}
                   </legend>
-                  <p class="mb-(--spacing-xs) text-body-sm text-(--text-muted)">
+                  <p
+                    :id="`${uid}-columns-description`"
+                    class="mb-(--spacing-xs) text-body-sm text-(--text-muted)"
+                  >
                     {{ t('collectionPreferences.columnsDescription') }}
                   </p>
                   <ul class="flex flex-col gap-(--spacing-xxs)">
@@ -317,7 +321,7 @@
                         <span class="min-w-0 truncate">{{ columnLabel(column.id) }}</span>
                         <span
                           v-if="locked(column.id)"
-                          class="ms-auto shrink-0 text-label-xs text-(--text-muted)"
+                          class="ms-auto shrink-0 text-body-xs text-(--text-muted)"
                           >{{ t('collectionPreferences.alwaysShown') }}</span
                         >
                       </label>

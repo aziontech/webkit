@@ -14,7 +14,7 @@
   })
 
   interface Props {
-    /** Visible label rendered inside the link. Empty uses the locale catalog (`Learn More`). */
+    /** Visible label rendered inside the link. Empty uses the locale catalog (`Learn more`). */
     label?: string
     /** Size token. Affects height, gap, and typography. */
     size?: LinkSize

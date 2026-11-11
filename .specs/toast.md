@@ -8,9 +8,9 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 586c4116e5caa82269761846ec58aedd0245bb71116c5553987b408a7ff87be6
+checksum: 498b0a4c788cd3d3986d83e3976cbebd97173512b4aef1c3a0b1b4ab72b5e60e
 created: 2026-06-23
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Toast — Component Spec
@@ -43,7 +43,7 @@ The card surface, typography, and severity icons follow the Figma design (see `f
 
 - Mount `Toaster` once near the app root, or install `ToastPlugin`. Don't mount one per page; the store renders only the first registered region.
 - Use the typed shortcuts (`toast.success`, `toast.error`, …). The type sets the icon and the live-region urgency: `error` makes the region assertive, and `error` and `warning` items get `role="alert"`.
-- Keep the message text to one line and move detail to `description`. Offer at most one `action`.
+- Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).
 - `duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.
 - Don't make a toast the only path to an important action. It auto-dismisses and never takes focus.
 
@@ -99,6 +99,12 @@ import { toast } from '@aziontech/webkit/toast'
 const id = toast('Saved') // default type
 toast.success('Deployed', { description: 'edge-01 live' }) // typed shortcut
 toast.error('Failed', { action: { label: 'Retry', onClick: () => retry() } })
+toast.error('Deploy failed', {
+  actions: [
+    { label: 'Edit', onClick: () => edit() },
+    { label: 'Redeploy', onClick: () => redeploy() }
+  ]
+}) // up to two actions; `actions` wins over `action`
 toast.loading('Uploading…', { duration: 0 }) // persists until dismissed
 toast('Heads up', { position: 'top-center' }) // anchor this toast to a corner (overrides Toaster)
 toast('Saved', { closable: true }) // always-visible close control (overrides Toaster)
@@ -199,9 +205,9 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ## Slots
 
-| Slot      | Scope                | Notes                                                                                                                                                                                                                                                                         |
-| --------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default` | `{ toast, dismiss }` | Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry. |
+| Slot      | Scope                | Notes                                                                                                                                                                                                                                                                                                                                                                         |
+| --------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | `{ toast, dismiss }` | Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, actions?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`. |
 
 ## States
 

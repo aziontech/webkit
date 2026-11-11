@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs, watch } from 'vue'
 
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
@@ -7,8 +7,10 @@
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import Spinner from '../../utils/spinner/spinner.vue'
+  import { formatLogLineText } from './composables/format-log-line-text'
   import { splitTextByQuery } from './composables/split-text-by-query'
   import { useLogViewContext } from './composables/use-log-view-context'
+  import type { LogViewLine } from './injection-key'
 
   defineOptions({
     name: 'LogViewContent',
@@ -27,6 +29,37 @@
 
   const { split, observe } = useLazyChunks({ rowHeight: 24 })
   const chunks = computed(() => split(ctx.filteredLines.value))
+
+  const announced = ref<{ id: string; text: string }[]>([])
+
+  const snapshot = (lines: LogViewLine[]) => ({
+    length: lines.length,
+    firstId: lines[0]?.id,
+    lastId: lines[lines.length - 1]?.id
+  })
+
+  let seen = snapshot(ctx.lines.value)
+
+  watch(
+    () => [ctx.lines.value, ctx.lines.value.length] as const,
+    ([next]) => {
+      const previous = seen
+      seen = snapshot(next)
+      const appended =
+        previous.length > 0 &&
+        next.length > previous.length &&
+        next[0]?.id === previous.firstId &&
+        next[previous.length - 1]?.id === previous.lastId
+      if (!appended) {
+        announced.value = []
+        return
+      }
+      const added = new Set(next.slice(previous.length).map((line) => line.id))
+      announced.value = ctx.filteredLines.value
+        .filter((line) => added.has(line.id))
+        .map((line) => ({ id: line.id, text: formatLogLineText(line) }))
+    }
+  )
 
   const segmentsFor = (text: string) => splitTextByQuery(text, searchQuery.value)
 
@@ -62,6 +95,20 @@
     </div>
 
     <div
+      role="log"
+      aria-live="polite"
+      :data-testid="`${testId}__announcer`"
+      class="sr-only"
+    >
+      <div
+        v-for="entry in announced"
+        :key="entry.id"
+      >
+        {{ entry.text }}
+      </div>
+    </div>
+
+    <div
       v-if="ctx.loading.value"
       role="status"
       aria-live="polite"
@@ -80,8 +127,6 @@
       fade
       :data-testid="`${testId}__body`"
       class="h-full min-h-0 bg-(--bg-canvas) sm:data-[orientation=both]:overflow-x-hidden"
-      role="log"
-      aria-live="polite"
     >
       <template v-if="ctx.filteredLines.value.length">
         <div class="max-sm:min-w-max">

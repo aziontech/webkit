@@ -7,7 +7,7 @@ export const ptBR: Messages = {
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'Nenhum resultado encontrado'
+    empty: 'Nenhum resultado encontrado.'
   },
   avatar: {
     fallbackLabel: 'Avatar do usuário',
@@ -160,7 +160,7 @@ export const ptBR: Messages = {
   docProse: {
     copy: 'Copiar',
     copied: 'Copiado',
-    copyManually: 'Pressione ⌘C para copiar'
+    copyManually: 'Pressione {shortcut} para copiar'
   },
   donutChart: {
     total: 'Total',
@@ -201,7 +201,7 @@ export const ptBR: Messages = {
   },
   heroForm: {
     search: 'Buscar',
-    empty: 'Nenhum resultado encontrado'
+    empty: 'Nenhum resultado encontrado.'
   },
   keyValuePairs: {
     notSet: 'Não definido'
@@ -276,12 +276,14 @@ export const ptBR: Messages = {
     uppercase: 'Letra maiúscula',
     special: 'Caractere especial',
     number: 'Número',
-    lowercase: 'Letra minúscula'
+    lowercase: 'Letra minúscula',
+    met: 'atendido',
+    unmet: 'não atendido'
   },
   phoneInput: {
     dialCode: 'Código de discagem do país',
     search: 'Buscar país',
-    empty: 'Nenhum país encontrado'
+    empty: 'Nenhum país encontrado.'
   },
   pickList: {
     moveSelectedToTarget: 'Mover selecionados para o destino',
@@ -331,7 +333,15 @@ export const ptBR: Messages = {
     linkCopied: 'Link copiado'
   },
   settingsSection: {
-    copyLink: 'Copiar link da seção {title}'
+    copyLink: 'Copiar link da seção {title}',
+    linkCopied: 'Link copiado'
+  },
+  severityTag: {
+    critical: 'Crítica',
+    high: 'Alta',
+    medium: 'Média',
+    low: 'Baixa',
+    info: 'Informativa'
   },
   sidebar: {
     label: 'Barra lateral',
@@ -353,7 +363,7 @@ export const ptBR: Messages = {
   },
   splitButton: {
     moreActions: 'Mais ações',
-    moreActionsFor: '{label} — mais ações'
+    moreActionsFor: 'Mais ações para {label}'
   },
   statTile: {
     noValue: 'Sem valor',
@@ -376,7 +386,7 @@ export const ptBR: Messages = {
   storyLibrary: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'Nenhum resultado encontrado'
+    empty: 'Nenhum resultado encontrado.'
   },
   table: {
     selectAll: 'Selecionar todas as linhas',

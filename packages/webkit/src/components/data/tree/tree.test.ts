@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import { userEvent } from '@storybook/test'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
@@ -104,6 +106,18 @@ describe('Tree', () => {
     expect(node(view.container, 'assets').getAttribute('aria-expanded')).toBe('true')
     expect(node(view.container, 'assets').contains(logo)).toBe(true)
     expect(view.container.querySelector(`[data-item-id="${INDEX.id}"]`)).toBeNull()
+  })
+
+  it('draws the indent guide under the parent chevron and outside the nested rows', () => {
+    const view = mount({ expanded: ['assets'] })
+    const chevron = node(view.container, 'assets')
+      .querySelector<HTMLElement>('[data-tree-toggle]')!
+      .getBoundingClientRect()
+    const group = view.getByRole('group').getBoundingClientRect()
+    const guideCenter = group.left + 0.5
+    expect(Math.abs(guideCenter - (chevron.left + chevron.width / 2))).toBeLessThanOrEqual(1)
+    const nestedRow = rowOf(view.container, HERO.id).getBoundingClientRect()
+    expect(group.left + 1).toBeLessThanOrEqual(nestedRow.left)
   })
 
   it('ignores unknown and leaf ids in expanded', () => {

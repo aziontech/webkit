@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: ad21223d9231f0728c3e3605bf938c2f2af6d1c3263c64e39f07a709afba90ed
+checksum: ffde18bc7b53b072815731d6190aabc7905005e293829909550a523b6e42838a
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -39,27 +39,34 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import Button from '@aziontech/webkit/button'
-import Drawer from '@aziontech/webkit/drawer'
-import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-import DrawerPortal from '@aziontech/webkit/drawer-portal'
-import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-import DrawerContent from '@aziontech/webkit/drawer-content'
-import DrawerTitle from '@aziontech/webkit/drawer-title'
-import DrawerDescription from '@aziontech/webkit/drawer-description'
-import DrawerClose from '@aziontech/webkit/drawer-close'
-import PanelHeader from '@aziontech/webkit/panel-header'
-import PanelContent from '@aziontech/webkit/panel-content'
-import PanelFooter from '@aziontech/webkit/panel-footer'
+  import { ref } from 'vue'
+  import Button from '@aziontech/webkit/button'
+  import Drawer from '@aziontech/webkit/drawer'
+  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
+  import DrawerPortal from '@aziontech/webkit/drawer-portal'
+  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import DrawerDescription from '@aziontech/webkit/drawer-description'
+  import DrawerClose from '@aziontech/webkit/drawer-close'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
 
-const open = ref(false)
+  const open = ref(false)
 </script>
 
 <template>
-  <Drawer v-model:open="open" side="right" size="medium">
+  <Drawer
+    v-model:open="open"
+    side="right"
+    size="medium"
+  >
     <DrawerTrigger>
-      <Button label="Add origin" kind="primary" />
+      <Button
+        label="Add origin"
+        kind="primary"
+      />
     </DrawerTrigger>
     <DrawerPortal>
       <DrawerOverlay />
@@ -74,8 +81,15 @@ const open = ref(false)
           </DrawerDescription>
         </PanelContent>
         <PanelFooter>
-          <Button label="Cancel" kind="outlined" @click="open = false" />
-          <Button label="Save" kind="primary" />
+          <Button
+            label="Cancel"
+            kind="outlined"
+            @click="open = false"
+          />
+          <Button
+            label="Save"
+            kind="primary"
+          />
         </PanelFooter>
       </DrawerContent>
     </DrawerPortal>
@@ -123,7 +137,7 @@ const open = ref(false)
 
 ## Motion & Animations
 
-_none_
+- From `md` up the panel slides in from its `side` edge (`translate-x`) and out to it. `side` names the physical edge of a left-to-right page and the panel anchors on the logical one (`start-0` / `end-0`), so under `dir="rtl"` the slide mirrors with it (`rtl:` variants): a `left` drawer sits on the right and leaves to the right.
 
 ## Tokens
 

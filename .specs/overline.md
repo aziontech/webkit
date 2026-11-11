@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: 58afc58d7f3fa1ae02058875ff1aff4bd203a8f8905e08411a816ac19f8724a9
+checksum: c7a8745e424b980b0252dbbc7480097e1772f86354b6a5db48f7ca4bcda57440
 created: 2026-11-10
 last_updated: 2026-11-11
 ---
@@ -102,8 +102,8 @@ Overline is the short uppercase label set above a headline to name the section, 
 | Region                      | Token (DESIGN.md)                                           |
 | --------------------------- | ----------------------------------------------------------- |
 | typography (prefix, label)  | `.text-overline-md` with `font-medium`                      |
-| text (prefix)               | `var(--text-default)` (`text-default`)                      |
-| text (label)                | `var(--primary)` (`text-primary`)                           |
+| text (prefix)               | `var(--text-default)` (`text-(--text-default)`)             |
+| text (label)                | `var(--primary)` (`text-(--primary)`)                       |
 | cursor surface              | `var(--accent)`                                             |
 | cursor size                 | `w-1` · `h-5`                                               |
 | gap (prefix, label, cursor) | `var(--spacing-xxs)`                                        |

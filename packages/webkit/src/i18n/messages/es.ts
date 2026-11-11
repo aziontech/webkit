@@ -7,7 +7,7 @@ export const es: Messages = {
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'No se encontraron resultados'
+    empty: 'No se encontraron resultados.'
   },
   avatar: {
     fallbackLabel: 'Avatar del usuario',
@@ -160,7 +160,7 @@ export const es: Messages = {
   docProse: {
     copy: 'Copiar',
     copied: 'Copiado',
-    copyManually: 'Pulsa ⌘C para copiar'
+    copyManually: 'Pulsa {shortcut} para copiar'
   },
   donutChart: {
     total: 'Total',
@@ -201,7 +201,7 @@ export const es: Messages = {
   },
   heroForm: {
     search: 'Buscar',
-    empty: 'No se encontraron resultados'
+    empty: 'No se encontraron resultados.'
   },
   keyValuePairs: {
     notSet: 'Sin definir'
@@ -276,12 +276,14 @@ export const es: Messages = {
     uppercase: 'Letra mayúscula',
     special: 'Carácter especial',
     number: 'Número',
-    lowercase: 'Letra minúscula'
+    lowercase: 'Letra minúscula',
+    met: 'cumplido',
+    unmet: 'no cumplido'
   },
   phoneInput: {
     dialCode: 'Código de marcación del país',
     search: 'Buscar país',
-    empty: 'No se encontró ningún país'
+    empty: 'No se encontró ningún país.'
   },
   pickList: {
     moveSelectedToTarget: 'Mover seleccionados al destino',
@@ -331,7 +333,15 @@ export const es: Messages = {
     linkCopied: 'Enlace copiado'
   },
   settingsSection: {
-    copyLink: 'Copiar enlace a la sección {title}'
+    copyLink: 'Copiar enlace a la sección {title}',
+    linkCopied: 'Enlace copiado'
+  },
+  severityTag: {
+    critical: 'Crítica',
+    high: 'Alta',
+    medium: 'Media',
+    low: 'Baja',
+    info: 'Informativa'
   },
   sidebar: {
     label: 'Barra lateral',
@@ -353,7 +363,7 @@ export const es: Messages = {
   },
   splitButton: {
     moreActions: 'Más acciones',
-    moreActionsFor: '{label} — más acciones'
+    moreActionsFor: 'Más acciones para {label}'
   },
   statTile: {
     noValue: 'Sin valor',
@@ -376,7 +386,7 @@ export const es: Messages = {
   storyLibrary: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'No se encontraron resultados'
+    empty: 'No se encontraron resultados.'
   },
   table: {
     selectAll: 'Seleccionar todas las filas',

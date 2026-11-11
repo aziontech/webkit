@@ -55,7 +55,7 @@ describe('SplitButton (joined command + menu overlay)', () => {
 
     expect(getByTestId('actions-split-button__primary').textContent).toContain('Deploy')
     expect(getByTestId('actions-split-button__toggle-button').getAttribute('aria-label')).toBe(
-      'Deploy — more actions'
+      'More actions for Deploy'
     )
     expect(panel()).toBeNull()
   })
@@ -210,7 +210,7 @@ describe('SplitButton (joined command + menu overlay)', () => {
     const primary = view.getByTestId('actions-split-button__primary')
     await waitFor(() => expect(primary.textContent).toContain('Deploy to staging'))
     expect(view.getByTestId('actions-split-button__toggle-button').getAttribute('aria-label')).toBe(
-      'Deploy to staging — more actions'
+      'More actions for Deploy to staging'
     )
 
     // The primary click now carries the mirrored item.
@@ -271,7 +271,7 @@ describe('SplitButton (joined command + menu overlay)', () => {
       expect(view.getByTestId('actions-split-button__primary').textContent).toContain('Save')
     )
     expect(view.getByTestId('actions-split-button__toggle-button').getAttribute('aria-label')).toBe(
-      'Save — more actions'
+      'More actions for Save'
     )
   })
 })

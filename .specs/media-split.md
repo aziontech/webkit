@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 2022999fbd2b4cfdba1b86293061b73a62327daefe34a71e5ed2d870d2543992
+checksum: 6ae5d59fdbd813c508d308e3f62d032b53850bb41877319cd6a7c82b393b35b4
 created: 2026-09-22
 last_updated: 2026-11-11
 ---
@@ -164,9 +164,9 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## Motion & Animations
 
-| Trigger                                                                   | Animation / Transition                                                                                                                                                                | Token                                                             | Reduced-motion fallback                                                                 |
-| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| hover on a band, or `focus-visible` on a media cell, carrying `mediaHref` | the chevron affordance fades and slides in — `transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance`, `opacity-0 translate-x-1` to `opacity-100 translate-x-0` | `--transition-duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none` — the affordance still appears, it just does not travel |
+| Trigger                                                                   | Animation / Transition                                                                                                                                                                                                                               | Token                                                             | Reduced-motion fallback                                                                 |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| hover on a band, or `focus-visible` on a media cell, carrying `mediaHref` | the chevron affordance fades and slides in — `transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance`, `opacity-0 translate-x-1` to `opacity-100 translate-x-0`, from the closing side (`rtl:-translate-x-1` in right-to-left) | `--transition-duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none` — the affordance still appears, it just does not travel |
 
 ## Tokens
 

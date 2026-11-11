@@ -39,12 +39,12 @@
     <span
       v-if="prefix"
       aria-hidden="true"
-      class="text-default font-medium text-overline-md"
+      class="text-(--text-default) font-medium text-overline-md"
       :class="{ 'whitespace-nowrap': singleLine }"
     >
       {{ prefix }}
     </span>
-    <span class="min-w-0 text-pretty text-primary font-medium uppercase text-overline-md">
+    <span class="min-w-0 text-pretty text-(--primary) font-medium uppercase text-overline-md">
       <slot />
     </span>
     <span

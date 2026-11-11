@@ -104,6 +104,13 @@ describe('DocUpdate', () => {
       expect(getByText('Version 2.8.0')).toBeInTheDocument()
     })
 
+    it('centres the node on the rule in both reading directions', () => {
+      const { getByTestId } = render(DocUpdate, { props: titled })
+      const node = getByTestId('documentation-doc-update__node')
+      expect(node.className).toContain('-translate-x-1/2')
+      expect(node.className).toContain('rtl:translate-x-1/2')
+    })
+
     it('anchors on the label and title together', () => {
       const { getByTestId, getByRole } = render(DocUpdate, { props: titled })
       const root = getByTestId('documentation-doc-update')

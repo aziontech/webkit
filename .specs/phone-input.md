@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: 43ca66c37778d2b46bea05ea8cf400b0759234767286c5a4c5345a14d7fd3d94
+checksum: 7bc860f41c19b5c9bdf071537936c8ba6bf76ff9146694a0fb40b9bf715fc9bd
 created: 2026-11-10
 last_updated: 2026-11-11
 ---
@@ -70,18 +70,18 @@ International phone-number control: an `InputGroup` with a searchable dial-code 
 
 ## Props
 
-| Prop                | Type                             | Default                     | Required | JSDoc                                                                                                               |
-| ------------------- | -------------------------------- | --------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
-| `countries`         | `Country[]`                      | (built-in list — see Notes) | false    | Countries offered by the dial-code Select. When omitted, uses the built-in curated list.                            |
-| `placeholder`       | `string`                         | `''`                        | false    | Placeholder of the tel input. Falls back to the selected country's mask when empty.                                 |
-| `size`              | `'small' \| 'medium' \| 'large'` | `'medium'`                  | false    | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px.    |
-| `disabled`          | `boolean`                        | `false`                     | false    | Disables both the dial-code Select and the internal input.                                                          |
-| `readonly`          | `boolean`                        | `false`                     | false    | Marks the internal input read-only; dial-code Select is also disabled while readonly.                               |
-| `required`          | `boolean`                        | `false`                     | false    | Applies the required border on the InputGroup and sets required on the input.                                       |
-| `invalid`           | `boolean`                        | `false`                     | false    | Applies the invalid border on the InputGroup and sets aria-invalid on the input.                                    |
-| `name`              | `string`                         | `''`                        | false    | HTML name for the internal input (form + vee-validate integration).                                                 |
-| `searchPlaceholder` | `string`                         | `''`                        | false    | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`).    |
-| `searchEmptyLabel`  | `string`                         | `''`                        | false    | Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found`). |
+| Prop                | Type                             | Default                     | Required | JSDoc                                                                                                                |
+| ------------------- | -------------------------------- | --------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| `countries`         | `Country[]`                      | (built-in list — see Notes) | false    | Countries offered by the dial-code Select. When omitted, uses the built-in curated list.                             |
+| `placeholder`       | `string`                         | `''`                        | false    | Placeholder of the tel input. Falls back to the selected country's mask when empty.                                  |
+| `size`              | `'small' \| 'medium' \| 'large'` | `'medium'`                  | false    | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px.     |
+| `disabled`          | `boolean`                        | `false`                     | false    | Disables both the dial-code Select and the internal input.                                                           |
+| `readonly`          | `boolean`                        | `false`                     | false    | Marks the internal input read-only; dial-code Select is also disabled while readonly.                                |
+| `required`          | `boolean`                        | `false`                     | false    | Applies the required border on the InputGroup and sets required on the input.                                        |
+| `invalid`           | `boolean`                        | `false`                     | false    | Applies the invalid border on the InputGroup and sets aria-invalid on the input.                                     |
+| `name`              | `string`                         | `''`                        | false    | HTML name for the internal input (form + vee-validate integration).                                                  |
+| `searchPlaceholder` | `string`                         | `''`                        | false    | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`).     |
+| `searchEmptyLabel`  | `string`                         | `''`                        | false    | Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). |
 
 Notes on the built-in `countries` list: the default set opens with the priority shortlist (BR, US, GB, PT, ES, AR, MX, CL, CO, DE, FR, IT — order preserved in the Select), continues with the rest of the supported countries in alphabetical order (AU, BE, BO, CA, CN, EC, IN, IE, IL, JP, NL, PY, PE, PL, SG, ZA, KR, CH, TR, AE, UY, VE). Countries outside the list are not offered. Consumers who need a different set pass a custom `countries` array. The list lives in a co-located `countries.ts` inside the component folder; it is data, not a public export.
 
@@ -139,6 +139,7 @@ _none_ — motion is owned by `InputGroup` (colour transitions) and `Select` (dr
 - ARIA: the tel input has `type="tel"`, `inputmode="tel"`, `autocomplete="tel-national"`, `aria-invalid`, `aria-required`, and the `id` / `aria-describedby` of the enclosing `Field`; the dial-code trigger has `aria-label="Country dial code"`. The control provides an empty Field context below it so the inner search input never takes the field id.
 - Contrast ≥4.5:1 for input and dial-code text.
 - Touch target follows the `size` (40px at `large`).
+- Direction: the tel input and each option's dial code render `dir="ltr"`, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
 
 ## Stories (Storybook)
 

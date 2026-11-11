@@ -1,5 +1,5 @@
 import { fireEvent, render, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import Collapsible from '../../../../examples/settings-section/collapsible.vue'
 import Default from '../../../../examples/settings-section/default.vue'
@@ -52,6 +52,17 @@ describe('SettingsSection', () => {
     )
     expect(anchored.getByRole('heading', { level: 2 }).id).toBe('general')
     expect(anchored.getByRole('button', { name: 'Copy link to the General section' })).toBeTruthy()
+  })
+
+  it('confirms a copied link on the button itself', async () => {
+    const write = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue()
+    const view = within(
+      render(SettingsSection, { props: { title: 'General', anchor: 'general' } }).container
+    )
+    await fireEvent.click(view.getByRole('button', { name: 'Copy link to the General section' }))
+    expect(write).toHaveBeenCalledWith(expect.stringMatching(/#general$/))
+    await vi.waitFor(() => expect(view.getByRole('button', { name: 'Link copied' })).toBeTruthy())
+    write.mockRestore()
   })
 
   it('keeps a non-collapsible body open and has no disclosure', () => {

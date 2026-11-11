@@ -80,6 +80,31 @@ describe('ConfirmDialog', () => {
     }
   )
 
+  it('locks Cancel, the close button and Escape while loading, then releases them', async () => {
+    const { emitted, rerender } = render(ConfirmDialog, {
+      props: { open: true, title: 'Delete resource', loading: true }
+    })
+    await settle()
+
+    const cancel = byTestId('overlay-confirm-dialog__cancel') as HTMLButtonElement
+    expect(cancel.disabled).toBe(true)
+    await fireEvent.click(byTestId('overlay-confirm-dialog__close') as HTMLElement)
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    expect(emitted()['update:open']).toBeUndefined()
+    expect(emitted()['cancel']).toBeUndefined()
+
+    await rerender({ loading: false })
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    expect(emitted()['update:open']).toContainEqual([false])
+  })
+
+  it('stacks the confirm button above Cancel below md', async () => {
+    render(ConfirmDialog, { props: { open: true, title: 'Remove domain' } })
+    await settle()
+    const actions = byTestId('overlay-confirm-dialog__actions') as HTMLElement
+    expect(actions.className).toContain('flex-col-reverse')
+  })
+
   it('replaces the buttons with the actions slot', async () => {
     const { getByTestId } = within(render(SaveOrDiscard).container)
 

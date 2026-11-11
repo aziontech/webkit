@@ -171,7 +171,7 @@ const DEFAULT_RENDER_TEMPLATE = `<Input
     </CommandGroup>
     <CommandSeparator />
     <CommandGroup heading="Commands">
-      <CommandItem value="search" shortcut="meta+k">Search Everything</CommandItem>
+      <CommandItem value="search" shortcut="meta+k">Search everything</CommandItem>
       <CommandItem value="new-app-cmd" shortcut="meta+n">New Application</CommandItem>
       <CommandItem value="toggle-theme" shortcut="meta+shift+l">Toggle Theme</CommandItem>
     </CommandGroup>
@@ -225,7 +225,7 @@ const DEFAULT_SNIPPET = `<Input
     </CommandGroup>
     <CommandSeparator />
     <CommandGroup heading="Commands">
-      <CommandItem value="search" shortcut="meta+k">Search Everything</CommandItem>
+      <CommandItem value="search" shortcut="meta+k">Search everything</CommandItem>
       <CommandItem value="new-app-cmd" shortcut="meta+n">New Application</CommandItem>
       <CommandItem value="toggle-theme" shortcut="meta+shift+l">Toggle Theme</CommandItem>
     </CommandGroup>

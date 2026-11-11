@@ -26,7 +26,7 @@
   )
 
   const PORT_CLASS =
-    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) data-[flow-port=end]:start-0 data-[flow-port=end]:-translate-x-full data-[flow-port=start]:end-0 data-[flow-port=start]:translate-x-full group-data-[disabled]:border-dashed'
+    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) data-[flow-port=end]:start-0 data-[flow-port=end]:-translate-x-full data-[flow-port=start]:end-0 data-[flow-port=start]:translate-x-full rtl:data-[flow-port=end]:translate-x-full rtl:data-[flow-port=start]:-translate-x-full group-data-[disabled]:border-dashed'
 
   const rootClass = computed(() => cn('relative block', attrs.class as string | undefined))
 </script>

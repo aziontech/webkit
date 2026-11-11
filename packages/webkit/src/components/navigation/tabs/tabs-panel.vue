@@ -44,7 +44,7 @@
 
   const contentKey = computed(() => String(context.value.value))
 
-  const motionReady = ref(false)
+  const motionReady = ref(true)
 
   const enterOffsetClass = computed(() => {
     const direction = context.slideDirection.value
@@ -85,8 +85,7 @@
       if (activeValue === props.value) {
         runEnterMotion()
       }
-    },
-    { immediate: true }
+    }
   )
 </script>
 

@@ -101,3 +101,13 @@ describe('every block and example renders on the server', () => {
     assert.deepEqual(errors, [], `${errors.length} SFC(s) fail to render on the server`)
   })
 })
+
+describe('motion does not hide server-rendered content', () => {
+  test('the active Tabs panel renders visible without JS', async () => {
+    const mod = await server.ssrLoadModule(join(PKG, 'examples/tabs/default.vue'))
+    const html = await renderToString(createSSRApp(mod.default))
+    const panel = html.match(/role="tabpanel"[^>]*data-state="active"[^>]*>\s*<div class="([^"]*)"/)
+    assert.ok(panel, 'active tab panel not found')
+    assert.ok(!panel[1].split(/\s+/).includes('opacity-0'), `active panel classes: ${panel[1]}`)
+  })
+})

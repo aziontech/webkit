@@ -5,7 +5,7 @@
   import * as en from '../../../i18n/messages/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
 
-  /** Heading scale: medium for a band heading, small for a muted label-sized heading. */
+  /** Heading scale: medium for a band heading, small for the smallest heading, a band nested inside another. */
   export type SectionHeaderSize = 'small' | 'medium'
 
   defineOptions({
@@ -63,7 +63,7 @@
             :id="anchor || undefined"
             :data-testid="`${testId}__title`"
             :data-size="size"
-            class="scroll-mt-(--spacing-xl) text-balance data-[size=medium]:text-heading-xs data-[size=medium]:text-(--text-default) data-[size=small]:text-label-md data-[size=small]:text-(--text-muted)"
+            class="scroll-mt-(--spacing-xl) text-balance text-(--text-default) data-[size=medium]:text-heading-xs data-[size=small]:text-heading-xxs"
           >
             {{ title }}
           </h2>

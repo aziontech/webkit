@@ -86,7 +86,7 @@ describe('Calendar', () => {
     const trigger = getByTestId('input-calendar__trigger')
     expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
-    expect(trigger.textContent).toContain('Select a Date Range')
+    expect(trigger.textContent).toContain('Select a date range')
 
     expect(getPopover()).toBeNull()
     expect(document.body.querySelector('[data-testid="input-calendar__grid"]')).toBeNull()
@@ -584,7 +584,7 @@ describe('Calendar', () => {
 
     const presetsTrigger = getByTestId('input-calendar__presets-trigger')
     expect(presetsTrigger.getAttribute('aria-haspopup')).toBe('menu')
-    expect(presetsTrigger.textContent).toContain('Select Period')
+    expect(presetsTrigger.textContent).toContain('Select period')
 
     await fireEvent.click(presetsTrigger)
     const menu = await waitFor(() => {
@@ -754,7 +754,7 @@ describe('Calendar', () => {
   it('renders the Default story fixture cleanly', async () => {
     const { getByTestId } = render(Default)
 
-    expect(getByTestId('input-calendar__trigger').textContent).toContain('Select a Date Range')
+    expect(getByTestId('input-calendar__trigger').textContent).toContain('Select a date range')
 
     await openCalendar(getByTestId)
     await expectNoA11yViolations(document.body)

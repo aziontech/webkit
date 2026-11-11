@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 6db5d6565052437eede94008cbd9aaffeb51f400b168642606c5c4acfa17e8f4
+checksum: 6e2186524ac0dd71ca08cdc792c2fb9047c994bb6ecbe9acc12d768db51f98e0
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # SeverityTag — Component Spec
@@ -34,7 +34,7 @@ SeverityTag labels an item with its place on an ordered severity scale: critical
 
 ## Best practices
 
-- Keep the default label (the level name) so the text always names the level; override `label` only to translate it.
+- Keep the default label (the level name from the locale catalog, translated under `WebkitProvider`) so the text always names the level; override `label` only when the product glossary names the level differently.
 - Use one SeverityTag per row, in its own column, so the glyphs line up and the scale reads down the column.
 - Do not pair the tag with a toned `tag` for the same level; the glyph and the ramp already carry it.
 
@@ -42,21 +42,24 @@ SeverityTag labels an item with its place on an ordered severity scale: critical
 
 ```vue
 <script setup>
-import SeverityTag from '@aziontech/webkit/severity-tag'
+  import SeverityTag from '@aziontech/webkit/severity-tag'
 </script>
 
 <template>
-  <SeverityTag severity="high" size="medium" />
+  <SeverityTag
+    severity="high"
+    size="medium"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `severity` | `'critical' \| 'high' \| 'medium' \| 'low' \| 'info'` | `'info'` | false | Severity level; sets how many glyph bars fill, their colour and the default label. |
-| `label` | `string` | `''` | false | Text of the tag; empty falls back to the level name in sentence case. |
-| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
+| Prop       | Type                                                  | Default    | Required | JSDoc                                                                                         |
+| ---------- | ----------------------------------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------- |
+| `severity` | `'critical' \| 'high' \| 'medium' \| 'low' \| 'info'` | `'info'`   | false    | Severity level; sets how many glyph bars fill, their colour and the default label.            |
+| `label`    | `string`                                              | `''`       | false    | Text of the tag. Empty uses the locale catalog (`Critical`, `High`, `Medium`, `Low`, `Info`). |
+| `size`     | `'small' \| 'medium'`                                 | `'medium'` | false    | Size token; `medium` is 24px tall, `small` is 20px.                                           |
 
 ## Events
 
@@ -64,9 +67,9 @@ import SeverityTag from '@aziontech/webkit/severity-tag'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Replaces the label text. |
+| Slot      | Scope | Notes                    |
+| --------- | ----- | ------------------------ |
+| `default` | —     | Replaces the label text. |
 
 ## States
 
@@ -81,27 +84,27 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (both sizes) | `.text-label-sm` |
-| surface | `var(--bg-canvas)` |
-| border | `var(--border-default)` at `var(--border-width-default)` |
-| text | `var(--text-default)` |
-| spacing (medium) | `var(--spacing-xs)` horizontal padding and glyph gap |
-| spacing (small) | `var(--spacing-xxs)` horizontal padding and glyph gap |
-| shape | `var(--shape-elements)` |
-| glyph bar (filled) | `var(--severity-critical)` · `var(--severity-high)` · `var(--severity-medium)` · `var(--severity-low)`; info fills no bar, and `var(--severity-info)` colors info series in charts |
-| glyph bar (empty) | `var(--border-default)` |
+| Region                  | Token (DESIGN.md)                                                                                                                                                                  |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| typography (both sizes) | `.text-label-sm`                                                                                                                                                                   |
+| surface                 | `var(--bg-canvas)`                                                                                                                                                                 |
+| border                  | `var(--border-default)` at `var(--border-width-default)`                                                                                                                           |
+| text                    | `var(--text-default)`                                                                                                                                                              |
+| spacing (medium)        | `var(--spacing-xs)` horizontal padding and glyph gap                                                                                                                               |
+| spacing (small)         | `var(--spacing-xxs)` horizontal padding and glyph gap                                                                                                                              |
+| shape                   | `var(--shape-elements)`                                                                                                                                                            |
+| glyph bar (filled)      | `var(--severity-critical)` · `var(--severity-high)` · `var(--severity-medium)` · `var(--severity-low)`; info fills no bar, and `var(--severity-info)` colors info series in charts |
+| glyph bar (empty)       | `var(--border-default)`                                                                                                                                                            |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `severity-critical` | `primitives.red.600` (light) · `primitives.red.400` (dark) | Add the `severity` theme role in `packages/theme/src/tokens/theme/severity.js` with this component. |
-| `severity-high` | `primitives.orange.600` (light) · `primitives.orange.400` (dark) | Same role. |
-| `severity-medium` | `primitives.yellow.700` (light) · `primitives.yellow.500` (dark) | Same role. |
-| `severity-low` | `primitives.blue.600` (light) · `primitives.blue.400` (dark) | Same role. |
-| `severity-info` | `primitives.gray.500` (light) · `primitives.gray.400` (dark) | Same role. |
+| Figma variable      | Temporary primitive                                              | Follow-up                                                                                           |
+| ------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `severity-critical` | `primitives.red.600` (light) · `primitives.red.400` (dark)       | Add the `severity` theme role in `packages/theme/src/tokens/theme/severity.js` with this component. |
+| `severity-high`     | `primitives.orange.600` (light) · `primitives.orange.400` (dark) | Same role.                                                                                          |
+| `severity-medium`   | `primitives.yellow.700` (light) · `primitives.yellow.500` (dark) | Same role.                                                                                          |
+| `severity-low`      | `primitives.blue.600` (light) · `primitives.blue.400` (dark)     | Same role.                                                                                          |
+| `severity-info`     | `primitives.gray.500` (light) · `primitives.gray.400` (dark)     | Same role.                                                                                          |
 
 ## Accessibility (WCAG 2.1 AA)
 

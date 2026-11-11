@@ -311,3 +311,15 @@ describe('Switch touch target', () => {
     )
   })
 })
+
+describe('Switch direction', () => {
+  it('mirrors the checked handle slide under rtl', () => {
+    const view = render(Switch, {
+      props: { modelValue: true },
+      attrs: { 'aria-label': 'Enabled' }
+    })
+    const handle = view.getByTestId('input-switch__handle').className
+    expect(handle).toContain('group-data-[checked]:translate-x-3.5')
+    expect(handle).toContain('rtl:group-data-[checked]:-translate-x-3.5')
+  })
+})
