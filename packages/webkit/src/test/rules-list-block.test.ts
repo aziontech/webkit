@@ -6,7 +6,7 @@ import ReviewChanges from '../../blocks/platform/view/rules-list/variants/review
 import Searching from '../../blocks/platform/view/rules-list/variants/searching.vue'
 
 const namesIn = (root: HTMLElement, phase: string) =>
-  Array.from(root.querySelectorAll(`[data-rule-cell^="${phase}"] a[data-rule-name]`)).map((a) =>
+  Array.from(root.querySelectorAll(`[data-reorder-row^="${phase}"] a[data-rule-name]`)).map((a) =>
     a.textContent?.trim()
   )
 
@@ -14,15 +14,13 @@ const requestNames = (root: HTMLElement) =>
   Array.from(root.querySelectorAll('a[data-rule-name]')).map((a) => a.textContent?.trim())
 
 describe('platform/view/rules-list block', () => {
-  it('moves a rule with the arrow keys on its grip, announces it and keeps focus on the moved rule', async () => {
+  it('moves a rule with the arrow keys on its Table grip, announces it and keeps focus on the moved rule', async () => {
     const view = render(RulesList)
-    const grip = view.getByRole('button', { name: /^Reorder Docs rewrite, position 5 of 5/ })
+    const grip = view.getByRole('button', { name: 'Reorder Docs rewrite, position 5 of 5' })
     grip.focus()
     await fireEvent.keyDown(grip, { key: 'ArrowUp' })
     await waitFor(() =>
-      expect(view.getByTestId('rules-list__announcer').textContent).toContain(
-        'Docs rewrite moved to position 4 of 5 in the Request phase.'
-      )
+      expect(view.container.textContent).toContain('Moved Docs rewrite to position 4 of 5.')
     )
     expect(requestNames(view.container).slice(0, 5)).toEqual([
       'Default rule',
@@ -32,42 +30,48 @@ describe('platform/view/rules-list block', () => {
       'API gateway'
     ])
     await waitFor(() =>
-      expect(document.activeElement?.getAttribute('aria-label')).toMatch(
-        /^Reorder Docs rewrite, position 4 of 5/
+      expect(document.activeElement?.getAttribute('aria-label')).toBe(
+        'Reorder Docs rewrite, position 4 of 5'
       )
     )
+    expect(view.container.textContent).toMatch(/2\s+changes to the rules, not saved yet\./)
   })
 
   it('keeps the locked default rule first and disables its controls with the reason', async () => {
     const view = render(RulesList)
-    const grip = view.getByRole('button', { name: /^Default rule cannot be reordered/ })
+    const grip = view.getByRole('button', { name: 'Reorder Default rule, position 1 of 5' })
     expect(grip.hasAttribute('disabled')).toBe(true)
-    expect(grip.getAttribute('aria-label')).toContain(
-      'The default rule runs first and stays first.'
-    )
-    const up = view.getByRole('button', { name: 'Move Maintenance page up' })
+    await fireEvent.keyDown(view.getByRole('button', { name: /^Reorder Maintenance page/ }), {
+      key: 'Home'
+    })
+    expect(requestNames(view.container)[0]).toBe('Default rule')
+    const up = view.getByRole('button', {
+      name: 'Move Default rule down. The default rule runs first and stays first.'
+    })
     expect(up.hasAttribute('disabled')).toBe(true)
+    expect(
+      view.getByRole('button', { name: 'Move Maintenance page up' }).hasAttribute('disabled')
+    ).toBe(true)
     expect(view.getByRole('switch', { name: 'Run Default rule' }).hasAttribute('disabled')).toBe(
       true
     )
   })
 
-  it('moves a rule to a typed position and refocuses its position field', async () => {
+  it('moves a rule one place with Move down, announces it in its phase and keeps focus', async () => {
     const view = render(RulesList)
-    const field = view.getByRole('textbox', { name: /^Position of Maintenance page/ })
-    await fireEvent.update(field, '4')
-    await fireEvent.keyDown(field, { key: 'Enter' })
-    expect(requestNames(view.container).slice(0, 5)).toEqual([
+    await fireEvent.click(view.getByRole('button', { name: 'Move Maintenance page down' }))
+    expect(requestNames(view.container).slice(0, 3)).toEqual([
       'Default rule',
       'Redirect www',
-      'API gateway',
-      'Maintenance page',
-      'Docs rewrite'
+      'Maintenance page'
     ])
     await waitFor(() =>
-      expect(document.activeElement?.getAttribute('aria-label')).toMatch(
-        /^Position of Maintenance page/
+      expect(view.getByTestId('rules-list__announcer').textContent).toContain(
+        'Maintenance page moved to position 3 of 5 in the Request phase.'
       )
+    )
+    await waitFor(() =>
+      expect(document.activeElement?.getAttribute('aria-label')).toBe('Move Maintenance page down')
     )
   })
 
@@ -110,13 +114,16 @@ describe('platform/view/rules-list block', () => {
   it('turns reordering off while a search narrows the list', async () => {
     const view = render(Searching)
     expect(view.getByText(/Reordering is off while a search narrows the list/)).toBeTruthy()
-    const grips = view.getAllByRole('button', { name: /cannot be reordered/ })
-    expect(grips.length).toBeGreaterThan(0)
-    for (const grip of grips) {
-      expect(grip.getAttribute('aria-label')).toMatch(
+    const moves = view.getAllByRole('button', { name: /^Move .+ (up|down)\. / })
+    expect(moves.length).toBeGreaterThan(0)
+    for (const move of moves) {
+      expect(move.getAttribute('aria-label')).toMatch(
         /The default rule runs first|Clear the search to change the order/
       )
     }
+    const grips = Array.from(document.querySelectorAll('[data-reorder-handle]'))
+    expect(grips.length).toBeGreaterThan(0)
+    expect(grips.every((grip) => grip.hasAttribute('disabled'))).toBe(true)
     expect(view.getByTestId('rules-list__count-response').textContent?.trim()).toBe('1 of 3')
   })
 })

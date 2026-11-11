@@ -174,6 +174,8 @@
       estimateRowHeight?: number
       /** Data-driven mode: a leading grip lets people drag rows, or move the focused one with Arrow Up, Arrow Down, Home and End, into a new order. The table emits `update:data` with the reordered records (bind `v-model:data`) and `reorder`; it is locked while a sort is applied. */
       reorderable?: boolean
+      /** With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A row it rejects keeps its place: its grip is disabled, and no other row is dropped onto it or moved past it with the keys. */
+      rowReorderable?: (row: RowRecord) => boolean
     }>(),
     {
       maxHeight: '',
@@ -210,7 +212,8 @@
       density: 'comfortable',
       virtual: false,
       estimateRowHeight: 48,
-      reorderable: false
+      reorderable: false,
+      rowReorderable: undefined
     }
   )
 
@@ -1210,6 +1213,11 @@
       position: index + 1,
       total: orderedIds.value.length
     })
+  const canMoveId = (id: string): boolean => {
+    if (!props.rowReorderable) return true
+    const record = props.data.find((row) => rowKeyOf(row) === id)
+    return record ? props.rowReorderable(record) : false
+  }
   const dropOf = (id: string): 'before' | 'after' | undefined => {
     if (!dragId.value || overId.value !== id || dragId.value === id) return undefined
     const ids = orderedIds.value
@@ -1258,25 +1266,26 @@
       event.preventDefault()
       return
     }
-    if (reorderLocked.value) return
+    if (reorderLocked.value || !canMoveId(id)) return
     const ids = orderedIds.value
     const index = ids.indexOf(id)
+    const movable = ids.filter(canMoveId)
     const targets: Record<string, number> = {
       ArrowUp: index - 1,
       ArrowDown: index + 1,
-      Home: 0,
-      End: ids.length - 1
+      Home: ids.indexOf(movable[0] ?? id),
+      End: ids.indexOf(movable[movable.length - 1] ?? id)
     }
     const target = targets[event.key]
     if (target === undefined) return
     event.preventDefault()
-    if (target < 0 || target >= ids.length || target === index) return
+    if (target < 0 || target >= ids.length || target === index || !canMoveId(ids[target])) return
     moveRow(id, ids[target], 'moved')
   }
 
   const REORDER_EDGE = 32
   const onHandlePointerDown = (event: PointerEvent, id: string): void => {
-    if (reorderLocked.value || event.button !== 0) return
+    if (reorderLocked.value || event.button !== 0 || !canMoveId(id)) return
     const handle = event.currentTarget as HTMLElement
     if (event.isTrusted) handle.setPointerCapture(event.pointerId)
     event.preventDefault()
@@ -1289,7 +1298,8 @@
     const hit = globalThis.document
       .elementFromPoint(event.clientX, event.clientY)
       ?.closest<HTMLElement>('[data-reorder-row]')
-    if (hit && rootEl.value?.contains(hit)) overId.value = hit.getAttribute('data-reorder-row')
+    const hitId = hit && rootEl.value?.contains(hit) ? hit.getAttribute('data-reorder-row') : null
+    if (hitId && canMoveId(hitId)) overId.value = hitId
     const viewport = viewportEl()
     if (!viewport) return
     const box = viewport.getBoundingClientRect()
@@ -1627,7 +1637,7 @@
                       size="small"
                       :ariaLabel="handleLabelOf(row.id, windowStart + index)"
                       :aria-describedby="reorderHintId"
-                      :disabled="reorderLocked"
+                      :disabled="reorderLocked || !canMoveId(row.id)"
                       :data-reorder-handle="row.id"
                       :data-testid="`${testId}__reorder-handle`"
                       class="cursor-grab touch-none active:cursor-grabbing"
