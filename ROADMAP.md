@@ -325,7 +325,24 @@ MCP at `node_modules/@aziontech/webkit/llms/llms.txt`. The docs site (M2.3) serv
 
 ## M2.3 — Docs site
 
-Our own docs site that renders `examples/` and `blocks/` with the code beside, foundations included. Replaces Storybook for people.
+Done: `apps/docs` (`@aziontech/webkit-docs`, private), a Vite + Vue Router site prerendered with
+`vite-ssg` (one static HTML per route, hydrated) and built with WebKit itself (`GlobalHeader`,
+`Sidebar`, `Menu`, `Command` search on ⌘K, `DocPageHeader`, `DocProse`, `DocOnThisPage`,
+`CodeBlock`, `Table`, `ThemeSwitcher`), Rubik, light/dark, an RTL toggle and en / pt-BR / es through
+`WebkitProvider`. Pages come from the files: one per component from `catalog.json` (summary,
+import, when to use / not, props / events / slots, every example from `examples/*/examples.json`
+mounted live beside its Shiki-highlighted source, do / don't, accessibility and RTL from
+`.specs/`), one per block from `blocks/**/block.json` (every state in a resizable iframe with 375 /
+768 / 1280 / full widths, source, `guidelines.md`, `npx @aziontech/webkit add <id>`), and
+foundations (color, typography, spacing, radius, shadows, motion, z-index parsed from the theme's
+`globals.css`; getting started, languages, RTL, layout and devices, accessibility from the README and
+`rules/`). "Copy for AI" on every component and block; `packages/webkit/llms/` is served at
+`/llms/` (plus `/llms.txt`) and every component, block and foundation page links its `.md` as
+"View as Markdown". Marketing examples' `/marketing-components/…` URLs resolve to the package's
+`assets/*` exports. Use `pnpm docs:dev`,
+`docs:build`, `docs:preview`, `docs:smoke` (Playwright over every route, console errors and axe on a
+sample in both themes, WebKit findings already in `a11y-known.json` counted as known); how pages are generated and how to deploy statically is in
+`apps/docs/README.md`.
 
 ## M2.4 — Generative-AI components
 
@@ -478,6 +495,9 @@ before the branch is closed.
 | 10 | M2.4 | `WebkitProvider` bundles the pt-BR and es catalogs, so every new component's strings grow it (10.49 KB after M2.4; budget raised 9.1 → 10.6 KB) | Load non-English catalogs on demand (dynamic import keyed by locale, SSR-safe), lower the budget back to ≤ 9 KB |
 | 11 | M2.9 editors | `platform/edit/rule-builder` still draws its criteria rows by hand; the inventory row says they become `AttributeEditor`'s grouped mode, which now exists (`grouped`, AND inside a group, OR between groups). | Rebuild the criteria section of the rule-builder primary and `Composed` variant on `AttributeEditor` with `grouped`, update its guidelines, rebuild the catalog and run the harness for the block. |
 | 12 | M2.9 editors | `CodeEditor`'s Monaco path is tested only against a structural fake; no example or block loads the real `monaco-editor` (WebKit does not depend on it), so workers, the token theme and the diff editor have not been seen in a real browser. | Add a docs-site example that passes `loader: () => import('monaco-editor')` with its workers, check it visually in light and dark, and decide on an optional `@aziontech/webkit/code-editor-monaco` entry (spec "Decisions and open questions"). |
+| 13 | M2.3  | Media that examples and blocks load by absolute path (`/media/…`, `/logos/…`, `/docs/…`) still lives in `apps/storybook/static`, and the `/marketing-components/…` → `@aziontech/webkit/assets/*` table is `apps/storybook/src/stories/_shared/site-assets.js`; the docs site reads both from Storybook | M2.5 moves the folder to `apps/docs/public` and the table next to the assets in `packages/webkit` when Storybook is removed, then points `STATIC_ASSETS` and `SITE_ASSETS` in `apps/docs/plugins/paths.ts` at them |
+| 14 | M2.3  | Rubik does not load from `fonts.azion.com`: `https://fonts.azion.com/rubik/Rubik-VariableFont_wght.ttf` answers 404, so every page falls back to the system font | Publish `apps/fonts/rubik/` to fonts.azion.com (owner: whoever deploys apps/fonts), or have the theme self-host it |
+| 15 | M2.3  | `apps/docs` has no `type-check` script: `vue-tsc` over it reports the kebab `aria-label` passed to `IconButton`'s required `ariaLabel` prop (the pattern WebKit's own examples use) and WebKit source `.js` presets without declarations (TS7016) | Make WebKit's required `ariaLabel` props accept the attribute form in types (or ship `.d.ts` for the presets), then add `type-check` to `apps/docs/package.json` and the root gates |
 
 ## M2.11 — Close the branch and merge into `main`
 
