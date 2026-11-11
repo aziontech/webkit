@@ -6,6 +6,7 @@ import {
   CAREERS_HOME_HERO,
   CAREERS_JOBS_PATH,
   CAREERS_PHOTOS,
+  CAREERS_PROCESS,
   CAREERS_ROLES,
   CAREERS_VISION,
   CAREERS_WORK
@@ -51,6 +52,14 @@ export const CAREERS_HOME_PAGE = [
     size: 'large',
     mediaPadded: true,
     scene: { component: markRaw(BrandGlobeScene) }
+  },
+  {
+    section: 'ProcessSteps',
+    eyebrow: CAREERS_PROCESS.eyebrow,
+    title: CAREERS_PROCESS.title,
+    description: CAREERS_PROCESS.description,
+    steps: CAREERS_PROCESS.steps,
+    ariaLabel: 'Hiring process stages'
   },
   {
     section: 'ListingTable',
