@@ -36,6 +36,7 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { downloadCsv, toCsv } from '../../../utils/csv'
+  import IconButton from '../../actions/icon-button/icon-button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Checkbox from '../../inputs/checkbox/checkbox.vue'
@@ -171,6 +172,8 @@
       virtual?: boolean
       /** Row height (px) assumed in `virtual` mode until a row is measured. */
       estimateRowHeight?: number
+      /** Data-driven mode: a leading grip lets people drag rows, or move the focused one with Arrow Up, Arrow Down, Home and End, into a new order. The table emits `update:data` with the reordered records (bind `v-model:data`) and `reorder`; it is locked while a sort is applied. */
+      reorderable?: boolean
     }>(),
     {
       maxHeight: '',
@@ -206,7 +209,8 @@
       striped: false,
       density: 'comfortable',
       virtual: false,
-      estimateRowHeight: 48
+      estimateRowHeight: 48,
+      reorderable: false
     }
   )
 
@@ -223,6 +227,8 @@
     'filter-remove': [filter: AppliedFilter]
     refresh: []
     export: [rows: RowRecord[]]
+    'update:data': [value: RowRecord[]]
+    reorder: [payload: { from: number; to: number; row: RowRecord }]
   }>()
 
   defineSlots<{
@@ -245,7 +251,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ table: en.table })
+  const { t } = useTranslate({ table: en.table, tableReorder: en.tableReorder })
 
   const slots = useSlots()
   const hasSlot = (name: string): boolean => Boolean((slots as Record<string, unknown>)[name])
@@ -749,7 +755,11 @@
   )
 
   const leftOffsetOf = (id: string): number => {
-    let offset = selectionFrozen.value ? SELECTION_WIDTH : 0
+    let offset =
+      (selectionFrozen.value ? SELECTION_WIDTH : 0) +
+      (props.reorderable && dataDriven.value && leftFrozenCols.value.length > 0
+        ? SELECTION_WIDTH
+        : 0)
     for (const c of leftFrozenCols.value) {
       if (columnId(c) === id) break
       offset += frozenWidthOf(c)
@@ -1091,7 +1101,7 @@
     const root = rootEl.value
     if (!root || props.loading || stacked.value) return
     const headCells = Array.from(root.querySelectorAll<HTMLElement>('[role="columnheader"]'))
-    const offset = props.enableRowSelection ? 1 : 0
+    const offset = leadingCells.value
     const next: Record<string, number> = {}
     headers.value.forEach((header, index) => {
       const column = props.columns.find((c: TableColumn) => columnId(c) === header.column.id)
@@ -1137,6 +1147,142 @@
     () => void scheduleAutoFit()
   )
 
+  const reorderActive = computed<boolean>(() => props.reorderable && dataDriven.value)
+  const reorderLocked = computed<boolean>(() => table.getState().sorting.length > 0)
+  const leadingCells = computed<number>(
+    () => (props.enableRowSelection ? 1 : 0) + (reorderActive.value ? 1 : 0)
+  )
+  const handleFrozen = computed<boolean>(
+    () => reorderActive.value && leftFrozenCols.value.length > 0
+  )
+  const selectionStyle = computed<Record<string, string> | undefined>(() =>
+    handleFrozen.value && selectionFrozen.value && !stacked.value
+      ? { insetInlineStart: `${SELECTION_WIDTH}px` }
+      : undefined
+  )
+  const reorderHintId = `${useId()}-reorder-hint`
+  const reorderMessage = ref<string>('')
+  const dragId = ref<string | null>(null)
+  const overId = ref<string | null>(null)
+  let focusAfterMove: string | null = null
+
+  const orderedIds = computed<string[]>(() =>
+    leanRows.value ? sourceIds.value : rows.value.map((row) => row.id)
+  )
+  const principalKey = computed<string | undefined>(() => {
+    const column = props.columns[principalIndex.value]
+    return column?.accessorKey ?? column?.id
+  })
+  const rowNameOf = (id: string): string => {
+    const record = props.data.find((row) => rowKeyOf(row) === id)
+    const key = principalKey.value
+    const value = record && key ? record[key] : undefined
+    return value === undefined || value === null || value === '' ? id : String(value)
+  }
+  const handleLabelOf = (id: string, index: number): string =>
+    t('tableReorder.handle', {
+      name: rowNameOf(id),
+      position: index + 1,
+      total: orderedIds.value.length
+    })
+  const dropOf = (id: string): 'before' | 'after' | undefined => {
+    if (!dragId.value || overId.value !== id || dragId.value === id) return undefined
+    const ids = orderedIds.value
+    return ids.indexOf(dragId.value) < ids.indexOf(id) ? 'after' : 'before'
+  }
+
+  const moveRow = (id: string, targetId: string, message: 'moved' | 'dropped'): void => {
+    const from = props.data.findIndex((row) => rowKeyOf(row) === id)
+    const to = props.data.findIndex((row) => rowKeyOf(row) === targetId)
+    if (from < 0 || to < 0 || from === to) return
+    const next = [...props.data]
+    const [moved] = next.splice(from, 1)
+    next.splice(to, 0, moved)
+    reorderMessage.value = t(`tableReorder.${message}`, {
+      name: rowNameOf(id),
+      position: orderedIds.value.indexOf(targetId) + 1,
+      total: orderedIds.value.length
+    })
+    focusAfterMove = id
+    emit('update:data', next)
+    emit('reorder', { from, to, row: moved })
+  }
+
+  const focusHandle = (id: string): void => {
+    const handle = Array.from(
+      rootEl.value?.querySelectorAll<HTMLElement>('[data-reorder-handle]') ?? []
+    ).find((el) => el.getAttribute('data-reorder-handle') === id)
+    handle?.focus()
+  }
+  watch(
+    () => props.data,
+    () => {
+      const id = focusAfterMove
+      if (!id) return
+      focusAfterMove = null
+      void nextTick(() => focusHandle(id))
+    },
+    { flush: 'post' }
+  )
+
+  const onHandleKeydown = (event: KeyboardEvent, id: string): void => {
+    if (event.key === 'Escape' && dragId.value) {
+      dragId.value = null
+      overId.value = null
+      reorderMessage.value = t('tableReorder.cancelled')
+      event.preventDefault()
+      return
+    }
+    if (reorderLocked.value) return
+    const ids = orderedIds.value
+    const index = ids.indexOf(id)
+    const targets: Record<string, number> = {
+      ArrowUp: index - 1,
+      ArrowDown: index + 1,
+      Home: 0,
+      End: ids.length - 1
+    }
+    const target = targets[event.key]
+    if (target === undefined) return
+    event.preventDefault()
+    if (target < 0 || target >= ids.length || target === index) return
+    moveRow(id, ids[target], 'moved')
+  }
+
+  const REORDER_EDGE = 32
+  const onHandlePointerDown = (event: PointerEvent, id: string): void => {
+    if (reorderLocked.value || event.button !== 0) return
+    const handle = event.currentTarget as HTMLElement
+    if (event.isTrusted) handle.setPointerCapture(event.pointerId)
+    event.preventDefault()
+    handle.focus()
+    dragId.value = id
+    overId.value = id
+  }
+  const onHandlePointerMove = (event: PointerEvent): void => {
+    if (!dragId.value) return
+    const hit = globalThis.document
+      .elementFromPoint(event.clientX, event.clientY)
+      ?.closest<HTMLElement>('[data-reorder-row]')
+    if (hit && rootEl.value?.contains(hit)) overId.value = hit.getAttribute('data-reorder-row')
+    const viewport = viewportEl()
+    if (!viewport) return
+    const box = viewport.getBoundingClientRect()
+    if (event.clientY < box.top + REORDER_EDGE) viewport.scrollTop -= REORDER_EDGE / 2
+    else if (event.clientY > box.bottom - REORDER_EDGE) viewport.scrollTop += REORDER_EDGE / 2
+  }
+  const onHandlePointerUp = (): void => {
+    const id = dragId.value
+    const target = overId.value
+    dragId.value = null
+    overId.value = null
+    if (id && target && target !== id) moveRow(id, target, 'dropped')
+  }
+  const onHandlePointerCancel = (): void => {
+    dragId.value = null
+    overId.value = null
+  }
+
   const startResize = (
     column: ColumnLike & { id: string },
     event: MouseEvent | globalThis.TouchEvent
@@ -1150,7 +1296,7 @@
       const headerCells = Array.from(
         headerRow.querySelectorAll<HTMLElement>('[role="columnheader"]')
       )
-      const offset = props.enableRowSelection ? 1 : 0
+      const offset = leadingCells.value
       const snapshot = { ...resizeWidths.value }
       headers.value.forEach((header, columnIndex: number) => {
         const m = metaOf(header.column)
@@ -1290,9 +1436,20 @@
             >
               <TableRow>
                 <TableHeadCell
+                  v-if="reorderActive"
+                  key="reorder"
+                  kind="checkbox"
+                  :frozen="handleFrozen ? 'start' : undefined"
+                  data-reorder-cell
+                >
+                  <span class="sr-only">{{ t('tableReorder.column') }}</span>
+                </TableHeadCell>
+                <TableHeadCell
                   v-if="enableRowSelection"
+                  key="select"
                   kind="checkbox"
                   :frozen="selectionFrozen ? 'start' : undefined"
+                  :style="selectionStyle"
                 >
                   <Checkbox
                     v-if="!stacked"
@@ -1345,9 +1502,18 @@
                 "
               >
                 <TableCell
+                  v-if="reorderActive"
+                  key="reorder"
+                  kind="checkbox"
+                  :frozen="handleFrozen ? 'start' : undefined"
+                  :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
+                />
+                <TableCell
                   v-if="enableRowSelection"
+                  key="select"
                   kind="checkbox"
                   :frozen="selectionFrozen ? 'start' : undefined"
+                  :style="selectionStyle"
                   :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                 >
                   <Skeleton
@@ -1399,24 +1565,61 @@
                     striped,
                     windowed,
                     virtualActive,
-                    windowStart + index
+                    windowStart + index,
+                    reorderActive,
+                    reorderLocked,
+                    dragId === row.id,
+                    dropOf(row.id),
+                    orderedIds.length
                   ]"
                   :selected="row.getIsSelected()"
                   :aria-rowindex="windowed ? windowStart + index + 2 : undefined"
+                  :data-reorder-row="reorderActive ? row.id : undefined"
+                  :data-dragging="dragId === row.id || undefined"
+                  :data-drop="dropOf(row.id)"
                   :class="[
                     stacked
                       ? 'flex-wrap rounded-(--shape-elements) border! py-(--spacing-xxs)'
                       : undefined,
                     striped && (windowStart + index) % 2 === 1
                       ? '[--table-row-bg:var(--bg-surface-raised)]'
-                      : undefined
+                      : undefined,
+                    'transition-[opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:-outline-offset-2 data-[dragging]:outline-(--accent) data-[drop=before]:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:shadow-[inset_0_-2px_0_var(--accent)]'
                   ]"
                   @click="onRowClick($event, row)"
                 >
                   <TableCell
+                    v-if="reorderActive"
+                    key="reorder"
+                    kind="checkbox"
+                    :frozen="handleFrozen ? 'start' : undefined"
+                    data-reorder-cell
+                    :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
+                  >
+                    <IconButton
+                      icon="pi pi-bars"
+                      kind="outlined"
+                      size="small"
+                      :ariaLabel="handleLabelOf(row.id, windowStart + index)"
+                      :aria-describedby="reorderHintId"
+                      :disabled="reorderLocked"
+                      :data-reorder-handle="row.id"
+                      :data-testid="`${testId}__reorder-handle`"
+                      class="cursor-grab touch-none active:cursor-grabbing"
+                      @click.stop
+                      @keydown="(event: KeyboardEvent) => onHandleKeydown(event, row.id)"
+                      @pointerdown="(event: PointerEvent) => onHandlePointerDown(event, row.id)"
+                      @pointermove="onHandlePointerMove"
+                      @pointerup="onHandlePointerUp"
+                      @pointercancel="onHandlePointerCancel"
+                    />
+                  </TableCell>
+                  <TableCell
                     v-if="enableRowSelection"
+                    key="select"
                     kind="checkbox"
                     :frozen="selectionFrozen ? 'start' : undefined"
+                    :style="selectionStyle"
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                   >
                     <Checkbox
@@ -1492,6 +1695,19 @@
         </Transition>
       </div>
     </ScrollArea>
+    <template v-if="reorderActive">
+      <span
+        :id="reorderHintId"
+        class="sr-only"
+        >{{ reorderLocked ? t('tableReorder.locked') : t('tableReorder.hint') }}</span
+      >
+      <span
+        role="status"
+        :data-testid="`${testId}__reorder-status`"
+        class="sr-only"
+        >{{ reorderMessage }}</span
+      >
+    </template>
 
     <div
       v-if="dataDriven && paginated"

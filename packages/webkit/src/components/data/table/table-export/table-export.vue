@@ -4,6 +4,7 @@
   import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -48,14 +49,16 @@
     name="trigger"
     :export="onExport"
   >
-    <IconButton
-      v-bind="$attrs"
-      :data-testid="testId"
-      icon="pi pi-download"
-      :ariaLabel="t('tableExport.label')"
-      kind="outlined"
-      size="medium"
-      @click="onExport"
-    />
+    <Tooltip :text="t('tableExport.label')">
+      <IconButton
+        v-bind="$attrs"
+        :data-testid="testId"
+        icon="pi pi-download"
+        :ariaLabel="t('tableExport.label')"
+        kind="outlined"
+        size="medium"
+        @click="onExport"
+      />
+    </Tooltip>
   </slot>
 </template>

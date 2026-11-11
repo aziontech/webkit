@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A domain line: the first domain, then `+3` opening a popover with the other three, each a link that opens in a new tab. The chip's name says what it counts.",
+   "sfc": "<script setup>\n  import OverflowCount from '@aziontech/webkit/overflow-count'\n\n  const domains = ['shop.example.com', 'api.example.com', 'img.example.com', 'docs.example.com']\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-xs) min-w-0 items-center gap-(--spacing-xs)\">\n    <a\n      :href=\"`https://${domains[0]}`\"\n      target=\"_blank\"\n      rel=\"noopener noreferrer\"\n      class=\"min-w-0 truncate text-body-sm text-(--text-default) underline-offset-2 hover:underline\"\n      >{{ domains[0] }}</a\n    >\n    <OverflowCount\n      :items=\"domains.slice(1).map((label) => ({ label, href: `https://${label}` }))\"\n      :noun=\"{ one: 'domain', other: 'domains' }\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Long list",
+   "summary": "34 tags: past 7 items the popover adds a search box, it loads 10 at a time with Load more, the summary says how many show, and a search with no match quotes the query.",
+   "sfc": "<script setup>\n  import OverflowCount from '@aziontech/webkit/overflow-count'\n\n  const regions = ['north', 'south', 'east', 'west']\n  const tiers = ['edge', 'core', 'cache', 'origin', 'shield', 'relay', 'gateway', 'store', 'queue']\n  const tags = regions.flatMap((region) => tiers.map((tier) => `${region}-${tier}`)).slice(0, 34)\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-xs)\">\n    <span class=\"text-body-sm text-(--text-default)\">{{ tags[0] }}</span>\n    <OverflowCount\n      :items=\"tags.slice(1)\"\n      :noun=\"{ one: 'tag', other: 'tags' }\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}
