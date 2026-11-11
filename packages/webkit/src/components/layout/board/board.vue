@@ -93,7 +93,9 @@
     const existing = current.value[index]
     if (!existing) return
     if (
-      Object.entries(patch).every(([key, value]) => existing[key as keyof BoardLayoutItem] === value)
+      Object.entries(patch).every(
+        ([key, value]) => existing[key as keyof BoardLayoutItem] === value
+      )
     )
       return
     const next = [...current.value]

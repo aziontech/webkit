@@ -73,3 +73,15 @@ Two entries changed for M2.9 phase 1 (the PR #1169 port). `Item.List` now tells 
 | --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------ |
 | listing-browser | 64.65         | within budget   | 64.69        | 64.75      | Raised: `Item` list-member context and the listitem wrapper. |
 | listing-table   | 55.85         | within budget   | 55.92        | 56         | Raised: same `Item` change.                                  |
+
+Two entries changed and seven new entries were set for M2.9 WP app-layout. `ChartCard` now reads an enclosing `Board.Item` (span, height, drag and keyboard move go through the board), so the configurable dashboard is built on `Board`. `WebKitProvider` bundles the English catalog, which grew by the new `appLayout`, `board`, `errorBoundary`, `hotspot` and `tutorialPanel` groups. The new entries are set just above what they measure; `error-boundary` ships `Alert` and `Button` for its fallback.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                   |
+| --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------ |
+| chart-card      | 4.7           | within budget   | 4.71         | 4.75       | Raised: the `Board.Item` bridge.                       |
+| webkit-provider | 9.1           | within budget   | 10.21        | 10.25      | Raised: five new locale groups in the English catalog. |
+| app-layout      | new           | –               | 22.48        | 23         | New: regions, two drawers, split panel resize.         |
+| board           | new           | –               | 3.40         | 3.5        | New: `Board` and `Board.Item`.                         |
+| error-boundary  | new           | –               | 6.35         | 6.5        | New: fallback built from `Alert` and `Button`.         |
+| hotspot         | new           | –               | 11.10        | 11.25      | New: the marker on `Popover`.                          |
+| tutorial-panel  | new           | –               | 8.48         | 8.75       | New: the panel, its provider and the task list.        |

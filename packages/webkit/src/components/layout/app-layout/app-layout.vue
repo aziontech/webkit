@@ -369,7 +369,7 @@
       >
         <div class="flex min-h-0 min-w-0 flex-1 flex-col">
           <div
-            v-if="$slots.notifications"
+            v-if="$slots['notifications']"
             :data-testid="`${testId}__notifications`"
             class="flex shrink-0 flex-col gap-(--spacing-xs) px-(--spacing-md) pt-(--spacing-md) empty:hidden"
           >
@@ -380,7 +380,7 @@
             class="min-h-0 min-w-0 flex-1 overflow-auto"
           >
             <div
-              v-if="$slots.breadcrumbs"
+              v-if="$slots['breadcrumbs']"
               :data-testid="`${testId}__breadcrumbs`"
               class="px-(--spacing-md) pt-(--spacing-md)"
             >
@@ -425,7 +425,7 @@
               <IconButton
                 v-if="!compact"
                 icon="pi pi-window-maximize"
-                :aria-label="t('appLayout.showAtSide')"
+                :ariaLabel="t('appLayout.showAtSide')"
                 kind="transparent"
                 size="small"
                 :data-testid="`${testId}__split-position`"
@@ -433,7 +433,7 @@
               />
               <IconButton
                 icon="pi pi-times"
-                :aria-label="t('appLayout.closeSplitPanel')"
+                :ariaLabel="t('appLayout.closeSplitPanel')"
                 kind="transparent"
                 size="small"
                 :data-testid="`${testId}__split-close`"
@@ -481,7 +481,7 @@
             </h2>
             <IconButton
               icon="pi pi-window-minimize"
-              :aria-label="t('appLayout.showAtBottom')"
+              :ariaLabel="t('appLayout.showAtBottom')"
               kind="transparent"
               size="small"
               :data-testid="`${testId}__split-position`"
@@ -489,7 +489,7 @@
             />
             <IconButton
               icon="pi pi-times"
-              :aria-label="t('appLayout.closeSplitPanel')"
+              :ariaLabel="t('appLayout.closeSplitPanel')"
               kind="transparent"
               size="small"
               :data-testid="`${testId}__split-close`"
@@ -519,7 +519,7 @@
             </h2>
             <IconButton
               icon="pi pi-times"
-              :aria-label="t('appLayout.closeTools')"
+              :ariaLabel="t('appLayout.closeTools')"
               kind="transparent"
               size="small"
               :data-testid="`${testId}__tools-close`"
