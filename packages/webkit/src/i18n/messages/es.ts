@@ -928,5 +928,18 @@ export const es: Messages = {
     previous: 'Anterior',
     next: 'Siguiente',
     submit: 'Crear'
+  },
+  consolePanel: {
+    views: 'Vistas de la consola'
+  },
+  customerSpotlight: {
+    list: 'Historias de clientes',
+    story: 'Leer la historia'
+  },
+  sectionCommand: {
+    command: 'Comando',
+    prompt: 'Prompt',
+    copyCommand: 'Copiar comando',
+    copyPrompt: 'Copiar prompt'
   }
 }

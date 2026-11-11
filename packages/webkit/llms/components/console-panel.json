@@ -1,0 +1,150 @@
+{
+ "name": "console-panel",
+ "binding": "ConsolePanel",
+ "import": "@aziontech/webkit/console-panel",
+ "treeShakeableImport": "@aziontech/webkit/console-panel",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ShellMockup`, `ProductWidget` or diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.",
+ "setup": null,
+ "useWhen": [
+  "Showing the product itself on a landing page.",
+  "A tour of three or four views of one screen."
+ ],
+ "avoidWhen": [
+  "For a screenshot with copy beside it — use `MediaSplitBand`.",
+  "For code — use `CodeSplit` or `CliTerminal`."
+ ],
+ "related": [
+  "ShellMockup`, `ProductWidget` — scenes it frames.",
+  "ToggleGroup` — the tab control.",
+  "TextureMaterial`, `FrameBox`, `SectionTitle`."
+ ],
+ "bestPractices": [
+  "Two to four tabs, each a different view, labelled with one word.",
+  "Crop the scene only to remove empty space at its bottom (0.1–0.3)."
+ ],
+ "props": [
+  {
+   "name": "kind",
+   "type": "'console' \\ | 'diagram'",
+   "default": "'console'",
+   "required": "false",
+   "doc": "What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height."
+  },
+  {
+   "name": "titleKind",
+   "type": "SectionTitleKind",
+   "default": "'centered'",
+   "required": "false",
+   "doc": "Layout of the headline block."
+  },
+  {
+   "name": "titlePadding",
+   "type": "SectionTitlePadding",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Vertical padding of the headline block."
+  },
+  {
+   "name": "size",
+   "type": "SectionTitleSize",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Step of the headline on the heading scale."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered as its `h2`."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One or two sentences under the headline."
+  },
+  {
+   "name": "texture",
+   "type": "TextureMaterialKind",
+   "default": "'pixelate'",
+   "required": "false",
+   "doc": "Texture the panel is grounded with."
+  },
+  {
+   "name": "textureFade",
+   "type": "TextureMaterialFade",
+   "default": "'top'",
+   "required": "false",
+   "doc": "Axis the texture fades out along."
+  },
+  {
+   "name": "tabs",
+   "type": "ConsolePanelTab[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene."
+  },
+  {
+   "name": "tabsAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the tab control; empty uses the built-in \"Console views\"."
+  },
+  {
+   "name": "crop",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up."
+  },
+  {
+   "name": "actions",
+   "type": "ConsolePanelAction[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Buttons under the headline; each is `{ label, href, trailing?, target? }`, the first secondary, the rest outlined."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "scene",
+   "scope": "{ tab: string \\",
+   "notes": "undefined }` | The scene the band presents; `tab` is the selected tab value (undefined without tabs)."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ConsolePanel from '@aziontech/webkit/console-panel'\n  import ShellMockup from '@aziontech/webkit/shell-mockup'\n  import Tag from '@aziontech/webkit/tag'\n\n  const tabs = [\n    { value: 'applications', title: 'Applications' },\n    { value: 'metrics', title: 'Metrics' },\n    { value: 'logs', title: 'Logs' }\n  ]\n\n  const views = {\n    applications: { heading: 'Applications', rows: ['storefront', 'checkout-api', 'image-proxy'] },\n    metrics: { heading: 'Metrics', rows: ['Requests 1.2M', 'Cache hit 94%', 'Errors 0.02%'] },\n    logs: { heading: 'Logs', rows: ['GET /cart 200', 'POST /pay 201', 'GET /img/hero.webp 304'] }\n  }\n</script>\n\n<template>\n  <ConsolePanel\n    eyebrow=\"Console\"\n    title=\"One console for every workload\"\n    description=\"Deploy, observe and secure from the same place.\"\n    :tabs=\"tabs\"\n    :crop=\"0.2\"\n  >\n    <template #scene=\"{ tab }\">\n      <ShellMockup\n        :title=\"views[tab ?? 'applications'].heading\"\n        rail=\"workloads\"\n        fade=\"bottom\"\n      >\n        <div class=\"flex flex-col gap-(--spacing-sm) p-(--spacing-lg)\">\n          <span class=\"text-heading-sm text-(--text-default)\">{{\n            views[tab ?? 'applications'].heading\n          }}</span>\n          <div\n            v-for=\"row in views[tab ?? 'applications'].rows\"\n            :key=\"row\"\n            class=\"flex items-center justify-between border-b border-(--border-default) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            {{ row }}\n            <Tag\n              label=\"Live\"\n              severity=\"success\"\n              size=\"small\"\n            />\n          </div>\n        </div>\n      </ShellMockup>\n    </template>\n  </ConsolePanel>\n</template>"
+  },
+  {
+   "name": "Diagram",
+   "sfc": "<script setup>\n  import ConsolePanel from '@aziontech/webkit/console-panel'\n  import Illustration from '@aziontech/webkit/illustration'\n</script>\n\n<template>\n  <ConsolePanel\n    kind=\"diagram\"\n    title=\"Requests take the shortest path\"\n    :actions=\"[{ label: 'See the network', href: '/network', trailing: true }]\"\n  >\n    <template #scene>\n      <Illustration\n        name=\"global-network\"\n        aria-label=\"Requests routed to the nearest location\"\n        class=\"max-w-(--container-lg)\"\n      />\n    </template>\n  </ConsolePanel>\n</template>"
+  }
+ ],
+ "docs": "components/console-panel.md"
+}

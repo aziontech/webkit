@@ -33,7 +33,7 @@
    "type": "HeroBandKind",
    "default": "'title-band'",
    "required": "false",
-   "doc": "Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy."
+   "doc": "Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `centered-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy."
   },
   {
    "name": "size",
@@ -118,10 +118,35 @@
    "default": "''",
    "required": "false",
    "doc": "Height of the site header above the band, taken out of a band that fills a screen; any CSS length."
+  },
+  {
+   "name": "titleLength",
+   "type": "HeroBandTitleLength",
+   "default": "'short'",
+   "required": "false",
+   "doc": "Length of the headline; `long` widens its column so it breaks into two lines instead of three."
+  },
+  {
+   "name": "plain",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Drops the dot texture of the `centered` layout."
   }
  ],
  "events": [],
- "slots": [],
+ "slots": [
+  {
+   "name": "top",
+   "scope": "—",
+   "notes": "A scene in the window above the copy (`ShellMockup`, `ProductWidget`, a diagram). The design sample's hero scenes render here."
+  },
+  {
+   "name": "bottom",
+   "scope": "—",
+   "notes": "A scene in the window under the copy; it enters after the copy (`animate-content-enter`, off under reduced motion) and fades at the inline edges on narrow containers."
+  }
+ ],
  "styleSeam": false,
  "examples": [
   {
@@ -131,6 +156,10 @@
   {
    "name": "Types",
    "sfc": "<script setup>\n  import HeroBand from '@aziontech/webkit/hero-band'\n</script>\n\n<template>\n  <div class=\"flex flex-col\">\n    <HeroBand\n      kind=\"centered\"\n      highlight=\"Build and run applications\"\n      title=\"globally, with no ops\"\n      description=\"Run code, AI, data, and security on 100+ data centers worldwide.\"\n      :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n      :secondary-action=\"{ label: 'Talk to a specialist', href: '/contact', trailing: true }\"\n      carousel-label=\"Trusted by teams running critical workloads\"\n      :carousel-marks=\"['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']\"\n    />\n    <HeroBand\n      kind=\"title-band\"\n      size=\"large\"\n      eyebrow=\"Cache\"\n      title=\"Deliver content fast, worldwide\"\n      description=\"Serve cached content close to users.\"\n      :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n      :secondary-action=\"{ label: 'Docs', href: '/docs', trailing: true }\"\n    />\n    <HeroBand\n      kind=\"pixel-floor\"\n      eyebrow=\"AI Inference\"\n      title=\"Build and deploy AI agents and applications in seconds\"\n      description=\"Run AI inference close to users on Azion’s distributed infrastructure.\"\n      :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n      :secondary-action=\"{ label: 'Talk to a specialist', href: '/contact' }\"\n      carousel-label=\"Trusted by teams running critical workloads\"\n      :carousel-marks=\"['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']\"\n    />\n    <HeroBand\n      kind=\"copy-beside-art\"\n      eyebrow=\"AWS Alternative Comparison\"\n      title=\"AWS sells services. Your team becomes the integrator.\"\n      description=\"Azion delivers one platform, distributed by default.\"\n      :primary-action=\"{ label: 'Talk to a specialist', href: '/contact', trailing: true }\"\n      illustration=\"global-network\"\n      illustration-aria-label=\"A global network of Azion data centers\"\n      carousel-label=\"Trusted by teams running critical workloads\"\n      :carousel-marks=\"['agibank', 'radware', 'america-movil', 'gpa', 'fourbank']\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Bands",
+   "sfc": "<script setup>\n  import HeroBand from '@aziontech/webkit/hero-band'\n  import SectionCommand from '@aziontech/webkit/section-command'\n</script>\n\n<template>\n  <div class=\"flex flex-col\">\n    <HeroBand\n      kind=\"centered-band\"\n      eyebrow=\"Pricing\"\n      title=\"Pay for what runs, not for what waits\"\n      description=\"Start free and grow without changing plans.\"\n      :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n    />\n    <HeroBand\n      kind=\"compact-band\"\n      eyebrow=\"Changelog\"\n      title=\"What shipped this month across the platform, the console and the CLI\"\n      title-length=\"long\"\n      description=\"New features and fixes, newest first.\"\n    />\n    <HeroBand\n      kind=\"centered\"\n      plain\n      title=\"Ship from your terminal\"\n      description=\"One command creates, builds and deploys a project.\"\n    >\n      <template #bottom>\n        <SectionCommand value=\"npm create azion@latest\" />\n      </template>\n    </HeroBand>\n  </div>\n</template>"
   }
  ],
  "docs": "components/hero-band.md"

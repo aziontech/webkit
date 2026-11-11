@@ -11,6 +11,11 @@
       "name": "Types",
       "summary": "Every layout stacked: `centered` over the dot field with the client strip, the large `title-band`, `pixel-floor` with its copy at the start over the animated floor, and `copy-beside-art` with the illustration beside the copy.",
       "file": "types.vue"
+    },
+    {
+      "name": "Bands",
+      "summary": "The design sample's other openings: `centered-band` (large, site-wide, centered), `compact-band` (short, copy at the start) with `title-length=\"long\"` widening the headline, and a `plain` centered screen with a scene in the `bottom` slot.",
+      "file": "bands.vue"
     }
   ]
 }

@@ -245,3 +245,17 @@ New documentation parts. Each wrapper carries the design-system component it ren
 | doc-heading         | new           | 0.95         | 1.5        | New: anchor heading on `useHeadingNav`.       |
 | doc-tab             | new           | 0.28         | 1          | New: a `display: contents` carrier.           |
 | doc-tabs            | new           | 16.56        | 17         | New: `Tabs` root, list, items and panels.     |
+
+New sections and the sample's section variants. `ConsolePanel` carries `ToggleGroup` for its tabs and `SectionCommand` carries `InputGroup` and `CopyButton`; the others are layout over `SectionModule`, `SectionTitle`, `FrameBox` and `TextureMaterial`. `HeroBand`, `LogoWallQuote` and `ComparePlans` grow by their new variants and stay inside their budgets. The `consolePanel`, `customerSpotlight` and `sectionCommand` groups grow the English catalog the provider ships and the two opt-in locale entries (measured + ~0.2 KB).
+
+| Entry              | Budget before | Measured now | New budget | Note                                             |
+| ------------------ | ------------- | ------------ | ---------- | ------------------------------------------------ |
+| capability-grid    | new           | 6.24         | 6.75       | New: `CardGrid` of `Topic`s.                     |
+| console-panel      | new           | 20.72        | 21.25      | New: `ToggleGroup` tabs, scene slot.             |
+| customer-spotlight | new           | 4.93         | 5.5        | New: expanding client cards.                     |
+| process-scroll     | new           | 4.99         | 5.5        | New: numbered card row.                          |
+| section-command    | new           | 8.53         | 9          | New: `InputGroup` with `CopyButton`.             |
+| sticky-carousel    | new           | 5.60         | 6.1        | New: pinned row, one rAF-batched scroll handler. |
+| webkit-provider    | 8.4           | 8.27         | 8.5        | Raised: the site-sections groups in English.     |
+| locales-pt-BR      | 7.8           | 7.66         | 7.9        | Raised: the same groups in Portuguese.           |
+| locales-es         | 7.9           | 7.75         | 8          | Raised: the same groups in Spanish.              |

@@ -1495,6 +1495,10 @@
       "surface": "marketing"
     },
     {
+      "id": "capability-grid",
+      "surface": "marketing"
+    },
+    {
       "id": "card-grid",
       "surface": "marketing"
     },
@@ -1591,11 +1595,19 @@
       "surface": "marketing"
     },
     {
+      "id": "console-panel",
+      "surface": "marketing"
+    },
+    {
       "id": "contact-hub",
       "surface": "marketing"
     },
     {
       "id": "content-columns",
+      "surface": "marketing"
+    },
+    {
+      "id": "customer-spotlight",
       "surface": "marketing"
     },
     {
@@ -1815,6 +1827,10 @@
       "surface": "marketing"
     },
     {
+      "id": "process-scroll",
+      "surface": "marketing"
+    },
+    {
       "id": "quote",
       "surface": "marketing"
     },
@@ -1832,6 +1848,10 @@
     },
     {
       "id": "resource-grid",
+      "surface": "marketing"
+    },
+    {
+      "id": "section-command",
       "surface": "marketing"
     },
     {
@@ -1860,6 +1880,10 @@
     },
     {
       "id": "stats-band",
+      "surface": "marketing"
+    },
+    {
+      "id": "sticky-carousel",
       "surface": "marketing"
     },
     {

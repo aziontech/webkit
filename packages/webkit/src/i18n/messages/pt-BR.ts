@@ -929,5 +929,18 @@ export const ptBR: Messages = {
     previous: 'Anterior',
     next: 'Próximo',
     submit: 'Criar'
+  },
+  consolePanel: {
+    views: 'Visões do console'
+  },
+  customerSpotlight: {
+    list: 'Histórias de clientes',
+    story: 'Ler a história'
+  },
+  sectionCommand: {
+    command: 'Comando',
+    prompt: 'Prompt',
+    copyCommand: 'Copiar comando',
+    copyPrompt: 'Copiar prompt'
   }
 }

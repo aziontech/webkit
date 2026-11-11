@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "One shell command with the `$` prompt and a copy button, sized for a hero's actions row.",
+   "sfc": "<script setup>\n  import SectionCommand from '@aziontech/webkit/section-command'\n</script>\n\n<template>\n  <SectionCommand value=\"npm create azion@latest\" />\n</template>"
+  },
+  {
+   "name": "Prompt",
+   "summary": "With `shell` off the line is a prompt for an AI agent: no `$`, and the field and copy button are named Prompt.",
+   "sfc": "<script setup>\n  import SectionCommand from '@aziontech/webkit/section-command'\n</script>\n\n<template>\n  <SectionCommand\n    :shell=\"false\"\n    value=\"Deploy this repository to Azion and give me the URL\"\n  />\n</template>"
+  }
+ ]
+}

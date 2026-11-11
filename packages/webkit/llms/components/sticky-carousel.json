@@ -1,0 +1,89 @@
+{
+ "name": "sticky-carousel",
+ "binding": "StickyCarousel",
+ "import": "@aziontech/webkit/sticky-carousel",
+ "treeShakeableImport": "@aziontech/webkit/sticky-carousel",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A row of numbered dark cards that pins under the site header while the page scrolls and slides the row sideways until its last card is in view, then lets the page continue. Below the large breakpoint, or under reduced motion, it is a plain snap-scrolling row. From the design sample's site `StickyCarousel`.",
+ "setup": null,
+ "useWhen": [
+  "Five to eight short points that read best one after another (principles, reasons)."
+ ],
+ "avoidWhen": [
+  "For three to five ordered stages that fit the width — use `ProcessScroll`.",
+  "For content the reader must compare side by side."
+ ],
+ "related": [
+  "ProcessScroll` — the same cards without pinning.",
+  "StickyStack`, `FeatureScroll` — other scroll-driven bands."
+ ],
+ "bestPractices": [
+  "Keep each card to a heading and two lines.",
+  "Do not nest it inside a container that clips overflow; sticky positioning needs the page scroll."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered as its `h2`; the band renders nothing when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Paragraph beside the headline."
+  },
+  {
+   "name": "items",
+   "type": "StickyCarouselItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The cards, in order; each is `{ title, description }` and is numbered by its position."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the card row; defaults to the title."
+  },
+  {
+   "name": "headerOffset",
+   "type": "string",
+   "default": "'3.5rem'",
+   "required": "false",
+   "doc": "Height of the sticky site header the band pins under, from the large breakpoint up; any CSS length."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import StickyCarousel from '@aziontech/webkit/sticky-carousel'\n\n  const items = [\n    { title: 'One platform', description: 'Code, data and security deploy together.' },\n    { title: 'No regions', description: 'Everything runs everywhere by default.' },\n    { title: 'No cold starts', description: 'Isolates start in under a millisecond.' },\n    { title: 'Open standards', description: 'Web APIs, so code moves in and out freely.' },\n    { title: 'Predictable bills', description: 'Pay for requests, not for idle servers.' },\n    { title: 'Support that answers', description: 'Engineers on call, not ticket queues.' }\n  ]\n</script>\n\n<template>\n  <StickyCarousel\n    eyebrow=\"Why teams move\"\n    title=\"Six reasons teams run on one platform\"\n    description=\"Scroll the page: the row pins under the header and slides until the last card is in view.\"\n    :items=\"items\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/sticky-carousel.md"
+}

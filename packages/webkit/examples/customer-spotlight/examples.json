@@ -1,0 +1,11 @@
+{
+  "component": "customer-spotlight",
+  "title": "Components/Marketing/Sections/CustomerSpotlight",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Three client cards painted in each client's colours. Hover or focus a card on a wide canvas to open it: the logo rises and the story line and Read story cue slide in. On narrow canvases every card is open.",
+      "file": "default.vue"
+    }
+  ]
+}

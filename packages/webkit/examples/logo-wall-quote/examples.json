@@ -6,6 +6,11 @@
       "name": "Default",
       "summary": "The band as the customers page places it: the overline and headline over a nine-mark logo wall, with one signed quote from Zoop in the aside and a link out to its case study. Edit the props in the Controls panel — a band with no logos and no quote renders only its title.",
       "file": "default.vue"
+    },
+    {
+      "name": "Quote band",
+      "summary": "`kind=\"quote\"` sets the quote alone as a full-width band, with no logos: the design sample's QuoteBand. `quote-kind=\"highlight\"` gives it the featured register with the mark beside the text.",
+      "file": "quote-band.vue"
     }
   ],
   "site": [

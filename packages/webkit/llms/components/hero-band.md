@@ -32,7 +32,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `HeroBandKind` | `'title-band'` | false | Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy. |
+| `kind` | `HeroBandKind` | `'title-band'` | false | Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `centered-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy. |
 | `size` | `HeroBandSize` | `'medium'` | false | Vertical rhythm of the band; `large` is the opening a product page leads with. |
 | `eyebrow` | `string` | `''` | false | Short overline above the headline. |
 | `highlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
@@ -45,6 +45,15 @@
 | `illustration` | `string` | `''` | false | Registry name of the illustration set beside the copy in the `copy-beside-art` layout. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible description of the illustration. |
 | `headerOffset` | `string` | `''` | false | Height of the site header above the band, taken out of a band that fills a screen; any CSS length. |
+| `titleLength` | `HeroBandTitleLength` | `'short'` | false | Length of the headline; `long` widens its column so it breaks into two lines instead of three. |
+| `plain` | `boolean` | `false` | false | Drops the dot texture of the `centered` layout. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `top` | — | A scene in the window above the copy (`ShellMockup`, `ProductWidget`, a diagram). The design sample's hero scenes render here. |
+| `bottom` | — | A scene in the window under the copy; it enters after the copy (`animate-content-enter`, off under reduced motion) and fades at the inline edges on narrow containers. |
 
 ## States
 
@@ -137,6 +146,44 @@
       carousel-label="Trusted by teams running critical workloads"
       :carousel-marks="['agibank', 'radware', 'america-movil', 'gpa', 'fourbank']"
     />
+  </div>
+</template>
+```
+
+### Bands
+
+```vue
+<script setup>
+  import HeroBand from '@aziontech/webkit/hero-band'
+  import SectionCommand from '@aziontech/webkit/section-command'
+</script>
+
+<template>
+  <div class="flex flex-col">
+    <HeroBand
+      kind="centered-band"
+      eyebrow="Pricing"
+      title="Pay for what runs, not for what waits"
+      description="Start free and grow without changing plans."
+      :primary-action="{ label: 'Start for free', href: '/signup' }"
+    />
+    <HeroBand
+      kind="compact-band"
+      eyebrow="Changelog"
+      title="What shipped this month across the platform, the console and the CLI"
+      title-length="long"
+      description="New features and fixes, newest first."
+    />
+    <HeroBand
+      kind="centered"
+      plain
+      title="Ship from your terminal"
+      description="One command creates, builds and deploys a project."
+    >
+      <template #bottom>
+        <SectionCommand value="npm create azion@latest" />
+      </template>
+    </HeroBand>
   </div>
 </template>
 ```

@@ -1,0 +1,18 @@
+{
+ "purpose": "A row of numbered dark cards that pins under the site header while the page scrolls and slides the row sideways until its last card is in view, then lets the page continue. Below the large breakpoint, or under reduced motion, it is a plain snap-scrolling row. From the design sample's site `StickyCarousel`.",
+ "useWhen": [
+  "Five to eight short points that read best one after another (principles, reasons)."
+ ],
+ "avoidWhen": [
+  "For three to five ordered stages that fit the width — use `ProcessScroll`.",
+  "For content the reader must compare side by side."
+ ],
+ "related": [
+  "ProcessScroll` — the same cards without pinning.",
+  "StickyStack`, `FeatureScroll` — other scroll-driven bands."
+ ],
+ "bestPractices": [
+  "Keep each card to a heading and two lines.",
+  "Do not nest it inside a container that clips overflow; sticky positioning needs the page scroll."
+ ]
+}

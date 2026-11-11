@@ -37,8 +37,8 @@
 | `pickerAriaLabel` | `string` | `''` | false | Accessible name of the plan picker shown below the large breakpoint. |
 | `includedLabel` | `string` | `''` | false | Screen-reader text of a ticked cell. |
 | `excludedLabel` | `string` | `''` | false | Screen-reader text of a dashed cell. |
-| `plans` | `ComparePlansPlan[]` | `[]` | false | The plan columns, in order; each is `{ id, name, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. |
-| `sections` | `ComparePlansSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows }` and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
+| `plans` | `ComparePlansPlan[]` | `[]` | false | The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. |
+| `sections` | `ComparePlansSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
 | `primaryAction` | `ComparePlansAction` | `undefined` | false | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. |
 
 ## States
@@ -59,46 +59,63 @@
 - Touch target ≥40×40 px — the plan buttons and the picker are `large`.
 - Reflow: below `lg` (one plan column beside the row labels) the header cells, the section headings and the row labels use `var(--spacing-sm)` side padding instead of `var(--spacing-lg)`, so the two columns fit a 640px box at 200% zoom; from `lg` the padding is unchanged.
 
-## Usage
+## Examples
+
+### Band links
 
 ```vue
 <script setup>
   import ComparePlans from '@aziontech/webkit/compare-plans'
+
+  const plans = [
+    {
+      id: 'hobby',
+      name: 'Hobby',
+      description: 'For side projects.',
+      action: { label: 'Start for free', href: '/signup' }
+    },
+    {
+      id: 'pro',
+      name: 'Pro',
+      description: 'For teams in production.',
+      highlighted: true,
+      action: { label: 'Start trial', href: '/signup?plan=pro' }
+    }
+  ]
+
+  const sections = [
+    {
+      eyebrow: 'Compute',
+      title: 'Functions',
+      description: 'Run code close to users.',
+      rows: [
+        { label: 'Requests per month', values: ['1M', '10M'] },
+        { label: 'Custom domains', values: [true, true] },
+        { label: 'Usage alerts', values: ['—', true] }
+      ],
+      link: { label: 'See compute rates', href: '/pricing/compute' }
+    },
+    {
+      eyebrow: 'Storage',
+      title: 'Object Storage',
+      rows: [
+        { label: 'Storage included', values: ['5 GB', '100 GB'] },
+        { label: 'Versioning', values: ['—', true] }
+      ],
+      link: { label: 'See storage rates', href: '/pricing/storage' }
+    }
+  ]
 </script>
 
 <template>
   <ComparePlans
-    anchor="comparison"
-    caption="Feature comparison across the plans."
+    caption="Hobby and Pro compared feature by feature"
     column-label="Features"
     picker-aria-label="Plan being compared"
     included-label="Included"
     excluded-label="Not included"
-    :plans="[
-      { id: 'hobby', name: 'Hobby', action: { label: 'Start for free', href: '/signup' } },
-      {
-        id: 'pro',
-        name: 'Pro',
-        highlighted: true,
-        action: { label: 'Start with Pro', href: '/signup' }
-      }
-    ]"
-    :sections="[
-      {
-        eyebrow: 'Build',
-        title: 'Applications',
-        description: 'Build, run and scale applications globally.',
-        rows: [
-          {
-            label: 'Rules Engine',
-            hint: 'Conditional rules evaluated per request.',
-            values: ['✓', '✓']
-          },
-          { label: 'Rules per application', values: ['10 included', '20 included'] }
-        ]
-      }
-    ]"
-    :primary-action="{ label: 'See on-demand pricing', href: '/docs/pricing' }"
+    :plans="plans"
+    :sections="sections"
   />
 </template>
 ```

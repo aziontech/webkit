@@ -35861,6 +35861,117 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ---
 
+<!-- components/capability-grid.md -->
+
+# Capability Grid
+
+> A framed grid of product capabilities under an optional section title: each cell is a `Topic` (glyph, heading, sentence) with optional bullet points, three or four to a row. From the design sample's site `CapabilityGrid`.
+
+- Import: `import CapabilityGrid from '@aziontech/webkit/capability-grid'`
+- Category: sections · Surface: marketing · Structure: monolithic
+- API as JSON: [capability-grid.json](https://github.com/aziontech/webkit/blob/main/.specs/capability-grid.json)
+
+## When to use
+
+- A product page listing what the product does, three or six at a time.
+- A bare grid (no title) under a band that already has its heading.
+
+## Do
+
+- Three or six items at three columns, four or eight at four, so rows stay full.
+- Keep points to three short lines.
+
+## Don’t
+
+- For capabilities with art — use `FeatureTiles` or `BentoGrid`.
+- For links to other pages — use `UseCaseLinks` or `ResourceGrid`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- Topic`, `CardGrid`, `FrameBox`, `SectionTitle` — the parts.
+- FeatureTiles` — tiles with illustrations.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `eyebrow` | `string` | `''` | false | Overline above the title. |
+| `title` | `string` | `''` | false | Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`. |
+| `description` | `string` | `''` | false | One or two sentences under the title. |
+| `items` | `CapabilityGridItem[]` | `[]` | false | The capabilities, in order; each is `{ title, description, icon?, points? }`. The band renders nothing when empty. |
+| `columns` | `3 \ \| 4` | `3` | false | Capabilities per row from the large breakpoint up. |
+| `actions` | `CapabilityGridAction[]` | `[]` | false | Buttons under the section title; each is `{ label, href, trailing?, target? }`, the first secondary, the rest outlined. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
+
+## States
+
+- Renders nothing without items.
+- Heading level drops to `h3` under a title and rises to `h2` without one.
+
+## Accessibility
+
+- A `section` named by its title; headings nest under it.
+- Points are a real list.
+- Glyphs are decorative (from `Topic`).
+
+## Right-to-left
+
+- Layout: logical utilities only (`ps-*`, `border-e`, `ms-*`).
+- Icons: none mirrored.
+- Keyboard: unchanged.
+
+## Internationalization
+
+- Built-in strings: none. Every visible string is marketing copy and arrives through props, so the page supplies it in its own language.
+
+## Responsive
+
+- One column on phones, two on medium, `columns` from large (from `CardGrid`).
+- No horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import CapabilityGrid from '@aziontech/webkit/capability-grid'
+
+  const items = [
+    {
+      icon: 'pi pi-bolt',
+      title: 'Functions',
+      description: 'Run JavaScript and WebAssembly close to every user.'
+    },
+    {
+      icon: 'pi pi-database',
+      title: 'Object Storage',
+      description: 'Keep files where they are read, with no egress to plan for.'
+    },
+    {
+      icon: 'pi pi-shield',
+      title: 'Firewall',
+      description: 'Stop bots and attacks before they reach your origin.'
+    }
+  ]
+</script>
+
+<template>
+  <CapabilityGrid
+    eyebrow="Platform"
+    title="Everything an application needs, in one place"
+    description="Compute, storage and security that deploy together."
+    :items="items"
+    :actions="[{ label: 'Explore the platform', href: '/platform', trailing: true }]"
+  />
+</template>
+```
+
+1 more example(s) in [components/capability-grid.md](https://github.com/aziontech/webkit/blob/main/.specs/components/capability-grid.md).
+
+---
+
 <!-- components/cli-terminal.md -->
 
 # Cli Terminal
@@ -36766,8 +36877,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `pickerAriaLabel` | `string` | `''` | false | Accessible name of the plan picker shown below the large breakpoint. |
 | `includedLabel` | `string` | `''` | false | Screen-reader text of a ticked cell. |
 | `excludedLabel` | `string` | `''` | false | Screen-reader text of a dashed cell. |
-| `plans` | `ComparePlansPlan[]` | `[]` | false | The plan columns, in order; each is `{ id, name, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. |
-| `sections` | `ComparePlansSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows }` and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
+| `plans` | `ComparePlansPlan[]` | `[]` | false | The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. |
+| `sections` | `ComparePlansSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
 | `primaryAction` | `ComparePlansAction` | `undefined` | false | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. |
 
 ## States
@@ -36788,46 +36899,63 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - Touch target ≥40×40 px — the plan buttons and the picker are `large`.
 - Reflow: below `lg` (one plan column beside the row labels) the header cells, the section headings and the row labels use `var(--spacing-sm)` side padding instead of `var(--spacing-lg)`, so the two columns fit a 640px box at 200% zoom; from `lg` the padding is unchanged.
 
-## Usage
+## Examples
+
+### Band links
 
 ```vue
 <script setup>
   import ComparePlans from '@aziontech/webkit/compare-plans'
+
+  const plans = [
+    {
+      id: 'hobby',
+      name: 'Hobby',
+      description: 'For side projects.',
+      action: { label: 'Start for free', href: '/signup' }
+    },
+    {
+      id: 'pro',
+      name: 'Pro',
+      description: 'For teams in production.',
+      highlighted: true,
+      action: { label: 'Start trial', href: '/signup?plan=pro' }
+    }
+  ]
+
+  const sections = [
+    {
+      eyebrow: 'Compute',
+      title: 'Functions',
+      description: 'Run code close to users.',
+      rows: [
+        { label: 'Requests per month', values: ['1M', '10M'] },
+        { label: 'Custom domains', values: [true, true] },
+        { label: 'Usage alerts', values: ['—', true] }
+      ],
+      link: { label: 'See compute rates', href: '/pricing/compute' }
+    },
+    {
+      eyebrow: 'Storage',
+      title: 'Object Storage',
+      rows: [
+        { label: 'Storage included', values: ['5 GB', '100 GB'] },
+        { label: 'Versioning', values: ['—', true] }
+      ],
+      link: { label: 'See storage rates', href: '/pricing/storage' }
+    }
+  ]
 </script>
 
 <template>
   <ComparePlans
-    anchor="comparison"
-    caption="Feature comparison across the plans."
+    caption="Hobby and Pro compared feature by feature"
     column-label="Features"
     picker-aria-label="Plan being compared"
     included-label="Included"
     excluded-label="Not included"
-    :plans="[
-      { id: 'hobby', name: 'Hobby', action: { label: 'Start for free', href: '/signup' } },
-      {
-        id: 'pro',
-        name: 'Pro',
-        highlighted: true,
-        action: { label: 'Start with Pro', href: '/signup' }
-      }
-    ]"
-    :sections="[
-      {
-        eyebrow: 'Build',
-        title: 'Applications',
-        description: 'Build, run and scale applications globally.',
-        rows: [
-          {
-            label: 'Rules Engine',
-            hint: 'Conditional rules evaluated per request.',
-            values: ['✓', '✓']
-          },
-          { label: 'Rules per application', values: ['10 included', '20 included'] }
-        ]
-      }
-    ]"
-    :primary-action="{ label: 'See on-demand pricing', href: '/docs/pricing' }"
+    :plans="plans"
+    :sections="sections"
   />
 </template>
 ```
@@ -37454,6 +37582,158 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ---
 
+<!-- components/console-panel.md -->
+
+# Console Panel
+
+> A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ShellMockup`, `ProductWidget` or diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.
+
+- Import: `import ConsolePanel from '@aziontech/webkit/console-panel'`
+- Category: sections · Surface: marketing · Structure: monolithic
+- API as JSON: [console-panel.json](https://github.com/aziontech/webkit/blob/main/.specs/console-panel.json)
+
+## When to use
+
+- Showing the product itself on a landing page.
+- A tour of three or four views of one screen.
+
+## Do
+
+- Two to four tabs, each a different view, labelled with one word.
+- Crop the scene only to remove empty space at its bottom (0.1–0.3).
+
+## Don’t
+
+- For a screenshot with copy beside it — use `MediaSplitBand`.
+- For code — use `CodeSplit` or `CliTerminal`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- ShellMockup`, `ProductWidget` — scenes it frames.
+- ToggleGroup` — the tab control.
+- TextureMaterial`, `FrameBox`, `SectionTitle`.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `kind` | `'console' \ \| 'diagram'` | `'console'` | false | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. |
+| `titleKind` | `SectionTitleKind` | `'centered'` | false | Layout of the headline block. |
+| `titlePadding` | `SectionTitlePadding` | `'medium'` | false | Vertical padding of the headline block. |
+| `size` | `SectionTitleSize` | `'medium'` | false | Step of the headline on the heading scale. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
+| `eyebrow` | `string` | `''` | false | Overline above the title. |
+| `title` | `string` | `''` | false | Headline of the band, rendered as its `h2`. |
+| `description` | `string` | `''` | false | One or two sentences under the headline. |
+| `texture` | `TextureMaterialKind` | `'pixelate'` | false | Texture the panel is grounded with. |
+| `textureFade` | `TextureMaterialFade` | `'top'` | false | Axis the texture fades out along. |
+| `tabs` | `ConsolePanelTab[]` | `[]` | false | Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene. |
+| `tabsAriaLabel` | `string` | `''` | false | Accessible name of the tab control; empty uses the built-in "Console views". |
+| `crop` | `number` | `0` | false | Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up. |
+| `actions` | `ConsolePanelAction[]` | `[]` | false | Buttons under the headline; each is `{ label, href, trailing?, target? }`, the first secondary, the rest outlined. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `scene` | { tab: string \ | undefined }` \| The scene the band presents; `tab` is the selected tab value (undefined without tabs). |
+
+## States
+
+- `data-kind` mirrors `kind`.
+- The first tab is selected on render.
+- `--mockup-fade-start` / `--mockup-fade-end` are set for a `ShellMockup` scene when cropped.
+
+## Accessibility
+
+- A `section` named by its title.
+- Tabs are a `ToggleGroup` (radio group) named by `tabsAriaLabel` or "Console views"; arrow keys move between them.
+- The scene supplies its own accessible content (a mock is usually `aria-hidden` with a description in the copy).
+
+## Right-to-left
+
+- Layout: logical utilities only (`ps-*`, `border-e`, `ms-*`).
+- Icons: none mirrored.
+- Keyboard: unchanged.
+
+## Internationalization
+
+| Key                  | English source  | Override prop   |
+| -------------------- | --------------- | --------------- |
+| `consolePanel.views` | `Console views` | `tabsAriaLabel` |
+
+- Every other string is marketing copy passed through props.
+
+## Responsive
+
+- Below medium the console scene is square and uncropped; from medium it is 1.9:1 with the crop applied.
+- No horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ConsolePanel from '@aziontech/webkit/console-panel'
+  import ShellMockup from '@aziontech/webkit/shell-mockup'
+  import Tag from '@aziontech/webkit/tag'
+
+  const tabs = [
+    { value: 'applications', title: 'Applications' },
+    { value: 'metrics', title: 'Metrics' },
+    { value: 'logs', title: 'Logs' }
+  ]
+
+  const views = {
+    applications: { heading: 'Applications', rows: ['storefront', 'checkout-api', 'image-proxy'] },
+    metrics: { heading: 'Metrics', rows: ['Requests 1.2M', 'Cache hit 94%', 'Errors 0.02%'] },
+    logs: { heading: 'Logs', rows: ['GET /cart 200', 'POST /pay 201', 'GET /img/hero.webp 304'] }
+  }
+</script>
+
+<template>
+  <ConsolePanel
+    eyebrow="Console"
+    title="One console for every workload"
+    description="Deploy, observe and secure from the same place."
+    :tabs="tabs"
+    :crop="0.2"
+  >
+    <template #scene="{ tab }">
+      <ShellMockup
+        :title="views[tab ?? 'applications'].heading"
+        rail="workloads"
+        fade="bottom"
+      >
+        <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-lg)">
+          <span class="text-heading-sm text-(--text-default)">{{
+            views[tab ?? 'applications'].heading
+          }}</span>
+          <div
+            v-for="row in views[tab ?? 'applications'].rows"
+            :key="row"
+            class="flex items-center justify-between border-b border-(--border-default) py-(--spacing-xs) text-body-sm text-(--text-default)"
+          >
+            {{ row }}
+            <Tag
+              label="Live"
+              severity="success"
+              size="small"
+            />
+          </div>
+        </div>
+      </ShellMockup>
+    </template>
+  </ConsolePanel>
+</template>
+```
+
+1 more example(s) in [components/console-panel.md](https://github.com/aziontech/webkit/blob/main/.specs/components/console-panel.md).
+
+---
+
 <!-- components/contact-hub.md -->
 
 # Contact Hub
@@ -37565,6 +37845,117 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       }
     ]"
   />
+</template>
+```
+
+---
+
+<!-- components/customer-spotlight.md -->
+
+# Customer Spotlight
+
+> A row of client cards, each painted in the client's own colours with its reversed logo; the hovered or focused card opens to reveal its story line and a "Read story" cue, and the whole card links to the success story. Below the large breakpoint the cards stack and stay open. From the design sample's site `CustomerSpotlight`.
+
+- Import: `import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'`
+- Category: sections · Surface: marketing · Structure: monolithic
+- API as JSON: [customer-spotlight.json](https://github.com/aziontech/webkit/blob/main/.specs/customer-spotlight.json)
+
+## When to use
+
+- Three or four flagship customer stories on a landing page.
+
+## Do
+
+- Three or four cards.
+- Use the client's reversed (white) logo; the face colours are the client's brand, passed as data.
+- One sentence per story line.
+
+## Don’t
+
+- For many clients — use `ClientMosaic` or `LogoWallQuote`.
+- For a quotation — use `ClientQuotes` or `LogoWallQuote` `kind="quote"`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- ClientMosaic`, `ClientQuotes`, `LogoWallQuote`.
+- FrameBox`.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `cards` | `CustomerSpotlightCard[]` | `[]` | false | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand: { base, glow } }`. A card opens while hovered or focused. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the list; empty uses the built-in "Customer stories". |
+| `storyLabel` | `string` | `''` | false | Label revealed under the description while the card is open; empty uses the built-in "Read story". |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
+
+## States
+
+- Renders nothing without cards.
+- Each item carries `data-state=open|closed`; one is open at a time on large screens.
+
+## Accessibility
+
+- A list of links; each link name is "<story label>, <client>: <story line>", so the logo image is decorative (`alt=""`).
+- Focus opens the card the same way hover does; the focus ring is drawn inside the card.
+- Contrast of the story line: `--text-default` on `--bg-canvas`.
+
+## Right-to-left
+
+- Layout: logical utilities; the first card is flush at the inline start.
+- Icons: `pi-arrow-up-right` is mirrored.
+- Keyboard: unchanged.
+
+## Internationalization
+
+| Key                       | English source     | Override prop |
+| ------------------------- | ------------------ | ------------- |
+| `customerSpotlight.list`  | `Customer stories` | `ariaLabel`   |
+| `customerSpotlight.story` | `Read story`       | `storyLabel`  |
+
+- Client names, logos and story lines are content passed through `cards`.
+
+## Responsive
+
+- Below large: cards stack, open, with the logo above the story line.
+- From large: one row, open on hover or focus.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'
+
+  const cards = [
+    {
+      name: 'Agibank',
+      logo: '/marketing-components/logos/agibank-extended-reversed.svg',
+      href: '/customers/agibank',
+      description: 'Agibank moved its digital bank to a platform that scales with every campaign.',
+      brand: { base: '#0e89ff', glow: '#0e89ff' }
+    },
+    {
+      name: 'Americanas',
+      logo: '/marketing-components/logos/americanas-extended-reversed.svg',
+      href: '/customers/americanas',
+      description: 'Americanas serves Black Friday traffic with no capacity planning.',
+      brand: { base: '#e60014', glow: '#ff4d5e' }
+    },
+    {
+      name: 'Arezzo',
+      logo: '/marketing-components/logos/arezzo-extended-reversed.svg',
+      href: '/customers/arezzo',
+      description: 'Arezzo cut image weight by half across its storefronts.',
+      brand: { base: '#2b2b2b', glow: '#6b6b6b' }
+    }
+  ]
+</script>
+
+<template>
+  <CustomerSpotlight :cards="cards" />
 </template>
 ```
 
@@ -38142,7 +38533,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `HeroBandKind` | `'title-band'` | false | Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy. |
+| `kind` | `HeroBandKind` | `'title-band'` | false | Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `centered-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy. |
 | `size` | `HeroBandSize` | `'medium'` | false | Vertical rhythm of the band; `large` is the opening a product page leads with. |
 | `eyebrow` | `string` | `''` | false | Short overline above the headline. |
 | `highlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
@@ -38155,6 +38546,15 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `illustration` | `string` | `''` | false | Registry name of the illustration set beside the copy in the `copy-beside-art` layout. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible description of the illustration. |
 | `headerOffset` | `string` | `''` | false | Height of the site header above the band, taken out of a band that fills a screen; any CSS length. |
+| `titleLength` | `HeroBandTitleLength` | `'short'` | false | Length of the headline; `long` widens its column so it breaks into two lines instead of three. |
+| `plain` | `boolean` | `false` | false | Drops the dot texture of the `centered` layout. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `top` | — | A scene in the window above the copy (`ShellMockup`, `ProductWidget`, a diagram). The design sample's hero scenes render here. |
+| `bottom` | — | A scene in the window under the copy; it enters after the copy (`animate-content-enter`, off under reduced motion) and fades at the inline edges on narrow containers. |
 
 ## States
 
@@ -38198,7 +38598,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 </template>
 ```
 
-1 more example(s) in [components/hero-band.md](https://github.com/aziontech/webkit/blob/main/.specs/components/hero-band.md).
+2 more example(s) in [components/hero-band.md](https://github.com/aziontech/webkit/blob/main/.specs/components/hero-band.md).
 
 ---
 
@@ -39088,6 +39488,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
+| `kind` | `LogoWallQuoteKind` | `'wall'` | false | Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band (the design sample's QuoteBand) and needs no logos. |
+| `quoteKind` | `LogoWallQuoteQuoteKind` | `'signed'` | false | Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the logo wall. |
@@ -39191,6 +39594,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   />
 </template>
 ```
+
+1 more example(s) in [components/logo-wall-quote.md](https://github.com/aziontech/webkit/blob/main/.specs/components/logo-wall-quote.md).
 
 ---
 
@@ -39984,6 +40389,106 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ---
 
+<!-- components/process-scroll.md -->
+
+# Process Scroll
+
+> The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width. From the design sample's site `ProcessScroll`.
+
+- Import: `import ProcessScroll from '@aziontech/webkit/process-scroll'`
+- Category: sections · Surface: marketing · Structure: monolithic
+- API as JSON: [process-scroll.json](https://github.com/aziontech/webkit/blob/main/.specs/process-scroll.json)
+
+## When to use
+
+- How something works in three to five ordered stages (build, deploy, observe).
+
+## Do
+
+- Name each stage with a verb.
+- Keep descriptions to two lines.
+
+## Don’t
+
+- For more than five stages or stages with art — use `FeatureScroll`.
+- For a row that pins while the page scrolls — use `StickyCarousel`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- StickyCarousel` — the same cards, pinned while the row travels.
+- TextureMaterial`, `FrameBox`, `SectionTitle`.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
+| `eyebrow` | `string` | `''` | false | Overline above the title. |
+| `titleKind` | `SectionTitleKind` | `'horizontal'` | false | Alignment of the section title over the card row. |
+| `title` | `string` | `''` | false | Headline of the band, rendered as its `h2`; the band renders nothing when empty. |
+| `description` | `string` | `''` | false | Paragraph beside the headline. |
+| `descriptionWidth` | `SectionTitleDescriptionWidth` | `'narrow'` | false | Column span of the paragraph: `wide` runs it across the middle column too. |
+| `steps` | `ProcessScrollStep[]` | `[]` | false | The stages, in order; each is `{ title, description }` and gets its own numbered card. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the scrollable card row; defaults to the title. |
+
+## States
+
+- Renders nothing without a title or steps.
+- Cards are `data-theme="dark"` in both themes (the sample's design).
+
+## Accessibility
+
+- The band root is a plain container; the scroll row is the one focusable `region`, named by `ariaLabel` or the title, so keyboard users can scroll it with the arrow keys and the page has one landmark per band.
+- Stages are an ordered list; the big number is `aria-hidden` because the list already orders them.
+- Each stage heading is an `h3`.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ps-*`, `border-e`, `ms-*`).
+- Icons: none mirrored.
+- Keyboard: unchanged.
+
+## Internationalization
+
+- Built-in strings: none. Every visible string is marketing copy and arrives through props, so the page supplies it in its own language.
+
+## Responsive
+
+- Below large: cards are `min(22rem, 80vw)` wide and snap; the row scrolls inside itself, never the page.
+- From large: cards share the width.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ProcessScroll from '@aziontech/webkit/process-scroll'
+
+  const steps = [
+    { title: 'Push', description: 'Every push to the main branch builds a new version.' },
+    { title: 'Build', description: 'The build runs in an isolated worker with your settings.' },
+    {
+      title: 'Deploy',
+      description: 'The version goes live everywhere at once, with no regions to pick.'
+    },
+    { title: 'Observe', description: 'Metrics and logs for the new version arrive in seconds.' }
+  ]
+</script>
+
+<template>
+  <ProcessScroll
+    eyebrow="How it works"
+    title="From commit to production"
+    description="Four stages, all automatic once the repository is connected."
+    :steps="steps"
+  />
+</template>
+```
+
+---
+
 <!-- components/recognition-marquee.md -->
 
 # Recognition Marquee
@@ -40227,6 +40732,93 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```
 
 1 more example(s) in [components/resource-grid.md](https://github.com/aziontech/webkit/blob/main/.specs/components/resource-grid.md).
+
+---
+
+<!-- components/section-command.md -->
+
+# Section Command
+
+> A one-line command or agent prompt with a copy button, set in a large `InputGroup` under hero or section copy ("npm create azion", "Ask your agent to …"). With `shell` a `$` prompt leads the line. From the design sample's site `SectionCommand`.
+
+- Import: `import SectionCommand from '@aziontech/webkit/section-command'`
+- Category: sections · Surface: marketing · Structure: monolithic
+- API as JSON: [section-command.json](https://github.com/aziontech/webkit/blob/main/.specs/section-command.json)
+
+## When to use
+
+- The one command that starts a product, beside or instead of a call to action.
+- A prompt to paste into an AI agent (`shell` off).
+
+## Do
+
+- One line that works when pasted as is.
+- Place it in a hero or section-title actions slot.
+
+## Don’t
+
+- For several lines or output — use `CodeBlock` or `CliTerminal`.
+- For an editable field — use `InputText`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- CopyButton`, `InputGroup` — the parts.
+- CliTerminal` — a full terminal session.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `string` | `—` | true | Text on the line, copied as written. |
+| `shell` | `boolean` | `true` | false | Draws the shell prompt before the text; turn off for a prompt meant for an agent. |
+
+## States
+
+- Read-only input; the copy button shows its copied state (from `CopyButton`).
+
+## Accessibility
+
+- The read-only input is named "Command" or "Prompt"; the copy button is named "Copy command" or "Copy prompt".
+- The `$` is decorative (`aria-hidden`).
+- Keyboard: `Tab` reaches the field (text can be selected) and the copy button.
+
+## Right-to-left
+
+- Layout: logical utilities.
+- The command is `dir="ltr"` so a shell line keeps its order inside right-to-left pages.
+- Keyboard: unchanged.
+
+## Internationalization
+
+| Key                          | English source | Override prop |
+| ---------------------------- | -------------- | ------------- |
+| `sectionCommand.command`     | `Command`      | —             |
+| `sectionCommand.prompt`      | `Prompt`       | —             |
+| `sectionCommand.copyCommand` | `Copy command` | —             |
+| `sectionCommand.copyPrompt`  | `Copy prompt`  | —             |
+
+- The command itself is content.
+
+## Responsive
+
+- Fills its column up to `--container-xs`; fixed at that width from large.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import SectionCommand from '@aziontech/webkit/section-command'
+</script>
+
+<template>
+  <SectionCommand value="npm create azion@latest" />
+</template>
+```
+
+1 more example(s) in [components/section-command.md](https://github.com/aziontech/webkit/blob/main/.specs/components/section-command.md).
 
 ---
 
@@ -40634,6 +41226,104 @@ import SiteNav from '@aziontech/webkit/site-nav'
       { value: '24', suffix: '/7', label: 'Support on every plan' },
       { value: '99.99', suffix: '%', label: 'Availability, contractual' }
     ]"
+  />
+</template>
+```
+
+---
+
+<!-- components/sticky-carousel.md -->
+
+# Sticky Carousel
+
+> A row of numbered dark cards that pins under the site header while the page scrolls and slides the row sideways until its last card is in view, then lets the page continue. Below the large breakpoint, or under reduced motion, it is a plain snap-scrolling row. From the design sample's site `StickyCarousel`.
+
+- Import: `import StickyCarousel from '@aziontech/webkit/sticky-carousel'`
+- Category: sections · Surface: marketing · Structure: monolithic
+- API as JSON: [sticky-carousel.json](https://github.com/aziontech/webkit/blob/main/.specs/sticky-carousel.json)
+
+## When to use
+
+- Five to eight short points that read best one after another (principles, reasons).
+
+## Do
+
+- Keep each card to a heading and two lines.
+- Do not nest it inside a container that clips overflow; sticky positioning needs the page scroll.
+
+## Don’t
+
+- For three to five ordered stages that fit the width — use `ProcessScroll`.
+- For content the reader must compare side by side.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- ProcessScroll` — the same cards without pinning.
+- StickyStack`, `FeatureScroll` — other scroll-driven bands.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
+| `eyebrow` | `string` | `''` | false | Overline above the title. |
+| `title` | `string` | `''` | false | Headline of the band, rendered as its `h2`; the band renders nothing when empty. |
+| `description` | `string` | `''` | false | Paragraph beside the headline. |
+| `items` | `StickyCarouselItem[]` | `[]` | false | The cards, in order; each is `{ title, description }` and is numbered by its position. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the card row; defaults to the title. |
+| `headerOffset` | `string` | `'3.5rem'` | false | Height of the sticky site header the band pins under, from the large breakpoint up; any CSS length. |
+
+## States
+
+- Renders nothing without a title or items.
+- Pinned (large, motion allowed): the runway grows by the row overflow and the row translates with the scroll.
+- Not pinned: a snap-scrolling row.
+
+## Accessibility
+
+- The band root is a plain container; the row is the one focusable `region`, named by `ariaLabel` or the title.
+- Cards are an ordered list; the number is `aria-hidden`.
+- Keyboard: when pinned, focus moving into a card scrolls the page, and the row follows the page scroll.
+
+## Right-to-left
+
+- Layout: logical utilities; the pinned row slides toward the inline start in both directions.
+- Keyboard: unchanged.
+
+## Internationalization
+
+- Built-in strings: none. Every visible string is marketing copy and arrives through props, so the page supplies it in its own language.
+
+## Responsive
+
+- Pins only from the large breakpoint up.
+- Below large: cards `min(22rem, 80vw)` with snap.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import StickyCarousel from '@aziontech/webkit/sticky-carousel'
+
+  const items = [
+    { title: 'One platform', description: 'Code, data and security deploy together.' },
+    { title: 'No regions', description: 'Everything runs everywhere by default.' },
+    { title: 'No cold starts', description: 'Isolates start in under a millisecond.' },
+    { title: 'Open standards', description: 'Web APIs, so code moves in and out freely.' },
+    { title: 'Predictable bills', description: 'Pay for requests, not for idle servers.' },
+    { title: 'Support that answers', description: 'Engineers on call, not ticket queues.' }
+  ]
+</script>
+
+<template>
+  <StickyCarousel
+    eyebrow="Why teams move"
+    title="Six reasons teams run on one platform"
+    description="Scroll the page: the row pins under the header and slides until the last card is in view."
+    :items="items"
   />
 </template>
 ```

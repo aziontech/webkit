@@ -1,0 +1,19 @@
+{
+ "purpose": "A framed grid of product capabilities under an optional section title: each cell is a `Topic` (glyph, heading, sentence) with optional bullet points, three or four to a row. From the design sample's site `CapabilityGrid`.",
+ "useWhen": [
+  "A product page listing what the product does, three or six at a time.",
+  "A bare grid (no title) under a band that already has its heading."
+ ],
+ "avoidWhen": [
+  "For capabilities with art — use `FeatureTiles` or `BentoGrid`.",
+  "For links to other pages — use `UseCaseLinks` or `ResourceGrid`."
+ ],
+ "related": [
+  "Topic`, `CardGrid`, `FrameBox`, `SectionTitle` — the parts.",
+  "FeatureTiles` — tiles with illustrations."
+ ],
+ "bestPractices": [
+  "Three or six items at three columns, four or eight at four, so rows stay full.",
+  "Keep points to three short lines."
+ ]
+}

@@ -1,0 +1,11 @@
+{
+  "component": "sticky-carousel",
+  "title": "Components/Marketing/Sections/StickyCarousel",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Six numbered cards. From the large breakpoint, with motion allowed, the band pins under the header and the row slides with the page scroll; otherwise it is a snap-scrolling row.",
+      "file": "default.vue"
+    }
+  ]
+}

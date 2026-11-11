@@ -199,3 +199,22 @@ describe('ComparePlans', () => {
     await expectNoA11yViolations(container)
   })
 })
+
+describe('ComparePlans — plan description and band links', () => {
+  it('shows each plan description and closes a band with its link', async () => {
+    const { default: BandLinks } = await import('../../../../examples/compare-plans/band-links.vue')
+    const { getByText, getByRole } = render(BandLinks)
+    expect(getByText('For teams in production.')).toBeInTheDocument()
+    expect(getByRole('link', { name: /See compute rates/ })).toHaveAttribute(
+      'href',
+      '/pricing/compute'
+    )
+    expect(getByRole('link', { name: /See storage rates/ })).toHaveAttribute('target', '_blank')
+  })
+
+  it('has no axe violations with band links', async () => {
+    const { default: BandLinks } = await import('../../../../examples/compare-plans/band-links.vue')
+    const { container } = render(BandLinks)
+    await expectNoA11yViolations(container)
+  })
+})

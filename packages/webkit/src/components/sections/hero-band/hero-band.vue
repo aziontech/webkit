@@ -12,7 +12,11 @@
   })
 
   /** Layout of the opening band. */
-  export type HeroBandKind = 'centered' | 'title-band' | 'pixel-floor' | 'copy-beside-art'
+  export type HeroBandKind =
+    'centered' | 'title-band' | 'centered-band' | 'compact-band' | 'pixel-floor' | 'copy-beside-art'
+
+  /** Length of the headline: `long` widens its column so it breaks into two lines instead of three. */
+  export type HeroBandTitleLength = 'short' | 'long'
 
   /** Vertical rhythm of the band. */
   export type HeroBandSize = 'medium' | 'large'
@@ -30,7 +34,7 @@
   }
 
   interface Props {
-    /** Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy. */
+    /** Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `centered-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy. */
     kind?: HeroBandKind
     /** Vertical rhythm of the band; `large` is the opening a product page leads with. */
     size?: HeroBandSize
@@ -56,6 +60,10 @@
     illustrationAriaLabel?: string
     /** Height of the site header above the band, taken out of a band that fills a screen; any CSS length. */
     headerOffset?: string
+    /** Length of the headline; `long` widens its column so it breaks into two lines instead of three. */
+    titleLength?: HeroBandTitleLength
+    /** Drops the dot texture of the `centered` layout. */
+    plain?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -71,8 +79,17 @@
     carouselMarks: () => [],
     illustration: '',
     illustrationAriaLabel: '',
-    headerOffset: ''
+    headerOffset: '',
+    titleLength: 'short',
+    plain: false
   })
+
+  defineSlots<{
+    /** A scene in the window above the copy (a `ShellMockup`, a `ProductWidget`, a diagram). */
+    top?(): unknown
+    /** A scene in the window under the copy, entering after it. */
+    bottom?(): unknown
+  }>()
 
   const attrs = useAttrs()
 
@@ -80,19 +97,43 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-hero-band'
   )
 
-  const isScreen = computed(() => props.kind !== 'title-band')
+  const BANDS: HeroBandKind[] = ['title-band', 'centered-band', 'compact-band']
 
-  const isCentered = computed(() => props.kind === 'centered' || props.kind === 'title-band')
+  const isScreen = computed(() => !BANDS.includes(props.kind))
+
+  const isCentered = computed(
+    () =>
+      props.kind !== 'pixel-floor' &&
+      props.kind !== 'copy-beside-art' &&
+      props.kind !== 'compact-band'
+  )
 
   const heroWidth = computed(() => {
-    if (props.kind === 'centered') return 'site'
     if (props.kind === 'pixel-floor') return 'full'
+    if (
+      props.kind === 'centered' ||
+      props.kind === 'centered-band' ||
+      props.kind === 'compact-band'
+    )
+      return 'site'
     return '5xl'
   })
 
-  const titleWidth = computed(() =>
-    props.kind === 'centered' || props.kind === 'copy-beside-art' ? 'xl' : '4xl'
-  )
+  const heroSize = computed(() => {
+    if (props.kind === 'centered-band') return 'large'
+    if (props.kind === 'compact-band') return 'medium'
+    return props.size
+  })
+
+  const titleWidth = computed(() => {
+    const long = props.titleLength === 'long'
+    if (props.kind === 'centered') return long ? '3xl' : 'xl'
+    if (props.kind === 'copy-beside-art') return 'xl'
+    if (props.kind === 'centered-band' || props.kind === 'compact-band') return long ? '3xl' : '2xl'
+    return '4xl'
+  })
+
+  const dots = computed(() => props.kind === 'centered' && !props.plain)
 
   const hasArt = computed(() => props.kind === 'copy-beside-art' && props.illustration.length > 0)
 
@@ -117,10 +158,10 @@
     <Hero
       v-if="title"
       :kind="isScreen ? 'screen' : 'band'"
-      :size="size"
+      :size="heroSize"
       :max-width="heroWidth"
-      :texture="kind === 'centered' ? 'dots' : 'none'"
-      :texture-fade="kind === 'centered' ? 'top' : 'none'"
+      :texture="dots ? 'dots' : 'none'"
+      :texture-fade="dots ? 'top' : 'none'"
       :floor-texture="kind === 'pixel-floor' ? 'pixelate' : 'none'"
       :floor-texture-size="kind === 'pixel-floor' ? 'small' : 'medium'"
       :bordered="kind !== 'pixel-floor'"
@@ -170,6 +211,26 @@
           />
         </template>
       </HeroTitle>
+
+      <template
+        v-if="$slots.top"
+        #top
+      >
+        <slot name="top" />
+      </template>
+
+      <template
+        v-if="$slots.bottom"
+        #bottom
+      >
+        <div class="@container">
+          <div
+            class="flex animate-content-enter justify-center pb-(--spacing-xxl) [--content-enter-delay:120ms] motion-reduce:animate-none @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]"
+          >
+            <slot name="bottom" />
+          </div>
+        </div>
+      </template>
 
       <template
         v-if="hasArt"

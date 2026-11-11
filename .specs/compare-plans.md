@@ -3,10 +3,10 @@ name: compare-plans
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
 last_updated: 2026-11-11
-checksum: 03b4c2beca8139daa4bc0de1ac42bd8e08d0f07cbc60c39c1c0e96896a6b628f
+checksum: 0a1fede52a1c6c12ab36f32fffe6de36a61aeb029a66867c28b8d3fe005e3d07
 ---
 
 # ComparePlans — Component Spec
@@ -81,17 +81,17 @@ The feature-by-feature matrix under the plan cards on Pricing: one column per pl
 
 ## Props
 
-| Prop              | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                                     |
-| ----------------- | ----------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `anchor`          | `string`                | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                  |
-| `caption`         | `string`                | `''`        | false    | Screen-reader caption naming the table.                                                                                                                                                                                                   |
-| `columnLabel`     | `string`                | `''`        | false    | Heading of the feature column, shown from the large breakpoint up.                                                                                                                                                                        |
-| `pickerAriaLabel` | `string`                | `''`        | false    | Accessible name of the plan picker shown below the large breakpoint.                                                                                                                                                                      |
-| `includedLabel`   | `string`                | `''`        | false    | Screen-reader text of a ticked cell.                                                                                                                                                                                                      |
-| `excludedLabel`   | `string`                | `''`        | false    | Screen-reader text of a dashed cell.                                                                                                                                                                                                      |
-| `plans`           | `ComparePlansPlan[]`    | `[]`        | false    | The plan columns, in order; each is `{ id, name, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped.                                                                                            |
-| `sections`        | `ComparePlansSection[]` | `[]`        | false    | The product bands, in order; each is `{ eyebrow, title, description, rows }` and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
-| `primaryAction`   | `ComparePlansAction`    | `undefined` | false    | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent.                                                                                                                                                |
+| Prop              | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                        |
+| ----------------- | ----------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`          | `string`                | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                     |
+| `caption`         | `string`                | `''`        | false    | Screen-reader caption naming the table.                                                                                                                                                                                                                                                      |
+| `columnLabel`     | `string`                | `''`        | false    | Heading of the feature column, shown from the large breakpoint up.                                                                                                                                                                                                                           |
+| `pickerAriaLabel` | `string`                | `''`        | false    | Accessible name of the plan picker shown below the large breakpoint.                                                                                                                                                                                                                         |
+| `includedLabel`   | `string`                | `''`        | false    | Screen-reader text of a ticked cell.                                                                                                                                                                                                                                                         |
+| `excludedLabel`   | `string`                | `''`        | false    | Screen-reader text of a dashed cell.                                                                                                                                                                                                                                                         |
+| `plans`           | `ComparePlansPlan[]`    | `[]`        | false    | The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped.                                                                                                                                 |
+| `sections`        | `ComparePlansSection[]` | `[]`        | false    | The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
+| `primaryAction`   | `ComparePlansAction`    | `undefined` | false    | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent.                                                                                                                                                                                                   |
 
 ## Events
 

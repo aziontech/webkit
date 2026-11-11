@@ -20658,14 +20658,14 @@
      "type": "ComparePlansPlan[]",
      "default": "[]",
      "required": "false",
-     "doc": "The plan columns, in order; each is `{ id, name, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped."
+     "doc": "The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped."
     },
     {
      "name": "sections",
      "type": "ComparePlansSection[]",
      "default": "[]",
      "required": "false",
-     "doc": "The product bands, in order; each is `{ eyebrow, title, description, rows }` and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank."
+     "doc": "The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank."
     },
     {
      "name": "primaryAction",
@@ -20676,6 +20676,7 @@
     }
    ],
    "surface": "marketing",
+   "examplesFile": "catalog/examples/compare-plans.json",
    "docsFile": "catalog/components/compare-plans.json"
   },
   "compare-support-tiers": {
@@ -21165,7 +21166,7 @@
      "type": "HeroBandKind",
      "default": "'title-band'",
      "required": "false",
-     "doc": "Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy."
+     "doc": "Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `centered-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy."
     },
     {
      "name": "size",
@@ -21250,11 +21251,416 @@
      "default": "''",
      "required": "false",
      "doc": "Height of the site header above the band, taken out of a band that fills a screen; any CSS length."
+    },
+    {
+     "name": "titleLength",
+     "type": "HeroBandTitleLength",
+     "default": "'short'",
+     "required": "false",
+     "doc": "Length of the headline; `long` widens its column so it breaks into two lines instead of three."
+    },
+    {
+     "name": "plain",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Drops the dot texture of the `centered` layout."
+    }
+   ],
+   "slots": [
+    {
+     "name": "top",
+     "scope": "—",
+     "notes": "A scene in the window above the copy (`ShellMockup`, `ProductWidget`, a diagram). The design sample's hero scenes render here."
+    },
+    {
+     "name": "bottom",
+     "scope": "—",
+     "notes": "A scene in the window under the copy; it enters after the copy (`animate-content-enter`, off under reduced motion) and fades at the inline edges on narrow containers."
     }
    ],
    "surface": "marketing",
    "examplesFile": "catalog/examples/hero-band.json",
    "docsFile": "catalog/components/hero-band.json"
+  },
+  "capability-grid": {
+   "import": "@aziontech/webkit/capability-grid",
+   "target": "./src/components/sections/capability-grid/capability-grid.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/capability-grid",
+   "category": "sections",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "eyebrow",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Overline above the title."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One or two sentences under the title."
+    },
+    {
+     "name": "items",
+     "type": "CapabilityGridItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The capabilities, in order; each is `{ title, description, icon?, points? }`. The band renders nothing when empty."
+    },
+    {
+     "name": "columns",
+     "type": "3 \\ | 4",
+     "default": "3",
+     "required": "false",
+     "doc": "Capabilities per row from the large breakpoint up."
+    },
+    {
+     "name": "actions",
+     "type": "CapabilityGridAction[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Buttons under the section title; each is `{ label, href, trailing?, target? }`, the first secondary, the rest outlined."
+    },
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "In-page id set on the band so a hash link can target it."
+    }
+   ],
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/capability-grid.json",
+   "docsFile": "catalog/components/capability-grid.json"
+  },
+  "console-panel": {
+   "import": "@aziontech/webkit/console-panel",
+   "target": "./src/components/sections/console-panel/console-panel.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/console-panel",
+   "category": "sections",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "kind",
+     "type": "'console' \\ | 'diagram'",
+     "default": "'console'",
+     "required": "false",
+     "doc": "What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height."
+    },
+    {
+     "name": "titleKind",
+     "type": "SectionTitleKind",
+     "default": "'centered'",
+     "required": "false",
+     "doc": "Layout of the headline block."
+    },
+    {
+     "name": "titlePadding",
+     "type": "SectionTitlePadding",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Vertical padding of the headline block."
+    },
+    {
+     "name": "size",
+     "type": "SectionTitleSize",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Step of the headline on the heading scale."
+    },
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "In-page id set on the band so a hash link can target it."
+    },
+    {
+     "name": "eyebrow",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Overline above the title."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Headline of the band, rendered as its `h2`."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One or two sentences under the headline."
+    },
+    {
+     "name": "texture",
+     "type": "TextureMaterialKind",
+     "default": "'pixelate'",
+     "required": "false",
+     "doc": "Texture the panel is grounded with."
+    },
+    {
+     "name": "textureFade",
+     "type": "TextureMaterialFade",
+     "default": "'top'",
+     "required": "false",
+     "doc": "Axis the texture fades out along."
+    },
+    {
+     "name": "tabs",
+     "type": "ConsolePanelTab[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene."
+    },
+    {
+     "name": "tabsAriaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the tab control; empty uses the built-in \"Console views\"."
+    },
+    {
+     "name": "crop",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up."
+    },
+    {
+     "name": "actions",
+     "type": "ConsolePanelAction[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Buttons under the headline; each is `{ label, href, trailing?, target? }`, the first secondary, the rest outlined."
+    }
+   ],
+   "slots": [
+    {
+     "name": "scene",
+     "scope": "{ tab: string \\",
+     "notes": "undefined }` | The scene the band presents; `tab` is the selected tab value (undefined without tabs)."
+    }
+   ],
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/console-panel.json",
+   "docsFile": "catalog/components/console-panel.json"
+  },
+  "customer-spotlight": {
+   "import": "@aziontech/webkit/customer-spotlight",
+   "target": "./src/components/sections/customer-spotlight/customer-spotlight.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/customer-spotlight",
+   "category": "sections",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "cards",
+     "type": "CustomerSpotlightCard[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand: { base, glow } }`. A card opens while hovered or focused."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list; empty uses the built-in \"Customer stories\"."
+    },
+    {
+     "name": "storyLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Label revealed under the description while the card is open; empty uses the built-in \"Read story\"."
+    },
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "In-page id set on the band so a hash link can target it."
+    }
+   ],
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/customer-spotlight.json",
+   "docsFile": "catalog/components/customer-spotlight.json"
+  },
+  "process-scroll": {
+   "import": "@aziontech/webkit/process-scroll",
+   "target": "./src/components/sections/process-scroll/process-scroll.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/process-scroll",
+   "category": "sections",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "In-page id set on the band so a hash link can target it."
+    },
+    {
+     "name": "eyebrow",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Overline above the title."
+    },
+    {
+     "name": "titleKind",
+     "type": "SectionTitleKind",
+     "default": "'horizontal'",
+     "required": "false",
+     "doc": "Alignment of the section title over the card row."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Headline of the band, rendered as its `h2`; the band renders nothing when empty."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Paragraph beside the headline."
+    },
+    {
+     "name": "descriptionWidth",
+     "type": "SectionTitleDescriptionWidth",
+     "default": "'narrow'",
+     "required": "false",
+     "doc": "Column span of the paragraph: `wide` runs it across the middle column too."
+    },
+    {
+     "name": "steps",
+     "type": "ProcessScrollStep[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The stages, in order; each is `{ title, description }` and gets its own numbered card."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the scrollable card row; defaults to the title."
+    }
+   ],
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/process-scroll.json",
+   "docsFile": "catalog/components/process-scroll.json"
+  },
+  "section-command": {
+   "import": "@aziontech/webkit/section-command",
+   "target": "./src/components/sections/section-command/section-command.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/section-command",
+   "category": "sections",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "value",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "Text on the line, copied as written."
+    },
+    {
+     "name": "shell",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Draws the shell prompt before the text; turn off for a prompt meant for an agent."
+    }
+   ],
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/section-command.json",
+   "docsFile": "catalog/components/section-command.json"
+  },
+  "sticky-carousel": {
+   "import": "@aziontech/webkit/sticky-carousel",
+   "target": "./src/components/sections/sticky-carousel/sticky-carousel.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/sticky-carousel",
+   "category": "sections",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "In-page id set on the band so a hash link can target it."
+    },
+    {
+     "name": "eyebrow",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Overline above the title."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Headline of the band, rendered as its `h2`; the band renders nothing when empty."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Paragraph beside the headline."
+    },
+    {
+     "name": "items",
+     "type": "StickyCarouselItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The cards, in order; each is `{ title, description }` and is numbered by its position."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the card row; defaults to the title."
+    },
+    {
+     "name": "headerOffset",
+     "type": "string",
+     "default": "'3.5rem'",
+     "required": "false",
+     "doc": "Height of the sticky site header the band pins under, from the large breakpoint up; any CSS length."
+    }
+   ],
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/sticky-carousel.json",
+   "docsFile": "catalog/components/sticky-carousel.json"
   },
   "hero-copy-on-top-art": {
    "import": "@aziontech/webkit/hero-copy-on-top-art",
@@ -21671,6 +22077,27 @@
    "category": "sections",
    "structure": "monolithic",
    "props": [
+    {
+     "name": "kind",
+     "type": "LogoWallQuoteKind",
+     "default": "'wall'",
+     "required": "false",
+     "doc": "Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band (the design sample's QuoteBand) and needs no logos."
+    },
+    {
+     "name": "quoteKind",
+     "type": "LogoWallQuoteQuoteKind",
+     "default": "'signed'",
+     "required": "false",
+     "doc": "Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence."
+    },
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "In-page id set on the band so a hash link can target it."
+    },
     {
      "name": "eyebrow",
      "type": "string",

@@ -3,11 +3,12 @@ name: logo-wall-quote
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: 933ea8ac37ff0c24ca12e5c6106f187cea243c803f87fd43fda353fc1bbb0a34
+last_updated: 2026-11-11
+checksum: 784efb726df90eeccd7cda3b713c19380a86ef9b455619dfc7be68d9de20b295
 ---
+
 # LogoWallQuote — Component Spec
 
 ## Purpose
@@ -36,7 +37,7 @@ The customers band: a section title over a framed logo wall of linked client mar
 
 ```vue
 <script setup>
-import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
+  import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
 </script>
 
 <template>
@@ -46,24 +47,43 @@ import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
     aria-label="Banks and e-commerce companies running on Azion"
     :logos="[
       { name: 'Magalu', logo: '/logos/magalu.svg', href: '/success-case/magalu' },
-      { name: 'Banco de la Nación', logo: '/logos/banco-de-la-nacion.svg', logoTreatment: 'monochrome', href: '/success-case/banco' }
+      {
+        name: 'Banco de la Nación',
+        logo: '/logos/banco-de-la-nacion.svg',
+        logoTreatment: 'monochrome',
+        href: '/success-case/banco'
+      }
     ]"
-    :quote="{ text: 'Azion delivered the advanced protection and superior performance we needed.', name: 'Ismael Aguilar', jobTitle: 'Information Security Manager at Zoop', logo: '/logos/zoop.svg', logoAlt: 'Zoop' }"
-    :primary-action="{ label: 'Read the case study', href: '/success-case/zoop', trailing: true, target: '_blank' }"
+    :quote="{
+      text: 'Azion delivered the advanced protection and superior performance we needed.',
+      name: 'Ismael Aguilar',
+      jobTitle: 'Information Security Manager at Zoop',
+      logo: '/logos/zoop.svg',
+      logoAlt: 'Zoop'
+    }"
+    :primary-action="{
+      label: 'Read the case study',
+      href: '/success-case/zoop',
+      trailing: true,
+      target: '_blank'
+    }"
   />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the logo wall. |
-| `logos` | `LogoWallQuoteLogo[]` | `[]` | false | The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, href? }` where `logoTreatment` is `'as-is'`, `'monochrome'` or `'invert-light'`. |
-| `quote` | `LogoWallQuoteQuote` | `undefined` | false | The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt }`. Omitted when absent. |
-| `primaryAction` | `LogoWallQuoteAction` | `undefined` | false | Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| Prop            | Type                     | Default     | Required | JSDoc                                                                                                                                                                                 |
+| --------------- | ------------------------ | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`          | `LogoWallQuoteKind`      | `'wall'`    | false    | Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band (the design sample's QuoteBand) and needs no logos. |
+| `quoteKind`     | `LogoWallQuoteQuoteKind` | `'signed'`  | false    | Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence.                                                                            |
+| `anchor`        | `string`                 | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                              |
+| `eyebrow`       | `string`                 | `''`        | false    | Overline above the section title.                                                                                                                                                     |
+| `title`         | `string`                 | `''`        | false    | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty.                                                                               |
+| `ariaLabel`     | `string`                 | `''`        | false    | Accessible name of the logo wall.                                                                                                                                                     |
+| `logos`         | `LogoWallQuoteLogo[]`    | `[]`        | false    | The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, href? }` where `logoTreatment` is `'as-is'`, `'monochrome'` or `'invert-light'`.                       |
+| `quote`         | `LogoWallQuoteQuote`     | `undefined` | false    | The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt }`. Omitted when absent.                                                                                 |
+| `primaryAction` | `LogoWallQuoteAction`    | `undefined` | false    | Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                   |
 
 ## Events
 
@@ -85,15 +105,15 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
 | frame rules and marks | `var(--border-default)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
