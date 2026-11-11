@@ -8,6 +8,7 @@
     "action-confirmation",
     "ai-loading",
     "alert",
+    "app-layout",
     "architecture-tabs",
     "article-body",
     "article-cards",
@@ -375,6 +376,7 @@
     "assets/windsurf-symbol-mono.svg",
     "assets/workers-cf-symbol-color.svg",
     "assets/zoop-extended-color.svg",
+    "attribute-editor",
     "avatar",
     "badge",
     "band-stack",
@@ -384,11 +386,15 @@
     "bento-grid-cell",
     "bento-grid-root",
     "big-numbers",
+    "board",
+    "board-item",
+    "board-root",
     "brand",
     "breadcrumb",
     "breadcrumb-item",
     "browser-frame",
     "button",
+    "button-group",
     "button-highlight",
     "calendar",
     "calendar-clear",
@@ -411,6 +417,7 @@
     "chart-area",
     "chart-axis",
     "chart-bar",
+    "chart-brush",
     "chart-card",
     "chart-card-content",
     "chart-card-controls",
@@ -426,6 +433,7 @@
     "chart-legend",
     "chart-line",
     "chart-root",
+    "chart-scatter",
     "chart-tooltip",
     "chat-message",
     "chat-message-actions",
@@ -442,12 +450,14 @@
     "closing-call-to-action-agents",
     "closing-call-to-action-newsletter",
     "code-block",
+    "code-editor",
     "code-split",
     "collection-preferences",
     "column-navigation",
     "column-navigation-column",
     "column-navigation-item",
     "column-navigation-root",
+    "combobox",
     "command",
     "command-empty",
     "command-group",
@@ -466,6 +476,7 @@
     "conversation",
     "copy-button",
     "currency",
+    "date-range-picker",
     "diagram",
     "dialog",
     "dialog-close",
@@ -506,6 +517,7 @@
     "dropdown-menu-trigger",
     "embed",
     "empty-state",
+    "error-boundary",
     "eslint-plugin",
     "faq",
     "faq-section",
@@ -525,6 +537,7 @@
     "field-set",
     "field-title",
     "file-dropzone",
+    "file-token-group",
     "flow",
     "flow-anchor",
     "flow-node",
@@ -535,6 +548,7 @@
     "footer-link",
     "footer-root",
     "frame-box",
+    "gauge-chart",
     "global-header",
     "help-panel",
     "help-panel-header",
@@ -552,6 +566,7 @@
     "hero-title",
     "hero-with-opening",
     "hint",
+    "hotspot",
     "icon-button",
     "illustration",
     "input",
@@ -581,12 +596,15 @@
     "link",
     "listing-browser",
     "listing-table",
+    "locales/es",
+    "locales/pt-BR",
     "log-view",
     "log-view-content",
     "log-view-footer",
     "log-view-header",
     "logo-wall",
     "logo-wall-quote",
+    "map-chart",
     "media-split",
     "media-split-band",
     "media-split-stack",
@@ -611,6 +629,8 @@
     "network-map",
     "network-section",
     "number-input",
+    "outcome-mark",
+    "overflow-count",
     "overline",
     "package.json",
     "page-header",
@@ -661,6 +681,7 @@
     "resizable-root",
     "resource-grid",
     "save-bar",
+    "schema-form",
     "scroll-area",
     "section-container",
     "section-gap",
@@ -721,6 +742,12 @@
     "table-body",
     "table-caption",
     "table-cell",
+    "table-cell-actions",
+    "table-cell-id",
+    "table-cell-link",
+    "table-cell-status",
+    "table-cell-tags",
+    "table-cell-time",
     "table-column-selector",
     "table-export",
     "table-filter",
@@ -735,6 +762,7 @@
     "table-toolbar",
     "tabs",
     "tag",
+    "tag-editor",
     "template-gallery",
     "textarea",
     "texture-material",
@@ -751,8 +779,14 @@
     "tool-call",
     "tooltip",
     "topic",
+    "topology-diagram",
+    "trace",
     "tracker",
     "tree",
+    "tutorial-panel",
+    "tutorial-panel-provider",
+    "tutorial-panel-root",
+    "upload-progress",
     "use-case-links",
     "use-cases",
     "use-collection",
@@ -762,6 +796,7 @@
     "use-heading-nav",
     "use-locale",
     "use-placement",
+    "use-unsaved-changes",
     "utils/cn",
     "utils/csv",
     "vite",
@@ -787,11 +822,13 @@
     "platform/create/create-hub",
     "platform/create/create-in-drawer",
     "platform/create/deploy-drawer",
+    "platform/create/deploy-progress-dialog",
     "platform/create/deploy-success",
     "platform/create/deploy-template",
     "platform/create/deployment-flow",
     "platform/create/multipage-create",
     "platform/create/provision-wizard",
+    "platform/create/release-impact",
     "platform/create/resource-picker",
     "platform/create/single-page-create",
     "platform/create/source-wizard",
@@ -821,17 +858,24 @@
     "platform/edit/code-editor",
     "platform/edit/edit-resource",
     "platform/edit/rule-builder",
+    "platform/edit/schema-editor",
     "platform/settings/settings-form",
     "platform/states/async-submit",
     "platform/states/first-use",
+    "platform/states/form-error",
     "platform/states/form-validation",
+    "platform/states/not-found",
     "platform/states/page-wires",
     "platform/states/project-intake",
     "platform/view/card-view",
     "platform/view/file-browser",
+    "platform/view/marketplace",
     "platform/view/query-editor",
+    "platform/view/rules-list",
     "platform/view/split-view",
     "platform/view/table-view",
+    "platform/view/template-browser",
+    "platform/view/waf-tuning",
     "shells/console",
     "shells/documentation",
     "shells/website"
@@ -1131,6 +1175,10 @@
       "formatValue": null,
       "height": null,
       "labels": null,
+      "labelScale": [
+        "category",
+        "linear"
+      ],
       "loading": null,
       "max": null,
       "min": null,
@@ -1154,6 +1202,10 @@
       "formatValue": null,
       "height": null,
       "labels": null,
+      "labelScale": [
+        "category",
+        "linear"
+      ],
       "loading": null,
       "max": null,
       "min": null,
@@ -1207,6 +1259,47 @@
       ],
       "tableView": null,
       "totalLabel": null
+    },
+    "gauge-chart": {
+      "ariaLabel": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatValue": null,
+      "label": null,
+      "loading": null,
+      "max": null,
+      "min": null,
+      "refetching": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "thresholds": null,
+      "value": null
+    },
+    "map-chart": {
+      "ariaLabel": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatValue": null,
+      "loading": null,
+      "points": null,
+      "refetching": null,
+      "regions": null,
+      "tableView": null,
+      "view": [
+        "africa",
+        "americas",
+        "asia",
+        "europe",
+        "north-america",
+        "oceania",
+        "south-america",
+        "world"
+      ]
     },
     "stat-tile": {
       "delta": null,
@@ -1367,8 +1460,18 @@
       ]
     },
     "card": {
+      "badges": null,
+      "description": null,
+      "href": null,
+      "installed": null,
+      "kind": [
+        "default",
+        "integration"
+      ],
+      "logo": null,
       "padded": null,
-      "title": null
+      "title": null,
+      "vendor": null
     },
     "card-pricing": {
       "actionLabel": null,
@@ -1399,6 +1502,25 @@
     "help-panel-root": {
       "ariaLabel": null,
       "loading": null
+    },
+    "hotspot": {
+      "hotspotId": null,
+      "side": [
+        "end",
+        "start"
+      ]
+    },
+    "tutorial-panel": {
+      "ariaLabel": null,
+      "description": null,
+      "loading": null,
+      "title": null
+    },
+    "tutorial-panel-root": {
+      "ariaLabel": null,
+      "description": null,
+      "loading": null,
+      "title": null
     },
     "section-title": {
       "description": null,
@@ -1720,6 +1842,10 @@
       "columns": null,
       "loading": null
     },
+    "overflow-count": {
+      "items": null,
+      "noun": null
+    },
     "key-value-pairs-root": {
       "ariaLabel": null,
       "columns": null,
@@ -1769,6 +1895,11 @@
       ],
       "scale": null
     },
+    "trace": {
+      "ariaLabel": null,
+      "selected": null,
+      "spans": null
+    },
     "log-view": {
       "bordered": null,
       "copyable": null,
@@ -1817,6 +1948,7 @@
       "pageSize": null,
       "paginated": null,
       "pagination": null,
+      "reorderable": null,
       "rowCount": null,
       "rowKey": null,
       "rowSelection": null,
@@ -1859,6 +1991,7 @@
       "pageSize": null,
       "paginated": null,
       "pagination": null,
+      "reorderable": null,
       "rowCount": null,
       "rowKey": null,
       "rowSelection": null,
@@ -1875,10 +2008,17 @@
       "ariaLabel": null,
       "disabled": null,
       "freeText": null,
+      "mode": [
+        "query",
+        "tokens"
+      ],
       "placeholder": null,
       "properties": null,
       "query": null,
-      "totalCount": null
+      "suggest": null,
+      "text": null,
+      "totalCount": null,
+      "validate": null
     },
     "collection-preferences": {
       "columns": null,
@@ -1934,6 +2074,11 @@
         "center",
         "start"
       ]
+    },
+    "topology-diagram": {
+      "ariaLabel": null,
+      "levels": null,
+      "loading": null
     },
     "flow-root": {
       "align": [
@@ -2083,6 +2228,13 @@
       ],
       "title": null
     },
+    "error-boundary": {
+      "description": null,
+      "propagate": null,
+      "resetKey": null,
+      "retryLabel": null,
+      "title": null
+    },
     "status-indicator": {
       "label": null,
       "loading": null,
@@ -2132,6 +2284,32 @@
       ],
       "width": null
     },
+    "outcome-mark": {
+      "animated": null,
+      "ariaLabel": null,
+      "severity": [
+        "danger",
+        "neutral",
+        "success",
+        "warning"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "upload-progress": {
+      "cancelable": null,
+      "floating": null,
+      "items": null,
+      "operation": [
+        "delete",
+        "move",
+        "upload"
+      ],
+      "title": null
+    },
     "progress": {
       "indeterminate": null,
       "max": null,
@@ -2145,6 +2323,28 @@
         "small"
       ],
       "value": null
+    },
+    "date-range-picker": {
+      "ariaLabel": null,
+      "disabled": null,
+      "max": null,
+      "min": null,
+      "now": null,
+      "placeholder": null,
+      "rangeSelectorMode": [
+        "absolute-only",
+        "default",
+        "relative-only"
+      ],
+      "relativeOptions": null,
+      "showStep": null,
+      "showTimeZone": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "timeZones": null
     },
     "calendar": {
       "clearable": null,
@@ -2347,6 +2547,18 @@
       ],
       "multiple": null,
       "title": null
+    },
+    "file-token-group": {
+      "alignment": [
+        "horizontal",
+        "vertical"
+      ],
+      "ariaLabel": null,
+      "items": null,
+      "limit": null,
+      "readonly": null,
+      "showFileLastModified": null,
+      "showFileSize": null
     },
     "password-requirements": {
       "requirements": null,
@@ -2555,6 +2767,40 @@
         "medium",
         "small"
       ]
+    },
+    "app-layout": {
+      "compactBelow": null,
+      "navigationLabel": null,
+      "navigationOpen": null,
+      "splitPanelOpen": null,
+      "splitPanelPosition": [
+        "bottom",
+        "side"
+      ],
+      "splitPanelSize": null,
+      "splitPanelTitle": null,
+      "storageKey": null,
+      "toolsLabel": null,
+      "toolsOpen": null,
+      "toolsWidth": null
+    },
+    "board": {
+      "ariaLabel": null,
+      "columns": null,
+      "editing": null,
+      "maxHeight": null,
+      "maxSpan": null,
+      "minHeight": null,
+      "minSpan": null
+    },
+    "board-root": {
+      "ariaLabel": null,
+      "columns": null,
+      "editing": null,
+      "maxHeight": null,
+      "maxSpan": null,
+      "minHeight": null,
+      "minSpan": null
     },
     "resizable": {
       "ariaLabel": null,
@@ -3038,6 +3284,7 @@
       ]
     },
     "webkit-provider": {
+      "catalogs": null,
       "dir": [
         "auto",
         "ltr",
@@ -3524,6 +3771,101 @@
       "autoplayInterval": null,
       "items": null,
       "showProgress": null
+    },
+    "attribute-editor": {
+      "addButtonLabel": null,
+      "addDisabled": null,
+      "addGroupLabel": null,
+      "ariaLabel": null,
+      "definition": null,
+      "disabled": null,
+      "empty": null,
+      "errors": null,
+      "groupLimit": null,
+      "groups": null,
+      "itemRemovable": null,
+      "items": null,
+      "limit": null,
+      "minItems": null,
+      "newItem": null,
+      "removeButtonLabel": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "button-group": {
+      "ariaLabel": null,
+      "items": null,
+      "kind": [
+        "outlined",
+        "transparent"
+      ],
+      "overflowLabel": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "visibleCount": null
+    },
+    "combobox": {
+      "allowCustom": null,
+      "ariaLabel": null,
+      "clearable": null,
+      "disabled": null,
+      "emptyText": null,
+      "filter": null,
+      "invalid": null,
+      "loading": null,
+      "options": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "code-editor": {
+      "ariaLabel": null,
+      "diff": null,
+      "disabled": null,
+      "fill": null,
+      "height": null,
+      "invalid": null,
+      "language": null,
+      "lineNumbers": null,
+      "loader": null,
+      "markers": null,
+      "original": null,
+      "path": null,
+      "readonly": null
+    },
+    "tag-editor": {
+      "ariaLabel": null,
+      "disabled": null,
+      "errors": null,
+      "keyMaxLength": null,
+      "keySuggestions": null,
+      "limit": null,
+      "reservedPrefix": null,
+      "tags": null,
+      "valueMaxLength": null,
+      "valueSuggestions": null
+    },
+    "schema-form": {
+      "disabled": null,
+      "errors": null,
+      "readonly": null,
+      "schema": null,
+      "ui": null,
+      "validateOn": [
+        "blur",
+        "submit"
+      ]
     }
   }
 }

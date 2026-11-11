@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: 324862bf389afc4cf7bb346d28c3598f997cf7ed2a7295be82dc0c76841ce4f7
+checksum: 85c8b0d12c4967bab154f4364d50f1750a7953daea697e15b5c29e9230fd70da
 created: 2026-06-25
 last_updated: 2026-11-11
 ---
@@ -181,7 +181,7 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` moves focus through focusable nodes in document order; no arrow-key roving (the diagram is a static list). When the diagram is wider than its box, the scroll root itself takes `tabindex="0"` (measured with a resize observer, removed again when it fits) so keyboard users can scroll it with the arrow keys; it shows the focus ring inset.
-- ARIA: root `flow` is `role="list"`; each `flow-node` is `role="listitem"` with accessible text content; `flow-parallel` is a `role="listitem"` (one step of the outer list) holding a nested `role="list"` (`data-flow-branches`, `display: contents`) of its branch nodes, because a `group` is not an allowed child of a `list` and its nodes would lose their `list` parent; the connector SVG is decorative and carries `aria-hidden="true"`, as does every connector port (`data-flow-port`) — the ports are a visual attachment affordance and carry no meaning for AT. A `flow-anchor` wraps meaningful node content and is therefore not hidden.
+- ARIA: root `flow` is `role="list"`; each `flow-node` is `role="listitem"` with accessible text content; `flow-parallel` is a `role="listitem"` (one step of the outer list) holding a nested `role="list"` (`data-flow-branches`, testid `<parallel testid>-branches`; it is the flex column that stacks and aligns the branches) of its branch nodes, because a `group` is not an allowed child of a `list` and its nodes would lose their `list` parent; the connector SVG is decorative and carries `aria-hidden="true"`, as does every connector port (`data-flow-port`) — the ports are a visual attachment affordance and carry no meaning for AT. A `flow-anchor` wraps meaningful node content and is therefore not hidden.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` not required — the component is static (no motion).
 - Touch target ≥40×40 px where a node is interactive.

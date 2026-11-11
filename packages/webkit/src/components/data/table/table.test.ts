@@ -164,6 +164,72 @@ describe('Table (composition + data-driven)', () => {
       expect(emptyTable.contains(empty.getByTestId('data-table__empty'))).toBe(false)
       await expectNoA11yViolations(empty.container)
     })
+
+    describe('accessibility — the table owns only its caption and row groups', () => {
+      it('keeps the toolbar, the focusable viewport and the footer outside role=table', () => {
+        const { getByRole, getByTestId } = render(Table, {
+          props: { data: rows, columns, paginated: true, pageSize: 2, 'aria-label': 'Domains' },
+          slots: { toolbar: '<button type="button">Refresh</button>', caption: 'Three domains' }
+        })
+
+        const table = getByRole('table', { name: 'Domains' })
+        expect(table).toBe(getByTestId('data-table__table'))
+        expect(getByTestId('data-table').hasAttribute('aria-label')).toBe(false)
+        expect(table.contains(getByTestId('data-table__viewport'))).toBe(false)
+        expect(table.contains(getByTestId('data-table__footer'))).toBe(false)
+        expect(table.contains(getByRole('button', { name: 'Refresh' }))).toBe(false)
+        expect(getByTestId('data-table__footer').getAttribute('role')).toBeNull()
+      })
+
+      it('is named by its caption unless the consumer names it', async () => {
+        // A composed caption registers while it mounts, after the table's
+        // first render; the data-driven caption names the table from the start.
+        const composed = render(CompositionTree)
+        const caption = composed.getByTestId('data-table__caption')
+        expect(caption.hasAttribute('role')).toBe(false)
+        expect(await composed.findByRole('table', { name: 'My caption' })).toBeTruthy()
+        composed.unmount()
+
+        const captioned = render(Table, {
+          props: { data: rows, columns },
+          slots: { caption: 'Three domains' }
+        })
+        expect(captioned.getByRole('table', { name: 'Three domains' })).toBeTruthy()
+        captioned.unmount()
+
+        const named = render(Table, {
+          props: { data: rows, columns, 'aria-label': 'Domains' },
+          slots: { caption: 'Three domains' }
+        })
+        expect(named.getByRole('table', { name: 'Domains' })).toBeTruthy()
+      })
+
+      it('has no a11y violations: composed, data-driven with toolbar, caption and pagination, and empty', async () => {
+        const composed = render(CompositionTree)
+        await expectNoA11yViolations(composed.container)
+        composed.unmount()
+
+        const narrow = render(
+          defineComponent({
+            components: { Table },
+            setup: () => ({ rows, columns }),
+            template: `
+            <div style="width: 240px">
+              <Table :data="rows" :columns="columns" paginated :page-size="2" aria-label="Domains">
+                <template #toolbar><button type="button">Refresh</button></template>
+                <template #caption>Three domains</template>
+              </Table>
+            </div>
+          `
+          })
+        )
+        await expectNoA11yViolations(narrow.container)
+        narrow.unmount()
+
+        const empty = render(Table, { props: { data: [], columns, 'aria-label': 'Domains' } })
+        await expectNoA11yViolations(empty.container)
+      })
+    })
   })
 
   describe('TableRow — selected state (composition)', () => {

@@ -1,3 +1,4 @@
+import { intlLocale } from '../../../composables/use-locale/use-translate'
 import { endOfDay, startOfDay } from './format'
 import type { CalendarRange } from './injection-key'
 
@@ -74,7 +75,7 @@ function collect(vocabulary: Vocabulary, locale: string) {
   for (const unit of SPAN_UNITS) {
     for (const unitDisplay of ['long', 'short', 'narrow'] as const) {
       for (const count of [1, 2, 5]) {
-        const parts = new Intl.NumberFormat(locale, {
+        const parts = new Intl.NumberFormat(intlLocale(locale), {
           style: 'unit',
           unit,
           unitDisplay
@@ -88,7 +89,7 @@ function collect(vocabulary: Vocabulary, locale: string) {
     }
   }
 
-  const relative = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
+  const relative = new Intl.RelativeTimeFormat(intlLocale(locale), { numeric: 'auto' })
   for (const [keyword, amount, unit] of KEYWORDS) {
     addAll(vocabulary.keywords, relative.format(amount, unit), keyword)
   }
@@ -97,7 +98,7 @@ function collect(vocabulary: Vocabulary, locale: string) {
     const date = new Date(2024, month, 15)
     for (const style of ['long', 'short'] as const) {
       for (const options of [{ month: style }, { month: style, day: 'numeric' as const }]) {
-        const name = new Intl.DateTimeFormat(locale, options)
+        const name = new Intl.DateTimeFormat(intlLocale(locale), options)
           .formatToParts(date)
           .find((part) => part.type === 'month')?.value
         if (name) addAll(vocabulary.months, name, month)
@@ -123,7 +124,7 @@ function vocabularyFor(locale: string): Vocabulary {
   collect(vocabulary, 'en')
   if (locale !== 'en') collect(vocabulary, locale)
 
-  const order = new Intl.DateTimeFormat(locale, {
+  const order = new Intl.DateTimeFormat(intlLocale(locale), {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric'
@@ -298,10 +299,11 @@ const unitLabel = (
   amount: number,
   unit: SpanUnit,
   unitDisplay: 'long' | 'narrow'
-): string => new Intl.NumberFormat(locale, { style: 'unit', unit, unitDisplay }).format(amount)
+): string =>
+  new Intl.NumberFormat(intlLocale(locale), { style: 'unit', unit, unitDisplay }).format(amount)
 
 const keywordLabel = (locale: string, amount: number, unit: Intl.RelativeTimeFormatUnit): string =>
-  new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(amount, unit)
+  new Intl.RelativeTimeFormat(intlLocale(locale), { numeric: 'auto' }).format(amount, unit)
 
 export function relativeHints(locale = 'en'): string[] {
   return [
@@ -317,9 +319,9 @@ export function relativeHints(locale = 'en'): string[] {
 
 export function fixedHints(locale = 'en', now: Date = new Date()): string[] {
   const year = now.getFullYear()
-  const numeric = new Intl.DateTimeFormat(locale, { month: 'numeric', day: 'numeric' })
+  const numeric = new Intl.DateTimeFormat(intlLocale(locale), { month: 'numeric', day: 'numeric' })
   return [
-    new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric' }).format(
+    new Intl.DateTimeFormat(intlLocale(locale), { month: 'short', day: 'numeric' }).format(
       new Date(year, 0, 1)
     ),
     `${numeric.format(new Date(year, 0, 1))} - ${numeric.format(new Date(year, 0, 2))}`,

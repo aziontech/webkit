@@ -95,6 +95,10 @@ export interface TableContext {
   }) => Promise<void>
   /** Signal a refresh; the root emits `refresh` (the app refetches). */
   reload: () => void
+  /** Id a `TableCaption` takes, so the table is labelled by it (`aria-labelledby`). */
+  captionId?: string
+  /** A `TableCaption` registers while mounted; returns the unregister function. */
+  registerCaption?: () => () => void
 }
 
 export const TableInjectionKey: InjectionKey<TableContext> = Symbol('TableContext')

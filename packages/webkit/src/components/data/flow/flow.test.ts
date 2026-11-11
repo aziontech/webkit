@@ -214,7 +214,7 @@ describe('Flow (composition compound)', () => {
   })
 
   describe('Flow.Parallel — flow-parallel.vue align prop', () => {
-    it('renders the parallel step as a listitem holding a nested list, default align=start', () => {
+    it('renders a list item with data-flow-kind=parallel holding its branches in a nested list, default align=start', () => {
       const { getByTestId } = renderTree(`
         <Flow>
           <FlowParallel>
@@ -225,9 +225,12 @@ describe('Flow (composition compound)', () => {
       `)
       const group = getByTestId('data-flow__parallel')
       expect(group.getAttribute('role')).toBe('listitem')
-      expect(group.firstElementChild?.getAttribute('role')).toBe('list')
       expect(group.getAttribute('data-flow-kind')).toBe('parallel')
       expect(group.getAttribute('data-align')).toBe('start')
+      const branches = getByTestId('data-flow__parallel-branches')
+      expect(branches.parentElement).toBe(group)
+      expect(branches.getAttribute('role')).toBe('list')
+      expect(branches.querySelectorAll(':scope > [role="listitem"]').length).toBe(2)
     })
 
     it('reflects align=end onto data-align', () => {
@@ -331,9 +334,19 @@ describe('Flow (composition compound)', () => {
           path.getAttribute('d')
         )
 
+      // Same path commands and coordinates within 0.1px: under a scale, engines
+      // round the scaled layout to device pixels (Firefox lands 0.02px off).
+      const numbersOf = (testid: string) =>
+        pathsOf(testid).flatMap((d) => (d ?? '').match(/-?\d+(\.\d+)?/g)?.map(Number) ?? [])
+      const commandsOf = (testid: string) => pathsOf(testid).map((d) => d?.replace(/[-\d.]+/g, '#'))
+
       await waitFor(() => {
         expect(pathsOf('flow-plain').length).toBeGreaterThan(0)
-        expect(pathsOf('flow-scaled')).toEqual(pathsOf('flow-plain'))
+        expect(commandsOf('flow-scaled')).toEqual(commandsOf('flow-plain'))
+        const plain = numbersOf('flow-plain')
+        const scaled = numbersOf('flow-scaled')
+        expect(scaled).toHaveLength(plain.length)
+        scaled.forEach((value, index) => expect(Math.abs(value - plain[index]!)).toBeLessThan(0.1))
       })
     })
 
@@ -391,6 +404,21 @@ describe('Flow (composition compound)', () => {
         <Flow>
           <FlowNode>Source</FlowNode>
           <FlowNode>Transform</FlowNode>
+          <FlowNode>Deliver</FlowNode>
+        </Flow>
+      `)
+      await expectNoA11yViolations(getByTestId('data-flow'))
+    })
+
+    it('has no violations for a flow with parallel branches', async () => {
+      // A parallel step is a list item that owns its branches as a nested list.
+      const { getByTestId } = renderTree(`
+        <Flow>
+          <FlowNode>Source</FlowNode>
+          <FlowParallel>
+            <FlowNode>Branch A</FlowNode>
+            <FlowNode>Branch B</FlowNode>
+          </FlowParallel>
           <FlowNode>Deliver</FlowNode>
         </Flow>
       `)

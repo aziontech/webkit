@@ -20,6 +20,15 @@ const FIXTURE_CSS = `
   .scroll-content { height: 500px; width: 500px; }
 `
 
+/**
+ * Scroll offsets are compared within a pixel: the browser-mode harness scales
+ * its test iframe to fit the page (a CSS transform), and Firefox snaps scroll
+ * offsets to device pixels under that scale (40 reads back as 39.82). The
+ * component's step is still exact; only the read-back is rounded.
+ */
+const expectOffset = (actual: number, expected: number) =>
+  expect(Math.abs(actual - expected)).toBeLessThan(1)
+
 let fixtureSheet: globalThis.HTMLStyleElement
 
 beforeAll(() => {
@@ -94,7 +103,7 @@ describe('ScrollArea (layout viewport + keyboard scrolling)', () => {
 
     await fireEvent.keyDown(viewport, { key: 'ArrowDown' })
     expect(onKeydown).toHaveBeenCalledTimes(1)
-    expect(viewport.scrollTop).toBe(40)
+    expectOffset(viewport.scrollTop, 40)
   })
 
   it('merges a consumer class onto the viewport without losing the component classes', () => {
@@ -126,16 +135,16 @@ describe('ScrollArea (layout viewport + keyboard scrolling)', () => {
 
     const down = new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true })
     viewport.dispatchEvent(down)
-    expect(viewport.scrollTop).toBe(40)
+    expectOffset(viewport.scrollTop, 40)
     // A handled key claims the event so the page does not double-scroll.
     expect(down.defaultPrevented).toBe(true)
 
     await fireEvent.keyDown(viewport, { key: 'ArrowDown' })
-    expect(viewport.scrollTop).toBe(80)
+    expectOffset(viewport.scrollTop, 80)
 
     const up = new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true })
     viewport.dispatchEvent(up)
-    expect(viewport.scrollTop).toBe(40)
+    expectOffset(viewport.scrollTop, 40)
     expect(up.defaultPrevented).toBe(true)
   })
 
@@ -146,7 +155,7 @@ describe('ScrollArea (layout viewport + keyboard scrolling)', () => {
     expect(page).toBeGreaterThan(0)
 
     await fireEvent.keyDown(viewport, { key: 'PageDown' })
-    expect(viewport.scrollTop).toBe(page)
+    expectOffset(viewport.scrollTop, page)
 
     await fireEvent.keyDown(viewport, { key: 'PageUp' })
     expect(viewport.scrollTop).toBe(0)
@@ -160,7 +169,7 @@ describe('ScrollArea (layout viewport + keyboard scrolling)', () => {
 
     await fireEvent.keyDown(viewport, { key: 'End' })
     // The browser clamps scrollTop = scrollHeight to the real maximum.
-    expect(viewport.scrollTop).toBe(maxScroll)
+    expectOffset(viewport.scrollTop, maxScroll)
 
     await fireEvent.keyDown(viewport, { key: 'Home' })
     expect(viewport.scrollTop).toBe(0)
@@ -187,7 +196,7 @@ describe('ScrollArea (layout viewport + keyboard scrolling)', () => {
     const viewport = area(view)
 
     await fireEvent.keyDown(viewport, { key: 'ArrowRight' })
-    expect(viewport.scrollLeft).toBe(40)
+    expectOffset(viewport.scrollLeft, 40)
 
     await fireEvent.keyDown(viewport, { key: 'ArrowLeft' })
     expect(viewport.scrollLeft).toBe(0)
@@ -208,8 +217,8 @@ describe('ScrollArea (layout viewport + keyboard scrolling)', () => {
 
     await fireEvent.keyDown(viewport, { key: 'ArrowDown' })
     await fireEvent.keyDown(viewport, { key: 'ArrowRight' })
-    expect(viewport.scrollTop).toBe(40)
-    expect(viewport.scrollLeft).toBe(40)
+    expectOffset(viewport.scrollTop, 40)
+    expectOffset(viewport.scrollLeft, 40)
   })
 
   // ---- Fade ---------------------------------------------------------------------------
