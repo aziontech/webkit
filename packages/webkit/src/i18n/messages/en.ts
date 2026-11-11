@@ -467,6 +467,20 @@ export const outcomeMark = {
   neutral: 'Not set'
 } as const
 
+export const overflowCount = {
+  noun: {
+    one: 'item',
+    other: 'items'
+  },
+  summary: '{count} {noun}',
+  paged: '{shown} of {count} {noun}',
+  showAll: 'Show all {count} {noun}',
+  search: 'Search',
+  noMatch: 'Nothing matches “{query}”',
+  loadMore: 'Load {count} more',
+  newTab: '(opens in a new tab)'
+} as const
+
 export const pagination = {
   label: 'Pagination',
   info: 'Showing {start} to {end} of {total} entries',
@@ -710,6 +724,45 @@ export const tableHeadCell = {
 
 export const tableRefreshButton = {
   label: 'Refresh'
+} as const
+
+export const tableCellActions = {
+  label: 'Row actions',
+  labelFor: 'Actions for {name}'
+} as const
+
+export const tableCellId = {
+  copy: 'Copy ID',
+  copyResource: 'Copy {resource} ID'
+} as const
+
+export const tableCellLink = {
+  open: 'Open {label}',
+  openIn: 'Open {label} in {destination}',
+  newTab: 'Open {label} in a new tab',
+  newTabHint: '(opens in a new tab)',
+  copy: 'Copy {label}'
+} as const
+
+export const tableCellTags = {
+  noun: {
+    one: 'tag',
+    other: 'tags'
+  }
+} as const
+
+export const tableCellTime = {
+  justNow: 'just now'
+} as const
+
+export const tableReorder = {
+  column: 'Order',
+  handle: 'Reorder {name}, position {position} of {total}',
+  hint: 'Drag, or press Arrow Up or Arrow Down to move.',
+  locked: 'Clear the sort to reorder rows.',
+  moved: 'Moved {name} to position {position} of {total}.',
+  dropped: 'Dropped {name} at position {position} of {total}.',
+  cancelled: 'Reorder cancelled.'
 } as const
 
 export const tableSearch = {
@@ -994,6 +1047,7 @@ export const en = {
   navigationMenu,
   numberInput,
   outcomeMark,
+  overflowCount,
   pagination,
   passwordInput,
   passwordRequirements,
@@ -1027,6 +1081,12 @@ export const en = {
   tableFilter,
   tableHeadCell,
   tableRefreshButton,
+  tableCellActions,
+  tableCellId,
+  tableCellLink,
+  tableCellTags,
+  tableCellTime,
+  tableReorder,
   tableSearch,
   tableSortButton,
   tabs,

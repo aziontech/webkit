@@ -235,6 +235,7 @@
     "./shell-mockup-part": "./src/components/content/shell-mockup/shell-mockup-part/shell-mockup-part.vue",
     "./kbd": "./src/components/content/kbd/kbd.vue",
     "./key-value-pairs": "./src/components/content/key-value-pairs/index.ts",
+    "./overflow-count": "./src/components/content/overflow-count/overflow-count.vue",
     "./key-value-pairs-root": "./src/components/content/key-value-pairs/key-value-pairs.vue",
     "./key-value-pairs-item": "./src/components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue",
     "./key-value-pairs-group": "./src/components/content/key-value-pairs/key-value-pairs-group/key-value-pairs-group.vue",
