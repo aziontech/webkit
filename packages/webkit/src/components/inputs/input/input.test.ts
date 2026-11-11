@@ -335,3 +335,15 @@ describe('Input — password managers', () => {
     expect(input).toHaveAttribute('data-1p-ignore', 'false')
   })
 })
+
+describe('Input — direction of the typed value', () => {
+  it('uses dir="auto" so a value in another script keeps its own direction', () => {
+    const { getByTestId } = render(Input)
+    expect(getByTestId('input').getAttribute('dir')).toBe('auto')
+  })
+
+  it('lets a dir attribute override the default', () => {
+    const { getByTestId } = render(Input, { attrs: { dir: 'ltr' } })
+    expect(getByTestId('input').getAttribute('dir')).toBe('ltr')
+  })
+})

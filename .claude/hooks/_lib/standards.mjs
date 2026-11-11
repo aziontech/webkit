@@ -67,7 +67,8 @@ export const STANDARDS = [
       { surface: 'ci', by: 'check-authoring' },
       { surface: 'lint', by: 'no-hardcoded-color' },
       { surface: 'lint', by: 'no-hardcoded-motion' },
-      { surface: 'lint', by: 'no-style-override' }
+      { surface: 'lint', by: 'no-style-override' },
+      { surface: 'lint', by: 'no-physical-direction' }
     ],
     note: 'The ratchet runs the same token-checks engine repo-wide, so an editor push cannot bypass the hook; consumers get the color/motion/override lints.'
   },

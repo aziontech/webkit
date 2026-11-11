@@ -2,9 +2,9 @@
 name: webkit-layout
 description: The page container system — how a page built on @aziontech/webkit gets its width, its inset from the app chrome, and its vertical rhythm. Fixes the three-level page shape (boundary → parent section → band), the five measures and what picks one (the payload, never the URL), why the boundary is not part of the measure and what that buys, the two rhythm steps and the margin form for a band whose parent cannot carry a gap, the site frame, and the control cap inside an item-group field row. Everything comes from the `layout-*` utilities and tokens in @aziontech/theme — a page never writes its own `mx-auto max-w-*`, and full-bleed is the absence of a column class, not a `w-full`. Use when building any page, adding a sticky action bar, wondering how wide a page should be, or reviewing a page whose column drifts left, whose bar misaligns with the body it submits, or whose sections breathe unevenly.
 status: active
-last_updated: 2026-09-21
+last_updated: 2026-11-11
 scope: general
-enforced_by: [webkit-styling, webkit-tokens, ui-verify, review]
+enforced_by: [webkit-styling, webkit-tokens, webkit-direction, ui-verify, review]
 ---
 
 # Skill: webkit-layout
@@ -296,6 +296,11 @@ everything inside it. One token, retuned per band, instead of a width re-typed o
 - **NEVER** write a responsive variant for the boundary or the rhythm — the tokens are already fluid.
 - **MUST** pick the measure from the payload, never from the route, and only ever narrower than
   `layout-column`.
+- **NEVER** name a physical side: `ps-`/`pe-`, `ms-`/`me-`, `start-`/`end-`, `text-start`,
+  `border-s` — so the same page mirrors under `dir="rtl"` (the boundary, the sticky bar and the field
+  row's control column included). `webkit/no-physical-direction` blocks `pl-`/`mr-`/`left-`/`text-right`;
+  "left" and "right" in this skill read as "start" and "end" in a right-to-left page (rule
+  `webkit-direction`).
 - **NEVER** cap the app shell — the sidebar, the global header, the content zone's own inset stay
   fluid. The cap lives on the page's own column.
 

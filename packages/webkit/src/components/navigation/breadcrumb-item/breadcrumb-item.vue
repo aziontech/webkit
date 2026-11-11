@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
+  import { directionalIconClass } from '../../../utils/directional-icons'
   import {
     focusVisibleRingClasses,
     ghostLayerClasses
@@ -97,7 +98,7 @@
   >
     <i
       v-if="showIcon"
-      :class="icon"
+      :class="[icon, directionalIconClass(icon)]"
       class="relative z-1 size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
       aria-hidden="true"
       :data-testid="`${testId}__icon`"

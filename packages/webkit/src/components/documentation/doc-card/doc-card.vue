@@ -96,8 +96,8 @@
       <i
         :class="
           isExternal
-            ? 'pi-arrow-up-right group-hover:translate-x-0.5 group-hover:-translate-y-0.5'
-            : 'pi-chevron-right group-hover:translate-x-0.5'
+            ? 'pi-arrow-up-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5'
+            : 'pi-chevron-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5'
         "
         class="pi text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
         aria-hidden="true"

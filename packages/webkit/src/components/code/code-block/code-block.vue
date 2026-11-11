@@ -10,6 +10,7 @@
     watch
   } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { cn } from '../../../utils/cn'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
@@ -94,6 +95,7 @@
   }>()
 
   const attrs = useAttrs()
+  const dir = useDirection()
   const tabListRef = ref<HTMLElement | null>(null)
   const tabRefs = ref<HTMLElement[]>([])
   const indicatorVisible = ref(false)
@@ -171,6 +173,7 @@
   const indicatorTransitionStyle = computed(() => getCodeBlockIndicatorTransitionStyle())
 
   const indicatorTransformStyle = computed(() => ({
+    left: '0',
     width: `${indicatorWidth.value}px`,
     transform: `translate3d(${indicatorOffsetX.value}px, 0, 0)`
   }))
@@ -344,7 +347,9 @@
       return
     }
 
-    if (event.key === 'ArrowRight') {
+    const key = logicalArrowKey(event.key, dir.value)
+
+    if (key === 'ArrowRight') {
       event.preventDefault()
       const next = getNextTabValue(1)
 
@@ -356,7 +361,7 @@
       return
     }
 
-    if (event.key === 'ArrowLeft') {
+    if (key === 'ArrowLeft') {
       event.preventDefault()
       const next = getNextTabValue(-1)
 
@@ -569,7 +574,7 @@
       >
         <span
           v-show="indicatorVisible"
-          class="pointer-events-none absolute inset-y-0 start-0 z-1 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm) motion-reduce:transition-none"
+          class="pointer-events-none absolute inset-y-0 z-1 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm) motion-reduce:transition-none"
           :style="[indicatorTransitionStyle, indicatorTransformStyle]"
           :data-testid="`${testId}__indicator`"
           aria-hidden="true"
@@ -674,6 +679,7 @@
           :data-testid="`${testId}__panel`"
         >
           <div
+            dir="ltr"
             class="flex min-w-full w-max flex-col"
             :data-testid="`${testId}__lines`"
           >

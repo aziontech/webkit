@@ -20,6 +20,10 @@ const noHardcodedColor = (await import('../../src/eslint-plugin/rules/no-hardcod
   .default
 const noHardcodedMotion = (await import('../../src/eslint-plugin/rules/no-hardcoded-motion.js'))
   .default
+const noPhysicalDirection = (await import('../../src/eslint-plugin/rules/no-physical-direction.js'))
+  .default
+const { logicalClass, physicalDirectionClasses } =
+  await import('../../src/eslint-plugin/direction-classes.js')
 const preferTreeShakeableRoot = (
   await import('../../src/eslint-plugin/rules/prefer-tree-shakeable-root.js')
 ).default
@@ -273,6 +277,86 @@ test('no-hardcoded-motion (script + template)', () => {
         code: '<template><div style="transition: opacity 200ms">x</div></template>',
         filename: 'g.vue',
         errors: [{ messageId: 'styleTiming' }]
+      }
+    ]
+  })
+})
+
+test('direction classes: physical → logical mapping', () => {
+  const cases = {
+    'ml-2': 'ms-2',
+    '-mr-px': '-me-px',
+    'pl-4': 'ps-4',
+    'md:pr-[12px]': 'md:pe-[12px]',
+    'left-0': 'start-0',
+    '-right-2': '-end-2',
+    'text-left': 'text-start',
+    'hover:text-right': 'hover:text-end',
+    'border-l': 'border-s',
+    'border-r-2': 'border-e-2',
+    'border-l-(--border-default)': 'border-s-(--border-default)',
+    'rounded-l-md': 'rounded-s-md',
+    'rounded-tr-lg': 'rounded-se-lg',
+    'rounded-bl': 'rounded-es',
+    'float-right': 'float-end',
+    'scroll-pl-4': 'scroll-ps-4',
+    '!pl-2': '!ps-2',
+    'pl-2!': 'ps-2!'
+  }
+  for (const [from, to] of Object.entries(cases)) assert.equal(logicalClass(from), to, from)
+  for (const fine of [
+    'ms-2',
+    'px-4',
+    'inset-x-0',
+    'text-center',
+    'border-x',
+    'rounded-md',
+    'start-0'
+  ]) {
+    assert.equal(logicalClass(fine), null, fine)
+  }
+  assert.deepEqual(physicalDirectionClasses('absolute left-1/2 -translate-x-1/2 top-0'), [])
+  assert.deepEqual(
+    physicalDirectionClasses('absolute left-1/2 top-0').map((h) => h.fix),
+    ['start-1/2']
+  )
+})
+
+test('no-physical-direction (template + script + fix)', () => {
+  vue.run('no-physical-direction', noPhysicalDirection, {
+    valid: [
+      {
+        code: '<template><div class="ms-2 pe-4 text-start border-s">x</div></template>',
+        filename: 'a.vue'
+      },
+      {
+        code: '<template><span class="absolute left-1/2 -translate-x-1/2">x</span></template>',
+        filename: 'b.vue'
+      },
+      { code: '<template><Tooltip placement="right-start" /></template>', filename: 'c.vue' },
+      {
+        code: "<script setup>const side = 'left-edge'</script><template><i /></template>",
+        filename: 'd.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: '<template><div class="ml-2 p-4 text-right">x</div></template>',
+        output: '<template><div class="ms-2 p-4 text-end">x</div></template>',
+        filename: 'e.vue',
+        errors: [{ messageId: 'physical' }]
+      },
+      {
+        code: `<template><div :class="['pl-4', open && 'border-r']">x</div></template>`,
+        output: `<template><div :class="['ps-4', open && 'border-e']">x</div></template>`,
+        filename: 'f.vue',
+        errors: [{ messageId: 'physical' }, { messageId: 'physical' }]
+      },
+      {
+        code: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-l-md', { 'mr-1': true })</script><template><i :class="c" /></template>`,
+        output: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-s-md', { 'me-1': true })</script><template><i :class="c" /></template>`,
+        filename: 'g.vue',
+        errors: [{ messageId: 'physical' }, { messageId: 'physical' }]
       }
     ]
   })

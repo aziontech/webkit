@@ -69,7 +69,7 @@
     <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
       <i
         v-if="kind === 'previous'"
-        class="pi pi-chevron-left text-[length:inherit] leading-none"
+        class="pi pi-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
         aria-hidden="true"
       />
       <i
@@ -80,7 +80,7 @@
       <slot v-if="kind === 'number'" />
       <i
         v-if="kind === 'next'"
-        class="pi pi-chevron-right text-[length:inherit] leading-none"
+        class="pi pi-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
         aria-hidden="true"
       />
     </span>

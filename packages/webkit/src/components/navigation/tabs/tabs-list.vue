@@ -37,6 +37,7 @@
   const indicatorTransitionStyle = computed(() => getTabViewIndicatorTransitionStyle())
 
   const indicatorTransformStyle = computed(() => ({
+    left: '0',
     width: `${indicatorWidth.value}px`,
     height: `${indicatorHeight.value}px`,
     transform: `translate3d(${indicatorOffsetX.value}px, ${indicatorOffsetY.value}px, 0)`
@@ -45,8 +46,9 @@
   const updateScrollAffordance = () => {
     const el = listRef.value
     if (!el) return
-    canScrollStart.value = el.scrollLeft > 1
-    canScrollEnd.value = Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth - 1
+    const scrolled = Math.abs(el.scrollLeft)
+    canScrollStart.value = scrolled > 1
+    canScrollEnd.value = Math.ceil(scrolled + el.clientWidth) < el.scrollWidth - 1
   }
 
   const listClasses = computed(() =>
@@ -57,7 +59,7 @@
   )
 
   const indicatorClasses = [
-    'pointer-events-none absolute start-0 top-0 z-0',
+    'pointer-events-none absolute top-0 z-0',
     'rounded-(--shape-button) bg-(--secondary-mask)',
     'border-(length:--border-width-default) border-(--border-muted)',
     'shadow-(--shadow-xs)',
@@ -152,7 +154,7 @@
         v-if="canScrollStart"
         :data-testid="`${testId}__fade-start`"
         aria-hidden="true"
-        class="pointer-events-none absolute inset-y-0 start-0 z-10 w-(--spacing-6) bg-gradient-to-r from-(--bg-canvas) to-transparent"
+        class="pointer-events-none absolute inset-y-0 start-0 z-10 w-(--spacing-6) bg-gradient-to-r from-(--bg-canvas) to-transparent rtl:bg-gradient-to-l"
       />
     </Transition>
     <Transition
@@ -163,7 +165,7 @@
         v-if="canScrollEnd"
         :data-testid="`${testId}__fade-end`"
         aria-hidden="true"
-        class="pointer-events-none absolute inset-y-0 end-0 z-10 w-(--spacing-6) bg-gradient-to-l from-(--bg-canvas) to-transparent"
+        class="pointer-events-none absolute inset-y-0 end-0 z-10 w-(--spacing-6) bg-gradient-to-l from-(--bg-canvas) to-transparent rtl:bg-gradient-to-r"
       />
     </Transition>
   </div>

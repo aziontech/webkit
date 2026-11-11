@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { directionalIconClass } from '../../../utils/directional-icons'
+
   export type LinkSize = 'small' | 'medium' | 'large'
   export type LinkTarget = '_self' | '_blank'
 
@@ -98,7 +100,7 @@
       </span>
       <i
         v-if="showIcon"
-        :class="icon"
+        :class="[icon, directionalIconClass(icon)]"
         class="inline-flex size-(--spacing-sm) shrink-0 items-center justify-center text-[length:inherit] leading-none"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"

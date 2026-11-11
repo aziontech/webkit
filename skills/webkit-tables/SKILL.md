@@ -1,8 +1,8 @@
 ---
 name: webkit-tables
-description: Data tables on @aziontech/webkit — one data-driven <Table :data :columns row-key> with a column model (principal, grow, enableSorting, kind:'action', hideable) and a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters, scrolling its body internally via the h-full/min-h-0 chain. Ships a fixed set of cell recipes so every table reads the same — principal name cell, Tag/status-severity cell (one chip per row, a category chip one rounded severity), actions DropdownMenu cell, copy-value cell, "+N" overflow Popover, a Last Modified cell (Avatar + relative time in one column), the cross-resource link (the name, a 12px pi-external-link, and a tooltip naming the destination) and the domain cell built from it, with its copy button pinned to the cell's right edge for common-width alignment. The tabular companion to /webkit-form and /webkit-ui-states.
+description: Data tables on @aziontech/webkit — one data-driven <Table :data :columns row-key> with a column model (principal, grow, enableSorting, kind:'action', hideable) and a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters, scrolling its body internally via the h-full/min-h-0 chain. Ships a fixed set of cell recipes so every table reads the same — principal name cell, Tag/status-severity cell (one chip per row, a category chip one rounded severity), actions DropdownMenu cell, copy-value cell, "+N" overflow Popover, a Last Modified cell (Avatar + relative time in one column), the cross-resource link (the name, a 12px pi-external-link, and a tooltip naming the destination) and the domain cell built from it, with its copy button pinned to the cell's end edge for common-width alignment. The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
-last_updated: 2026-10-28
+last_updated: 2026-11-11
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-tokens, ui-verify]
 ---
@@ -287,11 +287,11 @@ a tooltip at all.
   nothing errors, and at a wide viewport it looks correct. Measure it at a narrow one — assert zero
   cells where `scrollWidth > clientWidth`.
 
-### Domain cell — the link above, copy button pinned to the cell's right edge
+### Domain cell — the link above, copy button pinned to the cell's end edge
 
 **The rule that fixes misalignment:** the copy button never sits flush against the domain text (its
-x-position would then vary per row with the domain length). It is **pinned to the cell's right edge** with
-`ml-auto shrink-0`, the link **truncates**, and the cell fills its column (`w-full`) — so every copy
+x-position would then vary per row with the domain length). It is **pinned to the cell's end edge** with
+`ms-auto shrink-0`, the link **truncates**, and the cell fills its column (`w-full`) — so every copy
 button lines up vertically no matter how long the domain is.
 
 ```vue
@@ -305,7 +305,7 @@ button lines up vertically no matter how long the domain is.
       kind="outlined"
       :value="value"
       aria-label="Copy domain name"
-      class="ml-auto shrink-0"
+      class="ms-auto shrink-0"
     />
   </div>
 </template>
@@ -317,7 +317,9 @@ copies are indistinguishable until you diff them.
 
 Do **not**:
 
-- put `CopyButton` immediately after the text with no `ml-auto` (the misalignment this recipe fixes);
+- put `CopyButton` immediately after the text with no `ms-auto` (the misalignment this recipe fixes);
+- let a domain or ID reorder inside right-to-left text: wrap the value in `<span dir="ltr">` (or
+  `<bdi>`) so `api.example.com` and `a1b2-c3` keep their order under `dir="rtl"`;
 - use `whitespace-nowrap` on the link instead of `truncate` (a long domain then shoves the button off);
 - omit `@click.stop` on the link/button when the row has `@row-click` (the click would open the row).
 
@@ -347,7 +349,7 @@ shared component and drop it into the cell:
       kind="outlined"
       :value="row.domains[0]"
       aria-label="Copy domain name"
-      class="ml-auto shrink-0"
+      class="ms-auto shrink-0"
     />
   </div>
 </template>
@@ -356,7 +358,7 @@ shared component and drop it into the cell:
 ### Copy-value cell — text + CopyButton at the end
 
 Any cell that exposes a copyable value (token, ID, variable value) uses the same **text-then-copy** shape,
-copy pinned to the right edge:
+copy pinned to the end edge:
 
 ```vue
 <template #cell-value="{ value }">
@@ -366,7 +368,7 @@ copy pinned to the right edge:
       kind="outlined"
       :value="value"
       aria-label="Copy value"
-      class="ml-auto shrink-0"
+      class="ms-auto shrink-0"
     />
   </div>
 </template>
@@ -468,9 +470,9 @@ destructive actions in their own `DropdownMenu.Group`.
 - [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
 - [ ] Every name that leaves the screen uses the one shared cross-resource link: 12px `pi-external-link`, a tooltip naming the destination, underline on hover, and **no mark at all** when there is no destination.
 - [ ] Only **one** chip per row, and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.
-- [ ] Domain cell = the shared link + `CopyButton` with `ml-auto shrink-0`; cell `w-full`. Copy buttons align across rows.
+- [ ] Domain cell = the shared link + `CopyButton` with `ms-auto shrink-0`; cell `w-full`. Copy buttons align across rows.
 - [ ] Measured at a narrow viewport: **zero** cells where `scrollWidth > clientWidth` (catches a link wrapper that cannot shrink, which looks fine when wide).
-- [ ] Every copyable cell uses text-then-copy with the copy button pinned right (`ml-auto shrink-0`), never flush against the text.
+- [ ] Every copyable cell uses text-then-copy with the copy button pinned to the end (`ms-auto shrink-0`), never flush against the text.
 - [ ] "Last Modified" cell = `Avatar` + relative time in one column, name on the avatar tooltip; no raw absolute date and no separate "Last Modified By"/"Author" column beside it.
 - [ ] Overflow shown as a `+N` `Tag` opening a `Popover` (summary, search past 7, Load more — per `/webkit-ux-heuristics`), not a wrapped inline list.
 - [ ] Status via `Tag :severity`, never a raw color; long text `truncate`s inside `min-w-0`.

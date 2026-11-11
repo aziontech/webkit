@@ -47,6 +47,10 @@ Every export carries a `surface`: `product` (console and apps), `marketing` (the
   compiles webkit's classes). Light is the default; for dark set `<html data-theme="dark">`.
 - **Accessible & keyboard-operable.** Label every field, keep a visible focus ring, mirror state in
   ARIA, no click handler without a key handler.
+- **Right-to-left ready.** Logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`,
+  `text-start`, `border-s`, `rounded-s`); directional icons mirror with `rtl:-scale-x-100`; arrow-key
+  and drag logic reads `useDirection` (`@aziontech/webkit/use-direction`); code, URLs and IDs
+  inside text sit in `dir="ltr"` or `<bdi>` (rule `webkit-direction`).
 - **Small bundles.** Prefer the `<name>-root` path (or specific sub-components), import icons
   individually, lazy-load heavy overlays.
 - **App-level setup at first use.** A few components declare a one-time wiring in their catalog
@@ -59,7 +63,8 @@ Every export carries a `surface`: `product` (console and apps), `marketing` (the
 
 ESLint (`@aziontech/webkit/eslint-plugin` + `vuejs-accessibility`, wired by `webkit init`) fails the
 build on: category-prefixed / deep-internal / barrel imports · hardcoded color · restyling a webkit
-component · a custom element where a webkit component exists · a hand-rolled `modelValue`+`update`
+component · a physical left/right utility (`ml-`, `pr-`, `left-`, `text-right`…) · a custom
+element where a webkit component exists · a hand-rolled `modelValue`+`update`
 instead of `defineModel` · a deprecated component · a whole-icon-set import · missing the
 tree-shakeable root · and the static a11y set (alt-text, aria-props, aria-role, click-without-key,
 label-has-for, no-autofocus). The rest — states, motion-reduce, contrast/behavioral a11y, both

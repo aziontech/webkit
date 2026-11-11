@@ -208,12 +208,12 @@
           >
             <span class="px-0.5 text-(--text-muted)">Applications</span>
             <i
-              class="pi pi-angle-right text-body-sm text-(--text-muted)"
+              class="pi pi-angle-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="px-0.5 text-(--text-default)">qa-p-app</span>
             <i
-              class="pi pi-angle-right text-body-sm text-(--text-muted)"
+              class="pi pi-angle-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="px-0.5 text-(--text-default)">A7TEE0XR</span>
@@ -431,11 +431,11 @@
                 >
                 <span class="inline-flex items-center gap-(--spacing-sm)">
                   <i
-                    class="pi pi-angle-double-left"
+                    class="pi pi-angle-double-left rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <i
-                    class="pi pi-angle-left"
+                    class="pi pi-angle-left rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span
@@ -443,11 +443,11 @@
                     >1</span
                   >
                   <i
-                    class="pi pi-angle-right"
+                    class="pi pi-angle-right rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <i
-                    class="pi pi-angle-double-right"
+                    class="pi pi-angle-double-right rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span

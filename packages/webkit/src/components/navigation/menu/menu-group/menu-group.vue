@@ -53,7 +53,7 @@
     'data-[motion=push]:bg-[var(--menu-slide-surface,var(--bg-surface))] ' +
     'data-[motion=pop]:bg-[var(--menu-slide-surface,var(--bg-surface))] ' +
     'aria-hidden:z-0 ' +
-    'aria-hidden:absolute aria-hidden:inset-x-0 aria-hidden:top-0 aria-hidden:-translate-x-full ' +
+    'aria-hidden:absolute aria-hidden:inset-x-0 aria-hidden:top-0 aria-hidden:-translate-x-full rtl:aria-hidden:translate-x-full ' +
     'aria-hidden:opacity-0 aria-hidden:motion-reduce:hidden ' +
     'motion-reduce:transition-none motion-reduce:transform-none'
 
@@ -70,7 +70,7 @@
   <Transition
     v-bind="transitionAttrs"
     :duration="{ enter: MENU_LEVEL_ENTER_MS, leave: 0 }"
-    enter-from-class="motion-safe:-translate-x-full!"
+    enter-from-class="motion-safe:-translate-x-full! rtl:motion-safe:translate-x-full!"
   >
     <section
       v-bind="$attrs"

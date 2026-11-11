@@ -174,8 +174,38 @@ the save strategies are `platform/settings/settings-form`, the two details pages
 [`src/cli/migrations/v6-blocks.json`](./src/cli/migrations/v6-blocks.json); `get_pattern` still
 answers an old id with the new block and a `note`. Code you already copied does not change.
 
+### Right-to-left
+
+Components, blocks and examples use logical utilities only, so a page under `dir="rtl"` mirrors:
+`ml-`/`mr-` became `ms-`/`me-`, `pl-`/`pr-` became `ps-`/`pe-`, `left-`/`right-` became
+`start-`/`end-`, `text-left`/`text-right` became `text-start`/`text-end`, `border-l`/`border-r`
+became `border-s`/`border-e` and `rounded-l`/`rounded-tr`… became `rounded-s`/`rounded-se`…. The
+`left-1/2 -translate-x-1/2` centering pair is the one physical form kept. Copied blocks keep working;
+copy them again to get the mirrored version.
+
+- **Lint.** The ESLint presets add `webkit/no-physical-direction` (error, autofix). Run
+  `npx eslint --fix .` once to rewrite your own `ml-`/`pr-`/`left-`/`text-right` classes; it skips
+  the centering pair.
+- **`useDirection`.** `import { useDirection, logicalArrowKey } from '@aziontech/webkit/use-direction'`
+  returns a reactive `'ltr' | 'rtl'` read from the closest `[dir]` ancestor (or `<html dir>`), and
+  follows changes. Tabs, ToggleGroup, RadioCards, Slider, Pagination, NavigationMenu, Menu
+  submenus, Tree, Calendar, Resizable, Carousel, QuoteTabs, Tracker and CodeBlock tabs already use
+  it: under `rtl`, ArrowLeft moves to the next item.
+- **Icons.** Arrows, chevrons, carets and sign-in/sign-out glyphs mirror under `rtl`
+  (`@aziontech/webkit/styles` and the `icon` props of Button, IconButton, Link, Breadcrumb and
+  MenuItem); external-link arrows, media controls and logos do not. Add `rtl:-scale-x-100` to a
+  directional glyph you draw yourself.
+- **User data.** `Input`, `Textarea`, `NumberInput` and `PasswordInput` render `dir="auto"` unless
+  you pass `dir`; `CodeBlock` lines, `Kbd`, `LogView` timestamps and the `BrowserFrame` address are
+  `dir="ltr"`. Snapshot tests of those components see the new attribute.
+- **Theme.** The sans stack is `Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif`,
+  with Noto Sans Arabic loaded only for Arabic code points, and `:lang(ar)`, `:lang(fa)` and
+  `:lang(ur)` get a taller default line height. Set `lang` with `dir`.
+
+See the `webkit-direction` rule for the full standard.
+
 ## 5. Unchanged
 
-Theme tokens, icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style
+Theme tokens (apart from the sans stack above), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style
 (`@aziontech/webkit/<name>`) are the same. The AI bundle (`skills/`, `rules/`) is updated by
 `npx @aziontech/webkit sync`.

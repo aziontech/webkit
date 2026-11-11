@@ -54,6 +54,7 @@ import { useTransitionStatus } from './use-transition-status.js'
  *   closeDelay: number
  *   orientation: 'horizontal' | 'vertical'
  *   nested: boolean
+ *   dir?: import('vue').Ref<'ltr' | 'rtl'>
  * }} options
  * @param {(event: string, ...args: unknown[]) => void} emit
  */
@@ -141,7 +142,8 @@ export function useNavigationMenuRootState(
 
       if (previousIndex !== -1 && nextIndex !== -1) {
         if (options.orientation === 'horizontal') {
-          activationDirection.value = nextIndex > previousIndex ? 'right' : 'left'
+          const forward = nextIndex > previousIndex !== (options.dir?.value === 'rtl')
+          activationDirection.value = forward ? 'right' : 'left'
         } else {
           activationDirection.value = nextIndex > previousIndex ? 'down' : 'up'
         }
@@ -279,8 +281,9 @@ export function useNavigationMenuRootState(
     }
 
     const isHorizontal = options.orientation === 'horizontal'
-    const nextKey = isHorizontal ? 'ArrowRight' : 'ArrowDown'
-    const prevKey = isHorizontal ? 'ArrowLeft' : 'ArrowUp'
+    const isRtl = isHorizontal && options.dir?.value === 'rtl'
+    const nextKey = isHorizontal ? (isRtl ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown'
+    const prevKey = isHorizontal ? (isRtl ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp'
 
     if (event.key !== nextKey && event.key !== prevKey) {
       return

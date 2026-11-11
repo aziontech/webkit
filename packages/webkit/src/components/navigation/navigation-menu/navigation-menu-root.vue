@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { useDirection } from '../../../composables/use-direction'
   import { provideNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
   import { useNavigationMenuRootState } from './composables/use-navigation-menu-root.js'
   import { getNavigationMenuRootClasses } from './presets/styles'
@@ -60,7 +61,8 @@
       delay: props.delay,
       closeDelay: props.closeDelay,
       orientation: props.orientation,
-      nested: false
+      nested: false,
+      dir: useDirection()
     },
     emitBridge
   )

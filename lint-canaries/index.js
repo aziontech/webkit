@@ -117,7 +117,12 @@ const ESLINT_CANARIES = [
   // ESLint — Clean code
   { file: 'eslint/clean-code/no-console.ts', rule: 'no-console' },
   { file: 'eslint/clean-code/no-debugger.ts', rule: 'no-debugger' },
-  { file: 'eslint/clean-code/prefer-const.ts', rule: 'prefer-const' }
+  { file: 'eslint/clean-code/prefer-const.ts', rule: 'prefer-const' },
+  // ESLint — webkit plugin
+  {
+    file: 'eslint/webkit/no-physical-direction.vue',
+    rule: 'webkit/no-physical-direction'
+  }
 ]
 
 /**

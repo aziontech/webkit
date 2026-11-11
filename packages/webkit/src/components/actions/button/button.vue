@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../utils/spinner/spinner.vue'
 
   export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'
@@ -174,10 +175,10 @@
       />
       <i
         v-else-if="icon"
-        :class="icon"
+        :class="[icon, directionalIconClass(icon)]"
         :data-icon-position="iconPosition"
         :data-animated="animated && iconPosition === 'trailing' ? '' : undefined"
-        class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
+        class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 rtl:group-hover/button:data-animated:-translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
         aria-hidden="true"
       />
       {{ label }}
@@ -207,10 +208,10 @@
       />
       <i
         v-else-if="icon"
-        :class="icon"
+        :class="[icon, directionalIconClass(icon)]"
         :data-icon-position="iconPosition"
         :data-animated="animated && iconPosition === 'trailing' ? '' : undefined"
-        class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
+        class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 rtl:group-hover/button:data-animated:-translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
         aria-hidden="true"
       />
       {{ label }}

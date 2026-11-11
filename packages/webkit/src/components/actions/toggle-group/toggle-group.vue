@@ -10,6 +10,7 @@
     watch
   } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { cn } from '../../../utils/cn'
   import { getSegmentedButtonIndicatorTransitionStyle } from './presets/transitions'
 
@@ -52,6 +53,7 @@
 
   const attrs = useAttrs()
   const rootRef = ref<HTMLElement | null>(null)
+  const dir = useDirection(rootRef)
   const optionRefs = ref<HTMLElement[]>([])
   const indicatorVisible = ref(false)
   const indicatorWidth = ref(0)
@@ -97,6 +99,7 @@
   const indicatorTransitionStyle = computed(() => getSegmentedButtonIndicatorTransitionStyle())
 
   const indicatorTransformStyle = computed(() => ({
+    left: '0',
     width: `${indicatorWidth.value}px`,
     height: `${indicatorHeight.value}px`,
     transform: `translate3d(${indicatorOffsetX.value}px, ${indicatorOffsetY.value}px, 0)`
@@ -113,7 +116,7 @@
   )
 
   const indicatorClasses = [
-    'pointer-events-none absolute start-0 top-0 z-0',
+    'pointer-events-none absolute top-0 z-0',
     'rounded-(--shape-button) bg-(--bg-selected)',
     'motion-reduce:transition-none'
   ]
@@ -214,13 +217,15 @@
       return
     }
 
-    if (event.key === 'ArrowRight') {
+    const key = logicalArrowKey(event.key, dir.value)
+
+    if (key === 'ArrowRight') {
       event.preventDefault()
       moveSelection('next')
       return
     }
 
-    if (event.key === 'ArrowLeft') {
+    if (key === 'ArrowLeft') {
       event.preventDefault()
       moveSelection('prev')
     }

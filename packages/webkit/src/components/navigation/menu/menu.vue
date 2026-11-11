@@ -12,6 +12,7 @@
     type VNode
   } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { cn } from '../../../utils/cn'
   import {
     type MenuGroupNode,
@@ -61,6 +62,7 @@
   }>()
 
   const attrs = useAttrs()
+  const dir = useDirection()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu')
   const role = computed(() => (attrs['role'] as string | undefined) ?? 'navigation')
@@ -187,7 +189,8 @@
   })
 
   const onKeydown = (event: globalThis.KeyboardEvent) => {
-    if (event.key !== 'Escape' && event.key !== 'ArrowLeft') return
+    const key = logicalArrowKey(event.key, dir.value)
+    if (key !== 'Escape' && key !== 'ArrowLeft') return
     if (path.value.length === 0) return
     event.preventDefault()
     pop()

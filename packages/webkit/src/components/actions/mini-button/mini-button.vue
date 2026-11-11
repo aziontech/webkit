@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { directionalIconClass } from '../../../utils/directional-icons'
+
   export type MiniButtonSize = 'large' | 'medium'
   export type MiniButtonTarget = '_self' | '_blank'
 
@@ -101,7 +103,7 @@
       </span>
       <i
         v-if="showIcon"
-        :class="icon"
+        :class="[icon, directionalIconClass(icon)]"
         class="mini-button-icon inline-flex size-(--spacing-sm) shrink-0 items-center justify-center text-(--primary) leading-none"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"

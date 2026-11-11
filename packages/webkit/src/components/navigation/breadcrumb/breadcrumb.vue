@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
+  import { directionalIconClass } from '../../../utils/directional-icons'
   import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
   import DropdownMenu from '../dropdown-menu'
   import BreadcrumbList from './breadcrumb-list.vue'
@@ -174,7 +175,7 @@
                       #left
                     >
                       <i
-                        :class="item.icon"
+                        :class="[item.icon, directionalIconClass(item.icon)]"
                         class="size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
                         aria-hidden="true"
                       />

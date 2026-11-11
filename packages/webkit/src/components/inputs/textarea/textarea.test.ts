@@ -243,3 +243,15 @@ describe('Textarea', () => {
     })
   })
 })
+
+describe('Textarea — direction of the typed value', () => {
+  it('uses dir="auto" so a value in another script keeps its own direction', () => {
+    const { getByTestId } = render(Textarea)
+    expect(getByTestId('input-textarea').getAttribute('dir')).toBe('auto')
+  })
+
+  it('lets a dir attribute override the default', () => {
+    const { getByTestId } = render(Textarea, { attrs: { dir: 'ltr' } })
+    expect(getByTestId('input-textarea').getAttribute('dir')).toBe('ltr')
+  })
+})

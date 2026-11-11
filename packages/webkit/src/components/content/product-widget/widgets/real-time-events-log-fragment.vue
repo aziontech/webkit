@@ -244,7 +244,7 @@
             >
               <i
                 :data-open="selected(index) || null"
-                class="pi pi-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none"
+                class="pi pi-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none rtl:-scale-x-100 rtl:data-open:-rotate-90"
                 aria-hidden="true"
               />
             </span>

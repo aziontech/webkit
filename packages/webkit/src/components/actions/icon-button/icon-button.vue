@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, Transition, useAttrs } from 'vue'
 
+  import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../utils/spinner/spinner.vue'
   import {
     iconTransitionEnterActiveClasses,
@@ -196,13 +197,19 @@
       >
         <i
           :key="icon"
-          :class="[icon, iconClasses, iconTransitionIconClasses, iconClass]"
+          :class="[
+            icon,
+            directionalIconClass(icon),
+            iconClasses,
+            iconTransitionIconClasses,
+            iconClass
+          ]"
           aria-hidden="true"
         />
       </Transition>
       <i
         v-else
-        :class="[icon, iconClasses, iconClass]"
+        :class="[icon, directionalIconClass(icon), iconClasses, iconClass]"
         aria-hidden="true"
       />
     </span>
@@ -245,13 +252,19 @@
       >
         <i
           :key="icon"
-          :class="[icon, iconClasses, iconTransitionIconClasses, iconClass]"
+          :class="[
+            icon,
+            directionalIconClass(icon),
+            iconClasses,
+            iconTransitionIconClasses,
+            iconClass
+          ]"
           aria-hidden="true"
         />
       </Transition>
       <i
         v-else
-        :class="[icon, iconClasses, iconClass]"
+        :class="[icon, directionalIconClass(icon), iconClasses, iconClass]"
         aria-hidden="true"
       />
     </span>

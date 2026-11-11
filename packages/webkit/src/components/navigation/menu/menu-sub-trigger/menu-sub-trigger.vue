@@ -8,6 +8,7 @@
     watch
   } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
   import { cn } from '../../../../utils/cn'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { useMenuSubContext } from '../composables/use-menu-sub-context'
@@ -49,6 +50,7 @@
 
   const sub = useMenuSubContext()
   const attrs = useAttrs()
+  const dir = useDirection()
   const labelEl = shallowRef<globalThis.HTMLElement | null>(null)
   const arrowEl = shallowRef<ComponentPublicInstance | null>(null)
 
@@ -148,7 +150,9 @@
   const onKeydown = (event: globalThis.KeyboardEvent) => {
     if (props.disabled) return
 
-    if (event.key === 'ArrowRight') {
+    const key = logicalArrowKey(event.key, dir.value)
+
+    if (key === 'ArrowRight') {
       if (!isInline.value) {
         event.preventDefault()
         sub.push()
@@ -161,7 +165,7 @@
       return
     }
 
-    if (event.key === 'ArrowLeft' && isInline.value && sub.open.value) {
+    if (key === 'ArrowLeft' && isInline.value && sub.open.value) {
       event.preventDefault()
       event.stopPropagation()
       sub.setOpen(false)

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { cn } from '../../../utils/cn'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
@@ -26,6 +27,7 @@
   const model = defineModel<ThemeSwitcherValue>({ default: 'system' })
 
   const attrs = useAttrs()
+  const dir = useDirection()
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-theme-switcher'
@@ -69,7 +71,7 @@
     const last = MODES.length - 1
     let target: number | null = null
 
-    switch (event.key) {
+    switch (logicalArrowKey(event.key, dir.value)) {
       case 'ArrowRight':
       case 'ArrowDown':
         target = index === last ? 0 : index + 1
@@ -159,8 +161,11 @@
       v-show="indicatorVisible"
       aria-hidden="true"
       :data-testid="`${testId}__indicator`"
-      :style="{ transform: `translate3d(${indicatorOffsetX}px, ${indicatorOffsetY}px, 0)` }"
-      class="pointer-events-none absolute start-0 top-0 z-0 h-5 w-7 rounded-full bg-(--bg-selected) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      :style="{
+        left: 0,
+        transform: `translate3d(${indicatorOffsetX}px, ${indicatorOffsetY}px, 0)`
+      }"
+      class="pointer-events-none absolute top-0 z-0 h-5 w-7 rounded-full bg-(--bg-selected) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
     />
     <Tooltip
       v-for="(mode, index) in MODES"

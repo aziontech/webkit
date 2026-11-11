@@ -1,5 +1,5 @@
 export const fontFamily = {
-  sans: 'Rubik',
+  sans: "Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif",
   code: 'Roboto Mono',
   display: 'Proto Mono'
 }

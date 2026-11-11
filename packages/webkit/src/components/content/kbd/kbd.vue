@@ -52,6 +52,7 @@
 
 <template>
   <kbd
+    dir="ltr"
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"

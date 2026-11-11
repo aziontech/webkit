@@ -2,6 +2,7 @@
   import { useEventListener, useResizeObserver } from '@vueuse/core'
   import { computed, onMounted, provide, type Ref, ref, shallowReadonly, useAttrs } from 'vue'
 
+  import { useDirection } from '../../../composables/use-direction'
   import { CarouselInjectionKey } from './injection-key'
 
   defineOptions({
@@ -28,6 +29,7 @@
   const attrs = useAttrs()
 
   const track = ref<globalThis.HTMLUListElement | null>(null)
+  const dir = useDirection(track)
   const scrolled = ref(0)
   const visibleWidth = ref(0)
   const contentWidth = ref(0)
@@ -56,7 +58,7 @@
   function measure() {
     const element = track.value
     if (!element) return
-    scrolled.value = element.scrollLeft
+    scrolled.value = Math.abs(element.scrollLeft)
     visibleWidth.value = element.clientWidth
     contentWidth.value = element.scrollWidth
   }
@@ -64,7 +66,7 @@
   function slideStep(element: globalThis.HTMLUListElement): number {
     const slides = Array.from(element.children) as globalThis.HTMLElement[]
     if (slides.length > 1) {
-      const stride = slides[1].offsetLeft - slides[0].offsetLeft
+      const stride = Math.abs(slides[1].offsetLeft - slides[0].offsetLeft)
       if (stride > 0) return stride
     }
     if (slides.length > 0 && slides[0].offsetWidth > 0) return slides[0].offsetWidth
@@ -74,7 +76,8 @@
   function step(direction: 1 | -1) {
     const element = track.value
     if (!element) return
-    element.scrollBy({ left: direction * slideStep(element), behavior: 'smooth' })
+    const sign = dir.value === 'rtl' ? -direction : direction
+    element.scrollBy({ left: sign * slideStep(element), behavior: 'smooth' })
   }
 
   function scrollPrev() {
@@ -158,7 +161,7 @@
       :data-can-scroll-prev="canScrollPrev || null"
       :data-can-scroll-next="canScrollNext || null"
       :data-dragging="dragging || null"
-      class="[--carousel-fade-end:0%] [--carousel-fade-start:0%] data-[can-scroll-next]:[--carousel-fade-end:12%] data-[can-scroll-prev]:[--carousel-fade-start:12%] data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_right,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] flex snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-none [&::-webkit-scrollbar]:hidden data-[dragging]:cursor-grabbing data-[dragging]:snap-none data-[dragging]:scroll-auto data-[dragging]:select-none data-[scrollable]:not-data-[dragging]:cursor-grab focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:scroll-auto"
+      class="[--carousel-fade-end:0%] [--carousel-fade-start:0%] data-[can-scroll-next]:[--carousel-fade-end:12%] data-[can-scroll-prev]:[--carousel-fade-start:12%] data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_right,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] rtl:data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_left,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] flex snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-none [&::-webkit-scrollbar]:hidden data-[dragging]:cursor-grabbing data-[dragging]:snap-none data-[dragging]:scroll-auto data-[dragging]:select-none data-[scrollable]:not-data-[dragging]:cursor-grab focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:scroll-auto"
     >
       <slot />
     </ul>

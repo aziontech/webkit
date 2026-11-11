@@ -2,6 +2,7 @@
   import { useElementSize } from '@vueuse/core'
   import { computed, ref, useAttrs, useId } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import { useFrameDocument } from './composables/use-frame-document'
 
@@ -54,6 +55,7 @@
   }>()
 
   const attrs = useAttrs()
+  const dir = useDirection()
   const sizerRef = ref<globalThis.HTMLElement | null>(null)
   const iframeRef = ref<globalThis.HTMLIFrameElement | null>(null)
   const { width: containerWidth } = useElementSize(sizerRef)
@@ -124,7 +126,7 @@
       Home: props.minWidth,
       End: props.maxWidth
     }
-    const next = targets[event.key]
+    const next = targets[logicalArrowKey(event.key, dir.value)]
     if (next === undefined) return
     event.preventDefault()
     width.value = clamp(next, props.minWidth, props.maxWidth)
@@ -162,7 +164,7 @@
     if (axis !== 'height') {
       const upper = container.value > 0 ? Math.min(container.value, props.maxWidth) : props.maxWidth
       width.value = clamp(
-        Math.round(startWidth + (event.clientX - originX) * 2),
+        Math.round(startWidth + (event.clientX - originX) * (dir.value === 'rtl' ? -2 : 2)),
         props.minWidth,
         upper
       )
@@ -218,6 +220,7 @@
         >
           <span
             aria-hidden="true"
+            dir="ltr"
             class="flex min-w-0 flex-1 items-center justify-center text-label-code-sm text-(--text-muted)"
           >
             <span class="min-w-0 truncate">{{ addressHead }}</span>

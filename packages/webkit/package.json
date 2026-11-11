@@ -856,6 +856,7 @@
     "./utils/csv": "./src/utils/csv.ts",
     "./styles/country-flags": "./src/styles/country-flags.css",
     "./use-controllable": "./src/composables/use-controllable/index.js",
+    "./use-direction": "./src/composables/use-direction/index.ts",
     "./use-focus-trap": "./src/composables/use-focus-trap/index.js",
     "./use-heading-nav": "./src/composables/use-heading-nav/index.ts",
     "./use-placement": "./src/composables/use-placement/index.ts",

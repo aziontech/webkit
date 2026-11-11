@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, ref, useAttrs } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { useTreeNavigation } from './composables/use-tree-navigation'
@@ -64,6 +65,7 @@
   }>()
 
   const attrs = useAttrs()
+  const dir = useDirection()
 
   const activeSelection = computed(() => (props.selectable ? selected.value : ''))
 
@@ -142,7 +144,7 @@
     const id = treeitemOf(event.target)
     if (!id) return
     const parent = navigation.isParent(id)
-    switch (event.key) {
+    switch (logicalArrowKey(event.key, dir.value)) {
       case 'ArrowDown':
         focusItem(navigation.sibling(id, 1))
         break

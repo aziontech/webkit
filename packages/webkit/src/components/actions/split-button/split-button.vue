@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { directionalIconClass } from '../../../utils/directional-icons'
   import DropdownMenu from '../../navigation/dropdown-menu'
   import Button from '../button/button.vue'
   import IconButton from '../icon-button/icon-button.vue'
@@ -163,7 +164,7 @@
             #left
           >
             <i
-              :class="item.icon"
+              :class="[item.icon, directionalIconClass(item.icon)]"
               class="text-[length:inherit] leading-none"
               aria-hidden="true"
             />

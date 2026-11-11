@@ -70,7 +70,7 @@
       @click="ctx.pop()"
     >
       <i
-        class="pi pi-chevron-left size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted)"
+        class="pi pi-chevron-left size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted) rtl:-scale-x-100"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       />

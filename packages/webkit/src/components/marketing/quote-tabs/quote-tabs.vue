@@ -14,6 +14,7 @@
     watch
   } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../card-grid/card-grid.vue'
@@ -78,6 +79,7 @@
   }>()
 
   const attrs = useAttrs()
+  const dir = useDirection()
   const baseId = useId()
   const reducedMotion = usePreferredReducedMotion()
 
@@ -217,11 +219,12 @@
   }
 
   async function onKeydown(event: globalThis.KeyboardEvent): Promise<void> {
-    const next = targetOf(event.key)
+    const key = logicalArrowKey(event.key, dir.value)
+    const next = targetOf(key)
     if (next === null) return
     event.preventDefault()
     if (next !== selected.value) {
-      pendingDirection = directionOf(event.key)
+      pendingDirection = directionOf(key)
       select(next)
     }
     await nextTick()
@@ -302,9 +305,9 @@
         <Transition
           mode="out-in"
           enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none motion-reduce:duration-0"
-          enter-from-class="opacity-0 group-data-[direction=forward]/panel:translate-x-(--spacing-xl) group-data-[direction=back]/panel:-translate-x-(--spacing-xl) motion-reduce:translate-x-0"
+          enter-from-class="opacity-0 group-data-[direction=forward]/panel:translate-x-(--spacing-xl) group-data-[direction=back]/panel:-translate-x-(--spacing-xl) rtl:group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:translate-x-(--spacing-xl) motion-reduce:translate-x-0"
           leave-active-class="pointer-events-none transition-[translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none motion-reduce:duration-0"
-          leave-to-class="opacity-0 group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) group-data-[direction=back]/panel:translate-x-(--spacing-xl) motion-reduce:translate-x-0"
+          leave-to-class="opacity-0 group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) group-data-[direction=back]/panel:translate-x-(--spacing-xl) rtl:group-data-[direction=forward]/panel:translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:-translate-x-(--spacing-xl) motion-reduce:translate-x-0"
           @before-leave="hideLeaving"
         >
           <div

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, provide, ref, shallowRef, useAttrs, useId } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { cn } from '../../../utils/cn'
   import {
     type TabsContext,
@@ -59,6 +60,7 @@
   const internalValue = ref<TabsValue | null>(props.defaultValue)
   const tabs = shallowRef<TabsTabRegistration[]>([])
   const slideDirection = ref<TabsSlideDirection>(null)
+  const dir = useDirection()
 
   const isControlled = computed(() => valueProp.value !== undefined)
 
@@ -141,7 +143,7 @@
 
     let next: TabsValue | null = null
 
-    switch (event.key) {
+    switch (logicalArrowKey(event.key, dir.value)) {
       case 'ArrowRight':
         next = getNextTabValue(tabs.value, activeValue.value, 1)
         break

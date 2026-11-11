@@ -2,7 +2,7 @@
 name: webkit-motion-polish
 description: Make motion smooth using only @aziontech/theme animate tokens — animate-* utilities, duration-*/ease-*/curve tokens, compositor-props-only, ≤150ms interaction feedback, and a mandatory motion-reduce escape on every motion class. No external animation library, no inline cubic-bezier, no hardcoded ms.
 status: active
-last_updated: 2026-08-12
+last_updated: 2026-11-11
 scope: general
 enforced_by: [webkit-motion, webkit-accessibility, ui-verify]
 ---
@@ -171,7 +171,7 @@ element's own `auto` width follow.
        `min-width: 0` cannot shrink it) and leaves dead space in the empty state —
        so the gap and padding live on the row INSIDE, which is clipped with the text. -->
   <span class="min-w-0 overflow-hidden">
-    <span class="flex min-w-0 items-center gap-(--spacing-xxs) whitespace-nowrap pl-(--spacing-xxs)">…</span>
+    <span class="flex min-w-0 items-center gap-(--spacing-xxs) whitespace-nowrap ps-(--spacing-xxs)">…</span>
   </span>
 </span>
 ```

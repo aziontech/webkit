@@ -77,7 +77,7 @@
                 </Item.Content>
                 <Item.Actions>
                   <i
-                    class="pi pi-chevron-right text-(--text-muted)"
+                    class="pi pi-chevron-right text-(--text-muted) rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                 </Item.Actions>

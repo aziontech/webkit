@@ -86,6 +86,7 @@
     <span
       v-else-if="label"
       :data-testid="`${testId}__label`"
+      dir="auto"
     >
       {{ label }}
     </span>

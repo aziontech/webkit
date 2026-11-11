@@ -6,6 +6,10 @@ import { dirname, join, relative, resolve } from 'node:path'
 
 import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/authoring-checks.js'
 import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/token-checks.js'
+import noPhysicalDirection from '../src/eslint-plugin/rules/no-physical-direction.js'
+import { Linter } from 'eslint'
+import * as vueParser from 'vue-eslint-parser'
+import tsParser from '@typescript-eslint/parser'
 import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-compliance-checks.mjs'
 import {
   checks as storyChecks,
@@ -13,6 +17,7 @@ import {
 } from '../../../.claude/hooks/_lib/story-source-checks.mjs'
 
 const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES }
+const DIRECTION_DIRS = ['src/components', 'blocks', 'examples']
 const DETAILS = new Map()
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
@@ -36,8 +41,38 @@ function walk(dir) {
   return out
 }
 
-function currentViolations() {
+function directionViolations() {
+  const linter = new Linter({ configType: 'flat' })
+  const config = [
+    {
+      files: ['**/*.vue', '**/*.ts', '**/*.js'],
+      languageOptions: {
+        parser: vueParser,
+        parserOptions: { parser: tsParser, ecmaVersion: 'latest', sourceType: 'module' }
+      },
+      plugins: { webkit: { rules: { 'no-physical-direction': noPhysicalDirection } } },
+      rules: { 'webkit/no-physical-direction': 'error' }
+    }
+  ]
   const keys = []
+  for (const dir of DIRECTION_DIRS) {
+    for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
+      if (!/\.(vue|ts|js)$/.test(abs) || /\.(test|stories)\.ts$/.test(abs)) continue
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      const messages = linter.verify(readFileSync(abs, 'utf-8'), config, { filename: abs })
+      for (const m of messages) {
+        if (m.ruleId !== 'webkit/no-physical-direction') continue
+        const key = `${rel}::direction:no-physical-direction`
+        keys.push(key)
+        DETAILS.set(key, `line ${m.line}: ${m.message}`)
+      }
+    }
+  }
+  return keys
+}
+
+function currentViolations() {
+  const keys = [...directionViolations()]
   for (const abs of walk(SRC)) {
     const rel = relative(ROOT, abs).split('\\').join('/')
     if (rel.startsWith(WIP_PREFIX)) continue
@@ -128,7 +163,7 @@ if (introduced.length) {
     console.error(`  ${file}`)
     if (id.startsWith('spec:')) {
       console.error(`    [spec] ${id.slice(5)}`)
-    } else if (id.startsWith('story:')) {
+    } else if (id.startsWith('story:') || id.startsWith('direction:')) {
       console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(6)}`)
     } else {
       console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^token:/, '')] ?? id}`)

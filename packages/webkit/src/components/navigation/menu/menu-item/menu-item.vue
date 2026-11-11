@@ -2,6 +2,7 @@
   import { computed, useAttrs, useSlots } from 'vue'
 
   import { cn } from '../../../../utils/cn'
+  import { directionalIconClass } from '../../../../utils/directional-icons'
   import Tag from '../../../content/tag/tag.vue'
 
   export type MenuItemKind = 'option' | 'group'
@@ -159,7 +160,7 @@
         :data-testid="`${testId}__icon`"
       >
         <i
-          :class="[icon, iconClasses]"
+          :class="[icon, directionalIconClass(icon), iconClasses]"
           aria-hidden="true"
         />
       </span>
@@ -200,7 +201,7 @@
         :data-testid="`${testId}__icon`"
       >
         <i
-          :class="[icon, iconClasses]"
+          :class="[icon, directionalIconClass(icon), iconClasses]"
           aria-hidden="true"
         />
       </span>

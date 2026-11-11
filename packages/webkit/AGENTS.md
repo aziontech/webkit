@@ -10,7 +10,7 @@ packages/webkit/src/
 │   ├── actions/  content/  data/  feedback/  inputs/  layout/
 │   ├── navigation/  overlay/  code/  utils/
 │   └── avatar/, tag/, overline/   (legacy flat folders — migrate into a category when touched)
-├── composables/         use-controllable, use-focus-trap, use-placement
+├── composables/         use-controllable, use-direction, use-focus-trap, use-placement
 ├── utils/               cn (clsx + tailwind-merge), csv
 ├── cli/                 `webkit` bin — init / doctor / plan / apply
 ├── mcp/                 `webkit-mcp` bin — catalog-backed MCP server

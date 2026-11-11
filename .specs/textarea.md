@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 09c5690a29d1233801aac74d5650f929bd01dc30e81c27e7aeb82112177f8f2e
+checksum: 1fc3f652df8dc3f99acb9c0802100d20e64bd8817c735ae24c2bda245196c165
 created: 2026-06-23
-last_updated: 2026-07-03
+last_updated: 2026-11-11
 ---
 
 # Textarea — Component Spec
@@ -134,6 +134,7 @@ _No slots._
 
 - Visible focus: on `:focus`, a `ring-2` shadow in `var(--ring-color)` plus a `ring-offset-2` in `var(--bg-canvas)` render around the field; the color transition respects `motion-reduce:transition-none`.
 - Keyboard map: `Tab` focuses; typing inserts text; `Enter` inserts a newline; `Shift+Tab` moves focus to the previous element.
+- Direction: the `<textarea>` renders `dir="auto"` so a value typed in another script keeps its own direction inside right-to-left UI; a `dir` attribute overrides it.
 - ARIA: root is a native `<textarea>`; `aria-invalid` mirrors `invalid`; `aria-required` mirrors `required`; `aria-disabled` mirrors `disabled` when applicable.
 - Contrast ≥4.5:1 (text) / ≥3:1 (border + icons), including disabled state.
 - `motion-reduce:transition-none` on animated state transitions.
