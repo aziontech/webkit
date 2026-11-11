@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: c7a28e996223d1ff37b980f794728450083967bfc3f55f6673e55a30049b0f02
-created: 2026-11-12
-last_updated: 2026-11-12
+checksum: a040616ba2e9fc062a4b452a6e2f9121baabaecea36787c3f4df444a16c362c3
+created: 2026-11-11
+last_updated: 2026-11-11
 ---
 
 # GaugeChart — Component Spec
@@ -87,9 +87,7 @@ One reading against a known range, drawn as a half-circle dial with the value un
 
 ## Events
 
-| Event  | Payload | Notes                                           |
-| ------ | ------- | ----------------------------------------------- |
-| _none_ | —       | The gauge is a read-out; it has no interaction. |
+_No events — the gauge is a read-out; wrap it in a link or button to make it interactive._
 
 ## Slots
 

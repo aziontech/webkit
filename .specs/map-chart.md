@@ -6,8 +6,8 @@ status: implemented
 spec_version: 1
 template: 2
 checksum: a7211dc403aa4c81df639bdd2e61d07e34422627681e3d78035fbf1469e66113
-created: 2026-11-12
-last_updated: 2026-11-12
+created: 2026-11-11
+last_updated: 2026-11-11
 ---
 
 # MapChart — Component Spec

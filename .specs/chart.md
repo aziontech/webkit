@@ -7,7 +7,7 @@ checksum: cbb6b2a4f84a1a7320fded06b4bdc8dcc73cb2b9803b2d4e9f912d7f2a893066
 spec_version: 2
 template: 2
 created: 2026-10-20
-last_updated: 2026-11-12
+last_updated: 2026-11-11
 ---
 
 # Chart — Component Spec

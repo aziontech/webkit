@@ -613,7 +613,7 @@
         <div
           v-if="readout"
           aria-hidden="true"
-          :style="{ left: '0px', translate: `${readout.x}px ${readout.y}px` }"
+          :style="{ left: '0', translate: `${readout.x}px ${readout.y}px` }"
           :data-testid="`${testId}__tooltip`"
           class="pointer-events-none absolute top-0"
         >
