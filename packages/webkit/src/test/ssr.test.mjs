@@ -131,3 +131,37 @@ describe('trigger ARIA is in the server HTML', () => {
     })
   }
 })
+
+describe('trigger ARIA reaches controls behind a Tooltip and leaf components', () => {
+  test('a Tooltip-wrapped IconButton trigger carries the ARIA on the button', async () => {
+    const file = 'blocks/platform/create/create-in-drawer/variants/edit-domain.vue'
+    const mod = await server.ssrLoadModule(join(PKG, file))
+    const html = await renderToString(createSSRApp(mod.default))
+    const trigger = html.match(
+      /(<span[^>]*data-testid="[^"]*__trigger"[^>]*>)(?:\s|<!--\[-->)*(<span[^>]*data-testid="overlay-tooltip"[^>]*>)(?:\s|<!--\[-->)*(<button[^>]*>)/
+    )
+    assert.ok(trigger, 'trigger wrapper > tooltip wrapper > button not found')
+    const [, wrapper, tooltip, button] = trigger
+    assert.doesNotMatch(wrapper, /aria-|role=|tabindex=/, wrapper)
+    assert.doesNotMatch(tooltip, /aria-|role=|tabindex=/, tooltip)
+    assert.match(button, /aria-haspopup="menu"/, button)
+    assert.match(button, /aria-expanded="false"/, button)
+    assert.match(button, /aria-controls="[^"]+"/, button)
+    assert.match(button, /\sid="[^"]+"/, button)
+  })
+
+  test('an Avatar trigger renders the wrapper as the button', async () => {
+    const mod = await server.ssrLoadModule(join(PKG, 'examples/dropdown-menu/custom-triggers.vue'))
+    const html = await renderToString(createSSRApp(mod.default))
+    const trigger = html.match(
+      /(<span[^>]*data-testid="[^"]*__trigger"[^>]*>)\s*<span[^>]*data-testid="content-avatar"/
+    )
+    assert.ok(trigger, 'trigger wrapper with an Avatar child not found')
+    const wrapper = trigger[1]
+    assert.match(wrapper, /role="button"/, wrapper)
+    assert.match(wrapper, /tabindex="0"/, wrapper)
+    assert.match(wrapper, /aria-haspopup="menu"/, wrapper)
+    assert.match(wrapper, /aria-expanded="false"/, wrapper)
+    assert.match(wrapper, /\sid="[^"]+"/, wrapper)
+  })
+})

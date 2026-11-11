@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 13cc7d6cc0c9f702c585926d92b33a24f3d41d4e242ae6c3ec4bec3d50f3e792
+checksum: ecfc4ebcd606f8b4812a7e727436140cc7df28b122ded6652520a3cbbaba8e25
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -105,7 +105,7 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 - `drawer-overlay.vue` — Public sub-component `drawer-overlay`.
 - `drawer-portal.vue` — Public sub-component `drawer-portal`.
 - `drawer-title.vue` — Public sub-component `drawer-title`.
-- `drawer-trigger.vue` — Public sub-component `drawer-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the drawer on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), the ARIA and `id` are merged into that node at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in a `Tooltip` or another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element, the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`.
+- `drawer-trigger.vue` — Public sub-component `drawer-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the drawer on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
 
 ## Props
 

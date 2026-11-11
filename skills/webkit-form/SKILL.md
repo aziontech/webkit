@@ -147,18 +147,22 @@ Every form sits on the same **Form Layout** (above); a _type_ only changes the *
 lives in and its **save model**. Approach A / B still applies inside each one. There are **five form
 contexts** in Azion products:
 
-- **Drawer form.** In-context creation — the user is deep inside a navigated module and needs to create
-  a resource _without leaving the page they're on_. One scoped save (the drawer's primary action).
+- **Drawer form.** In-context creation — the user is working inside a resource and adds an item that
+  only exists in it (a rule, an origin, a domain, a record) _without leaving the page they're on_. A
+  first-level resource creates on a page, not here (`/webkit-create-surface`; variables are the one
+  exception). One scoped save (the drawer's primary action).
   Approach A for grouped/config-heavy creates (one flush ItemGroup, or several `SettingsSection` bands),
   Approach B for short ones.
 
-- **Nested drawer.** A drawer form whose Select points at a _related_ resource that may not exist yet — a
-  Function, a Cache Setting, a Team. Rather than sending the user away to create it (losing the parent
-  form's in-progress state), a "Create …" quick-add opens a **second, smaller drawer** stacked over the
-  first; on save the new resource is appended to the Select's options and selected back into the parent.
-  **Each drawer is its own form** — its own scoped save, its own `submitting` flag, its own `<fieldset>`;
-  the two never share a lock. Approach A inside each. This is the create-a-related-resource-inline case,
-  documented below.
+- **Nested drawer.** A drawer form whose Select points at **another item of the same resource** that may
+  not exist yet — the origin a new rule sends requests to, both living inside the storefront resource.
+  Rather than sending the user away to create it (losing the parent form's in-progress state), a
+  "Create …" quick-add opens a **second, smaller drawer** stacked over the first; on save the new item is
+  appended to the Select's options and selected back into the parent. **Each drawer is its own form** —
+  its own scoped save, its own `submitting` flag, its own `<fieldset>`; the two never share a lock.
+  Approach A inside each. Documented below. **Never a first-level resource** (a Function, a Service, a
+  Team — anything the sidebar routes to): it creates on its own page (`/webkit-create-surface`), so the
+  Select gets a link to that create page, or the field becomes a `platform/create/resource-picker`.
 
 - **Dialog form.** Small, focused, usually confirmational or destructive — e.g. removing a resource.
   Few (or zero) fields, a single confirm action. A yes-or-no decision is `ConfirmDialog`
@@ -389,14 +393,21 @@ Canonical pattern:
 </template>
 ```
 
-### Example — Nested drawer (create a related resource inline)
+### Example — Nested drawer (create an item of the same resource inline)
 
-A drawer form whose `Select` points at a resource the user may not have created yet. Rather than sending
-them away to make it — and losing everything they've typed in the parent — a "Create …" affordance in the
-`Select`'s footer opens a **second, smaller drawer** on top. The child creates the resource, appends it to
-the `Select`'s options, selects it back into the parent, and closes; the parent form is exactly as the user
-left it. This is the pattern behind _Functions Instance → Edge Function → Create Function_ in the
-Applications module.
+A drawer form whose `Select` points at another item of the **same** resource that the user may not have
+created yet. Rather than sending them away to make it — and losing everything they've typed in the parent —
+a "Create …" affordance in the `Select`'s footer opens a **second, smaller drawer** on top. The child
+creates the item, appends it to the `Select`'s options, selects it back into the parent, and closes; the
+parent form is exactly as the user left it. This is the pattern behind _Rules Engine → Add Rule → Origin →
+Create Origin_ on a resource (`platform/create/create-in-drawer`, variant `NestedDrawer`): the rule and the
+origin both live inside the storefront resource, so both create in a drawer.
+
+**Only for items inside the parent's resource.** When the missing thing is a first-level resource (a
+Function, a Service, a Team), the stacked drawer would create it on the wrong surface — a first-level
+resource creates on its own page (`/webkit-create-surface`). Give the Select a link to that resource's
+create page (opened in a new tab so the drawer keeps its typing), or bind the field with
+`platform/create/resource-picker`.
 
 Three decisions make it safe:
 
@@ -407,119 +418,115 @@ Three decisions make it safe:
   `v-model`) so picking the quick-add never commits a real value. The quick-add is a normal
   `Select.Option` in the `#footer` slot carrying a sentinel value; `@update:model-value` intercepts it,
   closes the dropdown, and opens the child instead of assigning `form.*`.
-- **Explicit stacking.** A webkit `Drawer` panel sits at `z-1001` and a `Select.Content` teleports to
-  `<body>` at `z-50`, so each layer must opt its overlay / content / popups **above** the layer beneath
-  it: the child drawer's overlay `z-1002` / content `z-1003`, any `Select.Content` inside the child
-  `z-1004`; a `Select.Content` in the **parent** drawer needs `z-1002` to clear the parent panel.
-  (These `!z-[…]` overrides are the current stopgap for a webkit bug where overlay popups render behind a
-  `Drawer` — remove them once webkit stacks overlay content above `Drawer`.)
+- **Stacking is built in.** The child `Drawer` portals after the parent, so it sits over it at the same
+  layer, and a `Select.Content` teleports at `--z-input-overlay` (above every drawer). Add no `z-*`
+  overrides to the overlay, the content or the popups.
 
 Canonical pattern:
 
 ```vue
 <script setup>
-  // PARENT large drawer holds a Select of Functions; the CHILD medium drawer creates one.
-  const functions = ref([{ value: 'fn-auth', label: 'auth-handler' }])
-  const functionLabel = (v) => functions.value.find((f) => f.value === v)?.label ?? ''
+  // PARENT large drawer adds a Rule with a Select of the resource's Origins; the CHILD medium drawer creates one.
+  const origins = ref([{ value: 'origin-api', label: 'api-backend' }])
+  const originLabel = (v) => origins.value.find((o) => o.value === v)?.label ?? ''
 
   // The PARENT form's own scope.
-  const form = reactive({ functionId: '' })
-  const errors = reactive({ functionId: '' })
+  const form = reactive({ name: '', originId: '' })
+  const errors = reactive({ name: '', originId: '' })
   const submitting = ref(false)
 
   // A sentinel Select value for the quick-add. The Select is CONTROLLED (:model-value),
   // so picking the sentinel never commits a real value — it opens the child instead.
-  const CREATE_FUNCTION = '__create-function__'
-  const functionSelectOpen = ref(false) // control the dropdown so we can close it first
-  const onFunctionModel = (value) => {
-    if (value === CREATE_FUNCTION) {
-      functionSelectOpen.value = false // close the dropdown …
-      functionOpen.value = true // … then open the child over the parent
+  const CREATE_ORIGIN = '__create-origin__'
+  const originSelectOpen = ref(false) // control the dropdown so we can close it first
+  const onOriginModel = (value) => {
+    if (value === CREATE_ORIGIN) {
+      originSelectOpen.value = false // close the dropdown …
+      childOpen.value = true // … then open the child over the parent
       return
     }
-    form.functionId = value
-    errors.functionId = ''
+    form.originId = value
+    errors.originId = ''
   }
 
   // The CHILD form's own, SEPARATE scope — its own submitting flag.
-  const functionOpen = ref(false)
-  const functionForm = reactive({ name: '' })
-  const functionSubmitting = ref(false)
+  const childOpen = ref(false)
+  const childForm = reactive({ name: '', address: '' })
+  const childSubmitting = ref(false)
 
-  const submitFunction = async () => {
-    if (functionSubmitting.value) return // re-entrancy lock, on the CHILD's flag
-    functionSubmitting.value = true
+  const submitChild = async () => {
+    if (childSubmitting.value) return // re-entrancy lock, on the CHILD's flag
+    childSubmitting.value = true
     try {
-      const value = `fn-${uid()}`
-      functions.value = [{ value, label: functionForm.name.trim() }, ...functions.value]
-      form.functionId = value // select the new resource back into the parent
-      errors.functionId = ''
-      toast.success(`Function "${functionForm.name.trim()}" created.`)
-      functionOpen.value = false
+      const value = `origin-${uid()}`
+      origins.value = [{ value, label: childForm.name.trim() }, ...origins.value]
+      form.originId = value // select the new origin back into the parent
+      errors.originId = ''
+      toast.success(`Origin "${childForm.name.trim()}" created.`)
+      childOpen.value = false
     } catch (error) {
-      toast.error('Could not create the function.', { description: error?.message })
+      toast.error('Could not create the origin.', { description: error?.message })
     } finally {
-      functionSubmitting.value = false // release on success AND failure
+      childSubmitting.value = false // release on success AND failure
     }
   }
 </script>
 
 <template>
-  <!-- PARENT: the Function Select with a quick-add in its footer slot -->
+  <!-- PARENT (Add Rule): the Origin Select with a quick-add in its footer slot -->
   <Select
-    :model-value="form.functionId"
-    v-model:open="functionSelectOpen"
-    :display-value="functionLabel"
+    :model-value="form.originId"
+    v-model:open="originSelectOpen"
+    :display-value="originLabel"
     :disabled="submitting"
-    placeholder="Select a function"
-    :required="!!errors.functionId"
-    @update:model-value="onFunctionModel"
+    placeholder="Select an origin"
+    :required="!!errors.originId"
+    @update:model-value="onOriginModel"
   >
     <Select.Trigger
-      id="fi-function"
-      aria-label="Edge Function"
+      id="rule-origin"
+      aria-label="Origin"
     />
-    <Select.Content class="!z-1002">
-      <!-- above the parent drawer panel (z-1001) -->
+    <Select.Content>
       <Select.Option
-        v-for="fn in functions"
-        :key="fn.value"
-        :value="fn.value"
-        >{{ fn.label }}</Select.Option
+        v-for="origin in origins"
+        :key="origin.value"
+        :value="origin.value"
+        >{{ origin.label }}</Select.Option
       >
       <template #footer>
         <Select.Option
-          :value="CREATE_FUNCTION"
+          :value="CREATE_ORIGIN"
           icon="pi pi-plus-circle"
-          >Create Function</Select.Option
+          >Create Origin</Select.Option
         >
       </template>
     </Select.Content>
   </Select>
 
-  <!-- CHILD medium drawer — its own form + submitting flag; stacks above the parent -->
+  <!-- CHILD medium drawer — its own form + submitting flag; portals over the parent -->
   <Drawer
-    v-model:open="functionOpen"
+    v-model:open="childOpen"
     size="medium"
     side="right"
   >
     <DrawerPortal>
-      <DrawerOverlay class="z-1002" />
-      <DrawerContent class="z-1003">
+      <DrawerOverlay />
+      <DrawerContent>
         <form
           class="flex min-h-0 flex-1 flex-col"
-          aria-label="Create Function"
+          aria-label="Create Origin"
           novalidate
-          @submit.prevent="submitFunction"
+          @submit.prevent="submitChild"
         >
           <fieldset
             class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
-            :disabled="functionSubmitting"
+            :disabled="childSubmitting"
           >
-            <legend class="sr-only">Create function</legend>
-            <!-- Approach A ItemGroup sections here; a nested Select uses !z-1004 -->
+            <legend class="sr-only">Create origin</legend>
+            <!-- Approach A ItemGroup sections here: Name, Address -->
           </fieldset>
-          <!-- PanelFooter: Cancel + Save type="submit" :loading="functionSubmitting" -->
+          <!-- PanelFooter: Cancel + Create Origin type="submit" :loading="childSubmitting" -->
         </form>
       </DrawerContent>
     </DrawerPortal>
@@ -540,9 +547,11 @@ Rules:
 - **On the child's save, wire the resource back into the parent** — append it to the `Select`'s options,
   set the parent's model to the new value, clear the parent's error for that field, `toast.success`, close
   the child. The parent form keeps everything else the user had typed.
-- **Stack every layer explicitly** — child overlay `z-1002`, child content `z-1003`, a `Select.Content`
-  inside the child `z-1004`, a `Select.Content` in the parent `z-1002` (temporary overrides for the
-  webkit `Drawer`/overlay-popup stacking bug).
+- **The child creates an item of the parent's resource, never a first-level resource.** A missing
+  Function, Service or Team gets a link to its create page or a `platform/create/resource-picker`, not
+  a stacked drawer.
+- **No `z-*` overrides** — the child drawer portals over the parent and `Select.Content` already sits
+  above every drawer.
 - Everything else follows the **Drawer form** rules: Approach A ItemGroup sections inside each drawer,
   validation on submit only (`Item.Title` as the label, `HelperText` under the control), Enter submits
   through the Save `Button type="submit"`.
@@ -1011,15 +1020,18 @@ Rules:
 
 ## Choosing an approach
 
-| Situation                                                            | Approach                                                                             |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| Settings page, resource config, many grouped fields, a Create drawer | **A — Cards + ItemGroups** (`Item.List`, `size="small"`)                             |
-| Login, rename, a short 1–3 field dialog, one wizard step             | **B — Fields separated** (`Field` stacked)                                           |
-| A section mixes a couple of simple rows with a radio block           | **A**, with the radio block as a full-width child inside its `Item`                  |
-| A drawer's Select needs a related resource that doesn't exist yet    | **Nested drawer** — quick-add opens a second drawer; each drawer its own scoped save |
+| Situation                                                            | Approach                                                                              |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Settings page, resource config, many grouped fields, a Create drawer | **A — Cards + ItemGroups** (`Item.List`, `size="small"`)                              |
+| Login, rename, a short 1–3 field dialog, one wizard step             | **B — Fields separated** (`Field` stacked)                                            |
+| A section mixes a couple of simple rows with a radio block           | **A**, with the radio block as a full-width child inside its `Item`                   |
+| A drawer's Select needs an item of the same resource not created yet | **Nested drawer** — quick-add opens a second drawer; each drawer its own scoped save  |
+| A drawer's Select needs a first-level resource that doesn't exist    | Link to its create page, or `platform/create/resource-picker` — never a nested drawer |
 
-The module **create** action for a long form lands on a dedicated **page** (route `/<module>/new`), not
-a modal, so it is linkable and back-button-safe; a short create can live in a drawer.
+The module **create** action for a first-level resource lands on a dedicated **page** (route
+`/<module>/new`), not a modal, so it is linkable and back-button-safe, however short the form; a
+drawer creates only an item inside a resource (and variables, the one exception in
+`/webkit-create-surface`).
 
 ## Review output
 
@@ -1063,8 +1075,9 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       for the Card-with-independent-saves type.
 - [ ] A **nested drawer** keeps parent and child as independent forms — each its own `submitting` flag,
       `<fieldset :disabled>`, and Save `:loading`; the parent `Select` is controlled with a sentinel
-      quick-add; the child wires its new resource back into the parent on save; every layer is stacked
-      explicitly (child overlay/content and any nested `Select.Content` above the parent panel).
+      quick-add; the child creates an item of the parent's resource (never a first-level resource,
+      which gets a link to its create page or a `resource-picker`) and wires it back into the parent on
+      save; no `z-*` overrides on the drawers or popups.
 - [ ] Field spacing follows the macro rule: `--spacing-xs` inside a field, `--spacing-lg` between fields
       and sections (`--spacing-md` only in a compact modal body). No one-off gaps.
 - [ ] Hierarchy is not inverted: title → description → section title → field label → control → helper.

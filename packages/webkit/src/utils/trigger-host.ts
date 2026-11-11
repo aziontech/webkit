@@ -29,9 +29,19 @@ function flatten(nodes: VNodeArrayChildren, out: VNode[] = []): VNode[] {
   return out
 }
 
-function isControl({ type, props }: VNode): boolean {
-  if (typeof type !== 'string')
-    return /^(Icon)?Button$/.test((type as { name?: string }).name ?? '')
+type Slots = Record<string, unknown>
+
+const CONTROLS = new Set(['Button', 'IconButton'])
+const WRAPPERS = new Set(['Tooltip'])
+const LEAVES = new Set(['Avatar', 'Badge', 'Tag', 'SeverityTag'])
+
+function componentName({ type }: VNode): string {
+  return typeof type === 'string' ? '' : ((type as { name?: string }).name ?? '')
+}
+
+function isControl(vnode: VNode): boolean {
+  const { type, props } = vnode
+  if (typeof type !== 'string') return CONTROLS.has(componentName(vnode))
   const p = props ?? {}
   return (
     /^(button|input|select|textarea)$/.test(type) ||
@@ -48,8 +58,44 @@ function isInert(nodes: VNodeArrayChildren): boolean {
       vnode.type === Text ||
       (typeof vnode.type === 'string' &&
         !isControl(vnode) &&
-        (!Array.isArray(vnode.children) || isInert(vnode.children)))
+        (!Array.isArray(vnode.children) || isInert(vnode.children))) ||
+      (LEAVES.has(componentName(vnode)) && vnode.children == null)
   )
+}
+
+function firstIndex(nodes: VNode[]): number {
+  return nodes.findIndex(
+    (vnode) => vnode.type !== Comment && !(vnode.type === Text && !String(vnode.children).trim())
+  )
+}
+
+function mergeFirst(nodes: VNode[], attrs: () => TriggerAria): boolean {
+  const index = firstIndex(nodes)
+  const first = nodes[index]
+  if (!first) return false
+  if (isControl(first)) {
+    const own = attrs()
+    if (first.props?.['id'] != null) delete own['id']
+    nodes[index] = cloneVNode(first, own, true)
+    return true
+  }
+  const slots = first.children as Slots | null
+  const inner = slots && !Array.isArray(slots) && typeof slots === 'object' && slots['default']
+  if (!WRAPPERS.has(componentName(first)) || typeof inner !== 'function') return false
+  const copy = cloneVNode(first, null, true)
+  const rest: Slots = { ...slots }
+  delete rest['_']
+  copy.children = {
+    ...rest,
+    default: (...args: unknown[]) => {
+      const value = (inner as (...a: unknown[]) => unknown)(...args)
+      const out = flatten((Array.isArray(value) ? value : [value]) as VNodeArrayChildren)
+      mergeFirst(out, attrs)
+      return out
+    }
+  } as unknown as VNode['children']
+  nodes[index] = copy
+  return true
 }
 
 export const TriggerHost = defineComponent({
@@ -104,19 +150,8 @@ export const TriggerHost = defineComponent({
 
     return () => {
       const nodes = flatten(slots['default']?.() ?? [])
-      const index = nodes.findIndex(
-        (vnode) =>
-          vnode.type !== Comment && !(vnode.type === Text && !String(vnode.children).trim())
-      )
-      const first = nodes[index]
-      if (first && isControl(first)) {
-        nodes[index] = cloneVNode(
-          first,
-          { ...props.aria, ...(first.props?.['id'] == null && { id: props.controlId }) },
-          true
-        )
+      if (mergeFirst(nodes, () => ({ ...props.aria, id: props.controlId })))
         return h('span', { ref: hostRef }, nodes)
-      }
       return h('span', { ref: hostRef, ...(isInert(nodes) && hostAttrs()) }, nodes)
     }
   }
