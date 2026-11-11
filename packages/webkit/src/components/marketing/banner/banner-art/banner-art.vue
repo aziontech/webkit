@@ -35,7 +35,7 @@
     :data-testid="testId"
     :data-art="art"
     aria-hidden="true"
-    class="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+    class="pointer-events-none absolute inset-0 z-0 overflow-hidden [container-type:size]"
   >
     <template v-if="art === 'globe'">
       <TextureMaterial />
@@ -43,7 +43,7 @@
         class="absolute inset-0 mx-auto flex w-full max-w-(--layout-measure-site) items-center justify-end"
       >
         <div
-          class="relative aspect-square w-[min(calc((100dvh-var(--banner-offset,0px))*1.25),150vw,var(--container-5xl))] shrink-0 translate-x-1/2 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent_0%,black_20%),linear-gradient(to_bottom,transparent_11%,black_26%,black_74%,transparent_89%)] rtl:-translate-x-1/2 rtl:[mask-image:linear-gradient(to_left,transparent_0%,black_20%),linear-gradient(to_bottom,transparent_11%,black_26%,black_74%,transparent_89%)]"
+          class="relative aspect-square w-[min(calc(100cqh*1.25),150vw,var(--container-5xl))] shrink-0 translate-x-1/2 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent_0%,black_20%),linear-gradient(to_bottom,transparent_11%,black_26%,black_74%,transparent_89%)] rtl:-translate-x-1/2 rtl:[mask-image:linear-gradient(to_left,transparent_0%,black_20%),linear-gradient(to_bottom,transparent_11%,black_26%,black_74%,transparent_89%)]"
         >
           <SpinningGlobe
             :animated="animated"

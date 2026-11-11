@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  defineOptions({ name: 'DocAccordionItem' })
+  import { computed, useAttrs } from 'vue'
+
+  defineOptions({ name: 'DocAccordionItem', inheritAttrs: false })
 
   interface Props {
     /** The question the trigger shows; `DocAccordionGroup` reads it to build the row. */
@@ -14,11 +16,18 @@
     /** The answer shown when the entry is open. */
     default(): unknown
   }>()
+
+  const attrs = useAttrs()
+
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'documentation-doc-accordion-item'
+  )
 </script>
 
 <template>
   <div
-    data-testid="documentation-doc-accordion-item"
+    v-bind="$attrs"
+    :data-testid="testId"
     class="contents"
   >
     <slot />

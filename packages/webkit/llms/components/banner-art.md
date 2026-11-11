@@ -56,7 +56,7 @@
 
 ## Responsive
 
-- The globe is sized off the band height and capped by `150vw` and `--container-5xl`.
+- The globe is sized off the band height (a size container on the backdrop) and capped by `150vw` and `--container-5xl`.
 - The map takes the full width below medium and the inline-end three fifths from medium.
 
 ## Examples

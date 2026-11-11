@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  defineOptions({ name: 'DocTab' })
+  import { computed, useAttrs } from 'vue'
+
+  defineOptions({ name: 'DocTab', inheritAttrs: false })
 
   interface Props {
     /** The tab label; `DocTabs` reads it to build the strip. */
@@ -12,11 +14,18 @@
     /** The panel body. */
     default(): unknown
   }>()
+
+  const attrs = useAttrs()
+
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'documentation-doc-tab'
+  )
 </script>
 
 <template>
   <div
-    data-testid="documentation-doc-tab"
+    v-bind="$attrs"
+    :data-testid="testId"
     class="contents"
   >
     <slot />

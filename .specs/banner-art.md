@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 8584ab4ed2fba990d7d2e58526c3162fd9d0814e03ef668265d048afb105be31
+checksum: 17a74efa168860441d6ea42721b6985acdf8fe275ff5d2e177374556ae332bf6
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -85,12 +85,12 @@ From `SpinningGlobe` (rotation, stopped under reduced motion) and `NetworkMap` (
 
 ## Tokens
 
-| Region        | Token (DESIGN.md)                                                                        |
-| ------------- | ---------------------------------------------------------------------------------------- |
-| washes        | `var(--bg-canvas)` through `color-mix`                                                   |
-| lattice       | From `TextureMaterial`                                                                   |
-| map and globe | From `NetworkMap` and `SpinningGlobe` (`--text-muted`, `--primary`, illustration tokens) |
-| globe width   | `var(--container-5xl)`, `var(--layout-measure-site)`, `--banner-offset`                  |
+| Region        | Token (DESIGN.md)                                                                                                   |
+| ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| washes        | `var(--bg-canvas)` through `color-mix`                                                                              |
+| lattice       | From `TextureMaterial`                                                                                              |
+| map and globe | From `NetworkMap` and `SpinningGlobe` (`--text-muted`, `--primary`, illustration tokens)                            |
+| globe width   | `var(--container-5xl)`, `var(--layout-measure-site)`; sized off the band height through a size container (`100cqh`) |
 
 ## Theme gaps
 
@@ -114,7 +114,7 @@ From `SpinningGlobe` (rotation, stopped under reduced motion) and `NetworkMap` (
 
 ## Responsive
 
-- The globe is sized off the band height and capped by `150vw` and `--container-5xl`.
+- The globe is sized off the band height (a size container on the backdrop) and capped by `150vw` and `--container-5xl`.
 - The map takes the full width below medium and the inline-end three fifths from medium.
 
 ## Performance

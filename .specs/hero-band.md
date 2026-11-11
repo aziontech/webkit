@@ -6,7 +6,7 @@ status: implemented
 spec_version: 2
 created: 2026-11-05
 last_updated: 2026-11-11
-checksum: 8da056fa7708825d147855a3fc36c71b0661c7895064e141c2a9c731e77f96de
+checksum: b4b854c643c03b64df6849fcaefda4da2c4e4e62a8d9895e566ade7a7538dd28
 ---
 
 # HeroBand — Component Spec
@@ -96,7 +96,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 
 ## Motion & Animations
 
-_none_
+- `animate-content-enter` with `[--content-enter-delay:120ms]` on the `bottom` scene window, so the scene settles in after the copy; `motion-reduce:animate-none` on the same class string.
 
 ## Tokens
 
