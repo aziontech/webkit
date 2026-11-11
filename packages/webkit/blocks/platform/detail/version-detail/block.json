@@ -21,9 +21,17 @@
     "revert version",
     "rollback version",
     "reverter versão",
-    "revertir versión"
+    "revertir versión",
+    "environment switcher",
+    "environment crumb",
+    "switch environment",
+    "seletor de ambiente"
   ],
-  "skills": ["webkit-layout", "webkit-navigation", "webkit-ui-states"],
+  "skills": [
+    "webkit-layout",
+    "webkit-navigation",
+    "webkit-ui-states"
+  ],
   "primary": {
     "name": "Draft",
     "file": "version-detail.vue"
@@ -43,6 +51,11 @@
       "name": "Revert",
       "summary": "An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed.",
       "file": "variants/revert.vue"
+    },
+    {
+      "name": "EnvironmentCrumb",
+      "summary": "The same version page reached from an environment: the breadcrumb reads Resources, the resource, then two `Select` crumbs. The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`.",
+      "file": "variants/environment-crumb.vue"
     }
   ]
 }
