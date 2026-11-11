@@ -85,14 +85,18 @@ describe('MapChart', () => {
 
   it('renders exactly one state at a time', () => {
     expect(mount({ loading: true }).getByTestId('chart-map-chart__skeleton')).toBeTruthy()
-    expect(mount({ error: 'Could not load the map.' }).getByTestId('chart-map-chart__error')).toBeTruthy()
+    expect(
+      mount({ error: 'Could not load the map.' }).getByTestId('chart-map-chart__error')
+    ).toBeTruthy()
     expect(mount({ regions: [], points: [] }).getByTestId('chart-map-chart__empty')).toBeTruthy()
   })
 
   it('keeps the geography unmirrored under rtl', async () => {
     const view = render({
       render: () =>
-        h('div', { dir: 'rtl', style: 'width: 640px' }, [h(MapChart, { points, ariaLabel: 'PoPs' })])
+        h('div', { dir: 'rtl', style: 'width: 640px' }, [
+          h(MapChart, { points, ariaLabel: 'PoPs' })
+        ])
     })
     const plot = view.getByTestId('chart-map-chart__plot')
     const gru = Number(plot.querySelector('[data-point="gru"]')?.getAttribute('cx'))

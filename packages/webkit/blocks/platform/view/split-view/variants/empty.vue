@@ -363,7 +363,6 @@
 
   const levelOrder = Object.keys(eventLevels)
 
-
   const eventLevelOptions = levelOrder.map((value) => ({ value, label: value }))
 
   const eventPeriods = [

@@ -131,7 +131,11 @@ export function linearLayout(
   }
 }
 
-export function mirrorLayout(layout: CategoryLayout, start: number, length: number): CategoryLayout {
+export function mirrorLayout(
+  layout: CategoryLayout,
+  start: number,
+  length: number
+): CategoryLayout {
   const flip = (offset: number) => start + length - (offset - start)
   return {
     ...layout,

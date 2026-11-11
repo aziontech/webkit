@@ -2875,10 +2875,12 @@
     "@aziontech/webkit/chart-area",
     "@aziontech/webkit/chart-axis",
     "@aziontech/webkit/chart-bar",
+    "@aziontech/webkit/chart-brush",
     "@aziontech/webkit/chart-crosshair",
     "@aziontech/webkit/chart-grid",
     "@aziontech/webkit/chart-legend",
     "@aziontech/webkit/chart-line",
+    "@aziontech/webkit/chart-scatter",
     "@aziontech/webkit/chart-tooltip",
     "@aziontech/webkit/chart-card"
    ],
@@ -2905,6 +2907,13 @@
      "default": "'vertical'",
      "required": "false",
      "doc": "Value axis direction. Horizontal lays categories down the side, for ordered bars."
+    },
+    {
+     "name": "labelScale",
+     "type": "'category' | 'linear'",
+     "default": "'category'",
+     "required": "false",
+     "doc": "How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets."
     },
     {
      "name": "min",
@@ -3028,7 +3037,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order."
+     "notes": "The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order."
     },
     {
      "name": "empty",
@@ -3046,18 +3055,23 @@
      "notes": "Replaces the default danger Alert."
     }
    ],
-   "purpose": "A cartesian chart — lines, areas and bars over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
+   "purpose": "A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
    "useWhen": [
     "A measure over time — requests, threats, bandwidth per bucket — as one or more lines or areas.",
     "Comparing magnitudes across ordered categories — top countries, attack families — as vertical or horizontal bars.",
     "Parts of a total over time — allowed / blocked / logged — as stacked areas or stacked bars.",
-    "Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals."
+    "Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals.",
+    "Two measures of one unit where one is the total and one a part — requests as bars, cached requests as a line (mixed).",
+    "How one measure spreads against another — response time by object size — as scatter dots on a `linear` label scale.",
+    "A volume histogram that filters a log or a table to a time span: add `Chart.Brush` and read `v-model:range`."
    ],
    "avoidWhen": [
     "A single headline number with a delta → use `stat-tile`.",
     "Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.",
     "More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.",
-    "Two measures on different scales → two charts side by side; this component never draws a second value axis."
+    "Two measures on different scales → two charts side by side; this component never draws a second value axis.",
+    "One reading against its range (CPU, cache hit ratio) → use `gauge-chart`.",
+    "Values by country or location → use `map-chart`."
    ],
    "related": [
     "chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.",
@@ -3072,7 +3086,9 @@
     "Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.",
     "Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.",
     "Keep filters and the time range in one row above the dashboard, never inside a chart.",
-    "While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton."
+    "While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton.",
+    "Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.",
+    "Use `labelScale=\"linear\"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced."
    ],
    "surface": "product",
    "examplesFile": "catalog/examples/chart.json"
@@ -3108,6 +3124,13 @@
      "doc": "Value axis direction. Horizontal lays categories down the side, for ordered bars."
     },
     {
+     "name": "labelScale",
+     "type": "'category' | 'linear'",
+     "default": "'category'",
+     "required": "false",
+     "doc": "How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets."
+    },
+    {
      "name": "min",
      "type": "number",
      "default": "0",
@@ -3229,7 +3252,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order."
+     "notes": "The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order."
     },
     {
      "name": "empty",
@@ -3247,18 +3270,23 @@
      "notes": "Replaces the default danger Alert."
     }
    ],
-   "purpose": "A cartesian chart — lines, areas and bars over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
+   "purpose": "A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
    "useWhen": [
     "A measure over time — requests, threats, bandwidth per bucket — as one or more lines or areas.",
     "Comparing magnitudes across ordered categories — top countries, attack families — as vertical or horizontal bars.",
     "Parts of a total over time — allowed / blocked / logged — as stacked areas or stacked bars.",
-    "Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals."
+    "Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals.",
+    "Two measures of one unit where one is the total and one a part — requests as bars, cached requests as a line (mixed).",
+    "How one measure spreads against another — response time by object size — as scatter dots on a `linear` label scale.",
+    "A volume histogram that filters a log or a table to a time span: add `Chart.Brush` and read `v-model:range`."
    ],
    "avoidWhen": [
     "A single headline number with a delta → use `stat-tile`.",
     "Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.",
     "More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.",
-    "Two measures on different scales → two charts side by side; this component never draws a second value axis."
+    "Two measures on different scales → two charts side by side; this component never draws a second value axis.",
+    "One reading against its range (CPU, cache hit ratio) → use `gauge-chart`.",
+    "Values by country or location → use `map-chart`."
    ],
    "related": [
     "chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.",
@@ -3273,7 +3301,9 @@
     "Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.",
     "Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.",
     "Keep filters and the time range in one row above the dashboard, never inside a chart.",
-    "While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton."
+    "While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton.",
+    "Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.",
+    "Use `labelScale=\"linear\"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced."
    ],
    "surface": "product"
   },
@@ -3299,6 +3329,14 @@
    "kind": "subcomponent",
    "parent": "chart",
    "treeShakeableImport": "@aziontech/webkit/chart-bar",
+   "surface": "product"
+  },
+  "chart-brush": {
+   "import": "@aziontech/webkit/chart-brush",
+   "target": "./src/components/chart/chart/chart-brush/chart-brush.vue",
+   "kind": "subcomponent",
+   "parent": "chart",
+   "treeShakeableImport": "@aziontech/webkit/chart-brush",
    "surface": "product"
   },
   "chart-crosshair": {
@@ -3331,6 +3369,14 @@
    "kind": "subcomponent",
    "parent": "chart",
    "treeShakeableImport": "@aziontech/webkit/chart-line",
+   "surface": "product"
+  },
+  "chart-scatter": {
+   "import": "@aziontech/webkit/chart-scatter",
+   "target": "./src/components/chart/chart/chart-scatter/chart-scatter.vue",
+   "kind": "subcomponent",
+   "parent": "chart",
+   "treeShakeableImport": "@aziontech/webkit/chart-scatter",
    "surface": "product"
   },
   "chart-tooltip": {
@@ -3804,6 +3850,294 @@
    ],
    "surface": "product",
    "examplesFile": "catalog/examples/donut-chart.json"
+  },
+  "gauge-chart": {
+   "import": "@aziontech/webkit/gauge-chart",
+   "target": "./src/components/chart/gauge-chart/gauge-chart.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/gauge-chart",
+   "category": "chart",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "value",
+     "type": "number | null",
+     "default": "null",
+     "required": "false",
+     "doc": "The reading. Null or absent renders the empty state."
+    },
+    {
+     "name": "min",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Start of the scale."
+    },
+    {
+     "name": "max",
+     "type": "number",
+     "default": "100",
+     "required": "false",
+     "doc": "End of the scale."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Caption under the reading: what is measured, or the unit."
+    },
+    {
+     "name": "thresholds",
+     "type": "GaugeChartThreshold[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Bands from low to high; the arc takes the color of the band the value falls in, and each band start is marked on the track."
+    },
+    {
+     "name": "formatValue",
+     "type": "(value: number) => string",
+     "default": "formatCompact",
+     "required": "false",
+     "doc": "Formats the reading and the scale ends."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Width of the dial: 160, 224 or 288 pixels."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders a Skeleton sized to the dial."
+    },
+    {
+     "name": "refetching",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Holds the previous reading at reduced opacity while new data loads."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Error message; when set, a danger Alert replaces the dial."
+    },
+    {
+     "name": "emptyTitle",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Title of the empty state shown when there is no reading. Empty uses the locale catalog (`No data available`)."
+    },
+    {
+     "name": "emptyDescription",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Supporting line under the empty title: why there is no reading, or what to do next."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the meter when it is not inside a ChartCard with a title."
+    }
+   ],
+   "slots": [
+    {
+     "name": "value",
+     "scope": "{ value: number; text: string; status: string }",
+     "notes": "Replaces the reading and caption under the arc."
+    },
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Replaces the default EmptyState."
+    },
+    {
+     "name": "empty-actions",
+     "scope": "—",
+     "notes": "Actions under the default EmptyState."
+    },
+    {
+     "name": "error",
+     "scope": "—",
+     "notes": "Replaces the default danger Alert."
+    }
+   ],
+   "purpose": "One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.",
+   "useWhen": [
+    "A utilization or ratio with a fixed range: CPU, memory, cache hit ratio, quota used.",
+    "A latency or score against a target, where bands (healthy, busy, critical) carry the meaning.",
+    "A headline reading on a detail page or in a dashboard card, beside the time series that explains it."
+   ],
+   "avoidWhen": [
+    "A number with a change against a period and a trend → use `stat-tile`.",
+    "A value over time → use `chart` (line or area).",
+    "Progress of a task toward done → use `progress-bar`.",
+    "Several readings to compare with each other → use `bar-list` or `chart` with horizontal bars; dials side by side compare badly."
+   ],
+   "related": [
+    "stat-tile` — one figure with a delta and a sparkline, for a KPI row.",
+    "chart-card` — the box a dashboard gauge sits in; the gauge takes its accessible name from the card title.",
+    "progress-bar` — completion of a task, not a reading."
+   ],
+   "bestPractices": [
+    "Give the range that means something for the reading (0 to 100 for a ratio, 0 to the quota for usage); the dial is meaningless without it.",
+    "Name every band (`label`) so the value is read with its meaning, not only with a color.",
+    "Use status colors for bands (`success`, `warning`, `danger`) and severity colors only when the reading is a severity.",
+    "Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/gauge-chart.json"
+  },
+  "map-chart": {
+   "import": "@aziontech/webkit/map-chart",
+   "target": "./src/components/chart/map-chart/map-chart.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/map-chart",
+   "category": "chart",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "regions",
+     "type": "MapChartRegion[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Countries shaded by value on a five-step sequential scale."
+    },
+    {
+     "name": "points",
+     "type": "MapChartPoint[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Locations drawn as bubbles sized by value."
+    },
+    {
+     "name": "view",
+     "type": "'world' | 'americas' | 'north-america' | 'south-america' | 'europe' | 'africa' | 'asia' | 'oceania'",
+     "default": "'world'",
+     "required": "false",
+     "doc": "Part of the world the map frames."
+    },
+    {
+     "name": "formatValue",
+     "type": "(value: number) => string",
+     "default": "formatCompact",
+     "required": "false",
+     "doc": "Formats values in the tooltip, legend and table."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders a Skeleton sized to the map and suppresses interaction."
+    },
+    {
+     "name": "refetching",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Holds the previous render at reduced opacity while new data loads."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Error message; when set, a danger Alert replaces the map."
+    },
+    {
+     "name": "emptyTitle",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Title of the empty state shown when no region or point has a value. Empty uses the locale catalog (`No data available`)."
+    },
+    {
+     "name": "emptyDescription",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Supporting line under the empty title: why the range is empty, or what to do next."
+    },
+    {
+     "name": "tableView",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the data table in place of the map. The table is always present for assistive tech."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the map when it is not inside a ChartCard with a title."
+    }
+   ],
+   "events": [
+    {
+     "name": "region-click",
+     "payload": "(event: MouseEvent | KeyboardEvent, region: MapChartRegion)",
+     "notes": "Click on a shaded country, or Enter / Space while it is active."
+    },
+    {
+     "name": "point-click",
+     "payload": "(event: MouseEvent | KeyboardEvent, point: MapChartPoint)",
+     "notes": "Click on a bubble, or Enter / Space while it is active."
+    }
+   ],
+   "slots": [
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Replaces the default EmptyState."
+    },
+    {
+     "name": "empty-actions",
+     "scope": "—",
+     "notes": "Actions under the default EmptyState, such as a Clear filters button."
+    },
+    {
+     "name": "error",
+     "scope": "—",
+     "notes": "Replaces the default danger Alert."
+    }
+   ],
+   "purpose": "Values by place on the dotted world map of `NetworkMap`: countries shaded on a five-step sequential scale (a choropleth on the dot grid) and locations drawn as bubbles whose area follows the value. One tab stop walks every place from the highest value down, with a tooltip, a polite announcement and a table twin, so nothing on the map needs a pointer. The country shapes are a lazy chunk; the map itself adds no dependency.",
+   "useWhen": [
+    "Requests, threats or bandwidth by country (Real-Time Metrics map card).",
+    "Traffic by point of presence or by city, as bubbles.",
+    "A regional view of either, framed with `view` (for example `south-america`)."
+   ],
+   "avoidWhen": [
+    "Ranking a handful of countries where the exact order matters → use `bar-list`; a map hides small countries.",
+    "A decorative network backdrop with no data → use `network-map`.",
+    "Values over time → use `chart`."
+   ],
+   "related": [
+    "network-map` — the same dot grid as decoration in marketing and empty states.",
+    "bar-list` — the ranked list that usually sits beside the map.",
+    "chart-card` — the card a dashboard map sits in; the map takes its accessible name from the card title."
+   ],
+   "bestPractices": [
+    "Pair the map with a ranked list or a table: the map shows where, the list shows how much.",
+    "Pass ISO 3166-1 alpha-2 codes as region ids; names come from the locale (`Intl.DisplayNames`) unless you pass `name`.",
+    "Keep region and point ids distinct: `v-model:activeId` holds one of them.",
+    "Give points a status color only when the color means a state; otherwise leave the series slot."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/map-chart.json"
   },
   "stat-tile": {
    "import": "@aziontech/webkit/stat-tile",
@@ -30312,6 +30646,7 @@
     "Button",
     "ButtonHighlight",
     "CalendarRoot",
+    "Chart",
     "Checkbox",
     "Chip",
     "CodeBlock",
@@ -30347,6 +30682,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/calendar-root",
+    "@aziontech/webkit/chart",
     "@aziontech/webkit/checkbox",
     "@aziontech/webkit/chip",
     "@aziontech/webkit/code-block",

@@ -145,7 +145,9 @@
   const text = computed(() => valueText(reading.value))
   const status = computed(() => band.value?.label ?? '')
   const valueLabel = computed(() =>
-    status.value ? t('gaugeChart.valueWithStatus', { value: text.value, status: status.value }) : text.value
+    status.value
+      ? t('gaugeChart.valueWithStatus', { value: text.value, status: status.value })
+      : text.value
   )
   const rangeLabel = computed(() =>
     t('gaugeChart.range', { min: valueText(props.min), max: valueText(props.max) })
@@ -163,7 +165,10 @@
   function scheduleEnter() {
     cancelEnter()
     entered.value = false
-    if (reducedMotion.value === 'reduce' || typeof globalThis.requestAnimationFrame !== 'function') {
+    if (
+      reducedMotion.value === 'reduce' ||
+      typeof globalThis.requestAnimationFrame !== 'function'
+    ) {
       entered.value = true
       return
     }

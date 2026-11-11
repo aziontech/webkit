@@ -402,6 +402,16 @@
     event.preventDefault()
   }
 
+  function onClick(event: MouseEvent) {
+    const target = event.target instanceof Element ? event.target : null
+    const mark = target?.closest('[data-region], [data-point]')
+    const id = mark?.getAttribute('data-region') ?? mark?.getAttribute('data-point')
+    if (!id) return
+    const item = items.value.find((entry) => entry.id === id) ?? null
+    setActive(id)
+    activate(event, item)
+  }
+
   const dimmed = (id: string) => activeId.value !== null && activeId.value !== id
 </script>
 
@@ -527,6 +537,7 @@
         :style="{ aspectRatio: `${box.width} / ${box.height}` }"
         class="relative w-full min-w-0 rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
         @keydown="onKeydown"
+        @click="onClick"
       >
         <svg
           :viewBox="viewBox"
@@ -580,7 +591,6 @@
             :data-entered="entered || null"
             class="cursor-pointer opacity-0 transition-opacity duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:opacity-100 data-[entered]:data-[dimmed]:opacity-40"
             @pointerenter="setActive(shape.id)"
-            @click="activate($event, items.find((item) => item.id === shape.id) ?? null)"
           />
           <circle
             v-for="bubble in bubbles"
@@ -598,7 +608,6 @@
             :data-entered="entered || null"
             class="cursor-pointer opacity-0 transition-opacity duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:opacity-100 data-[entered]:data-[dimmed]:opacity-40"
             @pointerenter="setActive(bubble.id)"
-            @click="activate($event, items.find((item) => item.id === bubble.id) ?? null)"
           />
         </svg>
         <div
@@ -641,7 +650,9 @@
           />
         </span>
         <span aria-hidden="true">{{ legend.max }}</span>
-        <span class="sr-only">{{ t('mapChart.legend', { min: legend.min, max: legend.max }) }}</span>
+        <span class="sr-only">{{
+          t('mapChart.legend', { min: legend.min, max: legend.max })
+        }}</span>
       </div>
     </template>
 

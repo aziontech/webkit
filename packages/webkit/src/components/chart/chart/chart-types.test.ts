@@ -82,7 +82,10 @@ describe('Chart types', () => {
   })
 
   it('sets a mixed chart on bands so the line sits on the bar centers', async () => {
-    const view = mount({}, () => [h(ChartBar, { ids: ['allowed'] }), h(ChartLine, { ids: ['blocked'] })])
+    const view = mount({}, () => [
+      h(ChartBar, { ids: ['allowed'] }),
+      h(ChartLine, { ids: ['blocked'] })
+    ])
     await measured(view)
     await fireEvent.keyDown(plotOf(view), { key: 'ArrowRight' })
     const marker = view.getByTestId('chart-chart__line').querySelector('circle')
@@ -101,7 +104,10 @@ describe('Chart types', () => {
     expect(live.textContent).toContain('WAF requests allowed')
     expect(live.textContent).not.toContain('WAF requests blocked')
     expect(
-      view.getByTestId('chart-chart__line').querySelector('[data-series="blocked"]')?.getAttribute('data-dimmed')
+      view
+        .getByTestId('chart-chart__line')
+        .querySelector('[data-series="blocked"]')
+        ?.getAttribute('data-dimmed')
     ).toBe('true')
     await fireEvent.keyDown(plot, { key: 'ArrowDown' })
     expect(live.textContent).toContain('WAF requests blocked')
@@ -133,15 +139,31 @@ describe('Chart types', () => {
     const plot = plotOf(view)
     const rect = plot.getBoundingClientRect()
     const y = rect.top + 20
-    await fireEvent.pointerDown(plot, { clientX: rect.right - 4, clientY: y, button: 0, pointerId: 1 })
-    await fireEvent.pointerMove(plot, { clientX: rect.left + rect.width / 2 - 4, clientY: y, pointerId: 1 })
-    await fireEvent.pointerUp(plot, { clientX: rect.left + rect.width / 2 - 4, clientY: y, pointerId: 1 })
+    await fireEvent.pointerDown(plot, {
+      clientX: rect.right - 4,
+      clientY: y,
+      button: 0,
+      pointerId: 1
+    })
+    await fireEvent.pointerMove(plot, {
+      clientX: rect.left + rect.width / 2 - 4,
+      clientY: y,
+      pointerId: 1
+    })
+    await fireEvent.pointerUp(plot, {
+      clientX: rect.left + rect.width / 2 - 4,
+      clientY: y,
+      pointerId: 1
+    })
     expect(onRange).toHaveBeenLastCalledWith([1, 3])
   })
 
   it('draws a controlled range and clears it with Escape', async () => {
     const onRange = vi.fn()
-    const view = mount({ range: [1, 2], 'onUpdate:range': onRange }, () => [h(ChartBrush), h(ChartBar)])
+    const view = mount({ range: [1, 2], 'onUpdate:range': onRange }, () => [
+      h(ChartBrush),
+      h(ChartBar)
+    ])
     await measured(view)
     const band = view.getByTestId('chart-chart__brush').querySelector('rect')
     expect(Number(band?.getAttribute('width'))).toBeGreaterThan(0)
@@ -150,11 +172,21 @@ describe('Chart types', () => {
   })
 
   it('runs the category axis from the right and keeps the value axis at the start under rtl', async () => {
-    const view = mount({}, () => [h(ChartAxis, { kind: 'y' }), h(ChartAxis, { kind: 'x' }), h(ChartLine, { markers: true })], 'rtl')
+    const view = mount(
+      {},
+      () => [
+        h(ChartAxis, { kind: 'y' }),
+        h(ChartAxis, { kind: 'x' }),
+        h(ChartLine, { markers: true })
+      ],
+      'rtl'
+    )
     await vi.waitFor(() => {
       const dots = view.getByTestId('chart-chart__line').querySelectorAll('circle')
       expect(dots.length).toBeGreaterThan(1)
-      expect(Number(dots[0]?.getAttribute('cx'))).toBeGreaterThan(Number(dots[1]?.getAttribute('cx')))
+      expect(Number(dots[0]?.getAttribute('cx'))).toBeGreaterThan(
+        Number(dots[1]?.getAttribute('cx'))
+      )
     })
     const ticks = view.getByTestId('chart-chart__axis-y').querySelectorAll('text')
     const plot = plotOf(view).getBoundingClientRect()
@@ -177,7 +209,11 @@ describe('Chart types', () => {
   })
 
   it('grows horizontal bars from the end side under rtl', async () => {
-    const view = mount({ orientation: 'horizontal', series: [threats[0]] }, () => [h(ChartBar)], 'rtl')
+    const view = mount(
+      { orientation: 'horizontal', series: [threats[0]] },
+      () => [h(ChartBar)],
+      'rtl'
+    )
     await vi.waitFor(() => {
       const bar = view.getByTestId('chart-chart__bar').querySelector('path') as SVGPathElement
       const plot = plotOf(view).getBoundingClientRect()

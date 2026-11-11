@@ -48,7 +48,9 @@ describe('GaugeChart', () => {
     expect(view.getByTestId('chart-gauge-chart__arc').getAttribute('stroke')).toBe(
       'var(--chart-status-danger)'
     )
-    expect(view.getByTestId('chart-gauge-chart__value').textContent).toContain('CPU usage, Critical')
+    expect(view.getByTestId('chart-gauge-chart__value').textContent).toContain(
+      'CPU usage, Critical'
+    )
     expect(meter.querySelectorAll('line')).toHaveLength(2)
   })
 
@@ -61,7 +63,9 @@ describe('GaugeChart', () => {
 
   it('renders exactly one state at a time', () => {
     expect(mount({ loading: true }).getByTestId('chart-gauge-chart__skeleton')).toBeTruthy()
-    expect(mount({ error: 'Could not load CPU usage.' }).getByTestId('chart-gauge-chart__error')).toBeTruthy()
+    expect(
+      mount({ error: 'Could not load CPU usage.' }).getByTestId('chart-gauge-chart__error')
+    ).toBeTruthy()
     const empty = mount({ value: null, emptyTitle: 'No reading yet' })
     expect(empty.getByTestId('chart-gauge-chart__empty').textContent).toContain('No reading yet')
     expect(empty.queryByRole('meter')).toBeNull()
@@ -70,7 +74,9 @@ describe('GaugeChart', () => {
   it('mirrors the dial under rtl so it fills from the start side', async () => {
     const view = mount({}, 'rtl')
     await vi.waitFor(() =>
-      expect(view.getByRole('meter').querySelector('g')?.getAttribute('transform')).toContain('scale(-1 1)')
+      expect(view.getByRole('meter').querySelector('g')?.getAttribute('transform')).toContain(
+        'scale(-1 1)'
+      )
     )
   })
 
