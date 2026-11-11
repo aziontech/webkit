@@ -96,9 +96,9 @@
     :data-side="side"
     :data-active="entry ? true : null"
     :data-current="isCurrent || null"
-    class="group/hotspot inline-flex max-w-full items-center gap-(--spacing-xxs) data-[side=start]:flex-row-reverse"
+    class="group/hotspot inline-flex max-w-full items-center gap-(--spacing-xxs)"
   >
-    <slot />
+    <slot v-if="side !== 'start'" />
     <Popover
       v-if="entry"
       :open="isOpen"
@@ -165,5 +165,6 @@
         </div>
       </PopoverContent>
     </Popover>
+    <slot v-if="side === 'start'" />
   </span>
 </template>

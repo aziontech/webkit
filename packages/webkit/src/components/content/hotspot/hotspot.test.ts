@@ -89,7 +89,7 @@ describe('Hotspot', () => {
   })
 
   it('places the marker before the content with side="start"', async () => {
-    const { getByRole } = render({
+    const { getByRole, container } = render({
       components: { TutorialPanelProvider, Hotspot },
       setup: () => ({ tutorials }),
       template: `
@@ -99,11 +99,11 @@ describe('Hotspot', () => {
       `
     })
     await tick()
-    const marker = markers()[0] as HTMLElement
+    const marker = container.querySelector<HTMLElement>(
+      '[data-testid="content-hotspot__marker"]'
+    ) as HTMLElement
     const button = getByRole('button', { name: 'Alpha' })
-    expect(marker.getBoundingClientRect().right).toBeLessThanOrEqual(
-      button.getBoundingClientRect().left
-    )
+    expect(marker.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
   it('has no axe violations', async () => {
