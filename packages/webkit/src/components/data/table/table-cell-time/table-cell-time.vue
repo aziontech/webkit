@@ -86,7 +86,8 @@
         :data-testid="`${testId}__avatar`"
       />
     </Tooltip>
-    <Tooltip key="tooltip-2"
+    <Tooltip
+      key="tooltip-2"
       v-if="date"
       :text="absolute"
       class="min-w-0 shrink!"

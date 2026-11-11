@@ -38,7 +38,9 @@ describe('OverflowCount', () => {
     await fireEvent.click(view.getByRole('button', { name: 'Show all 3 domains' }))
     await waitFor(() => expect(byTestId('content-overflow-count__summary')).not.toBeNull())
     expect(byTestId('content-overflow-count__summary')!.textContent).toContain('3 domains')
-    const links = allByTestId('content-overflow-count__item').map((item) => item.querySelector('a')!)
+    const links = allByTestId('content-overflow-count__item').map((item) =>
+      item.querySelector('a')!
+    )
     expect(links).toHaveLength(3)
     expect(links[0].getAttribute('target')).toBe('_blank')
     expect(links[0].getAttribute('rel')).toBe('noopener noreferrer')
@@ -50,9 +52,7 @@ describe('OverflowCount', () => {
     let rowClicks = 0
     const Host = defineComponent({
       render: () =>
-        h('div', { onClick: () => (rowClicks += 1) }, [
-          h(OverflowCount, { items: ['a', 'b'] })
-        ])
+        h('div', { onClick: () => (rowClicks += 1) }, [h(OverflowCount, { items: ['a', 'b'] })])
     })
     render(Host)
     await fireEvent.click(trigger().querySelector('button') ?? trigger())

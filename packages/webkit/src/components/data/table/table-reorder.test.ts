@@ -17,9 +17,9 @@ const seed = (): Row[] => [
   { id: 'd', name: 'Delta' }
 ]
 
-const handles = (root: ParentNode = document.body): HTMLElement[] =>
+const handles = (root: Document | HTMLElement = document): HTMLElement[] =>
   Array.from(root.querySelectorAll<HTMLElement>('[data-reorder-handle]'))
-const order = (root: ParentNode = document.body): string[] =>
+const order = (root: Document | HTMLElement = document): string[] =>
   handles(root).map((handle) => handle.getAttribute('data-reorder-handle') ?? '')
 const status = (): string =>
   document.body.querySelector('[data-testid="data-table__reorder-status"]')?.textContent ?? ''
@@ -82,9 +82,9 @@ describe('Table reorderable rows', () => {
     const target = document.body.querySelector<HTMLElement>('[data-reorder-row="c"]')!
     const box = target.getBoundingClientRect()
     await fireEvent.pointerDown(first, { button: 0, pointerId: 1, clientX: 4, clientY: 4 })
-    expect(document.body.querySelector('[data-reorder-row="a"]')!.hasAttribute('data-dragging')).toBe(
-      true
-    )
+    expect(
+      document.body.querySelector('[data-reorder-row="a"]')!.hasAttribute('data-dragging')
+    ).toBe(true)
     await fireEvent.pointerMove(first, {
       pointerId: 1,
       clientX: box.left + 4,
@@ -123,7 +123,9 @@ describe('Table reorderable rows', () => {
   it('keeps grips with row selection and maps positions under pagination', async () => {
     const { data } = mountTable({ enableRowSelection: true, paginated: true, pageSize: 2 })
     expect(handles()).toHaveLength(2)
-    expect(document.body.querySelectorAll('[role="checkbox"], input[type="checkbox"]').length).toBeGreaterThan(0)
+    expect(
+      document.body.querySelectorAll('[role="checkbox"], input[type="checkbox"]').length
+    ).toBeGreaterThan(0)
     await fireEvent.keyDown(handles()[1], { key: 'ArrowUp' })
     expect(data.value.map((row) => row.id)).toEqual(['b', 'a', 'c', 'd'])
   })

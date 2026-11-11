@@ -67,8 +67,10 @@ describe('Table cell presets', () => {
       'RouterLink',
       defineComponent({
         props: { to: { type: [String, Object], required: true } },
-        setup: (props, { slots }) => () =>
-          h('a', { href: '#routed', 'data-to': JSON.stringify(props.to) }, slots['default']?.())
+        setup:
+          (props, { slots }) =>
+          () =>
+            h('a', { href: '#routed', 'data-to': JSON.stringify(props.to) }, slots['default']?.())
       })
     )
     app.mount(host)

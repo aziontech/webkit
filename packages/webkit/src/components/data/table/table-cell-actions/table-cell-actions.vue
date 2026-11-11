@@ -46,9 +46,7 @@
       (ctx ? `${ctx.testId}__cell-actions` : 'data-table__cell-actions')
   )
   const label = computed<string>(() =>
-    props.name
-      ? t('tableCellActions.labelFor', { name: props.name })
-      : t('tableCellActions.label')
+    props.name ? t('tableCellActions.labelFor', { name: props.name }) : t('tableCellActions.label')
   )
 </script>
 
@@ -65,7 +63,7 @@
         icon="pi pi-ellipsis-h"
         kind="outlined"
         size="small"
-        :aria-label="label"
+        :ariaLabel="label"
         :disabled="disabled"
         :data-testid="`${testId}__trigger`"
       />

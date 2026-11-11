@@ -1437,6 +1437,7 @@
               <TableRow>
                 <TableHeadCell
                   v-if="reorderActive"
+                  key="reorder"
                   kind="checkbox"
                   :frozen="handleFrozen ? 'start' : undefined"
                   data-reorder-cell
@@ -1445,6 +1446,7 @@
                 </TableHeadCell>
                 <TableHeadCell
                   v-if="enableRowSelection"
+                  key="select"
                   kind="checkbox"
                   :frozen="selectionFrozen ? 'start' : undefined"
                   :style="selectionStyle"
@@ -1501,12 +1503,14 @@
               >
                 <TableCell
                   v-if="reorderActive"
+                  key="reorder"
                   kind="checkbox"
                   :frozen="handleFrozen ? 'start' : undefined"
                   :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                 />
                 <TableCell
                   v-if="enableRowSelection"
+                  key="select"
                   kind="checkbox"
                   :frozen="selectionFrozen ? 'start' : undefined"
                   :style="selectionStyle"
@@ -1586,6 +1590,7 @@
                 >
                   <TableCell
                     v-if="reorderActive"
+                    key="reorder"
                     kind="checkbox"
                     :frozen="handleFrozen ? 'start' : undefined"
                     data-reorder-cell
@@ -1611,6 +1616,7 @@
                   </TableCell>
                   <TableCell
                     v-if="enableRowSelection"
+                    key="select"
                     kind="checkbox"
                     :frozen="selectionFrozen ? 'start' : undefined"
                     :style="selectionStyle"

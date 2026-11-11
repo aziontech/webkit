@@ -68,8 +68,7 @@
     return routerLink() ?? 'a'
   })
   const linkAttrs = computed<Record<string, unknown>>(() => {
-    if (props.href)
-      return { href: props.href, target: '_blank', rel: 'noopener noreferrer' }
+    if (props.href) return { href: props.href, target: '_blank', rel: 'noopener noreferrer' }
     if (!props.to) return {}
     if (typeof tag.value !== 'string') return { to: props.to }
     return { href: typeof props.to === 'string' ? props.to : undefined }
