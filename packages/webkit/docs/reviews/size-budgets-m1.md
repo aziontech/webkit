@@ -199,3 +199,23 @@ No new entries. Six small raises, all from accessibility fixes in shared parts t
 | listing-table    | 56            | 56.09        | 56.25      | `Table` grid role and attribute forwarding.                    |
 | hotspot          | 11.25         | 11.32        | 11.4       | Built on `Popover`, whose trigger goes through `TriggerHost`.  |
 | confirm-dialog   | 23.8          | 23.99        | 24.1       | `Dialog` focus return to the element focused before it opened. |
+
+## M2.9 WP list-kit
+
+`OverflowCount` and the six `Table.Cell*` presets are new entries. `TableCellTime` is the heaviest preset because `Avatar` merges classes with `tailwind-merge` (about 58 KB before compression, shared with every component that uses `cn`); an app that already ships webkit pays it once. `Table` grows by the reorderable rows (grip column, pointer and keyboard moves, announcements), and the two sections built on it grow with it. The `overflowCount`, `tableCell*` and `tableReorder` groups grow the English catalog the provider ships and the two opt-in locale entries. Budgets are measured + ~0.25 KB.
+
+| Entry              | Budget before | Measured now | New budget | Note                                                                   |
+| ------------------ | ------------- | ------------ | ---------- | ---------------------------------------------------------------------- |
+| overflow-count     | new           | 12.27        | 12.5       | New: `Popover`, `Tag`, search `Input`, Load more `Button`.             |
+| table-cell-status  | new           | 1.41         | 3          | New: one `Tag`.                                                        |
+| table-cell-link    | new           | 15.05        | 15.3       | New: `Tooltip`, `OverflowCount`, `CopyButton`.                         |
+| table-cell-id      | new           | 7.70         | 7.95       | New: `CopyButton`.                                                     |
+| table-cell-time    | new           | 17.05        | 17.3       | New: `Avatar` (with `tailwind-merge`), `Tooltip`, relative time clock. |
+| table-cell-tags    | new           | 13.18        | 13.45      | New: fit measuring plus `OverflowCount`.                               |
+| table-cell-actions | new           | 9.62         | 10         | New: `DropdownMenu` and its trigger.                                   |
+| table-root         | 50            | 51.64        | 51.9       | Raised: `reorderable` rows.                                            |
+| listing-browser    | 65.1          | 66.69        | 66.95      | Raised: built on `Table`.                                              |
+| listing-table      | 56.25         | 57.77        | 58         | Raised: built on `Table`.                                              |
+| webkit-provider    | 7.75          | 7.91         | 8.1        | Raised: the list-kit groups in the English catalog.                    |
+| locales-pt-BR      | 7.15          | 7.28         | 7.5        | Raised: the same groups in Portuguese.                                 |
+| locales-es         | 7.25          | 7.36         | 7.6        | Raised: the same groups in Spanish.                                    |

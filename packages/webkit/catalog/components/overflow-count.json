@@ -1,0 +1,23 @@
+{
+ "purpose": "A small `+N` chip that stands for the items a slot cannot show, and opens a popover with the whole list. It replaces the design sample's `DomainOverflowPopover`, the overflow badge of `TagListCell` and `WorkloadCell`, and the Console Kit's `OverflowCountButton`. The popover follows the overflow rule of `webkit-ux-heuristics`: a summary line (`12 domains`, `10 of 34 domains` while paged), a search box once the list holds more than 7 items, a scrolling list, a **Load N more** footer while items remain, a no-match line quoting the query, and a polite status region that announces the summary. Closing it clears the query and the paging.",
+ "useWhen": [
+  "A table cell or a detail row shows the first value of a list and the rest hide behind a count: the domains of a workload, the tags of a row, the workloads a rule applies to.",
+  "A card or a header names one item of many and the reader may want the full list without leaving the screen."
+ ],
+ "avoidWhen": [
+  "The list is the content of the page → render it as a `Table` or an `Item` list.",
+  "The reader picks from the list → use `Select`, `Combobox` or `MultiSelect`.",
+  "A single count without a list behind it → use `Badge`."
+ ],
+ "related": [
+  "table` — `Table.CellTags` and `Table.CellLink` put this chip after the values they fit.",
+  "tag` — the chip is a small secondary `Tag`.",
+  "popover` — the list opens in a `Popover`."
+ ],
+ "bestPractices": [
+  "Show the first item (or as many as fit) beside the chip; the chip counts only the hidden ones, and `items` passes only those.",
+  "Name the items with `noun` (`{ one: 'domain', other: 'domains' }`) so the summary reads `12 domains`, not `12 items`.",
+  "Give an item an `href` only when it opens something; an item without one renders as plain text.",
+  "Use the `item` slot for a router link or a richer entry; keep every entry to one truncating line."
+ ]
+}

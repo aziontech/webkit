@@ -6551,6 +6551,40 @@
    "examplesFile": "catalog/examples/key-value-pairs.json",
    "docsFile": "catalog/components/key-value-pairs.json"
   },
+  "overflow-count": {
+   "import": "@aziontech/webkit/overflow-count",
+   "target": "./src/components/content/overflow-count/overflow-count.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/overflow-count",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "Array<string | { label: string; href?: string }>",
+     "default": "[]",
+     "required": "false",
+     "doc": "The hidden items. The chip reads `+<length>`; an item with `href` opens in a new tab."
+    },
+    {
+     "name": "noun",
+     "type": "string | { one: string; other: string }",
+     "default": "undefined",
+     "required": "false",
+     "doc": "What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "item",
+     "scope": "",
+     "notes": "One list entry; replaces the built-in text or link."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/overflow-count.json",
+   "docsFile": "catalog/components/overflow-count.json"
+  },
   "key-value-pairs-root": {
    "import": "@aziontech/webkit/key-value-pairs-root",
    "target": "./src/components/content/key-value-pairs/key-value-pairs.vue",
@@ -6921,6 +6955,12 @@
     "@aziontech/webkit/table-row",
     "@aziontech/webkit/table-head-cell",
     "@aziontech/webkit/table-cell",
+    "@aziontech/webkit/table-cell-status",
+    "@aziontech/webkit/table-cell-link",
+    "@aziontech/webkit/table-cell-id",
+    "@aziontech/webkit/table-cell-time",
+    "@aziontech/webkit/table-cell-tags",
+    "@aziontech/webkit/table-cell-actions",
     "@aziontech/webkit/table-sort-button",
     "@aziontech/webkit/table-toolbar",
     "@aziontech/webkit/table-search",
@@ -7170,6 +7210,13 @@
      "default": "48",
      "required": "false",
      "doc": "Row height (px) assumed in `virtual` mode until a row is measured."
+    },
+    {
+     "name": "reorderable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: a leading grip column lets people drag rows, or move the focused grip's row with Arrow Up, Arrow Down, Home and End, into a new order. Emits `update:data` (bind `v-model:data`) and `reorder`; locked while a sort is applied."
     }
    ],
    "events": [
@@ -7232,6 +7279,16 @@
      "name": "export",
      "payload": "rows: Record<string, unknown>[]",
      "notes": "Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads)."
+    },
+    {
+     "name": "update:data",
+     "payload": "value: Record<string, unknown>[]",
+     "notes": "reorderable`: the records in their new order; bind `v-model:data`."
+    },
+    {
+     "name": "reorder",
+     "payload": "payload: { from: number; to: number; row: Record<string, unknown> }",
+     "notes": "reorderable`: a row moved from index `from` to index `to` of `data`."
     }
    ],
    "slots": [
@@ -7521,6 +7578,13 @@
      "default": "48",
      "required": "false",
      "doc": "Row height (px) assumed in `virtual` mode until a row is measured."
+    },
+    {
+     "name": "reorderable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: a leading grip column lets people drag rows, or move the focused grip's row with Arrow Up, Arrow Down, Home and End, into a new order. Emits `update:data` (bind `v-model:data`) and `reorder`; locked while a sort is applied."
     }
    ],
    "events": [
@@ -7583,6 +7647,16 @@
      "name": "export",
      "payload": "rows: Record<string, unknown>[]",
      "notes": "Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads)."
+    },
+    {
+     "name": "update:data",
+     "payload": "value: Record<string, unknown>[]",
+     "notes": "reorderable`: the records in their new order; bind `v-model:data`."
+    },
+    {
+     "name": "reorder",
+     "payload": "payload: { from: number; to: number; row: Record<string, unknown> }",
+     "notes": "reorderable`: a row moved from index `from` to index `to` of `data`."
     }
    ],
    "slots": [
@@ -7679,6 +7753,54 @@
    "kind": "subcomponent",
    "parent": "table",
    "treeShakeableImport": "@aziontech/webkit/table-cell",
+   "surface": "product"
+  },
+  "table-cell-status": {
+   "import": "@aziontech/webkit/table-cell-status",
+   "target": "./src/components/data/table/table-cell-status/table-cell-status.vue",
+   "kind": "subcomponent",
+   "parent": "table",
+   "treeShakeableImport": "@aziontech/webkit/table-cell-status",
+   "surface": "product"
+  },
+  "table-cell-link": {
+   "import": "@aziontech/webkit/table-cell-link",
+   "target": "./src/components/data/table/table-cell-link/table-cell-link.vue",
+   "kind": "subcomponent",
+   "parent": "table",
+   "treeShakeableImport": "@aziontech/webkit/table-cell-link",
+   "surface": "product"
+  },
+  "table-cell-id": {
+   "import": "@aziontech/webkit/table-cell-id",
+   "target": "./src/components/data/table/table-cell-id/table-cell-id.vue",
+   "kind": "subcomponent",
+   "parent": "table",
+   "treeShakeableImport": "@aziontech/webkit/table-cell-id",
+   "surface": "product"
+  },
+  "table-cell-time": {
+   "import": "@aziontech/webkit/table-cell-time",
+   "target": "./src/components/data/table/table-cell-time/table-cell-time.vue",
+   "kind": "subcomponent",
+   "parent": "table",
+   "treeShakeableImport": "@aziontech/webkit/table-cell-time",
+   "surface": "product"
+  },
+  "table-cell-tags": {
+   "import": "@aziontech/webkit/table-cell-tags",
+   "target": "./src/components/data/table/table-cell-tags/table-cell-tags.vue",
+   "kind": "subcomponent",
+   "parent": "table",
+   "treeShakeableImport": "@aziontech/webkit/table-cell-tags",
+   "surface": "product"
+  },
+  "table-cell-actions": {
+   "import": "@aziontech/webkit/table-cell-actions",
+   "target": "./src/components/data/table/table-cell-actions/table-cell-actions.vue",
+   "kind": "subcomponent",
+   "parent": "table",
+   "treeShakeableImport": "@aziontech/webkit/table-cell-actions",
    "surface": "product"
   },
   "table-sort-button": {

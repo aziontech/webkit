@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: c7453e7992aef591231e233f7c015f5232a9198c98959c03f9d47348ea128ba0
+checksum: be6d0976f4db3302067087378aed220b9ecf14b75e8d780b284134298734c9bf
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -82,10 +82,10 @@ _none_
 
 ## Motion & Animations
 
-| Trigger              | Animation / Transition                       | Token                    | Reduced-motion fallback         |
-| -------------------- | -------------------------------------------- | ------------------------ | ------------------------------- |
-| popover open / close | inherited from `Popover` (`animate-popup-*`) | `semantic/animations.js` | `motion-reduce:animate-none`    |
-| entry hover          | `transition-colors duration-fast-02`         | `semantic/animations.js` | `motion-reduce:transition-none` |
+| Trigger              | Animation / Transition                                                 | Token                    | Reduced-motion fallback                  |
+| -------------------- | ---------------------------------------------------------------------- | ------------------------ | ---------------------------------------- |
+| popover open / close | inherited from `Popover` (its scale-in and scale-out popup animations) | `semantic/animations.js` | inherited (`motion-reduce` on the panel) |
+| entry hover          | `transition-colors duration-fast-02`                                   | `semantic/animations.js` | `motion-reduce:transition-none`          |
 
 ## Tokens
 

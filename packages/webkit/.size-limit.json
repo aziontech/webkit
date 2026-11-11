@@ -43,7 +43,7 @@
   {
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
-    "limit": "50 KB"
+    "limit": "51.9 KB"
   },
   {
     "name": "property-filter",
@@ -520,7 +520,7 @@
   {
     "name": "listing-browser",
     "path": "src/components/sections/listing-browser/listing-browser.vue",
-    "limit": "65.1 KB"
+    "limit": "66.95 KB"
   },
   {
     "name": "platform-directory",
@@ -589,7 +589,7 @@
   {
     "name": "listing-table",
     "path": "src/components/sections/listing-table/listing-table.vue",
-    "limit": "56.25 KB"
+    "limit": "58 KB"
   },
   {
     "name": "site-footer",
@@ -960,17 +960,17 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "7.75 KB"
+    "limit": "8.1 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "7.15 KB"
+    "limit": "7.5 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "7.25 KB"
+    "limit": "7.6 KB"
   },
   {
     "name": "phone-input",
@@ -1126,7 +1126,7 @@
   {
     "name": "overflow-count",
     "path": "src/components/content/overflow-count/overflow-count.vue",
-    "limit": "9 KB"
+    "limit": "12.5 KB"
   },
   {
     "name": "table-cell-status",
@@ -1136,22 +1136,22 @@
   {
     "name": "table-cell-link",
     "path": "src/components/data/table/table-cell-link/table-cell-link.vue",
-    "limit": "14 KB"
+    "limit": "15.3 KB"
   },
   {
     "name": "table-cell-id",
     "path": "src/components/data/table/table-cell-id/table-cell-id.vue",
-    "limit": "5 KB"
+    "limit": "7.95 KB"
   },
   {
     "name": "table-cell-time",
     "path": "src/components/data/table/table-cell-time/table-cell-time.vue",
-    "limit": "7 KB"
+    "limit": "17.3 KB"
   },
   {
     "name": "table-cell-tags",
     "path": "src/components/data/table/table-cell-tags/table-cell-tags.vue",
-    "limit": "13 KB"
+    "limit": "13.45 KB"
   },
   {
     "name": "table-cell-actions",

@@ -157,6 +157,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Kbd](components/kbd.md): Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap.
 - [KeyValuePairs](components/key-value-pairs.md): A grid of labelled facts about one subject: each pair is a key (the term) and its value, which may be plain text or a composed component such as a `Link`, `Tag`, `CopyButton` or `StatusIndicator`.
 - [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent.
+- [OverflowCount](components/overflow-count.md): A small `+N` chip that stands for the items a slot cannot show, and opens a popover with the whole list.
 - [Overline](components/overline.md): Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow").
 - [ProductWidget](components/product-widget.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside a `shell-mockup` frame, that marketing bands use to show the product.
 - [SeverityTag](components/severity-tag.md): SeverityTag labels an item with its place on an ordered severity scale: critical, high, medium, low or info.
