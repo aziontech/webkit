@@ -1,27 +1,12 @@
-<script lang="ts">
-  import { computed, inject, onBeforeUnmount, onMounted, ref , useAttrs } from 'vue'
+<script setup lang="ts">
+  import { computed, inject, useAttrs } from 'vue'
 
   import { useLocale } from '../../../../composables/use-locale/use-locale'
   import * as en from '../../../../i18n/messages/en'
+  import Avatar from '../../../content/avatar/avatar.vue'
+  import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import { TableInjectionKey } from '../injection-key'
-
-  const TICK_MS = 60_000
-  const now = ref<number>(Date.now())
-  let subscribers = 0
-  let timer: ReturnType<typeof setInterval> | undefined
-
-  function subscribe(): void {
-    subscribers += 1
-    now.value = Date.now()
-    if (timer === undefined) timer = setInterval(() => (now.value = Date.now()), TICK_MS)
-  }
-
-  function unsubscribe(): void {
-    subscribers = Math.max(0, subscribers - 1)
-    if (subscribers > 0 || timer === undefined) return
-    clearInterval(timer)
-    timer = undefined
-  }
+  import { useMinuteClock } from './minute-clock'
 
   defineOptions({
     name: 'TableCellTime',
@@ -47,6 +32,7 @@
   const JUST_NOW_MS = 45_000
 
   const attrs = useAttrs()
+  const now = useMinuteClock()
   const { t, formatDate, formatRelativeTime } = useLocale({ tableCellTime: en.tableCellTime })
   const ctx = inject(TableInjectionKey, null)
   const testId = computed<string>(
@@ -62,8 +48,7 @@
   })
   const relative = computed<string>(() => {
     if (!date.value) return ''
-    const diff = date.value.getTime() - now.value
-    if (Math.abs(diff) < JUST_NOW_MS) return t('tableCellTime.justNow')
+    if (Math.abs(date.value.getTime() - now.value) < JUST_NOW_MS) return t('tableCellTime.justNow')
     return formatRelativeTime(date.value)
   })
   const absolute = computed<string>(() =>
@@ -72,17 +57,14 @@
   const displayName = computed<string>(() => {
     const raw = props.author.trim()
     if (!raw) return ''
-    const local = raw.includes('@') ? raw.slice(0, raw.indexOf('@')) : raw
     if (!raw.includes('@') && /\s/.test(raw)) return raw
+    const local = raw.includes('@') ? raw.slice(0, raw.indexOf('@')) : raw
     return local
       .split(/[._-]+/)
       .filter(Boolean)
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ')
   })
-
-  onMounted(subscribe)
-  onBeforeUnmount(unsubscribe)
 </script>
 
 <template>
