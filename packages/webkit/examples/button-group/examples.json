@@ -1,0 +1,16 @@
+{
+  "component": "button-group",
+  "title": "Components/Primitives/Actions/ButtonGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A toolbar of icon actions above a code panel: Copy and Format are plain actions, Wrap lines is a toggle that reports its pressed state, and Download opens a menu. Each button names itself in a tooltip; one Tab stop enters the toolbar and the arrow keys move between its buttons.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithOverflow",
+      "summary": "Outlined, small buttons with `visible-count=\"3\"`: the first three items stay in the bar and the rest, a disabled action and a menu among them, move into the More actions menu, where the pressed toggle shows its check.",
+      "file": "with-overflow.vue"
+    }
+  ]
+}

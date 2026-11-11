@@ -85,6 +85,23 @@ export const es: Messages = {
     searchFacet: 'Buscar {facet}',
     empty: 'No se encontraron resultados.'
   },
+  attributeEditor: {
+    add: 'Agregar elemento',
+    remove: 'Quitar elemento',
+    rowAction: '{label} {index}',
+    addGroup: 'Agregar grupo O',
+    empty: 'Todavía no hay elementos.',
+    remaining: {
+      one: 'Puedes agregar {count} elemento más.',
+      other: 'Puedes agregar {count} elementos más.'
+    },
+    limitReached: 'Alcanzaste el límite de {limit} elementos.',
+    added: 'Elemento {index} agregado.',
+    removed: 'Elemento {index} quitado.',
+    group: 'Grupo {index}',
+    and: 'y',
+    or: 'o'
+  },
   avatar: {
     fallbackLabel: 'Avatar del usuario',
     imageAlt: 'Avatar'
@@ -103,6 +120,10 @@ export const es: Messages = {
     resizeHeight: 'Cambiar el alto de la vista previa',
     widthValue: '{value} píxeles de ancho',
     heightValue: '{value} píxeles de alto'
+  },
+  buttonGroup: {
+    moreActions: 'Más acciones',
+    pressed: 'Activado'
   },
   calendar: {
     placeholder: 'Selecciona un rango de fechas',
@@ -165,6 +186,24 @@ export const es: Messages = {
   codeBlock: {
     copy: 'Copiar código'
   },
+  codeEditor: {
+    label: 'Editor de código',
+    original: 'Original',
+    modified: 'Modificado',
+    problems: 'Problemas',
+    problemCount: {
+      zero: 'Ningún problema',
+      one: '{count} problema',
+      other: '{count} problemas'
+    },
+    line: 'Línea {line}',
+    error: 'Error',
+    warning: 'Advertencia',
+    info: 'Información',
+    loading: 'Cargando el editor completo…',
+    loadFailed: 'El editor completo no se pudo cargar. Puedes seguir editando aquí.',
+    tabHint: 'Pulsa Escape y luego Tab para salir del editor.'
+  },
   collectionPreferences: {
     trigger: 'Preferencias',
     title: 'Preferencias',
@@ -188,6 +227,17 @@ export const es: Messages = {
     density: 'Densidad',
     comfortable: 'Cómoda',
     compact: 'Compacta'
+  },
+  combobox: {
+    empty: 'Sin resultados',
+    loading: 'Cargando opciones',
+    useValue: 'Usar "{value}"',
+    clear: 'Borrar',
+    suggestions: 'Sugerencias',
+    count: {
+      one: '{count} opción',
+      other: '{count} opciones'
+    }
   },
   command: {
     empty: 'No se encontraron resultados.',
@@ -404,6 +454,26 @@ export const es: Messages = {
   resizable: {
     handle: 'Redimensionar panel'
   },
+  schemaForm: {
+    required: 'Este campo es obligatorio.',
+    minLength: 'Usa al menos {min} caracteres.',
+    maxLength: 'Usa como máximo {max} caracteres.',
+    pattern: 'Este valor no sigue el formato esperado.',
+    minimum: 'Ingresa {min} o más.',
+    maximum: 'Ingresa {max} o menos.',
+    number: 'Ingresa un número.',
+    integer: 'Ingresa un número entero.',
+    enum: 'Elige una de las opciones.',
+    minItems: 'Agrega al menos {min} valores.',
+    maxItems: 'Agrega como máximo {max} valores.',
+    listItem: 'Línea {line}: {message}',
+    json: 'Ingresa un JSON válido.',
+    selectPlaceholder: 'Selecciona una opción',
+    numberPlaceholder: 'Un número',
+    numberFrom: 'Desde {min}',
+    listPlaceholder: 'Un valor por línea',
+    jsonPlaceholder: 'Un valor JSON'
+  },
   sectionHeader: {
     copyLink: 'Copiar enlace a la sección {title}',
     linkCopied: 'Enlace copiado'
@@ -523,7 +593,31 @@ export const es: Messages = {
     unsorted: 'Ordenar columna'
   },
   tabs: {
-    close: 'Cerrar pestaña'
+    close: 'Cerrar pestaña',
+    unsaved: 'Cambios sin guardar'
+  },
+  tagEditor: {
+    label: 'Etiquetas',
+    key: 'Clave',
+    value: 'Valor',
+    keyPlaceholder: 'Ingresa la clave',
+    valuePlaceholder: 'Ingresa el valor',
+    add: 'Agregar etiqueta',
+    remove: 'Quitar etiqueta',
+    undo: 'Deshacer',
+    undoLabel: 'Deshacer la eliminación de la etiqueta {index}',
+    markedForRemoval: 'Esta etiqueta se eliminará cuando guardes.',
+    empty: 'No hay etiquetas asociadas al recurso.',
+    remaining: {
+      one: 'Puedes agregar {count} etiqueta más.',
+      other: 'Puedes agregar {count} etiquetas más.'
+    },
+    limitReached: 'Alcanzaste el límite de {limit} etiquetas.',
+    keyRequired: 'Ingresa una clave.',
+    keyDuplicate: 'Otra etiqueta ya usa esta clave.',
+    keyReserved: 'Las claves no pueden empezar con "{prefix}".',
+    keyInvalid: 'Usa solo letras, números, espacios y + - = . _ : / @.',
+    tooLong: 'Usa {max} caracteres o menos.'
   },
   themeSwitcher: {
     label: 'Tema',
@@ -543,6 +637,15 @@ export const es: Messages = {
   },
   tree: {
     emptyTitle: 'No hay elementos'
+  },
+  unsavedChanges: {
+    title: 'Cambios sin guardar',
+    description: 'Esta página tiene cambios que no guardaste. Si sales ahora, se descartarán.',
+    descriptionSavable:
+      'Esta página tiene cambios que aún no se guardaron. Guárdalos antes de salir o descártalos y continúa.',
+    keepEditing: 'Seguir editando',
+    discard: 'Descartar cambios',
+    save: 'Guardar cambios'
   },
   wizard: {
     stepOf: 'Paso {step} de {total}',

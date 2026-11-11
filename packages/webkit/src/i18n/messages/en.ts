@@ -8,6 +8,24 @@ export const articleIndex = {
   empty: 'No results found.'
 } as const
 
+export const attributeEditor = {
+  add: 'Add new item',
+  remove: 'Remove item',
+  rowAction: '{label} {index}',
+  addGroup: 'Add OR group',
+  empty: 'No items yet.',
+  remaining: {
+    one: 'You can add {count} more item.',
+    other: 'You can add {count} more items.'
+  },
+  limitReached: 'You have reached the limit of {limit} items.',
+  added: 'Item {index} added.',
+  removed: 'Item {index} removed.',
+  group: 'Group {index}',
+  and: 'and',
+  or: 'or'
+} as const
+
 export const avatar = {
   fallbackLabel: 'User avatar',
   imageAlt: 'Avatar'
@@ -29,6 +47,11 @@ export const browserFrame = {
   resizeHeight: 'Resize preview height',
   widthValue: '{value} pixels wide',
   heightValue: '{value} pixels tall'
+} as const
+
+export const buttonGroup = {
+  moreActions: 'More actions',
+  pressed: 'On'
 } as const
 
 export const calendar = {
@@ -99,6 +122,25 @@ export const codeBlock = {
   copy: 'Copy code'
 } as const
 
+export const codeEditor = {
+  label: 'Code editor',
+  original: 'Original',
+  modified: 'Modified',
+  problems: 'Problems',
+  problemCount: {
+    zero: 'No problems',
+    one: '{count} problem',
+    other: '{count} problems'
+  },
+  line: 'Line {line}',
+  error: 'Error',
+  warning: 'Warning',
+  info: 'Info',
+  loading: 'Loading the full editor…',
+  loadFailed: 'The full editor could not load. You can keep editing here.',
+  tabHint: 'Press Escape, then Tab, to leave the editor.'
+} as const
+
 export const collectionPreferences = {
   trigger: 'Preferences',
   title: 'Preferences',
@@ -122,6 +164,18 @@ export const collectionPreferences = {
   density: 'Density',
   comfortable: 'Comfortable',
   compact: 'Compact'
+} as const
+
+export const combobox = {
+  empty: 'No matches',
+  loading: 'Loading options',
+  useValue: 'Use "{value}"',
+  clear: 'Clear',
+  suggestions: 'Suggestions',
+  count: {
+    one: '{count} option',
+    other: '{count} options'
+  }
 } as const
 
 export const command = {
@@ -373,6 +427,27 @@ export const resizable = {
   handle: 'Resize panel'
 } as const
 
+export const schemaForm = {
+  required: 'This field is required.',
+  minLength: 'Use at least {min} characters.',
+  maxLength: 'Use at most {max} characters.',
+  pattern: "This value doesn't match the expected format.",
+  minimum: 'Enter {min} or more.',
+  maximum: 'Enter {max} or less.',
+  number: 'Enter a number.',
+  integer: 'Enter a whole number.',
+  enum: 'Choose one of the options.',
+  minItems: 'Add at least {min} values.',
+  maxItems: 'Add at most {max} values.',
+  listItem: 'Line {line}: {message}',
+  json: 'Enter valid JSON.',
+  selectPlaceholder: 'Select an option',
+  numberPlaceholder: 'A number',
+  numberFrom: 'From {min}',
+  listPlaceholder: 'One value per line',
+  jsonPlaceholder: 'A JSON value'
+} as const
+
 export const sectionHeader = {
   copyLink: 'Copy link to the {title} section',
   linkCopied: 'Link copied'
@@ -512,7 +587,32 @@ export const tableSortButton = {
 } as const
 
 export const tabs = {
-  close: 'Close tab'
+  close: 'Close tab',
+  unsaved: 'Unsaved changes'
+} as const
+
+export const tagEditor = {
+  label: 'Tags',
+  key: 'Key',
+  value: 'Value',
+  keyPlaceholder: 'Enter key',
+  valuePlaceholder: 'Enter value',
+  add: 'Add new tag',
+  remove: 'Remove tag',
+  undo: 'Undo',
+  undoLabel: 'Undo removal of tag {index}',
+  markedForRemoval: 'This tag will be removed when you save.',
+  empty: 'No tags associated with the resource.',
+  remaining: {
+    one: 'You can add {count} more tag.',
+    other: 'You can add {count} more tags.'
+  },
+  limitReached: 'You have reached the limit of {limit} tags.',
+  keyRequired: 'Enter a key.',
+  keyDuplicate: 'This key is already used by another tag.',
+  keyReserved: 'Keys cannot start with "{prefix}".',
+  keyInvalid: 'Use letters, numbers, spaces and + - = . _ : / @ only.',
+  tooLong: 'Use {max} characters or fewer.'
 } as const
 
 export const themeSwitcher = {
@@ -537,6 +637,16 @@ export const tracker = {
 
 export const tree = {
   emptyTitle: 'No items'
+} as const
+
+export const unsavedChanges = {
+  title: 'Unsaved changes',
+  description: "This page has changes you haven't saved. If you leave now, they're discarded.",
+  descriptionSavable:
+    "This page has changes that haven't been saved yet. Save them before you leave, or discard them and continue.",
+  keepEditing: 'Keep editing',
+  discard: 'Discard changes',
+  save: 'Save changes'
 } as const
 
 export const wizard = {
@@ -641,10 +751,12 @@ export const en = {
   alert,
   articleIndex,
   artifactPreview,
+  attributeEditor,
   avatar,
   barList,
   breadcrumb,
   browserFrame,
+  buttonGroup,
   calendar,
   cards,
   carousel,
@@ -654,7 +766,9 @@ export const en = {
   chip,
   citation,
   codeBlock,
+  codeEditor,
   collectionPreferences,
+  combobox,
   command,
   comparisonTable,
   confirmDialog,
@@ -695,6 +809,7 @@ export const en = {
   propertyFilter,
   reasoning,
   resizable,
+  schemaForm,
   sectionHeader,
   settingsSection,
   severityTag,
@@ -718,11 +833,13 @@ export const en = {
   tableSearch,
   tableSortButton,
   tabs,
+  tagEditor,
   themeSwitcher,
   toast,
   toggleGroup,
   toolCall,
   tracker,
   tree,
+  unsavedChanges,
   wizard
 }

@@ -899,6 +899,13 @@
     "./section-module": "./src/components/marketing/section-module/section-module.vue",
     "./section-container": "./src/components/marketing/section-container/section-container.vue",
     "./media-tile": "./src/components/marketing/media-tile/media-tile.vue",
-    "./quote-tabs": "./src/components/marketing/quote-tabs/quote-tabs.vue"
+    "./quote-tabs": "./src/components/marketing/quote-tabs/quote-tabs.vue",
+    "./use-unsaved-changes": "./src/composables/use-unsaved-changes/index.ts",
+    "./attribute-editor": "./src/components/inputs/attribute-editor/attribute-editor.vue",
+    "./button-group": "./src/components/actions/button-group/button-group.vue",
+    "./combobox": "./src/components/inputs/combobox/combobox.vue",
+    "./code-editor": "./src/components/code/code-editor/code-editor.vue",
+    "./tag-editor": "./src/components/inputs/tag-editor/tag-editor.vue",
+    "./schema-form": "./src/components/inputs/schema-form/schema-form.vue"
   }
 }

@@ -85,6 +85,23 @@ export const ptBR: Messages = {
     searchFacet: 'Buscar {facet}',
     empty: 'Nenhum resultado encontrado.'
   },
+  attributeEditor: {
+    add: 'Adicionar item',
+    remove: 'Remover item',
+    rowAction: '{label} {index}',
+    addGroup: 'Adicionar grupo OU',
+    empty: 'Nenhum item ainda.',
+    remaining: {
+      one: 'Você pode adicionar mais {count} item.',
+      other: 'Você pode adicionar mais {count} itens.'
+    },
+    limitReached: 'Você atingiu o limite de {limit} itens.',
+    added: 'Item {index} adicionado.',
+    removed: 'Item {index} removido.',
+    group: 'Grupo {index}',
+    and: 'e',
+    or: 'ou'
+  },
   avatar: {
     fallbackLabel: 'Avatar do usuário',
     imageAlt: 'Avatar'
@@ -103,6 +120,10 @@ export const ptBR: Messages = {
     resizeHeight: 'Redimensionar altura da pré-visualização',
     widthValue: '{value} pixels de largura',
     heightValue: '{value} pixels de altura'
+  },
+  buttonGroup: {
+    moreActions: 'Mais ações',
+    pressed: 'Ativado'
   },
   calendar: {
     placeholder: 'Selecione um período',
@@ -165,6 +186,24 @@ export const ptBR: Messages = {
   codeBlock: {
     copy: 'Copiar código'
   },
+  codeEditor: {
+    label: 'Editor de código',
+    original: 'Original',
+    modified: 'Modificado',
+    problems: 'Problemas',
+    problemCount: {
+      zero: 'Nenhum problema',
+      one: '{count} problema',
+      other: '{count} problemas'
+    },
+    line: 'Linha {line}',
+    error: 'Erro',
+    warning: 'Aviso',
+    info: 'Informação',
+    loading: 'Carregando o editor completo…',
+    loadFailed: 'O editor completo não carregou. Você pode continuar editando aqui.',
+    tabHint: 'Pressione Escape e depois Tab para sair do editor.'
+  },
   collectionPreferences: {
     trigger: 'Preferências',
     title: 'Preferências',
@@ -188,6 +227,17 @@ export const ptBR: Messages = {
     density: 'Densidade',
     comfortable: 'Confortável',
     compact: 'Compacta'
+  },
+  combobox: {
+    empty: 'Nenhum resultado',
+    loading: 'Carregando opções',
+    useValue: 'Usar "{value}"',
+    clear: 'Limpar',
+    suggestions: 'Sugestões',
+    count: {
+      one: '{count} opção',
+      other: '{count} opções'
+    }
   },
   command: {
     empty: 'Nenhum resultado encontrado.',
@@ -404,6 +454,26 @@ export const ptBR: Messages = {
   resizable: {
     handle: 'Redimensionar painel'
   },
+  schemaForm: {
+    required: 'Este campo é obrigatório.',
+    minLength: 'Use pelo menos {min} caracteres.',
+    maxLength: 'Use no máximo {max} caracteres.',
+    pattern: 'Este valor não segue o formato esperado.',
+    minimum: 'Informe {min} ou mais.',
+    maximum: 'Informe {max} ou menos.',
+    number: 'Informe um número.',
+    integer: 'Informe um número inteiro.',
+    enum: 'Escolha uma das opções.',
+    minItems: 'Adicione pelo menos {min} valores.',
+    maxItems: 'Adicione no máximo {max} valores.',
+    listItem: 'Linha {line}: {message}',
+    json: 'Informe um JSON válido.',
+    selectPlaceholder: 'Selecione uma opção',
+    numberPlaceholder: 'Um número',
+    numberFrom: 'A partir de {min}',
+    listPlaceholder: 'Um valor por linha',
+    jsonPlaceholder: 'Um valor JSON'
+  },
   sectionHeader: {
     copyLink: 'Copiar link da seção {title}',
     linkCopied: 'Link copiado'
@@ -523,7 +593,31 @@ export const ptBR: Messages = {
     unsorted: 'Ordenar coluna'
   },
   tabs: {
-    close: 'Fechar aba'
+    close: 'Fechar aba',
+    unsaved: 'Alterações não salvas'
+  },
+  tagEditor: {
+    label: 'Tags',
+    key: 'Chave',
+    value: 'Valor',
+    keyPlaceholder: 'Digite a chave',
+    valuePlaceholder: 'Digite o valor',
+    add: 'Adicionar tag',
+    remove: 'Remover tag',
+    undo: 'Desfazer',
+    undoLabel: 'Desfazer a remoção da tag {index}',
+    markedForRemoval: 'Esta tag será removida quando você salvar.',
+    empty: 'Nenhuma tag associada ao recurso.',
+    remaining: {
+      one: 'Você pode adicionar mais {count} tag.',
+      other: 'Você pode adicionar mais {count} tags.'
+    },
+    limitReached: 'Você atingiu o limite de {limit} tags.',
+    keyRequired: 'Digite uma chave.',
+    keyDuplicate: 'Esta chave já é usada por outra tag.',
+    keyReserved: 'As chaves não podem começar com "{prefix}".',
+    keyInvalid: 'Use apenas letras, números, espaços e + - = . _ : / @.',
+    tooLong: 'Use até {max} caracteres.'
   },
   themeSwitcher: {
     label: 'Tema',
@@ -543,6 +637,16 @@ export const ptBR: Messages = {
   },
   tree: {
     emptyTitle: 'Nenhum item'
+  },
+  unsavedChanges: {
+    title: 'Alterações não salvas',
+    description:
+      'Esta página tem alterações que você não salvou. Se sair agora, elas serão descartadas.',
+    descriptionSavable:
+      'Esta página tem alterações que ainda não foram salvas. Salve-as antes de sair ou descarte-as e continue.',
+    keepEditing: 'Continuar editando',
+    discard: 'Descartar alterações',
+    save: 'Salvar alterações'
   },
   wizard: {
     stepOf: 'Etapa {step} de {total}',
