@@ -334,9 +334,19 @@ describe('Flow (composition compound)', () => {
           path.getAttribute('d')
         )
 
+      // Same path commands and coordinates within 0.1px: under a scale, engines
+      // round the scaled layout to device pixels (Firefox lands 0.02px off).
+      const numbersOf = (testid: string) =>
+        pathsOf(testid).flatMap((d) => (d ?? '').match(/-?\d+(\.\d+)?/g)?.map(Number) ?? [])
+      const commandsOf = (testid: string) => pathsOf(testid).map((d) => d?.replace(/[-\d.]+/g, '#'))
+
       await waitFor(() => {
         expect(pathsOf('flow-plain').length).toBeGreaterThan(0)
-        expect(pathsOf('flow-scaled')).toEqual(pathsOf('flow-plain'))
+        expect(commandsOf('flow-scaled')).toEqual(commandsOf('flow-plain'))
+        const plain = numbersOf('flow-plain')
+        const scaled = numbersOf('flow-scaled')
+        expect(scaled).toHaveLength(plain.length)
+        scaled.forEach((value, index) => expect(Math.abs(value - plain[index]!)).toBeLessThan(0.1))
       })
     })
 
