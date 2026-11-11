@@ -9,6 +9,23 @@ export const es: Messages = {
     searchFacet: 'Buscar {facet}',
     empty: 'No se encontraron resultados.'
   },
+  attributeEditor: {
+    add: 'Agregar elemento',
+    remove: 'Quitar elemento',
+    rowAction: '{label} {index}',
+    addGroup: 'Agregar grupo O',
+    empty: 'Todavía no hay elementos.',
+    remaining: {
+      one: 'Puedes agregar {count} elemento más.',
+      other: 'Puedes agregar {count} elementos más.'
+    },
+    limitReached: 'Alcanzaste el límite de {limit} elementos.',
+    added: 'Elemento {index} agregado.',
+    removed: 'Elemento {index} quitado.',
+    group: 'Grupo {index}',
+    and: 'y',
+    or: 'o'
+  },
   avatar: {
     fallbackLabel: 'Avatar del usuario',
     imageAlt: 'Avatar'
@@ -27,6 +44,9 @@ export const es: Messages = {
     resizeHeight: 'Cambiar el alto de la vista previa',
     widthValue: '{value} píxeles de ancho',
     heightValue: '{value} píxeles de alto'
+  },
+  buttonGroup: {
+    todo: 'todo'
   },
   calendar: {
     placeholder: 'Selecciona un rango de fechas',
@@ -89,6 +109,9 @@ export const es: Messages = {
   codeBlock: {
     copy: 'Copiar código'
   },
+  codeEditor: {
+    todo: 'todo'
+  },
   collectionPreferences: {
     trigger: 'Preferencias',
     title: 'Preferencias',
@@ -112,6 +135,9 @@ export const es: Messages = {
     density: 'Densidad',
     comfortable: 'Cómoda',
     compact: 'Compacta'
+  },
+  combobox: {
+    todo: 'todo'
   },
   command: {
     empty: 'No se encontraron resultados.',
@@ -328,6 +354,9 @@ export const es: Messages = {
   resizable: {
     handle: 'Redimensionar panel'
   },
+  schemaForm: {
+    todo: 'todo'
+  },
   sectionHeader: {
     copyLink: 'Copiar enlace a la sección {title}',
     linkCopied: 'Enlace copiado'
@@ -447,7 +476,11 @@ export const es: Messages = {
     unsorted: 'Ordenar columna'
   },
   tabs: {
-    close: 'Cerrar pestaña'
+    close: 'Cerrar pestaña',
+    unsaved: 'Cambios sin guardar'
+  },
+  tagEditor: {
+    todo: 'todo'
   },
   themeSwitcher: {
     label: 'Tema',
@@ -467,6 +500,15 @@ export const es: Messages = {
   },
   tree: {
     emptyTitle: 'No hay elementos'
+  },
+  unsavedChanges: {
+    title: 'Cambios sin guardar',
+    description: 'Esta página tiene cambios que no guardaste. Si sales ahora, se descartarán.',
+    descriptionSavable:
+      'Esta página tiene cambios que aún no se guardaron. Guárdalos antes de salir o descártalos y continúa.',
+    keepEditing: 'Seguir editando',
+    discard: 'Descartar cambios',
+    save: 'Guardar cambios'
   },
   wizard: {
     stepOf: 'Paso {step} de {total}',

@@ -884,6 +884,8 @@
     "./section-module": "./src/components/marketing/section-module/section-module.vue",
     "./section-container": "./src/components/marketing/section-container/section-container.vue",
     "./media-tile": "./src/components/marketing/media-tile/media-tile.vue",
-    "./quote-tabs": "./src/components/marketing/quote-tabs/quote-tabs.vue"
+    "./quote-tabs": "./src/components/marketing/quote-tabs/quote-tabs.vue",
+    "./use-unsaved-changes": "./src/composables/use-unsaved-changes/index.ts",
+    "./attribute-editor": "./src/components/inputs/attribute-editor/attribute-editor.vue"
   }
 }

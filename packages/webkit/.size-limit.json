@@ -926,5 +926,10 @@
     "name": "log-view-content",
     "path": "src/components/code/log-view/log-view-content.vue",
     "limit": "22.75 KB"
+  },
+  {
+    "name": "attribute-editor",
+    "path": "src/components/inputs/attribute-editor/attribute-editor.vue",
+    "limit": "20 KB"
   }
 ]

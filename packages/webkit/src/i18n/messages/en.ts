@@ -8,6 +8,24 @@ export const articleIndex = {
   empty: 'No results found.'
 } as const
 
+export const attributeEditor = {
+  add: 'Add new item',
+  remove: 'Remove item',
+  rowAction: '{label} {index}',
+  addGroup: 'Add OR group',
+  empty: 'No items yet.',
+  remaining: {
+    one: 'You can add {count} more item.',
+    other: 'You can add {count} more items.'
+  },
+  limitReached: 'You have reached the limit of {limit} items.',
+  added: 'Item {index} added.',
+  removed: 'Item {index} removed.',
+  group: 'Group {index}',
+  and: 'and',
+  or: 'or'
+} as const
+
 export const avatar = {
   fallbackLabel: 'User avatar',
   imageAlt: 'Avatar'
@@ -29,6 +47,10 @@ export const browserFrame = {
   resizeHeight: 'Resize preview height',
   widthValue: '{value} pixels wide',
   heightValue: '{value} pixels tall'
+} as const
+
+export const buttonGroup = {
+  todo: 'todo'
 } as const
 
 export const calendar = {
@@ -99,6 +121,10 @@ export const codeBlock = {
   copy: 'Copy code'
 } as const
 
+export const codeEditor = {
+  todo: 'todo'
+} as const
+
 export const collectionPreferences = {
   trigger: 'Preferences',
   title: 'Preferences',
@@ -122,6 +148,10 @@ export const collectionPreferences = {
   density: 'Density',
   comfortable: 'Comfortable',
   compact: 'Compact'
+} as const
+
+export const combobox = {
+  todo: 'todo'
 } as const
 
 export const command = {
@@ -373,6 +403,10 @@ export const resizable = {
   handle: 'Resize panel'
 } as const
 
+export const schemaForm = {
+  todo: 'todo'
+} as const
+
 export const sectionHeader = {
   copyLink: 'Copy link to the {title} section',
   linkCopied: 'Link copied'
@@ -512,7 +546,12 @@ export const tableSortButton = {
 } as const
 
 export const tabs = {
-  close: 'Close tab'
+  close: 'Close tab',
+  unsaved: 'Unsaved changes'
+} as const
+
+export const tagEditor = {
+  todo: 'todo'
 } as const
 
 export const themeSwitcher = {
@@ -539,6 +578,16 @@ export const tree = {
   emptyTitle: 'No items'
 } as const
 
+export const unsavedChanges = {
+  title: 'Unsaved changes',
+  description: "This page has changes you haven't saved. If you leave now, they're discarded.",
+  descriptionSavable:
+    "This page has changes that haven't been saved yet. Save them before you leave, or discard them and continue.",
+  keepEditing: 'Keep editing',
+  discard: 'Discard changes',
+  save: 'Save changes'
+} as const
+
 export const wizard = {
   stepOf: 'Step {step} of {total}',
   optional: 'Optional',
@@ -551,10 +600,12 @@ export const wizard = {
 export const en = {
   alert,
   articleIndex,
+  attributeEditor,
   avatar,
   barList,
   breadcrumb,
   browserFrame,
+  buttonGroup,
   calendar,
   cards,
   carousel,
@@ -562,7 +613,9 @@ export const en = {
   chartCard,
   chip,
   codeBlock,
+  codeEditor,
   collectionPreferences,
+  combobox,
   command,
   comparisonTable,
   confirmDialog,
@@ -600,6 +653,7 @@ export const en = {
   popover,
   propertyFilter,
   resizable,
+  schemaForm,
   sectionHeader,
   settingsSection,
   severityTag,
@@ -621,10 +675,12 @@ export const en = {
   tableSearch,
   tableSortButton,
   tabs,
+  tagEditor,
   themeSwitcher,
   toast,
   toggleGroup,
   tracker,
   tree,
+  unsavedChanges,
   wizard
 }

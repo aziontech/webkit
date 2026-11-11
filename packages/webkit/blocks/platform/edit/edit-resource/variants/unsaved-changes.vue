@@ -6,6 +6,7 @@
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
@@ -29,6 +30,7 @@
   import Tabs from '@aziontech/webkit/tabs'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   const navGroups = [
@@ -255,7 +257,7 @@
   const theme = ref('system')
   const railWidth = ref(null)
   const railCollapsed = ref(false)
-  const activeTab = ref('main-settings')
+  const currentTab = ref('main-settings')
 
   watch(paletteOpen, () => {
     paletteQuery.value = ''
@@ -378,8 +380,34 @@
 
   const form = reactive({ ...structuredClone(record), debugRules: true })
   const saving = ref(false)
-  const baseline = ref(JSON.stringify(record))
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
+
+  const commitSave = () =>
+    new Promise((resolve) => {
+      saving.value = true
+      setTimeout(() => {
+        guard.commit()
+        saving.value = false
+        resolve()
+      }, 900)
+    })
+
+  const guard = useUnsavedChanges(() => form, {
+    onDiscard: (baseline) => Object.assign(form, baseline),
+    onSave: commitSave
+  })
+  guard.commit(record)
+  const dirty = guard.isDirty
+  const leaveDialog = guard.dialogProps
+  const leaveLabels = guard.labels
+
+  const activeTab = computed({
+    get: () => currentTab.value,
+    set: async (value) => {
+      if (!value || value === currentTab.value) return
+      if (currentTab.value === 'main-settings' && !(await guard.confirmLeave())) return
+      currentTab.value = value
+    }
+  })
 
   const nameError = ref(false)
   watch(
@@ -395,14 +423,10 @@
       nextTick(() => document.getElementById('resource-name')?.focus())
       return
     }
-    saving.value = true
-    setTimeout(() => {
-      baseline.value = JSON.stringify(form)
-      saving.value = false
-    }, 900)
+    commitSave()
   }
 
-  const discard = () => Object.assign(form, JSON.parse(baseline.value))
+  const discard = () => guard.discard()
 </script>
 
 <template>
@@ -823,6 +847,7 @@
               :key="tab.value"
               :value="tab.value"
               :label="tab.label"
+              :dirty="tab.value === 'main-settings' && dirty"
             />
           </PageTabs>
 
@@ -999,6 +1024,35 @@
                     </template>
                   </SaveBar>
                 </Transition>
+
+                <ConfirmDialog
+                  v-bind="leaveDialog"
+                  data-testid="unsaved-changes-dialog"
+                >
+                  <template #actions>
+                    <Button
+                      :label="leaveLabels.keepEditing"
+                      kind="transparent"
+                      size="medium"
+                      :disabled="leaveDialog.loading"
+                      @click="guard.keepEditing"
+                    />
+                    <Button
+                      :label="leaveLabels.discard"
+                      kind="outlined"
+                      size="medium"
+                      :disabled="leaveDialog.loading"
+                      @click="guard.discardAndLeave"
+                    />
+                    <Button
+                      :label="leaveLabels.save"
+                      kind="primary"
+                      size="medium"
+                      :loading="leaveDialog.loading"
+                      @click="guard.saveAndLeave"
+                    />
+                  </template>
+                </ConfirmDialog>
               </div>
             </div>
           </section>

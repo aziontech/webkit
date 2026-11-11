@@ -9,6 +9,23 @@ export const ptBR: Messages = {
     searchFacet: 'Buscar {facet}',
     empty: 'Nenhum resultado encontrado.'
   },
+  attributeEditor: {
+    add: 'Adicionar item',
+    remove: 'Remover item',
+    rowAction: '{label} {index}',
+    addGroup: 'Adicionar grupo OU',
+    empty: 'Nenhum item ainda.',
+    remaining: {
+      one: 'Você pode adicionar mais {count} item.',
+      other: 'Você pode adicionar mais {count} itens.'
+    },
+    limitReached: 'Você atingiu o limite de {limit} itens.',
+    added: 'Item {index} adicionado.',
+    removed: 'Item {index} removido.',
+    group: 'Grupo {index}',
+    and: 'e',
+    or: 'ou'
+  },
   avatar: {
     fallbackLabel: 'Avatar do usuário',
     imageAlt: 'Avatar'
@@ -27,6 +44,9 @@ export const ptBR: Messages = {
     resizeHeight: 'Redimensionar altura da pré-visualização',
     widthValue: '{value} pixels de largura',
     heightValue: '{value} pixels de altura'
+  },
+  buttonGroup: {
+    todo: 'todo'
   },
   calendar: {
     placeholder: 'Selecione um período',
@@ -89,6 +109,9 @@ export const ptBR: Messages = {
   codeBlock: {
     copy: 'Copiar código'
   },
+  codeEditor: {
+    todo: 'todo'
+  },
   collectionPreferences: {
     trigger: 'Preferências',
     title: 'Preferências',
@@ -112,6 +135,9 @@ export const ptBR: Messages = {
     density: 'Densidade',
     comfortable: 'Confortável',
     compact: 'Compacta'
+  },
+  combobox: {
+    todo: 'todo'
   },
   command: {
     empty: 'Nenhum resultado encontrado.',
@@ -328,6 +354,9 @@ export const ptBR: Messages = {
   resizable: {
     handle: 'Redimensionar painel'
   },
+  schemaForm: {
+    todo: 'todo'
+  },
   sectionHeader: {
     copyLink: 'Copiar link da seção {title}',
     linkCopied: 'Link copiado'
@@ -447,7 +476,11 @@ export const ptBR: Messages = {
     unsorted: 'Ordenar coluna'
   },
   tabs: {
-    close: 'Fechar aba'
+    close: 'Fechar aba',
+    unsaved: 'Alterações não salvas'
+  },
+  tagEditor: {
+    todo: 'todo'
   },
   themeSwitcher: {
     label: 'Tema',
@@ -467,6 +500,16 @@ export const ptBR: Messages = {
   },
   tree: {
     emptyTitle: 'Nenhum item'
+  },
+  unsavedChanges: {
+    title: 'Alterações não salvas',
+    description:
+      'Esta página tem alterações que você não salvou. Se sair agora, elas serão descartadas.',
+    descriptionSavable:
+      'Esta página tem alterações que ainda não foram salvas. Salve-as antes de sair ou descarte-as e continue.',
+    keepEditing: 'Continuar editando',
+    discard: 'Descartar alterações',
+    save: 'Salvar alterações'
   },
   wizard: {
     stepOf: 'Etapa {step} de {total}',
