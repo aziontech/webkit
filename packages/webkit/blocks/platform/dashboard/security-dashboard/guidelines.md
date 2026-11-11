@@ -127,6 +127,7 @@ replaces the whole grid with one bordered `EmptyState` and its `Add rule set` bu
 - Default: rules in place, populated tiles, charts, attention list and table.
 - Loading: every tile, chart and the table hold a `Skeleton`; Needs attention shows three placeholder rows.
 - Empty: no rule set yet; tiles read as dashes and one bordered `EmptyState` offers `Add rule set` instead of a grid of empty charts.
+- Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

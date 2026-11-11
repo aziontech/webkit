@@ -33,7 +33,7 @@
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -385,6 +385,14 @@
       certificate: 'example.com wildcard',
       generated: false
     }
+  ]
+
+  const domainColumns = [
+    { accessorKey: 'domain', header: 'Domain', principal: true, grow: 2 },
+    { accessorKey: 'environment', header: 'Environment' },
+    { accessorKey: 'policy', header: 'Policy' },
+    { accessorKey: 'certificate', header: 'Certificate' },
+    { id: 'actions', kind: 'action', hideable: false }
   ]
 
   const linkedEnvironments = [
@@ -1160,96 +1168,77 @@
                       <Card :padded="false">
                         <template #content>
                           <div class="flex min-w-0 flex-col">
-                            <Table :bordered="false">
-                              <Table.Header>
-                                <Table.Row>
-                                  <Table.HeadCell principal>Domain</Table.HeadCell>
-                                  <Table.HeadCell>Environment</Table.HeadCell>
-                                  <Table.HeadCell>Policy</Table.HeadCell>
-                                  <Table.HeadCell>Certificate</Table.HeadCell>
-                                  <Table.HeadCell kind="action" />
-                                </Table.Row>
-                              </Table.Header>
-
-                              <Table.Body>
-                                <Table.Row
-                                  v-for="entry in domains"
-                                  :key="entry.id"
+                            <TableRoot
+                              :data="domains"
+                              :columns="domainColumns"
+                              row-key="id"
+                              :bordered="false"
+                            >
+                              <template #cell-environment="{ value }">
+                                <Tag
+                                  v-if="value"
+                                  severity="secondary"
+                                  size="medium"
+                                  rounded
+                                  icon="ai ai-layers"
+                                  :label="value"
+                                />
+                              </template>
+                              <template #cell-policy="{ row, value }">
+                                <template v-if="row.environment">{{ value }}</template>
+                              </template>
+                              <template #cell-certificate="{ value }">
+                                <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+                                  <i
+                                    class="pi pi-verified shrink-0 text-(--text-muted)"
+                                    aria-hidden="true"
+                                  />
+                                  <span class="min-w-0 truncate">{{ value }}</span>
+                                </span>
+                              </template>
+                              <template #cell-actions="{ row }">
+                                <DropdownMenu
+                                  v-if="!row.generated"
+                                  placement="bottom-end"
                                 >
-                                  <Table.Cell principal>{{ entry.domain }}</Table.Cell>
-                                  <Table.Cell>
-                                    <Tag
-                                      v-if="entry.environment"
-                                      severity="secondary"
-                                      size="medium"
-                                      rounded
-                                      icon="ai ai-layers"
-                                      :label="entry.environment"
-                                    />
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <Tag
-                                      v-if="entry.environment"
-                                      severity="secondary"
-                                      size="medium"
-                                      rounded
-                                      :label="entry.policy"
-                                    />
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <Tag
-                                      severity="secondary"
-                                      size="medium"
-                                      rounded
-                                      icon="pi pi-verified"
-                                      :label="entry.certificate"
-                                    />
-                                  </Table.Cell>
-                                  <Table.Cell kind="action">
-                                    <DropdownMenu
-                                      v-if="!entry.generated"
-                                      placement="bottom-end"
+                                  <DropdownMenu.Trigger>
+                                    <Tooltip text="Row actions">
+                                      <IconButton
+                                        icon="pi pi-ellipsis-h"
+                                        kind="outlined"
+                                        size="small"
+                                        :disabled="saving"
+                                        :aria-label="`Actions for ${row.domain}`"
+                                      />
+                                    </Tooltip>
+                                  </DropdownMenu.Trigger>
+                                  <DropdownMenu.Group>
+                                    <DropdownMenu.Option
+                                      value="edit"
+                                      label="Edit"
                                     >
-                                      <DropdownMenu.Trigger>
-                                        <Tooltip text="Row actions">
-                                          <IconButton
-                                            icon="pi pi-ellipsis-h"
-                                            kind="outlined"
-                                            size="small"
-                                            :disabled="saving"
-                                            :aria-label="`Actions for ${entry.domain}`"
-                                          />
-                                        </Tooltip>
-                                      </DropdownMenu.Trigger>
-                                      <DropdownMenu.Group>
-                                        <DropdownMenu.Option
-                                          value="edit"
-                                          label="Edit"
-                                        >
-                                          <template #left
-                                            ><i
-                                              class="pi pi-pencil"
-                                              aria-hidden="true"
-                                          /></template>
-                                        </DropdownMenu.Option>
-                                      </DropdownMenu.Group>
-                                      <DropdownMenu.Group>
-                                        <DropdownMenu.Option
-                                          value="delete"
-                                          label="Delete"
-                                        >
-                                          <template #left
-                                            ><i
-                                              class="pi pi-trash"
-                                              aria-hidden="true"
-                                          /></template>
-                                        </DropdownMenu.Option>
-                                      </DropdownMenu.Group>
-                                    </DropdownMenu>
-                                  </Table.Cell>
-                                </Table.Row>
-                              </Table.Body>
-                            </Table>
+                                      <template #left
+                                        ><i
+                                          class="pi pi-pencil"
+                                          aria-hidden="true"
+                                      /></template>
+                                    </DropdownMenu.Option>
+                                  </DropdownMenu.Group>
+                                  <DropdownMenu.Group>
+                                    <DropdownMenu.Option
+                                      value="delete"
+                                      label="Delete"
+                                    >
+                                      <template #left
+                                        ><i
+                                          class="pi pi-trash"
+                                          aria-hidden="true"
+                                      /></template>
+                                    </DropdownMenu.Option>
+                                  </DropdownMenu.Group>
+                                </DropdownMenu>
+                              </template>
+                            </TableRoot>
 
                             <div
                               class="flex flex-wrap items-center justify-between gap-(--spacing-xs) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-sm)"

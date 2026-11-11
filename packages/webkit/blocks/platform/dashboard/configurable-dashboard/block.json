@@ -39,6 +39,11 @@
       "name": "Empty",
       "summary": "Nothing recorded yet. Each card keeps its place and size and shows its empty state, so the reader can still arrange the dashboard before any data arrives.",
       "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the cards failed: every card keeps its place, size and header, with a danger Alert that names the card that did not load and offers Retry.",
+      "file": "variants/failed.vue"
     }
   ]
 }

@@ -29,12 +29,12 @@
     },
     {
       "name": "WithPresets",
-      "summary": "Consumer presets drive the two-part trigger: the left dropdown applies a range in one click; the right calendar fine-tunes it.",
+      "summary": "Consumer presets drive the two-part trigger: the left dropdown applies a range in one click; the right calendar fine-tunes it. The presets count back from a fixed reference day, so server and browser render the same range.",
       "file": "with-presets.vue"
     },
     {
       "name": "MinMax",
-      "summary": "The `min` and `max` bounds (±2 months) disable days outside the allowed window and clamp navigation.",
+      "summary": "The `min` and `max` bounds (±2 months) around a fixed reference day disable days outside the allowed window and clamp navigation.",
       "file": "min-max.vue"
     },
     {

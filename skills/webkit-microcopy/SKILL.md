@@ -2,7 +2,7 @@
 name: webkit-microcopy
 description: The writing rules for Azion product interfaces (Console). Use whenever you author or review any interface string: page and section titles, field labels, helper text, buttons, menu and nav items, table headers, tags, tooltips, empty states, toasts, dialogs, validation messages. Fixes punctuation and capitalization (no em dash, no ampersand, no parentheses in labels, no bold in running text, sentence case with Azion product names capitalized), which surface each kind of copy belongs on (label names, description constrains, Alert explains impact, Popover defines, Tag states), one word per concept (Select not Pick, Include dependencies not Additional dependencies, Deployment topology not Composition, Review and deploy not Build and activate, Application not Edge Application, and no `edge` as a prefix or a location), navigation and IA naming, and copy that survives every breakpoint.
 status: active
-last_updated: 2026-08-20
+last_updated: 2026-11-11
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-prefer-over-custom, review]
 ---
@@ -137,7 +137,8 @@ section heading, table header, dialog title, button, toast, empty state.
 | `Remove`            | `Delete`                                 | Detaches a reference; the object survives                     |
 | `Delete`            | `Remove`, `Destroy`, `Erase`             | Permanent. Always behind a confirmation that repeats the verb |
 | `Save`              | `Apply`, `Confirm`, `Submit`, `OK`       | Persists edits to an existing object                          |
-| `Cancel`            | `Back`, `Discard`, `Nevermind`           | Always exactly `Cancel`                                       |
+| `Cancel`            | `Back`, `Nevermind`, `Close`             | Abandons a create flow or a dialog. Always exactly `Cancel`   |
+| `Discard`           | `Cancel`, `Reset`, `Revert`, `Undo`      | Settings save bar only: restores the saved record in place    |
 | `Retry`             | `Try again`, `Reload`                    | After a failed request                                        |
 
 **Nouns.** `deployment`, `release`, `version`, `workload`, `application`, `firewall`, `connector`,

@@ -45,6 +45,13 @@ Tables are **data-driven**, not hand-authored rows: pass `:data` + `:columns` an
 through a `#cell-<accessorKey>` slot. Never build `<tr>`/`<td>` by hand, and never restyle the Table's
 internals — compose inside its slots.
 
+`@aziontech/webkit/table-root` is the same data-driven root without the compound parts attached, so a
+file that only renders `:data` + `:columns` imports it to stay small; `TableRoot :data :columns` is the
+data-driven `Table`, not a hand-composed one. The parts (`Table.Header`, `Table.Row`, `Table.Cell`, or
+`table-row` / `table-cell` imports) are for a component author building a new table primitive. A screen
+or block never composes rows from them, even a short static list: a hand-composed table loses the
+stacked layout, the column model and the cell slots.
+
 ### Bind it to `useCollection` — the default for any list
 
 A table that lists records is a collection: bind it to `useCollection`

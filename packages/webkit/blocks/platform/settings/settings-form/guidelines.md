@@ -36,7 +36,7 @@ One `SettingRow` per setting, with a `title` and a one-sentence `description`. T
 
 ### E. Save — `SaveBar`, `Button` (required)
 
-SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Cancel and the primary Save, both medium. While saving, the `fieldset` and Cancel are disabled and Save takes `:loading`. Cancel puts back the last saved values and clears the errors. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, and SavePerCard puts an optional docs `Link` on the footer's start.
+SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard puts back the last saved values and clears the errors. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, and SavePerCard puts an optional docs `Link` on the footer's start.
 
 ## Do
 
@@ -62,7 +62,7 @@ SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlin
 - **Choices:** sentence case and no parentheses, e.g. "Team default", "Standard protection".
 - **Section heading:** a short topic noun, e.g. "General", "Notifications".
 - **Row title:** names the setting in one to three words, e.g. "Timezone"; description: one sentence with a period, e.g. "Times across the app are shown in this zone."
-- **Save:** exactly "Save" for the footer and every group or card; Cancel is exactly "Cancel".
+- **Save:** exactly "Save" for the footer and every group or card; Discard is exactly "Discard", never "Cancel": it restores the saved values and the reader stays on the page.
 - **Errors:** what is wrong plus what to do, e.g. "Enter a valid email address."
 - **Docs link:** names the topic, e.g. "Learn more about the Preview Toolbar".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
@@ -73,12 +73,12 @@ SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlin
 - Each group is a real `fieldset`; SaveAll gives it a visually hidden `legend` ("Profile settings").
 - Every control has an `aria-label` that repeats its row title; errors are linked with `aria-describedby` only while they show.
 - Disabling the `fieldset` while saving takes every control out of interaction at once; Save announces its loading state.
-- Focus order follows reading order: the rows from top to bottom, then Cancel and Save.
+- Focus order follows reading order: the rows from top to bottom, then Discard and Save.
 
 ## States
 
-- SaveAll: Profile with General, Preferences and Notifications in one fieldset and one sticky Cancel and Save footer.
-- Saving: the whole fieldset and Cancel are disabled and Save shows its loading state.
+- SaveAll: Profile with General, Preferences and Notifications in one fieldset and one sticky Discard and Save footer.
+- Saving: the whole fieldset and Discard are disabled and Save shows its loading state.
 - SavePerGroup: Preferences split into General and Notifications cards, each with its own secondary Save.
 - SavingOneGroup: General is saving with its rows disabled while Notifications stays editable.
 - SavePerCard: Project settings with Preview Toolbar and Deployment Protection cards, each with an info `Alert`, its fields and its own Save.

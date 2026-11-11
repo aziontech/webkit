@@ -6,6 +6,8 @@ import vue from '@vitejs/plugin-vue'
 import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
 
+import { renderOnServer } from './src/test/server-render'
+
 const EXPORTS: Record<string, string> = JSON.parse(
   readFileSync(new URL('./package.json', import.meta.url), 'utf8')
 ).exports
@@ -36,7 +38,8 @@ export default defineConfig({
       enabled: true,
       provider: playwright(),
       headless: true,
-      instances: [{ browser: 'chromium' }]
+      instances: [{ browser: 'chromium' }],
+      commands: { renderOnServer }
     },
     coverage: {
       provider: 'v8',

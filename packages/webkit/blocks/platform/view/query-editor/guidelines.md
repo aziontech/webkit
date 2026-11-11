@@ -102,6 +102,7 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 - EmptyDatabase: a database with no tables; the side panel says so and the pane shows the Create Table empty state.
 - Query: the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
 - Templates: the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer behind the Templates button.
+- Failed: the selected table's rows did not load; the Data view shows a danger `Alert` that names the table and offers Retry.
 
 ## Related
 

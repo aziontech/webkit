@@ -2,7 +2,7 @@
 name: webkit-create-surface
 description: Where a create or settings form LIVES, and what it is built from. Use whenever you add or review a flow that creates a resource, edits one, or asks a question that commits — a "New X" button, a create route, an "add" affordance inside a detail page, a settings tab. Fixes the surface (a first-level resource creates on a PAGE; anything created inside a resource opens a DRAWER; nothing creates in a dialog), the anatomy every one of them shares (Section band with a Hint glyph over a flush card of rows, control right or stacked when wide), what belongs behind the collapsed Advanced band (the endpoint's not-required, already-defaulted fields), and the commit model (create pages carry a persistent bar; settings pages mount one only once something is edited), and how a flow picks an existing resource (an Existing / New band whose picker carries search past 7 options and Load more).
 status: active
-last_updated: 2026-10-28
+last_updated: 2026-11-11
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-accessibility, webkit-prefer-over-custom]
 ---
@@ -150,7 +150,9 @@ for work nobody started, spending height to say there is nothing to do. Mount it
 it — a hidden bar still reserves its space.
 
 - **A page-level commit owes a Discard.** Without it the only way back is undoing each field by hand
-  and hoping the bar goes away.
+  and hoping the bar goes away. The word is exactly `Discard` (outlined, before Save): it restores the
+  saved record and the reader stays on the page. `Cancel` is for leaving a create page or closing a
+  dialog, so a settings bar never says Cancel (`/webkit-microcopy` § Verbs).
 - **Per-band saves are for pages whose bands are genuinely separate records** (an application's build
   configuration vs. its branch controls). When the page is ONE record, a per-band Save asks which part
   of one record the reader meant.

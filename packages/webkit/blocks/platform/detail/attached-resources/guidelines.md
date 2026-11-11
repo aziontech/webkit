@@ -21,13 +21,13 @@ A short list of the things one resource is attached to, shown in place inside it
 
 `Card :padded="false"` holds the table and the footer as one surface, so the table runs edge to edge and the footer rule meets the card border. It sits as the body of a `SettingsSection` band of the Settings tab, under that section's heading.
 
-### B. Attached table — `TableRoot`, `TableHeader`, `TableRow`, `TableHeadCell`, `TableBody`, `TableCell` (required)
+### B. Attached table — `TableRoot` (required)
 
-A composed `TableRoot :bordered="false"` with one row per attached record. The first column is `principal` and carries the record's name (the domain). The last head cell and cell are `kind="action"` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead.
+A data-driven `TableRoot :bordered="false"` given `:data`, `:columns` and `row-key`, one row per attached record, each cell rendered through a `#cell-<accessorKey>` slot. The first column is `principal` and carries the record's name (the domain). The last column is `kind: 'action'` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead.
 
-### C. Attribute tags — `Tag` (optional)
+### C. Environment chip — `Tag` (optional)
 
-Every attribute cell is a `Tag` with `severity="secondary"`, `size="medium"` and `rounded`; Environment carries the layers glyph and Certificate the verified glyph. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
+One chip per row, following `skills/webkit-tables`: Environment is a `Tag` with `severity="secondary"`, `size="medium"`, `rounded` and the layers glyph. Policy is plain text and Certificate is the verified glyph beside plain text, so the row keeps one chip. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
 
 ### D. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `Tooltip`, `IconButton`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
@@ -40,7 +40,7 @@ Below a top rule, a muted count on the left ("3 domains") and an outlined medium
 ## Do
 
 - Keep the card unpadded and the table borderless, so there is one border around the whole list.
-- Use the same `Tag` recipe (secondary, medium, rounded) for every attribute cell, so the columns read as one set.
+- Keep one chip per row: the Environment `Tag` (secondary, medium, rounded); every other attribute is plain text, with a glyph where it helps.
 - Leave a cell empty when the attribute does not apply to that record.
 - Hide the row menu on records the user cannot change, rather than showing disabled options.
 - Count the records in the footer with the right singular or plural noun.
@@ -60,7 +60,7 @@ Below a top rule, a muted count on the left ("3 domains") and an outlined medium
 - **Add action:** `Add <Module>` with the entity's capitalization, e.g. "Add Domain"; never "Create" inside a resource.
 - **Count:** a number and the noun, singular or plural, e.g. "1 domain", "3 domains".
 - **Row menu:** single verbs, e.g. "Edit", "Delete"; the trigger tooltip reads "Row actions".
-- **Tag values:** the value as the product names it, e.g. "Production", "Managed".
+- **Attribute values:** the value as the product names it, e.g. "Production", "Managed".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility

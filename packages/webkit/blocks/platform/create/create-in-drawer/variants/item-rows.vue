@@ -242,9 +242,13 @@
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
 
-  const breadcrumb = [{ label: 'Forms', href: '/forms' }, { label: 'ItemGroups in a drawer' }]
+  const breadcrumb = [
+    { label: 'Resources', href: '/resources' },
+    { label: 'storefront', href: '/resources/storefront' },
+    { label: 'Origins' }
+  ]
 
-  const activeId = ref('forms')
+  const activeId = ref('resources')
   const navOpen = ref(false)
   const paletteOpen = ref(false)
   const paletteQuery = ref('')
@@ -329,12 +333,12 @@
     if (id === 'sidebar') railCollapsed.value = !railCollapsed.value
   }
 
-  const runtimes = [
-    { label: 'Node.js 20', value: 'node20' },
-    { label: 'Python 3.12', value: 'python312' },
-    { label: 'Go 1.22', value: 'go122' }
+  const protocols = [
+    { label: 'HTTPS only', value: 'https' },
+    { label: 'HTTP only', value: 'http' },
+    { label: 'Match the request', value: 'match' }
   ]
-  const runtimeLabel = (value) => runtimes.find((option) => option.value === value)?.label ?? ''
+  const protocolLabel = (value) => protocols.find((option) => option.value === value)?.label ?? ''
   const regions = [
     { label: 'US East (Washington)', value: 'us-east' },
     { label: 'South America (São Paulo)', value: 'sa-east' },
@@ -342,22 +346,23 @@
   ]
   const regionLabel = (value) => regions.find((option) => option.value === value)?.label ?? ''
 
-  const services = ref([
-    { id: 'svc-1', name: 'checkout-api', runtime: 'node20' },
-    { id: 'svc-2', name: 'image-resizer', runtime: 'go122' }
+  const origins = ref([
+    { id: 'origin-1', name: 'storefront-bucket', protocol: 'https' },
+    { id: 'origin-2', name: 'legacy-cms', protocol: 'http' }
   ])
+  let nextOrigin = 3
 
   const drawerOpen = ref(false)
   const blankForm = {
     name: '',
     description: '',
-    runtime: '',
+    protocol: '',
     region: 'us-east',
     active: true,
     logging: false
   }
   const form = reactive({ ...blankForm })
-  const errors = reactive({ name: '', runtime: '' })
+  const errors = reactive({ name: '', protocol: '' })
   const submitting = ref(false)
 
   const openCreate = () => {
@@ -368,7 +373,7 @@
     if (!open) return
     Object.assign(form, blankForm)
     errors.name = ''
-    errors.runtime = ''
+    errors.protocol = ''
   })
 
   const NAME_PATTERN = /^[a-z0-9-]+$/
@@ -379,15 +384,15 @@
     else if (!NAME_PATTERN.test(name))
       errors.name = 'Use lower-case letters, numbers, and hyphen only.'
     else errors.name = ''
-    errors.runtime = form.runtime ? '' : 'This field is required.'
-    return !errors.name && !errors.runtime
+    errors.protocol = form.protocol ? '' : 'This field is required.'
+    return !errors.name && !errors.protocol
   }
 
   const submit = () => {
     if (!validate()) return
-    services.value = [
-      { id: `svc-${Date.now()}`, name: form.name.trim(), runtime: form.runtime },
-      ...services.value
+    origins.value = [
+      { id: `origin-${nextOrigin++}`, name: form.name.trim(), protocol: form.protocol },
+      ...origins.value
     ]
     drawerOpen.value = false
   }
@@ -808,13 +813,13 @@
       >
         <main class="flex h-full flex-col">
           <PageHeader
-            title="Services"
-            description="Drawer create whose body is several section-titled ItemGroup sections: the settings layout, in context, with one scoped save."
+            title="Origins"
+            description="Where storefront fetches the content it serves."
             size="small"
           >
             <template #actions>
               <Button
-                label="Create Service"
+                label="Add Origin"
                 icon="pi pi-plus"
                 kind="outlined"
                 size="medium"
@@ -825,13 +830,13 @@
 
           <ul class="layout-section-start flex flex-col gap-(--spacing-xs)">
             <li
-              v-for="service in services"
-              :key="service.id"
+              v-for="origin in origins"
+              :key="origin.id"
               class="flex items-center justify-between rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
             >
-              <span class="text-label-code-sm text-(--text-default)">{{ service.name }}</span>
+              <span class="text-label-code-sm text-(--text-default)">{{ origin.name }}</span>
               <span class="text-body-xs text-(--text-muted)">{{
-                runtimeLabel(service.runtime)
+                protocolLabel(origin.protocol)
               }}</span>
             </li>
           </ul>
@@ -847,15 +852,16 @@
             <DrawerContent>
               <form
                 class="flex min-h-0 flex-1 flex-col"
-                aria-label="Create Service"
+                aria-label="Add Origin"
                 novalidate
                 @submit.prevent="submit"
               >
                 <PanelHeader class="w-full">
                   <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <DrawerTitle>Create Service</DrawerTitle>
+                    <DrawerTitle>Add Origin</DrawerTitle>
                     <p class="text-body-sm text-(--text-muted)">
-                      Define a service across grouped sections, saved together.
+                      An origin is a server storefront fetches content from. Name it, then say how
+                      to reach it.
                     </p>
                   </div>
                   <DrawerClose />
@@ -866,7 +872,7 @@
                     class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
                     :disabled="submitting"
                   >
-                    <legend class="sr-only">Create Service</legend>
+                    <legend class="sr-only">Add Origin</legend>
 
                     <section class="flex flex-col gap-(--layout-group-gap)">
                       <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
@@ -888,18 +894,18 @@
                                       :disabled="submitting"
                                       class="w-full"
                                       aria-label="Name"
-                                      placeholder="my-service"
+                                      placeholder="my-origin"
                                       :required="!!errors.name && !form.name.trim()"
                                       :invalid="!!errors.name && !!form.name.trim()"
                                       :aria-describedby="
-                                        errors.name ? 'service-name-error' : undefined
+                                        errors.name ? 'origin-name-error' : undefined
                                       "
                                       @update:model-value="errors.name = ''"
                                     />
                                   </div>
                                   <HelperText
                                     v-if="errors.name"
-                                    id="service-name-error"
+                                    id="origin-name-error"
                                     :kind="form.name.trim() ? 'invalid' : 'required'"
                                     :label="errors.name"
                                   />
@@ -908,7 +914,7 @@
                             </SettingRow>
                             <SettingRow
                               title="Description"
-                              description="A short note about what this service does."
+                              description="A short note about what this origin serves."
                             >
                               <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                                 <Input
@@ -928,37 +934,37 @@
 
                     <section class="flex flex-col gap-(--layout-group-gap)">
                       <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                        Runtime
+                        Connection
                       </p>
                       <Card :padded="false">
                         <template #content>
                           <Item.List>
                             <SettingRow
-                              title="Runtime"
-                              description="The language the service runs on."
+                              title="Protocol"
+                              description="How storefront connects to the origin."
                             >
                               <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                                 <div class="flex w-full flex-col gap-(--spacing-xs)">
                                   <Select
-                                    v-model="form.runtime"
+                                    v-model="form.protocol"
                                     size="large"
                                     :disabled="submitting"
                                     class="w-full"
-                                    placeholder="Select a runtime"
-                                    :required="!!errors.runtime"
-                                    :display-value="runtimeLabel"
-                                    @update:model-value="errors.runtime = ''"
+                                    placeholder="Select a protocol"
+                                    :required="!!errors.protocol"
+                                    :display-value="protocolLabel"
+                                    @update:model-value="errors.protocol = ''"
                                   >
                                     <Select.Trigger
-                                      id="service-runtime"
-                                      aria-label="Runtime"
+                                      id="origin-protocol"
+                                      aria-label="Protocol"
                                       :aria-describedby="
-                                        errors.runtime ? 'service-runtime-error' : undefined
+                                        errors.protocol ? 'origin-protocol-error' : undefined
                                       "
                                     />
                                     <Select.Content>
                                       <Select.Option
-                                        v-for="option in runtimes"
+                                        v-for="option in protocols"
                                         :key="option.value"
                                         :value="option.value"
                                       >
@@ -967,17 +973,17 @@
                                     </Select.Content>
                                   </Select>
                                   <HelperText
-                                    v-if="errors.runtime"
-                                    id="service-runtime-error"
+                                    v-if="errors.protocol"
+                                    id="origin-protocol-error"
                                     kind="required"
-                                    :label="errors.runtime"
+                                    :label="errors.protocol"
                                   />
                                 </div>
                               </div>
                             </SettingRow>
                             <SettingRow
                               title="Region"
-                              description="Where the service is deployed."
+                              description="Where the origin server runs."
                             >
                               <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                                 <Select
@@ -988,7 +994,7 @@
                                   :display-value="regionLabel"
                                 >
                                   <Select.Trigger
-                                    id="service-region"
+                                    id="origin-region"
                                     aria-label="Region"
                                   />
                                   <Select.Content>
@@ -1017,7 +1023,7 @@
                           <Item.List>
                             <SettingRow
                               title="Active"
-                              description="Start the service immediately after creation."
+                              description="Send traffic to the origin as soon as it is added."
                               kind="compact"
                             >
                               <Switch
@@ -1028,7 +1034,7 @@
                             </SettingRow>
                             <SettingRow
                               title="Request logging"
-                              description="Record incoming requests for this service."
+                              description="Record the requests storefront sends to this origin."
                               kind="compact"
                             >
                               <Switch
@@ -1051,7 +1057,7 @@
                     <div class="w-full md:w-fit">
                       <Button
                         class="w-full"
-                        label="Create Service"
+                        label="Add Origin"
                         kind="primary"
                         size="medium"
                         :loading="submitting"

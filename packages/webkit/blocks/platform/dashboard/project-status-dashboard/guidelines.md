@@ -128,6 +128,7 @@ The owner's initials beside the name.
 - Default: the selected project and sprint.
 - Loading: tiles, both charts and the table hold their place with a `Skeleton`; the two lists show Skeleton rows.
 - Empty: a project with no tasks; tiles show a dash with no delta or trend, every card keeps its box with an `EmptyState`, and the completion card offers `Add tasks`.
+- Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

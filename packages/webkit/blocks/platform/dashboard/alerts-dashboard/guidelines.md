@@ -124,6 +124,7 @@ so it is a `Tag`, separate from severity.
 - Default: the populated page for the selected period.
 - Loading: tiles, chart, bar list and both tables render their own `Skeleton`; Open by severity holds Skeleton rows.
 - Empty: a period with no alerts; tiles show a dash with no delta, and every region keeps its box with an `EmptyState` that says why and what to do next.
+- Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

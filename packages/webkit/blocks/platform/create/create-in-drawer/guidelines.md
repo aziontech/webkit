@@ -102,7 +102,7 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 - AddEnvironment: the same form opened from the environment menu, titled and saved as Add Environment.
 - EditDomain: opened from a domain row menu on www.example.com, with the Certificate select showing the covering wildcard.
 - AddRecord: the DNS zone record form; Name and Value are flagged as required only after an empty Add Record.
-- ItemRows: a large drawer whose sections are `Item` rows in flush cards, saved together by one Create.
+- ItemRows: Add Origin on the Origins page of the storefront resource, a large drawer whose sections are `Item` rows in flush cards, saved together by one Add Origin.
 - NestedDrawer: Add Instance with a Service select whose Create Service option opens a second, medium drawer and selects the new service back.
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.
 

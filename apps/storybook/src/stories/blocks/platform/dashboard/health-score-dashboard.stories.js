@@ -6,6 +6,8 @@ import State1 from '../../../../../../../packages/webkit/blocks/platform/dashboa
 import source1 from '../../../../../../../packages/webkit/blocks/platform/dashboard/health-score-dashboard/variants/loading.vue?raw'
 import State2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/health-score-dashboard/variants/empty.vue'
 import source2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/health-score-dashboard/variants/empty.vue?raw'
+import State3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/health-score-dashboard/variants/failed.vue'
+import source3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/health-score-dashboard/variants/failed.vue?raw'
 
 export default {
   title: "Templates/Platform/Dashboard/HealthScoreDashboard",
@@ -31,4 +33,9 @@ export const Loading = {
 export const Empty = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "A period with no samples. The score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it." }, source: { code: source2 } } }
+}
+
+export const Failed = {
+  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The request for the period failed: the score shows a dash, and every card keeps its header with a danger Alert that names what did not load and offers Retry." }, source: { code: source3 } } }
 }

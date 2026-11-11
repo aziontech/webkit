@@ -104,6 +104,7 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 - Default: services reporting, both charts populated, open alerts in the rail.
 - Loading: every tile, both charts and the rail hold Skeletons; the window switches stay usable.
 - Empty: no traffic yet; tiles show a dash, both charts say metrics appear once a service serves requests, and the rail reads `No open alerts`.
+- Failed: the request failed; tiles show a dash, and both charts and the alert rail show a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

@@ -34,6 +34,11 @@
       "name": "Empty",
       "summary": "The filters match nothing. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that names the filters as the reason and offers Clear filters, which resets the period and the segment.",
       "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+      "file": "variants/failed.vue"
     }
   ]
 }

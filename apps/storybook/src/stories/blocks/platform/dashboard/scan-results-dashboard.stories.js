@@ -6,6 +6,8 @@ import State1 from '../../../../../../../packages/webkit/blocks/platform/dashboa
 import source1 from '../../../../../../../packages/webkit/blocks/platform/dashboard/scan-results-dashboard/variants/loading.vue?raw'
 import State2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/scan-results-dashboard/variants/empty.vue'
 import source2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/scan-results-dashboard/variants/empty.vue?raw'
+import State3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/scan-results-dashboard/variants/failed.vue'
+import source3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/scan-results-dashboard/variants/failed.vue?raw'
 
 export default {
   title: "Templates/Platform/Dashboard/ScanResultsDashboard",
@@ -31,4 +33,9 @@ export const Loading = {
 export const Empty = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "Nothing has been sent for analysis yet. The tiles read zero, the verdicts and sources keep their box with an EmptyState, and the Submissions card drops the filters and the table for one EmptyState that says what fills it." }, source: { code: source2 } } }
+}
+
+export const Failed = {
+  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry." }, source: { code: source3 } } }
 }

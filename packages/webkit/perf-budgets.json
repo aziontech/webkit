@@ -15,13 +15,13 @@
     },
     "table-1k": { "mount": 520, "update": 440, "update_is": "sort 1k rows under useCollection" },
     "table-10k-virtual": {
-      "mount": 840,
-      "update": 800,
+      "mount": 240,
+      "update": 260,
       "update_is": "sort 10k virtual rows under useCollection"
     },
     "table-10k-virtual-filter": {
-      "mount": 840,
-      "update": 160,
+      "mount": 240,
+      "update": 80,
       "update_is": "filter 10k virtual rows by text under useCollection"
     }
   }

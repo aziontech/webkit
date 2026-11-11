@@ -137,6 +137,7 @@ Each chart, breakdown and the log render their own `EmptyState` when the range h
 - Default: the populated page for the selected time range.
 - Loading: while the range loads, tiles, chart and breakdowns render their own `Skeleton` and the log holds Skeleton rows; nothing reflows.
 - Empty: no request in the range; tiles show a dash with no delta, every card keeps its box with an empty state, and the log says to widen the time range.
+- Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

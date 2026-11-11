@@ -34,6 +34,11 @@
       "name": "Empty",
       "summary": "Nothing has been sent for analysis yet. The tiles read zero, the verdicts and sources keep their box with an EmptyState, and the Submissions card drops the filters and the table for one EmptyState that says what fills it.",
       "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+      "file": "variants/failed.vue"
     }
   ]
 }

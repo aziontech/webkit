@@ -327,26 +327,33 @@
     if (id === 'sidebar') railCollapsed.value = !railCollapsed.value
   }
 
-  const referenceNow = new Date('2026-11-10T14:30:00').getTime()
+  const referenceNow = Date.UTC(2026, 10, 10, 14, 30)
 
   const minutesAgo = (minutes) => new Date(referenceNow - minutes * 60 * 1000)
 
-  const dayFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit' })
+  const dayFormat = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: '2-digit',
+    timeZone: 'UTC'
+  })
   const clockFormat = new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    hour12: false
+    hour12: false,
+    timeZone: 'UTC'
   })
   const axisFormat = new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
     minute: '2-digit',
-    hour12: false
+    hour12: false,
+    timeZone: 'UTC'
   })
   const stampFormat = new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: '2-digit',
-    year: 'numeric'
+    year: 'numeric',
+    timeZone: 'UTC'
   })
 
   const isDate = (value) => value instanceof Date && !Number.isNaN(value.getTime())

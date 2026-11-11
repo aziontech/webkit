@@ -6,6 +6,8 @@ import State1 from '../../../../../../../packages/webkit/blocks/platform/dashboa
 import source1 from '../../../../../../../packages/webkit/blocks/platform/dashboard/funnel-cohort-dashboard/variants/loading.vue?raw'
 import State2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/funnel-cohort-dashboard/variants/empty.vue'
 import source2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/funnel-cohort-dashboard/variants/empty.vue?raw'
+import State3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/funnel-cohort-dashboard/variants/failed.vue'
+import source3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/funnel-cohort-dashboard/variants/failed.vue?raw'
 
 export default {
   title: "Templates/Platform/Dashboard/FunnelCohortDashboard",
@@ -31,4 +33,9 @@ export const Loading = {
 export const Empty = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "The filters match nothing. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that names the filters as the reason and offers Clear filters, which resets the period and the segment." }, source: { code: source2 } } }
+}
+
+export const Failed = {
+  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry." }, source: { code: source3 } } }
 }

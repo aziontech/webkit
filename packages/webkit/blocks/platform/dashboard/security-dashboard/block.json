@@ -34,6 +34,11 @@
       "name": "Empty",
       "summary": "No security rules set up yet: the tiles read as dashes, and one bordered EmptyState names the reason and offers Add rule set instead of a grid of empty charts.",
       "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+      "file": "variants/failed.vue"
     }
   ]
 }

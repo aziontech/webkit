@@ -1,8 +1,11 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -11,6 +14,7 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
@@ -21,13 +25,14 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import Popover from '@aziontech/webkit/popover'
+  import PropertyFilter from '@aziontech/webkit/property-filter'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Switch from '@aziontech/webkit/switch'
   import TableRoot from '@aziontech/webkit/table-root'
   import Textarea from '@aziontech/webkit/textarea'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
   const columns = [
@@ -37,11 +42,6 @@
     { accessorKey: 'scope', header: 'Scope', minWidth: 80 },
     { accessorKey: 'lastModified', header: 'Last modified', enableSorting: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
-  ]
-  const filterFields = [
-    { id: 'lastEditor', label: 'Author' },
-    { id: 'type', label: 'Type' },
-    { id: 'modified', label: 'Last modified' }
   ]
   const seed = [
     {
@@ -96,48 +96,60 @@
     }
   ]
 
-  const variables = ref([...seed])
-  const existingKeys = computed(() => variables.value.map((variable) => variable.key))
+  const authors = [
+    'Robson Junior',
+    'Isaque Böck',
+    'Rafael Garbinatto',
+    'Herbert Júlio',
+    'Rafael Umman',
+    'myemail'
+  ]
+  const properties = [
+    { key: 'key', label: 'Key' },
+    { key: 'lastEditor', label: 'Author', options: authors.map((value) => ({ value })) },
+    { key: 'type', label: 'Type', options: [{ value: 'Plain' }, { value: 'Secret' }] }
+  ]
+  const withType = (variable) => ({ ...variable, type: variable.secret ? 'Secret' : 'Plain' })
 
-  const search = ref('')
+  const variables = ref(seed.map(withType))
+  const editing = ref(null)
+  const existingKeys = computed(() =>
+    variables.value
+      .filter((variable) => variable.id !== editing.value?.id)
+      .map((variable) => variable.key)
+  )
+
+  const {
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    status,
+    matchingItems,
+    clearFilters,
+    loading: fetching
+  } = useCollection({
+    items: variables,
+    columns,
+    filtering: { fields: ['key', 'id', 'lastEditor', 'type'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: {
+      storageKey: 'variables-table',
+      defaults: { columns: [{ id: 'id', visible: false }] }
+    },
+    url: true
+  })
+
   const loading = ref(false)
   const table = ref(null)
-  const columnVisibility = ref({ id: false })
+  const exportCsv = () => table.value?.exportCsv({ filename: 'variables.csv' })
 
   const refresh = () => {
+    if (loading.value) return
     loading.value = true
     setTimeout(() => {
       loading.value = false
     }, 600)
-  }
-
-  const filterOpen = ref(false)
-  const filterQuery = ref('')
-  const filterRows = computed(() => {
-    const term = filterQuery.value.trim().toLowerCase()
-    return term
-      ? filterFields.filter((field) => field.label.toLowerCase().includes(term))
-      : filterFields
-  })
-
-  const columnsOpen = ref(false)
-  const listedColumns = columns
-    .filter((column) => column.kind !== 'action')
-    .map((column) => ({
-      id: column.accessorKey,
-      label: column.header,
-      locked: column.hideable === false
-    }))
-  const isVisible = (id) => columnVisibility.value[id] !== false
-  const setVisible = (id, visible) => {
-    const next = { ...columnVisibility.value }
-    if (visible) delete next[id]
-    else next[id] = false
-    columnVisibility.value = next
-  }
-  const hiddenCount = computed(() => listedColumns.filter((column) => !isVisible(column.id)).length)
-  const showAll = () => {
-    columnVisibility.value = {}
   }
 
   const displayValue = (row) => (row.secret ? SECRET_MASK : row.value)
@@ -159,17 +171,77 @@
               : `${group.names.length} ${group.plural}`
       }))
 
+  let nextVariableId = seed.length
+  const newVariableId = () => `v-${String((nextVariableId += 1)).padStart(3, '0')}`
+  const touched = (variable) =>
+    withType({ ...variable, lastEditor: 'myemail', lastEditorAvatar: '', lastModified: 'just now' })
+
   const onCreated = (created) => {
     variables.value = [
-      ...created.map((variable, index) => ({
-        ...variable,
-        id: `v-${Date.now()}-${index}`,
-        lastEditor: 'myemail',
-        lastEditorAvatar: '',
-        lastModified: 'just now'
-      })),
+      ...created.map((variable) => touched({ ...variable, id: newVariableId() })),
       ...variables.value
     ]
+  }
+
+  const onUpdated = (id, [changed]) => {
+    variables.value = variables.value.map((variable) =>
+      variable.id === id
+        ? touched({
+            ...variable,
+            ...changed,
+            value: changed.secret && !changed.value ? variable.value : changed.value
+          })
+        : variable
+    )
+  }
+
+  const cloneKey = (key) => {
+    const taken = new Set(variables.value.map((variable) => variable.key))
+    let candidate = `${key}_COPY`
+    let n = 1
+    while (taken.has(candidate)) candidate = `${key}_COPY_${(n += 1)}`
+    return candidate
+  }
+
+  const openCreate = () => {
+    editing.value = null
+    drawerOpen.value = true
+  }
+
+  const pending = ref(null)
+  const deleteOpen = ref(false)
+  const confirmation = ref('')
+  const confirmLabelId = useId()
+  const canDelete = computed(
+    () => Boolean(pending.value) && confirmation.value.trim() === pending.value.key
+  )
+  const confirmDelete = () => {
+    if (!canDelete.value) return
+    variables.value = variables.value.filter((variable) => variable.id !== pending.value.id)
+    deleteOpen.value = false
+  }
+
+  const onRowAction = (value, row) => {
+    if (value === 'edit') {
+      editing.value = row
+      drawerOpen.value = true
+      return
+    }
+    if (value === 'duplicate') {
+      const index = variables.value.findIndex((variable) => variable.id === row.id)
+      const copy = touched({ ...row, id: newVariableId(), key: cloneKey(row.key) })
+      variables.value = [
+        ...variables.value.slice(0, index + 1),
+        copy,
+        ...variables.value.slice(index + 1)
+      ]
+      return
+    }
+    if (value === 'delete') {
+      pending.value = row
+      confirmation.value = ''
+      deleteOpen.value = true
+    }
   }
 
   const SECRET_MASK = '••••••••'
@@ -233,8 +305,10 @@
       return { kind: 'invalid', message: `${key} already exists in this list.` }
     return null
   }
+  const keepsSecret = (entry) => Boolean(editing.value?.secret && entry.secret && entry.key.trim())
   const valueError = (entry) => {
-    if (!submitted.value || isEmptyEntry(entry) || entry.value.trim()) return null
+    if (!submitted.value || isEmptyEntry(entry) || entry.value.trim() || keepsSecret(entry))
+      return null
     return { kind: 'required', message: 'Value is required.' }
   }
 
@@ -244,6 +318,12 @@
       !noVariables.value &&
       filledEntries.value.every((entry) => !keyError(entry) && !valueError(entry))
   )
+  const drawerTitle = computed(() => (editing.value ? 'Edit Variable' : 'Create Variable'))
+  const drawerDescription = computed(() => {
+    if (!editing.value) return 'Create one or more variables and define where they are available.'
+    if (editing.value.secret) return 'Leave the value empty to keep the saved secret.'
+    return 'Change the key, value or scope of this variable.'
+  })
   const canAdd = computed(() => {
     const last = entries.value.at(-1)
     return Boolean(last?.key.trim() && last?.value.trim())
@@ -448,14 +528,25 @@
       }))
     })
 
+  const scopesFor = (scope) =>
+    createScopes().map((item) => {
+      const ids = (scope ?? []).filter((entry) => entry.type === item.type).map((entry) => entry.id)
+      return item.type === 'global'
+        ? { ...item, enabled: ids.length > 0 }
+        : { ...item, enabled: ids.length > 0, ids }
+    })
+
   watch(drawerOpen, (isOpen) => {
     if (!isOpen) return
-    entries.value = [createEntry()]
+    const current = editing.value
+    entries.value = current
+      ? [createEntry(current.key, current.secret ? '' : current.value, current.secret)]
+      : [createEntry()]
     view.value = 'Form'
     jsonText.value = '{}'
     jsonError.value = ''
     submitted.value = false
-    Object.assign(scopes, createScopes())
+    Object.assign(scopes, current ? scopesFor(current.scope) : createScopes())
     submitting.value = false
   })
 
@@ -486,7 +577,9 @@
       secret: entry.secret,
       scope
     }))
-    onCreated(created)
+    if (editing.value) onUpdated(editing.value.id, created)
+    else onCreated(created)
+    editing.value = null
     submitting.value = false
     drawerOpen.value = false
   }
@@ -513,102 +606,20 @@
             icon="pi pi-plus"
             kind="primary"
             size="large"
-            @click="drawerOpen = true"
+            @click="openCreate"
           />
         </template>
       </PageHeader>
 
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <header class="flex items-center gap-(--layout-group-gap)">
-            <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
-              <div class="flex shrink-0 items-center">
-                <Popover
-                  v-model:open="filterOpen"
-                  placement="bottom-start"
-                  class="shrink-0"
-                >
-                  <div class="relative">
-                    <Popover.Trigger>
-                      <Button
-                        label="Filter"
-                        kind="outlined"
-                        size="medium"
-                        icon="pi pi-filter"
-                      />
-                    </Popover.Trigger>
-                  </div>
-                  <Popover.Content>
-                    <div class="flex flex-col">
-                      <div
-                        class="relative overflow-hidden transition-[height] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                      >
-                        <div
-                          data-level="root"
-                          class="flex flex-col"
-                        >
-                          <div class="border-b border-(--border-default) p-(--spacing-xs)">
-                            <Input
-                              v-model="filterQuery"
-                              size="medium"
-                              class="w-full"
-                              placeholder="Search fields"
-                              aria-label="Search filter fields"
-                            >
-                              <template #iconLeft>
-                                <i
-                                  class="pi pi-search"
-                                  aria-hidden="true"
-                                />
-                              </template>
-                            </Input>
-                          </div>
-                          <div
-                            class="flex max-h-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto p-(--spacing-xxs)"
-                          >
-                            <button
-                              v-for="field in filterRows"
-                              :key="field.id"
-                              type="button"
-                              data-filter-row
-                              class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                              :aria-expanded="false"
-                            >
-                              <span class="grow truncate">{{ field.label }}</span>
-                              <i
-                                class="pi pi-angle-right shrink-0 text-(--text-muted)"
-                                aria-hidden="true"
-                              />
-                            </button>
-                            <p
-                              v-if="!filterRows.length"
-                              class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
-                            >
-                              No match for “{{ filterQuery }}”.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Popover.Content>
-                </Popover>
-              </div>
-              <div class="flex min-w-36 grow basis-(--container-2xs)">
-                <Input
-                  v-model="search"
-                  size="medium"
-                  placeholder="Search variables"
-                  aria-label="Search variables"
-                  class="w-full"
-                >
-                  <template #iconLeft>
-                    <i
-                      class="pi pi-search"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </Input>
-              </div>
+          <header class="flex items-start gap-(--layout-group-gap)">
+            <div class="flex min-w-0 grow">
+              <PropertyFilter
+                v-bind="propertyFilterProps"
+                placeholder="Filter variables"
+                aria-label="Filter variables"
+              />
             </div>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
               <Tooltip
@@ -620,7 +631,7 @@
                   kind="outlined"
                   size="medium"
                   :loading="loading"
-                  ariaLabel="Refresh"
+                  aria-label="Refresh"
                   @click="refresh"
                 />
               </Tooltip>
@@ -632,95 +643,65 @@
                   icon="pi pi-download"
                   kind="outlined"
                   size="medium"
-                  :disabled="!table"
-                  ariaLabel="Download CSV"
-                  @click="table?.exportCsv({ filename: 'variables.csv' })"
+                  :disabled="!matchingItems.length"
+                  aria-label="Download CSV"
+                  @click="exportCsv"
                 />
               </Tooltip>
-              <Popover
-                v-model:open="columnsOpen"
-                placement="bottom-end"
-                class="shrink-0"
-              >
-                <Popover.Trigger>
-                  <Tooltip
-                    text="Columns"
-                    :disabled="columnsOpen"
-                  >
-                    <IconButton
-                      icon="ai ai-column"
-                      kind="outlined"
-                      size="medium"
-                      ariaLabel="Columns"
-                    />
-                  </Tooltip>
-                </Popover.Trigger>
-                <Popover.Content>
-                  <div class="flex flex-col">
-                    <div
-                      class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)"
-                    >
-                      <p class="text-label-md text-(--text-default)">Columns</p>
-                    </div>
-                    <div
-                      class="flex max-h-(--container-xs) flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain p-(--spacing-xxs)"
-                    >
-                      <label
-                        v-for="column in listedColumns"
-                        :key="column.id"
-                        class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                        :class="
-                          column.locked
-                            ? 'cursor-default text-(--text-muted)'
-                            : 'cursor-pointer text-(--text-default) hover:bg-(--bg-hover)'
-                        "
-                      >
-                        <Switch
-                          :model-value="isVisible(column.id)"
-                          :disabled="column.locked"
-                          @update:model-value="(value) => setVisible(column.id, !!value)"
-                        />
-                        <span class="min-w-0 truncate">{{ column.label }}</span>
-                        <span
-                          v-if="column.locked"
-                          class="ms-auto shrink-0 text-label-xs text-(--text-muted)"
-                          >Always shown</span
-                        >
-                      </label>
-                    </div>
-                    <div
-                      v-if="hiddenCount"
-                      class="border-t border-(--border-default) p-(--spacing-xxs)"
-                    >
-                      <Button
-                        label="Show all columns"
-                        kind="transparent"
-                        size="small"
-                        class="w-full"
-                        @click="showAll"
-                      />
-                    </div>
-                  </div>
-                </Popover.Content>
-              </Popover>
+              <CollectionPreferences
+                v-bind="preferencesProps"
+                title="Table preferences"
+              />
             </div>
           </header>
 
           <section class="flex min-h-0 flex-col">
-            <Card :padded="false">
+            <Card
+              v-if="status === 'empty'"
+              key="first-use"
+              :padded="false"
+            >
+              <template #content>
+                <EmptyState
+                  size="medium"
+                  icon="pi pi-key"
+                  title="No variables yet"
+                  description="Create a variable to store a value your services read at runtime."
+                >
+                  <template #actions>
+                    <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
+                      <Button
+                        label="Create Variable"
+                        icon="pi pi-plus"
+                        kind="secondary"
+                        size="small"
+                        @click="openCreate"
+                      />
+                      <Button
+                        label="Documentation"
+                        icon="pi pi-book"
+                        kind="outlined"
+                        size="small"
+                        href="https://example.com/docs/variables"
+                        target="_blank"
+                      />
+                    </div>
+                  </template>
+                </EmptyState>
+              </template>
+            </Card>
+            <Card
+              v-else
+              key="table"
+              :padded="false"
+            >
               <template #content>
                 <TableRoot
                   ref="table"
-                  v-model:globalFilter="search"
-                  v-model:columnVisibility="columnVisibility"
-                  :data="variables"
-                  :columns="columns"
-                  row-key="id"
+                  v-bind="tableProps"
+                  :loading="loading || fetching"
                   enable-sorting
-                  paginated
-                  :page-size="10"
                   :bordered="false"
-                  :loading="loading"
                 >
                   <template #cell-key="{ value }">
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -798,8 +779,11 @@
                     </div>
                   </template>
 
-                  <template #cell-actions>
-                    <DropdownMenu placement="bottom-end">
+                  <template #cell-actions="{ row }">
+                    <DropdownMenu
+                      placement="bottom-end"
+                      @select="(event, value) => onRowAction(value, row)"
+                    >
                       <DropdownMenu.Trigger>
                         <Tooltip text="Row actions">
                           <IconButton
@@ -851,6 +835,24 @@
                       </DropdownMenu.Group>
                     </DropdownMenu>
                   </template>
+
+                  <template #empty>
+                    <EmptyState
+                      size="medium"
+                      icon="pi pi-filter-slash"
+                      title="No matching variables"
+                      description="No variable matches these filters."
+                    >
+                      <template #actions>
+                        <Button
+                          label="Clear filters"
+                          kind="outlined"
+                          size="small"
+                          @click="clearFilters"
+                        />
+                      </template>
+                    </EmptyState>
+                  </template>
                 </TableRoot>
               </template>
             </Card>
@@ -870,15 +872,15 @@
           <form
             ref="formEl"
             class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create Variable"
+            :aria-label="drawerTitle"
             novalidate
             @submit.prevent="submit"
           >
             <PanelHeader class="w-full">
               <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Create Variable</DrawerTitle>
+                <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
                 <p class="text-body-sm text-(--text-muted)">
-                  Create one or more variables and define where they are available.
+                  {{ drawerDescription }}
                 </p>
               </div>
               <DrawerClose />
@@ -889,13 +891,16 @@
                 class="m-0 flex min-w-0 flex-col border-0 p-0"
                 :disabled="submitting"
               >
-                <legend class="sr-only">Create Variable</legend>
+                <legend class="sr-only">{{ drawerTitle }}</legend>
                 <SettingsSection
                   title="Variables"
                   hint="Store values your services read at runtime. Add one row per variable, or import a .env file."
                 >
                   <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
-                    <div class="flex items-center gap-(--spacing-xs) self-end">
+                    <div
+                      v-if="!editing"
+                      class="flex items-center gap-(--spacing-xs) self-end"
+                    >
                       <Button
                         label="Upload"
                         icon="pi pi-upload"
@@ -1016,6 +1021,7 @@
                                       binary
                                       :input-id="fieldId(entry, 'secret')"
                                       :aria-label="secretAriaLabel(entry)"
+                                      :disabled="Boolean(editing?.secret)"
                                     />
                                   </span>
                                 </Tooltip>
@@ -1038,7 +1044,7 @@
                         </div>
                       </div>
 
-                      <div>
+                      <div v-if="!editing">
                         <Button
                           label="Add variable"
                           icon="pi pi-plus"
@@ -1050,6 +1056,8 @@
                       </div>
 
                       <HelperText
+                        v-if="!editing"
+                        key="paste-hint"
                         label="Paste JSON or .env contents into an empty key field to create one row per variable."
                       />
                     </template>
@@ -1187,5 +1195,50 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
+
+    <ConfirmDialog
+      v-model:open="deleteOpen"
+      title="Delete variable"
+      size="medium"
+    >
+      <div class="flex flex-col gap-(--spacing-md)">
+        <Alert
+          severity="warning"
+          label="Once confirmed, this action can't be reversed."
+        />
+        <p class="m-0 text-body-sm text-(--text-muted)">
+          The selected variable will be deleted, and services in its scope stop reading it on their
+          next deployment.
+        </p>
+        <p
+          :id="confirmLabelId"
+          class="m-0 text-body-sm text-(--text-default)"
+        >
+          Type <code class="text-label-code-sm">{{ pending?.key }}</code> to confirm.
+        </p>
+        <Input
+          v-model="confirmation"
+          :aria-labelledby="confirmLabelId"
+          autocomplete="off"
+          class="w-full"
+          @keydown.enter="confirmDelete"
+        />
+      </div>
+      <template #actions="{ close }">
+        <Button
+          label="Cancel"
+          kind="outlined"
+          size="medium"
+          @click="close"
+        />
+        <Button
+          label="Delete variable"
+          kind="danger"
+          size="medium"
+          :disabled="!canDelete"
+          @click="confirmDelete"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>
