@@ -201,7 +201,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 | day typography (large)                  | `.text-body-md`             |
 | option row (preset / period) typography | `.text-label-sm`            |
 | month header typography                 | `.text-body-sm`             |
-| header / muted text                     | `var(--text-muted)`         |
+| header / muted text, adjacent-month day | `var(--text-muted)`         |
 | default text                            | `var(--text-default)`       |
 | disabled text                           | `var(--text-disabled)`      |
 | selected day surface                    | `var(--secondary)`          |

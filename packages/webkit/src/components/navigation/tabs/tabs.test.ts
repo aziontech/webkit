@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent as keyboardUser } from 'vitest/browser'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/tabs/default.vue'
@@ -400,5 +401,59 @@ describe('Tabs (composition)', () => {
       expect(getByTestId('navigation-tabs')).toBeTruthy()
       await expectNoA11yViolations(container)
     })
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const setup = async (props: Record<string, unknown> = {}) => {
+    const view = render(Tree, { props })
+    const tab = (label: string) => view.getByText(label).closest('[role="tab"]') as HTMLElement
+    const before = document.createElement('button')
+    before.textContent = 'Before'
+    document.body.prepend(before)
+    before.focus()
+    await keyboardUser.keyboard('{Tab}')
+    before.remove()
+    return { ...view, tab }
+  }
+
+  it('Tab enters the tab list on the selected tab only', async () => {
+    const { tab } = await setup({ defaultValue: 'tab-2' })
+    expect(document.activeElement).toBe(tab('Second'))
+    expect(tab('First').getAttribute('tabindex')).toBe('-1')
+  })
+
+  it('ArrowRight selects and focuses the next tab, wrapping at the end', async () => {
+    const { tab } = await setup({ defaultValue: 'tab-3' })
+    await keyboardUser.keyboard('{ArrowRight}')
+    expect(document.activeElement).toBe(tab('First'))
+    expect(tab('First').getAttribute('aria-selected')).toBe('true')
+  })
+
+  it('ArrowLeft selects and focuses the previous tab, wrapping at the start', async () => {
+    const { tab } = await setup()
+    await keyboardUser.keyboard('{ArrowLeft}')
+    expect(document.activeElement).toBe(tab('Third'))
+    expect(tab('Third').getAttribute('aria-selected')).toBe('true')
+  })
+
+  it('Home and End select the first and last enabled tabs', async () => {
+    const { tab } = await setup({ defaultValue: 'tab-2' })
+    await keyboardUser.keyboard('{End}')
+    expect(document.activeElement).toBe(tab('Third'))
+    await keyboardUser.keyboard('{Home}')
+    expect(document.activeElement).toBe(tab('First'))
+  })
+
+  it('arrows skip disabled tabs', async () => {
+    const { tab } = await setup({ disableSecond: true })
+    await keyboardUser.keyboard('{ArrowRight}')
+    expect(document.activeElement).toBe(tab('Third'))
+  })
+
+  it('Tab from the selected tab moves into its panel', async () => {
+    const { getByText } = await setup()
+    await keyboardUser.keyboard('{Tab}')
+    expect(document.activeElement).toBe(getByText('Content one').closest('[role="tabpanel"]'))
   })
 })

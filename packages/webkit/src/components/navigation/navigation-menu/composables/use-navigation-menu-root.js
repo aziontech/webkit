@@ -29,6 +29,7 @@ import { useTransitionStatus } from './use-transition-status.js'
  * @property {(itemValue: string | number) => void} unregisterTrigger
  * @property {(itemValue: string | number) => boolean} isItemOpen
  * @property {(event: KeyboardEvent) => void} onTriggerKeydown
+ * @property {(event: KeyboardEvent) => void} onPopupKeydown
  * @property {() => void} close
  * @property {() => void} unmount
  */
@@ -255,6 +256,70 @@ export function useNavigationMenuRootState(
     }
   )
 
+  const PANEL_FOCUSABLE =
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+  function panelFocusables() {
+    const panel = popupEl.value
+    if (!panel) return []
+    return /** @type {HTMLElement[]} */ (Array.from(panel.querySelectorAll(PANEL_FOCUSABLE)))
+  }
+
+  /** @param {'first' | 'last'} edge */
+  async function focusPanel(edge) {
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      await nextTick()
+      const items = panelFocusables()
+      if (items.length) {
+        ;(edge === 'last' ? items[items.length - 1] : items[0]).focus()
+        return
+      }
+      await new Promise((resolve) => globalThis.requestAnimationFrame(() => resolve(null)))
+    }
+  }
+
+  /** @param {KeyboardEvent} event */
+  function onPopupKeydown(event) {
+    const trigger = activeTriggerEl.value
+    const items = panelFocusables()
+    const index = items.indexOf(/** @type {HTMLElement} */ (document.activeElement))
+
+    if (event.key === 'Escape') {
+      event.preventDefault()
+      setValue(null, createChangeEventDetails('escape-key', event, trigger ?? undefined))
+      trigger?.focus()
+      return
+    }
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      if (!items.length) return
+      event.preventDefault()
+      const step = event.key === 'ArrowDown' ? 1 : -1
+      items[(index + step + items.length) % items.length].focus()
+      return
+    }
+
+    if (event.key === 'Home' || event.key === 'End') {
+      if (!items.length) return
+      event.preventDefault()
+      items[event.key === 'Home' ? 0 : items.length - 1].focus()
+      return
+    }
+
+    if (event.key !== 'Tab' || !trigger) return
+
+    if (event.shiftKey && index <= 0) {
+      event.preventDefault()
+      trigger.focus()
+      return
+    }
+
+    if (!event.shiftKey && index === items.length - 1) {
+      setValue(null, createChangeEventDetails('focus-out', event, trigger))
+      trigger.focus()
+    }
+  }
+
   /** @param {KeyboardEvent} event */
   function onTriggerKeydown(event) {
     const currentIndex = triggers.value.findIndex((entry) => entry.value === value.value)
@@ -263,6 +328,30 @@ export function useNavigationMenuRootState(
     if (event.key === 'Escape') {
       event.preventDefault()
       setValue(null, createChangeEventDetails('escape-key', event, event.currentTarget))
+      return
+    }
+
+    const ownTrigger = /** @type {HTMLElement} */ (event.currentTarget)
+    const ownValue = triggers.value.find((entry) => entry.el === ownTrigger)?.value
+    const ownOpen = ownValue != null && value.value === ownValue
+
+    if (event.key === 'Tab' && !event.shiftKey && ownOpen && panelFocusables().length) {
+      event.preventDefault()
+      void focusPanel('first')
+      return
+    }
+
+    const enterKey =
+      options.orientation === 'horizontal'
+        ? 'ArrowDown'
+        : options.dir?.value === 'rtl'
+          ? 'ArrowLeft'
+          : 'ArrowRight'
+
+    if (event.key === enterKey && ownValue != null) {
+      event.preventDefault()
+      if (!ownOpen) setValue(ownValue, createChangeEventDetails('trigger-press', event, ownTrigger))
+      void focusPanel('first')
       return
     }
 
@@ -350,6 +439,7 @@ export function useNavigationMenuRootState(
     unregisterTrigger,
     isItemOpen,
     onTriggerKeydown,
+    onPopupKeydown,
     close,
     unmount,
     createChangeEventDetails

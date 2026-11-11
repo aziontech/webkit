@@ -22,6 +22,8 @@ export interface DrawerContext {
   titleId: string
   descriptionId: string
   triggerRef: Ref<HTMLElement | null>
+  /** Element focused when the overlay opened; focus returns to it when there is no trigger. */
+  returnFocusRef: Ref<HTMLElement | null>
   side: DrawerSide
 }
 

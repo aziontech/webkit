@@ -95,14 +95,13 @@
     v-if="!isEntry"
     :is="props.as"
     :class="itemClasses"
-    role="none"
+    :role="props.as === 'li' ? undefined : 'listitem'"
     :data-testid="testId"
   >
     <slot />
   </component>
   <li
     v-else
-    role="none"
     :data-testid="testId"
   >
     <a

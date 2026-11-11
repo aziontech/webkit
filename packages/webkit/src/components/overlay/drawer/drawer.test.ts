@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/drawer/default.vue'
@@ -402,5 +403,72 @@ describe('Drawer on phones', () => {
     const shell = byTestId('overlay-drawer__panel-shell')
     expect(shell?.className).toContain('max-sm:h-dvh')
     expect(byTestId('overlay-drawer__panel')?.className).toContain('max-sm:top-0')
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const twoActions = defineComponent({
+    components: { Drawer, DrawerTrigger, DrawerPortal, DrawerOverlay, DrawerContent, DrawerTitle },
+    setup() {
+      const open = ref(false)
+      return { open }
+    },
+    template: `
+      <Drawer v-model:open="open">
+        <DrawerTrigger>
+          <button type="button">Open drawer</button>
+        </DrawerTrigger>
+        <DrawerPortal>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerTitle>Edit</DrawerTitle>
+            <button type="button" data-testid="first-action">First</button>
+            <button type="button" data-testid="last-action">Last</button>
+          </DrawerContent>
+        </DrawerPortal>
+      </Drawer>
+    `
+  })
+
+  const openWithKey = async (key: string) => {
+    const { getByTestId } = render(twoActions)
+    await settle()
+    const trigger = getByTestId('overlay-drawer__trigger').querySelector('button')!
+    trigger.focus()
+    await userEvent.keyboard(key)
+    await settle()
+    return { trigger }
+  }
+
+  it.each(['{Enter}', ' '])('%s on the trigger opens and focuses the first control', async (key) => {
+    await openWithKey(key)
+    expect(panel()).not.toBeNull()
+    await vi.waitFor(() => {
+      expect(document.activeElement).toBe(byTestId('first-action'))
+    })
+  })
+
+  it('Tab on the last control wraps to the first (focus is trapped)', async () => {
+    await openWithKey('{Enter}')
+    byTestId('last-action')!.focus()
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(byTestId('first-action'))
+  })
+
+  it('Shift+Tab on the first control wraps to the last', async () => {
+    await openWithKey('{Enter}')
+    byTestId('first-action')!.focus()
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    expect(document.activeElement).toBe(byTestId('last-action'))
+  })
+
+  it('Escape closes and returns focus to the trigger', async () => {
+    const { trigger } = await openWithKey('{Enter}')
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    await vi.waitFor(() => {
+      expect(panel()).toBeNull()
+      expect(document.activeElement).toBe(trigger)
+    })
   })
 })

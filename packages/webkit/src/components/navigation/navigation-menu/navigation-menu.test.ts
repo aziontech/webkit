@@ -1,6 +1,7 @@
 import { userEvent } from '@storybook/test'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { userEvent as keyboardUser } from 'vitest/browser'
 import { defineComponent, ref } from 'vue'
 
 import Default from '../../../../examples/navigation-menu/default.vue'
@@ -623,5 +624,115 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       const { getByRole } = render(Default)
       expect(getByRole('navigation', { name: 'Azion' })).toBeTruthy()
     })
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const setup = async () => {
+    const view = renderTree(COMPOSED)
+    const solutions = view.getByRole('button', { name: /Solutions/ })
+    const products = view.getByRole('button', { name: /Products/ })
+    solutions.focus()
+    return { ...view, solutions, products }
+  }
+
+  const expanded = (el: HTMLElement, value: 'true' | 'false') =>
+    waitFor(() => expect(el).toHaveAttribute('aria-expanded', value), { timeout: OPEN_TIMEOUT })
+
+  const focusedText = () => (document.activeElement as HTMLElement | null)?.textContent ?? ''
+
+  it.each(['{Enter}', ' '])('%s on a trigger toggles its panel', async (key) => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard(key)
+    await expanded(solutions, 'true')
+    await keyboardUser.keyboard(key)
+    await expanded(solutions, 'false')
+  })
+
+  it('ArrowRight and ArrowLeft move between triggers and wrap', async () => {
+    const { solutions, products } = await setup()
+    await keyboardUser.keyboard('{ArrowRight}')
+    expect(document.activeElement).toBe(products)
+    await keyboardUser.keyboard('{ArrowRight}')
+    expect(document.activeElement).toBe(solutions)
+    await keyboardUser.keyboard('{ArrowLeft}')
+    expect(document.activeElement).toBe(products)
+  })
+
+  it('ArrowDown on a trigger opens its panel and focuses the first entry', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{ArrowDown}')
+    await expanded(solutions, 'true')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+  })
+
+  it('Tab on the trigger of an open panel moves into the panel', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{Enter}')
+    await expanded(solutions, 'true')
+    await keyboardUser.keyboard('{Tab}')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+  })
+
+  it('ArrowDown and ArrowUp move between panel entries and wrap', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{ArrowDown}')
+    await expanded(solutions, 'true')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+    await keyboardUser.keyboard('{ArrowDown}')
+    expect(focusedText()).toContain('See all')
+    await keyboardUser.keyboard('{ArrowDown}')
+    expect(focusedText()).toContain('App development')
+    await keyboardUser.keyboard('{ArrowUp}')
+    expect(focusedText()).toContain('See all')
+  })
+
+  it('Escape in the panel closes it and returns focus to its trigger', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{ArrowDown}')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+    await keyboardUser.keyboard('{Escape}')
+    await expanded(solutions, 'false')
+    expect(document.activeElement).toBe(solutions)
+  })
+
+  it('Shift+Tab on the first entry returns focus to the trigger', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{ArrowDown}')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+    await keyboardUser.keyboard('{Shift>}{Tab}{/Shift}')
+    expect(document.activeElement).toBe(solutions)
+  })
+
+  it('Tab on the last entry closes the panel and moves on to the next trigger', async () => {
+    const { solutions, products } = await setup()
+    await keyboardUser.keyboard('{ArrowDown}')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+    await keyboardUser.keyboard('{End}')
+    expect(focusedText()).toContain('See all')
+    await keyboardUser.keyboard('{Tab}')
+    await expanded(solutions, 'false')
+    expect(document.activeElement).toBe(products)
+  })
+
+  it('Escape on a trigger closes its open panel', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{Enter}')
+    await expanded(solutions, 'true')
+    await keyboardUser.keyboard('{Escape}')
+    await expanded(solutions, 'false')
+    expect(document.activeElement).toBe(solutions)
   })
 })

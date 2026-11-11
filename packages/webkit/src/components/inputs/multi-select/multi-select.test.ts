@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/multi-select/default.vue'
@@ -527,5 +528,93 @@ describe('MultiSelect (composition / overlay)', () => {
     expect(trigger.getAttribute('aria-haspopup')).toBe('listbox')
     expect(trigger.getAttribute('aria-controls')).toBeTruthy()
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const settle = async () => {
+    await nextTick()
+    await nextTick()
+  }
+  const focusedText = () => (document.activeElement as HTMLElement | null)?.textContent?.trim()
+
+  const openWith = async (key: string) => {
+    cleanupTeleported()
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h('div', [
+            h(Harness, { open: false }),
+            h('button', { type: 'button', 'data-testid': 'after' }, 'After')
+          ])
+      })
+    )
+    const trigger = view.getByTestId('multi-select-trigger')
+    trigger.focus()
+    await userEvent.keyboard(key)
+    await settle()
+    expect(listbox()).not.toBeNull()
+    return { trigger, view }
+  }
+
+  it.each(['{Enter}', ' ', '{ArrowDown}'])(
+    '%s on the trigger opens the list and focuses the first option',
+    async (key) => {
+      await openWith(key)
+      expect(focusedText()).toBe('Option 1')
+    }
+  )
+
+  it('ArrowDown and ArrowUp move between enabled options and wrap', async () => {
+    await openWith('{Enter}')
+    await userEvent.keyboard('{ArrowDown}')
+    expect(focusedText()).toBe('Option 2')
+    await userEvent.keyboard('{ArrowUp}{ArrowUp}')
+    expect(focusedText()).not.toBe('Option 3 (disabled)')
+  })
+
+  it('Home and End jump to the first and last enabled options', async () => {
+    await openWith('{Enter}')
+    await userEvent.keyboard('{End}')
+    const last = focusedText()
+    await userEvent.keyboard('{Home}')
+    expect(focusedText()).toBe('Option 1')
+    expect(last).not.toBe('Option 1')
+  })
+
+  it.each(['{Enter}', ' '])('%s toggles the focused option and keeps the list open', async (key) => {
+    await openWith('{Enter}')
+    await userEvent.keyboard(key)
+    await settle()
+    expect(listbox()).not.toBeNull()
+    const option = document.activeElement as HTMLElement
+    expect(option.getAttribute('aria-selected')).toBe('true')
+    await userEvent.keyboard(key)
+    await settle()
+    expect(option.getAttribute('aria-selected')).toBe('false')
+  })
+
+  it('Escape closes and returns focus to the trigger', async () => {
+    const { trigger } = await openWith('{Enter}')
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    expect(listbox()).toBeNull()
+    expect(document.activeElement).toBe(trigger)
+  })
+
+  it('Tab closes and moves focus on to the control after the trigger', async () => {
+    const { view } = await openWith('{Enter}')
+    await userEvent.keyboard('{Tab}')
+    await settle()
+    expect(listbox()).toBeNull()
+    expect(document.activeElement).toBe(view.getByTestId('after'))
+  })
+
+  it('Shift+Tab closes and returns focus to the trigger', async () => {
+    const { trigger } = await openWith('{Enter}')
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    await settle()
+    expect(listbox()).toBeNull()
+    expect(document.activeElement).toBe(trigger)
   })
 })
