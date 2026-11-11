@@ -1,11 +1,11 @@
 # MfaManagement (`platform/account/mfa-management`)
 
-> Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`.
+> Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`.
 
 - Surface: product
 - Source: `blocks/platform/account/mfa-management/mfa-management.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/mfa-management")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [SettingRow](../../../components/setting-row.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Toast](../../../components/toast.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [SettingRow](../../../components/setting-row.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Toast](../../../components/toast.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -31,9 +31,9 @@ Multi-factor authentication for a whole account. An admin sees who signs in with
 
 Title `Multi-factor authentication` and one sentence on what the page holds. Action: Documentation.
 
-### B. Require MFA — `Card`, `SettingRow`, `Switch`, `ConfirmDialog` (required)
+### B. Require MFA — `Card`, `Item`, `SettingRow`, `Switch`, `ConfirmDialog` (required)
 
-One `SettingRow` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`kind="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once with a toast. While data loads or failed, the switch is disabled.
+One compact `SettingRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`kind="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once with a toast. While data loads or failed, the switch is disabled.
 
 ### C. Password-only warning — `Alert` (conditional)
 
@@ -109,6 +109,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
@@ -276,17 +277,20 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <Card :padded="false">
           <template #content>
-            <SettingRow
-              title="Require MFA"
-              description="Everyone in the account must use a second factor to sign in. People without one set it up at their next sign-in."
-            >
-              <Switch
-                :model-value="required"
-                aria-label="Require MFA"
-                :disabled="loading || loadFailed"
-                @update:model-value="onRequire"
-              />
-            </SettingRow>
+            <Item.List>
+              <SettingRow
+                title="Require MFA"
+                kind="compact"
+                description="Everyone in the account must use a second factor to sign in. People without one set it up at their next sign-in."
+              >
+                <Switch
+                  :model-value="required"
+                  aria-label="Require MFA"
+                  :disabled="loading || loadFailed"
+                  @update:model-value="onRequire"
+                />
+              </SettingRow>
+            </Item.List>
           </template>
         </Card>
 
@@ -386,11 +390,13 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   >
                     <DropdownMenu.Group>
                       <DropdownMenu.Option
+                        key="dropdown-menu.option-1"
                         v-if="row.enabled"
                         value="reset"
                         label="Reset MFA"
                       />
                       <DropdownMenu.Option
+                        key="dropdown-menu.option-2"
                         v-else
                         value="remind"
                         label="Send setup reminder"

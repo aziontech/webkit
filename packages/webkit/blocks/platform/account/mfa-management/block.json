@@ -3,7 +3,7 @@
   "name": "MfaManagement",
   "title": "Templates/Platform/Account/MfaManagement",
   "surface": "product",
-  "summary": "Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`.",
+  "summary": "Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"

@@ -6,6 +6,7 @@
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
@@ -173,17 +174,20 @@
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <Card :padded="false">
           <template #content>
-            <SettingRow
-              title="Require MFA"
-              description="Everyone in the account must use a second factor to sign in. People without one set it up at their next sign-in."
-            >
-              <Switch
-                :model-value="required"
-                aria-label="Require MFA"
-                :disabled="loading || loadFailed"
-                @update:model-value="onRequire"
-              />
-            </SettingRow>
+            <Item.List>
+              <SettingRow
+                title="Require MFA"
+                kind="compact"
+                description="Everyone in the account must use a second factor to sign in. People without one set it up at their next sign-in."
+              >
+                <Switch
+                  :model-value="required"
+                  aria-label="Require MFA"
+                  :disabled="loading || loadFailed"
+                  @update:model-value="onRequire"
+                />
+              </SettingRow>
+            </Item.List>
           </template>
         </Card>
 

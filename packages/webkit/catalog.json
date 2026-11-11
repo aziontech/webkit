@@ -24901,7 +24901,7 @@
    "title": "Templates/Platform/Account/MfaManagement",
    "source": "blocks/platform/account/mfa-management/mfa-management.vue",
    "surface": "product",
-   "summary": "Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`.",
+   "summary": "Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`.",
    "intents": [
     "mfa management",
     "multi-factor authentication",
@@ -24929,6 +24929,7 @@
     "ConfirmDialog",
     "DropdownMenu",
     "Input",
+    "Item",
     "PageHeader",
     "SettingRow",
     "Switch",
@@ -24944,6 +24945,7 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/item",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/switch",
@@ -30595,15 +30597,24 @@
     "DrawerTitle",
     "EmptyState",
     "Field",
+    "Input",
+    "Item",
     "KeyValuePairs",
+    "Link",
     "PageHeader",
     "PanelContent",
     "PanelFooter",
     "PanelHeader",
     "PropertyFilter",
+    "SaveBar",
     "Select",
+    "SettingRow",
+    "SettingsSection",
     "Skeleton",
+    "Switch",
+    "Table",
     "Tabs",
+    "Tag",
     "toast",
     "use-collection"
    ],
@@ -30620,15 +30631,24 @@
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/item",
     "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/save-bar",
     "@aziontech/webkit/select",
+    "@aziontech/webkit/setting-row",
+    "@aziontech/webkit/settings-section",
     "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/switch",
+    "@aziontech/webkit/table",
     "@aziontech/webkit/tabs",
+    "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/use-collection"
    ],
@@ -30662,6 +30682,18 @@
     {
      "name": "Loading",
      "summary": "The catalog is loading: the filter is disabled and skeleton tiles hold the grid."
+    },
+    {
+     "name": "SolutionPage",
+     "summary": "The integration as a full page (Waiting Room): a Back to Marketplace `Link`, the `PageHeader`, `Tabs` for Overview, Usage, Changelog (version history, Latest marked) and Applications (a `Table` of the applications running it, `Table.CellStatus` Up to date or Update available and an Update to <version> action), beside an install card whose Application `Select` tags each application Installed or Update available. Install and Update are async runs that end in a toast with Configure and Open application."
+    },
+    {
+     "name": "Configure",
+     "summary": "The screen behind Configure: the integration's settings on one application (Queue visitors `Switch`, Capacity and Queue page title fields, Session length `Select`) in `SettingsSection`s, errors after Save with a summary `Alert`, and a `SaveBar` with Discard and Save; saving is not a deploy, so its toast has no Redeploy."
+    },
+    {
+     "name": "TemplatePage",
+     "summary": "A template as a full page (Nuxt Storefront): a Back to Templates `Link`, the description, the deploy form (application name and repository, errors after Deploy) beside the template facts; Deploy is an async run that ends in the async-submit toast with Edit and Redeploy."
     }
    ],
    "file": "catalog/patterns/platform/view/marketplace.json"
