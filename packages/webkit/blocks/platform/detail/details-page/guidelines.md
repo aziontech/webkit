@@ -42,6 +42,13 @@ The last band, on the canvas fill, says what the user can do next in one sentenc
 
 For a resource made from the CLI, the `platform/detail/get-started` section follows the summary: a `SectionHeader` with the CLI or GitHub Actions `ToggleGroup`, then three numbered step `Card`s with a `CodeBlock` each.
 
+## Topology tab
+
+- Use `TopologyDiagram` for the path a request takes to the resource. The ServiceOverview state still composes its topology from `Flow` by hand; new pages use the component.
+- Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
+- Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
+- Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
+
 ## Do
 
 - Keep the content in `layout-column` with its boundary inset, and let the tab bar run full-bleed above it.
@@ -91,6 +98,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - ServiceOverview: a service, with the environment picker in the breadcrumb, Deploy on the tab row, the production checklist and the deployment topology.
 - DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
 - DeploymentFailed: a deployment the rules rejected, the danger banner with Redeploy, Visit disabled and the logs open on the failed step.
+- Application: a whole application page on the `AppLayout` console shell (rail in `#navigation`, header with the Applications › name breadcrumb in `#header`), with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `TableRoot`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
 
 ## Related
 

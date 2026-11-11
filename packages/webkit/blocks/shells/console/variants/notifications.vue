@@ -298,8 +298,9 @@
     }
   ])
 
-  const onNavigate = (event, node) => {
+  const onNavigate = (event, node, closeNavigation) => {
     activeId.value = node.id
+    closeNavigation()
   }
 
   const onPaletteSelect = (event, value) => {
@@ -371,7 +372,7 @@
       v-model:tools-open="notificationsOpen"
       tools-label="Notifications"
     >
-      <template #navigation="{ drawer }">
+      <template #navigation="{ drawer, closeNavigation }">
         <Sidebar
           v-model:width="railWidth"
           v-model:collapsed="railCollapsed"
@@ -504,7 +505,7 @@
               :groups="navGroups"
               :active-id="activeId"
               role="presentation"
-              @navigate="onNavigate"
+              @navigate="(event, node) => onNavigate(event, node, closeNavigation)"
             >
               <Menu.Back />
             </Menu>

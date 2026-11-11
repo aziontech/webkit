@@ -552,6 +552,19 @@ export const es: Messages = {
     warning: 'Requiere atención',
     neutral: 'Sin definir'
   },
+  overflowCount: {
+    noun: {
+      one: 'elemento',
+      other: 'elementos'
+    },
+    summary: '{count} {noun}',
+    paged: '{shown} de {count} {noun}',
+    showAll: 'Ver lista completa: {count} {noun}',
+    search: 'Buscar',
+    noMatch: 'Nada coincide con “{query}”',
+    loadMore: 'Cargar {count} más',
+    newTab: '(se abre en una pestaña nueva)'
+  },
   pagination: {
     label: 'Paginación',
     info: 'Mostrando {start} a {end} de {total} registros',
@@ -767,6 +780,39 @@ export const es: Messages = {
   },
   tableRefreshButton: {
     label: 'Actualizar'
+  },
+  tableCellActions: {
+    label: 'Acciones de la fila',
+    labelFor: 'Acciones de {name}'
+  },
+  tableCellId: {
+    copy: 'Copiar ID',
+    copyResource: 'Copiar ID de {resource}'
+  },
+  tableCellLink: {
+    open: 'Abrir {label}',
+    openIn: 'Abrir {label} en {destination}',
+    newTab: 'Abrir {label} en una pestaña nueva',
+    newTabHint: '(se abre en una pestaña nueva)',
+    copy: 'Copiar {label}'
+  },
+  tableCellTags: {
+    noun: {
+      one: 'etiqueta',
+      other: 'etiquetas'
+    }
+  },
+  tableCellTime: {
+    justNow: 'justo ahora'
+  },
+  tableReorder: {
+    column: 'Orden',
+    handle: 'Reordenar {name}, posición {position} de {total}',
+    hint: 'Arrastra, o pulsa Flecha arriba o Flecha abajo para mover.',
+    locked: 'Quita el orden para reordenar las filas.',
+    moved: '{name} movido a la posición {position} de {total}.',
+    dropped: '{name} soltado en la posición {position} de {total}.',
+    cancelled: 'Reordenación cancelada.'
   },
   tableSearch: {
     placeholder: 'Buscar'

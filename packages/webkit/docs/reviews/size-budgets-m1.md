@@ -212,6 +212,26 @@ Two new entries at measured plus about 0.2 KB, and three raises from the two new
 | locales-pt-BR    | 7.15          | 7.23         | 7.45       | Raised: the same groups in Portuguese.                              |
 | locales-es       | 7.25          | 7.32         | 7.55       | Raised: the same groups in Spanish.                                 |
 
+## M2.9 WP list-kit
+
+`OverflowCount` and the six `Table.Cell*` presets are new entries. `TableCellTime` is the heaviest preset because `Avatar` merges classes with `tailwind-merge` (about 58 KB before compression, shared with every component that uses `cn`); an app that already ships webkit pays it once. `Table` grows by the reorderable rows (grip column, pointer and keyboard moves, announcements), and the two sections built on it grow with it. The `overflowCount`, `tableCell*` and `tableReorder` groups grow the English catalog the provider ships and the two opt-in locale entries. Budgets are measured + ~0.25 KB; the provider and locale rows are measured after merging `feat/webkit-v6` (sql-storage strings included).
+
+| Entry              | Budget before | Measured now | New budget | Note                                                                   |
+| ------------------ | ------------- | ------------ | ---------- | ---------------------------------------------------------------------- |
+| overflow-count     | new           | 12.27        | 12.5       | New: `Popover`, `Tag`, search `Input`, Load more `Button`.             |
+| table-cell-status  | new           | 1.41         | 3          | New: one `Tag`.                                                        |
+| table-cell-link    | new           | 15.05        | 15.3       | New: `Tooltip`, `OverflowCount`, `CopyButton`.                         |
+| table-cell-id      | new           | 7.70         | 7.95       | New: `CopyButton`.                                                     |
+| table-cell-time    | new           | 17.05        | 17.3       | New: `Avatar` (with `tailwind-merge`), `Tooltip`, relative time clock. |
+| table-cell-tags    | new           | 13.18        | 13.45      | New: fit measuring plus `OverflowCount`.                               |
+| table-cell-actions | new           | 9.62         | 10         | New: `DropdownMenu` and its trigger.                                   |
+| table-root         | 50            | 51.64        | 51.9       | Raised: `reorderable` rows.                                            |
+| listing-browser    | 65.1          | 66.69        | 66.95      | Raised: built on `Table`.                                              |
+| listing-table      | 56.25         | 57.77        | 58         | Raised: built on `Table`.                                              |
+| webkit-provider    | 8.05          | 8.18         | 8.4        | Raised: the list-kit groups in the English catalog.                    |
+| locales-pt-BR      | 7.45          | 7.57         | 7.8        | Raised: the same groups in Portuguese.                                 |
+| locales-es         | 7.55          | 7.66         | 7.9        | Raised: the same groups in Spanish.                                    |
+
 ### M2.9 WP marketplace
 
 One new entry. `card` had no budget; measured 11.07 KB before the change (`cn` carries `tailwind-merge`) and 13.23 KB with the integration kind (`Tag` and the translate helper). The two new strings (`card.byVendor`, `card.installed`) fit inside the current provider and locale budgets.

@@ -135,7 +135,18 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the form-error rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
+- CacheSettings: one cache setting of an application, on the `AppLayout` console shell; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the async-submit toast with Edit and Redeploy.
+- Protocols: the protocol settings of a workload, on the `AppLayout` console shell; ports per protocol, TLS version and cipher suite, then Mutual authentication. Mutual authentication stays off, with a helper line saying why, until HTTPS is on; once on it shows the mode as `Field` choice cards, the trusted CA picker (search, expiry beside each certificate, Upload certificate in its footer opening a `Drawer`) and the revocation lists. Save checks a port per protocol and a CA, then deploys through the async-submit toast with Edit and Redeploy.
 - UnsavedChanges (leave guard): the Settings tab carries the dirty dot, and switching tabs while dirty opens the Unsaved changes dialog.
+
+## Settings that deploy
+
+Some settings only take effect once the resource is deployed (cache settings of an application, protocols of a workload). For those:
+
+- Say so in the save bar hint, e.g. "Saving deploys storefront to Production."
+- On Save, validate first (field errors per the form-error rule), then run the deploy on its own: a loading toast while it runs, then the async-submit toast with **Edit** (back to the form, focus on its first field) and **Redeploy**. Never offer View deployments.
+- Keep the form usable while it runs; the baseline moves to the saved values only when the deploy succeeds.
+- Keep switches that depend on each other consistent in both directions, e.g. HTTP/3 turns HTTPS on and HTTPS off turns HTTP/3 and mutual authentication off.
 
 ## Related
 

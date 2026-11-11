@@ -6,6 +6,8 @@ import State1 from '../../../../../../../packages/webkit/blocks/platform/create/
 import source1 from '../../../../../../../packages/webkit/blocks/platform/create/multipage-create/variants/module-off.vue?raw'
 import State2 from '../../../../../../../packages/webkit/blocks/platform/create/multipage-create/variants/list-settings.vue'
 import source2 from '../../../../../../../packages/webkit/blocks/platform/create/multipage-create/variants/list-settings.vue?raw'
+import State3 from '../../../../../../../packages/webkit/blocks/platform/create/multipage-create/variants/review.vue'
+import source3 from '../../../../../../../packages/webkit/blocks/platform/create/multipage-create/variants/review.vue?raw'
 
 export default {
   title: "Templates/Platform/Create/MultipageCreate",
@@ -14,7 +16,7 @@ export default {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
     docs: { canvas: { sourceState: 'shown' }, description: { component: "The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `PageHeader`, `SettingRow`, `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `Field` choice cards with `Switch` and `RadioButton`, `Item`, `Textarea`, `HelperText` and `Button`." } },
-    webkit: {"block":"platform/create/multipage-create","intents":["multipage create","multi-step create page","stepper create","create wizard","step by step form","criação em etapas","formulário em etapas","review step","review and create","confirm before create","wizard review","summary before submit","revisar","etapa de revisão","revisão antes de criar"],"skills":["webkit-create-surface","webkit-form","webkit-errors"],"steps":["where-it-runs","module","settings"],"primary":"WhereItRuns"}
+    webkit: {"block":"platform/create/multipage-create","intents":["multipage create","multi-step create page","stepper create","create wizard","step by step form","criação em etapas","formulário em etapas","review step","review and create","confirm before create","wizard review","summary before submit","revisar","etapa de revisão","revisão antes de criar","review before create","summary step","revisar antes de criar"],"skills":["webkit-create-surface","webkit-form","webkit-errors"],"steps":["where-it-runs","module","settings"],"primary":"WhereItRuns"}
   }
 }
 
@@ -31,4 +33,9 @@ export const ModuleOff = {
 export const ListSettings = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "The last step of a list bound to acme-production: the Type as wide RadioButton choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Create access list in the footer. Leaving the list empty flags it and marks the step red on the rail." }, source: { code: source2 } } }
+}
+
+export const Review = {
+  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as, the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step, marked red on the rail." }, source: { code: source3 } } }
 }

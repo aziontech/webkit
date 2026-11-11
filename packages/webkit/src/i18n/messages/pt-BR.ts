@@ -552,6 +552,19 @@ export const ptBR: Messages = {
     warning: 'Requer atenção',
     neutral: 'Não definido'
   },
+  overflowCount: {
+    noun: {
+      one: 'item',
+      other: 'itens'
+    },
+    summary: '{count} {noun}',
+    paged: '{shown} de {count} {noun}',
+    showAll: 'Ver lista completa: {count} {noun}',
+    search: 'Buscar',
+    noMatch: 'Nada corresponde a “{query}”',
+    loadMore: 'Carregar mais {count}',
+    newTab: '(abre em uma nova aba)'
+  },
   pagination: {
     label: 'Paginação',
     info: 'Mostrando {start} a {end} de {total} registros',
@@ -767,6 +780,39 @@ export const ptBR: Messages = {
   },
   tableRefreshButton: {
     label: 'Atualizar'
+  },
+  tableCellActions: {
+    label: 'Ações da linha',
+    labelFor: 'Ações de {name}'
+  },
+  tableCellId: {
+    copy: 'Copiar ID',
+    copyResource: 'Copiar ID de {resource}'
+  },
+  tableCellLink: {
+    open: 'Abrir {label}',
+    openIn: 'Abrir {label} em {destination}',
+    newTab: 'Abrir {label} em uma nova aba',
+    newTabHint: '(abre em uma nova aba)',
+    copy: 'Copiar {label}'
+  },
+  tableCellTags: {
+    noun: {
+      one: 'tag',
+      other: 'tags'
+    }
+  },
+  tableCellTime: {
+    justNow: 'agora mesmo'
+  },
+  tableReorder: {
+    column: 'Ordem',
+    handle: 'Reordenar {name}, posição {position} de {total}',
+    hint: 'Arraste, ou pressione Seta para cima ou Seta para baixo para mover.',
+    locked: 'Remova a ordenação para reordenar as linhas.',
+    moved: '{name} movido para a posição {position} de {total}.',
+    dropped: '{name} solto na posição {position} de {total}.',
+    cancelled: 'Reordenação cancelada.'
   },
   tableSearch: {
     placeholder: 'Buscar'

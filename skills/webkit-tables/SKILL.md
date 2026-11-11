@@ -1,6 +1,6 @@
 ---
 name: webkit-tables
-description: Data tables on @aziontech/webkit — one data-driven <Table> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records and the density / wrap / stripe preferences, with a column model (principal, grow, enableSorting, kind:'action', hideable) and a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters, scrolling its body internally via the h-full/min-h-0 chain. Ships a fixed set of cell recipes so every table reads the same — principal name cell, Tag/status-severity cell (one chip per row, a category chip one rounded severity), actions DropdownMenu cell, copy-value cell, "+N" overflow Popover, a Last Modified cell (Avatar + relative time in one column), the cross-resource link (the name, a 12px pi-external-link, and a tooltip naming the destination) and the domain cell built from it, with its copy button pinned to the cell's end edge for common-width alignment. The tabular companion to /webkit-form and /webkit-ui-states.
+description: Data tables on @aziontech/webkit — one data-driven <Table> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, enableSorting, kind:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — Table.CellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), Table.CellId, Table.CellStatus (one chip per row), Table.CellTags, Table.CellTime (avatar + relative time) and Table.CellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
 last_updated: 2026-11-11
 scope: general
@@ -176,6 +176,40 @@ type, options? }`) drives the `Table.Filter` builder.
 Order left→right: **Filter · Search (`flex-1`) · Refresh · Export · ColumnSelector**. `Table.Search`
 drives the global filter through the injected table context — it takes no `v-model` (compound API).
 
+### Refresh — the button, when it last updated, and auto-refresh
+
+A list whose rows change on their own (deployments, purges, certificates being issued) offers a
+refresh, says when it last loaded, and only refreshes by itself when the reader would expect it to.
+
+```vue
+<template #toolbar>
+  <div class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)">
+    <span class="shrink-0">Updated</span>
+    <Table.CellTime :value="updatedAt" />
+  </div>
+  <Table.RefreshButton :loading="refreshing" />
+</template>
+```
+
+1. **Keep the rows on screen while refreshing.** Pass `loading` to `Table.RefreshButton` (it spins
+   and cannot fire twice) and keep the table's own `loading` for a first load with nothing to show;
+   the skeleton replacing rows the reader was reading is a jump, not feedback.
+2. **Say when it last updated**, relative, beside the button: `Updated` plus `Table.CellTime`. It
+   re-renders every minute and carries the absolute time on its tooltip.
+3. **Auto-refresh is off by default on a list** and the reader turns it on (a `Switch` in the toolbar
+   or in `CollectionPreferences`). Turn it on by default only on a live view (a deploy in progress,
+   real-time events). Interval: 30 seconds or more for a list, 10 seconds for a live view.
+4. **Never disturb the reader.** Skip a tick while the tab is hidden
+   (`document.visibilityState`), while a row menu, a popover or an edit is open, or while rows are
+   selected. A refresh never moves focus, resets the scroll, the page, the sort or the selection.
+5. **Refresh once after the reader's own change** (create, delete, a bulk action), then fall back to
+   the rules above.
+6. **A failed refresh keeps the stale rows** and says so in an `Alert` above the table
+   (`Couldn't refresh. Showing data from 2 minutes ago.`) with **Retry**; auto-refresh stops until a
+   refresh succeeds. A failure is the only refresh outcome a screen reader hears.
+
+`examples/table/refresh.vue` is the reference.
+
 ### Scroll the body internally — never the page
 
 A full-height index scrolls its own **body** while the toolbar/header stay pinned. Do it with a height
@@ -238,10 +272,38 @@ not the page's: let `CollectionPreferences` set them through `useCollection` ins
 In the stacked layout the column headers are hidden, so the table renders a visible, labelled **Select
 all rows** checkbox above the stacked rows. Nothing to configure; do not add your own.
 
+### Order that matters — `reorderable`
+
+When the order of the rows **is** the data (rules that run top to bottom, a fallback list, steps), set
+`reorderable` and bind `v-model:data`. Each row gets a grip: drag it, or focus it and press Arrow Up,
+Arrow Down, Home or End. Every move is announced (`Moved Block unknown bots to position 2 of 5.`),
+focus stays on the moved row's grip, and the table emits `reorder` with `{ from, to, row }` for the
+save call.
+
+```vue
+<Table
+  v-model:data="rules"
+  :columns="columns"
+  row-key="id"
+  reorderable
+  aria-label="Rules, in the order they run"
+/>
+```
+
+- Reordering a sorted view means nothing, so the grips lock while a sort is applied and say why.
+  Do not offer a sort on a table whose order is the data.
+- Save the order the way the rest of the screen saves (a `SaveBar`, or at once with the async-submit
+  toast), not silently on every move.
+- Name the table after the order (`Rules, in the order they run`), so the position in each grip's
+  name has a meaning.
+
 ## Cell recipes
 
-Render each column with `#cell-<accessorKey>` (`#cell-actions` for the action column). Reuse these
-recipes verbatim so a cell type looks identical across every table.
+Render each column with `#cell-<accessorKey>` (`#cell-actions` for the action column). The recurring
+cells are **presets** on the `Table` compound (`Table.CellLink`, `Table.CellId`, `Table.CellStatus`,
+`Table.CellTags`, `Table.CellTime`, `Table.CellActions`; also importable one by one as
+`@aziontech/webkit/table-cell-<name>`): use them instead of re-typing the markup, so a cell type looks
+identical across every table. `examples/table/cell-presets.vue` shows all of them in one table.
 
 ### Principal / name cell — icon + truncate + hover-underline
 
@@ -306,253 +368,152 @@ colour _is_ the information.
     <span class="min-w-0 truncate">{{ value }}</span>
   </Tag>
 </template>
+```
 
-<template #cell-status="{ value }">
-  <Tag
-    :label="value"
-    :severity="value === 'Active' ? 'success' : 'secondary'"
-    size="medium"
+A status cell is `Table.CellStatus` (below).
+### Cross-resource link — `Table.CellLink`
+
+A name that opens **something other than this row** — the workload a deployment belongs to, the
+function an instance runs, the site a domain serves — is `Table.CellLink`, in a table cell and in a
+detail panel alike. It carries three rules, and each is a real bug when a hand-made copy skips one:
+
+1. **Every external mark says where it goes.** The glyph announces the name leaves; the **tooltip
+   names what it leaves for**, so the reader decides before the click. In-app (`to` plus
+   `destination`) reads `Open <name> in <Module>`; off-app (`href`) reads `Open <name> in a new tab`
+   and adds a visually hidden `(opens in a new tab)`.
+2. **The mark is a fixed 12px `pi-external-link`**, never sized from the text around it.
+3. **No destination, no mark, no tooltip.** Without `href` or `to` it renders plain truncating text.
+
+```vue
+<template #cell-workload="{ row }">
+  <Table.CellLink
+    :label="row.workload.name"
+    :to="`/workloads/${row.workload.id}`"
+    destination="Workloads"
   />
 </template>
 ```
 
-### Cross-resource link — one name that leaves the screen
+- `to` renders the app's registered `RouterLink`; with no router it falls back to a plain `href`.
+- It underlines on hover, not at rest, and stops the click so the row's `@row-click` does not fire.
+- Do not re-type its markup per call site. The hand-made copies drift on every axis at once (glyph,
+  icon size, underline at rest, tooltip or none), and a `Tooltip` trigger in a flex cell needs
+  `shrink!` to let the name truncate, which the preset already sets.
 
-A name that opens **something other than this row** — the workload a deployment belongs to, the
-function an instance runs, the site a domain serves — is the same component everywhere, in a table
-cell and in a detail panel alike. Three rules, and each is a real bug when skipped:
+### Domain cell — `Table.CellLink` with `more` and `copyable`
 
-1. **Every external mark says where it goes.** The glyph announces the name leaves; the **tooltip
-   names what it leaves for**, so the reader decides before the click instead of after. In-app reads
-   `Open <name> in <Module>`; off-app reads `Open <name> in a new tab`.
-2. **The mark is a fixed 12px `pi-external-link`** (`text-body-xs leading-none shrink-0`) — never
-   sized from the text around it. `text-[length:inherit]` inside a heading renders a heading-sized
-   arrow, and `text-[0.85em]` is the same 12px written as a number nobody can grep for.
-3. **No destination, no mark, no tooltip.** A glyph that leads nowhere is worse than no glyph, and a
-   tooltip promising a destination on a name that opens nothing is worse than silence. That leg
-   renders as plain truncating text.
-
-Build it **once** as a shared component and compose it; do not re-type the markup per call site. It
-drifts on every axis at once — glyph, icon size, underline-at-rest vs on-hover, and whether there is
-a tooltip at all.
+The copy button never sits flush against the domain (its x-position would then vary per row with
+the domain's length). `copyable` pins it to the cell's end edge, the link truncates and the cell
+fills its column, so every copy button lines up. `more` puts the other domains behind a `+N`
+`OverflowCount`:
 
 ```vue
-<!-- the shared component's body -->
-<Tooltip :text="tooltipText" :disabled="!isLink" class="min-w-0 shrink!">
-  <component
-    :is="tag"
-    :to="tag === 'router-link' ? to : undefined"
-    :href="href || undefined"
-    :target="href ? '_blank' : undefined"
-    :rel="href ? 'noopener noreferrer' : undefined"
-    class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
-    @click.stop
-  >
-    <span
-      class="truncate underline-offset-2"
-      :class="isLink ? 'group-hover/link:underline' : ''"
-      >{{ label }}</span
-    >
-    <span
-      v-if="href"
-      class="sr-only"
-      >{{ ' (opens in a new tab)' }}</span
-    >
-    <i
-      v-if="isLink"
-      class="pi pi-external-link shrink-0 text-body-xs leading-none"
-      aria-hidden="true"
-    />
-  </component>
-</Tooltip>
-```
-
-- **Underline on hover, not at rest.** A list is mostly links; underlining all of them at rest turns
-  the column into noise.
-- **`@click.stop`** so opening the link never also fires the row's `@row-click`.
-- **`sr-only` for the new-tab fact.** The tooltip is pointer- and focus-only, so the one thing a
-  screen reader cannot otherwise learn is said in text. Bind the string (`{{ ' (…)' }}`) to keep its
-  leading space — written as markup the formatter strips it and it runs into the name.
-- **`shrink!` is load-bearing, not decoration.** `Tooltip`'s trigger wrapper is a flat
-  `inline-flex w-fit shrink-0`, and a consumer class merges into it **by concatenation, not through
-  `cn`** — so a plain `shrink` and the component's own `shrink-0` set the same property at the same
-  specificity, and stylesheet order decides. Without the `!` the wrapper refuses to shrink in a flex
-  cell, the name never reaches its `truncate`, and **the cell overflows instead**. This is silent:
-  nothing errors, and at a wide viewport it looks correct. Measure it at a narrow one — assert zero
-  cells where `scrollWidth > clientWidth`.
-
-### Domain cell — the link above, copy button pinned to the cell's end edge
-
-**The rule that fixes misalignment:** the copy button never sits flush against the domain text (its
-x-position would then vary per row with the domain length). It is **pinned to the cell's end edge** with
-`ms-auto shrink-0`, the link **truncates**, and the cell fills its column (`w-full`) — so every copy
-button lines up vertically no matter how long the domain is.
-
-```vue
-<template #cell-domainName="{ value }">
-  <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-    <ResourceLink
-      :label="value"
-      :href="`https://${value}`"
-    />
-    <CopyButton
-      kind="outlined"
-      :value="value"
-      aria-label="Copy domain name"
-      class="ms-auto shrink-0"
-    />
-  </div>
+<template #cell-domains="{ row }">
+  <Table.CellLink
+    :label="row.domains[0]"
+    :href="`https://${row.domains[0]}`"
+    :more="row.domains.slice(1).map((label) => ({ label, href: `https://${label}` }))"
+    :more-noun="{ one: 'domain', other: 'domains' }"
+    copyable
+  />
 </template>
 ```
 
-Extract this whole cell as a component too, and use it on **every** list that shows a domain. Four
-lists having their own copy of it is how one of them ends up without the copy button — and the
-copies are indistinguishable until you diff them.
+The value keeps its order under `dir="rtl"` (`dir="auto"` on the name). Use this on **every** list
+that shows a domain; four lists each with their own copy is how one ends up without the copy button.
 
-Do **not**:
+### "+N" overflow — `OverflowCount`, not a wrapped list
 
-- put `CopyButton` immediately after the text with no `ms-auto` (the misalignment this recipe fixes);
-- let a domain or ID reorder inside right-to-left text: wrap the value in `<span dir="ltr">` (or
-  `<bdi>`) so `api.example.com` and `a1b2-c3` keep their order under `dir="rtl"`;
-- use `whitespace-nowrap` on the link instead of `truncate` (a long domain then shoves the button off);
-- omit `@click.stop` on the link/button when the row has `@row-click` (the click would open the row).
+When a cell holds a primary value plus more of the same kind, show the primary and an
+`OverflowCount` (`@aziontech/webkit/overflow-count`) with the hidden ones. It is the overflow rule of
+`/webkit-ux-heuristics` built once: a chip named `Show all <n> <noun>`, a popover with the summary
+(`12 domains`, `10 of 34 domains`), a search box past 7 items, Load more in batches of 10, a no-match
+line quoting the query, a polite status region, and a reset when it closes. Pass only the hidden items
+and a `noun`; an item with `href` opens in a new tab, and the `item` slot takes a router link.
+`Table.CellLink` (`more`) and `Table.CellTags` already use it.
 
-### "+N" overflow cell — Popover, not a wrapped list
+### Tags — `Table.CellTags`
 
-When a cell holds a primary value plus overflow (multiple domains, tags), show the primary + a `+N` `Tag`
-that opens a `Popover` listing the rest. The `+N` tag is `shrink-0` and sits right after the primary;
-copy (if any) still pins right.
-
-The popover itself — summary line, search past 7 items, the scrolling list, Load more, the no-match
-line — is the overflow rule in `/webkit-ux-heuristics` (Usability rules § 2). Build it once as a
-shared component and drop it into the cell:
+A list of tags shows as many as fit the cell and moves the rest behind `+N`; it measures itself, so
+the same column reads well at every width. Tags are rounded and secondary (a category, not a status).
 
 ```vue
-<template #cell-domainName="{ row }">
-  <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-    <ResourceLink
-      :label="row.domains[0]"
-      :href="`https://${row.domains[0]}`"
-    />
-    <DomainOverflow
-      v-if="row.domains.length > 1"
-      :domains="row.domains.slice(1)"
-      :count="row.domains.length - 1"
-    />
-    <CopyButton
-      kind="outlined"
-      :value="row.domains[0]"
-      aria-label="Copy domain name"
-      class="ms-auto shrink-0"
-    />
-  </div>
+<template #cell-tags="{ value }">
+  <Table.CellTags :items="value" />
 </template>
 ```
 
-### Copy-value cell — text + CopyButton at the end
+### Identifier — `Table.CellId`
 
-Any cell that exposes a copyable value (token, ID, variable value) uses the same **text-then-copy** shape,
-copy pinned to the end edge:
+An ID, token or other copyable value uses the **text-then-copy** shape with the copy button pinned to
+the end edge, named after what it copies (`resource="workload"` → `Copy workload ID`):
 
 ```vue
-<template #cell-value="{ value }">
-  <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-    <span class="min-w-0 truncate">{{ value }}</span>
-    <CopyButton
-      kind="outlined"
-      :value="value"
-      aria-label="Copy value"
-      class="ms-auto shrink-0"
-    />
-  </div>
+<template #cell-id="{ value }">
+  <Table.CellId
+    :value="value"
+    resource="workload"
+  />
 </template>
 ```
 
-### Last Modified cell — Avatar + relative time (one column, not two)
-
-A "Last Modified" / "Updated" / "Deployed" column shows **the modifier's `Avatar` + a relative timestamp**
-("3 days ago", "2 min ago") — never a raw absolute date, and never a _separate_ "Last Modified By" /
-"Author" column. The person is conveyed by the avatar (name on its `Tooltip`), so the two former columns
-**fold into one**. Extract the recipe into your own small cell component so every table's time column is
-identical:
+### Status — `Table.CellStatus`
 
 ```vue
-<!-- your own LastModifiedCell — Avatar (tooltip = name) + relative time -->
-<template #cell-lastModified="{ value, row }">
-  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-    <Tooltip
-      v-if="row.author"
-      :text="row.author"
-    >
-      <Avatar
-        :label="row.author"
-        size="small"
-      />
-    </Tooltip>
-    <span class="truncate text-body-sm text-(--text-muted)">{{ relativeTime(value) }}</span>
-  </div>
+<template #cell-status="{ value }">
+  <Table.CellStatus
+    :label="value"
+    :severity="statusSeverity(value)"
+  />
 </template>
 ```
 
-- **`relativeTime(date)`** is a small formatter you own in your app — "just now" / "N min ago" /
-  "N hours ago" / "N days ago" / "N weeks/months/years ago" (return `''` for empty/unparseable input so a
-  missing date renders nothing). It is app logic, not a webkit component.
-- **The avatar identifies the modifier**; the name (humanize an email: `maria.silva@example.com` →
-  `Maria Silva`) lives on the `Tooltip`, so there is no separate name column.
-- Do **not**: render the raw absolute date; keep a separate "Last Modified By"/"Author" column beside this
-  cell (two avatars per row).
+`statusSeverity` is one shared helper per status set (see the chip rules above). An empty value
+renders a muted dash.
 
-### Actions cell — DropdownMenu + ellipsis IconButton
+### Last modified — `Table.CellTime` (one column, not two)
 
-The trailing `kind:'action'` column renders a `DropdownMenu` triggered by an ellipsis `IconButton`. Group
-destructive actions in their own `DropdownMenu.Group`.
+A "Last modified" / "Updated" / "Deployed" column shows **the author's avatar and a relative time**
+("2 hours ago"), never a raw absolute date and never a separate "Author" column. The name is on the
+avatar's tooltip (an email reads as a name: `maria.silva@example.com` → `Maria Silva`); the absolute
+time is on the time's tooltip and in visually hidden text, so a screen reader hears both. Every
+mounted cell shares one minute clock, so "just now" turns into "1 minute ago" without a reload.
+
+```vue
+<template #cell-updatedAt="{ row }">
+  <Table.CellTime
+    :value="row.updatedAt"
+    :author="row.updatedBy"
+  />
+</template>
+```
+
+### Actions — `Table.CellActions`
+
+The trailing `kind: 'action'` column renders `Table.CellActions`: an outlined ellipsis trigger named
+`Actions for <row name>` (so a screen reader's button list tells the rows apart) opening a
+`DropdownMenu`. Destructive options go in their own last `DropdownMenu.Group`. Give the column a
+visually hidden header (`#header-actions` → `<span class="sr-only">Actions</span>`).
 
 ```vue
 <template #cell-actions="{ row }">
-  <DropdownMenu
-    placement="bottom-end"
+  <Table.CellActions
+    :name="row.name"
     @select="(event, value) => onRowAction(event, value, row)"
   >
-    <DropdownMenu.Trigger>
-      <IconButton
-        icon="pi pi-ellipsis-h"
-        kind="outlined"
-        size="small"
-        aria-label="Row actions"
-      />
-    </DropdownMenu.Trigger>
     <DropdownMenu.Group>
-      <DropdownMenu.Option
-        value="view"
-        label="View details"
-      >
-        <template #left
-          ><i
-            class="pi pi-eye"
-            aria-hidden="true"
-        /></template>
-      </DropdownMenu.Option>
-      <!-- edit, clone … -->
+      <DropdownMenu.Option value="edit" label="Edit" />
+      <DropdownMenu.Option value="clone" label="Clone" />
     </DropdownMenu.Group>
     <DropdownMenu.Group>
-      <DropdownMenu.Option
-        value="delete"
-        label="Delete"
-      >
-        <template #left
-          ><i
-            class="pi pi-trash"
-            aria-hidden="true"
-        /></template>
-      </DropdownMenu.Option>
+      <DropdownMenu.Option value="delete" label="Delete" />
     </DropdownMenu.Group>
-  </DropdownMenu>
+  </Table.CellActions>
 </template>
 ```
 
-`@select` follows the webkit event contract `(event, value)` — event first, value second. The in-cell
-`IconButton` is inside the action column, so it doesn't need `@click.stop`; any interactive control in a
-**non-action** cell of a row-clickable table does (`@click.stop`).
+`@select` follows the webkit event contract `(event, value)`. Any interactive control in a
+**non-action** cell of a row-clickable table needs `@click.stop`; the presets already stop theirs.
 
 ## Checklist
 
@@ -565,15 +526,18 @@ destructive actions in their own `DropdownMenu.Group`.
 - [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · ColumnSelector; `#filters` → `Table.AppliedFilters`.
 - [ ] Body scrolls internally: `min-h-0 flex-1` parent → `Card h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
 - [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
-- [ ] Every name that leaves the screen uses the one shared cross-resource link: 12px `pi-external-link`, a tooltip naming the destination, underline on hover, and **no mark at all** when there is no destination.
+- [ ] Every name that leaves the screen is `Table.CellLink` (12px `pi-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.
 - [ ] Only **one** chip per row, and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.
-- [ ] Domain cell = the shared link + `CopyButton` with `ms-auto shrink-0`; cell `w-full`. Copy buttons align across rows.
+- [ ] Domain cell = `Table.CellLink` with `copyable` (and `more` for the other domains); copy buttons align across rows.
 - [ ] In a 320 px box the rows stack into label/value cards (no `:stackable="false"` without a reason) and the toolbar wraps.
 - [ ] Measured at a narrow viewport: **zero** cells where `scrollWidth > clientWidth` (catches a link wrapper that cannot shrink, which looks fine when wide).
-- [ ] Every copyable cell uses text-then-copy with the copy button pinned to the end (`ms-auto shrink-0`), never flush against the text.
-- [ ] "Last Modified" cell = `Avatar` + relative time in one column, name on the avatar tooltip; no raw absolute date and no separate "Last Modified By"/"Author" column beside it.
-- [ ] Overflow shown as a `+N` `Tag` opening a `Popover` (summary, search past 7, Load more — per `/webkit-ux-heuristics`), not a wrapped inline list.
-- [ ] Status via `Tag :severity`, never a raw color; long text `truncate`s inside `min-w-0`.
+- [ ] Every copyable ID or token is `Table.CellId`: text then a copy button pinned to the end, named after what it copies.
+- [ ] "Last modified" cell = `Table.CellTime` (avatar + relative time in one column); no raw absolute date and no separate "Author" column beside it.
+- [ ] Overflow is an `OverflowCount` (`+N` with summary, search past 7, Load more), or `Table.CellTags` for tags; never a wrapped inline list.
+- [ ] Status via `Table.CellStatus :severity` from one shared helper, never a raw color; long text `truncate`s inside `min-w-0`.
+- [ ] Row actions are `Table.CellActions :name` (trigger named after the row), destructive options in their own last group.
+- [ ] A list whose rows change on their own: `Table.RefreshButton :loading` keeps the rows, an `Updated` time sits beside it, and auto-refresh follows the six refresh rules.
+- [ ] Order that is data → `reorderable` + `v-model:data`; no sort offered on that table.
 - [ ] Interactive controls in non-action cells use `@click.stop` when the table has `@row-click`.
 
 ## Related skills

@@ -1,11 +1,11 @@
 <script setup>
-  import Table from '@aziontech/webkit/table'
-  import Tag from '@aziontech/webkit/tag'
-  import IconButton from '@aziontech/webkit/icon-button'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Table from '@aziontech/webkit/table'
+  import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
   const rows = []

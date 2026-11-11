@@ -1,0 +1,16 @@
+{
+  "component": "overflow-count",
+  "title": "Components/Primitives/Content/OverflowCount",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A domain line: the first domain, then `+3` opening a popover with the other three, each a link that opens in a new tab. The chip's name says what it counts.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Long list",
+      "summary": "34 tags: past 7 items the popover adds a search box, it loads 10 at a time with Load more, the summary says how many show, and a search with no match quotes the query.",
+      "file": "long-list.vue"
+    }
+  ]
+}

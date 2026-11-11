@@ -244,6 +244,79 @@ Scope: new blocks `platform/view/rules-list` (Application primary; Firewall, Rev
 
 - Criteria are now `AttributeEditor` grouped (labels, Add condition, Add OR group, limits 10 and 5, Remove, focus, announcements, per-cell errors after Save), the variable a `Combobox` of the phase's variables. Decision: conditions no longer reorder (And and Or do not depend on order); the old mixed And/Or join inside one group is gone, since one level of Or over And is the model the guidelines already stated. Behaviors keep drag and arrow reorder.
 
+## WP list-kit
+
+Scope: new `OverflowCount` (`content/overflow-count`); six cell presets on the `Table` compound (`Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTags`, `Table.CellTime`, `Table.CellActions`); `Table` `reorderable` rows; `Table.RefreshButton` `loading` and a `Tooltip` on it and on `Table.Export`; the refresh pattern and the presets in `skills/webkit-tables`; examples `overflow-count/default`, `overflow-count/long-list`, `table/cell-presets`, `table/reorderable-rows`, `table/refresh`. Already on the branch and not rebuilt: `Table.Export` / `exportCsv` (CSV of the visible, ordered columns) and `virtual` rows (sticky header, resizable columns, measured heights). A mechanical pass over every new SFC and example found no raw colours, palette classes, physical direction utilities or raw pixel sizes, and every transition carries a `motion-reduce` escape.
+
+### OverflowCount
+
+- One shape for every "+N": a small secondary `Tag` in a `Popover` trigger named `Show all <n> <noun>` (the visible `+3` alone does not say what it counts). The popover follows the overflow rule of `webkit-ux-heuristics`: summary (`3 domains`, `10 of 33 tags`), search past 7 items, Load more in batches of 10, a no-match line quoting the query, a polite status region, reset on close. Entries that open a new tab say so in hidden text; every entry is `dir="auto"`. No defect.
+- Decision: the search threshold is 7 (our heuristics rule, Cloudscape) rather than the design sample's 10; Load more is synchronous (the sample's 420 ms fake latency is demo data, not design).
+- Finding: axe `aria-dialog-name` on the open popover (a `role="dialog"` with no name). Fixed: the summary is the `PopoverTitle`, so the dialog is named by it.
+- Note: the chip is 20 px tall (the small `Tag`); it passes WCAG 2.5.8 through the spacing exception in a cell (8 px gap to its neighbours), not through its own size.
+
+### Table cell presets
+
+- Rule 10 of ui-craft ("one shape per recurring element, built once") is now code: the cross-resource link, the domain cell, the ID, the status chip, the tag list, the last-modified cell and the row menu are components, so a list cannot drift from the others. The skill's recipes now point at them.
+- `CellLink` keeps the three link rules (destination tooltip, fixed 12 px mark, no mark without a destination), underlines on hover only, stops the click before a clickable row, and uses the app's registered `RouterLink` for `to` (plain `href` without a router). `CellId` keeps IDs `dir="ltr"`. Copy buttons pin to the end edge with `ms-auto`, so they align down the column. No defect.
+- `CellTime` folds author and time into one column (avatar with the name on its tooltip, relative time with the absolute one on its tooltip and in hidden text) and shares one minute clock across all mounted cells.
+- Finding: the relative time read `46 seconds ago` and could differ between server and client render. Fixed: under an hour it reads in whole minutes (`just now` under 45 s), and the clock takes the current time when its first cell sets up.
+- Finding: `CellTags` re-measured inside its `ResizeObserver` callback (a "loop completed with undelivered notifications" error). Fixed: measuring is deferred to the next animation frame.
+- Finding: the presets example's actions column had an empty header (axe `empty-table-header`). Fixed: `#header-actions` renders a visually hidden `Actions`, and the skill says so.
+- Empty values render a muted dash, as in the design sample.
+
+### Reorderable rows
+
+- A leading 40 px grip column (an outlined `pi-bars` `IconButton`, as in the design sample's rules engine) frozen at the start when other columns are. Pointer drag (pointer events, so touch works) shows the dragged row with a dashed accent outline and the drop edge as a 2 px accent line; the viewport scrolls near its edges. Keyboard: Arrow Up, Arrow Down, Home, End on a focused grip; focus stays on the moved row's grip; `Esc` cancels a drag. Each grip is named `Reorder <name>, position <n> of <total>` and described by the hint, and a polite status announces every move (WCAG 2.5.7: dragging is never the only way).
+- Decision: plain arrows on the grip (the design sample) rather than Alt+Arrow (the inventory's guess); the grip is a button, so arrows do not collide with anything.
+- Decision: the grips lock while a sort is applied, with the reason in their description; a sorted order cannot be reordered meaningfully.
+- No defect after tests (10 behaviour, keyboard, pointer, locale, RTL and axe cases).
+
+### Refresh pattern
+
+- `Table.RefreshButton :loading` spins and blocks a second press while the rows stay on screen; the table's own `loading` stays for a first load. The pattern (skill `webkit-tables`): an `Updated` time beside the button (`Table.CellTime`), auto-refresh off by default on lists and on by default only on live views, 30 s / 10 s intervals, skip while hidden or while the reader is acting, never move focus or reset scroll, page, sort or selection, refresh once after the reader's own change, and a failed refresh keeps stale rows with an `Alert` and Retry.
+- Finding: the example's dates were computed per render, so server and client disagreed (hydration attribute mismatch). Fixed: example dates are anchored to the current minute.
+
+Not verified: a styled render in both themes. The browser tests run without CSS, so geometry (the tag fit, the frozen grip offset, the drop line) is unasserted; it is an M2.10 row.
+
+## WP workload-app
+
+Scope: `shells/console` primary (ListPage) and DetailPage rebuilt on `AppLayout`, with `closeNavigation` added to the `AppLayout` navigation slot scope (additive; spec, checksum and test updated); new variants `details-page#Application` (Overview, Versions, Deployments and a Topology tab on `TopologyDiagram`), `edit-resource#CacheSettings` and `#Protocols`, `version-detail#EnvironmentCrumb`, `multipage-create#Review` and `record-table#ImportZoneFile`. Design from the sample (`ApplicationDetail`, `panels/CacheSettings`, `WorkloadProtocolSection`, `WorkloadMutualAuthSection`, `EnvironmentCrumb`, `ReviewStep`, `lib/format/zone-file.js`, `WorkloadDetail` topology), with fictional data. A mechanical pass over every new SFC found no raw colours, palette classes, physical direction utilities or raw pixel sizes, and every transition and page animation carries a `motion-reduce` escape. Deploys (the Application deploy, cache settings, protocols) end in the async-submit toast with Edit and Redeploy; the create and the zone import are not deploys, so their toasts carry no deploy actions. Behaviour, keyboard and axe for the interactive states the harness does not reach (Topology tab, deploy drawer, field errors, the open import drawer) are in `src/test/workload-app-blocks.test.ts`.
+
+### shells/console on AppLayout
+
+- One `AppLayout` per state; the rail in `#navigation` drops resize and collapse inside the drawer; the header swaps the breadcrumb for the hamburger and wordmark from the header scope's `compact`, so the shell goes compact in a narrow host too. No hand-written `Drawer` is left.
+- Finding: inside the `AppLayout` drawer, choosing a `Menu` item left the drawer open (the old hand-written drawer closed it). Fixed: `AppLayout` exposes `closeNavigation` in the navigation scope and all three states call it on navigate.
+- Finding: building blocks for the DetailPage tab bar and environment crumb named components the primary does not import. Fixed: described in the DetailPage state instead.
+
+### details-page#Application
+
+- The tab row keeps one outlined Deploy with the staged count beside it as a warning `Tag`; the deploy `Drawer` lists each staged change from and to before anything runs; the Topology status line is polite. Binds only stage; the toast's Edit returns to the Topology tab.
+- Finding: frame classes on `TopologyDiagram` and `PanelFooter` (consumer lint `no-style-override`). Fixed: moved to wrapper elements.
+- Finding: the Source fact linked to a Build tab this page does not have. Fixed: plain text.
+- Decision: Build is left out of the tab set; it is the ResourceBuild state of the same block.
+
+### edit-resource#CacheSettings and #Protocols
+
+- Dependent rows sit one level in under their switch or behavior; HTTP/3 turns HTTPS on, HTTPS off turns HTTP/3 and mutual authentication off; mutual authentication explains why it is off instead of hiding. Errors follow the form rule: the field turns invalid with one reason under it, focus moves to the first one on Save. The CA picker searches, shows expiry and uploads through a `Drawer` that validates name and PEM.
+- Finding: the forms had no `main` landmark, so the `PageHeader` `header` counted as a second banner (axe best practice `landmark-no-duplicate-banner`, not in the WCAG harness). Fixed: each form sits in `main`.
+- Finding: the Protocols breadcrumb ended on Settings, a tab. Fixed: it ends on the workload.
+- Open: only the success path of the deploy is drawn; the failure toast and `Alert` are the async-submit Failed state.
+
+### version-detail#EnvironmentCrumb
+
+- Environment comes before version; picking an environment moves the version crumb to the version live there and each version says where it is live, in text, beside its state `Tag`. No defect.
+- Open: like the primary, the crumbs hide below md, so a phone cannot switch environment from this page (same as the version switcher today).
+
+### multipage-create#Review
+
+- Values show with the property they are sent as; long lists show five `Tag`s and a count; Edit per band is named for its band (`Edit list settings`), and Create re-validates and opens the first step with an error. No defect.
+
+### record-table#ImportZoneFile
+
+- Nothing is written on drop; every line is previewed with its number, status `Tag` and reason in text (not colour alone); the counts are a polite status; errors raise one danger `Alert` that says the ready lines still import; Import is disabled at zero and the toast counts what was left out. The hidden file input is out of the tab order; Browse files is the keyboard path.
+- Note: axe best practice `empty-table-header` fires on the records table's action column, which predates this WP (its header is intentionally empty); the WCAG harness does not include that rule.
+
 ## WP marketplace
 
 Scope: `Card` `kind="integration"` (additive), new blocks `platform/view/template-browser` (Default; Preview, NoMatch, Loading, Failed) and `platform/view/marketplace` (Default; Templates, Detail, Installing, Installed, InstallFailed, NoMatch, Loading). Sources: the design sample's `IntegrationCard.vue`, `TemplateCard.vue`, `TemplateBrowser.vue`, `TemplatePreview.vue` and `pages/marketplace/Marketplace.vue` (tabs, Featured, search plus Publisher, Category and Context filters, the tile anatomy); the Console Kit's `SolutionView.vue` (vendor, version, last update, Overview) and `IntegrationInstall.vue` with `PermissionsFieldset.vue` (required application, the permissions list).
