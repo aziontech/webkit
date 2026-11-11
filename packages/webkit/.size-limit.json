@@ -1155,7 +1155,8 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/prompt-input.vue",
-    "limit": "11.45 KB"
+    "limit": "6 KB",
+    "entryOnly": true
   },
   {
     "name": "reasoning",
