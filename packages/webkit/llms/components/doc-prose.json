@@ -1,0 +1,52 @@
+{
+ "name": "doc-prose",
+ "binding": "DocProse",
+ "import": "@aziontech/webkit/doc-prose",
+ "treeShakeableImport": "@aziontech/webkit/doc-prose",
+ "category": "documentation",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The typography contract every documentation page inherits. A markdown or MDX pipeline compiles text to plain semantic HTML — `h2`, `p`, `ul`, `table`, `a`, `code` — and this container is what gives that HTML the Azion type scale, the semantic colors and the vertical rhythm, so an author writes markdown and never a class. It styles **descendants** rather than itself, so it works the same over any renderer's output, a slot of hand-written markup, or raw HTML from a CMS.",
+ "setup": null,
+ "useWhen": [
+  "Wrapping the body of a documentation or changelog page, whatever produced its HTML.",
+  "Giving authored prose inside a documentation block (a step's body, a tab's panel) the same type contract as the page around it."
+ ],
+ "avoidWhen": [
+  "To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-content` (`--layout-measure-content`, 876px).",
+  "To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.",
+  "For a single run of body copy in an application screen — use the `text-body-*` tokens directly."
+ ],
+ "related": [
+  "DocPageHeader` — the page masthead above this container; its `h1` is chrome, so authored content starts at `h2`.",
+  "DocCallout` / `DocCard` / `DocSteps` — blocks that sit inside prose and mark themselves `data-doc-chrome` so the contract stops at their edge."
+ ],
+ "bestPractices": [
+  "Mark a documentation component's root `data-doc-chrome` so prose rules stop there, and `data-doc-block` so it takes the block rung of the ladder. A callout is both.",
+  "Do not add per-page overrides. If a rung is wrong, it is wrong for every page and belongs in this contract.",
+  "Keep the consumer's column cap outside this component; it is typography, not layout."
+ ],
+ "props": [],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The document body: markdown-rendered HTML or hand-written markup."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import DocProse from '@aziontech/webkit/doc-prose'\n</script>\n\n<template>\n  <DocProse>\n    <h2>Deploy an application</h2>\n    <p>\n      Templates are ready-made projects that go live in a few clicks. You don't need any local\n      tooling, and the <a href=\"https://www.azion.com/en/documentation/\">template's guide</a> lists\n      what each one needs.\n    </p>\n    <h3>What you get</h3>\n    <ul>\n      <li>A <strong>workload</strong> bound to its own Azion domain</li>\n      <li>An edge application built from your <code>azion.config.js</code></li>\n      <li>A certificate issued and renewed for you</li>\n    </ul>\n    <ol>\n      <li>Pick a template</li>\n      <li>Fill in the fields it asks for</li>\n      <li>Deploy</li>\n    </ol>\n    <blockquote>\n      <p>The first request to a location is a cache miss. Warm-up is per location, not global.</p>\n    </blockquote>\n    <h4>Build command</h4>\n    <p>\n      An h4 is a label inside a section rather than a new section, so it shares the base gap of the\n      prose around it and carries its level on weight instead.\n    </p>\n    <hr />\n    <p>A section break above resets the reader before the next part of the page.</p>\n  </DocProse>\n</template>"
+  },
+  {
+   "name": "ChromeBoundary",
+   "sfc": "<script setup>\n  import DocProse from '@aziontech/webkit/doc-prose'\n</script>\n\n<template>\n  <DocProse>\n    <h2>The contract stops at a component's edge</h2>\n    <p>This paragraph is authored prose, so it takes the prose rung and the prose ink.</p>\n    <div data-doc-chrome>\n      <h2>A component's own heading</h2>\n      <p>A component's own copy keeps whatever that component gives it.</p>\n    </div>\n    <p>And prose after the component picks the ladder back up.</p>\n  </DocProse>\n</template>"
+  }
+ ],
+ "docs": "components/doc-prose.md"
+}

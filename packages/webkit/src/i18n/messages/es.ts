@@ -1,6 +1,82 @@
 import type { Messages } from '../types'
 
 export const es: Messages = {
+  actionConfirmation: {
+    approve: 'Aprobar',
+    deny: 'Denegar',
+    approved: 'Aprobado',
+    denied: 'Denegado',
+    expired: 'Solicitud vencida',
+    confirmLabel: 'Escribe {phrase} para confirmar'
+  },
+  aiLoading: {
+    generating: 'Generando una respuesta'
+  },
+  artifactPreview: {
+    open: 'Abrir',
+    openLabel: 'Abrir {title}',
+    download: 'Descargar {title}',
+    copy: 'Copiar {title}'
+  },
+  chatMessage: {
+    user: 'Tú',
+    assistant: 'Asistente de IA',
+    system: 'Sistema',
+    labelWithTime: '{author} a las {time}',
+    actions: 'Acciones del mensaje',
+    error: 'No se pudo generar la respuesta.',
+    retry: 'Intentar de nuevo',
+    helpful: 'Útil',
+    notHelpful: 'No fue útil',
+    feedback: 'Valoración de la respuesta',
+    feedbackSubmitting: 'Enviando valoración',
+    feedbackSubmitted: 'Valoración enviada'
+  },
+  citation: {
+    label: 'Fuente {index}: {title}',
+    labelUntitled: 'Fuente {index}'
+  },
+  conversation: {
+    label: 'Conversación',
+    scrollToLatest: 'Ir al último mensaje',
+    announcement: '{author}: {text}'
+  },
+  promptInput: {
+    label: 'Prompt',
+    placeholder: 'Haz una pregunta',
+    submit: 'Enviar',
+    stop: 'Detener la generación',
+    count: '{count}/{max}',
+    overLimit: '{count} caracteres por encima del límite'
+  },
+  reasoning: {
+    thinking: 'Pensando',
+    thoughtBriefly: 'Pensó durante unos segundos',
+    skip: 'Omitir razonamiento',
+    thought: {
+      one: 'Pensó durante {count} segundo',
+      other: 'Pensó durante {count} segundos'
+    }
+  },
+  sources: {
+    label: 'Fuentes',
+    count: {
+      one: '{count} fuente',
+      other: '{count} fuentes'
+    }
+  },
+  suggestionGroup: {
+    label: 'Prompts sugeridos'
+  },
+  toolCall: {
+    pending: 'En espera',
+    running: 'En ejecución',
+    success: 'Completado',
+    error: 'Falló',
+    denied: 'Denegado',
+    input: 'Entrada',
+    output: 'Salida'
+  },
   alert: {
     close: 'Cerrar mensaje'
   },

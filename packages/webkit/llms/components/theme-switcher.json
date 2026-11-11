@@ -1,0 +1,60 @@
+{
+ "name": "theme-switcher",
+ "binding": "ThemeSwitcher",
+ "import": "@aziontech/webkit/theme-switcher",
+ "treeShakeableImport": "@aziontech/webkit/theme-switcher",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.",
+ "setup": null,
+ "useWhen": [
+  "The app-wide color mode picker in a header, footer, account menu or settings page."
+ ],
+ "avoidWhen": [
+  "A general on/off preference → use `switch`.",
+  "Picking one of other mutually exclusive options → use `toggle-group`.",
+  "Moving between views or panels → use `tabs`."
+ ],
+ "related": [
+  "toggle-group` — the generic mutually exclusive option group, with labels and sizes.",
+  "switch` — boolean toggle for a single setting."
+ ],
+ "bestPractices": [
+  "Bind with `v-model` and apply the mode in the app (for example a `data-theme` attribute, resolving `system` from `prefers-color-scheme`); the component has no side effects.",
+  "Persist the chosen mode on the app side so it survives a reload.",
+  "Localize `ariaLabel`; the segment names (System, Dark, Light) are fixed in the component."
+ ],
+ "props": [
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the whole control and applies disabled tokens."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'\n\n  const theme = ref('system')\n</script>\n\n<template>\n  <ThemeSwitcher v-model=\"theme\" />\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'\n\n  const theme = ref('system')\n</script>\n\n<template>\n  <ThemeSwitcher\n    v-model=\"theme\"\n    disabled\n  />\n</template>"
+  }
+ ],
+ "docs": "components/theme-switcher.md"
+}

@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Two numbered references in a sentence: the first links to the source page and names it in a tooltip, the second points at item 2 of a Sources list on the same page.",
+   "sfc": "<script setup>\n  import Citation from '@aziontech/webkit/citation'\n</script>\n\n<template>\n  <p class=\"max-w-(--container-md) text-body-md text-(--text-default)\">\n    A purge reaches every edge location in a few seconds\n    <Citation\n      :index=\"1\"\n      title=\"Real-Time Purge\"\n      href=\"https://www.azion.com/en/documentation/\"\n    />, and cached objects are fetched again from the origin on the next request\n    <Citation\n      :index=\"2\"\n      title=\"Cache settings\"\n      href=\"#cache-answer-source-2\"\n    />.\n  </p>\n</template>"
+  }
+ ]
+}

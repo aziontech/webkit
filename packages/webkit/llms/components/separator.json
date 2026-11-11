@@ -1,0 +1,71 @@
+{
+ "name": "separator",
+ "binding": "Separator",
+ "import": "@aziontech/webkit/separator",
+ "treeShakeableImport": "@aziontech/webkit/separator",
+ "category": "layout",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Thin separator line that visually splits content into groups. Renders as a full-width hairline (`horizontal`) or full-height hairline (`vertical`), and can carry centered content (an \"Or\"-style label) when the default slot or `label` prop is set. Unlike `ScrollArea` it adds no scrolling behaviour; it is a purely decorative-yet-semantic boundary exposing `role=\"separator\"`.",
+ "setup": null,
+ "useWhen": [
+  "Separate groups of content inside a card, form, panel or menu.",
+  "An \"Or\" break between two alternative paths (social sign-in and email) with `label`.",
+  "A vertical rule between inline items in a toolbar or meta line."
+ ],
+ "avoidWhen": [
+  "The break between two page sections → use `section-gap`.",
+  "A bounded region that scrolls → use `scroll-area`."
+ ],
+ "related": [
+  "section-gap` — the frame that divides page sections, with its own rules and vertical air.",
+  "scroll-area` — scrolling container; Separator adds no scrolling."
+ ],
+ "bestPractices": [
+  "Size a vertical divider through its wrapper (`flex h-4 items-center`); its own `h-full` beats a height class passed to it, and in an `items-center` row it collapses to zero height.",
+  "Keep `label` to a word or two; the default slot replaces it when you need inline markup.",
+  "Use it to separate groups, not to add spacing; it renders `role=\"separator\"` with `aria-orientation`."
+ ],
+ "props": [
+  {
+   "name": "orientation",
+   "type": "'horizontal' | 'vertical'",
+   "default": "'horizontal'",
+   "required": "false",
+   "doc": "Layout axis of the separator line."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fallback centered text shown when the default slot is empty."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Centered content; overrides `label` when provided."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Separator from '@aziontech/webkit/separator'\n</script>\n\n<template>\n  <Separator orientation=\"horizontal\" />\n</template>"
+  },
+  {
+   "name": "WithLabel",
+   "sfc": "<script setup>\n  import Separator from '@aziontech/webkit/separator'\n</script>\n\n<template>\n  <Separator\n    orientation=\"horizontal\"\n    label=\"OR\"\n  />\n</template>"
+  },
+  {
+   "name": "Orientations",
+   "sfc": "<script setup>\n  import Separator from '@aziontech/webkit/separator'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-8\">\n    <div class=\"w-[160px]\">\n      <Separator orientation=\"horizontal\" />\n    </div>\n    <div class=\"flex items-center justify-center h-[80px]\">\n      <Separator orientation=\"vertical\" />\n    </div>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/separator.md"
+}

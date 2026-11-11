@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 55547f59d8d4e4a236596531c95771884b01d9e0e64629bc34d92c8c06e4b066
+checksum: 83cc50bf1b17633818c72dcc8ad6cad4c71e19202746ffb1272dc067977b01db
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -111,7 +111,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | message typography (small)                            | `.text-label-sm` — 12px                                                                                                                                                                                                                                                               |
 | message typography (medium)                           | `.text-label-md` — 14px                                                                                                                                                                                                                                                               |
-| inline link (anchor inside the message)               | `.text-link`                                                                                                                                                                                                                                                                          |
+| inline link (anchor inside the message)               | `.text-link` with its color set to `currentColor` (the message copy color), told apart by the underline, so it keeps AA contrast on every severity surface                                                                                                                            |
 | leading icon glyph                                    | `.text-label-md` — 14px at both sizes; the icon does not scale with the banner                                                                                                                                                                                                        |
 | leading icon box                                      | `size-3.5` — 14px, matching the glyph so the row height is stable                                                                                                                                                                                                                     |
 | leading icon alignment                                | the icon and the copy share an `items-start` block, and the icon rides an alignment box the height of the copy's line box (`h-5.25` medium / `h-4.5` small) — so it centers on the **first** line and stays there when the copy wraps, instead of drifting to the middle of the block |

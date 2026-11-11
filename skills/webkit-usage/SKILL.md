@@ -15,12 +15,17 @@ enforced_by: [webkit-imports, webkit-tokens, webkit-prefer-over-custom, webkit-p
 
 ## Start here: a screen begins from a pattern
 
-Before composing anything, ask the `webkit` MCP whether the screen already exists: `search_patterns`
-with the screen in plain words ("login", "account settings", "delete confirmation"), then
-`get_pattern` with the best id. Before adapting it, read the `guidelines` field `get_pattern`
-returns: when to use the screen and when another block fits better, what each building block (A,
+Before composing anything, check whether the screen already exists as a block:
+`npx @aziontech/webkit search <the screen in plain words>` ("login", "account settings", "delete
+confirmation"), or the `webkit` MCP `search_patterns`. Read the best one with
+`npx @aziontech/webkit view <block-id>` (or `get_pattern`), then start the screen with
+`npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state): it copies the SFC
+into the views directory, checks its imports, records it in `webkit.blocks.json` and prints the
+route entry. `npx @aziontech/webkit diff <block-id>` later shows what you changed against the
+canonical block. Before adapting it, read the guidelines (`view`, or the `guidelines` field
+`get_pattern` returns): when to use the screen and when another block fits better, what each building block (A,
 B, C…) is for, do and don't, the copy rules and the accessibility rules. If "When not to use"
-matches your case, switch to the block it names. Then copy that SFC and change only the content,
+matches your case, switch to the block it names. Then change only the content of the copy,
 keeping to the guidelines. Only when no pattern fits, compose from components (below). A marketing band is a page section, not a pattern (rule
 `webkit-sections`).
 
@@ -33,7 +38,8 @@ Structure and states first, polish last:
   (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation`
 - **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
 - **Foundation:** `/webkit-baseline-ui` (tokens, typography, spacing rhythm)
-- **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz`
+- **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-genai` (AI chat
+  and agent actions)
 - **Polish:** `/webkit-motion-polish` → `/webkit-impeccable-polish`
 - **Verify:** `/webkit-ui-verify` (real browser, both themes, several widths, axe)
 - **Adopting WebKit in an existing app:** `/webkit-ds-adoption`
@@ -45,7 +51,8 @@ Do not guess a component name or import path. Look it up.
 1. Ask the webkit MCP. The server exposes tools grounded in the exact webkit version this project installed:
    - `suggest_component` — describe what you need in plain words; it returns the matching component(s).
    - Import/validation tools — confirm a subpath is real and get the canonical path.
-2. Read the catalog directly. `node_modules/@aziontech/webkit/catalog.json` has an `imports` object; every key is a real published subpath (`button`, `empty-state`, `table`, ...). If a subpath is not a key there, it does not exist.
+2. No MCP? Read `node_modules/@aziontech/webkit/llms/llms.txt`. It links one Markdown page per block (`llms/blocks/<id>.md`: guidelines, variants, the primary SFC), per component (`llms/components/<name>.md`: props, events, slots, examples, accessibility, do and don't, with the same data as JSON in `<name>.json`) and per foundation (`llms/foundations/`: tokens, color, typography, spacing, motion, i18n, RTL, devices). `llms-full.txt` is every page in one file.
+3. Read the catalog directly. `node_modules/@aziontech/webkit/catalog.json` has an `imports` object; every key is a real published subpath (`button`, `empty-state`, `table`, ...). If a subpath is not a key there, it does not exist.
 
 ## App-level setup (`setup` in the catalog)
 

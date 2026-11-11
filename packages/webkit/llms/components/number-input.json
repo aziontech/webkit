@@ -1,0 +1,146 @@
+{
+ "name": "number-input",
+ "binding": "NumberInput",
+ "import": "@aziontech/webkit/number-input",
+ "treeShakeableImport": "@aziontech/webkit/number-input",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Numeric input field with optional increment/decrement spinner buttons. Use when the value is strictly numeric (counts, quantities, ports, thresholds, currency without formatting). Distinct from `input` because it enforces numeric type, supports `min`/`max`/`step`, and renders chevron-up/chevron-down controls on the trailing edge.",
+ "setup": null,
+ "useWhen": [
+  "Capture a strictly numeric value (counts, quantities, ports, prices)."
+ ],
+ "avoidWhen": [
+  "The value is free text → use `input`.",
+  "The user picks from a fixed set of numbers → use `select`."
+ ],
+ "related": [
+  "input` — free-text sibling with the same field API."
+ ],
+ "bestPractices": [
+  "Set `min` / `max` / `step` to constrain input rather than validating after the fact.",
+  "Use `inputmode=\"numeric\"` semantics for mobile keyboards."
+ ],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "v-model value (always numeric; cleared input falls back to `min ?? 0`)."
+  },
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Text shown when the input is empty."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; affects height, padding, and typography."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies disabled tokens."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field as read-only; spinner buttons are inert."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Applies the invalid border/ring tokens."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field as required for assistive tech."
+  },
+  {
+   "name": "min",
+   "type": "number | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Minimum allowed value; spinner stops at this bound."
+  },
+  {
+   "name": "max",
+   "type": "number | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Maximum allowed value; spinner stops at this bound."
+  },
+  {
+   "name": "step",
+   "type": "number",
+   "default": "1",
+   "required": "false",
+   "doc": "Increment used by the spinner buttons and arrow keys."
+  },
+  {
+   "name": "showButtons",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Renders the chevron-up/chevron-down spinner controls."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:modelValue",
+   "payload": "number",
+   "notes": "Emitted on every value change (typing or spinner)."
+  },
+  {
+   "name": "change",
+   "payload": "number",
+   "notes": "Emitted when the user commits the value (blur or Enter)."
+  }
+ ],
+ "slots": [
+  {
+   "name": "prefix",
+   "scope": "—",
+   "notes": "Content rendered before the input (e.g. `R$`)."
+  },
+  {
+   "name": "suffix",
+   "scope": "—",
+   "notes": "Content rendered after the input, before the spinner buttons (e.g. `%`)."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import NumberInput from '@aziontech/webkit/number-input'\n  import { ref } from 'vue'\n\n  const value = ref(1)\n</script>\n\n<template>\n  <div class=\"w-[20rem]\">\n    <NumberInput\n      v-model=\"value\"\n      :min=\"0\"\n      :max=\"100\"\n      :step=\"1\"\n      placeholder=\"Quantity\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import NumberInput from '@aziontech/webkit/number-input'\n  import { ref } from 'vue'\n\n  const small = ref(1)\n  const medium = ref(10)\n  const large = ref(100)\n</script>\n\n<template>\n  <div class=\"flex w-[20rem] flex-col gap-(--spacing-md)\">\n    <NumberInput\n      v-model=\"small\"\n      size=\"small\"\n      :min=\"0\"\n      :max=\"9\"\n      :step=\"1\"\n    />\n    <NumberInput\n      v-model=\"medium\"\n      size=\"medium\"\n      :min=\"0\"\n      :max=\"99\"\n      :step=\"5\"\n    />\n    <NumberInput\n      v-model=\"large\"\n      size=\"large\"\n      :min=\"0\"\n      :max=\"1000\"\n      :step=\"50\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import NumberInput from '@aziontech/webkit/number-input'\n  import { ref } from 'vue'\n\n  const value = ref(42)\n</script>\n\n<template>\n  <div class=\"w-[20rem]\">\n    <NumberInput\n      v-model=\"value\"\n      disabled\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/number-input.md"
+}

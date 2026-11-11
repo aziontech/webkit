@@ -1,0 +1,687 @@
+{
+  "light": {
+    "blocks/platform/auth/auth.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/email-already-registered.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/incorrect-credentials.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/server-error.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/service-unavailable.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/session-expired.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/sign-up.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/timeout.vue": ["link-in-text-block"],
+    "blocks/platform/create/create-hub/variants/connected.vue": [
+      "aria-prohibited-attr",
+      "button-name"
+    ],
+    "blocks/platform/create/create-hub/variants/loading-repositories.vue": [
+      "aria-prohibited-attr",
+      "button-name"
+    ],
+    "blocks/platform/create/deploy-success/variants/cli-created.vue": ["link-in-text-block"],
+    "blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/activity-outcomes-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/alerts-dashboard/alerts-dashboard.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/alerts-dashboard/variants/loading.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/analytics-dashboard/variants/empty.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/analytics-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/composition-dashboard/variants/empty.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/composition-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/data-dashboard/data-dashboard.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/data-dashboard/variants/empty.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/data-dashboard/variants/loading.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/funnel-cohort-dashboard/variants/empty.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/funnel-cohort-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/home-dashboard/variants/empty.vue": ["aria-allowed-attr"],
+    "blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/project-status-dashboard/variants/empty.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/project-status-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/scan-results-dashboard/scan-results-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/scan-results-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/security-dashboard/security-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/security-dashboard/variants/loading.vue": ["aria-required-children"],
+    "blocks/platform/detail/attached-resources/attached-resources.vue": ["aria-required-children"],
+    "blocks/platform/detail/details-page/details-page.vue": ["link-in-text-block"],
+    "blocks/platform/detail/details-page/variants/resource-versions.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/detail/details-page/variants/service-overview.vue": [
+      "aria-required-children",
+      "aria-required-parent",
+      "color-contrast"
+    ],
+    "blocks/platform/detail/details-page/variants/service.vue": ["color-contrast"],
+    "blocks/platform/detail/get-started/get-started.vue": ["link-in-text-block"],
+    "blocks/platform/detail/get-started/variants/ci.vue": ["link-in-text-block"],
+    "blocks/platform/detail/record-table/variants/records.vue": ["aria-required-children"],
+    "blocks/platform/edit/attribute-editor/attribute-editor.vue": ["aria-required-children"],
+    "blocks/platform/edit/edit-resource/variants/deployable-settings.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/view/file-browser/file-browser.vue": ["aria-required-children"],
+    "blocks/platform/view/file-browser/variants/inside-a-folder.vue": ["aria-required-children"],
+    "blocks/platform/view/query-editor/query-editor.vue": ["aria-prohibited-attr"],
+    "blocks/platform/view/query-editor/variants/query.vue": ["aria-required-children"],
+    "blocks/platform/view/query-editor/variants/schema.vue": ["aria-required-children"],
+    "blocks/platform/view/split-view/split-view.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/split-view/variants/empty.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/split-view/variants/failed.vue": ["nested-interactive"],
+    "blocks/platform/view/split-view/variants/filtered.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/table-view/table-view.vue": ["aria-required-children"],
+    "blocks/shells/website/website.vue": ["color-contrast"],
+    "examples/architecture-tabs/default.vue": ["color-contrast"],
+    "examples/architecture-tabs/site-default.vue": ["color-contrast"],
+    "examples/architecture-tabs/site-platform.vue": ["color-contrast"],
+    "examples/article-body/default.vue": ["color-contrast"],
+    "examples/article-body/site-success-story.vue": ["color-contrast"],
+    "examples/article-cards/site-centered.vue": ["color-contrast"],
+    "examples/article-cards/types.vue": ["color-contrast"],
+    "examples/banner/default.vue": ["color-contrast"],
+    "examples/banner/with-aside.vue": ["color-contrast", "link-in-text-block"],
+    "examples/calendar/open.vue": ["color-contrast"],
+    "examples/call-to-action/types.vue": ["color-contrast"],
+    "examples/call-to-action/with-eyebrow.vue": ["color-contrast"],
+    "examples/carousel/default.vue": ["color-contrast"],
+    "examples/carousel/peek.vue": ["color-contrast"],
+    "examples/chart/refetching.vue": ["color-contrast"],
+    "examples/checkbox/indeterminate.vue": ["aria-conditional-attr"],
+    "examples/cli-terminal/default.vue": ["color-contrast"],
+    "examples/cli-terminal/site-terminal.vue": ["color-contrast"],
+    "examples/client-quotes/default.vue": ["color-contrast"],
+    "examples/client-quotes/site-default.vue": ["color-contrast"],
+    "examples/closing-call-to-action-newsletter/default.vue": ["color-contrast"],
+    "examples/closing-call-to-action-newsletter/failed.vue": ["color-contrast"],
+    "examples/closing-call-to-action-newsletter/loading.vue": ["color-contrast"],
+    "examples/closing-call-to-action-newsletter/submitted.vue": ["color-contrast"],
+    "examples/closing-call-to-action/default.vue": ["color-contrast"],
+    "examples/closing-call-to-action/site-newsletter.vue": ["color-contrast"],
+    "examples/closing-call-to-action/site-split.vue": ["color-contrast"],
+    "examples/closing-call-to-action/types.vue": ["color-contrast"],
+    "examples/code-block/with-diff.vue": ["color-contrast"],
+    "examples/code-block/with-highlighted-line.vue": ["color-contrast"],
+    "examples/column-navigation/columns.vue": ["color-contrast"],
+    "examples/column-navigation/default.vue": ["color-contrast"],
+    "examples/column-navigation/rows.vue": ["color-contrast"],
+    "examples/compare-plans/default.vue": ["color-contrast"],
+    "examples/compare-plans/site-plan-matrix.vue": ["color-contrast"],
+    "examples/compare-support-tiers/default.vue": ["color-contrast"],
+    "examples/compare-support-tiers/site-tier-matrix.vue": ["color-contrast"],
+    "examples/comparison-table/default.vue": ["color-contrast"],
+    "examples/comparison-table/site-azion-vs-cloudflare.vue": ["color-contrast"],
+    "examples/comparison-table/site-azion-vs-vercel.vue": ["color-contrast"],
+    "examples/compliance-badges/default.vue": ["color-contrast"],
+    "examples/compliance-badges/site-default.vue": ["color-contrast"],
+    "examples/content-columns/columns.vue": ["color-contrast"],
+    "examples/content-columns/default.vue": ["color-contrast"],
+    "examples/doc-page-header/slots.vue": ["color-contrast"],
+    "examples/dropdown-menu/groups-with-top-and-bottom-slots.vue": ["aria-required-children"],
+    "examples/dropdown-menu/with-top-and-bottom-slots.vue": ["aria-required-children"],
+    "examples/feature-scroll/default.vue": ["color-contrast"],
+    "examples/feature-scroll/site-default.vue": ["color-contrast"],
+    "examples/feature-tabs/default.vue": ["color-contrast"],
+    "examples/feature-tabs/site-default.vue": ["color-contrast"],
+    "examples/feature-tiles/default.vue": ["color-contrast"],
+    "examples/feature-tiles/site-artwork.vue": ["color-contrast"],
+    "examples/feature-tiles/types.vue": ["color-contrast"],
+    "examples/feature-widgets/default.vue": ["color-contrast"],
+    "examples/feature-widgets/site-default.vue": ["color-contrast"],
+    "examples/file-dropzone/disabled.vue": ["color-contrast"],
+    "examples/flow/anchored-node.vue": [
+      "aria-required-children",
+      "aria-required-parent",
+      "scrollable-region-focusable"
+    ],
+    "examples/flow/branches.vue": [
+      "aria-required-children",
+      "aria-required-parent",
+      "scrollable-region-focusable"
+    ],
+    "examples/flow/parallel.vue": ["aria-required-children", "aria-required-parent"],
+    "examples/hero-band/default.vue": ["color-contrast"],
+    "examples/hero-band/types.vue": ["color-contrast"],
+    "examples/hero-copy-on-top-art/default.vue": [
+      "aria-required-children",
+      "aria-required-parent",
+      "color-contrast"
+    ],
+    "examples/hero-form/default.vue": ["color-contrast"],
+    "examples/hero-form/failed.vue": ["color-contrast"],
+    "examples/hero-form/loading.vue": ["color-contrast"],
+    "examples/hero-form/site-contact-split.vue": ["color-contrast"],
+    "examples/hero-form/site-under-attack.vue": ["color-contrast"],
+    "examples/hero-form/submitted.vue": ["color-contrast"],
+    "examples/hero-form/under-attack.vue": ["color-contrast"],
+    "examples/hero-title/centered.vue": ["color-contrast"],
+    "examples/hero-title/default.vue": ["color-contrast"],
+    "examples/hero-title/highlight.vue": ["color-contrast"],
+    "examples/hero-title/mobile-centered.vue": ["color-contrast"],
+    "examples/hero-title/with-actions.vue": ["color-contrast"],
+    "examples/hero-with-opening/default.vue": ["color-contrast"],
+    "examples/hero-with-opening/site-six-arguments.vue": ["color-contrast"],
+    "examples/hero-with-opening/site-three-arguments.vue": ["color-contrast"],
+    "examples/hero/alignment.vue": ["color-contrast"],
+    "examples/hero/banners.vue": ["color-contrast"],
+    "examples/hero/carousel.vue": ["color-contrast"],
+    "examples/hero/default.vue": ["color-contrast"],
+    "examples/hero/media-mobile-centered.vue": ["color-contrast"],
+    "examples/hero/media.vue": ["color-contrast"],
+    "examples/hero/screen.vue": ["color-contrast"],
+    "examples/hero/site-copy-beside-art.vue": ["color-contrast"],
+    "examples/hero/site-copy-on-top-art.vue": [
+      "aria-required-children",
+      "aria-required-parent",
+      "color-contrast"
+    ],
+    "examples/hero/site-pixel-floor.vue": ["color-contrast"],
+    "examples/hero/site-title-band-carousel.vue": ["color-contrast"],
+    "examples/hero/site-title-band-small.vue": ["color-contrast"],
+    "examples/hero/site-title-band.vue": ["color-contrast"],
+    "examples/input-group/with-select.vue": ["button-name"],
+    "examples/investor-marks/default.vue": ["color-contrast"],
+    "examples/investor-marks/site-default.vue": ["color-contrast"],
+    "examples/logo-wall-quote/default.vue": ["color-contrast"],
+    "examples/logo-wall-quote/site-default.vue": ["color-contrast"],
+    "examples/logo-wall/default.vue": ["color-contrast"],
+    "examples/logo-wall/rectangle.vue": ["color-contrast"],
+    "examples/media-split-band/default.vue": ["color-contrast"],
+    "examples/media-split-band/site-values.vue": ["color-contrast"],
+    "examples/media-split-stack/site-alternating.vue": ["color-contrast"],
+    "examples/media-split-stack/types.vue": ["color-contrast"],
+    "examples/media-split/actions.vue": ["color-contrast"],
+    "examples/media-split/default.vue": ["color-contrast"],
+    "examples/media-split/kinds.vue": ["color-contrast"],
+    "examples/media-split/media-link.vue": ["color-contrast"],
+    "examples/media-split/orientations.vue": ["color-contrast"],
+    "examples/media-split/placeholder.vue": ["color-contrast"],
+    "examples/media-split/textures.vue": ["color-contrast"],
+    "examples/media-split/undivided.vue": ["color-contrast"],
+    "examples/multi-select/default.vue": ["button-name"],
+    "examples/multi-select/disabled.vue": ["button-name"],
+    "examples/multi-select/filled.vue": ["button-name"],
+    "examples/multi-select/invalid.vue": ["button-name"],
+    "examples/multi-select/long-list.vue": ["button-name"],
+    "examples/multi-select/sizes.vue": ["button-name"],
+    "examples/multi-select/with-groups.vue": ["button-name"],
+    "examples/multi-select/with-option-extras.vue": ["button-name"],
+    "examples/multi-select/with-search-and-footer.vue": ["button-name"],
+    "examples/navigation-menu/default.vue": ["aria-hidden-focus", "aria-required-children"],
+    "examples/network-section/default.vue": ["color-contrast"],
+    "examples/network-section/site-benefits.vue": ["color-contrast"],
+    "examples/network-section/site-client-quotes.vue": ["color-contrast"],
+    "examples/network-section/types.vue": ["color-contrast"],
+    "examples/number-input/disabled.vue": ["label"],
+    "examples/number-input/invalid.vue": ["label"],
+    "examples/number-input/sizes.vue": ["label"],
+    "examples/overline/cursor.vue": ["color-contrast"],
+    "examples/overline/default.vue": ["color-contrast"],
+    "examples/overline/prefixes.vue": ["color-contrast"],
+    "examples/pick-list/disabled.vue": ["color-contrast"],
+    "examples/platform-directory/default.vue": ["color-contrast"],
+    "examples/platform-directory/site-primitives.vue": ["color-contrast"],
+    "examples/progress/default.vue": ["aria-progressbar-name"],
+    "examples/progress/indeterminate.vue": ["aria-progressbar-name"],
+    "examples/progress/shapes.vue": ["aria-progressbar-name"],
+    "examples/progress/simulation.vue": ["aria-progressbar-name"],
+    "examples/progress/sizes.vue": ["aria-progressbar-name"],
+    "examples/property-filter/with-collection.vue": ["aria-required-children"],
+    "examples/quote-carousel/default.vue": ["color-contrast"],
+    "examples/quote-carousel/fallback.vue": ["color-contrast"],
+    "examples/quote-tabs/default.vue": ["color-contrast"],
+    "examples/quote-tabs/fallback.vue": ["color-contrast"],
+    "examples/quote/default.vue": ["color-contrast"],
+    "examples/quote/highlights.vue": ["color-contrast"],
+    "examples/quote/types.vue": ["color-contrast"],
+    "examples/quote/without-logo.vue": ["color-contrast"],
+    "examples/recognition-marquee/default.vue": ["color-contrast"],
+    "examples/recognition-marquee/site-default.vue": ["color-contrast"],
+    "examples/resource-grid/default.vue": ["color-contrast"],
+    "examples/resource-grid/scrollable.vue": ["color-contrast"],
+    "examples/resource-grid/site-default.vue": ["color-contrast"],
+    "examples/resource-grid/site-scrollable.vue": ["color-contrast"],
+    "examples/section-container/with-modules.vue": ["color-contrast"],
+    "examples/section-module/default.vue": ["color-contrast"],
+    "examples/section-module/kinds.vue": ["color-contrast"],
+    "examples/section-title/default.vue": ["color-contrast"],
+    "examples/section-title/description-widths.vue": ["color-contrast"],
+    "examples/section-title/kinds.vue": ["color-contrast"],
+    "examples/section-title/sizes.vue": ["color-contrast"],
+    "examples/section-title/with-actions.vue": ["color-contrast"],
+    "examples/select/default.vue": ["button-name"],
+    "examples/select/disabled.vue": ["button-name"],
+    "examples/select/filled.vue": ["button-name"],
+    "examples/select/invalid.vue": ["button-name"],
+    "examples/select/long-list.vue": ["button-name"],
+    "examples/select/multiple.vue": ["button-name"],
+    "examples/select/required.vue": ["button-name"],
+    "examples/select/sizes.vue": ["button-name"],
+    "examples/select/with-groups.vue": ["button-name"],
+    "examples/select/with-option-extras.vue": ["button-name"],
+    "examples/select/with-search-and-footer.vue": ["button-name"],
+    "examples/sticky-scroll-code/default.vue": ["color-contrast"],
+    "examples/sticky-scroll-code/site-default.vue": ["color-contrast"],
+    "examples/subject-library/default.vue": ["color-contrast"],
+    "examples/subject-library/site-default.vue": ["color-contrast"],
+    "examples/table/column-width-floors.vue": ["aria-required-children"],
+    "examples/table/compact-header-with-sticky-column.vue": ["aria-required-children"],
+    "examples/table/compact-header.vue": ["aria-required-children"],
+    "examples/table/composition.vue": ["aria-required-children"],
+    "examples/table/default.vue": ["aria-required-children"],
+    "examples/table/empty.vue": ["aria-required-children"],
+    "examples/table/fixed-layout-with-column-sizes.vue": ["aria-required-children"],
+    "examples/table/resizable-columns.vue": ["aria-required-children"],
+    "examples/table/selected-row.vue": ["aria-conditional-attr", "aria-required-children"],
+    "examples/table/sticky-column.vue": ["aria-required-children"],
+    "examples/table/virtual-rows.vue": ["aria-required-children"],
+    "examples/table/with-checkboxes.vue": ["aria-required-children"],
+    "examples/table/with-collection.vue": ["aria-required-children"],
+    "examples/tabs/standalone.vue": ["aria-required-parent"],
+    "examples/template-gallery/default.vue": ["color-contrast"],
+    "examples/template-gallery/site-default.vue": ["color-contrast"],
+    "examples/textarea/invalid.vue": ["label"],
+    "examples/topic/in-grid.vue": ["color-contrast"],
+    "examples/topic/linked.vue": ["color-contrast"],
+    "examples/use-case-links/default.vue": ["color-contrast"],
+    "examples/use-case-links/site-topics.vue": ["color-contrast"],
+    "examples/use-cases/default.vue": ["color-contrast"],
+    "examples/use-cases/site-default.vue": ["color-contrast"]
+  },
+  "dark": {
+    "blocks/platform/auth/auth.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/email-already-registered.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/incorrect-credentials.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/server-error.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/service-unavailable.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/session-expired.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/sign-up.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/timeout.vue": ["link-in-text-block"],
+    "blocks/platform/create/create-hub/variants/connected.vue": [
+      "aria-prohibited-attr",
+      "button-name"
+    ],
+    "blocks/platform/create/create-hub/variants/loading-repositories.vue": [
+      "aria-prohibited-attr",
+      "button-name"
+    ],
+    "blocks/platform/create/deploy-success/variants/cli-created.vue": ["link-in-text-block"],
+    "blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/activity-outcomes-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/alerts-dashboard/alerts-dashboard.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/alerts-dashboard/variants/loading.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/analytics-dashboard/variants/empty.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/analytics-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/composition-dashboard/variants/empty.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/composition-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/data-dashboard/data-dashboard.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/data-dashboard/variants/empty.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/data-dashboard/variants/loading.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/funnel-cohort-dashboard/variants/empty.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/funnel-cohort-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/home-dashboard/variants/empty.vue": ["aria-allowed-attr"],
+    "blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/project-status-dashboard/variants/empty.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/project-status-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/scan-results-dashboard/scan-results-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/scan-results-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/security-dashboard/security-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/security-dashboard/variants/loading.vue": ["aria-required-children"],
+    "blocks/platform/detail/attached-resources/attached-resources.vue": ["aria-required-children"],
+    "blocks/platform/detail/details-page/details-page.vue": ["link-in-text-block"],
+    "blocks/platform/detail/details-page/variants/resource-versions.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/detail/details-page/variants/service-overview.vue": [
+      "aria-required-children",
+      "aria-required-parent",
+      "color-contrast"
+    ],
+    "blocks/platform/detail/details-page/variants/service.vue": ["color-contrast"],
+    "blocks/platform/detail/get-started/get-started.vue": ["link-in-text-block"],
+    "blocks/platform/detail/get-started/variants/ci.vue": ["link-in-text-block"],
+    "blocks/platform/detail/record-table/variants/records.vue": ["aria-required-children"],
+    "blocks/platform/edit/attribute-editor/attribute-editor.vue": ["aria-required-children"],
+    "blocks/platform/edit/edit-resource/variants/deployable-settings.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/view/file-browser/file-browser.vue": ["aria-required-children"],
+    "blocks/platform/view/file-browser/variants/inside-a-folder.vue": ["aria-required-children"],
+    "blocks/platform/view/query-editor/query-editor.vue": ["aria-prohibited-attr"],
+    "blocks/platform/view/query-editor/variants/query.vue": ["aria-required-children"],
+    "blocks/platform/view/query-editor/variants/schema.vue": ["aria-required-children"],
+    "blocks/platform/view/split-view/split-view.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/split-view/variants/empty.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/split-view/variants/failed.vue": ["nested-interactive"],
+    "blocks/platform/view/split-view/variants/filtered.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/table-view/table-view.vue": ["aria-required-children"],
+    "examples/banner/with-aside.vue": ["link-in-text-block"],
+    "examples/calendar/open.vue": ["color-contrast"],
+    "examples/chart/refetching.vue": ["color-contrast"],
+    "examples/checkbox/indeterminate.vue": ["aria-conditional-attr"],
+    "examples/dropdown-menu/groups-with-top-and-bottom-slots.vue": ["aria-required-children"],
+    "examples/dropdown-menu/with-top-and-bottom-slots.vue": ["aria-required-children"],
+    "examples/file-dropzone/disabled.vue": ["color-contrast"],
+    "examples/flow/anchored-node.vue": [
+      "aria-required-children",
+      "aria-required-parent",
+      "color-contrast",
+      "scrollable-region-focusable"
+    ],
+    "examples/flow/branches.vue": [
+      "aria-required-children",
+      "aria-required-parent",
+      "scrollable-region-focusable"
+    ],
+    "examples/flow/parallel.vue": ["aria-required-children", "aria-required-parent"],
+    "examples/hero-copy-on-top-art/default.vue": ["aria-required-children", "aria-required-parent"],
+    "examples/hero/site-copy-on-top-art.vue": ["aria-required-children", "aria-required-parent"],
+    "examples/input-group/with-select.vue": ["button-name"],
+    "examples/multi-select/default.vue": ["button-name"],
+    "examples/multi-select/disabled.vue": ["button-name"],
+    "examples/multi-select/filled.vue": ["button-name"],
+    "examples/multi-select/invalid.vue": ["button-name"],
+    "examples/multi-select/long-list.vue": ["button-name"],
+    "examples/multi-select/sizes.vue": ["button-name"],
+    "examples/multi-select/with-groups.vue": ["button-name"],
+    "examples/multi-select/with-option-extras.vue": ["button-name"],
+    "examples/multi-select/with-search-and-footer.vue": ["button-name"],
+    "examples/navigation-menu/default.vue": ["aria-hidden-focus", "aria-required-children"],
+    "examples/number-input/disabled.vue": ["label"],
+    "examples/number-input/invalid.vue": ["label"],
+    "examples/number-input/sizes.vue": ["label"],
+    "examples/pick-list/disabled.vue": ["color-contrast"],
+    "examples/progress/default.vue": ["aria-progressbar-name"],
+    "examples/progress/indeterminate.vue": ["aria-progressbar-name"],
+    "examples/progress/shapes.vue": ["aria-progressbar-name"],
+    "examples/progress/simulation.vue": ["aria-progressbar-name"],
+    "examples/progress/sizes.vue": ["aria-progressbar-name"],
+    "examples/property-filter/with-collection.vue": ["aria-required-children"],
+    "examples/select/default.vue": ["button-name"],
+    "examples/select/disabled.vue": ["button-name"],
+    "examples/select/filled.vue": ["button-name"],
+    "examples/select/invalid.vue": ["button-name"],
+    "examples/select/long-list.vue": ["button-name"],
+    "examples/select/multiple.vue": ["button-name"],
+    "examples/select/required.vue": ["button-name"],
+    "examples/select/sizes.vue": ["button-name"],
+    "examples/select/with-groups.vue": ["button-name"],
+    "examples/select/with-option-extras.vue": ["button-name"],
+    "examples/select/with-search-and-footer.vue": ["button-name"],
+    "examples/skeleton/on-surfaces.vue": ["color-contrast"],
+    "examples/table/column-width-floors.vue": ["aria-required-children"],
+    "examples/table/compact-header-with-sticky-column.vue": ["aria-required-children"],
+    "examples/table/compact-header.vue": ["aria-required-children"],
+    "examples/table/composition.vue": ["aria-required-children"],
+    "examples/table/default.vue": ["aria-required-children"],
+    "examples/table/empty.vue": ["aria-required-children"],
+    "examples/table/fixed-layout-with-column-sizes.vue": ["aria-required-children"],
+    "examples/table/resizable-columns.vue": ["aria-required-children"],
+    "examples/table/selected-row.vue": ["aria-conditional-attr", "aria-required-children"],
+    "examples/table/sticky-column.vue": ["aria-required-children"],
+    "examples/table/virtual-rows.vue": ["aria-required-children"],
+    "examples/table/with-checkboxes.vue": ["aria-required-children"],
+    "examples/table/with-collection.vue": ["aria-required-children"],
+    "examples/tabs/standalone.vue": ["aria-required-parent"],
+    "examples/textarea/invalid.vue": ["label"]
+  },
+  "media": {
+    "blocks/platform/auth/auth.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/email-already-registered.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/incorrect-credentials.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/server-error.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/service-unavailable.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/session-expired.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/sign-up.vue": ["link-in-text-block"],
+    "blocks/platform/auth/variants/timeout.vue": ["link-in-text-block"],
+    "blocks/platform/create/create-hub/variants/connected.vue": [
+      "aria-prohibited-attr",
+      "button-name"
+    ],
+    "blocks/platform/create/create-hub/variants/loading-repositories.vue": [
+      "aria-prohibited-attr",
+      "button-name"
+    ],
+    "blocks/platform/create/deploy-success/variants/cli-created.vue": ["link-in-text-block"],
+    "blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/activity-outcomes-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/alerts-dashboard/alerts-dashboard.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/alerts-dashboard/variants/loading.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/analytics-dashboard/variants/empty.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/analytics-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/composition-dashboard/variants/empty.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/composition-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/data-dashboard/data-dashboard.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/data-dashboard/variants/empty.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/data-dashboard/variants/loading.vue": ["aria-required-children"],
+    "blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/funnel-cohort-dashboard/variants/empty.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/funnel-cohort-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/home-dashboard/variants/empty.vue": ["aria-allowed-attr"],
+    "blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/project-status-dashboard/variants/empty.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/project-status-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/scan-results-dashboard/scan-results-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/scan-results-dashboard/variants/loading.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/security-dashboard/security-dashboard.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/dashboard/security-dashboard/variants/loading.vue": ["aria-required-children"],
+    "blocks/platform/detail/attached-resources/attached-resources.vue": ["aria-required-children"],
+    "blocks/platform/detail/details-page/details-page.vue": ["link-in-text-block"],
+    "blocks/platform/detail/details-page/variants/resource-versions.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/detail/details-page/variants/service-overview.vue": [
+      "aria-required-children",
+      "aria-required-parent"
+    ],
+    "blocks/platform/detail/get-started/get-started.vue": ["link-in-text-block"],
+    "blocks/platform/detail/get-started/variants/ci.vue": ["link-in-text-block"],
+    "blocks/platform/detail/record-table/variants/records.vue": ["aria-required-children"],
+    "blocks/platform/edit/attribute-editor/attribute-editor.vue": ["aria-required-children"],
+    "blocks/platform/edit/edit-resource/variants/deployable-settings.vue": [
+      "aria-required-children"
+    ],
+    "blocks/platform/view/file-browser/file-browser.vue": ["aria-required-children"],
+    "blocks/platform/view/file-browser/variants/inside-a-folder.vue": ["aria-required-children"],
+    "blocks/platform/view/query-editor/query-editor.vue": ["aria-prohibited-attr"],
+    "blocks/platform/view/query-editor/variants/query.vue": ["aria-required-children"],
+    "blocks/platform/view/query-editor/variants/schema.vue": ["aria-required-children"],
+    "blocks/platform/view/split-view/split-view.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/split-view/variants/empty.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/split-view/variants/failed.vue": ["nested-interactive"],
+    "blocks/platform/view/split-view/variants/filtered.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/table-view/table-view.vue": ["aria-required-children"],
+    "examples/banner/with-aside.vue": ["link-in-text-block"],
+    "examples/checkbox/indeterminate.vue": ["aria-conditional-attr"],
+    "examples/dropdown-menu/groups-with-top-and-bottom-slots.vue": ["aria-required-children"],
+    "examples/dropdown-menu/with-top-and-bottom-slots.vue": ["aria-required-children"],
+    "examples/flow/anchored-node.vue": [
+      "aria-required-children",
+      "aria-required-parent",
+      "scrollable-region-focusable"
+    ],
+    "examples/flow/branches.vue": [
+      "aria-required-children",
+      "aria-required-parent",
+      "scrollable-region-focusable"
+    ],
+    "examples/flow/parallel.vue": ["aria-required-children", "aria-required-parent"],
+    "examples/hero-copy-on-top-art/default.vue": ["aria-required-children", "aria-required-parent"],
+    "examples/hero/site-copy-on-top-art.vue": ["aria-required-children", "aria-required-parent"],
+    "examples/input-group/with-select.vue": ["button-name"],
+    "examples/multi-select/default.vue": ["button-name"],
+    "examples/multi-select/disabled.vue": ["button-name"],
+    "examples/multi-select/filled.vue": ["button-name"],
+    "examples/multi-select/invalid.vue": ["button-name"],
+    "examples/multi-select/long-list.vue": ["button-name"],
+    "examples/multi-select/sizes.vue": ["button-name"],
+    "examples/multi-select/with-groups.vue": ["button-name"],
+    "examples/multi-select/with-option-extras.vue": ["button-name"],
+    "examples/multi-select/with-search-and-footer.vue": ["button-name"],
+    "examples/navigation-menu/default.vue": ["aria-hidden-focus", "aria-required-children"],
+    "examples/number-input/disabled.vue": ["label"],
+    "examples/number-input/invalid.vue": ["label"],
+    "examples/number-input/sizes.vue": ["label"],
+    "examples/progress/default.vue": ["aria-progressbar-name"],
+    "examples/progress/indeterminate.vue": [
+      "aria-progressbar-name",
+      "reduced-motion-infinite-animation"
+    ],
+    "examples/progress/shapes.vue": ["aria-progressbar-name"],
+    "examples/progress/simulation.vue": ["aria-progressbar-name"],
+    "examples/progress/sizes.vue": ["aria-progressbar-name"],
+    "examples/property-filter/with-collection.vue": ["aria-required-children"],
+    "examples/select/default.vue": ["button-name"],
+    "examples/select/disabled.vue": ["button-name"],
+    "examples/select/filled.vue": ["button-name"],
+    "examples/select/invalid.vue": ["button-name"],
+    "examples/select/long-list.vue": ["button-name"],
+    "examples/select/multiple.vue": ["button-name"],
+    "examples/select/required.vue": ["button-name"],
+    "examples/select/sizes.vue": ["button-name"],
+    "examples/select/with-groups.vue": ["button-name"],
+    "examples/select/with-option-extras.vue": ["button-name"],
+    "examples/select/with-search-and-footer.vue": ["button-name"],
+    "examples/table/column-width-floors.vue": ["aria-required-children"],
+    "examples/table/compact-header-with-sticky-column.vue": ["aria-required-children"],
+    "examples/table/compact-header.vue": ["aria-required-children"],
+    "examples/table/composition.vue": ["aria-required-children"],
+    "examples/table/default.vue": ["aria-required-children"],
+    "examples/table/empty.vue": ["aria-required-children"],
+    "examples/table/fixed-layout-with-column-sizes.vue": ["aria-required-children"],
+    "examples/table/resizable-columns.vue": ["aria-required-children"],
+    "examples/table/selected-row.vue": ["aria-conditional-attr", "aria-required-children"],
+    "examples/table/sticky-column.vue": ["aria-required-children"],
+    "examples/table/virtual-rows.vue": ["aria-required-children"],
+    "examples/table/with-checkboxes.vue": ["aria-required-children"],
+    "examples/table/with-collection.vue": ["aria-required-children"],
+    "examples/tabs/standalone.vue": ["aria-required-parent"],
+    "examples/textarea/invalid.vue": ["label"]
+  }
+}

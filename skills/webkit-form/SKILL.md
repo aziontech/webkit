@@ -192,7 +192,9 @@ Dialog form is `platform/delete/delete-with-confirmation` (variant `LabelledFiel
 typed confirmation); ItemGroup settings and Card with independent saves are
 `platform/settings/settings-form`, whose primary `SaveAll` is the default one-save model and whose
 `SavePerGroup` and `SavePerCard` variants are the split ones. A resource's own settings tab is
-`platform/edit/edit-resource`; every submit state is `platform/states/form-validation`.
+`platform/edit/edit-resource`; every submit state is `platform/states/form-validation`; a server
+rejection that one section owns is `platform/states/form-error`; a save that starts a long run (build,
+deploy) is `platform/states/async-submit`.
 
 ### Example — Card with its own save
 
@@ -961,6 +963,27 @@ Rules:
   `:disabled` is what makes webkit `Select`/`Switch`/`Input` show the disabled visual).
 - **Report the request result where the user is looking** — `toast.success` on the happy path,
   `toast.error` with a Retry on failure. Field errors stay inline.
+
+### Form errors — the server rejects one section (`platform/states/form-error`)
+
+The design sample's `/forms/error-validation` screen is the standard. When the server rejects the save
+because of one section (a linked resource another user deleted, a value only that section owns), the
+form does four things, and never toasts:
+
+1. **One danger `Alert` above that section**, under its `SectionHeader`, saying what happened, why,
+   that nothing else was lost, and what to do, as separate sentences: `Origin "web-origin-prod" no
+longer exists. Another user deleted it while you were filling in this form, so the service wasn't
+created. Nothing else was lost: reload the origin list and select another one.`
+2. **The recovery action on that `Alert`** (`#action` slot, `kind="secondary"`): `Reload origins`,
+   with `loading` while it runs; meanwhile the field gives way to a `Skeleton` and Save is disabled.
+3. **The field turns `invalid`** with its own one-line reason under it (`This origin no longer
+exists.`), wired by `aria-describedby`. After the reload clears the stale value it turns `required`
+   (`Select an origin to continue.`) and the `Alert` closes.
+4. **The page takes the user there**: after the lock is released, scroll the section to the top of the
+   scroll container (instant under `prefers-reduced-motion`) and focus the field with
+   `preventScroll`. Every other entry is kept.
+
+Where each error renders, row by row, is `/webkit-errors`.
 
 ## Read-only vs disabled — a value the user cannot change
 

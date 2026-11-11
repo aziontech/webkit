@@ -1,0 +1,107 @@
+{
+ "name": "story-library",
+ "binding": "StoryLibrary",
+ "import": "@aziontech/webkit/story-library",
+ "treeShakeableImport": "@aziontech/webkit/story-library",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one searchable select per facet (industry, solution, product) on one row — then a grid of story cards and a load-more button. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-library', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `input`, `select`, `button` and `empty-state`; the search, the facet selections and each select's own option search are local state.",
+ "setup": null,
+ "useWhen": [
+  "To list every success story with search and facet filters."
+ ],
+ "avoidWhen": [
+  "For a closing row of three related stories → use `article-cards`.",
+  "For a filterable list of articles → use `article-index-blog` or `article-index-resource-hub`."
+ ],
+ "related": [
+  "article-index-resource-hub` — the sibling listing of articles with facet dropdowns.",
+  "empty-state` — the no-match state."
+ ],
+ "bestPractices": [
+  "Derive each facet's `options` from the values the items carry, so every option matches at least one story.",
+  "Give every item a `facets` entry per facet `key`; an item without one never matches a selection on that facet."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered left-aligned as its `h2`; the band renders no header when empty."
+  },
+  {
+   "name": "items",
+   "type": "StoryLibraryItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The stories, in order; each is `{ key, href, client, category, description, facets? }`."
+  },
+  {
+   "name": "facets",
+   "type": "StoryLibraryFacet[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The facet selects, in order; each is `{ key, label, allLabel, options }`."
+  },
+  {
+   "name": "search",
+   "type": "StoryLibrarySearch",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The search field's `placeholder` and accessible `label`; the field is omitted when absent."
+  },
+  {
+   "name": "empty",
+   "type": "StoryLibraryEmpty",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The no-match state's `title` and the `action` label of its clear-filters button."
+  },
+  {
+   "name": "linkLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Read cue at the foot of each card, also the lead of its accessible name."
+  },
+  {
+   "name": "moreLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the load-more button under the grid; the button is omitted when empty."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list of stories."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import StoryLibrary from '@aziontech/webkit/story-library'\n</script>\n\n<template>\n  <StoryLibrary\n    anchor=\"cases\"\n    title=\"Companies building with Azion\"\n    aria-label=\"Success stories\"\n    link-label=\"Read story\"\n    more-label=\"Load more\"\n    :items=\"[\n      {\n        key: 'case-gpa',\n        href: '/site/success-cases/gpa',\n        client: { name: 'GPA', logo: '/marketing-components/logos/gpa-extended-reversed.svg' },\n        category: 'Retail',\n        description:\n          'Grupo Pão de Açúcar (GPA) solved a targeted DNS attack, secured 100+ critical applications in 15 days, and reduced costs by 30%.',\n        facets: { industry: ['Retail'], solution: ['Secure'] }\n      },\n      {\n        key: 'case-axur',\n        href: '/site/success-cases/axur',\n        client: { name: 'Axur', logo: '/marketing-components/logos/axur-extended-reversed.svg' },\n        category: 'Tech',\n        description:\n          'See how moving AI inference off managed infrastructure unlocked the fastest automatic takedown in the market.',\n        facets: { industry: ['Tech'], solution: ['Build', 'Secure'] }\n      },\n      {\n        key: 'case-exame',\n        href: '/site/success-cases/exame',\n        client: { name: 'Exame', logo: '/marketing-components/logos/exame-extended-reversed.svg' },\n        category: 'Media',\n        description:\n          'Faster content delivery and resilient infrastructure enabled Exame to handle large traffic spikes during major news events.',\n        facets: { industry: ['Media'], solution: ['Build', 'Deploy'] }\n      }\n    ]\"\n    :facets=\"[\n      {\n        key: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: [\n          { value: 'Media', label: 'Media' },\n          { value: 'Retail', label: 'Retail' },\n          { value: 'Tech', label: 'Tech' }\n        ]\n      },\n      {\n        key: 'solution',\n        label: 'Solution',\n        allLabel: 'All solutions',\n        options: [\n          { value: 'Build', label: 'Build' },\n          { value: 'Deploy', label: 'Deploy' },\n          { value: 'Secure', label: 'Secure' }\n        ]\n      }\n    ]\"\n    :search=\"{ placeholder: 'Search by company or story', label: 'Search success stories' }\"\n    :empty=\"{ title: 'No stories match these filters.', action: 'View all success stories' }\"\n  />\n</template>"
+  },
+  {
+   "name": "NoResults",
+   "sfc": "<script setup>\n  import StoryLibrary from '@aziontech/webkit/story-library'\n</script>\n\n<template>\n  <StoryLibrary\n    anchor=\"cases\"\n    title=\"Companies building with Azion\"\n    aria-label=\"Success stories\"\n    :items=\"[]\"\n    :facets=\"[\n      {\n        key: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: [\n          { value: 'Media', label: 'Media' },\n          { value: 'Retail', label: 'Retail' },\n          { value: 'Tech', label: 'Tech' }\n        ]\n      },\n      {\n        key: 'solution',\n        label: 'Solution',\n        allLabel: 'All solutions',\n        options: [\n          { value: 'Build', label: 'Build' },\n          { value: 'Deploy', label: 'Deploy' },\n          { value: 'Secure', label: 'Secure' }\n        ]\n      }\n    ]\"\n    :search=\"{ placeholder: 'Search by company or story', label: 'Search success stories' }\"\n    :empty=\"{ title: 'No stories match these filters.', action: 'View all success stories' }\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/story-library.md"
+}

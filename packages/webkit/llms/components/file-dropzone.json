@@ -1,0 +1,134 @@
+{
+ "name": "file-dropzone",
+ "binding": "FileDropzone",
+ "import": "@aziontech/webkit/file-dropzone",
+ "treeShakeableImport": "@aziontech/webkit/file-dropzone",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A FileDropzone is the target a user drags files from the operating system onto. It owns the drag lifecycle (only drags carrying `Files` count), the `accept` / `multiple` filtering, and the idle/active look, and it hands the result back as two activation events: `drop` with the accepted files, `reject` with the files it filtered out. It holds no value and renders no file list. The list, upload progress and validation messages belong to the consumer (typically a `Field` around this component, whose `Field.Description` / `Field.Error` carry the messages). `kind` covers the two places a drop target lives: - **`inline`**: a dashed region that is always visible (icon, title, description, plus a default slot for the \"Browse files\" action the consumer composes). It switches to the active look while files are dragged over it. This is the Cloudscape FileDropzone / Cloudflare Pages \"Upload assets\" shape. - **`overlay`**: invisible at rest. When files are dragged into the window it fades in over its nearest positioned ancestor (`absolute inset-0`), and it fades out on window drag-leave, drop or `Escape`. This is the Vercel \"drag and drop a folder to deploy\" shape, and it replaces the sample app's page-level `ProjectDropZone` and the drop target in the `Templates/Platform/States/ProjectIntake` story. The drop target itself is pointer-only. It is never a keyboard control. The keyboard (and screen-reader) path to the same outcome is a real button the consumer puts in the default slot (`inline`), or elsewhere on the page (`overlay`).",
+ "setup": null,
+ "useWhen": [
+  "A form or settings surface accepts one or more files and should also accept them by drag (`kind=\"inline\"` with a Browse button in the slot).",
+  "A whole page or card should accept a project, folder contents or assets dropped anywhere on it, with no permanent drop region taking up space (`kind=\"overlay\"` inside a `relative` container).",
+  "The consumer needs the accepted and rejected files separated by an `accept` filter before it uploads anything."
+ ],
+ "avoidWhen": [
+  "Picking files by keyboard or click only, with no drag affordance → a `button` that opens a native file input is enough.",
+  "Showing the chosen files, their progress or their errors → render them yourself with `progress`, `message` or `helper-text`. The dropzone renders none of these.",
+  "Dragging items inside the page (reordering rows, moving cards) → this component only reacts to OS drags that carry `Files`. In-page drag and drop is out of scope.",
+  "A static \"nothing here yet\" panel with no drop behavior → use `empty-state`."
+ ],
+ "related": [
+  "button`: the \"Browse files\" action composed into the default slot. It is the keyboard path to the same outcome as a drop.",
+  "empty-state`: a no-data panel. Compose a FileDropzone inside or beside it when the empty state's call to action is \"upload\".",
+  "progress`: the consumer renders per-file progress after `drop`. The dropzone does not track uploads.",
+  "toast`: confirms the result of a drop or reports rejected files to everyone, including users who never see the drag.",
+  "card`: a positioned container (`class=\"relative\"`) that hosts an `overlay` dropzone."
+ ],
+ "bestPractices": [
+  "Always give the user a non-drag path. In `inline`, put a `Button` in the default slot that opens a native `<input type=\"file\">`. In `overlay`, keep an upload button somewhere on the page. The drop target is pointer-only by design.",
+  "Pass the same `accept` string to the dropzone and to the native input behind your Browse button, so both paths filter the same way.",
+  "Handle `reject`. Tell the user which files were skipped and why (e.g. a `toast` naming the files and the accepted types). A silent rejection reads as a broken drop.",
+  "Announce the outcome of a drop yourself (a toast, or a live region on your file list). The dropzone does not announce drag states (see Accessibility).",
+  "Render one `overlay` dropzone per positioned container, and make the container `relative`. Without a positioned ancestor the overlay covers the nearest positioned element up the tree, which may be the whole page.",
+  "Place the `overlay` dropzone as the last child of its container, so it paints above the container's other positioned content (see Theme gaps).",
+  "When the consumer's own flow is busy (an upload in progress), set `disabled` and disable the Browse button too.",
+  "Put the accepted types and limits in `description` (\"PNG or JPG, up to 5 MB\"). The title is the instruction, the description is the constraint."
+ ],
+ "props": [
+  {
+   "name": "kind",
+   "type": "'inline' | 'overlay'",
+   "default": "'inline'",
+   "required": "false",
+   "doc": "Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`)."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Secondary line under the title, typically the accepted types and limits. Not rendered when empty."
+  },
+  {
+   "name": "accept",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file."
+  },
+  {
+   "name": "multiple",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "When false, only the first accepted file of a drop is accepted and the rest are rejected."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Ignores drags and drops: no active state, no events."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "'pi pi-cloud-upload'",
+   "required": "false",
+   "doc": "PrimeIcons class for the glyph above the title."
+  }
+ ],
+ "events": [
+  {
+   "name": "drop",
+   "payload": "(event: DragEvent, files: File[])",
+   "notes": "Activation event. Fires when files are dropped on the target (the inline root, or the visible overlay) and at least one passes `accept` / `multiple`. `files` holds only the accepted files, in `dataTransfer.files` order, and is never empty. Not emitted when `disabled`. Declaring `drop` means a consumer `@drop` listener binds to this event, never to the native DOM `drop` on the root."
+  },
+  {
+   "name": "reject",
+   "payload": "(event: DragEvent, files: File[])",
+   "notes": "Activation event. Fires on the same drop when one or more files were filtered out, because they do not match `accept` or exceed `multiple=\"false\"`. `files` holds only the rejected files and is never empty. When a drop has both kinds of file, `drop` fires first, then `reject`, with the same `event`. Not emitted when `disabled`."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Actions or extra content under the description, typically a \"Browse files\" `Button`. Rendered only in `kind=\"inline\"`. The overlay is `aria-hidden` decoration, so interactive content there would be unreachable and is not rendered."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import Button from '@aziontech/webkit/button'\n  import FileDropzone from '@aziontech/webkit/file-dropzone'\n\n  const input = ref(null)\n  const browse = () => input.value?.click()\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <FileDropzone description=\"Or browse for files on your computer.\">\n      <Button\n        label=\"Browse files\"\n        kind=\"secondary\"\n        size=\"medium\"\n        @click=\"browse\"\n      />\n    </FileDropzone>\n    <input\n      ref=\"input\"\n      type=\"file\"\n      multiple\n      class=\"hidden\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Overlay",
+   "sfc": "<script setup>\n  import Card from '@aziontech/webkit/card'\n  import FileDropzone from '@aziontech/webkit/file-dropzone'\n</script>\n\n<template>\n  <div class=\"relative w-full max-w-(--container-md)\">\n    <Card title=\"Project files\">\n      <template #content>\n        <div class=\"flex min-h-48 flex-col gap-(--spacing-xs)\">\n          <p class=\"text-body-sm text-(--text-muted)\">\n            Drag a file from your computer over this window. The drop target covers this card until\n            you drop the file, leave the window or press Escape.\n          </p>\n        </div>\n      </template>\n    </Card>\n    <FileDropzone kind=\"overlay\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Accept",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import FileDropzone from '@aziontech/webkit/file-dropzone'\n\n  const accepted = ref([])\n  const rejected = ref([])\n  const onDrop = (event, files) => {\n    accepted.value = [...accepted.value, ...files.map((file) => file.name)]\n  }\n  const onReject = (event, files) => {\n    rejected.value = [...rejected.value, ...files.map((file) => file.name)]\n  }\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-md) flex-col gap-(--spacing-md)\">\n    <FileDropzone\n      accept=\"image/*\"\n      description=\"Images only. Other file types are rejected.\"\n      @drop=\"onDrop\"\n      @reject=\"onReject\"\n    />\n    <div class=\"flex flex-col gap-(--spacing-xxs) text-body-sm\">\n      <p class=\"text-(--text-default)\">\n        Accepted: {{ accepted.length ? accepted.join(', ') : 'none yet' }}\n      </p>\n      <p class=\"text-(--text-muted)\">\n        Rejected: {{ rejected.length ? rejected.join(', ') : 'none yet' }}\n      </p>\n    </div>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/file-dropzone.md"
+}

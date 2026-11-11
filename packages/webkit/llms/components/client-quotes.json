@@ -1,0 +1,60 @@
+{
+ "name": "client-quotes",
+ "binding": "ClientQuotes",
+ "import": "@aziontech/webkit/client-quotes",
+ "treeShakeableImport": "@aziontech/webkit/client-quotes",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `quote-tabs` and `button`.",
+ "setup": null,
+ "useWhen": [
+  "To let several customers speak in turn, one at a time, near the end of a page's argument."
+ ],
+ "avoidWhen": [
+  "For one quote beside a logo wall → use `logo-wall-quote`.",
+  "For a scrolling strip of analyst recognitions → use `recognition-marquee`."
+ ],
+ "related": [
+  "quote-tabs` — the tabbed quote carousel this band frames."
+ ],
+ "bestPractices": [
+  "Three to six items; the tabs need room for each client's mark.",
+  "Give each item either a registry `mark` or a `logo` URL with `clientName`, not both."
+ ],
+ "props": [
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the quote carousel."
+  },
+  {
+   "name": "items",
+   "type": "ClientQuotesItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`."
+  },
+  {
+   "name": "primaryAction",
+   "type": "ClientQuotesAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Button under the quotes; `{ label, href, trailing? }`. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ClientQuotes from '@aziontech/webkit/client-quotes'\n\n  const items = [\n    {\n      mark: 'dafiti',\n      clientName: 'Dafiti',\n      text: \"One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers.\",\n      name: 'Julian H',\n      jobTitle: 'IT OPS, SRE & SEC Manager at Dafiti Group'\n    },\n    {\n      mark: 'axur',\n      text: 'With Azion, we scale proprietary AI models without managing infrastructure—inspecting millions of websites daily and automating the market’s fastest threat takedown.',\n      name: 'Fabio Ramos',\n      jobTitle: 'CEO at Axur'\n    },\n    {\n      logo: '/marketing-components/logos/magalu-extended-color.svg',\n      clientName: 'Magalu',\n      text: 'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers across Latin America.',\n      name: 'Allan Monteiro',\n      jobTitle: 'CISO & Head of Technology at Magalu'\n    },\n    {\n      logo: '/marketing-components/logos/herospark-extended-color.svg',\n      clientName: 'HeroSpark',\n      text: 'Azion transformed our operations, reducing costs and improving performance while freeing 200+ monthly hours for strategic development.',\n      name: 'Mateus Leonardi',\n      jobTitle: 'CTO at HeroSpark'\n    },\n    {\n      logo: '/marketing-components/logos/zoop-extended-color.svg',\n      clientName: 'Zoop',\n      text: 'Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.',\n      name: 'Ismael Aguilar',\n      jobTitle: 'Information Security Manager at Zoop'\n    },\n    {\n      mark: 'contabilizei',\n      text: 'With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed.',\n      name: 'Fabrício Santos',\n      jobTitle: 'DevSecOps Manager at Contabilizei'\n    }\n  ]\n</script>\n\n<template>\n  <ClientQuotes\n    aria-label=\"Client stories\"\n    :items=\"items\"\n    :primary-action=\"{ label: 'See customer stories', href: '/success-cases', trailing: true }\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/client-quotes.md"
+}

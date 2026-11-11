@@ -1,0 +1,99 @@
+{
+ "name": "tool-call",
+ "binding": "ToolCall",
+ "import": "@aziontech/webkit/tool-call",
+ "treeShakeableImport": "@aziontech/webkit/tool-call",
+ "category": "ai",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Running…`, `Completed`, `Failed`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ActionConfirmation`.",
+ "setup": null,
+ "useWhen": [
+  "An agent calls a tool, an MCP server, an API or a CLI command during a response, and the reader should see what ran and what came back."
+ ],
+ "avoidWhen": [
+  "Asking the reader to allow a call → `action-confirmation` (then a `tool-call` records it).",
+  "The model's reasoning → `reasoning`.",
+  "A long-running job outside a chat → `progress` / `status-indicator` on the resource."
+ ],
+ "related": [
+  "action-confirmation` — the authorization step before a sensitive call.",
+  "status-indicator` — the status the row shows.",
+  "code-block`, `key-value-pairs` — what goes in the input and output slots."
+ ],
+ "bestPractices": [
+  "Name the tool exactly as it is (`list_workloads`) and describe it in plain words (`Listing your workloads`).",
+  "Collapse details by default; open them on error so the reader sees why.",
+  "Redact secrets from inputs and outputs."
+ ],
+ "props": [
+  {
+   "name": "name",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "The tool or command identifier, shown in code font (`list_workloads`)."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "What the call does in the reader's words (`Listing your workloads`). Empty shows only the name."
+  },
+  {
+   "name": "state",
+   "type": "'pending' | 'running' | 'success' | 'error' | 'denied'",
+   "default": "'running'",
+   "required": "false",
+   "doc": "pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Controlled open state of the input and output details. Use with `v-model:open`."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled; details start collapsed."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:open",
+   "payload": "boolean",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "input",
+   "scope": "—",
+   "notes": "The parameters the tool is called with (`CodeBlock`, `KeyValuePairs`)."
+  },
+  {
+   "name": "output",
+   "scope": "—",
+   "notes": "What the tool returned, or the error it failed with."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "States",
+   "sfc": "<script setup>\n  import ToolCall from '@aziontech/webkit/tool-call'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-xs)\">\n    <ToolCall\n      name=\"purge_urls\"\n      title=\"Purging one URL\"\n      state=\"pending\"\n    />\n    <ToolCall\n      name=\"list_workloads\"\n      title=\"Listing your workloads\"\n      state=\"running\"\n    />\n    <ToolCall\n      name=\"get_cache_settings\"\n      title=\"Reading the cache settings of storefront\"\n      state=\"success\"\n    />\n    <ToolCall\n      name=\"get_metrics\"\n      title=\"Reading the error rate\"\n      state=\"error\"\n    />\n    <ToolCall\n      name=\"delete_domain\"\n      title=\"Deleting www.example.com\"\n      state=\"denied\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "WithDetails",
+   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n  import ToolCall from '@aziontech/webkit/tool-call'\n\n  const input = JSON.stringify({ workload: 'storefront' }, null, 2)\n  const output = JSON.stringify({ cache_by_query_string: 'all', ttl: 3600 }, null, 2)\n  const failure = JSON.stringify({ error: 'metrics_unavailable', retry_after: 30 }, null, 2)\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-xs)\">\n    <ToolCall\n      name=\"get_cache_settings\"\n      title=\"Reading the cache settings of storefront\"\n      state=\"success\"\n    >\n      <template #input>\n        <CodeBlock\n          :tabs=\"[{ label: 'JSON', value: 'input', code: input, language: 'json' }]\"\n          :show-line-numbers=\"false\"\n        />\n      </template>\n      <template #output>\n        <CodeBlock\n          :tabs=\"[{ label: 'JSON', value: 'output', code: output, language: 'json' }]\"\n          :show-line-numbers=\"false\"\n        />\n      </template>\n    </ToolCall>\n    <ToolCall\n      name=\"get_metrics\"\n      title=\"Reading the error rate\"\n      state=\"error\"\n      default-open\n    >\n      <template #output>\n        <CodeBlock\n          :tabs=\"[{ label: 'JSON', value: 'error', code: failure, language: 'json' }]\"\n          :show-line-numbers=\"false\"\n        />\n      </template>\n    </ToolCall>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/tool-call.md"
+}

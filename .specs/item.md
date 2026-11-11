@@ -5,8 +5,8 @@ structure: composition
 status: implemented
 spec_version: 2
 created: 2026-05-24
-last_updated: 2026-11-10
-checksum: d8ea49ef4babb55a1a1ccc150100d4d5c3a627505380bba050005182078870ab
+last_updated: 2026-11-11
+checksum: edfe32392c01968e144ee7646babb722d4a469fc2dbf2c141335e181ede4d2ef
 ---
 
 # Item — Component Spec
@@ -176,7 +176,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 - Visible focus: on slotted links and buttons. The Item shell draws no focus ring on its own, except with `asChild`, where the merged focusable child (e.g. an anchor) receives the `focus-visible` ring (`focus-visible:ring-2 focus-visible:ring-(--ring-color)`) and hover/active feedback.
 - Keyboard map: slotted links and buttons supply Tab order; use `asChild` to merge layout onto a single focusable child when the whole row is a link.
-- ARIA: `ItemGroup` uses `role="list"`; consumers may set `role="listitem"` on Item when inside a list; `ItemSeparator` uses `role="separator"`.
+- ARIA: `ItemGroup` and `ItemList` use `role="list"` and tell their direct Items, through context, that they are list members; the consumer wires nothing. A member Item renders `role="listitem"` on its root. A member Item with `asChild` renders a `role="listitem"` wrapper (`data-slot="item-listitem"`) around the merged child, so a link row stays a link. An Item outside a list, or nested inside another Item, gets no list role. `ItemSeparator` uses `role="separator"`, and `role="none"` when it sits directly inside a list, where a separator is not an allowed child.
 - Contrast ≥4.5:1 for title and description text.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px on slotted actions (owned by children).

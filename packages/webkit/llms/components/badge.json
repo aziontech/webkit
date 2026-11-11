@@ -1,0 +1,76 @@
+{
+ "name": "badge",
+ "binding": "Badge",
+ "import": "@aziontech/webkit/badge",
+ "treeShakeableImport": "@aziontech/webkit/badge",
+ "category": "content",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status label with severity-based color coding. Use it to draw attention to a small piece of state — an unread count, a quantity, a short status word — and it is commonly overlaid on icons, avatars, or buttons. It differs from its sibling `tag`: `tag` is a labelled status/category chip (optional leading icon, optional pill shape, masked surfaces), whereas `badge` is a denser count/short-label indicator with fully filled severity surfaces and no icon affordance.",
+ "setup": null,
+ "useWhen": [
+  "Surface a numeric count or a very short status label attached to another element (a bell with unread count, a status dot with a label).",
+  "Convey severity through `kind` (neutral / success / danger / …) with a fully filled surface."
+ ],
+ "avoidWhen": [
+  "The label is user-removable or selectable → use `chip`.",
+  "It is a labelled category/status with an optional leading icon or pill shape → use `tag`."
+ ],
+ "related": [
+  "tag` — labelled status/category chip with optional icon and pill shape; use when the label is descriptive, not a count.",
+  "chip` — interactive/removable token; use when the user can select or dismiss it."
+ ],
+ "bestPractices": [
+  "Keep the content to a count or a 1–2 word label; longer text belongs in `tag`.",
+  "Drive color from `kind`, never a hardcoded color or a raw palette class."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fallback text when the default slot is empty."
+  },
+  {
+   "name": "severity",
+   "type": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'default'",
+   "default": "'primary'",
+   "required": "false",
+   "doc": "Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Main content; falls back to `label` when empty."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <Badge\n    label=\"99\"\n    severity=\"primary\"\n    size=\"medium\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Badge\n      label=\"99\"\n      severity=\"primary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"secondary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"success\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"warning\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"danger\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"default\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Badge\n      label=\"99\"\n      size=\"small\"\n    />\n    <Badge\n      label=\"99\"\n      size=\"medium\"\n    />\n    <Badge\n      label=\"99\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/badge.md"
+}

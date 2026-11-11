@@ -575,6 +575,38 @@ Shared finding (every dashboard except home): no error state. `webkit-data-viz` 
 - **Not a defect**
   - The Reloaded message `Select an origin to continue.` stays: it tells the user the save is blocked on that field, unlike the plain required message.
 
+### platform/states/form-error (M2.9, split from form-validation)
+
+- **Findings**
+  - errors: the four long-form states (InSync, Rejected, Reloading, Reloaded) sat in `form-validation`
+    beside the short-form states, so the section-scoped rule had no block of its own to point at.
+  - Compared against the sample's `/forms/error-validation`: the layout, the danger `Alert` under the
+    section heading with the recovery action, the `invalid` then `required` field reason, the
+    `Skeleton` while reloading, the scroll and focus, and the dashed simulation panel all match. The
+    only differences are the fictional names (origin and service instead of connector and Application,
+    by the M1.1 convention) and the sample's em dash, which is two sentences here.
+- **Fixed**
+  - The states moved to `platform/states/form-error`, with their own `block.json`, intents and
+    `guidelines.md`. `form-validation` keeps the short-form states and points at the new block. The v6
+    block map sends `platform/forms/server-validation` to the new block. The webkit-errors and
+    webkit-form skills name the block.
+- **Not a defect**
+  - `aria-label="Create Service"` on the form: it matches the `Create Variable` heading rule in
+    `form-validation` (`Create` plus the entity name).
+
+### platform/states/async-submit (M2.9)
+
+- **Findings**
+  - Compared against the sample's `/forms/async-deployment`: same anatomy (a status `Tag` in the
+    heading, the simulation `aside`, an `EmptyState` while idle, the logs while running, the outcome
+    `Alert`, one toast id per run). The sample's progress toast has a description and the block's did
+    not. The sample's failure toast and `Message` offer _View deployments_.
+- **Fixed**
+  - The progress toast description is now `acme/web-app. It keeps running if you leave.`
+- **Not a defect**
+  - _View deployments_ is not carried over. The roadmap rule for every build and deploy outcome is
+    **Edit** and **Redeploy**, and it overrides the sample.
+
 ### platform/states/page-wires
 
 - **Findings**

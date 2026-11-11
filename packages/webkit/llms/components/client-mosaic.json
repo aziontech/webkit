@@ -1,0 +1,68 @@
+{
+ "name": "client-mosaic",
+ "binding": "ClientMosaic",
+ "import": "@aziontech/webkit/client-mosaic",
+ "treeShakeableImport": "@aziontech/webkit/client-mosaic",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a \"read the case study\" link, and a mark cell carries only the client's linked logo on a chosen fill. The layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `bento-grid` and `mini-button`.",
+ "setup": null,
+ "useWhen": [
+  "On the home page, to show the best customer stories and a wall of marks in one band."
+ ],
+ "avoidWhen": [
+  "For three equal story columns → use `client-mosaic-columns`.",
+  "For a plain wall with one quote → use `logo-wall-quote`."
+ ],
+ "related": [
+  "bento-grid` — the grid the cells are laid in.",
+  "client-mosaic-columns` — the three-column sibling with brand-coloured faces."
+ ],
+ "bestPractices": [
+  "Two stories and six marks fill the four-column grid exactly.",
+  "Pick `fill` and `logoTreatment` together: a `knockout` mark reads on `white` or `primary`, a `monochrome` one on `canvas` or `surface`."
+ ],
+ "props": [
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the grid."
+  },
+  {
+   "name": "linkLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the link under every story."
+  },
+  {
+   "name": "stories",
+   "type": "ClientMosaicStory[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The story cells, in order; each is `{ logo, logoAlt, photo, text, href, fill?, logoTreatment? }`. The first spans two columns and two rows, the rest one column and two rows."
+  },
+  {
+   "name": "logos",
+   "type": "ClientMosaicLogo[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ClientMosaic from '@aziontech/webkit/client-mosaic'\n</script>\n\n<template>\n  <ClientMosaic\n    aria-label=\"Client stories\"\n    link-label=\"Read the case study\"\n    :stories=\"[\n      {\n        logo: '/marketing-components/logos/netshoes-extended-color.svg',\n        logoAlt: 'Netshoes',\n        photo: '/marketing-components/photos/netshoes.jpg',\n        text: 'Netshoes automatically blocks more than 4 million threats in six months',\n        href: 'https://www.azion.com/en/success-case/netshoes/',\n        fill: 'surface',\n        logoTreatment: 'monochrome'\n      },\n      {\n        logo: '/marketing-components/logos/gpa-extended-reversed.svg',\n        logoAlt: 'GPA',\n        photo: '/marketing-components/photos/gpa.jpg',\n        text: 'Grupo Pão de Açúcar (GPA) stops a cyberattack and reduces costs by 30%',\n        href: 'https://www.azion.com/en/success-case/gpa-solved-cyberattack/',\n        fill: 'surface',\n        logoTreatment: 'monochrome'\n      }\n    ]\"\n    :logos=\"[\n      {\n        logo: '/marketing-components/logos/dafiti-extended-mono.svg',\n        logoAlt: 'Dafiti',\n        href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',\n        fill: 'white',\n        logoTreatment: 'knockout'\n      },\n      {\n        logo: '/marketing-components/logos/agibank-extended-reversed.svg',\n        logoAlt: 'Agibank',\n        href: 'https://www.azion.com/en/success-case/agibank/',\n        fill: 'canvas',\n        logoTreatment: 'monochrome'\n      },\n      {\n        logo: '/marketing-components/logos/renner-extended-reversed.svg',\n        logoAlt: 'Renner',\n        href: 'https://www.azion.com/en/success-case/renner/',\n        fill: 'canvas',\n        logoTreatment: 'monochrome'\n      },\n      {\n        logo: '/marketing-components/logos/fourbank-extended-reversed.svg',\n        logoAlt: 'Fourbank',\n        href: 'https://www.azion.com/en/success-case/fourbank/',\n        fill: 'primary',\n        logoTreatment: 'knockout'\n      },\n      {\n        logo: '/marketing-components/logos/exame-extended-mono.svg',\n        logoAlt: 'Exame',\n        href: 'https://www.azion.com/en/success-case/exame/',\n        fill: 'canvas',\n        logoTreatment: 'monochrome'\n      },\n      {\n        logo: '/marketing-components/logos/nzn-extended-reversed.svg',\n        logoAlt: 'NZN',\n        href: 'https://www.azion.com/en/success-case/nzn/nzn-creates-more-than-100-edge-applications-and-reduces-their-websites-loading-time-by-50-using-the-azion-platform/',\n        fill: 'primary',\n        logoTreatment: 'knockout'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/client-mosaic.md"
+}

@@ -1,0 +1,60 @@
+{
+ "name": "client-mosaic-columns",
+ "binding": "ClientMosaicColumns",
+ "import": "@aziontech/webkit/client-mosaic-columns",
+ "treeShakeableImport": "@aziontech/webkit/client-mosaic-columns",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case. It is a page section — the site places it from a `{ _id: 'client-mosaic-columns', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `logo-wall`.",
+ "setup": null,
+ "useWhen": [
+  "When three stories deserve equal weight and their brands should colour the band."
+ ],
+ "avoidWhen": [
+  "For a mixed mosaic of stories and marks → use `client-mosaic`."
+ ],
+ "related": [
+  "client-mosaic` — the bento sibling.",
+  "logo-wall` — the single-mark wall each column's face is rendered with."
+ ],
+ "bestPractices": [
+  "Exactly three cells; the grid is three columns from the large breakpoint.",
+  "brand.base` and `brand.glow` are the client's colours and may be any CSS colour; set `brand.ink` to `'dark'` when the face is light enough that the link text must be dark."
+ ],
+ "props": [
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list of stories."
+  },
+  {
+   "name": "linkLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label the mark face reveals on hover and the link's accessible name."
+  },
+  {
+   "name": "cells",
+   "type": "ClientMosaicColumnsCell[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The stories, in order; each is `{ name, logo, href, story, brand, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'\n</script>\n\n<template>\n  <ClientMosaicColumns\n    aria-label=\"Featured success stories\"\n    link-label=\"Read story\"\n    :cells=\"[\n      {\n        name: 'Magalu',\n        logo: '/marketing-components/logos/magalu-extended-color.svg',\n        href: 'https://www.azion.com/en/success-case/magalu/',\n        story:\n          'Explore how Magalu enhances cybersecurity with Azion\\'s Firewall and WAF, improving threat intelligence and bot management in retail.',\n        brand: { base: '#0e89ff', glow: '#0e89ff' },\n        logoTreatment: 'monochrome'\n      },\n      {\n        name: 'Dafiti',\n        logo: '/marketing-components/logos/dafiti-extended-reversed.svg',\n        href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',\n        story:\n          'Dafiti modernized its digital architecture to deliver faster, scalable, and resilient experiences for millions of consumers across Latin America.',\n        brand: { base: '#ffffff', glow: '#ffffff', ink: 'dark' },\n        logoTreatment: 'knockout'\n      },\n      {\n        name: 'MadeiraMadeira',\n        logo: '/marketing-components/logos/madeiramadeira-extended-reversed.svg',\n        href: 'https://www.azion.com/en/success-case/madeiramadeira/',\n        story:\n          'Faster product delivery and scalable infrastructure allowed MadeiraMadeira to support massive traffic growth during major e-commerce campaigns.',\n        brand: { base: '#ff9014', glow: '#ff9014' },\n        logoTreatment: 'monochrome'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/client-mosaic-columns.md"
+}

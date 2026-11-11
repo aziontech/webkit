@@ -5,6 +5,8 @@
     "accordion-item",
     "accordion-root",
     "accordion-trigger",
+    "action-confirmation",
+    "ai-loading",
     "alert",
     "architecture-tabs",
     "article-body",
@@ -12,6 +14,7 @@
     "article-highlight",
     "article-index-blog",
     "article-index-resource-hub",
+    "artifact-preview",
     "assets/agi-extended-color.svg",
     "assets/agibank-extended-color.svg",
     "assets/agibank-extended-mono.svg",
@@ -397,6 +400,7 @@
     "card-grid-cell",
     "card-grid-root",
     "card-pricing",
+    "cards",
     "carousel",
     "carousel-item",
     "carousel-next",
@@ -423,8 +427,13 @@
     "chart-line",
     "chart-root",
     "chart-tooltip",
+    "chat-message",
+    "chat-message-actions",
+    "chat-message-feedback",
+    "chat-message-root",
     "checkbox",
     "chip",
+    "citation",
     "cli-terminal",
     "client-mosaic",
     "client-mosaic-columns",
@@ -434,6 +443,7 @@
     "closing-call-to-action-newsletter",
     "code-block",
     "code-split",
+    "collection-preferences",
     "column-navigation",
     "column-navigation-column",
     "column-navigation-item",
@@ -453,6 +463,7 @@
     "confirm-dialog",
     "contact-hub",
     "content-columns",
+    "conversation",
     "copy-button",
     "currency",
     "diagram",
@@ -635,11 +646,14 @@
     "pricing-plans",
     "product-widget",
     "progress",
+    "prompt-input",
+    "property-filter",
     "quote",
     "quote-carousel",
     "quote-tabs",
     "radio-button",
     "radio-cards",
+    "reasoning",
     "recognition-marquee",
     "resizable",
     "resizable-handle",
@@ -674,6 +688,7 @@
     "site-nav",
     "skeleton",
     "slider",
+    "sources",
     "spark-chart",
     "spinner",
     "split-button",
@@ -686,10 +701,12 @@
     "sticky-scroll-code",
     "sticky-stack",
     "story-library",
+    "streaming-response",
     "stylelint-config",
     "styles",
     "styles/country-flags",
     "subject-library",
+    "suggestion-group",
     "svg/azion/default",
     "svg/azion/full",
     "svg/azion/min",
@@ -731,12 +748,14 @@
     "toast-root",
     "toast-title",
     "toggle-group",
+    "tool-call",
     "tooltip",
     "topic",
     "tracker",
     "tree",
     "use-case-links",
     "use-cases",
+    "use-collection",
     "use-controllable",
     "use-direction",
     "use-focus-trap",
@@ -761,6 +780,9 @@
     "platform/account/onboarding-form",
     "platform/account/payment-method-card",
     "platform/account/profile",
+    "platform/ai/ai-action-approval",
+    "platform/ai/ai-chat",
+    "platform/ai/ai-chat-drawer",
     "platform/auth",
     "platform/create/create-hub",
     "platform/create/create-in-drawer",
@@ -805,6 +827,7 @@
     "platform/states/form-validation",
     "platform/states/page-wires",
     "platform/states/project-intake",
+    "platform/view/card-view",
     "platform/view/file-browser",
     "platform/view/query-editor",
     "platform/view/split-view",
@@ -823,6 +846,144 @@
       ],
       "showCursor": null,
       "singleLine": null
+    },
+    "action-confirmation": {
+      "approveLabel": null,
+      "confirmationPhrase": null,
+      "denyLabel": null,
+      "description": null,
+      "kind": [
+        "danger",
+        "default"
+      ],
+      "loading": null,
+      "state": [
+        "approved",
+        "denied",
+        "expired",
+        "pending"
+      ],
+      "title": null
+    },
+    "ai-loading": {
+      "delay": null,
+      "kind": [
+        "bar",
+        "inline"
+      ],
+      "label": null
+    },
+    "artifact-preview": {
+      "copyValue": null,
+      "description": null,
+      "downloadHref": null,
+      "icon": null,
+      "meta": null,
+      "openable": null,
+      "title": null
+    },
+    "chat-message": {
+      "author": null,
+      "errorMessage": null,
+      "from": [
+        "assistant",
+        "system",
+        "user"
+      ],
+      "grouped": null,
+      "loadingLabel": null,
+      "state": [
+        "complete",
+        "error",
+        "pending",
+        "streaming"
+      ],
+      "timestamp": null
+    },
+    "chat-message-root": {
+      "author": null,
+      "errorMessage": null,
+      "from": [
+        "assistant",
+        "system",
+        "user"
+      ],
+      "grouped": null,
+      "loadingLabel": null,
+      "state": [
+        "complete",
+        "error",
+        "pending",
+        "streaming"
+      ],
+      "timestamp": null
+    },
+    "citation": {
+      "href": null,
+      "index": null,
+      "title": null
+    },
+    "conversation": {
+      "alignment": [
+        "split",
+        "start"
+      ],
+      "ariaLabel": null
+    },
+    "prompt-input": {
+      "ariaLabel": null,
+      "disabled": null,
+      "maxLength": null,
+      "maxRows": null,
+      "minRows": null,
+      "placeholder": null,
+      "state": [
+        "ready",
+        "streaming",
+        "submitted"
+      ]
+    },
+    "reasoning": {
+      "defaultOpen": null,
+      "duration": null,
+      "open": null,
+      "skippable": null,
+      "streaming": null
+    },
+    "sources": {
+      "anchor": null,
+      "defaultOpen": null,
+      "items": null,
+      "open": null,
+      "title": null
+    },
+    "streaming-response": {
+      "anchor": null,
+      "content": null,
+      "sources": null,
+      "streaming": null
+    },
+    "suggestion-group": {
+      "ariaLabel": null,
+      "disabled": null,
+      "items": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "tool-call": {
+      "defaultOpen": null,
+      "name": null,
+      "open": null,
+      "state": [
+        "denied",
+        "error",
+        "pending",
+        "running",
+        "success"
+      ],
+      "title": null
     },
     "button": {
       "animated": null,
@@ -980,7 +1141,8 @@
       "otherLabel": null,
       "refetching": null,
       "series": null,
-      "tableView": null
+      "tableView": null,
+      "timeZone": null
     },
     "chart-root": {
       "ariaLabel": null,
@@ -1002,7 +1164,8 @@
       "otherLabel": null,
       "refetching": null,
       "series": null,
-      "tableView": null
+      "tableView": null,
+      "timeZone": null
     },
     "chart-card": {
       "ariaLabel": null,
@@ -1534,6 +1697,17 @@
     "kbd": {
       "alt": null,
       "ctrl": null,
+      "keyName": [
+        "alt",
+        "backspace",
+        "ctrl",
+        "delete",
+        "enter",
+        "escape",
+        "shift",
+        "space",
+        "tab"
+      ],
       "meta": null,
       "shift": null,
       "size": [
@@ -1618,9 +1792,15 @@
       "columns": null,
       "columnVisibility": null,
       "data": null,
+      "density": [
+        "comfortable",
+        "compact"
+      ],
       "enableRowSelection": null,
       "enableSorting": null,
+      "estimateRowHeight": null,
       "exportFilename": null,
+      "exportRows": null,
       "filterFields": null,
       "filters": null,
       "globalFilter": null,
@@ -1644,16 +1824,25 @@
       "selectOnRowClick": null,
       "sorting": null,
       "stackable": null,
-      "state": null
+      "state": null,
+      "striped": null,
+      "virtual": null,
+      "wrapLines": null
     },
     "table-root": {
       "bordered": null,
       "columns": null,
       "columnVisibility": null,
       "data": null,
+      "density": [
+        "comfortable",
+        "compact"
+      ],
       "enableRowSelection": null,
       "enableSorting": null,
+      "estimateRowHeight": null,
       "exportFilename": null,
+      "exportRows": null,
       "filterFields": null,
       "filters": null,
       "globalFilter": null,
@@ -1677,7 +1866,42 @@
       "selectOnRowClick": null,
       "sorting": null,
       "stackable": null,
-      "state": null
+      "state": null,
+      "striped": null,
+      "virtual": null,
+      "wrapLines": null
+    },
+    "property-filter": {
+      "ariaLabel": null,
+      "disabled": null,
+      "freeText": null,
+      "placeholder": null,
+      "properties": null,
+      "query": null,
+      "totalCount": null
+    },
+    "collection-preferences": {
+      "columns": null,
+      "container": [
+        "dialog",
+        "drawer"
+      ],
+      "disabled": null,
+      "pageSizeOptions": null,
+      "preferences": null,
+      "sections": null,
+      "title": null
+    },
+    "cards": {
+      "ariaLabel": null,
+      "items": null,
+      "loading": null,
+      "selectionMode": [
+        "multi",
+        "none",
+        "single"
+      ],
+      "trackBy": null
     },
     "pagination": {
       "ariaLabel": null,
@@ -2394,6 +2618,7 @@
     "save-bar": {
       "kind": [
         "docked",
+        "fade",
         "floating",
         "plain"
       ]

@@ -1,0 +1,121 @@
+{
+ "name": "split-button",
+ "binding": "SplitButton",
+ "import": "@aziontech/webkit/split-button",
+ "treeShakeableImport": "@aziontech/webkit/split-button",
+ "category": "actions",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a \"default is the last selection\" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.",
+ "setup": null,
+ "useWhen": [
+  "One default action with a few related alternatives (Save and Save as draft, Deploy and Deploy to staging).",
+  "A \"repeat the last choice\" control: set `updateLabelOnSelect` so the primary segment mirrors the last action picked."
+ ],
+ "avoidWhen": [
+  "A single action → use `button`.",
+  "A menu with no default action → use `dropdown-menu`.",
+  "Picking one of a few visible, mutually exclusive options → use `toggle-group`."
+ ],
+ "related": [
+  "button` — the primary segment; `kind` here is limited to `primary`, `secondary` and `outlined`.",
+  "dropdown-menu` — the overlay menu the toggle composes; use it alone when there is no default action.",
+  "icon-button` — the chevron toggle segment."
+ ],
+ "bestPractices": [
+  "Give every `model` entry a stable `value`; without one the `label` identifies the action, so renaming it changes what handlers receive.",
+  "Handle the default action in `@click` and the menu actions in `@item-click`; both receive `(event, item)`.",
+  "With `updateLabelOnSelect`, read the second argument of `click` (the mirrored item, `null` until one is picked) to run whichever action is active.",
+  "Set `loading` while the action runs: it disables both segments and keeps the menu closed.",
+  "Disable a single action with `disabled: true` on its model entry instead of removing it, so the menu does not shift."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Visible label text on the primary command button."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "PrimeIcons class for the primary button's leading icon."
+  },
+  {
+   "name": "model",
+   "type": "SplitButtonItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Actions rendered as rows in the attached overlay menu."
+  },
+  {
+   "name": "kind",
+   "type": "'primary' | 'secondary' | 'outlined'",
+   "default": "'primary'",
+   "required": "false",
+   "doc": "Visual variant applied to both joined segments."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'large'",
+   "required": "false",
+   "doc": "Size token; affects height, padding, and typography."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables both segments and prevents the menu from opening."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves."
+  },
+  {
+   "name": "updateLabelOnSelect",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does."
+  }
+ ],
+ "events": [
+  {
+   "name": "click",
+   "payload": "(event: MouseEvent, item: SplitButtonItem | null)",
+   "notes": "Fired by the primary command button on activation. `item` is the action currently mirrored on the primary segment when `updateLabelOnSelect` is on, otherwise `null`. Never fires while `disabled` or `loading`."
+  },
+  {
+   "name": "item-click",
+   "payload": "(event: MouseEvent | KeyboardEvent, item: SplitButtonItem)",
+   "notes": "Fired when a menu action is selected. `event` is the pointer/keyboard event that activated the option; `item` is the matched `model` entry. The menu cannot open while `disabled` or `loading`, so it never fires in those states."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import SplitButton from '@aziontech/webkit/split-button'\n\n  const items = [\n    { label: 'Update', value: 'update', icon: 'pi pi-refresh' },\n    { label: 'Duplicate', value: 'duplicate', icon: 'pi pi-copy' },\n    { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }\n  ]\n</script>\n\n<template>\n  <SplitButton\n    kind=\"primary\"\n    size=\"large\"\n    label=\"Save\"\n    icon=\"pi pi-check\"\n    :model=\"items\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import SplitButton from '@aziontech/webkit/split-button'\n\n  const items = [\n    { label: 'Update', value: 'update', icon: 'pi pi-refresh' },\n    { label: 'Duplicate', value: 'duplicate', icon: 'pi pi-copy' },\n    { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <SplitButton\n      kind=\"primary\"\n      label=\"Primary\"\n      :model=\"items\"\n    />\n    <SplitButton\n      kind=\"secondary\"\n      label=\"Secondary\"\n      :model=\"items\"\n    />\n    <SplitButton\n      kind=\"outlined\"\n      label=\"Outlined\"\n      :model=\"items\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import SplitButton from '@aziontech/webkit/split-button'\n\n  const items = [\n    { label: 'Update', value: 'update', icon: 'pi pi-refresh' },\n    { label: 'Duplicate', value: 'duplicate', icon: 'pi pi-copy' },\n    { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <SplitButton\n      size=\"small\"\n      label=\"Small\"\n      :model=\"items\"\n    />\n    <SplitButton\n      size=\"medium\"\n      label=\"Medium\"\n      :model=\"items\"\n    />\n    <SplitButton\n      size=\"large\"\n      label=\"Large\"\n      :model=\"items\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/split-button.md"
+}

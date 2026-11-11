@@ -1,0 +1,89 @@
+{
+ "name": "article-index-resource-hub",
+ "binding": "ArticleIndexResourceHub",
+ "import": "@aziontech/webkit/article-index-resource-hub",
+ "treeShakeableImport": "@aziontech/webkit/article-index-resource-hub",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet (content type, category, industry) on one row that wraps when it runs out of room. Each resource is a row — its cover on the left, and on the right its overline, headline and a two-line deck centred in the row; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The facets combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input` and `button`; the facet selections and each dropdown's option search are local state.",
+ "setup": null,
+ "useWhen": [
+  "For a resource hub that mixes content types (e-books, posts, comparisons, stories), filtered by facet."
+ ],
+ "avoidWhen": [
+  "For the blog's list filtered by a category picker and a search field, with bylines → use `article-index-blog`.",
+  "For the success-story library with a card grid → use `story-library`."
+ ],
+ "related": [
+  "article-index-blog` — the sibling listing with a category picker and a search field.",
+  "story-library` — the card-grid library with search and facets."
+ ],
+ "bestPractices": [
+  "Give every item a `facets` entry per facet `key` it can be filtered by; an item without one never matches a selection on that facet.",
+  "Keep each facet's `options` to values some item carries."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline beside the dropdowns, rendered as the band's `h2`."
+  },
+  {
+   "name": "items",
+   "type": "ArticleIndexResourceHubItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The resources, in order; each is `{ key, href, image, meta, title, description, facets? }`."
+  },
+  {
+   "name": "facets",
+   "type": "ArticleIndexResourceHubFacet[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The facet dropdowns, in order; each is `{ key, label, allLabel, options }`."
+  },
+  {
+   "name": "rowLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Read cue revealed at the end of a row under hover or focus."
+  },
+  {
+   "name": "moreLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the load-more button under the list; the button is omitted when empty."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list of resources."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'\n</script>\n\n<template>\n  <ArticleIndexResourceHub\n    anchor=\"resources\"\n    title=\"Explore all resources\"\n    row-label=\"Read article\"\n    more-label=\"Load more\"\n    aria-label=\"Resources\"\n    :facets=\"[\n      {\n        key: 'contentType',\n        label: 'Content type',\n        allLabel: 'All content types',\n        options: ['E-books', 'Blog', 'Comparisons']\n      },\n      {\n        key: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: ['Financial', 'Retail', 'Tech']\n      }\n    ]\"\n    :items=\"[\n      {\n        key: 'security-applications-apis-ai-agents',\n        href: 'https://www.azion.com/en/lp/security-applications-apis-ai-agents/',\n        image: 'https://www.azion.com/assets/content/blog/uploads/Rich%20contentsdark.png',\n        meta: 'E-books • OCT 15, 2026',\n        title: 'Security for applications, APIs, and AI agents',\n        description:\n          'Learn how to bring security policies into deployment, automate protection, and monitor traffic.',\n        facets: { contentType: ['E-books'] }\n      },\n      {\n        key: 'azion-mcp-servers-generally-available',\n        href: 'https://www.azion.com/en/blog/azion-mcp-servers-generally-available/',\n        image: 'https://www.azion.com/assets/content/blog/uploads/mcp-ga/Azion-MCP.svg',\n        meta: 'Blog • OCT 14, 2026',\n        title: 'Azion MCP servers: Connect Your Coding Agent to Azion',\n        description: 'Azion MCP servers connect coding agents to the Azion documentation and API.',\n        facets: { contentType: ['Blog'] }\n      },\n      {\n        key: 'cloudflare-to-azion-alternative-guide',\n        href: 'https://www.azion.com/en/lp/cloudflare-to-azion-alternative-guide/',\n        image: 'https://www.azion.com/assets/content/lp/uploads/og-image/og-img-cf-to-azion.png',\n        meta: 'Comparisons • OCT 3, 2026',\n        title: 'Cloudflare Alternative Comparison: Azion vs Cloudflare',\n        description: 'Azion vs Cloudflare: the same platform on every plan.',\n        facets: { contentType: ['Comparisons'] }\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/article-index-resource-hub.md"
+}

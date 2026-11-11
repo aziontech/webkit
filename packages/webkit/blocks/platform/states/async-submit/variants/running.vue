@@ -481,7 +481,11 @@
 
   const RUN_TOAST = 'async-submit-run'
 
-  const redeploy = () => toast.loading(`Deploying ${run.name}…`, { id: RUN_TOAST })
+  const redeploy = () =>
+    toast.loading(`Deploying ${run.name}…`, {
+      id: RUN_TOAST,
+      description: `${REPO.scope}/${REPO.name}. It keeps running if you leave.`
+    })
 
   onMounted(redeploy)
 

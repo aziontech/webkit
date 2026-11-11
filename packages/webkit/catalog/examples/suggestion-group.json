@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "FollowUpQuestions",
+   "summary": "Three follow-up questions under a response, as wrapping chips ordered by likelihood; choosing one sends it as the next prompt.",
+   "sfc": "<script setup>\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n  import { ref } from 'vue'\n\n  const sent = ref('')\n  const items = [\n    { id: 'ttl', label: 'What TTL should my images use?' },\n    { id: 'wildcard', label: 'How do I purge a whole folder?' },\n    { id: 'origin', label: 'Why does the origin still get requests?' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <SuggestionGroup\n      :items=\"items\"\n      aria-label=\"Follow-up questions\"\n      @select=\"(item) => (sent = item.label)\"\n    />\n    <p\n      v-if=\"sent\"\n      class=\"text-body-sm text-(--text-muted)\"\n    >\n      Sent: {{ sent }}\n    </p>\n  </div>\n</template>"
+  },
+  {
+   "name": "SupportPrompts",
+   "summary": "Support prompts on an empty assistant, stacked vertically with an icon each, showing what the assistant can do before the first message.",
+   "sfc": "<script setup>\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n\n  const items = [\n    { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'pi pi-github' },\n    { id: 'waf', label: 'Protect my site with a WAF', icon: 'pi pi-shield' },\n    { id: 'cache', label: 'Explain why my cache hit ratio dropped', icon: 'pi pi-chart-line' },\n    { id: 'domain', label: 'Point my domain to a workload', icon: 'pi pi-globe' }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-sm)\">\n    <SuggestionGroup\n      :items=\"items\"\n      orientation=\"vertical\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

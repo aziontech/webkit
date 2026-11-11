@@ -257,8 +257,64 @@ describe('Item (composition)', () => {
       await expectNoA11yViolations(container)
     })
 
-    // OMITTED: axe on ItemGroup wrapping Item rows fails aria-required-children —
-    // ItemGroup hardcodes role="list" but Item rows carry no role="listitem" (and a bare
-    // separator is a disallowed child of list). Real component a11y gap, not a test artifact.
+    it('WithGroup example has no violations', async () => {
+      const { container } = render(WithGroup)
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('list structure (Item.List and Item.Group own the listitem role)', () => {
+    it('exposes Item.Group rows as listitems and hides its separators from the list', () => {
+      const { getByRole } = render(WithGroup)
+      const list = getByRole('list')
+      Array.from(list.children).forEach((child) => {
+        const expected = child.getAttribute('data-slot') === 'item-separator' ? 'none' : 'listitem'
+        expect(child.getAttribute('role')).toBe(expected)
+      })
+    })
+
+    it('wraps an asChild row of Item.List in a listitem and keeps the link a link', () => {
+      const Tree = {
+        components: { Item, ItemList: Item.List },
+        template: `
+          <ItemList>
+            <Item as-child><a href="#one">One</a></Item>
+            <Item as-child><a href="#two">Two</a></Item>
+          </ItemList>
+        `
+      }
+      const { getByRole } = render(Tree)
+      const rows = Array.from(getByRole('list').children)
+      expect(rows.length).toBe(2)
+      rows.forEach((row) => {
+        expect(row.getAttribute('role')).toBe('listitem')
+        expect(row.firstElementChild?.tagName).toBe('A')
+        expect(row.firstElementChild?.hasAttribute('role')).toBe(false)
+      })
+    })
+
+    it('gives an Item outside a list no listitem role', () => {
+      const { getByTestId } = render(Item, { slots: { default: '<span>row</span>' } })
+      expect(getByTestId('content-item').hasAttribute('role')).toBe(false)
+    })
+
+    it('gives an Item nested inside a list row no listitem role', () => {
+      const Nested = {
+        components: { Item, ItemList: Item.List },
+        template: `
+          <ItemList>
+            <Item data-testid="outer"><Item data-testid="inner">Nested</Item></Item>
+          </ItemList>
+        `
+      }
+      const { getByTestId } = render(Nested)
+      expect(getByTestId('outer').getAttribute('role')).toBe('listitem')
+      expect(getByTestId('inner').hasAttribute('role')).toBe(false)
+    })
+
+    it('keeps role="separator" on a separator outside a list', () => {
+      const { getByRole } = render(Item.Separator)
+      expect(getByRole('separator')).toBeTruthy()
+    })
   })
 })

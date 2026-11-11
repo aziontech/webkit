@@ -182,10 +182,16 @@ async function main() {
         'Fuzzy / substring search across component names and categories. Ranked results so a phrase ' +
         'like "dropdown" or "paginated table" resolves to a real component.',
       inputSchema: {
-        query: z.string().describe('Free-text query, e.g. "dropdown", "date picker", "toast".')
+        query: z
+          .string()
+          .describe('Free-text query in en, pt-BR or es, e.g. "dropdown", "date picker", "botão".'),
+        surface: z
+          .enum(['product', 'marketing', 'docs'])
+          .optional()
+          .describe('Restrict to one surface. Console screens use "product" only.')
       }
     },
-    async ({ query }) => json(searchComponents(catalog, query))
+    async ({ query, surface }) => json(searchComponents(catalog, query, { surface }))
   )
 
   tool(
@@ -200,10 +206,14 @@ async function main() {
       inputSchema: {
         need: z
           .string()
-          .describe('What you are trying to build, e.g. "a searchable paginated table".')
+          .describe('What you are trying to build, e.g. "a searchable paginated table".'),
+        surface: z
+          .enum(['product', 'marketing', 'docs'])
+          .optional()
+          .describe('Restrict to one surface. Console screens use "product" only.')
       }
     },
-    async ({ need }) => json(suggestComponent(catalog, need))
+    async ({ need, surface }) => json(suggestComponent(catalog, need, { surface }))
   )
 
   tool(
@@ -217,10 +227,18 @@ async function main() {
         'skills, steps and `guidelinesSummary` (the job the screen serves). An empty query lists ' +
         'every pattern.',
       inputSchema: {
-        query: z.string().describe('The screen you need, in plain words, e.g. "login page".')
+        query: z
+          .string()
+          .describe(
+            'The screen you need, in plain words (en, pt-BR or es), e.g. "login page", "cadastro".'
+          ),
+        surface: z
+          .enum(['product', 'marketing', 'docs'])
+          .optional()
+          .describe('Restrict to one surface. Console screens use "product" only.')
       }
     },
-    async ({ query }) => json(searchPatterns(catalog, query))
+    async ({ query, surface }) => json(searchPatterns(catalog, query, { surface }))
   )
 
   tool(

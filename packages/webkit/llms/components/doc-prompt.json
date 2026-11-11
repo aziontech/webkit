@@ -1,0 +1,88 @@
+{
+ "name": "doc-prompt",
+ "binding": "DocPrompt",
+ "import": "@aziontech/webkit/doc-prompt",
+ "treeShakeableImport": "@aziontech/webkit/doc-prompt",
+ "category": "documentation",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "DocPrompt renders text the reader is meant to **run, not read** — the block a documentation page uses when the next step is \"say this to your agent\". It is the one component in this layer whose payload is addressed to a machine, so it is the one that ships an affordance for handing it to one: a copy control wired to the exact string on screen. It is deliberately **not** a code block — a prompt is a sentence, so it carries no language, no gutter, and no syntax highlighting, and it is set in the mono face only to say \"this is the literal text, copy it as it stands\".",
+ "setup": null,
+ "useWhen": [
+  "A documentation step, onboarding screen, or empty state whose next action is \"paste this into your agent\".",
+  "A short list of example prompts a reader can try, under a heading that has already said what they are.",
+  "Anywhere a literal string must be copied verbatim and the reader is the one who decides where it goes."
+ ],
+ "avoidWhen": [
+  "The payload is source code, a shell command, or configuration → use a code viewer, which owns languages, gutters, and highlighting; a prompt has none of them.",
+  "The payload is a short inline token (a key, a flag, a variable name) → use `kbd` or inline code in prose.",
+  "The block needs to run the prompt itself, or route it to a named vendor → out of scope; this component only puts the text on the clipboard."
+ ],
+ "related": [
+  "copy-button` — the control DocPrompt composes. Reach for it directly when the value being copied has no block of its own.",
+  "DocCallout` — draws attention to prose the reader should _read_; DocPrompt is for text the reader should _use_.",
+  "DocProse` — the contract around it. The prompt marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder."
+ ],
+ "bestPractices": [
+  "Write the prompt once, in the default slot. It is both the visible text and the copied string, so the two cannot drift.",
+  "Give `title` only when the surrounding page has not already said what the block is. Three one-line prompts under a \"Prompts to try\" heading want the bare shape.",
+  "Use `kind=\"line\"` for a single instruction and `kind=\"block\"` for a priming paragraph. A one-sentence prompt broken across three lines reads as three instructions.",
+  "Keep the prompt in the imperative and free of placeholders the reader must fill silently — if a value must be substituted, name it in the prose above."
+ ],
+ "props": [
+  {
+   "name": "kind",
+   "type": "'block' | 'line'",
+   "default": "'block'",
+   "required": "false",
+   "doc": "Wrapping paragraph capped at four lines, or one line that scrolls sideways."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "What the block is, in a word or two. Renders as a titled row above the prompt."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "'pi pi-sparkles'",
+   "required": "false",
+   "doc": "PrimeIcons class for the glyph beside the title."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fallback prompt text when the default slot is empty."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The prompt itself: one or more sentences of literal text. Also the string the copy control carries."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import DocPrompt from '@aziontech/webkit/doc-prompt'\n</script>\n\n<template>\n  <DocPrompt title=\"AI Assistant\">\n    Deploy this repository to Azion and show me the edge URL when it is live.\n  </DocPrompt>\n</template>"
+  },
+  {
+   "name": "Kinds",
+   "sfc": "<script setup>\n  import DocPrompt from '@aziontech/webkit/doc-prompt'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <DocPrompt\n      kind=\"block\"\n      title=\"AI Assistant\"\n    >\n      Deploy this repository to Azion and show me the edge URL when it is live.\n    </DocPrompt>\n    <DocPrompt\n      kind=\"line\"\n      title=\"AI Assistant\"\n    >\n      Deploy this repository to Azion and show me the edge URL when it is live. Then open the\n      deployment log, find the cold-start figure, and summarise it for me.\n    </DocPrompt>\n  </div>\n</template>"
+  },
+  {
+   "name": "Capped",
+   "sfc": "<script setup>\n  import DocPrompt from '@aziontech/webkit/doc-prompt'\n</script>\n\n<template>\n  <DocPrompt title=\"Priming prompt\">\n    You are working in an Azion Web Platform project. Read the repository, identify the framework\n    and its build output directory, then create the edge application, bind a domain to it, and\n    deploy. Before you deploy, tell me which framework you detected and which build command you are\n    about to run, and wait for me to confirm. After the deploy succeeds, report the edge URL and the\n    propagation time, and leave the build artifacts in place so I can inspect them.\n  </DocPrompt>\n</template>"
+  }
+ ],
+ "docs": "components/doc-prompt.md"
+}

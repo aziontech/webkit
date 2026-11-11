@@ -6,6 +6,7 @@ import vue from '@vitejs/plugin-vue'
 import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
 
+import { emulateMedia } from './src/test/emulate-media'
 import { renderOnServer } from './src/test/server-render'
 
 const EXPORTS: Record<string, string> = JSON.parse(
@@ -39,7 +40,7 @@ export default defineConfig({
       provider: playwright(),
       headless: true,
       instances: [{ browser: 'chromium' }],
-      commands: { renderOnServer }
+      commands: { emulateMedia, renderOnServer }
     },
     coverage: {
       provider: 'v8',

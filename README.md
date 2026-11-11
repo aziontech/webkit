@@ -18,14 +18,18 @@ Pick the path by what you are about to do.
 
 1. Run `npx @aziontech/webkit init`. It installs the `webkit` MCP server, the lint, the skills and
    rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
-2. A whole screen (login, signup, settings, a list, a create flow): start from a pattern.
-   `search_patterns`, then `get_pattern`. Copy the SFC and change only the content. Do not build the
-   screen from scratch. Patterns are grouped by task (`platform/<auth|account|create|view|detail|edit|delete|settings|states|dashboard>/…`),
+2. A whole screen (login, signup, settings, a list, a create flow): start from a block.
+   `npx @aziontech/webkit search <the screen in plain words>`, then
+   `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state). It copies the
+   reviewed SFC into your views, checks its imports against the installed version, records it in
+   `webkit.blocks.json` and prints the route to add. Change only the content. Do not build the
+   screen from scratch. (The MCP gives an agent the same blocks: `search_patterns`, `get_pattern`.) Patterns are grouped by task (`platform/<auth|account|create|view|detail|edit|delete|settings|states|dashboard>/…`),
    one per job with its states as variants; an id from before v6 still resolves, with a `note`
    naming the new one.
 3. A single piece: `suggest_component`, then `get_component`.
 4. Follow the `webkit-usage` skill, which points to the skill for each case.
-5. Before you hand it over: `npx @aziontech/webkit doctor` and the `webkit-ui-verify` skill.
+5. Before you hand it over: `npx @aziontech/webkit check` (the CI gate: setup, v5 names, imports,
+   lint, blocks drifting from the canonical copy) and the `webkit-ui-verify` skill.
 
 Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use `.claude/`,
 `.specs/` or `apps/storybook/` to build screens; they belong to the people who maintain WebKit.
@@ -40,7 +44,7 @@ Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use
 
 ## Building with WebKit (consume)
 
-The path for apps and screens that use the packages. AI agents start with the patterns in the `webkit` MCP (above).
+The path for apps and screens that use the packages. AI agents start with the patterns in the `webkit` MCP (above); agents without the MCP read `node_modules/@aziontech/webkit/llms/llms.txt`, a page per block, component and foundation.
 
 ### Use in your app
 

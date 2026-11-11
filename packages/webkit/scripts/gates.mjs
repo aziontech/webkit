@@ -12,6 +12,11 @@ export const GATES = [
     label: 'Catalog in sync',
     steps: [['node', 'scripts/build-catalog.mjs', '--check']]
   },
+  {
+    id: 'llms',
+    label: 'llms.txt and Markdown pages in sync',
+    steps: [['node', 'scripts/build-llms.mjs', '--check']]
+  },
   { id: 'naming', label: 'Naming', steps: [['node', 'scripts/check-naming.mjs']] },
   {
     id: 'migrations',

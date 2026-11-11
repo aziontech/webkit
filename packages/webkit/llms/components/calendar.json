@@ -1,0 +1,233 @@
+{
+ "name": "calendar",
+ "binding": "Calendar",
+ "import": "@aziontech/webkit/calendar",
+ "treeShakeableImport": "@aziontech/webkit/calendar-root",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/calendar-preset",
+  "@aziontech/webkit/calendar-clear"
+ ],
+ "purpose": "Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields (suppressible with `show-fields`), an optional timezone selector, and an Apply action; it also offers a \"Select Period\" mode whose hint chips and typed text are read in the active locale (`45m`, `12 hours` / `12 horas`, `last month` / `mês passado`, `yesterday` / `ontem`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones).",
+ "setup": null,
+ "useWhen": [
+  "Picking a date range for analytics, logs, or billing windows, optionally with times and a timezone.",
+  "Offering one-click ranges (\"Last 7 days\") next to the grid through `presets`.",
+  "Relative time windows typed as text (`45m`, `last month`) with `period`.",
+  "A single date with `mode=\"single\"`."
+ ],
+ "avoidWhen": [
+  "Only a fixed list of named windows, with no custom range → use `select`.",
+  "A duration or count (retention days, TTL) rather than a date → use `number-input`."
+ ],
+ "related": [
+  "select` — a fixed list of named periods without a grid.",
+  "input` — the trigger and the Start/End fields share its heights, hover, and disabled treatment, so they align side by side.",
+  "number-input` — numeric durations instead of dates."
+ ],
+ "bestPractices": [
+  "modelValue` is committed only on Apply; read the final value from `update:modelValue` or `apply`, and set `:show-apply=\"false\"` when every edit should commit at once.",
+  "Bind a `{ start, end }` object in range mode and a `Date` or `null` with `mode=\"single\"`.",
+  "Bound the selectable days with `min` and `max` instead of validating after commit.",
+  "Pair `show-timezone` with `v-model:timezone`; the timezone changes display formatting only, not the `Date` values.",
+  "Prefer the `presets` prop; use the `presets` slot with `Calendar.Preset` only when preset content needs custom markup."
+ ],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "Date | null | CalendarRange",
+   "default": "null",
+   "required": "false",
+   "doc": "Committed selection for v-model. A `Date` (or null) in single mode; a `{ start, end }` range in range mode. Only updated on Apply (or immediately when `showApply` is false)."
+  },
+  {
+   "name": "mode",
+   "type": "'single' | 'range'",
+   "default": "'range'",
+   "required": "false",
+   "doc": "Selection mode. Single picks one date; range picks a start and end date."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; affects the trigger, day-cell hit-area, and typography."
+  },
+  {
+   "name": "min",
+   "type": "Date | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Earliest selectable date; earlier days render disabled."
+  },
+  {
+   "name": "max",
+   "type": "Date | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Latest selectable date; later days render disabled."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the trigger, grid, and all controls, applying disabled tokens."
+  },
+  {
+   "name": "open",
+   "type": "boolean | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Controlled open state of the popover. Use with v-model:open; omit for uncontrolled."
+  },
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`)."
+  },
+  {
+   "name": "presets",
+   "type": "CalendarPresetItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets."
+  },
+  {
+   "name": "showFields",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered."
+  },
+  {
+   "name": "showTime",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows Start/End time fields alongside the date fields."
+  },
+  {
+   "name": "showTimezone",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the timezone selector below the fields."
+  },
+  {
+   "name": "timezone",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone."
+  },
+  {
+   "name": "timezones",
+   "type": "string[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Timezone options for the selector; empty falls back to a curated list derived from `Intl`."
+  },
+  {
+   "name": "horizontal",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Lays the fields/apply column beside the calendar instead of below it."
+  },
+  {
+   "name": "clearable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a clear control on the trigger that empties the committed selection."
+  },
+  {
+   "name": "showApply",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately."
+  },
+  {
+   "name": "period",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Enables the \"Select period\" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`."
+  },
+  {
+   "name": "split",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders the trigger as a split control with a separate chevron affordance."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:modelValue",
+   "payload": "Date | null | CalendarRange",
+   "notes": "v-model. The committed `Date` (single) or `{ start, end }` (range); empty value on clear."
+  },
+  {
+   "name": "update:open",
+   "payload": "boolean",
+   "notes": "v-model:open. Emitted when the popover opens or closes."
+  },
+  {
+   "name": "update:timezone",
+   "payload": "string",
+   "notes": "v-model:timezone. Emitted when the timezone selection changes."
+  },
+  {
+   "name": "month-change",
+   "payload": "CalendarMonth",
+   "notes": "Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed)."
+  },
+  {
+   "name": "apply",
+   "payload": "Date | null | CalendarRange",
+   "notes": "Emitted when the draft selection is committed via Apply."
+  }
+ ],
+ "slots": [
+  {
+   "name": "trigger",
+   "scope": "{ open, value, displayValue }",
+   "notes": "Replaces the default trigger button; scope exposes the open state, raw value, and formatted label."
+  },
+  {
+   "name": "presets",
+   "scope": "—",
+   "notes": "Custom preset dropdown content (e.g. `<Calendar.Preset>`); overrides the `presets` prop rendering."
+  },
+  {
+   "name": "footer",
+   "scope": "—",
+   "notes": "Custom footer/action-bar content (e.g. `<Calendar.Clear>`) alongside Apply."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import Calendar from '@aziontech/webkit/calendar'\n\n  const range = ref(null)\n</script>\n\n<template>\n  <Calendar\n    v-model=\"range\"\n    mode=\"range\"\n    clearable\n    show-time\n    show-timezone\n  />\n</template>"
+  },
+  {
+   "name": "Open",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import Calendar from '@aziontech/webkit/calendar'\n\n  const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })\n</script>\n\n<template>\n  <div class=\"min-h-[640px] w-full max-w-[560px]\">\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      :open=\"true\"\n      show-time\n      show-timezone\n      clearable\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import Calendar from '@aziontech/webkit/calendar'\n\n  const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-start gap-4\">\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"small\"\n    />\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"medium\"\n    />\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/calendar.md"
+}

@@ -2187,6 +2187,1104 @@
    "surface": "product",
    "examplesFile": "catalog/examples/overline.json"
   },
+  "action-confirmation": {
+   "import": "@aziontech/webkit/action-confirmation",
+   "target": "./src/components/ai/action-confirmation/action-confirmation.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/action-confirmation",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One or two sentences on what will happen and to what; backticks render as code."
+    },
+    {
+     "name": "state",
+     "type": "'pending' | 'approved' | 'denied' | 'expired'",
+     "default": "'pending'",
+     "required": "false",
+     "doc": "pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text."
+    },
+    {
+     "name": "kind",
+     "type": "'default' | 'danger'",
+     "default": "'default'",
+     "required": "false",
+     "doc": "danger` for an action that cannot be undone: the approve button turns destructive."
+    },
+    {
+     "name": "confirmationPhrase",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing."
+    },
+    {
+     "name": "approveLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`)."
+    },
+    {
+     "name": "denyLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the deny button. Empty uses the locale catalog (`Deny`)."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "A decision is being sent; both buttons are inert and Approve shows its loading state."
+    }
+   ],
+   "events": [
+    {
+     "name": "approve",
+     "payload": "—",
+     "notes": ""
+    },
+    {
+     "name": "deny",
+     "payload": "—",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "What exactly will run: a `CodeBlock`, or `KeyValuePairs` with parameters."
+    }
+   ],
+   "purpose": "A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValuePairs` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`kind=\"danger\"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.",
+   "useWhen": [
+    "One-time authorization of a consequential action proposed by an agent: a production deployment, a purge, a command.",
+    "An irreversible action (delete): add `confirmationPhrase`."
+   ],
+   "avoidWhen": [
+    "Tools already trusted for the session → record the call with `tool-call`, do not ask again.",
+    "A destructive action the reader started themselves in the UI → `confirm-dialog`.",
+    "A form → this card only approves or denies."
+   ],
+   "related": [
+    "tool-call` — the record of the call after it is approved (or `denied`).",
+    "confirm-dialog` — confirmation of the reader's own destructive action.",
+    "code-block`, `key-value-pairs` — what will run, in the body.",
+    "chat-message` — the assistant acknowledges the decision in the next message."
+   ],
+   "bestPractices": [
+    "Title is a question naming the action and target; put tool and command names in backticks (code).",
+    "Match the approve label to the title verb (`Deploy`, `Delete`) when it is not a generic tool call.",
+    "Never pre-focus or pre-select Approve for a risky action.",
+    "Do not leave a request pending forever: expire it (`state=\"expired\"`) and have the assistant say nothing ran.",
+    "After Deny, the assistant acknowledges in the conversation (\"Skipping that step.\")."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/action-confirmation.json"
+  },
+  "ai-loading": {
+   "import": "@aziontech/webkit/ai-loading",
+   "target": "./src/components/ai/ai-loading/ai-loading.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/ai-loading",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Visible loading text, `Generating <what>` or `Loading <what>`, with no end punctuation. Empty uses the locale catalog (`Generating a response`)."
+    },
+    {
+     "name": "kind",
+     "type": "'inline' | 'bar'",
+     "default": "'inline'",
+     "required": "false",
+     "doc": "inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear."
+    },
+    {
+     "name": "delay",
+     "type": "number",
+     "default": "1000",
+     "required": "false",
+     "doc": "Milliseconds to wait before showing anything, so a fast response never flickers a loading state."
+    }
+   ],
+   "purpose": "The loading state of a generative AI response (Cloudscape generative AI loading states and loading bar, AI Elements Loader): visible loading text — `Generating a response`, `Loading list of workloads` — paired with three pulsing dots (`inline`, for text) or an indeterminate bar (`bar`, where a table, list or code block is about to appear). It waits `delay` milliseconds before showing anything, so a response that arrives within a second never flickers a loading state.",
+   "useWhen": [
+    "Processing: the model has the prompt but has produced nothing yet (`ChatMessage` renders it for `state=\"pending\"`).",
+    "Generation of mixed content: a bar where a table or code block will appear while text streams."
+   ],
+   "avoidWhen": [
+    "Model reasoning with a trace → `reasoning`.",
+    "Loading a page or table of product data → `skeleton`, `spinner`, `progress`.",
+    "Determinate progress → `progress`."
+   ],
+   "related": [
+    "chat-message` — renders this while `pending`.",
+    "progress` — the indeterminate bar it draws.",
+    "reasoning` — thinking with a trace."
+   ],
+   "bestPractices": [
+    "Text says `[Generating|Loading] <what>` without end punctuation: `Generating a response`, `Loading list of workloads`.",
+    "Keep the default 1 s delay; set `delay` to 0 only when the owner already delayed.",
+    "Use the bar only for non-text content; stream text instead of loading it."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/ai-loading.json"
+  },
+  "artifact-preview": {
+   "import": "@aziontech/webkit/artifact-preview",
+   "target": "./src/components/ai/artifact-preview/artifact-preview.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/artifact-preview",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "File name or title of what was generated (`cache-rules.json`)."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One line on what it is or does."
+    },
+    {
+     "name": "meta",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Facts that help recognize it: size, rows, language (`2.4 KB · JSON`)."
+    },
+    {
+     "name": "icon",
+     "type": "string",
+     "default": "'pi pi-file'",
+     "required": "false",
+     "doc": "Icon class for the file type."
+    },
+    {
+     "name": "copyValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text the Copy control puts on the clipboard. Empty hides Copy."
+    },
+    {
+     "name": "downloadHref",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "URL of the file for the Download control. Empty hides Download."
+    },
+    {
+     "name": "openable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows Open, which emits `open` so the owner shows the full artifact in a side panel or page (a canvas preview)."
+    }
+   ],
+   "events": [
+    {
+     "name": "open",
+     "payload": "—",
+     "notes": ""
+    },
+    {
+     "name": "copy",
+     "payload": "string",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The inline preview; scrolls inside a 20 rem body."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Extra icon actions, placed before Copy and Download."
+    }
+   ],
+   "purpose": "A card for something the assistant generated — a file, a code snippet, a table, a configuration (Cloudscape artifact previews, AI Elements Artifact). The header names it (title, description, metadata such as size or format, a file-type icon) and carries its actions: Copy (when `copyValue` is set), Download (when `downloadHref` is set) and Open (when `openable`, emitting `open` so the owner shows the full artifact in a side panel — Cloudscape's canvas preview). The body holds a short inline preview (Cloudscape's inline preview): the first lines of code, the first rows of a table.",
+   "useWhen": [
+    "The assistant produced an artifact the reader may copy, download or open: a rules file, a CSV export, a command, a generated function."
+   ],
+   "avoidWhen": [
+    "Short code inside the prose of a response → fenced code in `StreamingResponse` (rendered as `CodeBlock`).",
+    "A resource that already exists in the product → link to its page; this card is for generated content.",
+    "Uploads the reader attached → `file-dropzone` items or chips in `PromptInput`'s attachments."
+   ],
+   "related": [
+    "code-block` — the usual inline preview body.",
+    "drawer` — where an `open` artifact is shown in full.",
+    "chat-message` — artifacts stack under the response, not inside its bubble."
+   ],
+   "bestPractices": [
+    "Stack artifacts below the message text, one card each; do not nest them in the bubble.",
+    "Keep artifact actions in the card and message actions in `ChatMessage.Actions`.",
+    "Express sizes in KB, MB or GB in `meta`.",
+    "Long or editable content opens (canvas); the inline body stays a preview."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/artifact-preview.json"
+  },
+  "chat-message": {
+   "import": "@aziontech/webkit/chat-message",
+   "target": "./src/components/ai/chat-message/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/chat-message-root",
+   "subcomponents": [
+    "@aziontech/webkit/chat-message-actions",
+    "@aziontech/webkit/chat-message-feedback"
+   ],
+   "category": "ai",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "from",
+     "type": "'user' | 'assistant' | 'system'",
+     "default": "'assistant'",
+     "required": "false",
+     "doc": "Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`)."
+    },
+    {
+     "name": "author",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
+    },
+    {
+     "name": "timestamp",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name."
+    },
+    {
+     "name": "state",
+     "type": "'pending' | 'streaming' | 'complete' | 'error'",
+     "default": "'complete'",
+     "required": "false",
+     "doc": "Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `complete` shows the actions, `error` shows the error line with Try again."
+    },
+    {
+     "name": "grouped",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn."
+    },
+    {
+     "name": "errorMessage",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Error text shown while `state` is `error`. Empty uses the locale catalog."
+    },
+    {
+     "name": "loadingLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Loading text shown while `state` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "retry",
+     "payload": "—",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`."
+    },
+    {
+     "name": "avatar",
+     "scope": "—",
+     "notes": "Replaces the default avatar (person glyph for the user, the assistant mark for the AI)."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `state` is `complete`."
+    }
+   ],
+   "purpose": "One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes on it (copy, regenerate, thumbs up / down). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `complete` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). User messages sit in a filled bubble; assistant messages are flat, full width, beside the assistant mark; system messages are a muted centered line. Alignment comes from the enclosing `Conversation`.",
+   "useWhen": [
+    "Every turn of a chat with the generative AI assistant: the person's prompt, the assistant's response, a system note (\"Conversation restarted\").",
+    "A response that must show its lifecycle (loading, streaming, failure) and its actions."
+   ],
+   "avoidWhen": [
+    "A generated block outside a conversation (a summary on a page) → `StreamingResponse` alone.",
+    "A notification or toast about the product → `alert` / `toast`.",
+    "A comment thread between people → not this component; it carries AI semantics (feedback thumbs, regenerate)."
+   ],
+   "related": [
+    "conversation` — the log that holds messages, sets alignment and announces finished ones.",
+    "streaming-response` — the safe Markdown renderer for assistant content.",
+    "reasoning`, `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.",
+    "copy-button`, `icon-button` — the actions composed into `ChatMessage.Actions`.",
+    "ai-loading` — what `pending` renders."
+   ],
+   "bestPractices": [
+    "Pass `state` from your request: `pending` until the first token, `streaming` while tokens arrive, then `complete` or `error`.",
+    "Keep actions to five or fewer, always visible (no hover-only): copy, regenerate, feedback.",
+    "Use `grouped` for a second message by the same author so stacked bubbles read as one turn (only the first shows the avatar).",
+    "Never put the feedback thumbs on non-AI content."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/chat-message.json"
+  },
+  "chat-message-root": {
+   "import": "@aziontech/webkit/chat-message-root",
+   "target": "./src/components/ai/chat-message/chat-message.vue",
+   "kind": "root",
+   "rootOf": "chat-message",
+   "treeShakeableImport": "@aziontech/webkit/chat-message-root",
+   "category": "ai",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "from",
+     "type": "'user' | 'assistant' | 'system'",
+     "default": "'assistant'",
+     "required": "false",
+     "doc": "Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`)."
+    },
+    {
+     "name": "author",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
+    },
+    {
+     "name": "timestamp",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name."
+    },
+    {
+     "name": "state",
+     "type": "'pending' | 'streaming' | 'complete' | 'error'",
+     "default": "'complete'",
+     "required": "false",
+     "doc": "Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `complete` shows the actions, `error` shows the error line with Try again."
+    },
+    {
+     "name": "grouped",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn."
+    },
+    {
+     "name": "errorMessage",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Error text shown while `state` is `error`. Empty uses the locale catalog."
+    },
+    {
+     "name": "loadingLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Loading text shown while `state` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "retry",
+     "payload": "—",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`."
+    },
+    {
+     "name": "avatar",
+     "scope": "—",
+     "notes": "Replaces the default avatar (person glyph for the user, the assistant mark for the AI)."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `state` is `complete`."
+    }
+   ],
+   "purpose": "One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes on it (copy, regenerate, thumbs up / down). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `complete` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). User messages sit in a filled bubble; assistant messages are flat, full width, beside the assistant mark; system messages are a muted centered line. Alignment comes from the enclosing `Conversation`.",
+   "useWhen": [
+    "Every turn of a chat with the generative AI assistant: the person's prompt, the assistant's response, a system note (\"Conversation restarted\").",
+    "A response that must show its lifecycle (loading, streaming, failure) and its actions."
+   ],
+   "avoidWhen": [
+    "A generated block outside a conversation (a summary on a page) → `StreamingResponse` alone.",
+    "A notification or toast about the product → `alert` / `toast`.",
+    "A comment thread between people → not this component; it carries AI semantics (feedback thumbs, regenerate)."
+   ],
+   "related": [
+    "conversation` — the log that holds messages, sets alignment and announces finished ones.",
+    "streaming-response` — the safe Markdown renderer for assistant content.",
+    "reasoning`, `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.",
+    "copy-button`, `icon-button` — the actions composed into `ChatMessage.Actions`.",
+    "ai-loading` — what `pending` renders."
+   ],
+   "bestPractices": [
+    "Pass `state` from your request: `pending` until the first token, `streaming` while tokens arrive, then `complete` or `error`.",
+    "Keep actions to five or fewer, always visible (no hover-only): copy, regenerate, feedback.",
+    "Use `grouped` for a second message by the same author so stacked bubbles read as one turn (only the first shows the avatar).",
+    "Never put the feedback thumbs on non-AI content."
+   ],
+   "surface": "product"
+  },
+  "chat-message-actions": {
+   "import": "@aziontech/webkit/chat-message-actions",
+   "target": "./src/components/ai/chat-message/chat-message-actions/chat-message-actions.vue",
+   "kind": "subcomponent",
+   "parent": "chat-message",
+   "treeShakeableImport": "@aziontech/webkit/chat-message-actions",
+   "surface": "product"
+  },
+  "chat-message-feedback": {
+   "import": "@aziontech/webkit/chat-message-feedback",
+   "target": "./src/components/ai/chat-message/chat-message-feedback/chat-message-feedback.vue",
+   "kind": "subcomponent",
+   "parent": "chat-message",
+   "treeShakeableImport": "@aziontech/webkit/chat-message-feedback",
+   "surface": "product"
+  },
+  "citation": {
+   "import": "@aziontech/webkit/citation",
+   "target": "./src/components/ai/citation/citation.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/citation",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "index",
+     "type": "number",
+     "default": "—",
+     "required": "true",
+     "doc": "1-based number of the source, in the order the response first cites it."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Title of the source, shown in the tooltip and read in the accessible name."
+    },
+    {
+     "name": "href",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it the number is plain text."
+    }
+   ],
+   "purpose": "An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL — with a tooltip naming the source and an accessible name of `Source 1: <title>`. `StreamingResponse` renders it for every `[n]`; use it directly when you build responses yourself.",
+   "useWhen": [
+    "A statement in a generated response that comes from a specific source."
+   ],
+   "avoidWhen": [
+    "A link the reader is meant to follow as part of the prose → a normal link.",
+    "Footnotes in documentation → `doc-prose` conventions."
+   ],
+   "related": [
+    "sources` — the list citations point at.",
+    "streaming-response` — renders citations from `[n]` in Markdown.",
+    "tooltip` — shows the source title."
+   ],
+   "bestPractices": [
+    "Number in order of first use: [1], [2], [3].",
+    "Give every citation a `title`; a bare number tells a screen reader nothing."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/citation.json"
+  },
+  "conversation": {
+   "import": "@aziontech/webkit/conversation",
+   "target": "./src/components/ai/conversation/conversation.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/conversation",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the message log. Empty uses the locale catalog (`Conversation`)."
+    },
+    {
+     "name": "alignment",
+     "type": "'split' | 'start'",
+     "default": "'split'",
+     "required": "false",
+     "doc": "split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card)."
+    }
+   ],
+   "purpose": "The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a \"Scroll to the latest message\" button brings them back. It is a `role=\"log\"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. It also sets where messages sit for the whole thread (`alignment`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).",
+   "useWhen": [
+    "Any surface where a person and the generative AI assistant exchange messages: the assistant page, the assistant drawer, an in-flow helper.",
+    "A transcript that grows while the reader watches it (streaming responses, tool calls appearing)."
+   ],
+   "avoidWhen": [
+    "A one-shot generated block on a page (a summary card, an explanation beside a chart) → render `StreamingResponse` in place.",
+    "A log of system events with timestamps and filtering → use `log-view`.",
+    "A list of past conversations → a `table` or `item` list; this is one thread."
+   ],
+   "related": [
+    "chat-message` — the item the log holds; announces itself through this component.",
+    "prompt-input` — the composer pinned under the log (outside it; only the log scrolls).",
+    "suggestion-group` — follow-up questions after the last response, or support prompts in the empty state.",
+    "empty-state` — what the panel shows before the first message (the block renders it instead of the log).",
+    "log-view` — machine logs, not conversations."
+   ],
+   "bestPractices": [
+    "Pin the prompt input under the conversation; only the log scrolls.",
+    "Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.",
+    "Use `alignment=\"start\"` in drawers and side panels, `split` on a full page.",
+    "Keep one conversation per surface; a second thread is a second page or a history list."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/conversation.json"
+  },
+  "prompt-input": {
+   "import": "@aziontech/webkit/prompt-input",
+   "target": "./src/components/ai/prompt-input/prompt-input.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/prompt-input",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "placeholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`)."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`)."
+    },
+    {
+     "name": "maxLength",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit."
+    },
+    {
+     "name": "minRows",
+     "type": "number",
+     "default": "1",
+     "required": "false",
+     "doc": "Rows shown while empty."
+    },
+    {
+     "name": "maxRows",
+     "type": "number",
+     "default": "6",
+     "required": "false",
+     "doc": "Rows the text area grows to before it scrolls."
+    },
+    {
+     "name": "state",
+     "type": "'ready' | 'submitted' | 'streaming'",
+     "default": "'ready'",
+     "required": "false",
+     "doc": "Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the text area, the submit control and every control in the slots' row."
+    }
+   ],
+   "events": [
+    {
+     "name": "submit",
+     "payload": "string",
+     "notes": ""
+    },
+    {
+     "name": "stop",
+     "payload": "—",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "attachments",
+     "scope": "—",
+     "notes": "Attached files or context chips, above the text."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Secondary controls at the inline start of the toolbar; inside a `fieldset` disabled with the input."
+    },
+    {
+     "name": "hint",
+     "scope": "—",
+     "notes": "Constraint text under the input; referenced by `aria-describedby`."
+    }
+   ],
+   "purpose": "The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated, a toolbar row for secondary controls (attach, mode), an attachments row above the text, an optional character limit with a counter, and constraint text under it (a disclaimer or the shortcuts it accepts). Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text, receives `submit` with the trimmed prompt, and clears it. While `state` is `submitted` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop.",
+   "useWhen": [
+    "The input of any conversation with the generative AI assistant.",
+    "A single \"Ask about this page\" box that opens a conversation."
+   ],
+   "avoidWhen": [
+    "A text field in a form → `textarea` inside `field`.",
+    "Search over a list → `input` with a search icon or `property-filter`.",
+    "A command palette → `command`."
+   ],
+   "related": [
+    "textarea` — the form control; this one has no visible label and submits on Enter.",
+    "conversation` — the log above it; only the log scrolls.",
+    "suggestion-group` — prompts the reader can send without typing.",
+    "file-dropzone`, `chip` — what attachment flows compose into the `attachments` slot."
+   ],
+   "bestPractices": [
+    "Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.",
+    "Put the disclaimer and the shortcuts in `hint`, not in the placeholder.",
+    "Set `state` from the request so Submit turns into Stop; wire `stop` to abort it.",
+    "Clear `v-model` in the `submit` handler and keep focus in the input.",
+    "Use `maxLength` only when the backend has a limit; the counter is the warning."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/prompt-input.json"
+  },
+  "reasoning": {
+   "import": "@aziontech/webkit/reasoning",
+   "target": "./src/components/ai/reasoning/reasoning.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/reasoning",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "streaming",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "The model is still reasoning: the label reads `Thinking` and pulses; when it turns false the label shows how long it took."
+    },
+    {
+     "name": "duration",
+     "type": "number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Controlled open state. Use with `v-model:open`."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled; collapsed is the default in a chat, where the response is the main content."
+    },
+    {
+     "name": "skippable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:open",
+     "payload": "boolean",
+     "notes": ""
+    },
+    {
+     "name": "skip",
+     "payload": "—",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The trace: short narration, steps, inline code. Kept as it was once thinking ends."
+    }
+   ],
+   "purpose": "Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is done, with the trace inside. Collapsed by default in a chat, where the response is the main content. The duration comes from the server (`duration`) or is measured from `streaming` turning on to turning off, rounded to whole seconds. An optional `Skip thinking` lets the reader ask for the response now.",
+   "useWhen": [
+    "The model performs extended reasoning before answering, and the trace helps the reader trust or check the response."
+   ],
+   "avoidWhen": [
+    "Ordinary loading with no reasoning → `ai-loading`.",
+    "Agent actions with side effects (calls, commands) → `tool-call` and `action-confirmation`.",
+    "Progressive steps of a long task → a `stepper` or a list of `tool-call`s."
+   ],
+   "related": [
+    "ai-loading` — loading without a trace.",
+    "tool-call` — what the agent did, rather than what it thought.",
+    "streaming-response` — renders a Markdown trace inside the slot."
+   ],
+   "bestPractices": [
+    "Keep it collapsed in chat; open it by default only where reasoning is the point (an editor, a review).",
+    "Never show secrets, token counts or system prompts in the trace.",
+    "Do not replace the label with trace text; the label stays `Thinking` until done.",
+    "Offer `skippable` only when the model can answer meaningfully without finishing."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/reasoning.json"
+  },
+  "sources": {
+   "import": "@aziontech/webkit/sources",
+   "target": "./src/components/ai/sources/sources.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/sources",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "AiSource[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The sources behind the response, in citation order; item `n` is what `[n]` points at."
+    },
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Heading of the disclosure. Empty uses the locale catalog (`3 sources`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Controlled open state. Use with `v-model:open`."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:open",
+     "payload": "boolean",
+     "notes": ""
+    }
+   ],
+   "purpose": "The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line description. Item `n` carries the id `<anchor>-source-<n>`, the target of the `[n]` citations `StreamingResponse` renders; following a citation opens the list and brings the item into view.",
+   "useWhen": [
+    "A response is grounded in documents, pages or records the reader may want to open or verify."
+   ],
+   "avoidWhen": [
+    "Related links that the response did not use → `help-panel` links or a plain list.",
+    "A single source → cite it inline with a link; a list of one is noise."
+   ],
+   "related": [
+    "citation` — the inline `[n]` that points here.",
+    "streaming-response` — renders the citations; share the `anchor`.",
+    "chat-message` — sources sit inside the assistant message, under the response."
+   ],
+   "bestPractices": [
+    "Order items as the response first cites them, so `[1]` is item 1.",
+    "Use the page title, not the URL, as the title; add the site or section as the description.",
+    "Keep the list collapsed by default; the inline citations are the primary path."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/sources.json"
+  },
+  "streaming-response": {
+   "import": "@aziontech/webkit/streaming-response",
+   "target": "./src/components/ai/streaming-response/streaming-response.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/streaming-response",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "content",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, relative and hash links survive."
+    },
+    {
+     "name": "streaming",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes."
+    },
+    {
+     "name": "sources",
+     "type": "AiSource[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name)."
+    },
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers."
+    }
+   ],
+   "purpose": "Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:` and `data:` links are dropped (only `http(s)`, `mailto`, relative and `#` links survive), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Numbered citations `[1]` become `Citation` references resolved against `sources`, linked to the `Sources` list under the response through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.",
+   "useWhen": [
+    "The content of every assistant `ChatMessage`.",
+    "Any generated text on a page (an explanation, a summary) that arrives token by token."
+   ],
+   "avoidWhen": [
+    "Authored documentation prose → `doc-prose`.",
+    "Code alone → `code-block`.",
+    "Trusted HTML from your own CMS → render it with your CMS pipeline; this component deliberately renders no HTML."
+   ],
+   "related": [
+    "chat-message` — the host of a response.",
+    "citation`, `sources` — inline references and the list they point at.",
+    "code-block` — what fenced code renders as.",
+    "ai-loading` — the loading text before the first token, or a bar where a table is coming."
+   ],
+   "bestPractices": [
+    "Pass the accumulated text on every chunk; the parser is cheap and the output is keyed by block.",
+    "Keep `streaming` true until the stream closes, then false (removes the caret, highlights an open fence).",
+    "Give the response and its `Sources` the same `anchor` so `[n]` links to item `n`.",
+    "Do not post-process model output into HTML; there is no HTML path."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/streaming-response.json"
+  },
+  "suggestion-group": {
+   "import": "@aziontech/webkit/suggestion-group",
+   "target": "./src/components/ai/suggestion-group/suggestion-group.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/suggestion-group",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "SuggestionItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Up to five prompts, most likely first."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the group. Empty uses the locale catalog (`Suggested prompts`)."
+    },
+    {
+     "name": "orientation",
+     "type": "'horizontal' | 'vertical'",
+     "default": "'horizontal'",
+     "required": "false",
+     "doc": "horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation)."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables every prompt, while a response is being generated."
+    }
+   ],
+   "events": [
+    {
+     "name": "select",
+     "payload": "SuggestionItem",
+     "notes": ""
+    }
+   ],
+   "purpose": "A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the item, and the owner either sends it or places it in the prompt input to edit.",
+   "useWhen": [
+    "The empty state of an assistant, to show what it can do (vertical, up to five).",
+    "After a broad response, to narrow it (horizontal chips, up to five, most likely first).",
+    "A follow-up question with predefined answers."
+   ],
+   "avoidWhen": [
+    "Navigation or filters → `tabs`, `toggle-group`, `property-filter`.",
+    "Choices that are a form value → `radio-group` / `radio-cards`.",
+    "More than five options → let the reader type; the prompt input stays available."
+   ],
+   "related": [
+    "prompt-input` — the open-ended alternative that must stay reachable.",
+    "empty-state` — hosts the vertical support prompts before the first message.",
+    "chip`, `button` — visual cousins; prompts are their own control because they send text."
+   ],
+   "bestPractices": [
+    "Five or fewer, ordered by likelihood.",
+    "Write prompts as the reader would ask them, under 72 characters, sentence case, no end punctuation needed for questions you send verbatim.",
+    "Disable the group while a response is generating.",
+    "Remove follow-ups once the reader sends anything else."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/suggestion-group.json"
+  },
+  "tool-call": {
+   "import": "@aziontech/webkit/tool-call",
+   "target": "./src/components/ai/tool-call/tool-call.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/tool-call",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "name",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "The tool or command identifier, shown in code font (`list_workloads`)."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "What the call does in the reader's words (`Listing your workloads`). Empty shows only the name."
+    },
+    {
+     "name": "state",
+     "type": "'pending' | 'running' | 'success' | 'error' | 'denied'",
+     "default": "'running'",
+     "required": "false",
+     "doc": "pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Controlled open state of the input and output details. Use with `v-model:open`."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled; details start collapsed."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:open",
+     "payload": "boolean",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "input",
+     "scope": "—",
+     "notes": "The parameters the tool is called with (`CodeBlock`, `KeyValuePairs`)."
+    },
+    {
+     "name": "output",
+     "scope": "—",
+     "notes": "What the tool returned, or the error it failed with."
+    }
+   ],
+   "purpose": "One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Running…`, `Completed`, `Failed`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ActionConfirmation`.",
+   "useWhen": [
+    "An agent calls a tool, an MCP server, an API or a CLI command during a response, and the reader should see what ran and what came back."
+   ],
+   "avoidWhen": [
+    "Asking the reader to allow a call → `action-confirmation` (then a `tool-call` records it).",
+    "The model's reasoning → `reasoning`.",
+    "A long-running job outside a chat → `progress` / `status-indicator` on the resource."
+   ],
+   "related": [
+    "action-confirmation` — the authorization step before a sensitive call.",
+    "status-indicator` — the status the row shows.",
+    "code-block`, `key-value-pairs` — what goes in the input and output slots."
+   ],
+   "bestPractices": [
+    "Name the tool exactly as it is (`list_workloads`) and describe it in plain words (`Listing your workloads`).",
+    "Collapse details by default; open them on error so the reader sees why.",
+    "Redact secrets from inputs and outputs."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/tool-call.json"
+  },
   "button": {
    "import": "@aziontech/webkit/button",
    "target": "./src/components/actions/button/button.vue",
@@ -16670,7 +17768,7 @@
      "notes": "—"
     }
    ],
-   "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover/active handled in CSS).",
+   "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover handled in CSS).",
    "useWhen": [
     "A standalone navigation link: a domain, a repository, a docs page, \"View all\".",
     "An in-console navigation action (\"Add custom domain\") with `showIcon` set to false."
@@ -26026,6 +27124,243 @@
    "variants": [],
    "file": "catalog/patterns/platform/account/profile.json"
   },
+  "platform/ai/ai-action-approval": {
+   "name": "AiActionApproval",
+   "title": "Templates/Platform/AI/AiActionApproval",
+   "source": "blocks/platform/ai/ai-action-approval/ai-action-approval.vue",
+   "surface": "product",
+   "summary": "A user-authorized action inside a generative AI conversation: the reader asks the assistant to deploy, the assistant records the read-only call it made (`ToolCall`), explains in `StreamingResponse` and proposes the deployment as an `ActionConfirmation` card whose title names the command in code, whose body shows the exact command in a `CodeBlock`, and whose Deny and Deploy buttons decide. Approving turns the card into Approved and adds a running `ToolCall` that completes, followed by a `ChatMessage` that reports what changed with Copy (`CopyButton`); denying or letting the request expire records the outcome on the card and the assistant says nothing ran. The `PromptInput` shows Stop while the approved action runs. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ActionConfirmation`, `CodeBlock`, `CopyButton` and `PromptInput`.",
+   "intents": [
+    "ai action approval",
+    "approve ai action",
+    "user authorized action",
+    "agent asks permission",
+    "human in the loop",
+    "tool call approval",
+    "confirm agent command",
+    "allow tool",
+    "aprovar ação da ia",
+    "autorizar ação do agente",
+    "confirmar comando",
+    "aprobar acción de la ia"
+   ],
+   "skills": [
+    "webkit-genai",
+    "webkit-ui-states",
+    "webkit-errors"
+   ],
+   "components": [
+    "ActionConfirmation",
+    "ChatMessage",
+    "CodeBlock",
+    "Conversation",
+    "CopyButton",
+    "PromptInput",
+    "StreamingResponse",
+    "ToolCall"
+   ],
+   "imports": [
+    "@aziontech/webkit/action-confirmation",
+    "@aziontech/webkit/chat-message",
+    "@aziontech/webkit/code-block",
+    "@aziontech/webkit/conversation",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/prompt-input",
+    "@aziontech/webkit/streaming-response",
+    "@aziontech/webkit/tool-call"
+   ],
+   "primary": "Pending",
+   "guidelinesSummary": "The moment an assistant needs permission. The reader asked for something that changes their account — a deployment, a purge, a deletion — and the assistant stops before doing it: it says what it found, shows exactly what will run, and waits for Approve or Deny. The decision stays in the thread as text, and the assistant reports what happened next, so the conversation is also the record of what ran and who allowed it.",
+   "variants": [
+    {
+     "name": "Irreversible",
+     "summary": "The assistant proposes deleting a domain nobody uses: the card turns danger and Delete stays disabled until the reader types the domain name."
+    },
+    {
+     "name": "Approved",
+     "summary": "After Deploy: the card reads Approved, the deployment call completed, and the assistant reports the new build is live with the previous one kept for rollback."
+    },
+    {
+     "name": "Denied",
+     "summary": "After Deny: the card reads Denied, the deployment call is recorded as denied, and the assistant acknowledges that nothing was deployed."
+    },
+    {
+     "name": "Expired",
+     "summary": "Nobody decided in time: the card reads Request expired and the assistant says nothing was deployed."
+    }
+   ],
+   "file": "catalog/patterns/platform/ai/ai-action-approval.json"
+  },
+  "platform/ai/ai-chat": {
+   "name": "AiChat",
+   "title": "Templates/Platform/AI/AiChat",
+   "source": "blocks/platform/ai/ai-chat/ai-chat.vue",
+   "surface": "product",
+   "summary": "The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`.",
+   "intents": [
+    "ai chat",
+    "ai assistant",
+    "chatbot",
+    "copilot",
+    "chat with ai",
+    "generative ai chat",
+    "assistant page",
+    "ask ai",
+    "llm chat",
+    "conversational ui",
+    "prompt and response",
+    "streaming response",
+    "chat de ia",
+    "assistente de ia",
+    "assistente virtual",
+    "conversa com ia",
+    "chat con ia",
+    "asistente de ia"
+   ],
+   "skills": [
+    "webkit-genai",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Button",
+    "ChatMessage",
+    "Conversation",
+    "CopyButton",
+    "EmptyState",
+    "IconButton",
+    "PromptInput",
+    "Reasoning",
+    "Sources",
+    "StreamingResponse",
+    "SuggestionGroup",
+    "Tag"
+   ],
+   "imports": [
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/chat-message",
+    "@aziontech/webkit/conversation",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/prompt-input",
+    "@aziontech/webkit/reasoning",
+    "@aziontech/webkit/sources",
+    "@aziontech/webkit/streaming-response",
+    "@aziontech/webkit/suggestion-group",
+    "@aziontech/webkit/tag"
+   ],
+   "primary": "Empty",
+   "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `platform/ai/ai-chat-drawer`.",
+   "variants": [
+    {
+     "name": "Streaming",
+     "summary": "A response arriving: the reader asked why storefront returns 502 errors and the answer streams in with its caret, a table on the way, the region busy and Stop in the composer; when it ends the sources, actions and follow-up questions appear."
+    },
+    {
+     "name": "Error",
+     "summary": "A response that failed mid-stream: the partial text stays, the error line says the connection was interrupted and Try again regenerates the response in place."
+    },
+    {
+     "name": "LongThread",
+     "summary": "Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread."
+    }
+   ],
+   "file": "catalog/patterns/platform/ai/ai-chat.json"
+  },
+  "platform/ai/ai-chat-drawer": {
+   "name": "AiChatDrawer",
+   "title": "Templates/Platform/AI/AiChatDrawer",
+   "source": "blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue",
+   "surface": "product",
+   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Ask AI `Button`, a `Card` of `KeyValuePairs` with a `StatusIndicator`) behind a medium `Drawer` whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and `DrawerClose`. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`.",
+   "intents": [
+    "ai assistant drawer",
+    "ask ai about this page",
+    "contextual ai help",
+    "copilot panel",
+    "ai side panel",
+    "chat drawer",
+    "assistant over console page",
+    "ai help drawer",
+    "assistente de ia na gaveta",
+    "perguntar à ia",
+    "painel lateral de ia",
+    "asistente de ia en panel lateral"
+   ],
+   "skills": [
+    "webkit-genai",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Button",
+    "Card",
+    "ChatMessage",
+    "Conversation",
+    "CopyButton",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "EmptyState",
+    "IconButton",
+    "KeyValuePairs",
+    "PageHeader",
+    "PanelHeader",
+    "PromptInput",
+    "Reasoning",
+    "Sources",
+    "StatusIndicator",
+    "StreamingResponse",
+    "SuggestionGroup",
+    "Tag"
+   ],
+   "imports": [
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/chat-message",
+    "@aziontech/webkit/conversation",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/prompt-input",
+    "@aziontech/webkit/reasoning",
+    "@aziontech/webkit/sources",
+    "@aziontech/webkit/status-indicator",
+    "@aziontech/webkit/streaming-response",
+    "@aziontech/webkit/suggestion-group",
+    "@aziontech/webkit/tag"
+   ],
+   "primary": "Empty",
+   "guidelinesSummary": "The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page. The drawer carries the same conversation as the full assistant page, laid out for a narrow column: every message at the inline start, a shorter composer, and support prompts written about this resource.",
+   "variants": [
+    {
+     "name": "Streaming",
+     "summary": "The drawer open on a response streaming in about the 502 errors of the workload behind it, with the caret, Stop in the composer and the busy region."
+    },
+    {
+     "name": "Error",
+     "summary": "A response that failed mid-stream inside the drawer: the partial text, the error line and Try again."
+    },
+    {
+     "name": "LongThread",
+     "summary": "Six earlier turns about the workload in the narrow drawer: the log opens on the newest response and Scroll to the latest message returns after scrolling up."
+    }
+   ],
+   "file": "catalog/patterns/platform/ai/ai-chat-drawer.json"
+  },
   "platform/auth": {
    "name": "Auth",
    "title": "Templates/Platform/Auth",
@@ -29570,7 +30905,7 @@
    "title": "Templates/Platform/States/AsyncSubmit",
    "source": "blocks/platform/states/async-submit/async-submit.vue",
    "surface": "product",
-   "summary": "The async counterpart of the server rejection in the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: one `Toaster` is mounted with the page, the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`).",
+   "summary": "The async counterpart of the server rejection in the FormError template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: one `Toaster` is mounted with the page, the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`).",
    "intents": [
     "async submit",
     "long running action",
@@ -29654,7 +30989,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Idle",
-   "guidelinesSummary": "A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.",
+   "guidelinesSummary": "The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.",
    "variants": [
     {
      "name": "Running",
@@ -29733,37 +31068,33 @@
    ],
    "file": "catalog/patterns/platform/states/first-use.json"
   },
-  "platform/states/form-validation": {
-   "name": "FormValidation",
-   "title": "Templates/Platform/States/FormValidation",
-   "source": "blocks/platform/states/form-validation/form-validation.vue",
+  "platform/states/form-error": {
+   "name": "FormError",
+   "title": "Templates/Platform/States/FormError",
+   "source": "blocks/platform/states/form-error/form-error.vue",
    "surface": "product",
-   "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. The InSync, Rejected, Reloading and Reloaded variants show where a field-scoped server rejection renders: a Create Service page whose linked origin is deleted by another user while the form is open, so the save scrolls to the Origin section and lands as a danger `Alert` under its heading with Reload origins, the Origin select takes the invalid state and the focus, and a dashed simulation panel plays the other user; never a toast, never a validation summary.",
+   "summary": "The form-error pattern from the design sample (`/forms/error-validation`): a server rejection scoped to one section of a long create form. A Create Service page whose linked origin is deleted by another user while the form is open; Save sends it, the API answers with a field-scoped error, and the page scrolls to the Origin section, where one danger `Alert` opens under the section heading saying what happened and that nothing else was lost, with the recovery action on it (Reload origins). The Origin select turns invalid with its own one-line reason under it and takes the focus. Never a toast, never a validation summary. Reloading swaps the select for a `Skeleton` and disables Save; Reloaded closes the Alert, clears the select and flags it required. A dashed simulation panel above the form plays the other user. Same page anatomy as Templates/Platform/Create/SinglePageCreate: the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`.",
    "intents": [
-    "form validation",
-    "validation errors",
-    "submit states",
-    "required fields",
-    "server error on submit",
-    "conflict error",
-    "saved state",
-    "validação de formulário",
-    "erros de validação",
-    "campos obrigatórios",
+    "form error",
     "server validation",
     "server-side error",
     "rejected save",
     "field scoped error",
+    "section error",
     "stale reference",
+    "linked resource deleted",
     "api error on save",
     "reload options",
+    "erro de formulário",
     "validação no servidor",
     "erro da api",
-    "salvamento rejeitado"
+    "salvamento rejeitado",
+    "error de formulario",
+    "validación en el servidor"
    ],
    "skills": [
-    "webkit-form",
     "webkit-errors",
+    "webkit-form",
     "webkit-ui-states"
    ],
    "components": [
@@ -29781,7 +31112,6 @@
     "Item",
     "MultiSelect",
     "NumberInput",
-    "PageHeader",
     "RadioButton",
     "SaveBar",
     "SectionHeader",
@@ -29789,9 +31119,7 @@
     "SettingRow",
     "Skeleton",
     "Switch",
-    "Tag",
-    "Textarea",
-    "toast"
+    "Tag"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -29808,7 +31136,6 @@
     "@aziontech/webkit/item",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/number-input",
-    "@aziontech/webkit/page-header",
     "@aziontech/webkit/radio-button",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/section-header",
@@ -29816,12 +31143,73 @@
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/switch",
-    "@aziontech/webkit/tag",
+    "@aziontech/webkit/tag"
+   ],
+   "primary": "InSync",
+   "guidelinesSummary": "The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section. The user's job is to create a service; another user deletes the origin it links to while the form is open, so the save comes back with an error the Origin section owns. The page takes the user to that section, says what happened and that nothing else was lost, offers the one action that recovers (Reload origins), and marks the field with its own reason. This is the standard for every server rejection that a section or a field owns.",
+   "variants": [
+    {
+     "name": "Rejected",
+     "summary": "User 2 deleted web-origin-prod and Save was pressed: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists."
+    },
+    {
+     "name": "Reloading",
+     "summary": "Reload origins in flight: its button shows the loading state, the Origin select gives way to a Skeleton, and Save is disabled until the list is back."
+    },
+    {
+     "name": "Reloaded",
+     "summary": "The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue."
+    }
+   ],
+   "file": "catalog/patterns/platform/states/form-error.json"
+  },
+  "platform/states/form-validation": {
+   "name": "FormValidation",
+   "title": "Templates/Platform/States/FormValidation",
+   "source": "blocks/platform/states/form-validation/form-validation.vue",
+   "surface": "product",
+   "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. A rejection the server scopes to one section of a long form (a linked resource deleted while the form is open) is the FormError template (Templates/Platform/States/FormError).",
+   "intents": [
+    "form validation",
+    "validation errors",
+    "submit states",
+    "required fields",
+    "server error on submit",
+    "conflict error",
+    "saved state",
+    "validação de formulário",
+    "erros de validação",
+    "campos obrigatórios"
+   ],
+   "skills": [
+    "webkit-form",
+    "webkit-errors",
+    "webkit-ui-states"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Field",
+    "Input",
+    "PageHeader",
+    "Select",
+    "Skeleton",
+    "Textarea",
+    "toast"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/skeleton",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast"
    ],
    "primary": "Default",
-   "guidelinesSummary": "Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading, and then a long Create Service page where another user deletes the linked origin while the form is open, the case where a server rejection is scoped to one section.",
+   "guidelinesSummary": "Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading. A server rejection scoped to one section of a long form is its own block, `platform/states/form-error`.",
    "variants": [
     {
      "name": "ValidationErrors",
@@ -29846,22 +31234,6 @@
     {
      "name": "Loading",
      "summary": "The form while its data loads, such as the environments it offers or the record an edit form opens with. Skeleton rows hold the layout, and Create stays disabled until the fields arrive."
-    },
-    {
-     "name": "InSync",
-     "summary": "Where a rejected save renders: a Create Service page whose linked origin is deleted by another user while the form is open. The API rejects the save with a field-scoped error, so it lands as a danger `Alert` under the Origin section heading, the section that owns the broken reference, carrying Reload origins, while the Origin select takes the invalid state. Never a toast, never a validation summary. A dashed simulation panel above the form plays the other user. Same page anatomy as the in-page create form (Templates/Platform/Create/SinglePageCreate): the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer, here raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`."
-    },
-    {
-     "name": "Rejected",
-     "summary": "User 2 deleted web-origin-prod and Save was pressed: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists."
-    },
-    {
-     "name": "Reloading",
-     "summary": "Reload origins in flight: its button shows the loading state, the Origin select gives way to a Skeleton, and Save is disabled until the list is back."
-    },
-    {
-     "name": "Reloaded",
-     "summary": "The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue."
     }
    ],
    "file": "catalog/patterns/platform/states/form-validation.json"
@@ -30786,7 +32158,7 @@
   "platform/forms/sectioned-form": "platform/create/single-page-create#ImportFromGit",
   "platform/forms/sectioned-form#Default": "platform/create/single-page-create#ImportFromGit",
   "platform/forms/sectioned-form#Submitted": "platform/create/single-page-create#ImportFromGitSubmitted",
-  "platform/forms/server-validation": "platform/states/form-validation#InSync",
+  "platform/forms/server-validation": "platform/states/form-error",
   "platform/lists/table-view": "platform/view/table-view",
   "platform/overlays/delete-with-confirmation": "platform/delete/delete-with-confirmation",
   "platform/overlays/deploy-drawer": "platform/create/deploy-drawer",

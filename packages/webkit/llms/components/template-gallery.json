@@ -1,0 +1,113 @@
+{
+ "name": "template-gallery",
+ "binding": "TemplateGallery",
+ "import": "@aziontech/webkit/template-gallery",
+ "treeShakeableImport": "@aziontech/webkit/template-gallery",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a ticker of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `media-split`, `scroll-area`, `card-grid`, `button`, `frame-box` and `ticker` rather than owning any anatomy of its own.",
+ "setup": null,
+ "useWhen": [
+  "On a solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming) to show the templates a reader can deploy right away.",
+  "Whenever a band pairs one pitch with a long, browsable list of deployable starters."
+ ],
+ "avoidWhen": [
+  "For a grid of features with artwork → use `feature-tiles`.",
+  "For a ticker of marks alone → compose `ticker` directly.",
+  "For a handful of icon-led use cases → use `use-cases`."
+ ],
+ "related": [
+  "media-split` — the framed copy-and-media split the band is built on; it owns the band's named region.",
+  "ticker` — the row of framework and cloud marks that closes the band."
+ ],
+ "bestPractices": [
+  "Keep the wall to an even number of templates so the two columns end level.",
+  "Turn on `invertInDark` only for a mark whose artwork ships in dark ink, so it stays legible on the dark theme.",
+  "Set `templatesAriaLabel` so the scrolling wall is announced by name."
+ ],
+ "props": [
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the headline."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the media split as its `h2` and naming its region."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Paragraph under the headline."
+  },
+  {
+   "name": "primaryAction",
+   "type": "TemplateGalleryAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "TemplateGalleryAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent."
+  },
+  {
+   "name": "templates",
+   "type": "TemplateGalleryTemplate[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped."
+  },
+  {
+   "name": "deployLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set."
+  },
+  {
+   "name": "templatesAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the scrolling wall of templates."
+  },
+  {
+   "name": "tickerLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the row of marks."
+  },
+  {
+   "name": "tickerMarks",
+   "type": "string[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Registry names of the frameworks and clouds in the row of marks, in order; the ticker is omitted when empty."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import TemplateGallery from '@aziontech/webkit/template-gallery'\n</script>\n\n<template>\n  <TemplateGallery\n    eyebrow=\"Your Stack, Your Way\"\n    title=\"Quick Start with Templates\"\n    description=\"Launch storefronts faster with pre-built templates and starter kits. Deploy complete projects in seconds with popular frameworks.\"\n    :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n    :secondary-action=\"{ label: 'Talk to a specialist', href: '/contact', trailing: true }\"\n    :templates=\"[\n      {\n        title: 'AI Inference Starter Kit',\n        description: 'Create an application that runs AI models close to users.',\n        icon: 'ai ai-edge-functions',\n        href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'\n      },\n      {\n        title: 'Next.js Commerce',\n        description: 'Ecommerce template built with Next.js and Shopify.',\n        icon: 'ai-cor ai-next',\n        invertInDark: true,\n        href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'\n      },\n      {\n        title: 'Astro Odyssey',\n        description: 'A modern business marketing website theme/starter built with Astro.',\n        icon: 'ai-cor ai-astro',\n        href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'\n      },\n      {\n        title: 'SvelteKit Commerce',\n        description: 'Ecommerce template built with SvelteKit and Shopify.',\n        icon: 'ai-cor ai-svelte',\n        href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'\n      }\n    ]\"\n    deploy-label=\"Deploy now\"\n    templates-aria-label=\"Templates you can deploy\"\n    ticker-label=\"Compatible with Your Stack\"\n    :ticker-marks=\"['nextjs', 'astro', 'react', 'vue', 'angular', 'nuxt']\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/template-gallery.md"
+}

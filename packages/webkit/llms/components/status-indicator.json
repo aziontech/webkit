@@ -1,0 +1,76 @@
+{
+ "name": "status-indicator",
+ "binding": "StatusIndicator",
+ "import": "@aziontech/webkit/status-indicator",
+ "treeShakeableImport": "@aziontech/webkit/status-indicator",
+ "category": "feedback",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Communicates status, alerts, or progress to the user. Lives at `packages/webkit/src/components/feedback/status-indicator/`.",
+ "setup": null,
+ "useWhen": [
+  "The state of a resource in a table cell, a list row or a detail header: Active, Failed, Paused.",
+  "A transitional state such as Deploying or Propagating, with `loading`."
+ ],
+ "avoidWhen": [
+  "A count or a very short label attached to another element → use `badge`.",
+  "A category or status chip with an optional icon → use `tag`.",
+  "A page or section notice with copy and actions → use `message`.",
+  "Measurable progress → use `progress`."
+ ],
+ "related": [
+  "badge` — filled count indicator, usually overlaid on an icon or avatar.",
+  "tag` — labelled chip for categories and statuses.",
+  "spinner` — replaces the dot while `loading` is true.",
+  "progress` — continuous progress instead of a discrete state."
+ ],
+ "bestPractices": [
+  "Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.",
+  "Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens, `neutral` is muted, and `alt` uses the primary color.",
+  "With `loading`, pass the bare verb (`\"Deploying\"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner.",
+  "It is a non-interactive `role=\"status\"` element with no click or keyboard behavior. Don't attach handlers to it."
+ ],
+ "props": [
+  {
+   "name": "severity",
+   "type": "'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'",
+   "default": "'success'",
+   "required": "false",
+   "doc": "Severity token driving the status dot color."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows loading state and disables activation."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Visible label text. Empty uses the locale catalog (`Status`)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import StatusIndicator from '@aziontech/webkit/status-indicator'\n</script>\n\n<template>\n  <StatusIndicator\n    severity=\"success\"\n    label=\"Status\"\n  />\n</template>"
+  },
+  {
+   "name": "Status",
+   "sfc": "<script setup>\n  import StatusIndicator from '@aziontech/webkit/status-indicator'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-3)\">\n    <StatusIndicator\n      severity=\"success\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"info\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"neutral\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"warning\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"alt\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"danger\"\n      label=\"Status\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Loading",
+   "sfc": "<script setup>\n  import StatusIndicator from '@aziontech/webkit/status-indicator'\n</script>\n\n<template>\n  <StatusIndicator\n    severity=\"success\"\n    label=\"Status\"\n    loading\n  />\n</template>"
+  }
+ ],
+ "docs": "components/status-indicator.md"
+}

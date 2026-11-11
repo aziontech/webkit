@@ -1,0 +1,96 @@
+{
+ "name": "quote-tabs",
+ "binding": "QuoteTabs",
+ "import": "@aziontech/webkit/quote-tabs",
+ "treeShakeableImport": "@aziontech/webkit/quote-tabs",
+ "category": "marketing",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings that client's quotation in. It is the band a page reaches for when several customers have one strong sentence each and only one of them should be read at a time. The band owns the selection and nothing else. The featured quotation is `quote` in its `highlight` register, and every card is the same framed cell `logo-wall` draws, so a quotation and a client card look the same here as everywhere else on the page. The quotation travels sideways in the direction of the choice — a card later in the wall brings its quotation in from the right, an earlier one from the left — so the reader feels the wall as a sequence. Left alone it moves through the clients on its own, the way `media-tabs` does: a hairline along the panel's bottom edge fills toward the next client, and the band holds still while the reader points at it or works it from the keyboard.",
+ "setup": null,
+ "useWhen": [
+  "To feature one client quotation at a time out of three to twelve peers, with every other client one click away on the wall below.",
+  "As a success-story band where the wall of customers and the quotation are the same content, not two lists."
+ ],
+ "avoidWhen": [
+  "For one quotation on its own → use `quote` with `kind=\"highlight\"`.",
+  "For several quotations read side by side or swiped through → use `quote-carousel`.",
+  "For a wall whose cards link to each customer's story → use `logo-wall`.",
+  "For a moving strip of marks with no links → use `ticker`.",
+  "For switching a page's content between views → use `tabs`."
+ ],
+ "related": [
+  "quote` — the `highlight` register this band renders for the selected client.",
+  "logo-wall` — the same framed client cells, as links out rather than as a selector.",
+  "card-grid` — the framed grid the cards are laid out on.",
+  "frame-box` — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.",
+  "quote-carousel` — the same testimonials as a row the reader scrolls through, every one visible.",
+  "media-tabs` — the same timer and progress hairline, for claims paired with a medium."
+ ],
+ "bestPractices": [
+  "Give the wall a full row: six clients fill it from `lg` up and three from below `sm`, so six or twelve leave no empty cell.",
+  "Give every item a `logo` in the client's own colours; it is drawn as-is on its card and in the featured quotation, so pick artwork that carries its own contrast on both themes. Without one, `mark` names a one-ink mark from the brand registry instead.",
+  "Let `clientName` default to the registry's label for `mark`; set it when the item has only a `logo`, or a client the registry does not carry. It is the card's accessible name, so it is never optional in practice.",
+  "Keep each quotation to one or two sentences, verbatim, without typed quotation marks — `quote` draws its own glyph. The panel holds the tallest quotation's height for all of them and floors the attribution and the `actions` control, so one much longer quotation opens a wide gap under every shorter one.",
+  "Keep each quotation readable inside `autoplayInterval`; raise the interval before shortening a verbatim quotation, and turn `autoplay` off when the band sits beside other moving content."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "QuoteTabsItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The clients, in wall order; each item is `{ logo?, mark?, clientName?, shape?, text, name?, jobTitle?, photo? }` — the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name for the wall of client cards."
+  },
+  {
+   "name": "autoplay",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion."
+  },
+  {
+   "name": "autoplayInterval",
+   "type": "number",
+   "default": "5000",
+   "required": "false",
+   "doc": "Milliseconds each client is held before the band advances."
+  },
+  {
+   "name": "showProgress",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Advances a hairline along the quotation panel's bottom edge while the timer runs."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "A trailing control under the featured quotation's attribution, such as a secondary `Button` to the success stories; rendered in `quote`'s own `actions` area, the same for every client."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import FrameBox from '@aziontech/webkit/frame-box'\n  import QuoteTabs from '@aziontech/webkit/quote-tabs'\n  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'\n  import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'\n  import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'\n  import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'\n  import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'\n</script>\n\n<template>\n  <FrameBox>\n    <QuoteTabs\n      aria-label=\"Client stories\"\n      :items=\"[\n        {\n          logo: magaluLogo,\n          clientName: 'Magalu',\n          text: 'Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.',\n          name: 'Allan Monteiro',\n          jobTitle: 'CISO & Head of Technology at Magalu'\n        },\n        {\n          logo: ifoodLogo,\n          clientName: 'iFood',\n          shape: 'compact',\n          text: 'iFood serves every order screen from the edge, so a lunch-hour peak reaches millions of customers without a capacity plan.',\n          name: 'iFood',\n          jobTitle: 'Food delivery'\n        },\n        {\n          logo: herosparkLogo,\n          clientName: 'HeroSpark',\n          text: 'HeroSpark serves course pages and checkouts from the edge, so a launch day reaches every student without a capacity plan.',\n          name: 'HeroSpark',\n          jobTitle: 'Education technology'\n        },\n        {\n          mark: 'fourbank',\n          text: 'Fourbank runs its digital banking on Azion, keeping every account screen fast and protected from the first login.',\n          name: 'Fourbank',\n          jobTitle: 'Financial services'\n        },\n        {\n          logo: stoneLogo,\n          clientName: 'Stone',\n          text: 'Stone keeps its payment flows answering in milliseconds for merchants across Brazil, peak day or not.',\n          name: 'Stone',\n          jobTitle: 'Payments'\n        },\n        {\n          logo: itauLogo,\n          clientName: 'Itaú',\n          shape: 'compact',\n          text: 'Itaú protects its digital banking channels at the edge, before a request ever reaches its origin.',\n          name: 'Itaú',\n          jobTitle: 'Financial services'\n        }\n      ]\"\n    >\n      <template #actions>\n        <Button\n          label=\"See success stories\"\n          kind=\"secondary\"\n          size=\"large\"\n          href=\"https://www.azion.com/en/success-case/\"\n          target=\"_blank\"\n          icon=\"pi pi-chevron-right\"\n          icon-position=\"trailing\"\n          animated\n        />\n      </template>\n    </QuoteTabs>\n  </FrameBox>\n</template>"
+  },
+  {
+   "name": "Fallback",
+   "sfc": "<script setup>\n  import FrameBox from '@aziontech/webkit/frame-box'\n  import QuoteTabs from '@aziontech/webkit/quote-tabs'\n  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'\n</script>\n\n<template>\n  <FrameBox>\n    <QuoteTabs\n      aria-label=\"Client stories\"\n      :items=\"[\n        {\n          logo: magaluLogo,\n          clientName: 'Magalu',\n          text: 'Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.',\n          name: 'Allan Monteiro',\n          jobTitle: 'CISO & Head of Technology at Magalu'\n        },\n        {\n          clientName: 'Acme',\n          text: 'Acme moved its storefront to the edge and now ships every release to all of its regions at once.',\n          name: 'Acme',\n          jobTitle: 'E-commerce'\n        }\n      ]\"\n    />\n  </FrameBox>\n</template>"
+  }
+ ],
+ "docs": "components/quote-tabs.md"
+}

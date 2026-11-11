@@ -1,0 +1,83 @@
+{
+ "name": "code-split",
+ "binding": "CodeSplit",
+ "import": "@aziontech/webkit/code-split",
+ "treeShakeableImport": "@aziontech/webkit/code-split",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The claim-beside-its-code band of a product page: a framed media split whose copy states the claim, with one or two large buttons under it, and whose media is a code sample on the pixelate texture, cut off by the frame's bottom rule. It is a page section — the site places it from a `{ _id: 'code-split', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split`, `code-block` and `button`. One tab draws a filename bar; several draw a tab strip, and a tab that carries an `icon` shows that mark beside its label.",
+ "setup": null,
+ "useWhen": [
+  "When the argument of a product page is a config file or a handler a developer can read, like Functions, Application Accelerator or AI Gateway."
+ ],
+ "avoidWhen": [
+  "For a terminal session under a headline → use `cli-terminal`.",
+  "For a run of capabilities, each with its own sample, pinned while the page scrolls → use `sticky-scroll-code`."
+ ],
+ "related": [
+  "media-split` — the copy-beside-media band this section renders through.",
+  "code-block` — the tabbed code sample in the media cell."
+ ],
+ "bestPractices": [
+  "Keep the sample short enough to read in the cell; the frame cuts off whatever runs past it.",
+  "Give every tab a `code`; a tab without one is skipped.",
+  "Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting sentence under the headline."
+  },
+  {
+   "name": "codeTabs",
+   "type": "CodeSplitTab[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The files of the code sample, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark drawn beside the tab label. A tab without `code` is skipped."
+  },
+  {
+   "name": "copyAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the sample's copy button; empty keeps the code block's own."
+  },
+  {
+   "name": "primaryAction",
+   "type": "CodeSplitAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "First button under the copy; `{ label, href, trailing?, icon?, target? }`. Omitted when absent."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "CodeSplitAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Second, outlined button beside the first; `{ label, href, trailing?, icon?, target? }`. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import CodeSplit from '@aziontech/webkit/code-split'\n\n  const codeTabs = [\n    {\n      label: 'cache-settings.json',\n      value: 'cache-settings',\n      language: 'json',\n      code: '{\\n  \"cache_settings\": {\\n    \"name\": \"api-cache\",\\n    \"browser_cache_settings\": {\\n      \"ttl\": 60\\n    },\\n    \"cdn_cache_settings\": {\\n      \"ttl\": 30\\n    },\\n    \"cache_key\": {\\n      \"query_string\": \"whitelist\",\\n      \"query_string_fields\": [\"user_id\", \"category\"],\\n      \"cookie\": \"whitelist\",\\n      \"cookie_names\": [\"session_id\", \"region\"]\\n    },\\n    \"methods\": [\"GET\", \"POST\", \"OPTIONS\"],\\n    \"stale_cache\": true\\n  }\\n}',\n      fileName: 'cache-settings.json',\n      fileIcon: 'ai ai-json'\n    }\n  ]\n\n  const primaryAction = {\n    label: 'Learn more',\n    href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',\n    trailing: true\n  }\n</script>\n\n<template>\n  <CodeSplit\n    title=\"From basic caching to advanced acceleration\"\n    description=\"Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content.\"\n    :code-tabs=\"codeTabs\"\n    copy-aria-label=\"Copy the cache settings sample\"\n    :primary-action=\"primaryAction\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/code-split.md"
+}

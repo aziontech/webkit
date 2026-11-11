@@ -86,6 +86,9 @@ not go in a `Alert`.** The `Alert` is for what the **server** said.
 
 ## 2. Server rejection scoped to one field → a `Alert` in that section
 
+The standard is the design sample's `/forms/error-validation` screen, shipped as the block
+**`platform/states/form-error`** (states InSync, Rejected, Reloading, Reloaded). Start from it.
+
 The case most apps get wrong. Two people work the same module: User 1 fills in a form and links a
 resource; User 2 deletes that resource through the API before User 1 saves. User 1's browser is never
 told — its copy of the list is simply stale. The create request is the moment the drift surfaces, and
@@ -244,7 +247,16 @@ Three things follow:
    `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` (the first two render; it
    wins over `action`), not by rebuilding the toast body in the `Toaster` slot.
 
-The success counterpart is the ordinary case: `duration: 6000`, closable, no action needed.
+The success counterpart is a closable toast with the default 6 second duration, and it carries the
+same **Edit** and **Redeploy**. The toast never points at a list of runs: no **View deployments**,
+no **View logs** as the only way out.
+
+The page that started the run also shows it while it is mounted: the run status as a `Tag` in the
+page heading (`Idle`, `Deploying`, `Failed`, `Deployed`) and, once it ends, the outcome as an `Alert`
+with the same two actions (a danger `Alert` with the reason over the stopped logs, or a success
+`Alert` naming where it is live). Use one toast id per run, so the progress toast turns into the
+outcome in place. The standard is the design sample's `/forms/async-deployment` screen, shipped as
+the block **`platform/states/async-submit`**; every build and deploy screen follows it.
 
 ## Severity, and the words
 
@@ -275,6 +287,8 @@ application. Check your connection and try again."` — not `"Error 500"`.
 - **An async run's state never lives in the component that started it.** If unmounting the page can
   cancel the run or lose the failure, the run is in the wrong place.
 - **Never claim an outcome the server did not confirm.** A timeout is a `warning` about an unknown.
+- **A deploy or build outcome toast carries Edit and Redeploy**, success and failure alike. Never
+  _View deployments_.
 
 ## Review output
 
@@ -291,7 +305,7 @@ For `/webkit-errors <file>`, list gaps. Each:
 
 ✗ Deploy.vue:52  error toast uses the default duration
   rule: A failure the user was not present for must not expire unseen.
-  fix: duration: 0 + closable: true, carrying Redeploy and an escape to Deployments.
+  fix: duration: 0 + closable: true, carrying Edit and Redeploy (never View deployments).
 
 ✗ ErrorValidation.vue:301  scrollToSection() runs before `submitting` is released
   rule: Move the user only after the lock is released — a disabled control cannot take focus.
@@ -307,6 +321,9 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
   copy with links), `@aziontech/webkit/toast` (`toast.error` / `.success` / `.loading`, `duration`,
   `closable`, `action`), the `@aziontech/webkit/field` compound + `/helper-text` (the field's own
   required / invalid state).
+- **Blocks:** `platform/states/form-error` (row 2, the section `Alert` with its recovery action),
+  `platform/states/form-validation` (rows 1 and 3 on a short form), `platform/auth` (row 4),
+  `platform/states/async-submit` (row 5, Edit and Redeploy).
 - **Companion skills:** `/webkit-form` (the field triad, submit-time validation, the locked scope),
   `/webkit-ui-states` (the full loading / empty / partial / error surface and async behaviour),
   `/webkit-microcopy` (what the words are), `/webkit-navigation` (which shell the failing page sits

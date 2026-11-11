@@ -1,0 +1,103 @@
+{
+ "name": "mini-button",
+ "binding": "MiniButton",
+ "import": "@aziontech/webkit/mini-button",
+ "treeShakeableImport": "@aziontech/webkit/mini-button",
+ "category": "actions",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Compact text action with an optional trailing external-link icon and a ghost hover surface. Use for secondary CTAs in dense layouts (cards, tables, toolbars) where a full `Button` is too heavy. Differs from `navigation/link` by using default body text color and a brand-colored icon.",
+ "setup": null,
+ "useWhen": [
+  "A short secondary CTA (\"Learn more\") inside a card, feature tile or table where a full `button` is too heavy.",
+  "A marketing link that reads in body text color with a brand-colored icon."
+ ],
+ "avoidWhen": [
+  "A standalone navigation link in product UI (a domain, a repository, a docs page) → use `link`.",
+  "The main action of a section → use `button`.",
+  "A link inside a sentence → use a plain anchor with the text-link class."
+ ],
+ "related": [
+  "link` — same anatomy (label, trailing icon, ghost hover) in link color, with a `small` size; the default for standalone links.",
+  "button` — full action control with kinds, loading and a button element."
+ ],
+ "bestPractices": [
+  "Always set `href`; the default `'#'` is a placeholder and the control always renders as an anchor.",
+  "Replace the `'Learn more'` default `label` with text that says where the link goes.",
+  "Keep the default `pi pi-external-link` icon for off-site targets with `target=\"_blank\"` (`rel=\"noopener noreferrer\"` is added for you); set `showIcon` to false otherwise.",
+  "Only `large` and `medium` sizes exist."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Visible label rendered inside the control. Empty uses the locale catalog (`Learn more`)."
+  },
+  {
+   "name": "size",
+   "type": "'large' | 'medium'",
+   "default": "'large'",
+   "required": "false",
+   "doc": "Size token; affects height, gap, and typography."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies disabled tokens."
+  },
+  {
+   "name": "showIcon",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "When true, renders the trailing icon."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "'pi pi-external-link'",
+   "required": "false",
+   "doc": "PrimeIcons class for the trailing icon."
+  },
+  {
+   "name": "href",
+   "type": "string",
+   "default": "'#'",
+   "required": "false",
+   "doc": "Destination URL for the anchor."
+  },
+  {
+   "name": "target",
+   "type": "'_blank' | '_self'",
+   "default": "'_self'",
+   "required": "false",
+   "doc": "Link target when navigating."
+  }
+ ],
+ "events": [
+  {
+   "name": "click",
+   "payload": "MouseEvent",
+   "notes": "Fires on activation; suppressed when `disabled`."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <MiniButton\n    size=\"large\"\n    label=\"Learn more\"\n    href=\"#\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <MiniButton\n      size=\"medium\"\n      label=\"Learn more\"\n      href=\"#\"\n    />\n    <MiniButton\n      size=\"large\"\n      label=\"Learn more\"\n      href=\"#\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/mini-button.md"
+}

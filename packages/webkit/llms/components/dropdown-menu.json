@@ -1,0 +1,115 @@
+{
+ "name": "dropdown-menu",
+ "binding": "DropdownMenu",
+ "import": "@aziontech/webkit/dropdown-menu",
+ "treeShakeableImport": "@aziontech/webkit/dropdown-menu-root",
+ "category": "navigation",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/dropdown-menu-trigger",
+  "@aziontech/webkit/dropdown-menu-group",
+  "@aziontech/webkit/dropdown-menu-option"
+ ],
+ "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `DropdownMenu` owns open/closed state, positioning, focus return, and keyboard navigation; `DropdownMenu.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `DropdownMenu.Group` groups options under an optional label; `DropdownMenu.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `DropdownMenu` in the project, in `navigation/`.",
+ "setup": null,
+ "useWhen": [
+  "A menu of actions opened from a button: row actions, an account menu, an overflow (\"more\") menu.",
+  "Options grouped under section labels, optionally with keyboard-shortcut hints."
+ ],
+ "avoidWhen": [
+  "Choosing a value that a form submits → use `select` (inside a `field` for a label).",
+  "A primary action joined to a menu of alternatives → use `split-button`.",
+  "A searchable palette of commands → use `command`.",
+  "Free-form or interactive content such as forms or filters → use `popover`.",
+  "Vertical application navigation → use `menu`."
+ ],
+ "related": [
+  "split-button` — composes `DropdownMenu` for its chevron menu.",
+  "select` — form control with a field trigger and a bound value.",
+  "popover` — same trigger and anchoring model, with free-form content instead of option rows.",
+  "command` — modal ⌘K palette with search and filtering."
+ ],
+ "bestPractices": [
+  "Give every `DropdownMenu.Option` a unique `value` and handle the root `select` event as `(event, value)`. The panel closes and focus returns to the trigger on its own.",
+  "selected` is a display flag. The dropdown never sets it, so derive it from your own state.",
+  "Use the `command` prop or the `right` slot on an option, not both. A `command` shortcut is live only while the panel is open.",
+  "Add a `label` to each `DropdownMenu.Group` when there is more than one group. Put search in the root `top` slot and footer actions in `bottom`; those regions stay outside the scrolling list."
+ ],
+ "props": [
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled."
+  },
+  {
+   "name": "placement",
+   "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+   "default": "'bottom-start'",
+   "required": "false",
+   "doc": "Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space."
+  },
+  {
+   "name": "offset",
+   "type": "number",
+   "default": "4",
+   "required": "false",
+   "doc": "Pixel gap between the trigger and the panel."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Prevents the trigger from opening the panel and applies disabled tokens."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:open",
+   "payload": "boolean",
+   "notes": "Fires on every open/closed transition; supports `v-model:open`."
+  },
+  {
+   "name": "select",
+   "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+   "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Place `<DropdownMenu.Trigger>` followed by one or more `<DropdownMenu.Group>`."
+  },
+  {
+   "name": "top",
+   "scope": "—",
+   "notes": "Sticky region rendered above the scrollable group list (e.g. search input)."
+  },
+  {
+   "name": "bottom",
+   "scope": "—",
+   "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import DropdownMenu, {\n    DropdownMenuGroup,\n    DropdownMenuOption,\n    DropdownMenuTrigger\n  } from '@aziontech/webkit/dropdown-menu'\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <DropdownMenu>\n    <DropdownMenuTrigger>\n      <IconButton\n        kind=\"outlined\"\n        icon=\"pi pi-plus\"\n        aria-label=\"Open menu\"\n      />\n    </DropdownMenuTrigger>\n    <DropdownMenuGroup>\n      <DropdownMenuOption\n        value=\"profile\"\n        label=\"Profile\"\n      />\n      <DropdownMenuOption\n        value=\"settings\"\n        label=\"Settings\"\n      />\n      <DropdownMenuOption\n        value=\"billing\"\n        label=\"Billing\"\n      />\n      <DropdownMenuOption\n        value=\"invite\"\n        label=\"Invite members\"\n      />\n      <DropdownMenuOption\n        value=\"logs\"\n        label=\"Audit log\"\n      />\n      <DropdownMenuOption\n        value=\"signout\"\n        label=\"Sign out\"\n      />\n    </DropdownMenuGroup>\n  </DropdownMenu>\n</template>"
+  },
+  {
+   "name": "Groups",
+   "sfc": "<script setup>\n  import DropdownMenu, {\n    DropdownMenuGroup,\n    DropdownMenuOption,\n    DropdownMenuTrigger\n  } from '@aziontech/webkit/dropdown-menu'\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <DropdownMenu>\n    <DropdownMenuTrigger>\n      <IconButton\n        kind=\"outlined\"\n        icon=\"pi pi-plus\"\n        aria-label=\"Open menu\"\n      />\n    </DropdownMenuTrigger>\n    <DropdownMenuGroup label=\"Account\">\n      <DropdownMenuOption\n        value=\"profile\"\n        label=\"Profile\"\n        command=\"⌘P\"\n      />\n      <DropdownMenuOption\n        value=\"settings\"\n        label=\"Settings\"\n      />\n    </DropdownMenuGroup>\n    <DropdownMenuGroup label=\"Workspace\">\n      <DropdownMenuOption\n        value=\"invite\"\n        label=\"Invite members\"\n      />\n      <DropdownMenuOption\n        value=\"logs\"\n        label=\"Audit log\"\n        selected\n      />\n    </DropdownMenuGroup>\n  </DropdownMenu>\n</template>"
+  },
+  {
+   "name": "States",
+   "sfc": "<script setup>\n  import DropdownMenu, {\n    DropdownMenuGroup,\n    DropdownMenuOption,\n    DropdownMenuTrigger\n  } from '@aziontech/webkit/dropdown-menu'\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <DropdownMenu :open=\"true\">\n    <DropdownMenuTrigger>\n      <IconButton\n        kind=\"outlined\"\n        icon=\"pi pi-plus\"\n        aria-label=\"Open menu\"\n      />\n    </DropdownMenuTrigger>\n    <DropdownMenuGroup label=\"Option states\">\n      <DropdownMenuOption\n        value=\"default\"\n        label=\"Default\"\n      />\n      <DropdownMenuOption\n        value=\"selected\"\n        label=\"Selected\"\n        selected\n      />\n      <DropdownMenuOption\n        value=\"disabled\"\n        label=\"Disabled\"\n        disabled\n      />\n    </DropdownMenuGroup>\n  </DropdownMenu>\n</template>"
+  }
+ ],
+ "docs": "components/dropdown-menu.md"
+}
