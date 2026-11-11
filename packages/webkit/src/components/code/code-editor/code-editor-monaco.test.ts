@@ -79,9 +79,14 @@ describe('CodeEditor · real monaco-editor (lazy loader with workers)', () => {
     expect(input).toHaveAccessibleName('Cache settings')
     input.focus()
     await userEvent.keyboard('{Control>}{End}{/Control}// x')
-    await waitFor(() =>
-      expect(main!.host.querySelector('.view-lines')!.textContent).toContain('// x')
-    )
+    const text = (host: HTMLElement) =>
+      [...host.querySelectorAll('.view-lines')]
+        .map((lines) => lines.textContent ?? '')
+        .join('\n')
+        .replace(/\u00a0/g, ' ')
+    await waitFor(() => expect(text(main!.host)).toContain('// x'))
+    const [, diff] = editors()
+    await waitFor(() => expect(text(diff!.host)).toContain('// x'))
   }, 60_000)
 
   it('follows the theme: the editor background is the dark surface under data-theme="dark"', async () => {
@@ -89,16 +94,12 @@ describe('CodeEditor · real monaco-editor (lazy loader with workers)', () => {
     document.documentElement.dataset['theme'] = 'dark'
     await nextTick()
     const [main] = editors()
-    await waitFor(
-      () => {
-        const surface = getComputedStyle(main!.root).getPropertyValue('--bg-surface').trim()
-        const background = getComputedStyle(
-          main!.host.querySelector<HTMLElement>('.monaco-editor-background')!
-        ).backgroundColor
-        expect(background).toBe(toRgb(surface))
-      },
-      { timeout: 5_000 }
-    )
+    const expected = toRgb(getComputedStyle(main!.root).getPropertyValue('--bg-surface').trim())
+    const background = () =>
+      getComputedStyle(main!.host.querySelector<HTMLElement>('.monaco-editor-background')!)
+        .backgroundColor
+    await waitFor(() => expect(background()).toBe(expected), { timeout: 5_000 })
+    expect(expected).not.toBe(toRgb('#ffffff'))
   }, 60_000)
 
   it('names both sides of the diff editor', async () => {
