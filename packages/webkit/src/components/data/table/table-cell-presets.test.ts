@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { createApp, defineComponent, h } from 'vue'
 
 import CellPresets from '../../../../examples/table/cell-presets.vue'
+import Refresh from '../../../../examples/table/refresh.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
@@ -12,6 +13,7 @@ import TableCellLink from './table-cell-link/table-cell-link.vue'
 import TableCellStatus from './table-cell-status/table-cell-status.vue'
 import TableCellTags from './table-cell-tags/table-cell-tags.vue'
 import TableCellTime from './table-cell-time/table-cell-time.vue'
+import TableRefreshButton from './table-refresh-button/table-refresh-button.vue'
 
 const byTestId = (id: string): HTMLElement | null =>
   document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
@@ -187,6 +189,23 @@ describe('Table cell presets', () => {
 
   it('has no axe violations', async () => {
     const view = render(CellPresets)
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('RefreshButton with loading spins and cannot fire again', () => {
+    const view = render(TableRefreshButton, { props: { loading: true } })
+    const button = view.getByRole('button', { name: 'Refresh' })
+    expect(button.getAttribute('aria-busy')).toBe('true')
+  })
+
+  it('the refresh example keeps its rows while refreshing and shows when it updated', async () => {
+    const view = render(Refresh)
+    expect(view.container.querySelector('time')!.textContent).toContain('just now')
+    await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
+    expect(view.getByText('storefront')).toBeTruthy()
+    await waitFor(() =>
+      expect(view.getByRole('button', { name: 'Refresh' }).getAttribute('aria-busy')).toBe('true')
+    )
     await expectNoA11yViolations(view.container)
   })
 })

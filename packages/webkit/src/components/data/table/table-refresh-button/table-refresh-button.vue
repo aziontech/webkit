@@ -4,6 +4,7 @@
   import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -15,9 +16,12 @@
     defineProps<{
       /** Disables the control (in addition to the injected loading state). */
       disabled?: boolean
+      /** Spins the glyph while a refresh runs and the current rows stay on screen; the control cannot fire again meanwhile. */
+      loading?: boolean
     }>(),
     {
-      disabled: false
+      disabled: false,
+      loading: false
     }
   )
 
@@ -36,14 +40,17 @@
 </script>
 
 <template>
-  <IconButton
-    v-bind="$attrs"
-    :data-testid="testId"
-    icon="pi pi-refresh"
-    :ariaLabel="t('tableRefreshButton.label')"
-    kind="outlined"
-    size="medium"
-    :disabled="isDisabled"
-    @click="onClick"
-  />
+  <Tooltip :text="t('tableRefreshButton.label')">
+    <IconButton
+      v-bind="$attrs"
+      :data-testid="testId"
+      icon="pi pi-refresh"
+      :ariaLabel="t('tableRefreshButton.label')"
+      kind="outlined"
+      size="medium"
+      :disabled="isDisabled"
+      :loading="loading"
+      @click="onClick"
+    />
+  </Tooltip>
 </template>

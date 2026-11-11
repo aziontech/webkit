@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 4c2d4b5c1f8bb4c3741fd8f8c0595a4970791ff001f5caea9a3ce11c4a5fa150
+checksum: c7453e7992aef591231e233f7c015f5232a9198c98959c03f9d47348ea128ba0
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -59,10 +59,10 @@ A small `+N` chip that stands for the items a slot cannot show, and opens a popo
 
 ## Props
 
-| Prop    | Type                                                     | Default     | Required | JSDoc                                                                                                   |
-| ------- | -------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `items` | `Array<string \| { label: string; href?: string }>`      | `[]`        | false    | The hidden items. The chip reads `+<length>`; an item with `href` opens in a new tab.                     |
-| `noun`  | `string \| { one: string; other: string }`               | `undefined` | false    | What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`).  |
+| Prop    | Type                                                | Default     | Required | JSDoc                                                                                                  |
+| ------- | --------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| `items` | `Array<string \| { label: string; href?: string }>` | `[]`        | false    | The hidden items. The chip reads `+<length>`; an item with `href` opens in a new tab.                  |
+| `noun`  | `string \| { one: string; other: string }`          | `undefined` | false    | What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`). |
 
 ## Events
 
@@ -70,9 +70,9 @@ _none_
 
 ## Slots
 
-| Slot   | Props                                                       | Notes                                                        |
-| ------ | ----------------------------------------------------------- | ------------------------------------------------------------ |
-| `item` | `{ item: { label: string; href?: string }, index: number }` | One list entry; replaces the built-in text or link.          |
+| Slot   | Props                                                       | Notes                                               |
+| ------ | ----------------------------------------------------------- | --------------------------------------------------- |
+| `item` | `{ item: { label: string; href?: string }, index: number }` | One list entry; replaces the built-in text or link. |
 
 ## States
 
@@ -82,21 +82,21 @@ _none_
 
 ## Motion & Animations
 
-| Trigger               | Animation / Transition                         | Token                    | Reduced-motion fallback       |
-| --------------------- | ---------------------------------------------- | ------------------------ | ----------------------------- |
-| popover open / close  | inherited from `Popover` (`animate-popup-*`)   | `semantic/animations.js` | `motion-reduce:animate-none`  |
-| entry hover           | `transition-colors duration-fast-02`           | `semantic/animations.js` | `motion-reduce:transition-none` |
+| Trigger              | Animation / Transition                       | Token                    | Reduced-motion fallback         |
+| -------------------- | -------------------------------------------- | ------------------------ | ------------------------------- |
+| popover open / close | inherited from `Popover` (`animate-popup-*`) | `semantic/animations.js` | `motion-reduce:animate-none`    |
+| entry hover          | `transition-colors duration-fast-02`         | `semantic/animations.js` | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region                 | Token                                                     |
-| ---------------------- | --------------------------------------------------------- |
-| summary                | `.text-label-sm` · `var(--text-muted)`                    |
-| entry                  | `.text-body-sm` · `var(--text-default)`                   |
-| entry hover            | `var(--bg-hover)`                                         |
-| dividers               | `var(--border-default)`                                   |
-| list height            | `var(--container-xs)`                                     |
-| ring                   | `var(--ring-color)`                                       |
+| Region      | Token                                   |
+| ----------- | --------------------------------------- |
+| summary     | `.text-label-sm` · `var(--text-muted)`  |
+| entry       | `.text-body-sm` · `var(--text-default)` |
+| entry hover | `var(--bg-hover)`                       |
+| dividers    | `var(--border-default)`                 |
+| list height | `var(--container-xs)`                   |
+| ring        | `var(--ring-color)`                     |
 
 ## Theme gaps
 
@@ -114,16 +114,16 @@ _none_
 
 ## Internationalization
 
-| Key                       | English source                       | Override prop |
-| ------------------------- | ------------------------------------ | ------------- |
-| `overflowCount.noun`      | `item` / `items` (plural)            | `noun`        |
-| `overflowCount.summary`   | `{count} {noun}`                     | —             |
-| `overflowCount.paged`     | `{shown} of {count} {noun}`          | —             |
-| `overflowCount.showAll`   | `Show all {count} {noun}`            | —             |
-| `overflowCount.search`    | `Search`                             | —             |
-| `overflowCount.noMatch`   | `Nothing matches “{query}”`          | —             |
-| `overflowCount.loadMore`  | `Load {count} more`                  | —             |
-| `overflowCount.newTab`    | `(opens in a new tab)`               | —             |
+| Key                      | English source              | Override prop |
+| ------------------------ | --------------------------- | ------------- |
+| `overflowCount.noun`     | `item` / `items` (plural)   | `noun`        |
+| `overflowCount.summary`  | `{count} {noun}`            | —             |
+| `overflowCount.paged`    | `{shown} of {count} {noun}` | —             |
+| `overflowCount.showAll`  | `Show all {count} {noun}`   | —             |
+| `overflowCount.search`   | `Search`                    | —             |
+| `overflowCount.noMatch`  | `Nothing matches “{query}”` | —             |
+| `overflowCount.loadMore` | `Load {count} more`         | —             |
+| `overflowCount.newTab`   | `(opens in a new tab)`      | —             |
 
 - Formatting: counts go through the locale's number format.
 
