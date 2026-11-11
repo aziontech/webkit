@@ -28,7 +28,7 @@
   {
     "name": "calendar-root",
     "path": "src/components/inputs/calendar/calendar.vue",
-    "limit": "20.35 KB"
+    "limit": "20.5 KB"
   },
   {
     "name": "table-root",
@@ -143,7 +143,7 @@
   {
     "name": "doc-tooltip",
     "path": "src/components/documentation/doc-tooltip/doc-tooltip.vue",
-    "limit": "6.25 KB"
+    "limit": "6.35 KB"
   },
   {
     "name": "doc-pagination",
@@ -365,7 +365,7 @@
   {
     "name": "article-index-blog",
     "path": "src/components/sections/article-index-blog/article-index-blog.vue",
-    "limit": "21.7 KB"
+    "limit": "21.85 KB"
   },
   {
     "name": "article-index-resource-hub",
@@ -794,7 +794,7 @@
   {
     "name": "wizard-root",
     "path": "src/components/navigation/wizard/wizard.vue",
-    "limit": "6.3 KB"
+    "limit": "6.4 KB"
   },
   {
     "name": "wizard-step",

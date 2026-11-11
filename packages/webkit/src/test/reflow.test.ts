@@ -47,6 +47,9 @@ function describeOverflow(root: HTMLElement): string {
 
 async function mountInBox(component: Component, width: number): Promise<HTMLElement> {
   await page.viewport(width, 900)
+  // WebKit applies the new frame size after the command resolves; viewport
+  // media queries (`max-lg:` folding) must see the width before measuring.
+  await vi.waitFor(() => expect(window.innerWidth).toBe(width))
   const host = document.createElement('div')
   host.style.width = `${width}px`
   document.body.appendChild(host)

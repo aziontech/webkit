@@ -13,7 +13,7 @@ import {
   ptBR,
   useLocale
 } from './index'
-import { useTranslate } from './use-translate'
+import { createMessageHelpers, intlLocale, useTranslate } from './use-translate'
 
 function probe(setupParent?: () => void) {
   let helpers: ReturnType<typeof useLocale> | null = null
@@ -179,5 +179,24 @@ describe('useLocale', () => {
       expect(l.locale.value).toBe('pt-BR')
       expect(l.t('wizard.stepOf', { step: 2, total: 4 })).toBe('Etapa 2 de 4')
     })
+  })
+})
+
+describe('intlLocale — the same digits on the server and in every engine', () => {
+  it('pins Latin digits unless the tag picks a numbering system', () => {
+    expect(intlLocale('ar')).toBe('ar-u-nu-latn')
+    expect(intlLocale('pt-BR')).toBe('pt-BR-u-nu-latn')
+    expect(intlLocale('ar-u-ca-islamic')).toBe('ar-u-nu-latn-ca-islamic')
+    expect(intlLocale('ar-u-nu-arab')).toBe('ar-u-nu-arab')
+    expect(intlLocale('ar-u-ca-islamic-nu-arab')).toBe('ar-u-ca-islamic-nu-arab')
+  })
+
+  it('formats an Arabic page with Latin digits, as Node renders it', () => {
+    const { formatNumber } = createMessageHelpers(
+      () => 'ar',
+      () => ({})
+    )
+    expect(formatNumber(48)).toBe('48')
+    expect(new Intl.NumberFormat(intlLocale('ar-u-nu-arab')).format(48)).toBe('٤٨')
   })
 })

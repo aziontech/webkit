@@ -1,3 +1,4 @@
+import { intlLocale } from '../../../composables/use-locale/use-translate'
 import type { CalendarMode, CalendarRange, CalendarValue } from './injection-key'
 
 export const startOfDay = (date: Date): Date =>
@@ -39,7 +40,7 @@ export const withTime = (date: Date, source: Date | null, isEnd: boolean): Date 
 const tzOption = (timezone: string): string | undefined => timezone || undefined
 
 export const formatDate = (date: Date, timezone = '', locale = 'en-US'): string =>
-  new Intl.DateTimeFormat(locale, {
+  new Intl.DateTimeFormat(intlLocale(locale), {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -47,7 +48,7 @@ export const formatDate = (date: Date, timezone = '', locale = 'en-US'): string 
   }).format(date)
 
 export const formatTime = (date: Date, timezone = '', locale = 'en-US'): string =>
-  new Intl.DateTimeFormat(locale, {
+  new Intl.DateTimeFormat(intlLocale(locale), {
     hour: '2-digit',
     minute: '2-digit',
     hourCycle: 'h23',
@@ -55,21 +56,21 @@ export const formatTime = (date: Date, timezone = '', locale = 'en-US'): string 
   }).format(date)
 
 const monthDay = (date: Date, timezone = '', locale = 'en-US'): string =>
-  new Intl.DateTimeFormat(locale, {
+  new Intl.DateTimeFormat(intlLocale(locale), {
     month: 'short',
     day: 'numeric',
     timeZone: tzOption(timezone)
   }).format(date)
 
 const monthYear = (date: Date, timezone = '', locale = 'en-US'): string =>
-  new Intl.DateTimeFormat(locale, {
+  new Intl.DateTimeFormat(intlLocale(locale), {
     month: 'long',
     year: 'numeric',
     timeZone: tzOption(timezone)
   }).format(date)
 
 const labelClock = (date: Date, timezone = '', locale = 'en-US'): string =>
-  new Intl.DateTimeFormat(locale, {
+  new Intl.DateTimeFormat(intlLocale(locale), {
     hour: 'numeric',
     minute: '2-digit',
     hourCycle: 'h23',
@@ -144,7 +145,7 @@ export const formatValueLabel = (
 }
 
 const formatClock = (date: Date, timezone = '', locale = 'en-US'): string =>
-  new Intl.DateTimeFormat(locale, {
+  new Intl.DateTimeFormat(intlLocale(locale), {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,

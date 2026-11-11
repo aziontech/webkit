@@ -266,7 +266,7 @@
     const own: Record<string, unknown> = {}
     for (const name in attrs) (name.startsWith('aria-') ? own : frame)[name] = attrs[name]
     if (
-      (captions.value || (dataDriven.value && slots.caption)) &&
+      (captions.value || (dataDriven.value && slots['caption'])) &&
       !own['aria-label'] &&
       !own['aria-labelledby']
     )

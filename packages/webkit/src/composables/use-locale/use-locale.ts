@@ -12,6 +12,7 @@ import {
   cached,
   createMessageHelpers,
   DEFAULT_LOCALE,
+  intlLocale,
   type LocaleContext,
   LocaleInjectionKey,
   useLocaleContext
@@ -120,9 +121,12 @@ export function createTranslator(
     value: Date | number | string,
     options?: Intl.DateTimeFormatOptions
   ): string =>
-    cached('date', locale(), options, () => new Intl.DateTimeFormat(locale(), options)).format(
-      value instanceof Date ? value : new Date(value)
-    )
+    cached(
+      'date',
+      locale(),
+      options,
+      () => new Intl.DateTimeFormat(intlLocale(locale()), options)
+    ).format(value instanceof Date ? value : new Date(value))
 
   const formatRelativeTime = (
     value: number | Date,
@@ -133,7 +137,7 @@ export function createTranslator(
       'relative',
       locale(),
       options,
-      () => new Intl.RelativeTimeFormat(locale(), options)
+      () => new Intl.RelativeTimeFormat(intlLocale(locale()), options)
     )
     if (!(value instanceof Date)) return format.format(value, unit)
     let amount = (value.getTime() - Date.now()) / 1000

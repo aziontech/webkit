@@ -74,3 +74,12 @@ Three entries changed in M1.11, where the full browser run turned four skipped a
 | table-root      | 50            | 49.94           | 50.14        | 50.25      | Raised: the table role moves off the frame.              |
 | listing-browser | 64.65         | 64.58           | 64.76        | 64.85      | Raised: it ships `Table`, same change.                   |
 | listing-table   | 55.85         | 55.82           | 56.03        | 56.15      | Raised: it ships `Table` and `TableFooter`, same change. |
+
+Four more entries changed in M1.11, from the WebKit run. For `locale="ar"` Node and Chromium format numbers with Latin digits (the current CLDR default) and Safari with Arabic-Indic ones, so a page rendered on the server failed to hydrate in Safari. Every `Intl` formatter now receives `intlLocale(tag)`, which pins Latin digits unless the tag picks a numbering system (`ar-u-nu-arab`). The helper was compacted once; the calendar calls it at each of its date and period formatters.
+
+| Entry              | Budget before | Measured before | Measured now | New budget | Note                                                         |
+| ------------------ | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------ |
+| calendar-root      | 20.35         | 20.34           | 20.39        | 20.5       | Raised: its date and period formatters pin the digits.       |
+| doc-tooltip        | 6.25          | 6.20            | 6.25         | 6.35       | Raised: its `Link` label goes through the shared translator. |
+| article-index-blog | 21.7          | 21.66           | 21.73        | 21.85      | Raised: dates and counts through the shared formatters.      |
+| wizard-root        | 6.3           | 6.24            | 6.30         | 6.4        | Raised: its step counter goes through the shared translator. |
