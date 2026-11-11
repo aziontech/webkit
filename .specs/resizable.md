@@ -4,11 +4,11 @@ category: layout
 structure: composition
 status: implemented
 spec_version: 1
-checksum: bf150815455d6fbfb15919d2ebb5cc2742c9c8e7729f727c7331e8dcf06c9cf5
+checksum: b4a85c0663b47517163989dc4bbfafbfe5f7ce8398c363457bba35c983b79c93
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
 created: 2026-08-16
-last_updated: 2026-08-16
+last_updated: 2026-11-11
 ---
 
 # Resizable Panel — Component Spec
@@ -107,7 +107,7 @@ Neither part is an overlay, so neither is named `Trigger` or `Content` and neith
 
 `resizable-handle` props:
 
-- `ariaLabel` — `string`, default `'Resize panel'`. Accessible name of the separator; name the edge it moves.
+- `ariaLabel` — `string`, default `''`. Accessible name of the separator; name the edge it moves. Empty uses the locale catalog (`Resize panel` in English).
 - `disabled` — `boolean`, default `false`. Disables the drag and the keyboard nudge, and removes the separator from the tab order.
 
 `resizable-pane` events: `update:basis` (`number`) on every step of a drag and on a

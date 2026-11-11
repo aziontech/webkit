@@ -2,6 +2,8 @@
   import { computed, ref, useAttrs, useSlots } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
 
   export type PasswordInputAutocomplete = 'current-password' | 'new-password' | 'off'
@@ -54,6 +56,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ passwordInput: en.passwordInput })
 
   const {
     controlId,
@@ -84,7 +87,9 @@
   const hasIconLeft = computed(() => Boolean(slots['iconLeft']))
   const hasIconRight = computed(() => !props.toggleable && Boolean(slots['iconRight']))
 
-  const toggleLabel = computed(() => (visible.value ? 'Hide password' : 'Show password'))
+  const toggleLabel = computed(() =>
+    visible.value ? t('passwordInput.hide') : t('passwordInput.show')
+  )
   const toggleIcon = computed(() => (visible.value ? 'pi pi-eye-slash' : 'pi pi-eye'))
 
   const handleInput = (event: globalThis.Event) => {

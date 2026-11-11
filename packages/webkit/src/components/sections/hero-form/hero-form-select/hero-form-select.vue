@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
   import { useSelectSearch } from '../../../../composables/use-select-search'
+  import * as en from '../../../../i18n/messages/en'
   import Input from '../../../inputs/input/input.vue'
   import Select from '../../../inputs/select/select.vue'
   import SelectContent from '../../../inputs/select/select-content/select-content.vue'
@@ -31,6 +33,7 @@
   const modelValue = defineModel<string>({ default: '' })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ heroForm: en.heroForm })
   const generatedId = useId()
 
   const testId = computed(
@@ -94,8 +97,8 @@
         <Input
           :id="searchId"
           v-model="query"
-          placeholder="Search"
-          aria-label="Search"
+          :placeholder="t('heroForm.search')"
+          :aria-label="t('heroForm.search')"
           :aria-activedescendant="activeKey ? optionId(activeKey) : undefined"
           autocomplete="off"
           :data-testid="`${testId}__search`"
@@ -124,7 +127,7 @@
         :data-testid="`${testId}__search-empty`"
         class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
       >
-        No results found
+        {{ t('heroForm.empty') }}
       </p>
     </SelectContent>
   </Select>

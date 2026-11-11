@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 00cdeda0e0a53db291b1f72bb03bb409db8fea986d9753407c4f71e067f6e253
+checksum: ba0896a8875d8df80936175a7fdfe040756ece9c7589960d10e9639f976928c6
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # PasswordRequirements — Component Spec
@@ -70,7 +70,7 @@ Live checklist of password rules shown under a `PasswordInput`: a caption follow
 | Prop           | Type                    | Default                         | Required | JSDoc                                                                                                               |
 | -------------- | ----------------------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
 | `requirements` | `PasswordRequirement[]` | `DEFAULT_PASSWORD_REQUIREMENTS` | false    | Rules rendered as chips, one per entry. Defaults to the built-in rule set; an empty array renders only the caption. |
-| `title`        | `string`                | `'Must contain:'`               | false    | Caption that opens the row and names the group for assistive tech.                                                  |
+| `title`        | `string`                | `''`                            | false    | Caption that opens the row and names the group for assistive tech. Empty uses the locale catalog (`Must contain:`). |
 | `value`        | `string`                | `''`                            | false    | Password every rule is evaluated against; pass the PasswordInput value.                                             |
 
 ## Events

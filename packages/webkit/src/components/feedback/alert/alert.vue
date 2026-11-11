@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, onMounted, onUnmounted, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import {
@@ -64,6 +66,7 @@
   } as const
 
   const attrs = useAttrs()
+  const { t } = useLocale({ alert: en.alert })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-alert')
 
@@ -205,7 +208,7 @@
         icon="pi pi-times"
         kind="transparent"
         :size="size"
-        ariaLabel="Close message"
+        :ariaLabel="t('alert.close')"
         :data-testid="`${testId}__close`"
         @click="handleClose"
       />

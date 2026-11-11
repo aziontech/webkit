@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 371bba13a17c40647e284efac51cd2ee47d3b17c241aa843ff9b1c4d6ea2a256
+checksum: a325f34c027029288356b7e44602be9f9eb5ab1491f830fe8d78c8fcdd52e290
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-11
 ---
 
 # DocOnThisPage — Component Spec
@@ -67,12 +67,12 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 
 ## Props
 
-| Prop       | Type            | Default          | Required | JSDoc                                                      |
-| ---------- | --------------- | ---------------- | -------- | ---------------------------------------------------------- |
-| `items`    | `DocTocItem[]`  | `[]`             | false    | The headings, in document order.                           |
-| `activeId` | `string`        | `''`             | false    | The id of the heading currently in view.                   |
-| `title`    | `string`        | `'On this page'` | false    | The rail's own heading.                                    |
-| `groups`   | `DocTocGroup[]` | `[]`             | false    | Complementary groups rendered below the outline, in order. |
+| Prop       | Type            | Default | Required | JSDoc                                                                   |
+| ---------- | --------------- | ------- | -------- | ----------------------------------------------------------------------- |
+| `items`    | `DocTocItem[]`  | `[]`    | false    | The headings, in document order.                                        |
+| `activeId` | `string`        | `''`    | false    | The id of the heading currently in view.                                |
+| `title`    | `string`        | `''`    | false    | The rail's own heading. Empty uses the locale catalog (`On this page`). |
+| `groups`   | `DocTocGroup[]` | `[]`    | false    | Complementary groups rendered below the outline, in order.              |
 
 ## Events
 

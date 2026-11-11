@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
 
   export type AvatarKind = 'circle' | 'square'
@@ -37,6 +39,7 @@
   )
 
   const attrs = useAttrs()
+  const { t } = useLocale({ avatar: en.avatar })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-avatar')
 
@@ -52,12 +55,14 @@
 
   const showIcon = computed(() => !hasImage.value && !showLabel.value)
 
-  const imageAlt = computed(() => props.alt?.trim() || normalizedLabel.value || 'Avatar')
+  const imageAlt = computed(
+    () => props.alt?.trim() || normalizedLabel.value || t('avatar.imageAlt')
+  )
 
   const accessibleLabel = computed(() => {
     if (hasImage.value) return imageAlt.value
     if (normalizedLabel.value) return normalizedLabel.value
-    return 'User avatar'
+    return t('avatar.fallbackLabel')
   })
 
   const kindClasses: Record<AvatarKind, string> = {

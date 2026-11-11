@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
@@ -73,6 +75,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ articleIndex: en.articleIndex })
 
   const selection = ref<Record<string, string>>({})
 
@@ -163,8 +166,10 @@
                   <Input
                     :model-value="optionQuery[facet.key] ?? ''"
                     size="small"
-                    placeholder="Search"
-                    :aria-label="`Search ${facet.label.toLowerCase()}`"
+                    :placeholder="t('articleIndex.search')"
+                    :aria-label="
+                      t('articleIndex.searchFacet', { facet: facet.label.toLowerCase() })
+                    "
                     @update:model-value="setOptionQuery(facet.key, $event)"
                   >
                     <template #iconLeft>
@@ -190,7 +195,7 @@
                   role="status"
                   class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
                 >
-                  No results found
+                  {{ t('articleIndex.empty') }}
                 </p>
               </SelectContent>
             </Select>

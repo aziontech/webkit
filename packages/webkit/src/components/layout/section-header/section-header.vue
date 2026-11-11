@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
 
   /** Heading scale: medium for a band heading, small for a muted label-sized heading. */
@@ -36,6 +38,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ sectionHeader: en.sectionHeader })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'layout-section-header'
@@ -73,8 +76,8 @@
               :data-testid="`${testId}__copy-link`"
               kind="transparent"
               size="small"
-              :aria-label="`Copy link to the ${title} section`"
-              copied-label="Link copied"
+              :aria-label="t('sectionHeader.copyLink', { title })"
+              :copied-label="t('sectionHeader.linkCopied')"
             />
           </span>
         </div>

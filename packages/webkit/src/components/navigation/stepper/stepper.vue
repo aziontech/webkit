@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, provide, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import type { StepperStepHandle } from './injection-key'
   import { StepperInjectionKey } from './injection-key'
 
@@ -11,11 +13,11 @@
 
   withDefaults(
     defineProps<{
-      /** Accessible name for the step rail. */
+      /** Accessible name for the step rail. Empty uses the locale catalog (`Steps`). */
       ariaLabel?: string
     }>(),
     {
-      ariaLabel: 'Steps'
+      ariaLabel: ''
     }
   )
 
@@ -27,6 +29,7 @@
   const model = defineModel<string>({ default: '' })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ stepper: en.stepper })
 
   const steps = ref<symbol[]>([])
   const elements = new Map<symbol, HTMLElement>()
@@ -83,7 +86,7 @@
 <template>
   <nav
     v-bind="$attrs"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || t('stepper.label')"
     :data-testid="testId"
     :data-current="model"
     data-orientation="vertical"

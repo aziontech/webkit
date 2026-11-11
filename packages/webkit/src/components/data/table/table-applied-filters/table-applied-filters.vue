@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import Chip from '../../../inputs/chip/chip.vue'
   import { type AppliedFilter, type FilterOperator, TableInjectionKey } from '../injection-key'
 
@@ -20,6 +22,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t, formatList } = useLocale({ tableAppliedFilters: en.tableAppliedFilters })
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
@@ -30,27 +33,29 @@
 
   const filters = computed<AppliedFilter[]>(() => ctx?.appliedFilters.value ?? [])
 
-  const OPERATOR_LABELS: Record<FilterOperator, string> = {
+  const OPERATOR_LABELS = computed<Record<FilterOperator, string>>(() => ({
     eq: '=',
     neq: '≠',
-    contains: 'contains',
-    'not-contains': 'not contains',
-    'starts-with': 'starts with',
-    'ends-with': 'ends with',
+    contains: t('tableAppliedFilters.contains'),
+    'not-contains': t('tableAppliedFilters.notContains'),
+    'starts-with': t('tableAppliedFilters.startsWith'),
+    'ends-with': t('tableAppliedFilters.endsWith'),
     gt: '>',
     gte: '≥',
     lt: '<',
     lte: '≤',
-    in: 'in',
-    'not-in': 'not in',
-    'is-empty': 'is empty',
-    'is-not-empty': 'is not empty'
-  }
+    in: t('tableAppliedFilters.in'),
+    'not-in': t('tableAppliedFilters.notIn'),
+    'is-empty': t('tableAppliedFilters.isEmpty'),
+    'is-not-empty': t('tableAppliedFilters.isNotEmpty')
+  }))
 
   const labelOf = (filter: AppliedFilter): string => {
     if (filter.label) return filter.label
-    const operator = OPERATOR_LABELS[filter.operator] ?? filter.operator
-    const value = Array.isArray(filter.value) ? filter.value.join(', ') : String(filter.value)
+    const operator = OPERATOR_LABELS.value[filter.operator] ?? filter.operator
+    const value = Array.isArray(filter.value)
+      ? formatList(filter.value.map(String), { type: 'unit', style: 'short' })
+      : String(filter.value)
     return `${filter.field} ${operator} ${value}`.trim()
   }
 

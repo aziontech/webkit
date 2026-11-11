@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: 4f44f01909cbffe3828a1f2e2fced4dc5ccb1d8a32895549fa2bfe30dda3850c
+checksum: d55d307f3b210b870e38ae84b5f9bb583a71f2f1cc39338d5f6f75116b9fd575
 created: 2026-07-13
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Theme Switcher — Component Spec
@@ -56,10 +56,10 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 
 ## Props
 
-| Prop        | Type      | Default   | Required | JSDoc                                                   |
-| ----------- | --------- | --------- | -------- | ------------------------------------------------------- |
-| `disabled`  | `boolean` | `false`   | false    | Disables the whole control and applies disabled tokens. |
-| `ariaLabel` | `string`  | `'Theme'` | false    | Accessible name for the icon-only segmented group.      |
+| Prop        | Type      | Default | Required | JSDoc                                                                                       |
+| ----------- | --------- | ------- | -------- | ------------------------------------------------------------------------------------------- |
+| `disabled`  | `boolean` | `false` | false    | Disables the whole control and applies disabled tokens.                                     |
+| `ariaLabel` | `string`  | `''`    | false    | Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`). |
 
 ## v-model
 

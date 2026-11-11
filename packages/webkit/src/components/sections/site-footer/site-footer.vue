@@ -2,6 +2,8 @@
   import { useMediaQuery } from '@vueuse/core'
   import { computed, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
@@ -50,11 +52,11 @@
   interface Props {
     /** Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed. */
     kind?: SiteFooterKind
-    /** Accessible name of the footer landmark. */
+    /** Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`). */
     ariaLabel?: string
     /** Destination of the Azion mark; the mark is not rendered when empty. */
     home?: string
-    /** Accessible name of the Azion mark link. */
+    /** Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`). */
     homeAriaLabel?: string
     /** The link columns, in order; each is `{ title, links }` where every link is `{ label, href }`. */
     columns?: SiteFooterColumn[]
@@ -64,23 +66,24 @@
     statusLabel?: string
     /** Options of the language select, as the reader sees them; the first one is selected. The select is not rendered when empty. */
     languages?: string[]
-    /** Accessible name of the language select, also its placeholder. */
+    /** Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`). */
     languageAriaLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'site',
-    ariaLabel: 'Footer',
+    ariaLabel: '',
     home: '',
-    homeAriaLabel: 'Azion home',
+    homeAriaLabel: '',
     columns: () => [],
     socials: () => [],
     statusLabel: '',
     languages: () => [],
-    languageAriaLabel: 'Language'
+    languageAriaLabel: ''
   })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ siteFooter: en.siteFooter })
 
   const wide = useMediaQuery('(min-width: 1024px)')
 
@@ -106,7 +109,7 @@
   >
     <Footer
       :kind="kind"
-      :aria-label="ariaLabel"
+      :aria-label="ariaLabel || t('siteFooter.label')"
     >
       <FooterColumn
         v-for="column in columns"
@@ -126,7 +129,7 @@
         <a
           v-if="brandLeadsSocialRow"
           :href="home"
-          :aria-label="homeAriaLabel"
+          :aria-label="homeAriaLabel || t('siteFooter.home')"
           class="me-(--spacing-xs) inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         >
           <Brand size="small" />
@@ -159,9 +162,9 @@
         <div class="w-28">
           <Select
             v-model="language"
-            :placeholder="languageAriaLabel"
+            :placeholder="languageAriaLabel || t('siteFooter.language')"
           >
-            <SelectTrigger :aria-label="languageAriaLabel">
+            <SelectTrigger :aria-label="languageAriaLabel || t('siteFooter.language')">
               <template #iconLeft>
                 <i
                   class="pi pi-globe text-(--text-muted)"
@@ -188,7 +191,7 @@
       >
         <a
           :href="home"
-          :aria-label="homeAriaLabel"
+          :aria-label="homeAriaLabel || t('siteFooter.home')"
           class="mx-auto inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         >
           <Brand size="small" />

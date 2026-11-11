@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { useHelpPanelTutorialContext } from '../composables/use-help-panel-tutorial-context'
   import type { HelpPanelTaskStatus } from '../injection-key'
 
@@ -27,6 +29,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ helpPanel: en.helpPanel })
   const context = useHelpPanelTutorialContext()
 
   const id = Symbol('HelpPanelTask')
@@ -41,9 +44,9 @@
   )
 
   const statusLabel = computed<string>(() => {
-    if (props.status === 'complete') return 'Complete'
-    if (props.status === 'current') return 'Current task'
-    return 'Not started'
+    if (props.status === 'complete') return t('helpPanel.taskComplete')
+    if (props.status === 'current') return t('helpPanel.taskCurrent')
+    return t('helpPanel.taskNotStarted')
   })
 </script>
 

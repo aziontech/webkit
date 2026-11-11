@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../card-grid/card-grid.vue'
   import CardGridCell from '../card-grid/card-grid-cell/card-grid-cell.vue'
@@ -35,7 +37,7 @@
     items?: LogoItem[]
     /** Accessible name for the group of marks, announced instead of an unnamed region. */
     ariaLabel?: string
-    /** Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. */
+    /** Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`). */
     linkLabel?: string
   }
 
@@ -43,7 +45,7 @@
     kind: 'square',
     items: () => [],
     ariaLabel: '',
-    linkLabel: 'Read story'
+    linkLabel: ''
   })
 
   const emit = defineEmits<{
@@ -59,6 +61,8 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ logoWall: en.logoWall })
+  const linkText = computed(() => props.linkLabel || t('logoWall.link'))
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-logo-wall'
@@ -101,7 +105,7 @@
         <a
           v-if="item.href"
           :href="item.href"
-          :aria-label="`${linkLabel}, ${item.alt}`"
+          :aria-label="`${linkText}, ${item.alt}`"
           class="group/logo relative isolate flex aspect-square group-data-[kind=rectangle]/logo-wall:aspect-3/2 items-center justify-center px-(--spacing-md) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance hover:before:opacity-100 motion-reduce:before:transition-none"
           @click="onItemClick($event, item)"
         >
@@ -127,7 +131,7 @@
             aria-hidden="true"
             class="pointer-events-none absolute inset-x-0 top-1/2 mt-(--spacing-xs) flex translate-y-1 items-center justify-center gap-(--spacing-xxs) whitespace-nowrap text-overline-md uppercase text-(--text-default) opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/logo:translate-y-0 group-hover/logo:opacity-100 group-focus-visible/logo:translate-y-0 group-focus-visible/logo:opacity-100 motion-reduce:transition-none"
           >
-            {{ linkLabel }}
+            {{ linkText }}
             <i class="pi pi-arrow-up-right leading-none" />
           </span>
         </a>

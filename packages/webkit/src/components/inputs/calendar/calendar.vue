@@ -11,7 +11,9 @@
   } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
+  import { useLocale } from '../../../composables/use-locale'
   import { usePlacement } from '../../../composables/use-placement'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import CalendarFields from './calendar-fields/calendar-fields.vue'
   import CalendarGrid from './calendar-grid/calendar-grid.vue'
@@ -55,7 +57,7 @@
     disabled?: boolean
     /** Controlled open state of the popover (v-model:open); omit for uncontrolled. */
     open?: boolean
-    /** Trigger text shown when there is no selection. */
+    /** Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a Date Range`). */
     placeholder?: string
     /** Data-driven shortcuts rendered in the presets rail; each is { label, value }. */
     presets?: CalendarPresetItem[]
@@ -89,7 +91,7 @@
     max: undefined,
     disabled: false,
     open: undefined,
-    placeholder: 'Select a Date Range',
+    placeholder: '',
     presets: () => [],
     showFields: true,
     showTime: false,
@@ -118,6 +120,8 @@
   }>()
 
   const attrs = useAttrs()
+  const { t, locale } = useLocale({ calendar: en.calendar })
+  const placeholderText = computed(() => props.placeholder || t('calendar.placeholder'))
   const slots = useSlots()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-calendar')
@@ -351,26 +355,26 @@
   }
 
   const displayValue = computed(() =>
-    formatValueLabel(props.modelValue, props.mode, timezoneValue.value)
+    formatValueLabel(props.modelValue, props.mode, timezoneValue.value, locale.value)
   )
   const hasCommitted = computed(() => displayValue.value !== '')
   const triggerIcon = computed(() => (props.period ? 'pi pi-clock' : 'pi pi-calendar'))
   const triggerText = computed(
-    () => displayValue.value || (props.period ? 'Period' : props.placeholder)
+    () => displayValue.value || (props.period ? t('calendar.period') : placeholderText.value)
   )
 
   const isPeriodDisplay = computed(
     () => props.period && committedPeriodLabel.value !== '' && hasCommitted.value
   )
   const windowLabel = computed(() =>
-    formatWindowLabel(props.modelValue, props.mode, timezoneValue.value)
+    formatWindowLabel(props.modelValue, props.mode, timezoneValue.value, locale.value)
   )
 
   const hasPresets = computed(() => props.presets.length > 0 || Boolean(slots['presets']))
 
   const isTwoPart = computed(() => hasPresets.value && !props.period)
-  const presetLabel = computed(() => committedPeriodLabel.value || 'Select Period')
-  const rangeText = computed(() => windowLabel.value || props.placeholder)
+  const presetLabel = computed(() => committedPeriodLabel.value || t('calendar.selectPeriod'))
+  const rangeText = computed(() => windowLabel.value || placeholderText.value)
 
   const { resolvedPlacement, panelStyle } = usePlacement({
     triggerRef,
@@ -590,7 +594,7 @@
               v-if="clearable && hasCommitted"
               type="button"
               :disabled="disabled"
-              aria-label="Clear selection"
+              :aria-label="t('calendar.clear')"
               :data-testid="`${testId}__clear-trigger`"
               class="inline-flex shrink-0 items-center justify-center px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
               @click="clearCommitted"
@@ -605,7 +609,7 @@
               v-if="split"
               type="button"
               :disabled="disabled"
-              aria-label="Open calendar"
+              :aria-label="t('calendar.open')"
               :aria-expanded="isOpen"
               :data-testid="`${testId}__split`"
               class="inline-flex shrink-0 items-center justify-center border-s border-(--border-default) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
@@ -631,7 +635,7 @@
           v-if="isOpen"
           ref="panelRef"
           role="dialog"
-          aria-label="Choose date"
+          :aria-label="t('calendar.chooseDate')"
           :data-testid="`${testId}__popover`"
           :data-state="isOpen ? 'open' : 'closed'"
           :data-placement="resolvedPlacement"
@@ -670,7 +674,7 @@
 
               <Button
                 v-if="showApply"
-                label="Apply Range"
+                :label="t('calendar.apply')"
                 kind="outlined"
                 :size="size"
                 :disabled="disabled"
@@ -696,7 +700,7 @@
           v-if="isPresetsOpen"
           ref="presetsPanelRef"
           role="menu"
-          aria-label="Presets"
+          :aria-label="t('calendar.presets')"
           :data-testid="`${testId}__presets-menu`"
           :data-state="isPresetsOpen ? 'open' : 'closed'"
           :data-placement="presetsPlacement"

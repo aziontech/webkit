@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
+
   export type MiniButtonSize = 'large' | 'medium'
   export type MiniButtonTarget = '_self' | '_blank'
 
@@ -10,7 +13,7 @@
   })
 
   interface Props {
-    /** Visible label rendered inside the control. */
+    /** Visible label rendered inside the control. Empty uses the locale catalog (`Learn More`). */
     label?: string
     /** Size token; affects height, gap, and typography. */
     size?: MiniButtonSize
@@ -27,7 +30,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    label: 'Learn More',
+    label: '',
     size: 'large',
     disabled: false,
     showIcon: true,
@@ -41,6 +44,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ miniButton: en.miniButton })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-mini-button'
@@ -97,7 +101,7 @@
         class="inline leading-none"
         :data-testid="`${testId}__label`"
       >
-        {{ label }}
+        {{ label || t('miniButton.label') }}
       </span>
       <i
         v-if="showIcon"

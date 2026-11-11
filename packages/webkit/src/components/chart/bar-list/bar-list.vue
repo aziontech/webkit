@@ -2,6 +2,8 @@
   import { usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { type ChartColor, colorToken, formatCompact, isFiniteNumber } from '../_lib'
@@ -36,7 +38,7 @@
     formatValue?: (value: number) => string
     /** Renders Skeleton rows in place of the list. */
     loading?: boolean
-    /** Title of the empty state shown when items is empty. */
+    /** Title of the empty state shown when items is empty. Empty uses the locale catalog (`No data available`). */
     emptyTitle?: string
     /** Accessible name of the list. */
     ariaLabel?: string
@@ -49,7 +51,7 @@
     clickable: false,
     formatValue: formatCompact,
     loading: false,
-    emptyTitle: 'No data available',
+    emptyTitle: '',
     ariaLabel: ''
   })
 
@@ -59,6 +61,11 @@
   }>()
 
   const attrs = useAttrs()
+  const { t, locale } = useLocale({ barList: en.barList })
+  const valueText = (value: number): string =>
+    props.formatValue === formatCompact
+      ? formatCompact(value, locale.value)
+      : props.formatValue(value)
   const reducedMotion = usePreferredReducedMotion()
   const entered = ref(false)
   let frame = 0
@@ -90,7 +97,7 @@
         tag: href ? 'a' : props.clickable ? 'button' : 'div',
         interactive: Boolean(href) || props.clickable,
         width: `${entered.value ? share : 0}%`,
-        label: isFiniteNumber(item.value) ? props.formatValue(item.value) : '–'
+        label: isFiniteNumber(item.value) ? valueText(item.value) : '–'
       }
     })
   })
@@ -147,7 +154,7 @@
       class="flex items-stretch"
     >
       <EmptyState
-        :title="emptyTitle"
+        :title="emptyTitle || t('barList.emptyTitle')"
         icon="pi pi-chart-bar"
         size="small"
         bordered

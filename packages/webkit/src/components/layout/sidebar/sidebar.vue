@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, onMounted, provide, ref, useAttrs, useSlots } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
@@ -25,14 +27,14 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    ariaLabel: 'Sidebar',
+    ariaLabel: '',
     resizable: false,
     collapsible: false,
     minWidthToken: '--container-3xs',
     maxWidthToken: '--container-sm',
-    collapseAriaLabel: 'Collapse sidebar',
-    expandAriaLabel: 'Expand sidebar',
-    resizeAriaLabel: 'Resize sidebar'
+    collapseAriaLabel: '',
+    expandAriaLabel: '',
+    resizeAriaLabel: ''
   })
 
   defineEmits<{
@@ -51,6 +53,13 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ sidebar: en.sidebar })
+  const labels = computed(() => ({
+    root: props.ariaLabel || t('sidebar.label'),
+    collapse: props.collapseAriaLabel || t('sidebar.collapse'),
+    expand: props.expandAriaLabel || t('sidebar.expand'),
+    resize: props.resizeAriaLabel || t('sidebar.resize')
+  }))
   const slots = useSlots()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-sidebar')
@@ -188,7 +197,7 @@
     v-bind="$attrs"
     :class="rootClass"
     :style="asideStyle"
-    :aria-label="ariaLabel"
+    :aria-label="labels.root"
     :data-testid="testId"
     :data-collapsed="isOut ? '' : undefined"
     :data-resizing="resizing ? '' : undefined"
@@ -247,12 +256,12 @@
           </div>
           <Tooltip
             v-if="collapsible"
-            :text="collapseAriaLabel"
+            :text="labels.collapse"
             placement="top"
           >
             <IconButton
               icon="pi pi-angle-double-left"
-              :ariaLabel="collapseAriaLabel"
+              :ariaLabel="labels.collapse"
               kind="outlined"
               size="small"
               :data-testid="`${testId}__collapse`"
@@ -267,7 +276,7 @@
       v-if="resizable"
       role="separator"
       aria-orientation="vertical"
-      :aria-label="resizeAriaLabel"
+      :aria-label="labels.resize"
       tabindex="0"
       :aria-valuenow="valueNow"
       :aria-valuemin="valueMin"
@@ -308,7 +317,7 @@
         v-if="resizable"
         role="separator"
         aria-orientation="vertical"
-        :aria-label="`${expandAriaLabel} by dragging`"
+        :aria-label="t('sidebar.expandByDragging', { label: labels.expand })"
         tabindex="0"
         :aria-valuenow="valueNow"
         :aria-valuemin="valueMin"
@@ -323,12 +332,12 @@
         class="pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] ps-(--spacing-xxs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
       >
         <Tooltip
-          :text="expandAriaLabel"
+          :text="labels.expand"
           placement="right"
         >
           <IconButton
             icon="pi pi-angle-double-right"
-            :ariaLabel="expandAriaLabel"
+            :ariaLabel="labels.expand"
             kind="outlined"
             size="medium"
             :data-testid="`${testId}__expand-button`"

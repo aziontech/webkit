@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, provide, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import FrameBox from '../frame-box/frame-box.vue'
   import { FooterInjectionKey } from './injection-key'
 
@@ -13,14 +15,14 @@
   export type FooterKind = 'content' | 'site'
 
   interface Props {
-    /** Accessible name for the contentinfo landmark. */
+    /** Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`). */
     ariaLabel?: string
     /** Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. */
     kind?: FooterKind
   }
 
   withDefaults(defineProps<Props>(), {
-    ariaLabel: 'Footer',
+    ariaLabel: '',
     kind: 'content'
   })
 
@@ -40,6 +42,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ footer: en.footer })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-footer')
 
@@ -55,7 +58,7 @@
 <template>
   <footer
     v-bind="$attrs"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || t('footer.label')"
     :data-testid="testId"
     :data-kind="kind"
     class="group flex w-full flex-col bg-(--bg-canvas)"

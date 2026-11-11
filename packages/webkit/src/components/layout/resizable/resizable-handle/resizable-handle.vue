@@ -1,23 +1,26 @@
 <script setup lang="ts">
   import { computed, inject, onScopeDispose, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { ResizableInjectionKey, type ResizablePaneApi } from '../injection-key'
 
   defineOptions({ name: 'ResizableHandle', inheritAttrs: false })
 
   interface Props {
-    /** Accessible name of the separator; name the edge it moves. */
+    /** Accessible name of the separator; name the edge it moves. Empty uses the locale catalog (`Resize panel`). */
     ariaLabel?: string
     /** Disables the drag and the keyboard nudge, and removes the separator from the tab order. */
     disabled?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    ariaLabel: 'Resize panel',
+    ariaLabel: '',
     disabled: false
   })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ resizable: en.resizable })
   const ctx = inject(ResizableInjectionKey, null)
 
   const testId = computed<string>(
@@ -129,7 +132,7 @@
     v-bind="$attrs"
     role="separator"
     tabindex="0"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || t('resizable.handle')"
     :aria-orientation="ariaOrientation"
     :aria-valuenow="valueNow"
     :aria-valuemin="valueMin"

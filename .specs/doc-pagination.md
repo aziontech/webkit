@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 11d125a5f047833a1e6a2dd7d9fe8a2a63bf2a5e23db3ffb272c8cf0fedc3135
+checksum: f9f0712c984641e6e72bd306d69a0c2a7792e289118fd5ea5cc7bee9447d82eb
 created: 2026-08-22
-last_updated: 2026-08-22
+last_updated: 2026-11-11
 ---
 
 # DocPagination — Component Spec
@@ -54,12 +54,12 @@ The previous / next pair that closes a documentation page. Each side is a link c
 
 ## Props
 
-| Prop            | Type                  | Default      | Required | JSDoc                           |
-| --------------- | --------------------- | ------------ | -------- | ------------------------------- |
-| `previous`      | `DocPageLink \| null` | `null`       | false    | The page before this one.       |
-| `next`          | `DocPageLink \| null` | `null`       | false    | The page after this one.        |
-| `previousLabel` | `string`              | `'Previous'` | false    | Eyebrow over the previous link. |
-| `nextLabel`     | `string`              | `'Next'`     | false    | Eyebrow over the next link.     |
+| Prop            | Type                  | Default | Required | JSDoc                                                                       |
+| --------------- | --------------------- | ------- | -------- | --------------------------------------------------------------------------- |
+| `previous`      | `DocPageLink \| null` | `null`  | false    | The page before this one.                                                   |
+| `next`          | `DocPageLink \| null` | `null`  | false    | The page after this one.                                                    |
+| `previousLabel` | `string`              | `''`    | false    | Eyebrow over the previous link. Empty uses the locale catalog (`Previous`). |
+| `nextLabel`     | `string`              | `''`    | false    | Eyebrow over the next link. Empty uses the locale catalog (`Next`).         |
 
 ## Events
 

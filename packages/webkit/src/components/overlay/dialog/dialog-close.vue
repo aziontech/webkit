@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import { DialogInjectionKey } from './injection-key'
 
@@ -11,15 +13,16 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Accessible label for the close control. */
+      /** Accessible label for the close control. Empty uses the locale catalog (`Close`). */
       ariaLabel?: string
     }>(),
     {
-      ariaLabel: 'Close'
+      ariaLabel: ''
     }
   )
 
   const attrs = useAttrs()
+  const { t } = useLocale({ dialog: en.dialog })
   const ctx = inject(DialogInjectionKey)
 
   const handleClick = () => {
@@ -35,7 +38,7 @@
     icon="pi pi-times"
     kind="outlined"
     size="small"
-    :ariaLabel="props.ariaLabel"
+    :ariaLabel="props.ariaLabel || t('dialog.close')"
     :disabled="isDisabled"
     :data-testid="`${ctx.testId}__close`"
     :class="attrs.class"

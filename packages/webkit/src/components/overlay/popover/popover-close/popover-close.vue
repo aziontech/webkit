@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { usePopoverContext } from '../injection-key'
 
@@ -10,6 +12,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ popover: en.popover })
   const ctx = usePopoverContext()
 
   const testId = computed(
@@ -26,7 +29,7 @@
   <IconButton
     v-bind="attrs"
     icon="pi pi-times"
-    ariaLabel="Close"
+    :ariaLabel="t('popover.close')"
     kind="outlined"
     size="small"
     :data-testid="testId"

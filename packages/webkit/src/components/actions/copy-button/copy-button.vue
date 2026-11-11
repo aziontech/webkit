@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import type { IconButtonKind, IconButtonSize } from '../icon-button/icon-button.vue'
   import IconButton from '../icon-button/icon-button.vue'
@@ -13,9 +15,9 @@
   interface Props {
     /** Text copied to the clipboard on activation. */
     value: string
-    /** Accessible name while idle. */
+    /** Accessible name while idle. Empty uses the locale catalog (`Copy`). */
     ariaLabel?: string
-    /** Accessible name while the copied state is shown. */
+    /** Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`). */
     copiedLabel?: string
     /** Visual variant forwarded to `IconButton`. */
     kind?: IconButtonKind
@@ -26,8 +28,8 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    ariaLabel: 'Copy',
-    copiedLabel: 'Copied',
+    ariaLabel: '',
+    copiedLabel: '',
     kind: 'transparent',
     size: 'small',
     disabled: false
@@ -38,6 +40,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ copyButton: en.copyButton })
 
   const copied = ref(false)
   let copiedTimeoutId: ReturnType<typeof setTimeout> | null = null
@@ -48,7 +51,11 @@
 
   const icon = computed(() => (copied.value ? 'pi pi-check' : 'pi pi-copy'))
 
-  const label = computed(() => (copied.value ? props.copiedLabel : props.ariaLabel))
+  const label = computed(() =>
+    copied.value
+      ? props.copiedLabel || t('copyButton.copied')
+      : props.ariaLabel || t('copyButton.copy')
+  )
 
   async function handleCopy(event: MouseEvent) {
     event.stopPropagation()

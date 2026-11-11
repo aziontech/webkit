@@ -3,10 +3,10 @@ name: chart
 category: chart
 structure: composition
 status: approved
-checksum: a4cc41e4d888f5dbfd3ad6a58fcc03b1ce9909f3a4016b1b663070fd2cba2f34
+checksum: 99cec65fa452e9c9ff3e6246b7cf3e1322d4fc6b1d9a4ffda57786fb0cb8a978
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Chart — Component Spec
@@ -153,25 +153,25 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ## Props
 
-| Prop               | Type                            | Default               | Required | JSDoc                                                                                              |
-| ------------------ | ------------------------------- | --------------------- | -------- | -------------------------------------------------------------------------------------------------- |
-| `series`           | `ChartSeries[]`                 | `[]`                  | false    | Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other. |
-| `labels`           | `ChartLabel[]`                  | `[]`                  | false    | One category label per index: a string, a number, or a Date.                                       |
-| `orientation`      | `'vertical' \| 'horizontal'`    | `'vertical'`          | false    | Value axis direction. Horizontal lays categories down the side, for ordered bars.                  |
-| `min`              | `number`                        | `0`                   | false    | Floor of the value axis. Marks grow from one baseline.                                             |
-| `max`              | `number`                        | `undefined`           | false    | Ceiling of the value axis. When absent, the nice ceiling of the visible data.                      |
-| `cap`              | `number`                        | `6`                   | false    | Series kept before the rest fold into Other.                                                       |
-| `otherLabel`       | `string`                        | `'Other'`             | false    | Name of the folded series.                                                                         |
-| `formatValue`      | `(value: number) => string`     | `formatCompact`       | false    | Formats ticks, tooltip values and legend totals.                                                   |
-| `formatLabel`      | `(label: ChartLabel) => string` | `formatLabel`         | false    | Formats category labels on the axis and in the tooltip.                                            |
-| `height`           | `number`                        | `240`                 | false    | Minimum plot height in pixels; the plot grows to fill a taller container.                          |
-| `loading`          | `boolean`                       | `false`               | false    | Renders a Skeleton sized to the plot and suppresses interaction.                                   |
-| `refetching`       | `boolean`                       | `false`               | false    | Holds the previous render at reduced opacity while new data loads.                                 |
-| `error`            | `string`                        | `''`                  | false    | Error message; when set, the plot renders a danger Alert instead of marks.                         |
-| `emptyTitle`       | `string`                        | `'No data available'` | false    | Title of the empty state shown when no series has a value.                                         |
-| `emptyDescription` | `string`                        | `''`                  | false    | Supporting line under the empty title: why the range is empty, or what to do next.                 |
-| `tableView`        | `boolean`                       | `false`               | false    | Shows the data table in place of the marks. The table is always present for assistive tech.        |
-| `ariaLabel`        | `string`                        | `''`                  | false    | Accessible name of the chart when it is not inside a ChartCard with a title.                       |
+| Prop               | Type                            | Default         | Required | JSDoc                                                                                                           |
+| ------------------ | ------------------------------- | --------------- | -------- | --------------------------------------------------------------------------------------------------------------- |
+| `series`           | `ChartSeries[]`                 | `[]`            | false    | Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other.              |
+| `labels`           | `ChartLabel[]`                  | `[]`            | false    | One category label per index: a string, a number, or a Date.                                                    |
+| `orientation`      | `'vertical' \| 'horizontal'`    | `'vertical'`    | false    | Value axis direction. Horizontal lays categories down the side, for ordered bars.                               |
+| `min`              | `number`                        | `0`             | false    | Floor of the value axis. Marks grow from one baseline.                                                          |
+| `max`              | `number`                        | `undefined`     | false    | Ceiling of the value axis. When absent, the nice ceiling of the visible data.                                   |
+| `cap`              | `number`                        | `6`             | false    | Series kept before the rest fold into Other.                                                                    |
+| `otherLabel`       | `string`                        | `''`            | false    | Name of the folded series. Empty uses the locale catalog (`Other`).                                             |
+| `formatValue`      | `(value: number) => string`     | `formatCompact` | false    | Formats ticks, tooltip values and legend totals.                                                                |
+| `formatLabel`      | `(label: ChartLabel) => string` | `formatLabel`   | false    | Formats category labels on the axis and in the tooltip.                                                         |
+| `height`           | `number`                        | `240`           | false    | Minimum plot height in pixels; the plot grows to fill a taller container.                                       |
+| `loading`          | `boolean`                       | `false`         | false    | Renders a Skeleton sized to the plot and suppresses interaction.                                                |
+| `refetching`       | `boolean`                       | `false`         | false    | Holds the previous render at reduced opacity while new data loads.                                              |
+| `error`            | `string`                        | `''`            | false    | Error message; when set, the plot renders a danger Alert instead of marks.                                      |
+| `emptyTitle`       | `string`                        | `''`            | false    | Title of the empty state shown when no series has a value. Empty uses the locale catalog (`No data available`). |
+| `emptyDescription` | `string`                        | `''`            | false    | Supporting line under the empty title: why the range is empty, or what to do next.                              |
+| `tableView`        | `boolean`                       | `false`         | false    | Shows the data table in place of the marks. The table is always present for assistive tech.                     |
+| `ariaLabel`        | `string`                        | `''`            | false    | Accessible name of the chart when it is not inside a ChartCard with a title.                                    |
 
 ## v-model
 

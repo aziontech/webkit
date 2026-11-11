@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
   import TableSortButton from '../table-sort-button/table-sort-button.vue'
 
@@ -60,6 +62,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ tableHeadCell: en.tableHeadCell })
   const ctx = inject(TableInjectionKey, null)
   const group = inject(TableRowGroupKey, { hoverable: false })
   const compact = computed<boolean>(() => group.compact === true)
@@ -128,7 +131,7 @@
       v-if="resizable"
       role="separator"
       aria-orientation="vertical"
-      aria-label="Resize column"
+      :aria-label="t('tableHeadCell.resize')"
       :data-resizing="resizing || null"
       class="absolute inset-y-0 end-0 z-20 w-2 shrink-0 cursor-col-resize touch-none select-none before:absolute before:inset-y-2 before:end-0 before:w-[2px] before:rounded-full before:bg-transparent before:content-[''] before:transition-colors before:duration-150 before:ease-out motion-reduce:before:transition-none hover:before:bg-(--border-strong) data-[resizing]:before:bg-(--ring-color)"
       @mousedown.stop="resizeHandler"

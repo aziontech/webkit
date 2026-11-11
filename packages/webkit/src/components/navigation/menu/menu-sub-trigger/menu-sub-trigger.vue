@@ -8,6 +8,8 @@
     watch
   } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { cn } from '../../../../utils/cn'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { useMenuSubContext } from '../composables/use-menu-sub-context'
@@ -49,6 +51,7 @@
 
   const sub = useMenuSubContext()
   const attrs = useAttrs()
+  const { t } = useLocale({ menu: en.menu })
   const labelEl = shallowRef<globalThis.HTMLElement | null>(null)
   const arrowEl = shallowRef<ComponentPublicInstance | null>(null)
 
@@ -64,9 +67,9 @@
 
   const arrowAriaLabel = computed(() => {
     const name = props.label
-    if (!isInline.value) return name ? `Open ${name} menu` : 'Open submenu'
-    if (sub.open.value) return name ? `Collapse ${name}` : 'Collapse'
-    return name ? `Expand ${name}` : 'Expand'
+    if (!isInline.value) return name ? t('menu.openNamed', { label: name }) : t('menu.open')
+    if (sub.open.value) return name ? t('menu.collapseNamed', { label: name }) : t('menu.collapse')
+    return name ? t('menu.expandNamed', { label: name }) : t('menu.expand')
   })
 
   const arrowIcon = computed(() => (isInline.value ? 'pi pi-chevron-down' : 'pi pi-chevron-right'))

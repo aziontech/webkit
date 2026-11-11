@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, provide, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { formatLogLineText } from './composables/format-log-line-text'
   import type { LogViewLine } from './injection-key'
@@ -18,7 +20,7 @@
     lines?: LogViewLine[]
     /** Draw the outer card border and corner radius around the log shell. On by default; set to false to render flush inside a surface that already frames it. */
     bordered?: boolean
-    /** Placeholder for the default header search field. */
+    /** Placeholder for the default header search field. Empty uses the locale catalog (`Find in Logs`). */
     searchPlaceholder?: string
     /** Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent). */
     copyable?: boolean
@@ -26,18 +28,18 @@
     disabled?: boolean
     /** Replaces the LogViewContent log body with a centered spinner and label. */
     loading?: boolean
-    /** Label shown beneath the spinner while `loading`. */
+    /** Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading...`). */
     loadingLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     lines: () => [],
     bordered: true,
-    searchPlaceholder: 'Find in Logs',
+    searchPlaceholder: '',
     copyable: true,
     disabled: false,
     loading: false,
-    loadingLabel: 'Loading...'
+    loadingLabel: ''
   })
 
   /** Bound to LogViewHeader search; filters LogViewContent when set. */
@@ -54,6 +56,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ logView: en.logView })
 
   const passthroughAttrs = computed(() => {
     const rest = { ...attrs }
@@ -97,15 +100,12 @@
     return result
   })
 
-  const lineCountLabel = computed(() => `${filteredLines.value.length} lines`)
+  const lineCountLabel = computed(() => t('logView.lines', { count: filteredLines.value.length }))
 
   const warningTagLabel = computed(() => {
     const count = warningCount.value
 
-    if (count === 1) return '1 Warning'
-    if (count > 1) return `${count} Warnings`
-
-    return 'Warnings'
+    return count > 0 ? t('logView.warningCount', { count }) : t('logView.warnings')
   })
 
   const copyText = computed(() =>
@@ -139,8 +139,8 @@
     disabled: computed(() => props.disabled),
     copyable: computed(() => props.copyable),
     loading: computed(() => props.loading),
-    loadingLabel: computed(() => props.loadingLabel),
-    searchPlaceholder: computed(() => props.searchPlaceholder),
+    loadingLabel: computed(() => props.loadingLabel || t('logView.loading')),
+    searchPlaceholder: computed(() => props.searchPlaceholder || t('logView.searchPlaceholder')),
     warningCount,
     lineCountLabel,
     warningTagLabel,

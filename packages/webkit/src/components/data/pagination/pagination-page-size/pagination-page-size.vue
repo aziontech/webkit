@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { PaginationInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -25,6 +27,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ pagination: en.pagination })
   const ctx = inject(PaginationInjectionKey, null)
 
   const testId = computed<string>(
@@ -52,7 +55,7 @@
   >
     <select
       :value="modelValue"
-      aria-label="Rows per page"
+      :aria-label="t('pagination.pageSize')"
       class="h-7 w-full cursor-pointer appearance-none rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) ps-(--spacing-sm) pe-7 text-label-sm text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
       @change="handleChange"
     >

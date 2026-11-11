@@ -6,13 +6,18 @@ import { dirname, join, relative, resolve } from 'node:path'
 
 import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/authoring-checks.js'
 import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/token-checks.js'
+import {
+  appliesToBuiltInStrings,
+  scanBuiltInStrings,
+  STRING_MESSAGES
+} from './lib/built-in-strings.mjs'
 import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-compliance-checks.mjs'
 import {
   checks as storyChecks,
   STORY_RE
 } from '../../../.claude/hooks/_lib/story-source-checks.mjs'
 
-const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES }
+const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES, ...STRING_MESSAGES }
 const DETAILS = new Map()
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
@@ -47,6 +52,9 @@ function currentViolations() {
     }
     if (tokenChecksApply(rel)) {
       for (const id of scanTokens(content)) keys.push(`${rel}::token:${id}`)
+    }
+    if (appliesToBuiltInStrings(rel)) {
+      for (const id of scanBuiltInStrings(content)) keys.push(`${rel}::i18n:${id}`)
     }
     if (rel.endsWith('.vue')) {
       const result = collectSpecViolations(abs, ROOT, { requireSpec: true })
@@ -131,7 +139,7 @@ if (introduced.length) {
     } else if (id.startsWith('story:')) {
       console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(6)}`)
     } else {
-      console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^token:/, '')] ?? id}`)
+      console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^(token|i18n):/, '')] ?? id}`)
     }
   }
   console.error(

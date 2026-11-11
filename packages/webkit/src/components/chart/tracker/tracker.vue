@@ -2,6 +2,8 @@
   import { useElementSize } from '@vueuse/core'
   import { computed, ref, useAttrs, watch } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { categoryLayout, type ChartStatus, colorToken } from '../_lib'
 
@@ -33,6 +35,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ tracker: en.tracker })
   const stripRef = ref<globalThis.HTMLDivElement | null>(null)
   const { width: stripWidth } = useElementSize(stripRef)
 
@@ -56,7 +59,7 @@
 
   const announcement = computed(() => {
     if (props.loading) return ''
-    if (isEmpty.value) return 'No data'
+    if (isEmpty.value) return t('tracker.noData')
     return activeIndex.value === null ? '' : (props.items[activeIndex.value]?.label ?? '')
   })
 
@@ -123,7 +126,7 @@
     :data-loading="loading || null"
     :aria-busy="loading || undefined"
     role="group"
-    aria-roledescription="status history"
+    :aria-roledescription="t('tracker.roleDescription')"
     :aria-label="ariaLabel || undefined"
     tabindex="0"
     class="relative w-full min-w-0 rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1"

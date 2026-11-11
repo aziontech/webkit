@@ -29,6 +29,8 @@
     watch
   } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { downloadCsv, toCsv } from '../../../utils/csv'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -219,6 +221,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ table: en.table })
 
   const slots = useSlots()
   const hasSlot = (name: string): boolean => Boolean((slots as Record<string, unknown>)[name])
@@ -922,7 +925,7 @@
                   binary
                   :model-value="table.getIsAllPageRowsSelected()"
                   :indeterminate="table.getIsSomePageRowsSelected()"
-                  aria-label="Select all rows"
+                  :aria-label="t('table.selectAll')"
                   @update:model-value="(v) => table.toggleAllPageRowsSelected(!!v)"
                 />
               </TableHeadCell>
@@ -1014,7 +1017,7 @@
                   <Checkbox
                     binary
                     :model-value="row.getIsSelected()"
-                    aria-label="Select row"
+                    :aria-label="t('table.selectRow')"
                     @update:model-value="(v) => row.toggleSelected(!!v)"
                   />
                 </TableCell>
@@ -1058,8 +1061,8 @@
                 <EmptyState
                   size="small"
                   icon="pi pi-table"
-                  title="No results yet"
-                  description="Get started by creating your first resource."
+                  :title="t('table.emptyTitle')"
+                  :description="t('table.emptyDescription')"
                 />
               </slot>
             </div>

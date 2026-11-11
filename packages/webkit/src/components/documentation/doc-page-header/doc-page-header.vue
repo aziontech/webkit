@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Separator from '../../layout/separator/separator.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
@@ -65,6 +67,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t, formatDate } = useLocale({ docPageHeader: en.docPageHeader })
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-page-header')
 
@@ -81,12 +84,12 @@
     if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw
     const parsed = new Date(`${raw}T00:00:00Z`)
     if (Number.isNaN(parsed.getTime())) return raw
-    return new Intl.DateTimeFormat('en-US', {
+    return formatDate(parsed, {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
       timeZone: 'UTC'
-    }).format(parsed)
+    })
   })
 </script>
 
@@ -135,7 +138,7 @@
           aria-hidden="true"
         />
         <span>
-          Last updated
+          {{ t('docPageHeader.lastUpdated') }}
           <time :datetime="lastUpdated">{{ updatedLabel }}</time>
         </span>
       </p>

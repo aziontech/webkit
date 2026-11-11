@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { type TabsContext, TabsInjectionKey, type TabsValue } from './injection-key'
 
@@ -42,6 +44,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ tabs: en.tabs })
   const buttonRef = ref<HTMLElement | null>(null)
   const resolvedValue = computed(() => props.value ?? props.label)
 
@@ -189,7 +192,7 @@
       :data-testid="`${testId}__close`"
       role="button"
       tabindex="-1"
-      aria-label="Close tab"
+      :aria-label="t('tabs.close')"
       @click.stop="onCloseClick"
       @keydown.enter.prevent.stop="onCloseClick"
       @keydown.space.prevent.stop="onCloseClick"

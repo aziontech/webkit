@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Spinner from '../../utils/spinner/spinner.vue'
 
   export type StatusIndicatorSeverity =
@@ -16,17 +18,19 @@
     severity?: StatusIndicatorSeverity
     /** Shows loading state and disables activation. */
     loading?: boolean
-    /** Visible label text. */
+    /** Visible label text. Empty uses the locale catalog (`Status`). */
     label?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     severity: 'success',
     loading: false,
-    label: 'Status'
+    label: ''
   })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ statusIndicator: en.statusIndicator })
+  const text = computed(() => props.label || t('statusIndicator.label'))
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'feedback-status-indicator'
@@ -59,7 +63,7 @@
       class="whitespace-nowrap group-data-[loading]:text-(--text-muted)"
       :data-testid="`${testId}__label`"
     >
-      {{ loading ? `${label}...` : label }}
+      {{ loading ? `${text}...` : text }}
     </span>
   </div>
 </template>

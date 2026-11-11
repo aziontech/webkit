@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import Spinner from '../../../utils/spinner/spinner.vue'
   import { useStepperContext } from '../composables/use-stepper-context'
 
@@ -39,6 +41,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ stepper: en.stepper })
   const context = useStepperContext()
 
   const id = Symbol('StepperStep')
@@ -61,11 +64,11 @@
   })
 
   const stateLabel = computed<string>(() => {
-    if (dataState.value === 'error') return 'Needs attention'
-    if (dataState.value === 'loading') return 'In progress'
-    if (dataState.value === 'current') return 'Current step'
-    if (dataState.value === 'complete') return 'Completed'
-    return 'Not started'
+    if (dataState.value === 'error') return t('stepper.error')
+    if (dataState.value === 'loading') return t('stepper.loading')
+    if (dataState.value === 'current') return t('stepper.current')
+    if (dataState.value === 'complete') return t('stepper.complete')
+    return t('stepper.upcoming')
   })
 
   const activate = () => context.select(props.value)

@@ -2465,9 +2465,9 @@
         {
           "name": "label",
           "type": "string",
-          "default": "'Learn More'",
+          "default": "''",
           "required": "false",
-          "doc": "Visible label rendered inside the control."
+          "doc": "Visible label rendered inside the control. Empty uses the locale catalog (`Learn More`)."
         },
         {
           "name": "size",
@@ -2571,16 +2571,16 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Copy'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name while idle."
+          "doc": "Accessible name while idle. Empty uses the locale catalog (`Copy`)."
         },
         {
           "name": "copiedLabel",
           "type": "string",
-          "default": "'Copied'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name while the copied state is shown."
+          "doc": "Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`)."
         },
         {
           "name": "kind",
@@ -3048,9 +3048,9 @@
         {
           "name": "otherLabel",
           "type": "string",
-          "default": "'Other'",
+          "default": "''",
           "required": "false",
-          "doc": "Name of the folded series."
+          "doc": "Name of the folded series. Empty uses the locale catalog (`Other`)."
         },
         {
           "name": "formatValue",
@@ -3097,9 +3097,9 @@
         {
           "name": "emptyTitle",
           "type": "string",
-          "default": "'No data available'",
+          "default": "''",
           "required": "false",
-          "doc": "Title of the empty state shown when no series has a value."
+          "doc": "Title of the empty state shown when no series has a value. Empty uses the locale catalog (`No data available`)."
         },
         {
           "name": "emptyDescription",
@@ -3258,9 +3258,9 @@
         {
           "name": "otherLabel",
           "type": "string",
-          "default": "'Other'",
+          "default": "''",
           "required": "false",
-          "doc": "Name of the folded series."
+          "doc": "Name of the folded series. Empty uses the locale catalog (`Other`)."
         },
         {
           "name": "formatValue",
@@ -3307,9 +3307,9 @@
         {
           "name": "emptyTitle",
           "type": "string",
-          "default": "'No data available'",
+          "default": "''",
           "required": "false",
-          "doc": "Title of the empty state shown when no series has a value."
+          "doc": "Title of the empty state shown when no series has a value. Empty uses the locale catalog (`No data available`)."
         },
         {
           "name": "emptyDescription",
@@ -3815,16 +3815,16 @@
         {
           "name": "otherLabel",
           "type": "string",
-          "default": "'Other'",
+          "default": "''",
           "required": "false",
-          "doc": "Name of the folded slice."
+          "doc": "Name of the folded slice. Empty uses the locale catalog (`Other`)."
         },
         {
           "name": "totalLabel",
           "type": "string",
-          "default": "'Total'",
+          "default": "''",
           "required": "false",
-          "doc": "Caption under the total in the center."
+          "doc": "Caption under the total in the center. Empty uses the locale catalog (`Total`)."
         },
         {
           "name": "formatValue",
@@ -3857,9 +3857,9 @@
         {
           "name": "emptyTitle",
           "type": "string",
-          "default": "'No data available'",
+          "default": "''",
           "required": "false",
-          "doc": "Title of the empty state shown when every slice is zero."
+          "doc": "Title of the empty state shown when every slice is zero. Empty uses the locale catalog (`No data available`)."
         },
         {
           "name": "emptyDescription",
@@ -4139,9 +4139,9 @@
         {
           "name": "emptyTitle",
           "type": "string",
-          "default": "'No data available'",
+          "default": "''",
           "required": "false",
-          "doc": "Title of the empty state shown when `items` is empty."
+          "doc": "Title of the empty state shown when `items` is empty. Empty uses the locale catalog (`No data available`)."
         },
         {
           "name": "ariaLabel",
@@ -4805,23 +4805,23 @@
         {
           "name": "copyAriaLabel",
           "type": "string",
-          "default": "'Copy address'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name of the address bar's copy button."
+          "doc": "Accessible name of the address bar's copy button. Empty uses the locale catalog (`Copy address`)."
         },
         {
           "name": "widthHandleAriaLabel",
           "type": "string",
-          "default": "'Resize preview width'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name of the right-edge width handle."
+          "doc": "Accessible name of the right-edge width handle. Empty uses the locale catalog (`Resize preview width`)."
         },
         {
           "name": "heightHandleAriaLabel",
           "type": "string",
-          "default": "'Resize preview height'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name of the bottom-edge height handle."
+          "doc": "Accessible name of the bottom-edge height handle. Empty uses the locale catalog (`Resize preview height`)."
         }
       ],
       "slots": [
@@ -5344,9 +5344,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Help'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the complementary landmark the panel renders."
+          "doc": "Accessible name for the complementary landmark the panel renders. Empty uses the locale catalog (`Help`)."
         },
         {
           "name": "loading",
@@ -5423,9 +5423,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Help'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the complementary landmark the panel renders."
+          "doc": "Accessible name for the complementary landmark the panel renders. Empty uses the locale catalog (`Help`)."
         },
         {
           "name": "loading",
@@ -6908,9 +6908,9 @@
         {
           "name": "searchPlaceholder",
           "type": "string",
-          "default": "'Find in Logs'",
+          "default": "''",
           "required": "false",
-          "doc": "Placeholder for the default header search field."
+          "doc": "Placeholder for the default header search field. Empty uses the locale catalog (`Find in Logs`)."
         },
         {
           "name": "copyable",
@@ -6936,9 +6936,9 @@
         {
           "name": "loadingLabel",
           "type": "string",
-          "default": "'Loading...'",
+          "default": "''",
           "required": "false",
-          "doc": "Label shown beneath the spinner while `loading`."
+          "doc": "Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading...`)."
         }
       ],
       "events": [
@@ -7053,9 +7053,9 @@
         {
           "name": "copyAriaLabel",
           "type": "string",
-          "default": "'Copy code'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the copy control (forwarded to CopyButton's aria-label)."
+          "doc": "Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`)."
         },
         {
           "name": "copyable",
@@ -7993,9 +7993,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Pagination'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the navigation landmark."
+          "doc": "Accessible name for the navigation landmark. Empty uses the locale catalog (`Pagination`)."
         }
       ],
       "events": [
@@ -8115,9 +8115,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Pagination'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the navigation landmark."
+          "doc": "Accessible name for the navigation landmark. Empty uses the locale catalog (`Pagination`)."
         }
       ],
       "events": [
@@ -8655,9 +8655,9 @@
         {
           "name": "emptyTitle",
           "type": "string",
-          "default": "'No items'",
+          "default": "''",
           "required": "false",
-          "doc": "Title of the default empty state shown when `items` is empty."
+          "doc": "Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`)."
         },
         {
           "name": "emptyDescription",
@@ -9188,9 +9188,9 @@
         {
           "name": "title",
           "type": "string",
-          "default": "'On this page'",
+          "default": "''",
           "required": "false",
-          "doc": "The rail's own heading."
+          "doc": "The rail's own heading. Empty uses the locale catalog (`On this page`)."
         },
         {
           "name": "groups",
@@ -9378,16 +9378,16 @@
         {
           "name": "previousLabel",
           "type": "string",
-          "default": "'Previous'",
+          "default": "''",
           "required": "false",
-          "doc": "Eyebrow over the previous link."
+          "doc": "Eyebrow over the previous link. Empty uses the locale catalog (`Previous`)."
         },
         {
           "name": "nextLabel",
           "type": "string",
-          "default": "'Next'",
+          "default": "''",
           "required": "false",
-          "doc": "Eyebrow over the next link."
+          "doc": "Eyebrow over the next link. Empty uses the locale catalog (`Next`)."
         }
       ],
       "events": [
@@ -10087,9 +10087,9 @@
         {
           "name": "label",
           "type": "string",
-          "default": "'Status'",
+          "default": "''",
           "required": "false",
-          "doc": "Visible label text."
+          "doc": "Visible label text. Empty uses the locale catalog (`Status`)."
         }
       ],
       "purpose": "Communicates status, alerts, or progress to the user. Lives at `packages/webkit/src/components/feedback/status-indicator/`.",
@@ -10582,9 +10582,9 @@
         {
           "name": "placeholder",
           "type": "string",
-          "default": "'Select a Date Range'",
+          "default": "''",
           "required": "false",
-          "doc": "Trigger text shown when there is no selection."
+          "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a Date Range`)."
         },
         {
           "name": "presets",
@@ -10811,9 +10811,9 @@
         {
           "name": "placeholder",
           "type": "string",
-          "default": "'Select a Date Range'",
+          "default": "''",
           "required": "false",
-          "doc": "Trigger text shown when there is no selection."
+          "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a Date Range`)."
         },
         {
           "name": "presets",
@@ -11748,16 +11748,16 @@
         {
           "name": "searchPlaceholder",
           "type": "string",
-          "default": "'Search country'",
+          "default": "''",
           "required": "false",
-          "doc": "Placeholder of the search box that filters the dial-code list."
+          "doc": "Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`)."
         },
         {
           "name": "searchEmptyLabel",
           "type": "string",
-          "default": "'No country found'",
+          "default": "''",
           "required": "false",
-          "doc": "Shown in the dial-code list when no country matches the search."
+          "doc": "Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found`)."
         }
       ],
       "events": [
@@ -12147,9 +12147,9 @@
         {
           "name": "title",
           "type": "string",
-          "default": "'Drop files to upload'",
+          "default": "''",
           "required": "false",
-          "doc": "Instruction shown under the icon."
+          "doc": "Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`)."
         },
         {
           "name": "description",
@@ -12282,9 +12282,9 @@
         {
           "name": "title",
           "type": "string",
-          "default": "'Must contain:'",
+          "default": "''",
           "required": "false",
-          "doc": "Caption that opens the row and names the group for assistive tech."
+          "doc": "Caption that opens the row and names the group for assistive tech. Empty uses the locale catalog (`Must contain:`)."
         },
         {
           "name": "value",
@@ -12978,9 +12978,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Theme'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the icon-only segmented group."
+          "doc": "Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`)."
         }
       ],
       "purpose": "A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.",
@@ -14054,9 +14054,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Footer'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the contentinfo landmark."
+          "doc": "Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`)."
         },
         {
           "name": "kind",
@@ -14085,7 +14085,7 @@
         {
           "name": "language",
           "scope": "—",
-          "notes": "Root: the language select. Rendered *before* `status` when stacked and *after* it from `md`, per the two Figma variants."
+          "notes": "Root: the language select. Rendered _before_ `status` when stacked and _after_ it from `md`, per the two Figma variants."
         },
         {
           "name": "brand",
@@ -14159,9 +14159,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Footer'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the contentinfo landmark."
+          "doc": "Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`)."
         },
         {
           "name": "kind",
@@ -14190,7 +14190,7 @@
         {
           "name": "language",
           "scope": "—",
-          "notes": "Root: the language select. Rendered *before* `status` when stacked and *after* it from `md`, per the two Figma variants."
+          "notes": "Root: the language select. Rendered _before_ `status` when stacked and _after_ it from `md`, per the two Figma variants."
         },
         {
           "name": "brand",
@@ -15089,9 +15089,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Global header'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the header landmark."
+          "doc": "Accessible name for the header landmark. Empty uses the locale catalog (`Global header`)."
         },
         {
           "name": "kind",
@@ -15178,9 +15178,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Sidebar'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the navigation landmark."
+          "doc": "Accessible name for the navigation landmark. Empty uses the locale catalog (`Sidebar`)."
         },
         {
           "name": "resizable",
@@ -15213,23 +15213,23 @@
         {
           "name": "collapseAriaLabel",
           "type": "string",
-          "default": "'Collapse sidebar'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the collapse trigger."
+          "doc": "Accessible name for the collapse trigger. Empty uses the locale catalog (`Collapse sidebar`)."
         },
         {
           "name": "expandAriaLabel",
           "type": "string",
-          "default": "'Expand sidebar'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the control and the grab bar that bring a collapsed rail back."
+          "doc": "Accessible name for the control and the grab bar that bring a collapsed rail back. Empty uses the locale catalog (`Expand sidebar`)."
         },
         {
           "name": "resizeAriaLabel",
           "type": "string",
-          "default": "'Resize sidebar'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the drag handle separator."
+          "doc": "Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`)."
         }
       ],
       "events": [
@@ -15420,9 +15420,9 @@
         {
           "name": "linkLabel",
           "type": "string",
-          "default": "'Read story'",
+          "default": "''",
           "required": "false",
-          "doc": "Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name."
+          "doc": "Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`)."
         }
       ],
       "events": [
@@ -15471,7 +15471,7 @@
         "Give every mark a real `alt` — the company name. A linked cell is announced as `linkLabel`, then that name (\"Read story, Magalu\").",
         "Set `ariaLabel` so the group announces its purpose (\"Clients running on Azion\") instead of reading as an unnamed region.",
         "Link a mark with `href` only when there is somewhere worth going, such as a case study; a wall of links to nowhere costs a reader a tab stop per cell. In an app with a client-side router, handle `item-click`: call `event.preventDefault()` and push `item.href`.",
-        "Put one statement in `aside`, not a second grid. The band's argument is *many customers, one of them talking*; two things of equal weight leave a reader with neither.",
+        "Put one statement in `aside`, not a second grid. The band's argument is _many customers, one of them talking_; two things of equal weight leave a reader with neither.",
         "Give the wall exactly six marks when `aside` is filled — two full rows of three squares beside the statement, and three rows of two between `lg` and `xl` — and a multiple of six when it is not, so the last row is never ragged.",
         "Reach for `kind: 'rectangle'` when the band names nine customers beside `aside`: three rows of three 3:2 cells at the height of the six-square wall. Nine is the count the rectangle wall is drawn for; without `aside` it runs six to a row like the square wall."
       ],
@@ -17932,9 +17932,9 @@
         {
           "name": "label",
           "type": "string",
-          "default": "'Learn More'",
+          "default": "''",
           "required": "false",
-          "doc": "Visible label rendered inside the link."
+          "doc": "Visible label rendered inside the link. Empty uses the locale catalog (`Learn More`)."
         },
         {
           "name": "size",
@@ -18067,9 +18067,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Menu'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the navigation region."
+          "doc": "Accessible name for the navigation region. Empty uses the locale catalog (`Menu`)."
         }
       ],
       "events": [
@@ -18190,9 +18190,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Menu'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the navigation region."
+          "doc": "Accessible name for the navigation region. Empty uses the locale catalog (`Menu`)."
         }
       ],
       "events": [
@@ -18447,9 +18447,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Steps'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the step rail."
+          "doc": "Accessible name for the step rail. Empty uses the locale catalog (`Steps`)."
         }
       ],
       "slots": [
@@ -18498,9 +18498,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Steps'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the step rail."
+          "doc": "Accessible name for the step rail. Empty uses the locale catalog (`Steps`)."
         }
       ],
       "slots": [
@@ -18560,9 +18560,9 @@
         {
           "name": "submitLabel",
           "type": "string",
-          "default": "'Create'",
+          "default": "''",
           "required": "false",
-          "doc": "Label of the primary action on the last step, where Next becomes the submit action."
+          "doc": "Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`)."
         },
         {
           "name": "loading",
@@ -18665,9 +18665,9 @@
         {
           "name": "submitLabel",
           "type": "string",
-          "default": "'Create'",
+          "default": "''",
           "required": "false",
-          "doc": "Label of the primary action on the last step, where Next becomes the submit action."
+          "doc": "Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`)."
         },
         {
           "name": "loading",
@@ -18791,9 +18791,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Main'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name for the root navigation landmark."
+          "doc": "Accessible name for the root navigation landmark. Empty uses the locale catalog (`Main`)."
         },
         {
           "name": "as",
@@ -19379,16 +19379,16 @@
         {
           "name": "confirmLabel",
           "type": "string",
-          "default": "'Confirm'",
+          "default": "''",
           "required": "false",
-          "doc": "Label of the confirm button."
+          "doc": "Label of the confirm button. Empty uses the locale catalog (`Confirm`)."
         },
         {
           "name": "cancelLabel",
           "type": "string",
-          "default": "'Cancel'",
+          "default": "''",
           "required": "false",
-          "doc": "Label of the cancel button."
+          "doc": "Label of the cancel button. Empty uses the locale catalog (`Cancel`)."
         },
         {
           "name": "kind",
@@ -20039,6 +20039,84 @@
           "name": "Sizes",
           "summary": "The spinner scales with the theme `size-*` utilities applied through `class`; color inherits from the parent.",
           "sfc": "<script setup>\n  import Spinner from '@aziontech/webkit/spinner'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-4 text-(--text-default)\">\n    <Spinner class=\"size-3\" />\n    <Spinner class=\"size-4\" />\n    <Spinner class=\"size-6\" />\n    <Spinner class=\"size-8\" />\n  </div>\n</template>"
+        }
+      ]
+    },
+    "provider": {
+      "import": "@aziontech/webkit/provider",
+      "target": "./src/components/utils/provider/provider.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/provider",
+      "category": "utils",
+      "structure": "monolithic",
+      "props": [
+        {
+          "name": "locale",
+          "type": "string",
+          "default": "'en'",
+          "required": "false",
+          "doc": "BCP 47 locale of everything below the provider; picks the built-in catalog (`en`, `pt-BR`, `es`) and the `Intl` formats."
+        },
+        {
+          "name": "messages",
+          "type": "PartialMessages",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`)."
+        },
+        {
+          "name": "dir",
+          "type": "'ltr' | 'rtl' | 'auto'",
+          "default": "'auto'",
+          "required": "false",
+          "doc": "Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left)."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The app, or the part of it that shares this locale."
+        }
+      ],
+      "purpose": "Sets the language and text direction of every WebKit component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. With no provider mounted every component falls back to English. The element it renders carries `lang` and `dir`.",
+      "useWhen": [
+        "Once at the root of every app, with the locale the user chose (`pt-BR`, `en`, `es`).",
+        "Around one region that must read in another language than the rest of the page (a preview of an email in the customer's language).",
+        "To rename a built-in string for the whole app (`messages`), instead of passing the same label prop to every instance."
+      ],
+      "avoidWhen": [
+        "Translating your own product copy (titles, descriptions, button labels you pass in) → keep it in your app's own i18n; the provider only covers the strings WebKit ships.",
+        "Changing one instance's label → pass the component's label prop (`aria-label`, `confirm-label`); a prop always wins over the catalog.",
+        "Only flipping the layout for a right-to-left language → still use the provider with that locale; `dir` follows it."
+      ],
+      "related": [
+        "use-locale` — the composable components use to read the active locale, translate a key and format with `Intl`; use it in your own components to match WebKit's formatting.",
+        "pagination` — reads its labels and the \"Showing x to y of z\" line from the catalog.",
+        "confirm-dialog` — reads Confirm and Cancel from the catalog when no label is passed."
+      ],
+      "bestPractices": [
+        "Mount one `WebkitProvider` at the app root and pass the locale the user chose; do not nest one per page.",
+        "Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no built-in catalog falls back to the same language, then to English.",
+        "Override built-in strings through `messages` (partial, deep-merged), not by forking components.",
+        "Leave `dir` on `auto`: Arabic, Hebrew, Persian and Urdu locales turn the subtree right-to-left."
+      ],
+      "surface": "product",
+      "examples": [
+        {
+          "name": "Default",
+          "summary": "Mounted with `locale=\"pt-BR\"`: Pagination and ConfirmDialog read their built-in labels in Portuguese and format numbers for Brazil.",
+          "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import Pagination from '@aziontech/webkit/pagination'\n  import WebkitProvider from '@aziontech/webkit/provider'\n  import { ref } from 'vue'\n\n  const page = ref(1)\n  const open = ref(false)\n</script>\n\n<template>\n  <WebkitProvider\n    locale=\"pt-BR\"\n    class=\"flex flex-col gap-(--spacing-md)\"\n  >\n    <Pagination\n      v-model:page=\"page\"\n      :total=\"120\"\n    />\n    <ConfirmDialog\n      v-model:open=\"open\"\n      title=\"Remover domínio\"\n      description=\"shop.example.com deixa de responder por este recurso.\"\n      @confirm=\"open = false\"\n    >\n      <template #trigger>\n        <Button\n          label=\"Remover domínio\"\n          kind=\"outlined\"\n          size=\"medium\"\n        />\n      </template>\n    </ConfirmDialog>\n  </WebkitProvider>\n</template>"
+        },
+        {
+          "name": "CustomMessages",
+          "summary": "`messages` replaces one built-in string for the whole subtree; the rest of the catalog stays.",
+          "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n  import WebkitProvider from '@aziontech/webkit/provider'\n\n  const messages = {\n    pagination: { info: '{start}–{end} de {total} domínios' }\n  }\n</script>\n\n<template>\n  <WebkitProvider\n    locale=\"pt-BR\"\n    :messages=\"messages\"\n  >\n    <Pagination :total=\"48\" />\n  </WebkitProvider>\n</template>"
+        },
+        {
+          "name": "RightToLeft",
+          "summary": "`locale=\"ar\"` derives `dir=\"rtl\"`: the subtree reads right to left and strings with no Arabic catalog fall back to English.",
+          "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n  import WebkitProvider from '@aziontech/webkit/provider'\n</script>\n\n<template>\n  <WebkitProvider locale=\"ar\">\n    <Pagination :total=\"48\" />\n  </WebkitProvider>\n</template>"
         }
       ]
     },
@@ -25847,9 +25925,9 @@
         {
           "name": "ariaLabel",
           "type": "string",
-          "default": "'Footer'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name of the footer landmark."
+          "doc": "Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`)."
         },
         {
           "name": "home",
@@ -25861,9 +25939,9 @@
         {
           "name": "homeAriaLabel",
           "type": "string",
-          "default": "'Azion home'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name of the Azion mark link."
+          "doc": "Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`)."
         },
         {
           "name": "columns",
@@ -25896,9 +25974,9 @@
         {
           "name": "languageAriaLabel",
           "type": "string",
-          "default": "'Language'",
+          "default": "''",
           "required": "false",
-          "doc": "Accessible name of the language select, also its placeholder."
+          "doc": "Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`)."
         }
       ],
       "purpose": "The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row; below it the mark moves to the footer's signature band, so the icons get the row to themselves. The language select keeps its own value locally; its options are the labels the reader sees.",
@@ -26552,6 +26630,12 @@
       "target": "./src/composables/use-placement/index.ts",
       "kind": "composable",
       "treeShakeableImport": "@aziontech/webkit/use-placement"
+    },
+    "use-locale": {
+      "import": "@aziontech/webkit/use-locale",
+      "target": "./src/composables/use-locale/index.ts",
+      "kind": "composable",
+      "treeShakeableImport": "@aziontech/webkit/use-locale"
     },
     "vite": {
       "import": "@aziontech/webkit/vite",

@@ -174,6 +174,36 @@ the save strategies are `platform/settings/settings-form`, the two details pages
 [`src/cli/migrations/v6-blocks.json`](./src/cli/migrations/v6-blocks.json); `get_pattern` still
 answers an old id with the new block and a `note`. Code you already copied does not change.
 
+### Languages
+
+v6 adds `WebkitProvider` (`@aziontech/webkit/provider`). Mount it once at the app root with the
+user's locale:
+
+```vue
+<script setup>
+  import WebkitProvider from '@aziontech/webkit/provider'
+</script>
+
+<template>
+  <WebkitProvider locale="pt-BR">
+    <App />
+  </WebkitProvider>
+</template>
+```
+
+Every built-in string (close buttons, pagination, empty states, sort state, assistive labels) now
+comes from a message catalog in English, Brazilian Portuguese or Spanish, and dates, numbers, file
+sizes, relative times and plurals format with `Intl` for the locale. The root carries `lang` and
+`dir`; `dir` defaults to `auto`, which turns Arabic, Hebrew, Persian and Urdu right-to-left.
+
+Without a provider nothing changes: components default to English. Label props you already pass still
+win. Props whose default was an English string (`ariaLabel: 'Close'`, `confirmLabel: 'Confirm'`,
+`emptyTitle: 'No data available'`, `placeholder: 'Search'`…) now default to `''` and fall back to the
+catalog, so an empty string no longer removes the label; `HelpPanel.Links` `title` defaults to
+`undefined` and still hides its heading when you pass `''`. The pagination line formats its numbers
+(`1,200`, `1.200` in Portuguese). `useLocale()` from `@aziontech/webkit/use-locale` gives your own
+components the same locale, `t()` and `Intl` helpers.
+
 ## 5. Unchanged
 
 Theme tokens, icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style

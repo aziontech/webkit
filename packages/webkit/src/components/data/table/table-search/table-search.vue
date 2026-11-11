@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import Input from '../../../inputs/input/input.vue'
   import { TableInjectionKey } from '../injection-key'
 
@@ -11,15 +13,16 @@
 
   withDefaults(
     defineProps<{
-      /** Placeholder text for the search input. */
+      /** Placeholder text for the search input. Empty uses the locale catalog (`Search`). */
       placeholder?: string
     }>(),
     {
-      placeholder: 'Search'
+      placeholder: ''
     }
   )
 
   const attrs = useAttrs()
+  const { t } = useLocale({ tableSearch: en.tableSearch })
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
@@ -42,7 +45,7 @@
     :data-testid="testId"
     class="flex-1"
     :model-value="globalFilter"
-    :placeholder="placeholder"
+    :placeholder="placeholder || t('tableSearch.placeholder')"
     @update:model-value="setFilter"
   >
     <template #iconLeft>

@@ -1,0 +1,21 @@
+{
+  "component": "provider",
+  "title": "Components/Primitives/Utils/WebkitProvider",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Mounted with `locale=\"pt-BR\"`: Pagination and ConfirmDialog read their built-in labels in Portuguese and format numbers for Brazil.",
+      "file": "default.vue"
+    },
+    {
+      "name": "CustomMessages",
+      "summary": "`messages` replaces one built-in string for the whole subtree; the rest of the catalog stays.",
+      "file": "custom-messages.vue"
+    },
+    {
+      "name": "RightToLeft",
+      "summary": "`locale=\"ar\"` derives `dir=\"rtl\"`: the subtree reads right to left and strings with no Arabic catalog fall back to English.",
+      "file": "right-to-left.vue"
+    }
+  ]
+}

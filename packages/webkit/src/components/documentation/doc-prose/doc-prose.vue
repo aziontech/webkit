@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
+
   defineOptions({ name: 'DocProse', inheritAttrs: false })
 
   defineSlots<{
@@ -9,10 +12,18 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ docProse: en.docProse })
 
   const proseRef = ref<HTMLElement | null>(null)
   const tipFor = ref<HTMLElement | null>(null)
-  const tipLabel = ref('Copy')
+  const tipState = ref<'copy' | 'copied' | 'manual'>('copy')
+  const tipLabel = computed(() =>
+    tipState.value === 'copied'
+      ? t('docProse.copied')
+      : tipState.value === 'manual'
+        ? t('docProse.copyManually')
+        : t('docProse.copy')
+  )
   const tipLeft = ref(0)
   const tipTop = ref(0)
   let resetTimer: ReturnType<typeof globalThis.setTimeout> | null = null
@@ -43,7 +54,7 @@
     const chip = chipFrom(event.target)
     if (!chip || chip === tipFor.value) return
     clearReset()
-    tipLabel.value = 'Copy'
+    tipState.value = 'copy'
     tipFor.value = chip
     anchorTip(chip)
   }
@@ -65,14 +76,14 @@
     anchorTip(chip)
     try {
       await globalThis.navigator.clipboard.writeText(text)
-      tipLabel.value = 'Copied'
+      tipState.value = 'copied'
     } catch {
-      tipLabel.value = 'Press \u2318C to copy'
+      tipState.value = 'manual'
       globalThis.getSelection()?.selectAllChildren(chip)
     }
     clearReset()
     resetTimer = globalThis.setTimeout(() => {
-      tipLabel.value = 'Copy'
+      tipState.value = 'copy'
       resetTimer = null
     }, 1400)
   }

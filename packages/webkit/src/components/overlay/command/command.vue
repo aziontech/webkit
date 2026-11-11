@@ -3,6 +3,8 @@
   import { computed, nextTick, provide, ref, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Dialog from '../dialog/dialog.vue'
   import DialogContent from '../dialog/dialog-content.vue'
   import DialogOverlay from '../dialog/dialog-overlay.vue'
@@ -50,6 +52,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ command: en.command })
   const uid = useId()
   const listId = `${uid}-list`
 
@@ -257,7 +260,7 @@
     <DialogPortal>
       <DialogOverlay />
       <DialogContent>
-        <DialogTitle class="sr-only">Command menu</DialogTitle>
+        <DialogTitle class="sr-only">{{ t('command.title') }}</DialogTitle>
         <div
           class="flex flex-col"
           role="presentation"

@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 1845f8313161566cfb6764916c224afb1210e8c76f4f4e159b2daebec0ad2cd7
+checksum: f4c47d0fb84d11d335ec08f7c7787bc5822d436ec00a9383f49be9945390e24f
 created: 2026-08-03
-last_updated: 2026-10-01
+last_updated: 2026-11-11
 ---
 
 # Menu — Component Spec
@@ -308,12 +308,12 @@ export type MenuGroupNode = {
 }
 ```
 
-| Prop           | Type              | Default  | Required | JSDoc                                                                                                                                                                               |
-| -------------- | ----------------- | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `groups`       | `MenuGroupNode[]` | `[]`     | false    | Data-driven navigation tree; each entry renders through `Menu.Group` and its items through `Menu.Item` / `Menu.Sub`. Composes with the `default` slot rather than replacing it.     |
-| `activeId`     | `string`          | `''`     | false    | Id of the node rendered as selected in data-driven mode.                                                                                                                            |
-| `enterOnMount` | `boolean`         | `false`  | false    | Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in. |
-| `ariaLabel`    | `string`          | `'Menu'` | false    | Accessible name for the navigation region.                                                                                                                                          |
+| Prop           | Type              | Default | Required | JSDoc                                                                                                                                                                               |
+| -------------- | ----------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `groups`       | `MenuGroupNode[]` | `[]`    | false    | Data-driven navigation tree; each entry renders through `Menu.Group` and its items through `Menu.Item` / `Menu.Sub`. Composes with the `default` slot rather than replacing it.     |
+| `activeId`     | `string`          | `''`    | false    | Id of the node rendered as selected in data-driven mode.                                                                                                                            |
+| `enterOnMount` | `boolean`         | `false` | false    | Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in. |
+| `ariaLabel`    | `string`          | `''`    | false    | Accessible name for the navigation region. Empty uses the locale catalog (`Menu`).                                                                                                  |
 
 The root also owns **`v-model:expanded`** — `string[]`, default `[]` — the ids of the inline subs
 currently open. Expansion belongs to the root, not to each sub, for two reasons: one sub opening

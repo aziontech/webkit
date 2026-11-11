@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
 
   defineOptions({
@@ -13,6 +15,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ toast: en.toast })
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__close'
   )
@@ -26,7 +29,7 @@
     icon="pi pi-times"
     kind="transparent"
     size="small"
-    ariaLabel="Close notification"
+    :ariaLabel="t('toast.close')"
     :data-testid="testId"
     @click="handleClick"
   />

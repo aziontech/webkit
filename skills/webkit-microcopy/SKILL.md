@@ -27,6 +27,15 @@ Scope: strings the user reads inside Azion products. It does not govern docs, ma
 comments, or commit messages. Copy is authored in English; translation follows the Azion brand
 glossary, and every rule here survives translation because none of it depends on a specific wording.
 
+Built-in strings (the ones WebKit components ship: Close, Previous page, No results found., Step 2
+of 4) are not yours to write. They live in the message catalogs,
+`@aziontech/webkit/src/i18n/messages/en.ts` and `pt-BR.ts` (plus `es.ts`), and follow these rules in
+both languages: sentence case in English and in Portuguese, the same verb for the same action (Fechar,
+Remover, Copiar), `{name}` placeholders kept as they are. Mount `WebkitProvider` with the user's
+locale instead of passing translated labels to each component; override a catalog string with its
+`messages` prop only when the product glossary says so. Pass a label prop only to say something more
+specific than the catalog (`aria-label="Close deployment logs"`).
+
 ## How to use
 
 - `/webkit-microcopy` while building: apply the rules to every string you write, and place each

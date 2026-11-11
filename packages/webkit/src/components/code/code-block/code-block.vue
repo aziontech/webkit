@@ -10,6 +10,8 @@
     watch
   } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
@@ -62,7 +64,7 @@
     defaultValue?: string
     /** Shows a fixed-width gutter with zero-padded line numbers before each code line. */
     showLineNumbers?: boolean
-    /** Accessible name for the copy control (forwarded to CopyButton's aria-label). */
+    /** Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`). */
     copyAriaLabel?: string
     /** Shows the copy control; turn it off for a decorative block nobody copies from. */
     copyable?: boolean
@@ -76,7 +78,7 @@
     tabs: () => [],
     defaultValue: undefined,
     showLineNumbers: true,
-    copyAriaLabel: 'Copy code',
+    copyAriaLabel: '',
     copyable: true,
     animateLines: false,
     bordered: true
@@ -94,6 +96,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ codeBlock: en.codeBlock })
   const tabListRef = ref<HTMLElement | null>(null)
   const tabRefs = ref<HTMLElement[]>([])
   const indicatorVisible = ref(false)
@@ -650,7 +653,7 @@
       >
         <CopyButton
           :value="activeTab?.code ?? ''"
-          :ariaLabel="copyAriaLabel"
+          :ariaLabel="copyAriaLabel || t('codeBlock.copy')"
           kind="outlined"
           size="small"
           :data-testid="`${testId}__copy`"

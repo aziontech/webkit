@@ -1,0 +1,132 @@
+import { render } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+import { defineComponent, h } from 'vue'
+
+import {
+  BUILT_IN_CATALOGS,
+  directionOf,
+  en,
+  mergeMessages,
+  type MessageKey,
+  pickCatalog,
+  provideLocale,
+  ptBR,
+  useLocale
+} from './index'
+
+function probe(setupParent?: () => void) {
+  let helpers: ReturnType<typeof useLocale> | null = null
+  const Child = defineComponent({
+    setup() {
+      helpers = useLocale(en)
+      return () => h('span')
+    }
+  })
+  const Parent = defineComponent({
+    setup() {
+      setupParent?.()
+      return () => h(Child)
+    }
+  })
+  render(Parent)
+  return helpers as unknown as ReturnType<typeof useLocale>
+}
+
+describe('useLocale', () => {
+  describe('without a provider', () => {
+    it('falls back to English, left to right', () => {
+      const l = probe()
+      expect(l.locale.value).toBe('en')
+      expect(l.dir.value).toBe('ltr')
+      expect(l.t('pagination.next')).toBe('Next page')
+      expect(l.t('dialog.close')).toBe('Close')
+    })
+
+    it('fills {name} placeholders and formats numeric params', () => {
+      const l = probe()
+      expect(l.t('pagination.info', { start: 1, end: 10, total: 1200 })).toBe(
+        'Showing 1 to 10 of 1,200 entries'
+      )
+      expect(l.t('chip.removeNamed', { label: 'prod' })).toBe('Remove prod')
+    })
+
+    it('picks a plural form by count', () => {
+      const l = probe()
+      expect(l.t('logView.lines', { count: 1 })).toBe('1 line')
+      expect(l.t('logView.lines', { count: 4 })).toBe('4 lines')
+      expect(l.plural(0, { zero: 'none', one: 'one', other: 'many' })).toBe('none')
+    })
+
+    it('reads only the fallback it is given', () => {
+      let bare: ReturnType<typeof useLocale> | null = null
+      render(
+        defineComponent({
+          setup() {
+            bare = useLocale({ dialog: en.dialog })
+            return () => h('span')
+          }
+        })
+      )
+      const l = bare as unknown as ReturnType<typeof useLocale>
+      expect(l.t('dialog.close')).toBe('Close')
+      expect(l.t('pagination.next')).toBe('pagination.next')
+    })
+
+    it('returns the key itself for an unknown key', () => {
+      const l = probe()
+      expect(l.t('nope.missing' as MessageKey)).toBe('nope.missing')
+    })
+
+    it('formats with Intl in English', () => {
+      const l = probe()
+      expect(l.formatNumber(1234.5)).toBe('1,234.5')
+      expect(l.formatList(['a', 'b'])).toBe('a and b')
+      expect(l.formatRelativeTime(2, 'hour')).toBe('in 2 hours')
+      expect(l.formatRelativeTime(new Date(Date.now() - 3 * 86_400_000))).toBe('3 days ago')
+      expect(l.formatFileSize(0)).toBe('0 byte')
+      expect(l.formatFileSize(5 * 1024 * 1024)).toBe('5 MB')
+      expect(l.formatDate(new Date(2026, 5, 1), { month: 'short', day: 'numeric' })).toBe('Jun 1')
+    })
+  })
+
+  describe('under provideLocale', () => {
+    it('reads the provided catalog and direction', () => {
+      const l = probe(() =>
+        provideLocale({ locale: 'ar', catalogs: BUILT_IN_CATALOGS, dir: 'auto' })
+      )
+      expect(l.dir.value).toBe('rtl')
+      expect(l.t('dialog.close')).toBe('Close')
+    })
+
+    it('reads Portuguese for pt-BR', () => {
+      const l = probe(() => provideLocale({ locale: 'pt-BR', catalogs: BUILT_IN_CATALOGS }))
+      expect(l.t('dialog.close')).toBe('Fechar')
+      expect(l.t('wizard.stepOf', { step: 2, total: 4 })).toBe('Etapa 2 de 4')
+    })
+  })
+
+  describe('helpers', () => {
+    it('directionOf: ar, he, fa, ur are right to left', () => {
+      expect(directionOf('ar-EG')).toBe('rtl')
+      expect(directionOf('he')).toBe('rtl')
+      expect(directionOf('fa-IR')).toBe('rtl')
+      expect(directionOf('ur')).toBe('rtl')
+      expect(directionOf('pt-BR')).toBe('ltr')
+      expect(directionOf('en')).toBe('ltr')
+    })
+
+    it('pickCatalog: exact tag, then language, then English', () => {
+      expect(pickCatalog('pt-BR', BUILT_IN_CATALOGS)).toBe(ptBR)
+      expect(pickCatalog('pt-pt', BUILT_IN_CATALOGS)).toBe(ptBR)
+      expect(pickCatalog('en-GB', BUILT_IN_CATALOGS)).toBe(en)
+      expect(pickCatalog('de', BUILT_IN_CATALOGS)).toBe(en)
+    })
+
+    it('mergeMessages deep-merges one group without mutating the base', () => {
+      const merged = mergeMessages(ptBR, { pagination: { next: 'Seguinte' } })
+      expect(merged.pagination.next).toBe('Seguinte')
+      expect(merged.pagination.previous).toBe('Página anterior')
+      expect(ptBR.pagination.next).toBe('Próxima página')
+    })
+  })
+})

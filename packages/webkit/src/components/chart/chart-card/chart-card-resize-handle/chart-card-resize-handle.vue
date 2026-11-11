@@ -1,20 +1,23 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { useChartCardContext } from '../composables/use-chart-card-context'
 
   defineOptions({ name: 'ChartCardResizeHandle', inheritAttrs: false })
 
   interface Props {
-    /** Accessible name of the handle. */
+    /** Accessible name of the handle. Empty uses the locale catalog (`Resize card`). */
     ariaLabel?: string
   }
 
   withDefaults(defineProps<Props>(), {
-    ariaLabel: 'Resize card'
+    ariaLabel: ''
   })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ chartCard: en.chartCard })
   const ctx = useChartCardContext()
   const handleRef = ref<globalThis.HTMLElement | null>(null)
 
@@ -37,8 +40,10 @@
   )
 
   const valueText = computed(() => {
-    const columns = `${ctx.span.value} of ${ctx.maxSpan.value} columns`
-    return ctx.height.value === undefined ? columns : `${columns}, ${ctx.height.value} pixels tall`
+    const columns = t('chartCard.columns', { span: ctx.span.value, max: ctx.maxSpan.value })
+    return ctx.height.value === undefined
+      ? columns
+      : t('chartCard.columnsAndHeight', { columns, height: String(ctx.height.value) })
   })
 
   function release() {
@@ -110,7 +115,7 @@
     v-bind="$attrs"
     role="separator"
     tabindex="0"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || t('chartCard.resize')"
     :aria-valuenow="ctx.span.value"
     :aria-valuemin="ctx.minSpan.value"
     :aria-valuemax="ctx.maxSpan.value"

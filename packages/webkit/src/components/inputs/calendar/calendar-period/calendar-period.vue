@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, ref } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { CalendarInjectionKey } from '../injection-key'
   import { parsePeriod } from '../parse-period'
 
@@ -9,18 +11,20 @@
     inheritAttrs: false
   })
 
+  const { t } = useLocale({ calendar: en.calendar })
+
   const ctx = inject(CalendarInjectionKey, null)
 
   const disabled = computed(() => ctx?.disabled.value ?? false)
   const horizontal = computed(() => ctx?.horizontal.value ?? false)
 
-  const PRESETS = [
-    { label: 'Last 3 Days', expr: '3d' },
-    { label: 'Last Week', expr: 'last week' },
-    { label: 'Last Month', expr: 'last month' },
-    { label: 'Last Quarter', expr: '3mo' },
-    { label: 'Last Year', expr: 'last year' }
-  ] as const
+  const PRESETS = computed(() => [
+    { label: t('calendar.last3Days'), expr: '3d' },
+    { label: t('calendar.lastWeek'), expr: 'last week' },
+    { label: t('calendar.lastMonth'), expr: 'last month' },
+    { label: t('calendar.lastQuarter'), expr: '3mo' },
+    { label: t('calendar.lastYear'), expr: 'last year' }
+  ])
 
   const RELATIVE_HINTS = ['45m', '12 hours', '10d', '2 weeks', 'last month', 'yesterday', 'today']
   const FIXED_HINTS = ['Jan 1', '1/1 - 1/2', '36 hours', '48 hours']
@@ -66,7 +70,7 @@
 
     <div class="flex flex-col gap-(--spacing-sm)">
       <div class="flex flex-col gap-(--spacing-xxs)">
-        <span class="text-label-sm text-(--text-muted)"> Type relative times </span>
+        <span class="text-label-sm text-(--text-muted)"> {{ t('calendar.relativeHints') }} </span>
         <div class="flex max-w-(--container-2xs) flex-wrap gap-(--spacing-xxs)">
           <button
             v-for="hint in RELATIVE_HINTS"
@@ -82,7 +86,7 @@
       </div>
 
       <div class="flex flex-col gap-(--spacing-xxs)">
-        <span class="text-label-sm text-(--text-muted)"> Type fixed times </span>
+        <span class="text-label-sm text-(--text-muted)"> {{ t('calendar.fixedHints') }} </span>
         <div class="flex max-w-(--container-2xs) flex-wrap gap-(--spacing-xxs)">
           <button
             v-for="hint in FIXED_HINTS"

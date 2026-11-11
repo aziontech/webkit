@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
-checksum: 184fe87064e423935f3af6a005541924c6d8ffa2b5eca5c6916aefa5b25b6421
+last_updated: 2026-11-11
+checksum: e4aacb3bd2f4a0f4772c5cde645c740fa7bb7a03115daa94dcdc1dac6d2ded01
 ---
 
 # BarList — Component Spec
@@ -63,16 +63,16 @@ A ranked list of named values: each row is a tinted bar whose length is the valu
 
 ## Props
 
-| Prop          | Type                                    | Default               | Required | JSDoc                                                                                                                            |
-| ------------- | --------------------------------------- | --------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `items`       | `BarListItem[]`                         | `[]`                  | false    | Rows to rank; each item is `{ id?: string; name: string; value: number; href?: string }`. An item with `href` renders as a link. |
-| `sort`        | `'descending' \| 'ascending' \| 'none'` | `'descending'`        | false    | Row order; `none` keeps the order of `items`.                                                                                    |
-| `color`       | `ChartColor`                            | `1`                   | false    | Hue of the bars: a categorical slot (1–6), `other`, or a status. The fill is that hue tinted over the surface.                   |
-| `clickable`   | `boolean`                               | `false`               | false    | Renders rows without an `href` as buttons that emit `item-click`.                                                                |
-| `formatValue` | `(value: number) => string`             | `formatCompact`       | false    | Formats the value column.                                                                                                        |
-| `loading`     | `boolean`                               | `false`               | false    | Renders Skeleton rows in place of the list.                                                                                      |
-| `emptyTitle`  | `string`                                | `'No data available'` | false    | Title of the empty state shown when `items` is empty.                                                                            |
-| `ariaLabel`   | `string`                                | `''`                  | false    | Accessible name of the list.                                                                                                     |
+| Prop          | Type                                    | Default         | Required | JSDoc                                                                                                                            |
+| ------------- | --------------------------------------- | --------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `items`       | `BarListItem[]`                         | `[]`            | false    | Rows to rank; each item is `{ id?: string; name: string; value: number; href?: string }`. An item with `href` renders as a link. |
+| `sort`        | `'descending' \| 'ascending' \| 'none'` | `'descending'`  | false    | Row order; `none` keeps the order of `items`.                                                                                    |
+| `color`       | `ChartColor`                            | `1`             | false    | Hue of the bars: a categorical slot (1–6), `other`, or a status. The fill is that hue tinted over the surface.                   |
+| `clickable`   | `boolean`                               | `false`         | false    | Renders rows without an `href` as buttons that emit `item-click`.                                                                |
+| `formatValue` | `(value: number) => string`             | `formatCompact` | false    | Formats the value column.                                                                                                        |
+| `loading`     | `boolean`                               | `false`         | false    | Renders Skeleton rows in place of the list.                                                                                      |
+| `emptyTitle`  | `string`                                | `''`            | false    | Title of the empty state shown when `items` is empty. Empty uses the locale catalog (`No data available`).                       |
+| `ariaLabel`   | `string`                                | `''`            | false    | Accessible name of the list.                                                                                                     |
 
 ## Events
 

@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, provide, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Stepper from '../stepper/stepper.vue'
   import StepperStep from '../stepper/stepper-step/stepper-step.vue'
@@ -13,7 +15,7 @@
   })
 
   interface Props {
-    /** Label of the primary action on the last step, where Next becomes the submit action. */
+    /** Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`). */
     submitLabel?: string
     /** Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. */
     loading?: boolean
@@ -22,7 +24,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    submitLabel: 'Create',
+    submitLabel: '',
     loading: false,
     ariaLabel: ''
   })
@@ -44,6 +46,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ wizard: en.wizard })
 
   const ids = ref<symbol[]>([])
   const metas = new Map<symbol, WizardStepMeta>()
@@ -168,7 +171,7 @@
           <span
             v-if="step.optional"
             class="text-body-xs text-(--text-muted)"
-            >Optional</span
+            >{{ t('wizard.optional') }}</span
           >
         </StepperStep>
       </Stepper>
@@ -182,7 +185,7 @@
       >
         <Button
           kind="transparent"
-          label="Cancel"
+          :label="t('wizard.cancel')"
           :disabled="loading"
           @click="onCancel"
         />
@@ -190,13 +193,13 @@
           <Button
             v-if="current > 0"
             kind="secondary"
-            label="Previous"
+            :label="t('wizard.previous')"
             :disabled="loading"
             @click="onPrevious"
           />
           <Button
             kind="primary"
-            :label="isLast ? submitLabel : 'Next'"
+            :label="isLast ? submitLabel || t('wizard.submit') : t('wizard.next')"
             :loading="loading"
             @click="onPrimary"
           />

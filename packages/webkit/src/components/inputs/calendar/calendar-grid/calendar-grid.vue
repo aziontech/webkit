@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, ref, watch } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import {
     getTabViewPanelTransitionStyle,
     type TabsSlideDirection
@@ -13,9 +15,17 @@
     inheritAttrs: false
   })
 
+  const { t, locale, formatDate } = useLocale({ calendar: en.calendar })
+  const weekdayLabels = computed(() =>
+    Array.from({ length: 7 }, (_, day) =>
+      new Intl.DateTimeFormat(locale.value, { weekday: 'narrow' }).format(
+        new Date(2023, 0, day + 1)
+      )
+    )
+  )
+
   const ctx = inject(CalendarInjectionKey, null)
 
-  const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] as const
   const MS_PER_DAY = 86_400_000
 
   const mode = computed(() => ctx?.mode.value ?? 'single')
@@ -188,7 +198,7 @@
       key: `${year}-${month}`,
       year,
       month,
-      label: date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+      label: formatDate(date, { month: 'long', year: 'numeric' }),
       weeks: buildWeeks(year, month)
     }
   })
@@ -324,7 +334,7 @@
         <button
           type="button"
           :disabled="disabledAll"
-          aria-label="Previous month"
+          :aria-label="t('calendar.previousMonth')"
           class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
           @click="goToPreviousMonth"
         >
@@ -337,7 +347,7 @@
         <button
           type="button"
           :disabled="disabledAll"
-          aria-label="Next month"
+          :aria-label="t('calendar.nextMonth')"
           class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
           @click="goToNextMonth"
         >
@@ -375,7 +385,7 @@
               class="flex items-start"
             >
               <span
-                v-for="(weekday, index) in WEEKDAY_LABELS"
+                v-for="(weekday, index) in weekdayLabels"
                 :key="`weekday-${index}`"
                 role="columnheader"
                 :data-size="size"

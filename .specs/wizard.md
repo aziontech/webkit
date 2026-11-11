@@ -3,10 +3,10 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: e7f9785795c2ace4ba6d4719ab86b6928ae5132121ab25f35f7a8b8558121de2
+checksum: 2eabbad6ccebe14c3dd201c1a97a7fc5329ad000eee66d14331390482b61e050
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Wizard — Component Spec
@@ -215,11 +215,11 @@ folder only):
 
 ## Props
 
-| Prop          | Type      | Default    | Required | JSDoc                                                                                                                  |
-| ------------- | --------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `submitLabel` | `string`  | `'Create'` | false    | Label of the primary action on the last step, where Next becomes the submit action.                                    |
-| `loading`     | `boolean` | `false`    | false    | Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. |
-| `ariaLabel`   | `string`  | `''`       | false    | Accessible name for the wizard region. Name the task, for example Create edge application.                             |
+| Prop          | Type      | Default | Required | JSDoc                                                                                                                         |
+| ------------- | --------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `submitLabel` | `string`  | `''`    | false    | Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`). |
+| `loading`     | `boolean` | `false` | false    | Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled.        |
+| `ariaLabel`   | `string`  | `''`    | false    | Accessible name for the wizard region. Name the task, for example Create edge application.                                    |
 
 ## v-model
 
