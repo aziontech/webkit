@@ -74,3 +74,26 @@ describe('SectionHeader', () => {
     await expectNoA11yViolations(container)
   })
 })
+
+describe('SectionHeader on devices', () => {
+  it('is a named container so its actions follow the box, not the window', () => {
+    const view = render(SectionHeader, {
+      props: { title: 'Domains' },
+      slots: { actions: '<button type="button">Add</button>' }
+    })
+
+    expect(view.getByTestId('layout-section-header').className).toContain(
+      '@container/section-header'
+    )
+    expect(view.getByTestId('layout-section-header__actions').className).toContain(
+      '@md/section-header:w-auto'
+    )
+  })
+
+  it('keeps the copy-link visible where there is no hover', () => {
+    const view = render(SectionHeader, { props: { title: 'Domains', anchor: 'domains' } })
+    const wrapper = view.getByTestId('layout-section-header__copy-link').parentElement
+
+    expect(wrapper?.className).toContain('[@media(hover:none)]:opacity-100')
+  })
+})

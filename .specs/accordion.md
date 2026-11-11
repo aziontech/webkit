@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: 9d7e034744d9ffb9ae42310312f18d5e28c2def9e5940ab5d500a25070144a03
+checksum: 85a92b829695d75e43ae3142aa6a875e534d37d46f7449349a4f22910b91662f
 created: 2026-06-26
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Accordion — Component Spec
@@ -160,6 +160,7 @@ Props below belong to the root `Accordion`. Sub-component props are documented i
 - `data-state` values: `open` | `closed` — on the item, the trigger, and the content
 - `data-disabled` mirrors the per-item `disabled` prop
 - `data-orientation`: `vertical`
+- Reflow: the trigger label region is `min-w-0`, so long trigger content truncates or wraps instead of overflowing a narrow box.
 
 ## Motion & Animations
 

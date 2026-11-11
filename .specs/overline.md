@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: ce6f4c57799f1f986dba631cd2b56304e1bf8173357997c90422a7b289fe45c6
+checksum: 4098eed84442bc649147d69a777b4448dd615a38fa2a0eee79c3208e20edec96
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Overline — Component Spec
@@ -89,6 +89,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 - Wrapping: with `singleLine` (default) the prefix and the label carry `whitespace-nowrap`; with it off the label wraps with `text-pretty`.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Test ids: root `content-overline` (consumer `data-testid` wins).
+- Reflow: the root is capped at the width of its container, and below `sm` a `singleLine` label wraps instead of overflowing.
 
 ## Motion & Animations
 

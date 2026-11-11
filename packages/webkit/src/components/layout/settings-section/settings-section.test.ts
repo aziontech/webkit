@@ -102,3 +102,19 @@ describe('SettingsSection', () => {
     await expectNoA11yViolations(render(Collapsible).container)
   })
 })
+
+describe('SettingsSection on devices', () => {
+  it('makes its body a named container for the rows inside', () => {
+    const view = render(SettingsSection, { props: { title: 'Cache' }, slots: { default: 'Rows' } })
+
+    expect(view.getByText('Rows').className).toContain('@container/settings-section')
+  })
+
+  it('shows the copy-link inline where there is no hover', () => {
+    const view = render(SettingsSection, { props: { title: 'Cache', anchor: 'cache' } })
+
+    expect(view.getByTestId('layout-settings-section__copy-link').className).toContain(
+      '[@media(hover:none)]:opacity-100'
+    )
+  })
+})

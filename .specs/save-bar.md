@@ -3,10 +3,10 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: 2f638cada7bac24de17e4c073ec876b26a5810575cadb0cb5d2f95300b09dd5b
+checksum: c83a91ca673a5724eb4d3e87d8db1d49480ca4ca13cb34d3889868dcebafc278
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # SaveBar — Component Spec
@@ -87,6 +87,7 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop on the root
+- Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Motion & Animations
 

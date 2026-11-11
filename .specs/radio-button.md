@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: 1ee1361a5f8f6abf5338d41e7345846e0725d9bbfa6ccacf462b5b391fdac721
+checksum: 012079c99d632e5327b94a27fc4f6c5d09522d18ff1ad0ef7cca2831d697f026
 created: 2026-05-22
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Radio Button — Component Spec
@@ -100,6 +100,7 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
 - `data-checked` mirrors selected state
+- Touch: the native input that receives the click extends past the 20 px circle to 24 × 24 px, and to 44 × 44 px on a coarse pointer; the drawn circle does not change.
 
 ## Motion & Animations
 

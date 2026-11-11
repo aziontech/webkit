@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 3b3269510fec5794372afdef034e8e5b23ec6c523a8e68ea67e941775f9f59bb
+checksum: 346edd3910d4435ffd9565259e282d535f2dffb674de57c35150c43927a1d62a
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Dialog — Component Spec
@@ -127,6 +127,7 @@ const open = ref(false)
 - Below `md` the dialog is a bottom sheet, capped at 80% of the **visible** viewport (`dvh`, not `vh`: on mobile browsers `vh` is the largest viewport with the toolbars retracted, so a `vh` sheet can extend under the URL bar with its footer off-screen).
 - Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-content`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
 - The page behind the overlay is scroll-locked while the dialog is open, and the lock is released on close.
+- Phones: below `md` the panel is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
 
 ## Motion & Animations
 

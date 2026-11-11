@@ -446,33 +446,34 @@
     >
       {{ announcement }}
     </p>
-    <table
+    <div
       v-if="showRing"
       class="sr-only"
-      :data-testid="`${testId}__twin`"
     >
-      <caption>
-        {{
-          ariaLabel || summary
-        }}
-      </caption>
-      <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Value</th>
-          <th scope="col">Share</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="entry in legend"
-          :key="entry.id"
-        >
-          <th scope="row">{{ entry.name }}</th>
-          <td>{{ entry.value }}</td>
-          <td>{{ entry.share }}</td>
-        </tr>
-      </tbody>
-    </table>
+      <table :data-testid="`${testId}__twin`">
+        <caption>
+          {{
+            ariaLabel || summary
+          }}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Value</th>
+            <th scope="col">Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="entry in legend"
+            :key="entry.id"
+          >
+            <th scope="row">{{ entry.name }}</th>
+            <td>{{ entry.value }}</td>
+            <td>{{ entry.share }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </figure>
 </template>

@@ -3,10 +3,10 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: approved
-checksum: 22b9c627f1fe3acc5465633cf9f37e3a4e2594a96d4586001493fa920b560c5a
+checksum: 72bbe3a8d7433a44f114409ae3c1c630a4732de8b9cdfc4af20c258b93b97430
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # DonutChart — Component Spec
@@ -110,6 +110,7 @@ A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per ser
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view` mirror the state
 - `data-entered` on each slice flips after two animation frames to run the sweep
 - `data-active` on the active slice, `data-dimmed` on the others
+- Reflow: the visually hidden table twin sits inside an `sr-only` box so its intrinsic width never adds horizontal overflow at 320 px.
 
 ## Motion & Animations
 

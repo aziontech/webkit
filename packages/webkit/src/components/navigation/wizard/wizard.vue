@@ -153,9 +153,9 @@
     :data-testid="testId"
     :data-loading="loading || null"
     :data-active-step="current"
-    class="flex w-full md:gap-(--spacing-xxl)"
+    class="@container/wizard flex w-full gap-(--spacing-xxl)"
   >
-    <div class="max-md:hidden md:w-(--container-3xs) md:shrink-0">
+    <div class="@max-2xl/wizard:hidden @2xl/wizard:w-(--container-3xs) @2xl/wizard:shrink-0">
       <Stepper v-model="railValue">
         <StepperStep
           v-for="(step, index) in steps"

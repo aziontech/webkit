@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { createSSRApp, h } from 'vue'
@@ -343,5 +345,44 @@ describe('Alert', () => {
     expect(getByTestId('feedback-alert__content').textContent).toContain(
       'Your workload finished deploying in 42 seconds.'
     )
+  })
+})
+
+const boxOf = (width: number) => {
+  const host = document.createElement('div')
+  host.style.width = `${width}px`
+  document.body.appendChild(host)
+  return host
+}
+
+describe('Alert in a narrow box', () => {
+  const mountIn = (width: number) =>
+    render(Alert, {
+      props: { label: 'The certificate expires in 3 days.', actionLabel: 'Renew', closable: true },
+      container: boxOf(width)
+    })
+
+  it('moves the action to its own line under the message', () => {
+    const view = mountIn(320)
+    const action = view.getByRole('button', { name: 'Renew' })
+    const close = view.getByRole('button', { name: 'Close message' })
+
+    expect(action.getBoundingClientRect().top).toBeGreaterThanOrEqual(
+      close.getBoundingClientRect().bottom
+    )
+  })
+
+  it('keeps the action on the message line in a wide box', () => {
+    const view = mountIn(900)
+    const action = view.getByRole('button', { name: 'Renew' })
+    const close = view.getByRole('button', { name: 'Close message' })
+
+    expect(action.getBoundingClientRect().top).toBeLessThan(close.getBoundingClientRect().bottom)
+  })
+
+  it('renders no action wrapper without an action', () => {
+    const view = render(Alert, { props: { label: 'Saved.' } })
+
+    expect(view.container.querySelector('[data-slot="alert-action"]')).toBeNull()
   })
 })

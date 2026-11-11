@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -268,5 +270,32 @@ describe('ToggleGroup', () => {
     const { getByTestId, queryAllByTestId } = render(WithDisabledOption)
     expect(getByTestId('actions-toggle-group')).toBeTruthy()
     expect(queryAllByTestId('actions-toggle-group__option-lock').length).toBe(1)
+  })
+})
+
+const boxOf = (width: number) => {
+  const host = document.createElement('div')
+  host.style.width = `${width}px`
+  document.body.appendChild(host)
+  return host
+}
+
+describe('ToggleGroup in a narrow box', () => {
+  it('shrinks its options and truncates the labels instead of overflowing', () => {
+    const host = boxOf(160)
+    const view = render(ToggleGroup, {
+      props: {
+        options: [
+          { label: 'Production environment', value: 'production' },
+          { label: 'Staging environment', value: 'staging' }
+        ],
+        ariaLabel: 'Environment'
+      },
+      container: host
+    })
+
+    expect(view.getByRole('radiogroup').getBoundingClientRect().right).toBeLessThanOrEqual(
+      host.getBoundingClientRect().right + 1
+    )
   })
 })

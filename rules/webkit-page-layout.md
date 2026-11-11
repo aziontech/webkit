@@ -15,6 +15,34 @@ on the same column.
 | `.layout-column-content` | Prose: documentation, blog                                    | `--layout-measure-content`     |
 | `.layout-column-site`    | The marketing site frame (hero, sections, footer)             | `--layout-measure-site`        |
 
+## Devices: window or box
+
+Two scales, documented in `@aziontech/theme` ("Breakpoints and container sizes"):
+
+- **Viewport breakpoints** (`sm:` 640, `md:` 768, `lg:` 1024, `xl:` 1280, `2xl:` 1536 px) are for
+  what belongs to the window: the app shell (sidebar on desktop, navigation `Drawer` on a phone),
+  overlays turning into sheets, the page boundary.
+- **Container sizes** (`@container`, `@sm:` 408, `@md:` 472, `@lg:` 552, `@xl:` 644 px …, the
+  `--container-*` scale) are for everything that can live in a panel: a band inside a drawer, a
+  split view or a card lays out for its box, not the window.
+
+These components are box-aware and need nothing from the page: `Table` (stacked rows below
+`--container-lg`, toolbar), `PageHeader`, `SectionHeader`, `SettingRow`, `SettingsSection`,
+`SaveBar`, `Card` (its content is `@container/card`), `Alert`, `EmptyState`, `Pagination`,
+`Wizard`, `HelpPanel`, `ChartCard`, `StatTile`, and the dialog and drawer body (`PanelContent`,
+`@container/panel`). `KeyValuePairs` and `Item` reflow by themselves; `Field orientation="responsive"`
+follows the nearest container.
+
+- Write `@md:` (container) for a layout inside a band; write `md:` (viewport) only for the shell.
+- Put `@container` only on a box whose width comes from its parent (a block, a grid track, a
+  `flex-1` item), never on a shrink-to-fit box (`inline-flex`, `w-fit`, a popover).
+- Every page reflows at 320 px with no horizontal page scroll; only code, logs, wide tables in
+  scroll mode and marquees scroll sideways, inside their own box.
+- Ultra-wide screens add margin, not line length: the container classes above already cap every
+  band, so never widen a page past its measure.
+- Touch targets are at least 24 × 24 px, and 44 × 44 px on a coarse pointer (`pointer-coarse:`);
+  nothing is revealed only on hover.
+
 ## Do
 
 - Put one container class on each band. A tab with a table is `.layout-column` even when the tab
@@ -41,6 +69,8 @@ on the same column.
 - Never use `w-full` to mean full-bleed. Full-bleed is the absence of a container class.
 - Never add a third rhythm step (`gap-12`, `mt-16`) between sections or groups.
 - Never write a literal length (`px`, `rem`) for a layout width; every measure is a token.
+- Never use a viewport breakpoint (`md:`, `lg:`) for a layout that lives inside a band; it breaks
+  the moment the band moves into a drawer or a split view.
 
 ## Correct
 

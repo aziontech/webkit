@@ -220,3 +220,15 @@ describe('ChartCard', () => {
     }
   })
 })
+
+describe('ChartCard on devices', () => {
+  it('is a named container whose header and controls wrap in a narrow card', () => {
+    const view = render(card())
+
+    expect(view.getByTestId('chart-chart-card').className).toContain('@container/chart-card')
+    expect(view.getByTestId('chart-chart-card__header').className).toContain('flex-wrap')
+    expect(view.getByTestId('chart-chart-card__controls').className).toContain(
+      '@max-xs/chart-card:w-full'
+    )
+  })
+})

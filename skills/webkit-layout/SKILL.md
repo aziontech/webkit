@@ -1,6 +1,6 @@
 ---
 name: webkit-layout
-description: The page container system — how a page built on @aziontech/webkit gets its width, its inset from the app chrome, and its vertical rhythm. Fixes the three-level page shape (boundary → parent section → band), the five measures and what picks one (the payload, never the URL), why the boundary is not part of the measure and what that buys, the two rhythm steps and the margin form for a band whose parent cannot carry a gap, the site frame, and the control cap inside an item-group field row. Everything comes from the `layout-*` utilities and tokens in @aziontech/theme — a page never writes its own `mx-auto max-w-*`, and full-bleed is the absence of a column class, not a `w-full`. Use when building any page, adding a sticky action bar, wondering how wide a page should be, or reviewing a page whose column drifts left, whose bar misaligns with the body it submits, or whose sections breathe unevenly.
+description: The page container system — how a page built on @aziontech/webkit gets its width, its inset from the app chrome, and its vertical rhythm. Fixes the three-level page shape (boundary → parent section → band), the five measures and what picks one (the payload, never the URL), why the boundary is not part of the measure and what that buys, the two rhythm steps and the margin form for a band whose parent cannot carry a gap, the site frame, the control cap inside an item-group field row, and the device contract (viewport breakpoints for the shell, container queries for anything that can sit in a drawer, split view or card, touch targets, reflow at 320 px). Everything comes from the `layout-*` utilities and tokens in @aziontech/theme — a page never writes its own `mx-auto max-w-*`, and full-bleed is the absence of a column class, not a `w-full`. Use when building any page, adding a sticky action bar, wondering how wide a page should be, or reviewing a page whose column drifts left, whose bar misaligns with the body it submits, or whose sections breathe unevenly.
 status: active
 last_updated: 2026-11-11
 scope: general
@@ -281,6 +281,57 @@ priority** — the fields _are_ the payload, several carry their own description
 filling them in rather than scanning them — so `layout-form-create` retunes the cap to 472px for
 everything inside it. One token, retuned per band, instead of a width re-typed on every row.
 
+## 8. Devices — the window, the box, the finger
+
+A component does not know whether it is on a 1440 px page or in a 400 px drawer, so it must not
+ask the window. Two scales (both in `@aziontech/theme`, "Breakpoints and container sizes"):
+
+| Question               | Scale            | Variants                       | Use it for                                                      |
+| ---------------------- | ---------------- | ------------------------------ | --------------------------------------------------------------- |
+| How big is the window? | `--breakpoint-*` | `sm:` `md:` `lg:` `xl:` `2xl:` | the shell (sidebar ↔ drawer), overlays as sheets, page boundary |
+| How big is my box?     | `--container-*`  | `@container` + `@sm:` `@md:` … | everything inside a band, a card, a drawer, a split view        |
+
+```vue
+<template>
+  <section class="@container/usage flex flex-col gap-(--layout-group-gap)">
+    <div class="grid grid-cols-1 gap-(--spacing-md) @xl/usage:grid-cols-2">…</div>
+  </section>
+</template>
+```
+
+The components that live in panels already do this, so a page gets it for free: `Table` (rows
+stack into label/value cards below `--container-lg`; `:stackable="false"` keeps the scrolling grid),
+`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingRow` (the
+control moves under its copy), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
+`Card` (its content is `@container/card`), `Alert` (the action takes its own line), `EmptyState`,
+`Pagination` (only previous / current / next in a narrow box), `Wizard` (the rail hides when the
+wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every dialog and drawer
+(`@container/panel`). `KeyValuePairs` picks its column count from its own width, and
+`Field orientation="responsive"` follows whichever container encloses it.
+
+The window still owns the shell:
+
+- Below `md` the console sidebar is not shown; the shell opens the same `Sidebar` inside a
+  `Drawer` from a menu button (the `shells/console` block).
+- Below `md` a `Dialog` or `Drawer` is a bottom sheet; below `sm` it is a full-height, full-width
+  sheet, and its `PanelFooter` actions stay pinned and stretch.
+- Ultra-wide (1920, 2560 px): the column classes of section 2 cap the content, so wide screens add
+  margin. Never widen a band to "use the space".
+
+Containment has one cost: a box with `@container` has no intrinsic width. Put it only on a box whose
+width comes from its parent (block, grid track, `flex-1`), never on `inline-flex`, `w-fit` or a
+popover.
+
+Touch: every target is at least 24 × 24 px, 44 × 44 px on a coarse pointer. The webkit controls do
+it without changing their drawn size (an invisible hit area under `pointer-coarse:`); in your own
+markup prefer a larger hit area over a larger control. Anything shown on hover is also shown on
+focus and under `[@media(hover:none)]:`.
+
+Reflow (WCAG 1.4.10): the page works at 320 px with no horizontal page scroll. Only code, logs,
+tables in scroll mode and marquees scroll sideways, inside their own box. Give fixed-width demo
+wrappers `w-full max-w-*`, rows that hold several controls `flex-wrap`, and flex items that hold
+truncating text `min-w-0`.
+
 ## Hard rules
 
 - **NEVER** hand-roll a page cap: no `mx-auto max-w-(--container-*)`, no `max-w-[…]`, no `max-w-5xl`
@@ -301,6 +352,9 @@ everything inside it. One token, retuned per band, instead of a width re-typed o
   row's control column included). `webkit/no-physical-direction` blocks `pl-`/`mr-`/`left-`/`text-right`;
   "left" and "right" in this skill read as "start" and "end" in a right-to-left page (rule
   `webkit-direction`).
+- **NEVER** use a viewport variant (`md:`, `lg:`) for a layout inside a band, card or panel; use a
+  container variant (`@md:`) so it survives being moved into a drawer or a split view.
+- **MUST** reflow at 320 px with no horizontal page scroll.
 - **NEVER** cap the app shell — the sidebar, the global header, the content zone's own inset stay
   fluid. The cap lives on the page's own column.
 

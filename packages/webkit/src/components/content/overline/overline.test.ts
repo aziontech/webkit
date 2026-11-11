@@ -132,3 +132,14 @@ describe('Overline', () => {
     expect(getByText('CLOSING TAG')).toBeInTheDocument()
   })
 })
+
+describe('Overline on phones', () => {
+  it('lets a single-line label wrap below sm so it never overflows', () => {
+    const view = render(Overline, { slots: { default: 'Trusted by mission-critical workloads' } })
+
+    expect(view.getByText('Trusted by mission-critical workloads').className).toContain(
+      'max-sm:whitespace-normal'
+    )
+    expect(view.getByTestId('content-overline').className).toContain('max-w-full')
+  })
+})

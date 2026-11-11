@@ -310,3 +310,13 @@ describe('RadioCards', () => {
     await expectNoA11yViolations(container)
   })
 })
+
+describe('RadioCards on devices', () => {
+  it('caps each option at the width of the group so long copy wraps', () => {
+    const view = render(RadioCards, {
+      props: { items: [{ label: 'Edge', value: 'edge', description: 'Runs on the edge' }] }
+    })
+
+    expect(view.getAllByRole('radio')[0]?.className).toContain('max-w-full')
+  })
+})

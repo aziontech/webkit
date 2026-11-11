@@ -58,6 +58,7 @@
     :data-level="level"
     role="listitem"
     size="small"
+    class="@container/setting-row"
   >
     <div
       :data-kind="kind"
@@ -81,7 +82,7 @@
       </ItemContent>
       <div
         :data-kind="kind"
-        class="contents data-[kind=field]:flex data-[kind=field]:max-w-(--container-3xs) data-[kind=field]:flex-1 data-[kind=field]:justify-end"
+        class="contents data-[kind=field]:flex data-[kind=field]:max-w-(--container-3xs) data-[kind=field]:flex-1 data-[kind=field]:justify-end @max-md/setting-row:data-[kind=field]:max-w-none @max-md/setting-row:data-[kind=field]:basis-full @max-md/setting-row:data-[kind=field]:justify-start"
       >
         <ItemActions
           :data-testid="`${testId}__control`"

@@ -141,3 +141,22 @@ describe('Card', () => {
     expect(getByText(/Card body content/)).toBeTruthy()
   })
 })
+
+describe('Card on devices', () => {
+  it('makes its content region a named container', () => {
+    const view = render(Card, { props: { title: 'Usage' }, slots: { content: 'Body' } })
+
+    expect(view.getByTestId('content-card__content').className).toContain('@container/card')
+  })
+
+  it('keeps the header action visible where there is no hover', () => {
+    const view = render(Card, {
+      props: { title: 'Usage' },
+      slots: { 'header-action': '<button type="button">Edit</button>' }
+    })
+
+    expect(view.getByTestId('content-card__header-action').className).toContain(
+      '[@media(hover:none)]:opacity-100'
+    )
+  })
+})

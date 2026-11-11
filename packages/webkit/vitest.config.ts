@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
+import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
@@ -19,7 +20,11 @@ const selfExports = {
 }
 
 export default defineConfig({
-  plugins: [selfExports, vue({ template: { transformAssetUrls: { includeAbsolute: false } } })],
+  plugins: [
+    selfExports,
+    vue({ template: { transformAssetUrls: { includeAbsolute: false } } }),
+    tailwindcss()
+  ],
   define: {
     'process.env.NODE_ENV': JSON.stringify('test')
   },

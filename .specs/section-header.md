@@ -3,10 +3,10 @@ name: section-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: d095c1d8067612be7ae3db29fe0eec728553a774aa43d1bbaaeeff485520251f
+checksum: fd468fc96cbddc4fdf8cbaf2ea1f9a7911c28aaa97103414efbf4fca862ea99d
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # SectionHeader — Component Spec
@@ -87,6 +87,8 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 
 - Visual states: `default`, `hover` / `focus-within` (reveals the copy-link button)
 - `data-size` mirrors the `size` prop on the root and the h2
+- Responsive: the root is the `@container/section-header`; the actions take the full width under the copy below `@md` of the box and sit beside it from `@md`.
+- Hover-free devices: the copy-link stays visible where the primary pointer cannot hover (`@media (hover: none)`), so it is never a hover-only affordance.
 
 ## Motion & Animations
 

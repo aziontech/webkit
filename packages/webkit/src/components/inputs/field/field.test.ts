@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
@@ -232,5 +234,36 @@ describe('Field', () => {
       await nextTick()
       await expectNoA11yViolations(container)
     })
+  })
+})
+
+const boxOf = (width: number) => {
+  const host = document.createElement('div')
+  host.style.width = `${width}px`
+  document.body.appendChild(host)
+  return host
+}
+
+describe('Field orientation="responsive" in any container', () => {
+  const mountIn = (width: number) =>
+    render(
+      {
+        components,
+        template:
+          '<div class="@container"><Field orientation="responsive"><FieldLabel>Name</FieldLabel><Input /></Field></div>'
+      },
+      { container: boxOf(width) }
+    )
+
+  it('stacks the label above the control in a narrow container', () => {
+    const view = mountIn(320)
+
+    expect(getComputedStyle(view.getByTestId('input-field')).flexDirection).toBe('column')
+  })
+
+  it('puts the label beside the control in a wide container outside a FieldGroup', () => {
+    const view = mountIn(800)
+
+    expect(getComputedStyle(view.getByTestId('input-field')).flexDirection).toBe('row')
   })
 })

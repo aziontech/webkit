@@ -107,7 +107,7 @@
 
   const rootClasses = computed(() =>
     cn(
-      'group relative inline-flex w-fit items-stretch gap-(--spacing-xxs)',
+      'group relative inline-flex w-fit max-w-full min-w-0 items-stretch gap-(--spacing-xxs)',
       'rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-xxs)',
       'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
       'data-[fluid]:flex data-[fluid]:w-full',
@@ -122,7 +122,7 @@
   ]
 
   const sharedOptionClasses = [
-    'relative z-1 inline-flex shrink-0 items-center justify-center gap-(--spacing-xs) whitespace-nowrap',
+    'relative z-1 inline-flex min-w-0 items-center justify-center gap-(--spacing-xs) whitespace-nowrap',
     'group-data-[fluid]:min-w-0 group-data-[fluid]:flex-1',
     'rounded-(--shape-button) border border-transparent',
     'group-data-[size=small]:px-(--spacing-xs) group-data-[size=medium]:px-(--spacing-sm) group-data-[size=large]:px-(--spacing-md)',

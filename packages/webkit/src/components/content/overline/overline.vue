@@ -33,20 +33,20 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex items-center gap-(--spacing-xxs) relative w-fit ps-(--spacing-xxs)"
+    class="flex items-center gap-(--spacing-xxs) relative w-fit max-w-full ps-(--spacing-xxs)"
     :class="!showCursor ? 'pe-(--spacing-xxs)' : 'pe-0'"
   >
     <span
       v-if="prefix"
       aria-hidden="true"
       class="text-default font-medium text-overline-md"
-      :class="{ 'whitespace-nowrap': singleLine }"
+      :class="{ 'whitespace-nowrap max-sm:whitespace-normal': singleLine }"
     >
       {{ prefix }}
     </span>
     <span
       class="text-pretty text-primary font-medium uppercase text-overline-md"
-      :class="{ 'whitespace-nowrap': singleLine }"
+      :class="{ 'whitespace-nowrap max-sm:whitespace-normal': singleLine }"
     >
       <slot />
     </span>

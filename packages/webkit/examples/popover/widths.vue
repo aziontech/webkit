@@ -12,7 +12,7 @@
 </script>
 
 <template>
-  <div class="flex items-center gap-(--spacing-xxl) p-(--spacing-xxl)">
+  <div class="flex flex-wrap items-center gap-(--spacing-xxl) p-(--spacing-xxl)">
     <Popover
       placement="bottom-start"
       width="small"

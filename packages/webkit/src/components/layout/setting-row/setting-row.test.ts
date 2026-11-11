@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
@@ -102,5 +104,39 @@ describe('SettingRow', () => {
   it('has no accessibility violations', async () => {
     await expectNoA11yViolations(render(Default).container)
     await expectNoA11yViolations(render(Nested).container)
+  })
+})
+
+const boxOf = (width: number) => {
+  const host = document.createElement('div')
+  host.style.width = `${width}px`
+  document.body.appendChild(host)
+  return host
+}
+
+describe('SettingRow in a narrow box', () => {
+  const mountIn = (width: number) =>
+    render(SettingRow, {
+      props: { title: 'Cache TTL', description: 'How long the edge keeps a copy.' },
+      slots: { default: '<input aria-label="TTL" />' },
+      container: boxOf(width)
+    })
+
+  it('moves the control under the copy at full width', () => {
+    const view = mountIn(320)
+    const title = view.getByTestId('layout-setting-row__title')
+    const control = view.getByTestId('layout-setting-row__control')
+
+    expect(control.getBoundingClientRect().top).toBeGreaterThan(
+      title.getBoundingClientRect().bottom
+    )
+  })
+
+  it('keeps the control beside the copy in a wide box', () => {
+    const view = mountIn(900)
+    const title = view.getByTestId('layout-setting-row__title')
+    const control = view.getByTestId('layout-setting-row__control')
+
+    expect(control.getBoundingClientRect().top).toBeLessThan(title.getBoundingClientRect().bottom)
   })
 })

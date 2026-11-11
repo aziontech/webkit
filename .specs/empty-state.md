@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 8625c4119e5f3919a1651e6bc9edf7460f6057fe524f78051352058550412096
+checksum: ba0eb91980a3576795995432ee0a3c6124b76f13fbc3583a69a9af7445930b57
 created: 2026-06-25
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Empty State — Component Spec
@@ -106,6 +106,7 @@ Centered placeholder shown when a resource list or section has no content yet. S
 - Visual states: `default`
 - `data-size` mirrors the `size` prop
 - `data-bordered` mirrors the `bordered` prop
+- Responsive: the root is the `@container/empty-state`; below `@xs` of its box (a narrow panel, a phone) the actions stretch to the full width.
 
 ## Motion & Animations
 

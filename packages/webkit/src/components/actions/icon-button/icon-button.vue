@@ -213,6 +213,11 @@
         aria-hidden="true"
       />
     </span>
+    <span
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+    />
   </a>
 
   <button
@@ -268,5 +273,10 @@
         aria-hidden="true"
       />
     </span>
+    <span
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+    />
   </button>
 </template>

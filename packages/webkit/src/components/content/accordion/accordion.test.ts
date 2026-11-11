@@ -378,3 +378,12 @@ describe('Accordion (compound / provide-inject)', () => {
     expect(texts.join(' ')).toContain('Pay only for what you use')
   })
 })
+
+describe('AccordionTrigger on devices', () => {
+  it('lets its label shrink so long trigger content truncates instead of overflowing', () => {
+    const view = render(Default)
+    const trigger = view.getAllByRole('button')[0]
+
+    expect(trigger?.firstElementChild?.className).toContain('min-w-0')
+  })
+})

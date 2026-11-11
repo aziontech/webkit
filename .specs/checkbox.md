@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 4ae3f01403758223a462dea82f32e9ed1d63fa8d59c20c600b43f6c12ab76b03
+checksum: b146b9eb7a6f72cff249c8caa9e3b48955b4abfaa3f53e6dd30a8becbfb022a1
 created: 2026-05-22
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Checkbox — Component Spec
@@ -95,6 +95,7 @@ The checkbox is a leaf primitive — no slots. Label/description live in the enc
 - `data-indeterminate` mirrors the `indeterminate` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-readonly` mirrors the `readonly` prop
+- Touch: the native input that receives the click extends past the 18 px box to 24 × 24 px, and to 44 × 44 px on a coarse pointer; the drawn box does not change.
 
 ## Motion & Animations
 

@@ -176,7 +176,7 @@
     :aria-labelledby="labelledBy"
     :aria-describedby="describedBy"
     :style="sizeVars"
-    class="relative flex min-w-0 flex-col overflow-clip rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) [grid-column:span_min(var(--chart-card-span),var(--chart-grid-columns,12))] [height:var(--chart-card-height,auto)] transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[dragging]:opacity-50"
+    class="@container/chart-card relative flex min-w-0 flex-col overflow-clip rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) [grid-column:span_min(var(--chart-card-span),var(--chart-grid-columns,12))] [height:var(--chart-card-height,auto)] transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[dragging]:opacity-50"
     @dragstart="onDragStart"
     @dragend="onDragEnd"
   >

@@ -149,7 +149,7 @@
       :aria-labelledby="attrs['aria-label'] ? undefined : labelledBy"
       :aria-invalid="isInvalid || undefined"
       :required="isRequired || undefined"
-      class="absolute inset-0 size-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
+      class="absolute inset-[min(0rem,calc(50%-12px))] cursor-pointer opacity-0 pointer-coarse:inset-[min(0rem,calc(50%-22px))] disabled:cursor-not-allowed"
       :checked="isChecked"
       :disabled="isDisabled"
       :readonly="readonly"

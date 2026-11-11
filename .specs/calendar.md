@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 8ce7714e026bb3a0740148ec1aa403961fdb541138b0866c527c70b0c1a95bd3
+checksum: 2dde0171c58fd220cd23110edbab489bb221176f76cf029704065127d5c6f745
 created: 2026-06-25
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Calendar — Component Spec
@@ -166,6 +166,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 - `data-disabled` mirrors the `disabled` prop on the root, unselectable day cells, and the clear control when there is no selection
 - When `presets` are supplied, the trigger is a two-part control: a left preset button (`aria-haspopup="menu"`, clock glyph, `data-testid` `…__presets-trigger`) opening the preset dropdown, and a right calendar button (`aria-haspopup="dialog"`, calendar glyph) opening the popover; the two dropdowns are mutually exclusive, and each preset menu item sets `data-selected` when it is the active preset
 - In period mode, a committed selection renders the trigger as two side-by-side segments: the relative token (e.g. `45m`, with a clock glyph) beside the resolved concrete window (e.g. `14:44 – 23:59`, with a calendar glyph), separated by a divider
+- Reflow: the root is capped at the width of its container (`max-w-full`), so the trigger, presets included, never overflows a 320 px box.
 
 ## Motion & Animations
 

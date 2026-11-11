@@ -204,6 +204,45 @@ copy them again to get the mirrored version.
 
 See the `webkit-direction` rule for the full standard.
 
+### Devices
+
+Components that live in panels now lay out for **their own box**, not the window, through
+container queries (Tailwind v4 `@container`, the `--container-*` scale; see the theme README,
+"Breakpoints and container sizes"). On a full-width page nothing moves much; inside a drawer, a
+split view or a card these change:
+
+- **Container-aware components.** `PageHeader` and `SectionHeader` drop their actions under the
+  title below `@md` of the header (was: below the `md` viewport). `SaveBar` puts message and actions
+  on one row from `@xl` of the bar (was: the `lg` viewport); `plain` stacks its actions below `@md`.
+  `Wizard` hides its rail below `@2xl` of the wizard (was: the `md` viewport). `SettingRow` moves a
+  `field` control under its copy below `@md` of the row. `Alert` moves its action to its own line,
+  `EmptyState` stretches its actions and `Pagination` keeps only previous / current / next in a
+  narrow box. `KeyValuePairs` picks its column count from its own width (a cell never gets narrower
+  than `--container-3xs`) instead of the `md`/`lg` viewport. `Field orientation="responsive"`
+  follows the nearest container (a Card, a dialog or drawer body, a `Field.Group`), not only a
+  `Field.Group`. If you relied on the old viewport switch, check those screens in a drawer.
+- **Containers you can use.** `Card` content (`@container/card`), the dialog and drawer body
+  (`PanelContent`, `@container/panel`), `SettingsSection` body, `HelpPanel`, `ChartCard`,
+  `StatTile` and `Table` (`@container/table`) are containers: `@md:` utilities in your own markup
+  inside them follow that box. A `Card` used as a shrink-to-fit flex item now needs a width
+  (`flex-1`, `w-full` or a grid track).
+- **Stacked table.** A data-driven `Table` narrower than `--container-lg` (552 px) renders each row
+  as a card of label / value lines instead of scrolling sideways. The column headers stay for
+  screen readers. Set `:stackable="false"` to keep the old grid; give a column `label` when its
+  header is a slot.
+- **Sheets.** Below `sm` a `Dialog` or `Drawer` is a full-height, full-width sheet (it was an
+  80 dvh bottom sheet, which it still is between `sm` and `md`). `PanelFooter` stretches its direct
+  children to equal widths and keeps the safe-area inset clear on phones.
+- **Touch and hover.** `Button`, `IconButton`, `Checkbox`, `RadioButton` and `Switch` keep their
+  drawn size but get a 24 px hit area, 44 px on a coarse pointer; `Pagination` buttons grow to
+  44 px on a coarse pointer. `Button` and `IconButton` render one more child, an empty
+  `[data-slot=touch-target]` span; update DOM snapshots. The copy-link of `SectionHeader` and
+  `SettingsSection`, the `Card` header action and the `Table` sort affordance stay visible on
+  devices without hover.
+- **Reflow.** `ToggleGroup`, `Calendar`, `RadioCards`, `Overline`, the `Accordion` trigger and
+  `Resizable` no longer overflow a 320 px box (they truncate, wrap or clip instead). A
+  `singleLine` `Overline` wraps below `sm`.
+
 ## 5. Unchanged
 
 Theme tokens (apart from the sans stack above), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style

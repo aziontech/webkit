@@ -301,3 +301,13 @@ describe('Switch', () => {
     })
   })
 })
+
+describe('Switch touch target', () => {
+  it('extends its hit area to 24px, and 44px on coarse pointers', () => {
+    const view = render(Switch, { attrs: { 'aria-label': 'Enabled' } })
+
+    expect(view.getByRole('switch').className).toContain(
+      'pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]'
+    )
+  })
+})

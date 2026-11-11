@@ -552,42 +552,43 @@
     >
       {{ announcement }}
     </p>
-    <table
+    <div
       v-if="showMarks"
       class="sr-only"
-      :data-testid="`${testId}__twin`"
     >
-      <caption>
-        {{
-          ariaLabel || summary
-        }}
-      </caption>
-      <thead>
-        <tr>
-          <th scope="col">Label</th>
-          <th
-            v-for="entry in visibleSeries"
-            :key="entry.id"
-            scope="col"
+      <table :data-testid="`${testId}__twin`">
+        <caption>
+          {{
+            ariaLabel || summary
+          }}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Label</th>
+            <th
+              v-for="entry in visibleSeries"
+              :key="entry.id"
+              scope="col"
+            >
+              {{ entry.name }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(label, index) in labels"
+            :key="index"
           >
-            {{ entry.name }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(label, index) in labels"
-          :key="index"
-        >
-          <th scope="row">{{ formatLabel(label) }}</th>
-          <td
-            v-for="entry in visibleSeries"
-            :key="entry.id"
-          >
-            {{ formatCell(entry.values[index]) }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <th scope="row">{{ formatLabel(label) }}</th>
+            <td
+              v-for="entry in visibleSeries"
+              :key="entry.id"
+            >
+              {{ formatCell(entry.values[index]) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </figure>
 </template>

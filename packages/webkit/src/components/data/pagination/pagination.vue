@@ -148,7 +148,7 @@
     v-bind="$attrs"
     :aria-label="ariaLabel"
     :data-testid="testId"
-    class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm) text-(--text-default)"
+    class="@container/pagination flex w-full flex-wrap items-center justify-between gap-(--spacing-sm) text-(--text-default)"
   >
     <div class="flex min-w-0 items-center">
       <slot name="info">
@@ -174,6 +174,7 @@
             :key="item.key"
             :kind="item.type === 'more' ? 'more' : 'number'"
             :selected="item.type === 'page' && item.value === currentPage"
+            class="@max-sm/pagination:not-data-selected:hidden"
             @click="onItemClick(item)"
           >
             {{ item.type === 'page' ? item.value : '' }}

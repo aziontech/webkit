@@ -154,3 +154,13 @@ describe('Panel', () => {
     await expectNoA11yViolations(getByTestId('overlay-panel'))
   })
 })
+
+describe('Panel on devices', () => {
+  it('makes the content a named container and stretches footer actions on phones', () => {
+    const { getByTestId } = render(composed())
+
+    expect(getByTestId('overlay-panel__content').className).toContain('@container/panel')
+    expect(getByTestId('overlay-panel__footer').className).toContain('max-sm:*:flex-1')
+    expect(getByTestId('overlay-panel__footer').className).toContain('safe-area-inset-bottom')
+  })
+})

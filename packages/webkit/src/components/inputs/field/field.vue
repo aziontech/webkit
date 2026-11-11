@@ -9,7 +9,7 @@
   })
 
   export interface Props {
-    /** Layout axis: label above the control, beside it, or beside it once the FieldGroup is wide enough. */
+    /** Layout axis: label above the control, beside it, or beside it once the enclosing container (a FieldGroup, Card, drawer or dialog body) is wide enough. */
     orientation?: FieldOrientation
     /** Marks the field invalid: the control sets aria-invalid and FieldDescription switches to the invalid tone. */
     invalid?: boolean
@@ -68,7 +68,7 @@
     :data-invalid="invalid || null"
     :data-disabled="disabled || null"
     :data-required="required || null"
-    class="group/field flex w-full gap-(--spacing-xs) data-[orientation=vertical]:flex-col data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:items-center data-[orientation=horizontal]:has-[>[data-slot=field-content]]:items-start data-[orientation=horizontal]:[&>[data-slot=field-label]]:flex-auto data-[orientation=responsive]:flex-col @md/field-group:data-[orientation=responsive]:flex-row @md/field-group:data-[orientation=responsive]:items-center data-[disabled]:cursor-not-allowed"
+    class="group/field flex w-full gap-(--spacing-xs) data-[orientation=vertical]:flex-col data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:items-center data-[orientation=horizontal]:has-[>[data-slot=field-content]]:items-start data-[orientation=horizontal]:[&>[data-slot=field-label]]:flex-auto data-[orientation=responsive]:flex-col @md:data-[orientation=responsive]:flex-row @md:data-[orientation=responsive]:items-center data-[disabled]:cursor-not-allowed"
   >
     <slot />
   </div>

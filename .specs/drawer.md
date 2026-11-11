@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 9d74e4e82e21f087d730969544b27fd2f71321c6518a41914f9b2a60ce307c45
+checksum: ad21223d9231f0728c3e3605bf938c2f2af6d1c3263c64e39f07a709afba90ed
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Drawer — Component Spec
@@ -119,6 +119,7 @@ const open = ref(false)
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
+- Phones: below `md` the drawer is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`top-0`, `h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content with full-width actions.
 
 ## Motion & Animations
 

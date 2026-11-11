@@ -144,6 +144,27 @@ chain, not a fixed pixel height:
 `min-h-0` on the flex parent (so it can shrink), `h-full` down the chain (`Card` → `Table`), and
 `max-height="100%"` on the `Table` — the body scrolls inside, the toolbar and column headers don't move.
 
+### Narrow boxes — stacked rows, not a sideways scroll
+
+A data-driven `Table` measures its own box. Below `--container-lg` (552 px: a phone, a drawer, one
+pane of a split view) it sets `data-stacked` and renders each row as a card: the checkbox, the
+principal column and the actions share the first line, and every other column becomes a line of
+**label · value** (the label is the column `label` or `header`). The column headers stay in the DOM,
+visually hidden, so screen readers keep them. Nothing to configure:
+
+```vue
+<Table :data="rows" :columns="columns" row-key="id" />
+```
+
+- Keep `principal: true` on the column that names the row: it is the card title.
+- Give a column `label` when its `header` is a slot, so the stacked line has a label.
+- `:stackable="false"` keeps the horizontally scrolling grid at every width. Use it only where
+  rows are compared across columns (a pricing grid, a diff), never just to avoid the cards.
+- The toolbar is a container too (`@container/table`): below `@md` of the table the toolbar slot
+  drops under the title and wraps. Keep `Table.Search` `flex-1` so it takes the free line.
+- A hand-composed table (`Table.Header` / `Table.Row` without `columns`) never stacks; prefer the
+  data-driven API in anything that can be narrow.
+
 ## Cell recipes
 
 Render each column with `#cell-<accessorKey>` (`#cell-actions` for the action column). Reuse these
@@ -471,6 +492,7 @@ destructive actions in their own `DropdownMenu.Group`.
 - [ ] Every name that leaves the screen uses the one shared cross-resource link: 12px `pi-external-link`, a tooltip naming the destination, underline on hover, and **no mark at all** when there is no destination.
 - [ ] Only **one** chip per row, and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.
 - [ ] Domain cell = the shared link + `CopyButton` with `ms-auto shrink-0`; cell `w-full`. Copy buttons align across rows.
+- [ ] In a 320 px box the rows stack into label/value cards (no `:stackable="false"` without a reason) and the toolbar wraps.
 - [ ] Measured at a narrow viewport: **zero** cells where `scrollWidth > clientWidth` (catches a link wrapper that cannot shrink, which looks fine when wide).
 - [ ] Every copyable cell uses text-then-copy with the copy button pinned to the end (`ms-auto shrink-0`), never flush against the text.
 - [ ] "Last Modified" cell = `Avatar` + relative time in one column, name on the avatar tooltip; no raw absolute date and no separate "Last Modified By"/"Author" column beside it.

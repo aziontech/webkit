@@ -195,3 +195,12 @@ describe('IconButton', () => {
     expect(getByTestId('actions-icon-button')).toBeInTheDocument()
   })
 })
+
+describe('IconButton touch target', () => {
+  it('adds a 44px hit area on coarse pointers without changing the drawn size', () => {
+    const view = render(IconButton, { props: { icon: 'pi pi-times', ariaLabel: 'Close' } })
+    const target = view.getByRole('button').querySelector('[data-slot="touch-target"]')
+
+    expect(target?.className).toContain('pointer-coarse:block')
+  })
+})

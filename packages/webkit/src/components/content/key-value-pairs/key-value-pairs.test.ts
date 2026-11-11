@@ -1,6 +1,8 @@
+import '../../../test/reflow.css'
+
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent } from 'vue'
+import { defineComponent, h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { useKeyValuePairsContext } from './composables/use-key-value-pairs-context'
@@ -225,5 +227,43 @@ describe('KeyValuePairs', () => {
       const view = render(Facts, { props: { loading: true } })
       await expectNoA11yViolations(view.container)
     })
+  })
+})
+
+const boxOf = (width: number) => {
+  const host = document.createElement('div')
+  host.style.width = `${width}px`
+  document.body.appendChild(host)
+  return host
+}
+
+describe('KeyValuePairs columns follow the box', () => {
+  const columnsIn = (width: number, columns: number) => {
+    const view = render(KeyValuePairs, {
+      props: { columns },
+      slots: {
+        default: () =>
+          ['Region', 'Status', 'Owner', 'Created'].map((label) =>
+            h(KeyValuePairsItem, { label }, { default: () => 'value' })
+          )
+      },
+      container: boxOf(width)
+    })
+    return getComputedStyle(view.getByTestId('content-key-value-pairs'))
+      .gridTemplateColumns.split(' ')
+      .filter(Boolean).length
+  }
+
+  it('lays out one column in a narrow box', () => {
+    expect(columnsIn(320, 3)).toBe(1)
+  })
+
+  it('caps the columns at the requested count in a wide box', () => {
+    expect(columnsIn(1200, 3)).toBe(3)
+    expect(columnsIn(1200, 2)).toBe(2)
+  })
+
+  it('drops to fewer columns before a cell gets narrower than --container-3xs', () => {
+    expect(columnsIn(700, 4)).toBe(2)
   })
 })

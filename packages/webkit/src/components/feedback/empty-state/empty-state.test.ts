@@ -166,3 +166,17 @@ describe('EmptyState', () => {
     })
   })
 })
+
+describe('EmptyState on devices', () => {
+  it('is a named container that stretches its actions in a narrow box', () => {
+    const view = render(EmptyState, {
+      props: { title: 'No domains' },
+      slots: { actions: '<button type="button">Add domain</button>' }
+    })
+
+    expect(view.getByTestId('feedback-empty-state').className).toContain('@container/empty-state')
+    expect(view.getByTestId('feedback-empty-state__actions').className).toContain(
+      '@max-xs/empty-state:w-full'
+    )
+  })
+})

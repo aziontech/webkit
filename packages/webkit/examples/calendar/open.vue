@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <div class="min-h-[640px] w-[560px]">
+  <div class="min-h-[640px] w-full max-w-[560px]">
     <Calendar
       v-model="range"
       mode="range"

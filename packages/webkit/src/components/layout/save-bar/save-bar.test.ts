@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -70,5 +72,41 @@ describe('SaveBar', () => {
 
   it('has no accessibility violations as a plain form footer', async () => {
     await expectNoA11yViolations(render(Plain).container)
+  })
+})
+
+const boxOf = (width: number) => {
+  const host = document.createElement('div')
+  host.style.width = `${width}px`
+  document.body.appendChild(host)
+  return host
+}
+
+describe('SaveBar in a narrow box', () => {
+  const mountIn = (width: number) =>
+    render(SaveBar, {
+      props: { kind: 'plain' },
+      slots: {
+        default: 'You have unsaved changes',
+        actions: '<button type="button">Discard</button><button type="button">Save</button>'
+      },
+      container: boxOf(width)
+    })
+
+  it('stacks full-width actions under the message', () => {
+    const view = mountIn(320)
+    const actions = view.getByTestId('layout-save-bar__actions')
+    const save = view.getByRole('button', { name: 'Save' })
+
+    expect(getComputedStyle(actions).flexDirection).toBe('column-reverse')
+    expect(Math.round(save.getBoundingClientRect().width)).toBe(
+      Math.round(actions.getBoundingClientRect().width)
+    )
+  })
+
+  it('keeps the actions in a row in a wide box', () => {
+    const view = mountIn(1024)
+
+    expect(getComputedStyle(view.getByTestId('layout-save-bar__actions')).flexDirection).toBe('row')
   })
 })

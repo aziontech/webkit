@@ -45,7 +45,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
-    class="flex flex-wrap items-start justify-between gap-(--spacing-md)"
+    class="@container/page-header flex flex-wrap items-start justify-between gap-(--spacing-md)"
   >
     <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -69,7 +69,7 @@
     <div
       v-if="$slots['actions']"
       :data-testid="`${testId}__actions`"
-      class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full max-md:*:w-full"
+      class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) @md/page-header:w-auto @md/page-header:max-w-full @max-md/page-header:*:w-full"
     >
       <slot name="actions" />
     </div>

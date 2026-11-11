@@ -3,10 +3,10 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: approved
-checksum: 6d2d57a9d38553651dfde59556a2ab7874df1e2489c9c68f5c16a729f6f1da43
+checksum: cac6445c8d36f16c4155200fc9342104f14162999cad377a34d35c97f9407aed
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # StatTile — Component Spec
@@ -94,6 +94,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `secondary` when flat
 - `data-loading` mirrors `loading`
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
+- Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
 
 ## Motion & Animations
 

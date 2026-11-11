@@ -3,10 +3,10 @@ name: setting-row
 category: layout
 structure: monolithic
 status: implemented
-checksum: b285a2f11c07433956f09360aee7203cbc5464ba7ec55d43d6b70c33dcfe9770
+checksum: f88750b25f01ee7b3117ac3dd6a81e703f03a9b9603c043300fc29aff69b8ef9
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # SettingRow — Component Spec
@@ -109,6 +109,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 
 - Visual states: `default`
 - `data-row-kind` mirrors `kind` and `data-level` mirrors `level` on the root
+- Responsive: the row is the `@container/setting-row`. Below `@md` of the row (a narrow drawer, a phone) a `field` control moves under the copy at full width; from `@md` it sits on the end side, capped at `--layout-measure-control`.
 
 ## Motion & Animations
 

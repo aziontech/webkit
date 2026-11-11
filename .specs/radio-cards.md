@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: ab8989e311d6498b2eb8497f5978e5df0e46993a061ecc324b86cc12b524771c
+checksum: 0bccc4caf77681add954d892fbf6ee020e1085ef801fdc2b3b7736a948726bf1
 created: 2026-05-23
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Box Grid Selection — Component Spec
@@ -102,6 +102,7 @@ Horizontal grid of selectable cards for mutually exclusive choices (plans, roles
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `selected`
 - `data-disabled` mirrors the `disabled` prop on root and each option
 - `data-selected` mirrors whether `modelValue === item.value`
+- Reflow: each option is capped at the width of the group (`max-w-full`) so long descriptions and tags wrap inside a narrow box.
 
 ## Motion & Animations
 

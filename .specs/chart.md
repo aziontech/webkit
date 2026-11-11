@@ -3,10 +3,10 @@ name: chart
 category: chart
 structure: composition
 status: approved
-checksum: a4cc41e4d888f5dbfd3ad6a58fcc03b1ce9909f3a4016b1b663070fd2cba2f34
+checksum: 1fd4f7db9d87d8d45f0c9cf6edd537093dc7cfe48470e7eedb0506de0a549703
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Chart — Component Spec
@@ -203,6 +203,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - `data-orientation`: `vertical` | `horizontal`
 - `data-entered` on each mark flips after two animation frames to run its entrance transition
 - `data-dimmed` on a series when another series is emphasized from the legend
+- Reflow: the visually hidden table twin sits inside an `sr-only` box so its intrinsic width never adds horizontal overflow at 320 px.
 
 ## Motion & Animations
 
