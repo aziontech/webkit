@@ -216,3 +216,41 @@ Scope: new `FileTokenGroup` (files picked for upload as removable tokens with si
 - Uploading: the dialog keeps refused files with the reason and leaves them out of the count on the primary button; the page drop overlay is `aria-hidden` because Add to files is the keyboard path; transfers never block the page; finished files land in the table one by one. MoveObject: the destination is a `Combobox` of folders that accepts a new path, validated on Move with the reason under the field. No defect.
 - Decision: the `Toaster` sits at `top-right` in both variants, because the floating transfer card holds the bottom inline-end corner.
 - Finding: Move stayed enabled with only folders or the `..` row selected and then did nothing. Fixed: disabled until a file is selected. Open: `TableRoot` cannot make single rows unselectable, so folders and `..` still take a checkbox (M2.10 row 24).
+
+## WP workload-app
+
+Scope: `shells/console` primary (ListPage) and DetailPage rebuilt on `AppLayout`, with `closeNavigation` added to the `AppLayout` navigation slot scope (additive; spec, checksum and test updated); new variants `details-page#Application` (Overview, Versions, Deployments and a Topology tab on `TopologyDiagram`), `edit-resource#CacheSettings` and `#Protocols`, `version-detail#EnvironmentCrumb`, `multipage-create#Review` and `record-table#ImportZoneFile`. Design from the sample (`ApplicationDetail`, `panels/CacheSettings`, `WorkloadProtocolSection`, `WorkloadMutualAuthSection`, `EnvironmentCrumb`, `ReviewStep`, `lib/format/zone-file.js`, `WorkloadDetail` topology), with fictional data. A mechanical pass over every new SFC found no raw colours, palette classes, physical direction utilities or raw pixel sizes, and every transition and page animation carries a `motion-reduce` escape. Deploys (the Application deploy, cache settings, protocols) end in the async-submit toast with Edit and Redeploy; the create and the zone import are not deploys, so their toasts carry no deploy actions. Behaviour, keyboard and axe for the interactive states the harness does not reach (Topology tab, deploy drawer, field errors, the open import drawer) are in `src/test/workload-app-blocks.test.ts`.
+
+### shells/console on AppLayout
+
+- One `AppLayout` per state; the rail in `#navigation` drops resize and collapse inside the drawer; the header swaps the breadcrumb for the hamburger and wordmark from the header scope's `compact`, so the shell goes compact in a narrow host too. No hand-written `Drawer` is left.
+- Finding: inside the `AppLayout` drawer, choosing a `Menu` item left the drawer open (the old hand-written drawer closed it). Fixed: `AppLayout` exposes `closeNavigation` in the navigation scope and all three states call it on navigate.
+- Finding: building blocks for the DetailPage tab bar and environment crumb named components the primary does not import. Fixed: described in the DetailPage state instead.
+
+### details-page#Application
+
+- The tab row keeps one outlined Deploy with the staged count beside it as a warning `Tag`; the deploy `Drawer` lists each staged change from and to before anything runs; the Topology status line is polite. Binds only stage; the toast's Edit returns to the Topology tab.
+- Finding: frame classes on `TopologyDiagram` and `PanelFooter` (consumer lint `no-style-override`). Fixed: moved to wrapper elements.
+- Finding: the Source fact linked to a Build tab this page does not have. Fixed: plain text.
+- Decision: Build is left out of the tab set; it is the ResourceBuild state of the same block.
+
+### edit-resource#CacheSettings and #Protocols
+
+- Dependent rows sit one level in under their switch or behavior; HTTP/3 turns HTTPS on, HTTPS off turns HTTP/3 and mutual authentication off; mutual authentication explains why it is off instead of hiding. Errors follow the form rule: the field turns invalid with one reason under it, focus moves to the first one on Save. The CA picker searches, shows expiry and uploads through a `Drawer` that validates name and PEM.
+- Finding: the forms had no `main` landmark, so the `PageHeader` `header` counted as a second banner (axe best practice `landmark-no-duplicate-banner`, not in the WCAG harness). Fixed: each form sits in `main`.
+- Finding: the Protocols breadcrumb ended on Settings, a tab. Fixed: it ends on the workload.
+- Open: only the success path of the deploy is drawn; the failure toast and `Alert` are the async-submit Failed state.
+
+### version-detail#EnvironmentCrumb
+
+- Environment comes before version; picking an environment moves the version crumb to the version live there and each version says where it is live, in text, beside its state `Tag`. No defect.
+- Open: like the primary, the crumbs hide below md, so a phone cannot switch environment from this page (same as the version switcher today).
+
+### multipage-create#Review
+
+- Values show with the property they are sent as; long lists show five `Tag`s and a count; Edit per band is named for its band (`Edit list settings`), and Create re-validates and opens the first step with an error. No defect.
+
+### record-table#ImportZoneFile
+
+- Nothing is written on drop; every line is previewed with its number, status `Tag` and reason in text (not colour alone); the counts are a polite status; errors raise one danger `Alert` that says the ready lines still import; Import is disabled at zero and the toast counts what was left out. The hidden file input is out of the tab order; Browse files is the keyboard path.
+- Note: axe best practice `empty-table-header` fires on the records table's action column, which predates this WP (its header is intentionally empty); the WCAG harness does not include that rule.

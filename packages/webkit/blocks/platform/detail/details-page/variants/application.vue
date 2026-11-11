@@ -343,7 +343,7 @@
   const facts = [
     { label: 'Active version', value: APP.version, code: true },
     { label: 'Framework', value: 'Vite' },
-    { label: 'Source', value: 'acme/storefront', href: '/applications/storefront-app/build' },
+    { label: 'Source', value: 'acme/storefront (main)' },
     { label: 'Created', value: '2 weeks ago by Mara Lin', author: 'Mara Lin' }
   ]
 
@@ -1158,14 +1158,7 @@
                           :label="fact.author"
                           size="small"
                         />
-                        <a
-                          v-if="fact.href"
-                          :href="fact.href"
-                          class="truncate text-body-sm text-(--text-default) underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                          >{{ fact.value }}</a
-                        >
                         <span
-                          v-else
                           class="truncate text-body-sm text-(--text-default)"
                           :class="fact.code && 'font-(family-name:--font-code)'"
                           >{{ fact.value }}</span

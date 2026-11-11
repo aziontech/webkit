@@ -330,11 +330,7 @@
     if (id === 'theme') theme.value = resolvedTheme.value === 'dark' ? 'light' : 'dark'
     if (id === 'sidebar') railCollapsed.value = !railCollapsed.value
   }
-  const crumbs = [
-    { label: 'Workloads', href: '/workloads' },
-    { label: 'storefront', href: '/workloads/storefront' },
-    { label: 'Settings' }
-  ]
+  const crumbs = [{ label: 'Workloads', href: '/workloads' }, { label: 'storefront' }]
 
   const port = (value, label = String(value)) => ({ value, label })
   const httpPorts = [port(80, '80 (default)'), port(8008), port(8080), port(8880)]
@@ -965,452 +961,456 @@
         </div>
       </template>
 
-      <form
-        class="flex min-h-full min-w-0 flex-col animate-page-enter motion-reduce:animate-none"
-        aria-label="Protocol settings"
-        novalidate
-        @submit.prevent="save"
-      >
-        <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
-          <PageHeader
-            title="Protocols"
-            description="How clients connect to storefront: ports, TLS, and whether they must present a certificate."
-            size="small"
-          />
-
-          <fieldset
-            class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
-            :disabled="saving"
-          >
-            <legend class="sr-only">Protocol settings</legend>
-
-            <SettingsSection
+      <main class="flex min-h-full min-w-0 flex-col">
+        <form
+          class="flex min-h-full min-w-0 flex-col animate-page-enter motion-reduce:animate-none"
+          aria-label="Protocol settings"
+          novalidate
+          @submit.prevent="save"
+        >
+          <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
+            <PageHeader
               title="Protocols"
-              hint="The ports and TLS settings clients connect to this workload with."
-              anchor="protocols"
+              description="How clients connect to storefront: ports, TLS, and whether they must present a certificate."
+              size="small"
+            />
+
+            <fieldset
+              class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="saving"
             >
-              <Card :padded="false">
-                <template #content>
-                  <Item.List>
-                    <TransitionGroup
-                      enter-active-class="animate-content-enter motion-reduce:animate-none"
-                    >
-                      <SettingRow
-                        key="httpPorts"
-                        title="HTTP ports"
-                        description="The ports this workload answers plain HTTP on."
+              <legend class="sr-only">Protocol settings</legend>
+
+              <SettingsSection
+                title="Protocols"
+                hint="The ports and TLS settings clients connect to this workload with."
+                anchor="protocols"
+              >
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <TransitionGroup
+                        enter-active-class="animate-content-enter motion-reduce:animate-none"
                       >
-                        <MultiSelect
-                          v-model="form.httpPorts"
-                          size="large"
-                          class="w-full"
-                          placeholder="Select an HTTP port"
-                          :display-value="portsLabel"
-                          :disabled="saving"
-                          :required="errors.httpPorts?.kind === 'required'"
-                          :invalid="errors.httpPorts?.kind === 'invalid'"
-                          :aria-describedby="
-                            errors.httpPorts ? 'protocols-httpPorts-message' : undefined
-                          "
-                          @update:model-value="clear('httpPorts')"
+                        <SettingRow
+                          key="httpPorts"
+                          title="HTTP ports"
+                          description="The ports this workload answers plain HTTP on."
                         >
-                          <MultiSelect.Trigger
-                            id="protocols-httpPorts"
-                            aria-label="HTTP ports"
-                          />
-                          <MultiSelect.Content>
-                            <MultiSelect.Option
-                              v-for="option in httpPorts"
-                              :key="option.value"
-                              :value="option.value"
-                            >
-                              {{ option.label }}
-                            </MultiSelect.Option>
-                          </MultiSelect.Content>
-                        </MultiSelect>
-                        <HelperText
-                          v-if="errors.httpPorts"
-                          id="protocols-httpPorts-message"
-                          :kind="errors.httpPorts.kind"
-                          :label="errors.httpPorts.message"
-                        />
-                      </SettingRow>
-                      <SettingRow
-                        key="useHttps"
-                        title="HTTPS support"
-                        description="Answer on HTTPS as well as HTTP. HTTP/3 and mutual authentication need it."
-                        kind="compact"
-                      >
-                        <Switch
-                          :model-value="form.useHttps"
-                          aria-label="HTTPS support"
-                          :disabled="saving"
-                          @update:model-value="setHttps"
-                        />
-                      </SettingRow>
-                      <SettingRow
-                        v-if="form.useHttps"
-                        key="httpsPorts"
-                        title="HTTPS ports"
-                        description="The ports this workload answers TLS traffic on."
-                        :level="1"
-                      >
-                        <MultiSelect
-                          v-model="form.httpsPorts"
-                          size="large"
-                          class="w-full"
-                          placeholder="Select an HTTPS port"
-                          :display-value="portsLabel"
-                          :disabled="saving"
-                          :required="errors.httpsPorts?.kind === 'required'"
-                          :invalid="errors.httpsPorts?.kind === 'invalid'"
-                          :aria-describedby="
-                            errors.httpsPorts ? 'protocols-httpsPorts-message' : undefined
-                          "
-                          @update:model-value="clear('httpsPorts')"
-                        >
-                          <MultiSelect.Trigger
-                            id="protocols-httpsPorts"
-                            aria-label="HTTPS ports"
-                          />
-                          <MultiSelect.Content>
-                            <MultiSelect.Option
-                              v-for="option in httpsPorts"
-                              :key="option.value"
-                              :value="option.value"
-                            >
-                              {{ option.label }}
-                            </MultiSelect.Option>
-                          </MultiSelect.Content>
-                        </MultiSelect>
-                        <HelperText
-                          v-if="errors.httpsPorts"
-                          id="protocols-httpsPorts-message"
-                          :kind="errors.httpsPorts.kind"
-                          :label="errors.httpsPorts.message"
-                        />
-                      </SettingRow>
-                      <SettingRow
-                        key="useHttp3"
-                        title="HTTP/3 support"
-                        description="Serve over HTTP/3 where the client supports it. Turns HTTPS support on with it."
-                        kind="compact"
-                      >
-                        <Switch
-                          :model-value="form.useHttp3"
-                          aria-label="HTTP/3 support"
-                          :disabled="saving"
-                          @update:model-value="setHttp3"
-                        />
-                      </SettingRow>
-                      <SettingRow
-                        v-if="form.useHttp3"
-                        key="http3Ports"
-                        title="HTTP/3 ports"
-                        description="The ports QUIC is answered on."
-                        :level="1"
-                      >
-                        <MultiSelect
-                          v-model="form.http3Ports"
-                          size="large"
-                          class="w-full"
-                          placeholder="Select an HTTP/3 port"
-                          :display-value="portsLabel"
-                          :disabled="saving"
-                          :required="errors.http3Ports?.kind === 'required'"
-                          :invalid="errors.http3Ports?.kind === 'invalid'"
-                          :aria-describedby="
-                            errors.http3Ports ? 'protocols-http3Ports-message' : undefined
-                          "
-                          @update:model-value="clear('http3Ports')"
-                        >
-                          <MultiSelect.Trigger
-                            id="protocols-http3Ports"
-                            aria-label="HTTP/3 ports"
-                          />
-                          <MultiSelect.Content>
-                            <MultiSelect.Option
-                              v-for="option in http3Ports"
-                              :key="option.value"
-                              :value="option.value"
-                            >
-                              {{ option.label }}
-                            </MultiSelect.Option>
-                          </MultiSelect.Content>
-                        </MultiSelect>
-                        <HelperText
-                          v-if="errors.http3Ports"
-                          id="protocols-http3Ports-message"
-                          :kind="errors.http3Ports.kind"
-                          :label="errors.http3Ports.message"
-                        />
-                      </SettingRow>
-                      <SettingRow
-                        v-if="form.useHttps"
-                        key="minimumTls"
-                        title="Minimum TLS version"
-                        description="The oldest TLS version a client may negotiate."
-                      >
-                        <Select
-                          v-model="form.minimumTls"
-                          size="large"
-                          class="w-full"
-                          :display-value="labelOf(tlsVersions)"
-                          :disabled="saving"
-                        >
-                          <Select.Trigger aria-label="Minimum TLS version" />
-                          <Select.Content>
-                            <Select.Option
-                              v-for="option in tlsVersions"
-                              :key="option.value"
-                              :value="option.value"
-                            >
-                              {{ option.label }}
-                            </Select.Option>
-                          </Select.Content>
-                        </Select>
-                      </SettingRow>
-                      <SettingRow
-                        v-if="form.useHttps"
-                        key="cipherSuite"
-                        title="Cipher suite"
-                        description="The ciphers offered during the handshake."
-                      >
-                        <Select
-                          v-model="form.cipherSuite"
-                          size="large"
-                          class="w-full"
-                          :display-value="labelOf(cipherSuites)"
-                          :disabled="saving"
-                        >
-                          <Select.Trigger aria-label="Cipher suite" />
-                          <Select.Content>
-                            <Select.Option
-                              v-for="option in cipherSuites"
-                              :key="option.value"
-                              :value="option.value"
-                            >
-                              {{ option.label }}
-                            </Select.Option>
-                          </Select.Content>
-                        </Select>
-                      </SettingRow>
-                    </TransitionGroup>
-                  </Item.List>
-                </template>
-              </Card>
-            </SettingsSection>
-            <SettingsSection
-              title="Mutual authentication"
-              hint="Ask each client for a certificate the workload can verify, as well as presenting its own."
-              anchor="mutual-authentication"
-            >
-              <Card :padded="false">
-                <template #content>
-                  <Item.List>
-                    <TransitionGroup
-                      enter-active-class="animate-content-enter motion-reduce:animate-none"
-                    >
-                      <SettingRow
-                        key="mtls"
-                        title="Mutual authentication"
-                        description="Clients without a valid certificate are refused or flagged, depending on the mode."
-                        kind="compact"
-                      >
-                        <Switch
-                          v-model="form.mtls"
-                          aria-label="Mutual authentication"
-                          :disabled="saving || !form.useHttps"
-                        />
-                        <HelperText
-                          v-if="!form.useHttps"
-                          label="Turn on HTTPS support to use mutual authentication."
-                        />
-                      </SettingRow>
-                      <SettingRow
-                        v-if="armed"
-                        key="mtlsMode"
-                        title="Mode"
-                        description="What happens when a client certificate cannot be verified."
-                        kind="stacked"
-                        :level="1"
-                      >
-                        <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
-                          <legend class="sr-only">Mutual authentication mode</legend>
-                          <Field.Label
-                            v-for="option in mtlsModes"
-                            :key="option.value"
-                          >
-                            <Field
-                              orientation="horizontal"
-                              :disabled="saving"
-                            >
-                              <RadioButton
-                                v-model="form.mtlsMode"
-                                :value="option.value"
-                                name="protocols-mtls-mode"
-                              />
-                              <Field.Content>
-                                <Field.Title>{{ option.label }}</Field.Title>
-                                <Field.Description>{{ option.description }}</Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                        </fieldset>
-                      </SettingRow>
-                      <SettingRow
-                        v-if="armed"
-                        key="trustedCa"
-                        title="Trusted CA certificate"
-                        description="The authority client certificates are verified against."
-                        :level="1"
-                      >
-                        <Select
-                          :model-value="form.trustedCa"
-                          size="large"
-                          class="w-full"
-                          placeholder="Select a trusted CA certificate"
-                          :display-value="caLabel"
-                          :disabled="saving"
-                          :required="errors.trustedCa?.kind === 'required'"
-                          @update:model-value="pickCa"
-                          @update:open="(open) => !open && (caQuery = '')"
-                        >
-                          <Select.Trigger
-                            id="protocols-trustedCa"
-                            aria-label="Trusted CA certificate"
+                          <MultiSelect
+                            v-model="form.httpPorts"
+                            size="large"
+                            class="w-full"
+                            placeholder="Select an HTTP port"
+                            :display-value="portsLabel"
+                            :disabled="saving"
+                            :required="errors.httpPorts?.kind === 'required'"
+                            :invalid="errors.httpPorts?.kind === 'invalid'"
                             :aria-describedby="
-                              errors.trustedCa ? 'protocols-trustedCa-message' : undefined
+                              errors.httpPorts ? 'protocols-httpPorts-message' : undefined
                             "
-                          />
-                          <Select.Content>
-                            <template #search>
-                              <Input
-                                v-model="caQuery"
-                                size="small"
-                                placeholder="Search certificates"
-                                aria-label="Search certificates"
-                                @keydown.stop
-                              >
-                                <template #iconLeft>
-                                  <i
-                                    class="pi pi-search"
-                                    aria-hidden="true"
-                                  />
-                                </template>
-                              </Input>
-                            </template>
-                            <Select.Group label="Trusted CA certificates">
-                              <Select.Option
-                                v-for="option in caMatches"
+                            @update:model-value="clear('httpPorts')"
+                          >
+                            <MultiSelect.Trigger
+                              id="protocols-httpPorts"
+                              aria-label="HTTP ports"
+                            />
+                            <MultiSelect.Content>
+                              <MultiSelect.Option
+                                v-for="option in httpPorts"
                                 :key="option.value"
                                 :value="option.value"
                               >
                                 {{ option.label }}
-                                <template #tag>
-                                  <span class="text-body-xs text-(--text-muted)">{{
-                                    option.expires
-                                  }}</span>
-                                </template>
-                              </Select.Option>
-                              <p
-                                v-if="!caMatches.length"
-                                class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
-                              >
-                                No certificate matches "{{ caQuery }}".
-                              </p>
-                            </Select.Group>
-                            <template #footer>
-                              <Select.Option
-                                value="__upload__"
-                                class="w-full"
-                              >
-                                <span class="flex items-center gap-(--spacing-xs)">
-                                  <i
-                                    class="pi pi-upload"
-                                    aria-hidden="true"
-                                  />
-                                  Upload certificate
-                                </span>
-                              </Select.Option>
-                            </template>
-                          </Select.Content>
-                        </Select>
-                        <HelperText
-                          v-if="errors.trustedCa"
-                          id="protocols-trustedCa-message"
-                          :kind="errors.trustedCa.kind"
-                          :label="errors.trustedCa.message"
-                        />
-                      </SettingRow>
-                      <SettingRow
-                        v-if="armed"
-                        key="crl"
-                        title="Certificate revocation lists"
-                        description="Certificates on these lists are refused during the handshake."
-                        :level="1"
-                      >
-                        <MultiSelect
-                          v-model="form.crl"
-                          size="large"
-                          class="w-full"
-                          placeholder="No revocation list"
-                          :display-value="listLabel"
-                          :disabled="saving"
-                        >
-                          <MultiSelect.Trigger
-                            id="protocols-crl"
-                            aria-label="Certificate revocation lists"
+                              </MultiSelect.Option>
+                            </MultiSelect.Content>
+                          </MultiSelect>
+                          <HelperText
+                            v-if="errors.httpPorts"
+                            id="protocols-httpPorts-message"
+                            :kind="errors.httpPorts.kind"
+                            :label="errors.httpPorts.message"
                           />
-                          <MultiSelect.Content>
-                            <MultiSelect.Option
-                              v-for="option in revocationLists"
+                        </SettingRow>
+                        <SettingRow
+                          key="useHttps"
+                          title="HTTPS support"
+                          description="Answer on HTTPS as well as HTTP. HTTP/3 and mutual authentication need it."
+                          kind="compact"
+                        >
+                          <Switch
+                            :model-value="form.useHttps"
+                            aria-label="HTTPS support"
+                            :disabled="saving"
+                            @update:model-value="setHttps"
+                          />
+                        </SettingRow>
+                        <SettingRow
+                          v-if="form.useHttps"
+                          key="httpsPorts"
+                          title="HTTPS ports"
+                          description="The ports this workload answers TLS traffic on."
+                          :level="1"
+                        >
+                          <MultiSelect
+                            v-model="form.httpsPorts"
+                            size="large"
+                            class="w-full"
+                            placeholder="Select an HTTPS port"
+                            :display-value="portsLabel"
+                            :disabled="saving"
+                            :required="errors.httpsPorts?.kind === 'required'"
+                            :invalid="errors.httpsPorts?.kind === 'invalid'"
+                            :aria-describedby="
+                              errors.httpsPorts ? 'protocols-httpsPorts-message' : undefined
+                            "
+                            @update:model-value="clear('httpsPorts')"
+                          >
+                            <MultiSelect.Trigger
+                              id="protocols-httpsPorts"
+                              aria-label="HTTPS ports"
+                            />
+                            <MultiSelect.Content>
+                              <MultiSelect.Option
+                                v-for="option in httpsPorts"
+                                :key="option.value"
+                                :value="option.value"
+                              >
+                                {{ option.label }}
+                              </MultiSelect.Option>
+                            </MultiSelect.Content>
+                          </MultiSelect>
+                          <HelperText
+                            v-if="errors.httpsPorts"
+                            id="protocols-httpsPorts-message"
+                            :kind="errors.httpsPorts.kind"
+                            :label="errors.httpsPorts.message"
+                          />
+                        </SettingRow>
+                        <SettingRow
+                          key="useHttp3"
+                          title="HTTP/3 support"
+                          description="Serve over HTTP/3 where the client supports it. Turns HTTPS support on with it."
+                          kind="compact"
+                        >
+                          <Switch
+                            :model-value="form.useHttp3"
+                            aria-label="HTTP/3 support"
+                            :disabled="saving"
+                            @update:model-value="setHttp3"
+                          />
+                        </SettingRow>
+                        <SettingRow
+                          v-if="form.useHttp3"
+                          key="http3Ports"
+                          title="HTTP/3 ports"
+                          description="The ports QUIC is answered on."
+                          :level="1"
+                        >
+                          <MultiSelect
+                            v-model="form.http3Ports"
+                            size="large"
+                            class="w-full"
+                            placeholder="Select an HTTP/3 port"
+                            :display-value="portsLabel"
+                            :disabled="saving"
+                            :required="errors.http3Ports?.kind === 'required'"
+                            :invalid="errors.http3Ports?.kind === 'invalid'"
+                            :aria-describedby="
+                              errors.http3Ports ? 'protocols-http3Ports-message' : undefined
+                            "
+                            @update:model-value="clear('http3Ports')"
+                          >
+                            <MultiSelect.Trigger
+                              id="protocols-http3Ports"
+                              aria-label="HTTP/3 ports"
+                            />
+                            <MultiSelect.Content>
+                              <MultiSelect.Option
+                                v-for="option in http3Ports"
+                                :key="option.value"
+                                :value="option.value"
+                              >
+                                {{ option.label }}
+                              </MultiSelect.Option>
+                            </MultiSelect.Content>
+                          </MultiSelect>
+                          <HelperText
+                            v-if="errors.http3Ports"
+                            id="protocols-http3Ports-message"
+                            :kind="errors.http3Ports.kind"
+                            :label="errors.http3Ports.message"
+                          />
+                        </SettingRow>
+                        <SettingRow
+                          v-if="form.useHttps"
+                          key="minimumTls"
+                          title="Minimum TLS version"
+                          description="The oldest TLS version a client may negotiate."
+                        >
+                          <Select
+                            v-model="form.minimumTls"
+                            size="large"
+                            class="w-full"
+                            :display-value="labelOf(tlsVersions)"
+                            :disabled="saving"
+                          >
+                            <Select.Trigger aria-label="Minimum TLS version" />
+                            <Select.Content>
+                              <Select.Option
+                                v-for="option in tlsVersions"
+                                :key="option.value"
+                                :value="option.value"
+                              >
+                                {{ option.label }}
+                              </Select.Option>
+                            </Select.Content>
+                          </Select>
+                        </SettingRow>
+                        <SettingRow
+                          v-if="form.useHttps"
+                          key="cipherSuite"
+                          title="Cipher suite"
+                          description="The ciphers offered during the handshake."
+                        >
+                          <Select
+                            v-model="form.cipherSuite"
+                            size="large"
+                            class="w-full"
+                            :display-value="labelOf(cipherSuites)"
+                            :disabled="saving"
+                          >
+                            <Select.Trigger aria-label="Cipher suite" />
+                            <Select.Content>
+                              <Select.Option
+                                v-for="option in cipherSuites"
+                                :key="option.value"
+                                :value="option.value"
+                              >
+                                {{ option.label }}
+                              </Select.Option>
+                            </Select.Content>
+                          </Select>
+                        </SettingRow>
+                      </TransitionGroup>
+                    </Item.List>
+                  </template>
+                </Card>
+              </SettingsSection>
+              <SettingsSection
+                title="Mutual authentication"
+                hint="Ask each client for a certificate the workload can verify, as well as presenting its own."
+                anchor="mutual-authentication"
+              >
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <TransitionGroup
+                        enter-active-class="animate-content-enter motion-reduce:animate-none"
+                      >
+                        <SettingRow
+                          key="mtls"
+                          title="Mutual authentication"
+                          description="Clients without a valid certificate are refused or flagged, depending on the mode."
+                          kind="compact"
+                        >
+                          <Switch
+                            v-model="form.mtls"
+                            aria-label="Mutual authentication"
+                            :disabled="saving || !form.useHttps"
+                          />
+                          <HelperText
+                            v-if="!form.useHttps"
+                            label="Turn on HTTPS support to use mutual authentication."
+                          />
+                        </SettingRow>
+                        <SettingRow
+                          v-if="armed"
+                          key="mtlsMode"
+                          title="Mode"
+                          description="What happens when a client certificate cannot be verified."
+                          kind="stacked"
+                          :level="1"
+                        >
+                          <fieldset
+                            class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
+                          >
+                            <legend class="sr-only">Mutual authentication mode</legend>
+                            <Field.Label
+                              v-for="option in mtlsModes"
                               :key="option.value"
-                              :value="option.value"
                             >
-                              {{ option.label }}
-                            </MultiSelect.Option>
-                          </MultiSelect.Content>
-                        </MultiSelect>
-                      </SettingRow>
-                    </TransitionGroup>
-                  </Item.List>
-                </template>
-              </Card>
-            </SettingsSection>
-          </fieldset>
-        </div>
+                              <Field
+                                orientation="horizontal"
+                                :disabled="saving"
+                              >
+                                <RadioButton
+                                  v-model="form.mtlsMode"
+                                  :value="option.value"
+                                  name="protocols-mtls-mode"
+                                />
+                                <Field.Content>
+                                  <Field.Title>{{ option.label }}</Field.Title>
+                                  <Field.Description>{{ option.description }}</Field.Description>
+                                </Field.Content>
+                              </Field>
+                            </Field.Label>
+                          </fieldset>
+                        </SettingRow>
+                        <SettingRow
+                          v-if="armed"
+                          key="trustedCa"
+                          title="Trusted CA certificate"
+                          description="The authority client certificates are verified against."
+                          :level="1"
+                        >
+                          <Select
+                            :model-value="form.trustedCa"
+                            size="large"
+                            class="w-full"
+                            placeholder="Select a trusted CA certificate"
+                            :display-value="caLabel"
+                            :disabled="saving"
+                            :required="errors.trustedCa?.kind === 'required'"
+                            @update:model-value="pickCa"
+                            @update:open="(open) => !open && (caQuery = '')"
+                          >
+                            <Select.Trigger
+                              id="protocols-trustedCa"
+                              aria-label="Trusted CA certificate"
+                              :aria-describedby="
+                                errors.trustedCa ? 'protocols-trustedCa-message' : undefined
+                              "
+                            />
+                            <Select.Content>
+                              <template #search>
+                                <Input
+                                  v-model="caQuery"
+                                  size="small"
+                                  placeholder="Search certificates"
+                                  aria-label="Search certificates"
+                                  @keydown.stop
+                                >
+                                  <template #iconLeft>
+                                    <i
+                                      class="pi pi-search"
+                                      aria-hidden="true"
+                                    />
+                                  </template>
+                                </Input>
+                              </template>
+                              <Select.Group label="Trusted CA certificates">
+                                <Select.Option
+                                  v-for="option in caMatches"
+                                  :key="option.value"
+                                  :value="option.value"
+                                >
+                                  {{ option.label }}
+                                  <template #tag>
+                                    <span class="text-body-xs text-(--text-muted)">{{
+                                      option.expires
+                                    }}</span>
+                                  </template>
+                                </Select.Option>
+                                <p
+                                  v-if="!caMatches.length"
+                                  class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                                >
+                                  No certificate matches "{{ caQuery }}".
+                                </p>
+                              </Select.Group>
+                              <template #footer>
+                                <Select.Option
+                                  value="__upload__"
+                                  class="w-full"
+                                >
+                                  <span class="flex items-center gap-(--spacing-xs)">
+                                    <i
+                                      class="pi pi-upload"
+                                      aria-hidden="true"
+                                    />
+                                    Upload certificate
+                                  </span>
+                                </Select.Option>
+                              </template>
+                            </Select.Content>
+                          </Select>
+                          <HelperText
+                            v-if="errors.trustedCa"
+                            id="protocols-trustedCa-message"
+                            :kind="errors.trustedCa.kind"
+                            :label="errors.trustedCa.message"
+                          />
+                        </SettingRow>
+                        <SettingRow
+                          v-if="armed"
+                          key="crl"
+                          title="Certificate revocation lists"
+                          description="Certificates on these lists are refused during the handshake."
+                          :level="1"
+                        >
+                          <MultiSelect
+                            v-model="form.crl"
+                            size="large"
+                            class="w-full"
+                            placeholder="No revocation list"
+                            :display-value="listLabel"
+                            :disabled="saving"
+                          >
+                            <MultiSelect.Trigger
+                              id="protocols-crl"
+                              aria-label="Certificate revocation lists"
+                            />
+                            <MultiSelect.Content>
+                              <MultiSelect.Option
+                                v-for="option in revocationLists"
+                                :key="option.value"
+                                :value="option.value"
+                              >
+                                {{ option.label }}
+                              </MultiSelect.Option>
+                            </MultiSelect.Content>
+                          </MultiSelect>
+                        </SettingRow>
+                      </TransitionGroup>
+                    </Item.List>
+                  </template>
+                </Card>
+              </SettingsSection>
+            </fieldset>
+          </div>
 
-        <Transition
-          enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-          enter-from-class="translate-y-2 opacity-0"
-          leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-          leave-to-class="translate-y-2 opacity-0"
-        >
-          <SaveBar v-if="dirty || saving">
-            Protocol settings changed.
-            <span class="text-(--text-muted)">Saving deploys storefront to Production.</span>
+          <Transition
+            enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+            enter-from-class="translate-y-2 opacity-0"
+            leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+            leave-to-class="translate-y-2 opacity-0"
+          >
+            <SaveBar v-if="dirty || saving">
+              Protocol settings changed.
+              <span class="text-(--text-muted)">Saving deploys storefront to Production.</span>
 
-            <template #actions>
-              <Button
-                type="button"
-                label="Discard"
-                kind="outlined"
-                size="medium"
-                :disabled="saving"
-                @click="discard"
-              />
-              <Button
-                label="Save"
-                kind="primary"
-                size="medium"
-                :loading="saving"
-                @click="save"
-              />
-            </template>
-          </SaveBar>
-        </Transition>
-      </form>
+              <template #actions>
+                <Button
+                  type="button"
+                  label="Discard"
+                  kind="outlined"
+                  size="medium"
+                  :disabled="saving"
+                  @click="discard"
+                />
+                <Button
+                  label="Save"
+                  kind="primary"
+                  size="medium"
+                  :loading="saving"
+                  @click="save"
+                />
+              </template>
+            </SaveBar>
+          </Transition>
+        </form>
+      </main>
     </AppLayout>
 
     <Drawer
