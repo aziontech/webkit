@@ -3,6 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { type Component, defineComponent, h, ref } from 'vue'
 
 import Pagination from '../components/data/pagination/pagination.vue'
+import TableColumnSelector from '../components/data/table/table-column-selector/table-column-selector.vue'
+import TableFilter from '../components/data/table/table-filter/table-filter.vue'
 import PhoneInput from '../components/inputs/phone-input/phone-input.vue'
 import Select from '../components/inputs/select/select.vue'
 import SelectContent from '../components/inputs/select/select-content/select-content.vue'
@@ -198,6 +200,49 @@ describe('overlays teleported to body keep the WebkitProvider dir and lang', () 
     await waitFor(() => expect(Object.values(panels()).every(Boolean)).toBe(true))
     for (const [name, panel] of Object.entries(panels())) {
       expect(panel?.closest('[dir]'), name).toBeNull()
+    }
+  })
+})
+
+const tablePanels = async (provider: boolean) => {
+  const triggers = [
+    h(TableFilter, { 'data-testid': 'rtl-filter', fields: [] }),
+    h(TableColumnSelector, { 'data-testid': 'rtl-columns' })
+  ]
+  const view = render(
+    defineComponent({
+      setup: () => () =>
+        provider ? h(WebkitProvider, { locale: 'ar' }, () => triggers) : h('div', null, triggers)
+    })
+  )
+  await fireEvent.click(view.getByTestId('rtl-filter'))
+  await fireEvent.click(view.getByTestId('rtl-columns'))
+  return waitFor(() => {
+    const found = ['rtl-filter', 'rtl-columns'].map((id) =>
+      document.body.querySelector<HTMLElement>(`[data-testid="${id}__panel"]`)
+    )
+    expect(found.every(Boolean)).toBe(true)
+    return found as HTMLElement[]
+  })
+}
+
+describe('Table.Filter and Table.ColumnSelector panels keep the WebkitProvider dir and lang', () => {
+  afterEach(() => {
+    document.body.innerHTML = ''
+  })
+
+  it('bind rtl and ar on the panel teleported to body under <WebkitProvider locale="ar">', async () => {
+    for (const panel of await tablePanels(true)) {
+      expect(panel.closest('[data-testid="utils-webkit-provider"]')).toBeNull()
+      expect(panel.getAttribute('dir')).toBe('rtl')
+      expect(panel.getAttribute('lang')).toBe('ar')
+    }
+  })
+
+  it('set nothing on the panel without a provider', async () => {
+    for (const panel of await tablePanels(false)) {
+      expect(panel.closest('[dir]')).toBeNull()
+      expect(panel.hasAttribute('lang')).toBe(false)
     }
   })
 })

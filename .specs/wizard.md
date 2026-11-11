@@ -3,7 +3,7 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: 5e6e23a3415478c4e3dbfdfa0b8ec5897be60c8a6add93b101ce86fee1134a57
+checksum: e4f098cf8973ffa5f95b974021cb60b23c9a09f3e695512011e9d66bd0a67def
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
@@ -269,6 +269,8 @@ Layout from `@2xl` of the wizard's own box (`@container/wizard`, so a wizard in 
 side and the content column (`min-w-0 flex-1`) beside it. The content column stacks the active step,
 then the footer. The footer is a row with Cancel at the start and Previous + Next grouped at the end,
 separated from the content by a top border.
+
+- Server render and hydration: steps register from their own setup, after the root has rendered, so until mount the root does not use the step count. The step shown, `data-active-step` and Previous follow the requested `activeStep` (clamped at 0), and the primary action reads Next; on mount the index is clamped to the registered steps and the last step reads the submit label. The server HTML and the first client render therefore match.
 
 ## Motion & Animations
 

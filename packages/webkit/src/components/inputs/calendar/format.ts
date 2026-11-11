@@ -180,7 +180,7 @@ export const localTimezone = (): string => {
   }
 }
 
-const cityName = (timezone: string): string =>
+export const cityName = (timezone: string): string =>
   timezone.split('/').pop()?.replace(/_/g, ' ') ?? timezone
 
 const offsetAndAbbr = (timezone: string): string => {

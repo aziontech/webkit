@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useMediaQuery } from '@vueuse/core'
+  import { useMediaQuery, useMounted } from '@vueuse/core'
   import { computed, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
@@ -85,7 +85,9 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ siteFooter: en.siteFooter })
 
-  const wide = useMediaQuery('(min-width: 1024px)')
+  const wideQuery = useMediaQuery('(min-width: 1024px)')
+  const mounted = useMounted()
+  const wide = computed(() => mounted.value && wideQuery.value)
 
   const language = ref<string>(props.languages[0] ?? '')
 

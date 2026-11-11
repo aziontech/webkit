@@ -14,44 +14,7 @@ import { commands } from 'vitest/browser'
 import { files, modules, useHydrationHost } from './hydration-shared'
 import type {} from './server-render'
 
-const KNOWN: { component: string; signature: RegExp; cause: string }[] = [
-  {
-    component: 'Breadcrumb',
-    signature: /\| in .*\bBreadcrumb(List)?\b/,
-    cause:
-      'useBreadcrumbCollapse reads useMediaQuery during setup: false on the server, true below 768px in the browser.'
-  },
-  {
-    component: 'PickList',
-    signature: /\| in PickList(Source|Target) < PickList\b/,
-    cause:
-      'The TransitionGroup list (v-for with v-else) gets a fragment from the SSR compiler that the client render does not have.'
-  },
-  {
-    component: 'Wizard',
-    signature: /\| in (Button < )?Wizard\b/,
-    cause:
-      'Steps register from their own setup, so the server renders the footer (Create, no Back) before the step count is known.'
-  },
-  {
-    component: 'StatTile',
-    signature: /rendered on server: – \| - expected on client: 0 \| in StatTile\b/,
-    cause:
-      'useCountUp leaves the figure null without requestAnimationFrame on the server; the browser sets 0 at once.'
-  },
-  {
-    component: 'Chart',
-    signature: /\| in (ChartAxis < )?Chart\b/,
-    cause:
-      'Date labels are formatted in the runtime time zone, so axis ticks and the summary differ.'
-  },
-  {
-    component: 'Calendar',
-    signature: /\| in CalendarTimezone\b/,
-    cause:
-      'The time zone options print offsets and the Local zone from the runtime clock and tz data.'
-  }
-]
+const KNOWN: { component: string; signature: RegExp; cause: string }[] = []
 
 const CASCADE =
   /^Hydration completed but contains mismatches\.|rendered on server: [\w-]+="[^"]*\bv-\d+/

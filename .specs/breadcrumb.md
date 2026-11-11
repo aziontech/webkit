@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: c1c56b6df899d4b1b5c48ce821ad919fc03d629cc2615c2522ea15318ac37df5
+checksum: b89609f93fb28a54a640bfb87d5a242de26397a3f8191edcce9f889dab6e8dab
 created: 2026-05-25
 last_updated: 2026-11-11
 ---
@@ -117,6 +117,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 - The trail is always a **single row**. A segment wider than the space available shrinks and ellipsizes its label; a trail that still does not fit scrolls horizontally. It never wraps to a second line and never extends past its container.
 - **`items` mode** additionally collapses below `md` (768px): first segment, an overflow menu holding the middle segments, then the current segment. The breakpoint is owned by the component's own `use-breadcrumb-collapse` composable.
 - **Slot (hand-composed) mode** keeps every segment it was given, since the root cannot know which of the consumer's children are middle segments, so on a narrow screen it degrades through the single-row rules above rather than through a collapse.
+- Server render and hydration: the collapse reads the viewport only after mount (`use-breadcrumb-collapse` gates the media query on `useMounted`), so the server HTML and the first client render are the full trail and match; below `md` the collapse applies in the same tick as mount, before paint.
 
 ## Motion & Animations
 

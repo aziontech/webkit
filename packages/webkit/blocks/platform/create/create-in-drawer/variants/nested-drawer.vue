@@ -241,9 +241,13 @@
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
 
-  const breadcrumb = [{ label: 'Forms', href: '/forms' }, { label: 'Nested drawer' }]
+  const breadcrumb = [
+    { label: 'Resources', href: '/resources' },
+    { label: 'storefront', href: '/resources/storefront' },
+    { label: 'Rules Engine' }
+  ]
 
-  const activeId = ref('forms')
+  const activeId = ref('resources')
   const navOpen = ref(false)
   const paletteOpen = ref(false)
   const paletteQuery = ref('')
@@ -331,42 +335,35 @@
   let nextId = 0
   const uid = () => (nextId += 1)
 
-  const services = ref([
-    { value: 'svc-auth', label: 'auth-handler' },
-    { value: 'svc-img', label: 'image-optimizer' }
+  const origins = ref([
+    { value: 'origin-api', label: 'api-backend' },
+    { value: 'origin-static', label: 'static-assets' }
   ])
-  const serviceLabel = (value) =>
-    services.value.find((service) => service.value === value)?.label ?? ''
+  const originLabel = (value) => origins.value.find((origin) => origin.value === value)?.label ?? ''
 
-  const runtimes = [
-    { value: 'node20', label: 'Node.js 20' },
-    { value: 'python312', label: 'Python 3.12' }
-  ]
-  const runtimeLabel = (value) => runtimes.find((r) => r.value === value)?.label ?? ''
-
-  const instances = ref([{ id: 'inst-1', name: 'auth-guard', serviceId: 'svc-auth' }])
+  const rules = ref([{ id: 'rule-1', name: 'route-api', originId: 'origin-api' }])
 
   const parentOpen = ref(false)
-  const form = reactive({ name: '', serviceId: '' })
-  const errors = reactive({ name: '', serviceId: '' })
+  const form = reactive({ name: '', originId: '' })
+  const errors = reactive({ name: '', originId: '' })
   const submitting = ref(false)
 
-  const CREATE_SERVICE = '__create-service__'
-  const serviceSelectOpen = ref(false)
+  const CREATE_ORIGIN = '__create-origin__'
+  const originSelectOpen = ref(false)
 
   const childOpen = ref(false)
-  const childForm = reactive({ name: '', runtime: '' })
-  const childErrors = reactive({ name: '', runtime: '' })
+  const childForm = reactive({ name: '', address: '' })
+  const childErrors = reactive({ name: '', address: '' })
   const childSubmitting = ref(false)
 
-  const onServiceModel = (value) => {
-    if (value === CREATE_SERVICE) {
-      serviceSelectOpen.value = false
+  const onOriginModel = (value) => {
+    if (value === CREATE_ORIGIN) {
+      originSelectOpen.value = false
       childOpen.value = true
       return
     }
-    form.serviceId = value
-    errors.serviceId = ''
+    form.originId = value
+    errors.originId = ''
   }
 
   const openParent = () => {
@@ -376,18 +373,18 @@
   watch(parentOpen, (open) => {
     if (!open) return
     form.name = ''
-    form.serviceId = ''
+    form.originId = ''
     errors.name = ''
-    errors.serviceId = ''
+    errors.originId = ''
   })
 
   const submitParent = () => {
     errors.name = form.name.trim() ? '' : 'This field is required.'
-    errors.serviceId = form.serviceId ? '' : 'Select a service.'
-    if (errors.name || errors.serviceId) return
-    instances.value = [
-      { id: `inst-${uid()}`, name: form.name.trim(), serviceId: form.serviceId },
-      ...instances.value
+    errors.originId = form.originId ? '' : 'Select an origin.'
+    if (errors.name || errors.originId) return
+    rules.value = [
+      ...rules.value,
+      { id: `rule-${uid()}`, name: form.name.trim(), originId: form.originId }
     ]
     parentOpen.value = false
   }
@@ -395,19 +392,19 @@
   watch(childOpen, (open) => {
     if (!open) return
     childForm.name = ''
-    childForm.runtime = ''
+    childForm.address = ''
     childErrors.name = ''
-    childErrors.runtime = ''
+    childErrors.address = ''
   })
 
   const submitChild = () => {
     childErrors.name = childForm.name.trim() ? '' : 'This field is required.'
-    childErrors.runtime = childForm.runtime ? '' : 'This field is required.'
-    if (childErrors.name || childErrors.runtime) return
-    const value = `svc-${uid()}`
-    services.value = [{ value, label: childForm.name.trim() }, ...services.value]
-    form.serviceId = value
-    errors.serviceId = ''
+    childErrors.address = childForm.address.trim() ? '' : 'This field is required.'
+    if (childErrors.name || childErrors.address) return
+    const value = `origin-${uid()}`
+    origins.value = [{ value, label: childForm.name.trim() }, ...origins.value]
+    form.originId = value
+    errors.originId = ''
     childOpen.value = false
   }
 </script>
@@ -827,13 +824,13 @@
       >
         <main class="flex h-full flex-col">
           <PageHeader
-            title="Instances"
-            description="Create a resource whose Select needs a related resource that may not exist yet. The quick-add opens a second drawer, then selects the new resource back into the parent. Each drawer is its own scoped save."
+            title="Rules Engine"
+            description="The rules of the storefront resource, run in order on every request they match. A rule that sends requests to an origin the resource does not have yet creates it in a second drawer."
             size="small"
           >
             <template #actions>
               <Button
-                label="Add Instance"
+                label="Add Rule"
                 icon="pi pi-plus"
                 kind="outlined"
                 size="medium"
@@ -844,14 +841,12 @@
 
           <ul class="layout-section-start flex flex-col gap-(--spacing-xs)">
             <li
-              v-for="instance in instances"
-              :key="instance.id"
+              v-for="rule in rules"
+              :key="rule.id"
               class="flex items-center justify-between rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
             >
-              <span class="text-label-code-sm text-(--text-default)">{{ instance.name }}</span>
-              <span class="text-body-xs text-(--text-muted)">{{
-                serviceLabel(instance.serviceId)
-              }}</span>
+              <span class="text-label-code-sm text-(--text-default)">{{ rule.name }}</span>
+              <span class="text-body-xs text-(--text-muted)">{{ originLabel(rule.originId) }}</span>
             </li>
           </ul>
         </main>
@@ -866,16 +861,16 @@
             <DrawerContent>
               <form
                 class="flex min-h-0 flex-1 flex-col"
-                aria-label="Add Instance"
+                aria-label="Add Rule"
                 novalidate
                 @submit.prevent="submitParent"
               >
                 <PanelHeader class="w-full">
                   <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <DrawerTitle>Add Instance</DrawerTitle>
+                    <DrawerTitle>Add Rule</DrawerTitle>
                     <p class="text-body-sm text-(--text-muted)">
-                      Instantiate a service in this project. Select an existing service or create
-                      one inline.
+                      A rule sends the requests it matches to one origin of this resource. Select
+                      the origin, or create it here.
                     </p>
                   </div>
                   <DrawerClose />
@@ -886,7 +881,7 @@
                     class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
                     :disabled="submitting"
                   >
-                    <legend class="sr-only">Create instance</legend>
+                    <legend class="sr-only">Add Rule</legend>
 
                     <section class="flex flex-col gap-(--layout-group-gap)">
                       <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
@@ -897,7 +892,7 @@
                           <Item.List>
                             <SettingRow
                               title="Name"
-                              description="Give a unique and descriptive name to identify the instance."
+                              description="Give a unique and descriptive name to identify the rule."
                             >
                               <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                                 <div class="flex w-full flex-col gap-(--spacing-xs)">
@@ -907,17 +902,15 @@
                                     :disabled="submitting"
                                     class="w-full"
                                     aria-label="Name"
-                                    placeholder="my-instance"
+                                    placeholder="my-rule"
                                     :required="!!errors.name && !form.name.trim()"
                                     :invalid="!!errors.name && !!form.name.trim()"
-                                    :aria-describedby="
-                                      errors.name ? 'instance-name-error' : undefined
-                                    "
+                                    :aria-describedby="errors.name ? 'rule-name-error' : undefined"
                                     @update:model-value="errors.name = ''"
                                   />
                                   <HelperText
                                     v-if="errors.name"
-                                    id="instance-name-error"
+                                    id="rule-name-error"
                                     :kind="form.name.trim() ? 'invalid' : 'required'"
                                     :label="errors.name"
                                   />
@@ -931,59 +924,59 @@
 
                     <section class="flex flex-col gap-(--layout-group-gap)">
                       <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                        Service
+                        Behavior
                       </p>
                       <Card :padded="false">
                         <template #content>
                           <Item.List>
                             <SettingRow
-                              title="Service"
-                              description="Select the service to instantiate, or create one."
+                              title="Origin"
+                              description="Select the origin matching requests go to, or create one."
                             >
                               <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                                 <div class="flex w-full flex-col gap-(--spacing-xs)">
                                   <Select
-                                    :model-value="form.serviceId"
-                                    v-model:open="serviceSelectOpen"
+                                    :model-value="form.originId"
+                                    v-model:open="originSelectOpen"
                                     size="large"
                                     :disabled="submitting"
                                     class="w-full"
-                                    placeholder="Select a service"
-                                    :required="!!errors.serviceId"
-                                    :display-value="serviceLabel"
-                                    @update:model-value="onServiceModel"
+                                    placeholder="Select an origin"
+                                    :required="!!errors.originId"
+                                    :display-value="originLabel"
+                                    @update:model-value="onOriginModel"
                                   >
                                     <Select.Trigger
-                                      id="instance-service"
-                                      aria-label="Service"
+                                      id="rule-origin"
+                                      aria-label="Origin"
                                       :aria-describedby="
-                                        errors.serviceId ? 'instance-service-error' : undefined
+                                        errors.originId ? 'rule-origin-error' : undefined
                                       "
                                     />
                                     <Select.Content>
                                       <Select.Option
-                                        v-for="service in services"
-                                        :key="service.value"
-                                        :value="service.value"
+                                        v-for="origin in origins"
+                                        :key="origin.value"
+                                        :value="origin.value"
                                       >
-                                        {{ service.label }}
+                                        {{ origin.label }}
                                       </Select.Option>
                                       <template #footer>
                                         <Select.Option
-                                          :value="CREATE_SERVICE"
+                                          :value="CREATE_ORIGIN"
                                           icon="pi pi-plus-circle"
                                           class="w-full"
                                         >
-                                          Create Service
+                                          Create Origin
                                         </Select.Option>
                                       </template>
                                     </Select.Content>
                                   </Select>
                                   <HelperText
-                                    v-if="errors.serviceId"
-                                    id="instance-service-error"
+                                    v-if="errors.originId"
+                                    id="rule-origin-error"
                                     kind="required"
-                                    :label="errors.serviceId"
+                                    :label="errors.originId"
                                   />
                                 </div>
                               </div>
@@ -1002,7 +995,7 @@
                     <div class="w-full md:w-fit">
                       <Button
                         class="w-full"
-                        label="Add Instance"
+                        label="Add Rule"
                         kind="primary"
                         size="medium"
                         :loading="submitting"
@@ -1026,16 +1019,16 @@
             <DrawerContent>
               <form
                 class="flex min-h-0 flex-1 flex-col"
-                aria-label="Create Service"
+                aria-label="Create Origin"
                 novalidate
                 @submit.prevent="submitChild"
               >
                 <PanelHeader class="w-full">
                   <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <DrawerTitle>Create Service</DrawerTitle>
+                    <DrawerTitle>Create Origin</DrawerTitle>
                     <p class="text-body-sm text-(--text-muted)">
-                      Create a service to instantiate. Once saved, it is available in the Service
-                      select.
+                      An origin is a host this resource fetches content from. Once saved, the rule
+                      sends its requests to it.
                     </p>
                   </div>
                   <DrawerClose />
@@ -1046,7 +1039,7 @@
                     class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
                     :disabled="childSubmitting"
                   >
-                    <legend class="sr-only">Create Service</legend>
+                    <legend class="sr-only">Create Origin</legend>
 
                     <section class="flex flex-col gap-(--layout-group-gap)">
                       <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
@@ -1057,7 +1050,7 @@
                           <Item.List>
                             <SettingRow
                               title="Name"
-                              description="A unique name for the service."
+                              description="A unique name for the origin."
                             >
                               <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                                 <div class="flex w-full flex-col gap-(--spacing-xs)">
@@ -1067,17 +1060,17 @@
                                     :disabled="childSubmitting"
                                     class="w-full"
                                     aria-label="Name"
-                                    placeholder="my-service"
+                                    placeholder="my-origin"
                                     :required="!!childErrors.name && !childForm.name.trim()"
                                     :invalid="!!childErrors.name && !!childForm.name.trim()"
                                     :aria-describedby="
-                                      childErrors.name ? 'svc-name-error' : undefined
+                                      childErrors.name ? 'origin-name-error' : undefined
                                     "
                                     @update:model-value="childErrors.name = ''"
                                   />
                                   <HelperText
                                     v-if="childErrors.name"
-                                    id="svc-name-error"
+                                    id="origin-name-error"
                                     :kind="childForm.name.trim() ? 'invalid' : 'required'"
                                     :label="childErrors.name"
                                   />
@@ -1085,43 +1078,30 @@
                               </div>
                             </SettingRow>
                             <SettingRow
-                              title="Runtime"
-                              description="The language the service runs on."
+                              title="Address"
+                              description="The host this resource fetches content from."
                             >
                               <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                                 <div class="flex w-full flex-col gap-(--spacing-xs)">
-                                  <Select
-                                    v-model="childForm.runtime"
+                                  <Input
+                                    v-model="childForm.address"
                                     size="large"
                                     :disabled="childSubmitting"
                                     class="w-full"
-                                    placeholder="Select a runtime"
-                                    :required="!!childErrors.runtime"
-                                    :display-value="runtimeLabel"
-                                    @update:model-value="childErrors.runtime = ''"
-                                  >
-                                    <Select.Trigger
-                                      id="svc-runtime"
-                                      aria-label="Runtime"
-                                      :aria-describedby="
-                                        childErrors.runtime ? 'svc-runtime-error' : undefined
-                                      "
-                                    />
-                                    <Select.Content>
-                                      <Select.Option
-                                        v-for="option in runtimes"
-                                        :key="option.value"
-                                        :value="option.value"
-                                      >
-                                        {{ option.label }}
-                                      </Select.Option>
-                                    </Select.Content>
-                                  </Select>
+                                    aria-label="Address"
+                                    placeholder="origin.example.com"
+                                    :required="!!childErrors.address && !childForm.address.trim()"
+                                    :invalid="!!childErrors.address && !!childForm.address.trim()"
+                                    :aria-describedby="
+                                      childErrors.address ? 'origin-address-error' : undefined
+                                    "
+                                    @update:model-value="childErrors.address = ''"
+                                  />
                                   <HelperText
-                                    v-if="childErrors.runtime"
-                                    id="svc-runtime-error"
-                                    kind="required"
-                                    :label="childErrors.runtime"
+                                    v-if="childErrors.address"
+                                    id="origin-address-error"
+                                    :kind="childForm.address.trim() ? 'invalid' : 'required'"
+                                    :label="childErrors.address"
                                   />
                                 </div>
                               </div>
@@ -1140,7 +1120,7 @@
                     <div class="w-full md:w-fit">
                       <Button
                         class="w-full"
-                        label="Create Service"
+                        label="Create Origin"
                         kind="primary"
                         size="medium"
                         :loading="childSubmitting"

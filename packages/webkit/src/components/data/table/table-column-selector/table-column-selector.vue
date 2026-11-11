@@ -2,7 +2,7 @@
   import type { Column } from '@tanstack/vue-table'
   import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { usePortalLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../../composables/use-placement'
   import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
@@ -31,6 +31,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableColumnSelector: en.tableColumnSelector })
+  const portalLocale = usePortalLocale()
   const heading = computed(() => props.title || t('tableColumnSelector.title'))
   const ctx = inject(TableInjectionKey, null)
 
@@ -118,6 +119,8 @@
           v-if="open"
           ref="panelRef"
           role="dialog"
+          :dir="portalLocale.dir"
+          :lang="portalLocale.lang"
           :aria-label="heading"
           :data-testid="`${testId}__panel`"
           :style="panelStyle"

@@ -4,9 +4,9 @@ category: data
 structure: composition
 status: implemented
 spec_version: 2
-checksum: 39650aa9ef208c267cdf004388c5159beee500775120b874f79c8d011e249763
+checksum: cdb06ccfb9efbf7631038cc55d1e8d1f9de62e256bf8d5555b21ba333f35488a
 created: 2026-06-25
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Pick List — Component Spec
@@ -141,6 +141,7 @@ The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its 
 - `data-loading` on a list (`pick-list-source` / `pick-list-target`) mirrors that list's `loading` prop
 - A loading list renders a centered spinner instead of its options and sets `aria-busy="true"`; while any list is loading, both the move controls and double-click-to-move are disabled until loading clears
 - Each option carries `data-selected` mirroring its selection and `aria-selected`
+- Server render and hydration: the options are the direct `v-for` children of the `TransitionGroup` list (an empty list while loading) and the spinner a sibling `v-if`, so the server renders no fragment markers inside the list and the HTML hydrates as is.
 
 ## Motion & Animations
 

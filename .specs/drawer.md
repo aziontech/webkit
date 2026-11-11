@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: cdd3355f3f01aaf9f39db2871c175122cdc76f6da7a0d18d729991603963e765
+checksum: b607217164055d857c2b20bec8a35df01595d6c3a246b70a1ec3efe0cc30241e
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -134,6 +134,7 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
 - Phones: below `md` the drawer is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`top-0`, `h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content with full-width actions.
+- Server render and hydration: the phone layout reads the viewport only after mount (`use-overlay-mobile` gates the media query on `useMounted`), so a drawer rendered open on the server hydrates with the desktop panel and switches to the phone sheet in the same tick as mount, before paint.
 
 ## Motion & Animations
 

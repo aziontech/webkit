@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import { computed, inject } from 'vue'
+  import { computed, inject, onMounted, ref } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
-  import { defaultTimezones, formatTimezoneLabel, localTimezone } from '../format'
+  import { cityName, defaultTimezones, formatTimezoneLabel, localTimezone } from '../format'
   import { CalendarInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -18,12 +18,26 @@
   const size = computed(() => ctx?.size.value ?? 'medium')
   const disabled = computed(() => ctx?.disabled.value ?? false)
 
+  const mounted = ref(false)
+  onMounted(() => {
+    mounted.value = true
+  })
+
+  const value = computed<string>(
+    () => ctx?.timezone.value || (mounted.value ? localTimezone() : '')
+  )
+
   const options = computed<string[]>(() => {
+    if (!mounted.value) return [value.value]
     const provided = ctx?.timezones.value ?? []
     return provided.length > 0 ? provided : defaultTimezones()
   })
 
-  const value = computed<string>(() => ctx?.timezone.value || localTimezone())
+  const optionLabel = (zone: string): string => {
+    const local = t('calendar.localTimezone')
+    if (mounted.value) return formatTimezoneLabel(zone, local)
+    return zone ? cityName(zone) : local
+  }
 
   const onChange = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLSelectElement
@@ -50,7 +64,7 @@
           :key="zone"
           :value="zone"
         >
-          {{ formatTimezoneLabel(zone, t('calendar.localTimezone')) }}
+          {{ optionLabel(zone) }}
         </option>
       </select>
       <i

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, ref, useAttrs } from 'vue'
+  import { computed, onMounted, provide, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -73,13 +73,23 @@
 
   const total = computed<number>(() => ordered.value.length)
 
-  const current = computed<number>(() => {
-    if (total.value === 0) return 0
-    const requested = Number.isFinite(activeStep.value) ? Math.trunc(activeStep.value) : 0
-    return Math.min(Math.max(requested, 0), total.value - 1)
+  const mounted = ref(false)
+  onMounted(() => {
+    mounted.value = true
   })
 
-  const isLast = computed<boolean>(() => current.value === total.value - 1)
+  const requested = computed<number>(() =>
+    Number.isFinite(activeStep.value) ? Math.max(Math.trunc(activeStep.value), 0) : 0
+  )
+
+  const current = computed<number>(() => {
+    if (total.value === 0) return 0
+    return Math.min(requested.value, total.value - 1)
+  })
+
+  const shown = computed<number>(() => (mounted.value ? current.value : requested.value))
+
+  const isLast = computed<boolean>(() => mounted.value && current.value === total.value - 1)
 
   const progressText = computed<string>(() =>
     total.value > 0 ? t('wizard.stepOf', { step: current.value + 1, total: total.value }) : ''
@@ -103,7 +113,7 @@
     const index = computed<number>(() => ordered.value.indexOf(id))
     return {
       index,
-      active: computed<boolean>(() => index.value === current.value)
+      active: computed<boolean>(() => index.value === shown.value)
     }
   }
 
@@ -159,7 +169,7 @@
     :aria-label="ariaLabel || undefined"
     :data-testid="testId"
     :data-loading="loading || null"
-    :data-active-step="current"
+    :data-active-step="shown"
     class="@container/wizard flex w-full gap-(--spacing-xxl)"
   >
     <div class="@max-2xl/wizard:hidden @2xl/wizard:w-(--container-3xs) @2xl/wizard:shrink-0">
@@ -203,7 +213,7 @@
         />
         <div class="flex items-center gap-(--spacing-xs)">
           <Button
-            v-if="current > 0"
+            v-if="shown > 0"
             kind="secondary"
             :label="t('wizard.previous')"
             :disabled="loading"

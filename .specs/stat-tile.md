@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: approved
-checksum: cac6445c8d36f16c4155200fc9342104f14162999cad377a34d35c97f9407aed
+checksum: 8f3e2e6008701f9c325d7944cf51e6a511b0671925f8b6987d4e5777576e3bd2
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-11
@@ -95,6 +95,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - `data-loading` mirrors `loading`
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
+- Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value.
 
 ## Motion & Animations
 
