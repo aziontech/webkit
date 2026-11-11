@@ -57,9 +57,9 @@ A `Card` titled Deployment with a `ToggleGroup` of Create one and Use existing. 
 
 A `SettingsSection` titled Advanced, `collapsible`, `icon="pi pi-cog"`, closed by default, with a `hint` saying every field carries the endpoint's default. It holds the minimum TLS version (`Label` and `Select`), the error page (`Field` and `Select`, "Not bound" by default) and `SettingRow kind="compact"` switches for Allow the platform domain and Active. Nothing required lives here.
 
-### K. Footer — `Button` (required)
+### K. Footer — `SaveBar`, `Button` (required)
 
-A footer that fades in over the canvas on the form's own measure: outlined Back from step two on, and at the end the primary submit, Next on step one and Create and deploy on step two. Both are medium; the submit is the form's only `type="submit"`.
+`SaveBar kind="fade"`, a footer with no border or surface that fades in over the canvas on the form's own measure: outlined Back in `#leading` from step two on, and in `#actions` the primary submit, Next on step one and Create and deploy on step two. Both are medium; the submit is the form's only `type="submit"`.
 
 ## Do
 

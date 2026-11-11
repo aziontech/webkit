@@ -69,8 +69,8 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
       expect(tip!.getAttribute('role')).toBe('tooltip')
       expect(tip!.textContent).toContain('Delete domain')
 
-      // The trigger's aria-describedby points at the panel's id (tooltipId).
-      const describedBy = trigger.getAttribute('aria-describedby')
+      expect(trigger.hasAttribute('aria-describedby')).toBe(false)
+      const describedBy = trigger.querySelector('button')!.getAttribute('aria-describedby')
       expect(describedBy).not.toBeNull()
       expect(tip!.getAttribute('id')).toBe(describedBy)
       expect(tip!.getAttribute('aria-hidden')).toBe('false')

@@ -918,9 +918,10 @@ locks the whole scope** — this is `/webkit-ui-states` **Pattern 1**; this skil
 re-derive it**. Save shows `:loading`, and **every field the action reads takes `:disabled` off the same
 flag**. On a long form, the actions live in a **sticky bar** — `SaveBar`
 (`@aziontech/webkit/save-bar`) — so Save/Cancel are always reachable. A create page or a form saved
-as one unit uses `kind="plain"` (always shown, on the form column); a settings page mounts the
-default `floating` bar only while the form is dirty or saving, with the status sentence in its
-default slot.
+as one unit uses `kind="plain"` (always shown, on the form column); a full-page wizard step uses
+`kind="fade"` (no border, Back in `#leading`, the step's submit in `#actions`); a settings page
+mounts the default `floating` bar only while the form is dirty or saving, with the status sentence
+in its default slot.
 
 **Bind `:disabled` on the controls, not only the `<fieldset>`.** A native `<fieldset :disabled>` blocks
 _interaction_ for the whole subtree, but webkit controls (`Select`, `Switch`, `Input`, …)

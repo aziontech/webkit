@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/save-bar/default.vue'
 import Docked from '../../../../examples/save-bar/docked.vue'
+import Fade from '../../../../examples/save-bar/fade.vue'
 import Plain from '../../../../examples/save-bar/plain.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SaveBar from './save-bar.vue'
@@ -31,7 +32,7 @@ describe('SaveBar', () => {
     )
   })
 
-  it.each(['floating', 'docked', 'plain'] as const)(
+  it.each(['floating', 'docked', 'plain', 'fade'] as const)(
     'renders the leading slot in place of the icon and sentence (kind=%s)',
     (kind) => {
       const { getByTestId } = within(
@@ -51,7 +52,7 @@ describe('SaveBar', () => {
     }
   )
 
-  it.each(['floating', 'docked', 'plain'] as const)(
+  it.each(['floating', 'docked', 'plain', 'fade'] as const)(
     'mirrors kind=%s and renders the actions',
     (kind) => {
       const { getByTestId, getByRole } = within(
@@ -93,6 +94,10 @@ describe('SaveBar', () => {
   it('has no accessibility violations as a plain form footer', async () => {
     await expectNoA11yViolations(render(Plain).container)
   })
+
+  it('has no accessibility violations as a wizard step footer', async () => {
+    await expectNoA11yViolations(render(Fade).container)
+  })
 })
 
 const boxOf = (width: number) => {
@@ -128,5 +133,22 @@ describe('SaveBar in a narrow box', () => {
     const view = mountIn(1024)
 
     expect(getComputedStyle(view.getByTestId('layout-save-bar__actions')).flexDirection).toBe('row')
+  })
+})
+
+describe('SaveBar fade in a narrow box', () => {
+  it('keeps Back and the action on one row, without a border', () => {
+    const view = render(Fade, { container: boxOf(320) })
+    const back = view.getByRole('button', { name: 'Back' })
+    const next = view.getByRole('button', { name: 'Continue' })
+    const root = view.getByTestId('layout-save-bar')
+
+    expect(getComputedStyle(view.getByTestId('layout-save-bar__actions')).flexDirection).toBe('row')
+    expect(Math.round(back.getBoundingClientRect().top)).toBe(
+      Math.round(next.getBoundingClientRect().top)
+    )
+    expect(back.getBoundingClientRect().left).toBeLessThan(next.getBoundingClientRect().left)
+    expect(getComputedStyle(root).borderTopWidth).toBe('0px')
+    expect(getComputedStyle(root).backgroundImage).toContain('gradient')
   })
 })

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, inject, onMounted, ref, useAttrs } from 'vue'
+  import { computed, inject, onBeforeUnmount, useAttrs } from 'vue'
 
+  import { TriggerHost } from '../../../utils/trigger-host'
   import { DrawerInjectionKey } from './injection-key'
 
   defineOptions({
@@ -14,32 +15,43 @@
 
   const attrs = useAttrs()
   const ctx = inject(DrawerInjectionKey)
-  const triggerEl = ref<HTMLElement | null>(null)
 
-  onMounted(() => {
-    if (ctx && triggerEl.value) {
-      ctx.triggerRef.value = triggerEl.value
-    }
-  })
+  const aria = computed(() => ({
+    'aria-haspopup': 'dialog',
+    'aria-expanded': String(Boolean(ctx?.isOpen.value))
+  }))
 
   const activate = () => {
     ctx?.open()
   }
 
-  const rootClasses = computed(() => [attrs.class])
+  function onKeydown(event: globalThis.KeyboardEvent) {
+    if (event.target !== event.currentTarget) return
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      activate()
+    }
+  }
+
+  function onControl(el: globalThis.HTMLElement | null) {
+    if (ctx) ctx.triggerRef.value = el
+  }
+
+  onBeforeUnmount(() => {
+    if (ctx) ctx.triggerRef.value = null
+  })
 </script>
 
 <template>
-  <span
-    ref="triggerEl"
-    role="button"
-    tabindex="0"
-    :class="rootClasses"
+  <TriggerHost
+    :aria="aria"
+    as-button
+    :class="attrs.class"
     :data-testid="`${ctx?.testId}__trigger`"
     @click="activate"
-    @keydown.enter.prevent="activate"
-    @keydown.space.prevent="activate"
+    @keydown="onKeydown"
+    @control="onControl"
   >
     <slot />
-  </span>
+  </TriggerHost>
 </template>

@@ -42,9 +42,9 @@ The Create Service row swaps the list for a `Field` with a Name `Input`, prefill
 
 A flush `Card` titled with the question, holding an `Item.List` of three small `Item`s rendered `as-child` on `button`s: an icon, the method as `Item.Title`, one or two sentences on what it does as `Item.Description`, and a chevron in `Item.Actions`. Clicking a method is the answer and moves on.
 
-### G. Footer — `Button` (conditional)
+### G. Footer — `SaveBar`, `Button` (conditional)
 
-Mounted only when it has something to offer: outlined Back from step two on, and the primary Next only on steps that ask for typed answers. Both are medium. On a step answered by a click, the footer carries Back alone.
+`SaveBar kind="fade"` under the form: no border or surface, the step content fades into the canvas above it on the form's own measure. Mounted only when it has something to offer: outlined Back in `#leading` from step two on, on the left, and the primary Next in `#actions` only on steps that ask for typed answers, on the right. Both are medium. On a step answered by a click, the footer carries Back alone.
 
 ## Do
 

@@ -14011,7 +14011,7 @@
    "props": [
     {
      "name": "kind",
-     "type": "'floating' | 'docked' | 'plain'",
+     "type": "'floating' | 'docked' | 'plain' | 'fade'",
      "default": "'floating'",
      "required": "false",
      "doc": "How the bar sits at the bottom of its scroll region."
@@ -14034,10 +14034,11 @@
      "notes": "Discard or Cancel, then Save, on the right."
     }
    ],
-   "purpose": "The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown.",
+   "purpose": "The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown; `fade` closes a wizard step with no border or surface, the step content fading into the canvas above Back and Next.",
    "useWhen": [
     "A settings page whose changes are staged and saved together: show the floating bar while the form is dirty or saving.",
-    "A create page or account form with one Save for the whole page (`plain`)."
+    "A create page or account form with one Save for the whole page (`plain`).",
+    "A full-page wizard step: Back in `leading`, the step's primary action in `actions` (`fade`)."
    ],
    "avoidWhen": [
     "A card that saves on its own → put the actions in the card footer.",
@@ -26796,7 +26797,7 @@
    "title": "Templates/Platform/Create/ProvisionWizard",
    "source": "blocks/platform/create/provision-wizard/provision-wizard.vue",
    "surface": "product",
-   "summary": "A two-step creation wizard that provisions a resource and binds it to another: the creation header, a Stepper rail that only lets you go back, a page heading over the form column, and a footer that fades in over the canvas with Back and the primary action, Next and then Create and deploy. Step one binds the project the service serves, either an existing one from the paged list (ResourcePicker) or a new one whose cache settings and origin are set right there. Step two reads the chosen project back with a Change button, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), the environment and certificate, the deployment the first release is cut against, and an Advanced disclosure. Submitting runs the provisioning log plotted in DeploymentFlow and ends on DeploySuccess. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `GlobalHeader`, `Stepper`, `Card`, `ToggleGroup`, `Field`, `Label`, `Input`, `HelperText`, `Item`, `Skeleton`, `Switch`, `RadioCards`, `Select` and `Button`.",
+   "summary": "A two-step creation wizard that provisions a resource and binds it to another: the creation header, a Stepper rail that only lets you go back, a page heading over the form column, and a borderless SaveBar footer that fades in over the canvas with Back and the primary action, Next and then Create and deploy. Step one binds the project the service serves, either an existing one from the paged list (ResourcePicker) or a new one whose cache settings and origin are set right there. Step two reads the chosen project back with a Change button, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), the environment and certificate, the deployment the first release is cut against, and an Advanced disclosure. Submitting runs the provisioning log plotted in DeploymentFlow and ends on DeploySuccess. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `GlobalHeader`, `Stepper`, `Card`, `ToggleGroup`, `Field`, `Label`, `Input`, `HelperText`, `Item`, `Skeleton`, `Switch`, `RadioCards`, `Select`, `SaveBar` and `Button`.",
    "intents": [
     "provision wizard",
     "create service wizard",
@@ -26833,6 +26834,7 @@
     "Label",
     "PageHeader",
     "RadioCards",
+    "SaveBar",
     "Select",
     "SettingRow",
     "SettingsSection",
@@ -26856,6 +26858,7 @@
     "@aziontech/webkit/label",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/radio-cards",
+    "@aziontech/webkit/save-bar",
     "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/settings-section",
@@ -27089,7 +27092,7 @@
    "title": "Templates/Platform/Create/SourceWizard",
    "source": "blocks/platform/create/source-wizard/source-wizard.vue",
    "surface": "product",
-   "summary": "A creation wizard that starts a resource from a code source and deploys it: the creation header, a Stepper rail that only lets you go back, the form column, and a footer with Back and the primary action that disappears while a step is answered by a click. It opens on Where it runs, a centred chooser of the service the project deploys to, six at a time with a search, an inline Create Service row and a way to continue without one; then a card of three methods (Import from Git, Sync with the CLI, Start from a template), each of which declares the remaining steps on the rail. The source, repository, target and configure steps of each method, and the provisioning and success screens (DeploymentFlow and DeploySuccess), are not plotted here. Built from `PageHeader`, `GlobalHeader`, `Stepper`, `Field`, `Input`, `Button`, `Card` and `Item`.",
+   "summary": "A creation wizard that starts a resource from a code source and deploys it: the creation header, a Stepper rail that only lets you go back, the form column, and a borderless fading SaveBar footer with Back and the primary action that disappears while a step is answered by a click. It opens on Where it runs, a centred chooser of the service the project deploys to, six at a time with a search, an inline Create Service row and a way to continue without one; then a card of three methods (Import from Git, Sync with the CLI, Start from a template), each of which declares the remaining steps on the rail. The source, repository, target and configure steps of each method, and the provisioning and success screens (DeploymentFlow and DeploySuccess), are not plotted here. Built from `PageHeader`, `GlobalHeader`, `Stepper`, `Field`, `Input`, `Button`, `SaveBar`, `Card` and `Item`.",
    "intents": [
     "source wizard",
     "deploy from git",
@@ -27126,6 +27129,7 @@
     "Input",
     "Item",
     "PageHeader",
+    "SaveBar",
     "Stepper"
    ],
    "imports": [
@@ -27140,6 +27144,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/page-header",
+    "@aziontech/webkit/save-bar",
     "@aziontech/webkit/stepper"
    ],
    "primary": "WhereItRuns",

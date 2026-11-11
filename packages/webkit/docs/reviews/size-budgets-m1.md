@@ -49,3 +49,13 @@ Three entries changed for M1.10 rows 41, 42 and 44. Overlays that teleport to `b
 | doc-page-header | 25.5          | 25.20           | 25.56        | 25.75      | Raised: its Breadcrumb overflow menu carries the as-child `DropdownMenu.Trigger` and portal locale. |
 | listing-browser | 64.25         | 64.13           | 64.26        | 64.5       | Raised: its Select and Popover panels bind the portal locale.                                       |
 | select          | 19.5          | 19.39           | 19.51        | 19.75      | Raised: the content binds the portal locale and the trigger isolates its value.                     |
+
+Five entries changed for M1.10 rows 46 and 48. `Popover.Trigger`, `Dialog.Trigger` and `Drawer.Trigger` became as-child triggers like `DropdownMenu.Trigger` (no role-less or focusable wrapper around the slotted button), and the four share an internal `TriggerHost` that merges the trigger ARIA into a slotted `Button`, `IconButton` or native control at render, so it is in the server HTML. `Tooltip` moves its `aria-describedby` from the wrapper onto the slotted control. Each is an accessibility fix (a nested interactive control, ARIA on an element with no role, a description nobody hears, ARIA missing until hydration), so the bytes stay.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                                                      |
+| --------------- | ------------- | --------------- | ------------ | ---------- | ----------------------------------------------------------------------------------------- |
+| browser-frame   | 11.9          | 11.87           | 12.02        | 12.1       | Raised: its `CopyButton` tooltip forwards `aria-describedby` onto the button.             |
+| doc-prompt      | 9.6           | 9.57            | 9.75         | 9.85       | Raised: same tooltip change, through `CopyButton`.                                        |
+| section-header  | 7.9           | 7.87            | 8.05         | 8.15       | Raised: same tooltip change, through `CopyButton`.                                        |
+| doc-page-header | 25.75         | 25.56           | 26.21        | 26.3       | Raised: its overflow menu's trigger carries `TriggerHost`, and its tooltips forward ARIA. |
+| confirm-dialog  | 23            | 22.59           | 23.48        | 23.6       | Raised: it ships `Dialog.Trigger`, now an as-child trigger on `TriggerHost`.              |

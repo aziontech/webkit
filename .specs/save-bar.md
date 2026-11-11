@@ -3,7 +3,7 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: dd6ddb0514056f601f8bf429a6ddff5ffa9deaedf396294f0d14225620b7d6ac
+checksum: fa996fdea2ce9b48e03d39843ae6ad5fde18e2a61b6163ac632827a9af975331
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
@@ -13,12 +13,13 @@ last_updated: 2026-11-11
 
 ## Purpose
 
-The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown.
+The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown; `fade` closes a wizard step with no border or surface, the step content fading into the canvas above Back and Next.
 
 ## When to use
 
 - A settings page whose changes are staged and saved together: show the floating bar while the form is dirty or saving.
 - A create page or account form with one Save for the whole page (`plain`).
+- A full-page wizard step: Back in `leading`, the step's primary action in `actions` (`fade`).
 
 ## When NOT to use
 
@@ -70,7 +71,7 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 
 | Prop   | Type                                | Default      | Required | JSDoc                                                |
 | ------ | ----------------------------------- | ------------ | -------- | ---------------------------------------------------- |
-| `kind` | `'floating' \| 'docked' \| 'plain'` | `'floating'` | false    | How the bar sits at the bottom of its scroll region. |
+| `kind` | `'floating' \| 'docked' \| 'plain' \| 'fade'` | `'floating'` | false    | How the bar sits at the bottom of its scroll region. |
 
 ## Events
 
@@ -88,7 +89,7 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop on the root
-- Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
+- Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Motion & Animations
 
@@ -100,10 +101,11 @@ _none_ — the consumer wraps the bar in a `Transition` when it appears with the
 | ----------------------- | --------------------------------------------------------------- |
 | floating/docked surface | `var(--bg-canvas)` · border `var(--border-default)`             |
 | plain surface           | `var(--bg-surface)` · border `var(--border-muted)`              |
+| fade surface            | gradient `transparent` to `var(--bg-canvas)`, no border         |
 | status text             | `.text-body-sm` · `var(--text-default)`                         |
 | status glyph            | `var(--text-muted)`                                             |
 | gaps                    | `var(--spacing-xs)` · `var(--spacing-sm)` · `var(--spacing-xl)` |
-| padding                 | `var(--spacing-sm)` · `var(--spacing-md)`                       |
+| padding                 | `var(--spacing-sm)` · `var(--spacing-md)` · `var(--spacing-lg)` · `var(--spacing-xl)` |
 
 ## Theme gaps
 
@@ -121,6 +123,7 @@ _none_
 - Floating — the dirty-state bar over a scroll region.
 - Docked — the bar on its own row; justified because `kind` changes the layout.
 - Plain — the form footer; justified because `kind` changes the surface and width.
+- Fade — the wizard step footer with Back in `leading`; justified because `kind` changes the surface and keeps one row.
 
 ## Constraints — DO NOT
 

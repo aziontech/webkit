@@ -162,7 +162,7 @@ describe('ComparisonTable', () => {
     await expectNoA11yViolations(container)
   })
 
-  it.skip('has no a11y violations with definitions: PopoverTrigger puts aria-expanded on a role-less span (aria-allowed-attr), a popover defect', async () => {
+  it('has no a11y violations with definitions', async () => {
     const { container } = band()
 
     await expectNoA11yViolations(container)

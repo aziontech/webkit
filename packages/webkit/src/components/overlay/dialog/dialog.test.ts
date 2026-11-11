@@ -78,8 +78,11 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
       // The Root + Trigger render in-place; DialogPortal renders nothing until open.
       expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
       const trigger = getByTestId('overlay-dialog__trigger')
-      expect(trigger.getAttribute('role')).toBe('button')
-      expect(trigger.getAttribute('tabindex')).toBe('0')
+      expect(trigger.hasAttribute('role')).toBe(false)
+      expect(trigger.hasAttribute('tabindex')).toBe(false)
+      const button = trigger.querySelector('button') as HTMLElement
+      expect(button.getAttribute('aria-haspopup')).toBe('dialog')
+      expect(button.getAttribute('aria-expanded')).toBe('false')
 
       expect(panel()).toBeNull()
       expect(backdrop()).toBeNull()
@@ -197,7 +200,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
       expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
       // Focus is restored to the trigger element (watch on isOpen -> triggerRef.focus()).
       await vi.waitFor(() => {
-        expect(document.activeElement).toBe(trigger)
+        expect(document.activeElement).toBe(trigger.querySelector('button'))
       })
     })
 
