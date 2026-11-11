@@ -22,6 +22,7 @@
   import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
@@ -521,20 +522,10 @@
             <span class="text-body-sm text-(--text-muted)">{{ value || 'None' }}</span>
           </template>
           <template #cell-actions="{ row }">
-            <DropdownMenu
-              placement="bottom-end"
+            <Table.CellActions
+              :name="row.name"
               @select="(event, value) => onColumnAction(value, row)"
             >
-              <DropdownMenu.Trigger>
-                <Tooltip text="Column actions">
-                  <IconButton
-                    icon="pi pi-ellipsis-h"
-                    kind="transparent"
-                    size="small"
-                    :aria-label="`Actions for ${row.name}`"
-                  />
-                </Tooltip>
-              </DropdownMenu.Trigger>
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="alter"
@@ -547,7 +538,7 @@
                   /></template>
                 </DropdownMenu.Option>
               </DropdownMenu.Group>
-            </DropdownMenu>
+            </Table.CellActions>
           </template>
         </TableRoot>
       </template>

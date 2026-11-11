@@ -38,13 +38,13 @@ A Columns `IconButton` opens a popover placed `bottom-end` with one `Switch` per
 
 A `Breadcrumb` of the folder path starts at the storage name; each crumb jumps back to that depth. Beside it the primary medium Add to files `SplitButton` offers Upload file and Add folder. It is the page's only primary action.
 
-### F. Cell recipes — `Avatar`, `Tooltip` (optional)
+### F. Cell recipes — `Table.CellTime` (optional)
 
-Folders sort first with a link-coloured folder glyph and open on row click; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified pairs the editor's small square `Avatar`, named in a `Tooltip`, with the relative time.
+Folders sort first with a link-coloured folder glyph and open on row click; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified is `Table.CellTime`: the editor's avatar and a relative time that updates every minute, with the absolute time in its tooltip.
 
-### G. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `IconButton`, `Tooltip` (required)
+### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
-A small ellipsis `IconButton` named File actions opens a menu placed `bottom-end`: Open for a folder or Download for a file in the first group, Delete alone in the last group. The `..` row has no menu.
+`Table.CellActions`, named after the file ("Actions for logo.svg"), opens a menu placed `bottom-end`: Open for a folder or Download for a file in the first group, Delete alone in the last group. The `..` row has no menu.
 
 ### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
@@ -104,7 +104,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - **Storage name:** the resource name as created, e.g. "acme-assets"; never prefixed with the type.
 - **Search:** placeholder names the scope, e.g. "Search in folder".
 - **Add action:** "Add to files", with options "Upload file" and "Add folder".
-- **Row menu:** one verb per option, e.g. "Open", "Download", "Delete"; the trigger is named "File actions".
+- **Row menu:** one verb per option, e.g. "Open", "Download", "Delete"; the trigger is named "Actions for <file>".
 - **Delete dialog:** title and confirm `Delete file` or `Delete folder`, consequence `The selected folder will be deleted, along with all its files.`, prompt `Type <name> to confirm.`
 - **Column headers:** short fragments, e.g. "Name", "Size", "Last modified".
 - **Empty folder:** title states the fact, e.g. "This folder is empty"; description is one sentence, e.g. "Upload files or create a folder to get started."
@@ -121,7 +121,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - The `Breadcrumb` crumbs are links the keyboard reaches in order; the last crumb is the current folder.
 - Folder rows open on click and the Open option in the row menu gives the same action to keyboard users.
 - Focus order follows reading order: search, Refresh, Download CSV, Columns, path, Add to files, the rows.
-- The `Avatar` carries the author name as `alt`, repeated by its `Tooltip`.
+- `Table.CellTime` names the author and reads the absolute time to screen readers.
 - The drop overlay is `aria-hidden`: dragging is a pointer path, and Add to files with Browse files is the keyboard path to the same upload.
 - `UploadProgress` is a region named File transfers with a polite status that announces each file finishing and the outcome; percentages are not announced. The toast repeats the outcome for people who collapsed the card.
 - In the upload dialog each refused file's reason is the `aria-describedby` of its Remove button, and removing a file moves focus to the next one.

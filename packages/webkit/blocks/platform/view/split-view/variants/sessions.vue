@@ -28,6 +28,7 @@
   import Popover from '@aziontech/webkit/popover'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
@@ -375,7 +376,6 @@
   const eventLevelSeverity = (level) => eventLevels[level] ?? 'secondary'
 
   const levelOrder = Object.keys(eventLevels)
-
 
   const eventLevelOptions = levelOrder.map((value) => ({ value, label: value }))
 
@@ -2691,10 +2691,9 @@
                     </template>
 
                     <template #cell-level="{ value }">
-                      <Tag
+                      <Table.CellStatus
                         :label="value"
                         :severity="eventLevelSeverity(value)"
-                        size="medium"
                       />
                     </template>
 

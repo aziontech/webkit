@@ -78,9 +78,9 @@ tokens are for. The legend toggles a series and shows its total for the range.
 Three ranked lists (by actor, by category, by destination), each with an `aria-label` naming what it
 ranks. Rank by count, largest first.
 
-### K. Outcome in the log — `Tag` (required)
+### K. Outcome in the log — `Table.CellStatus` (required)
 
-Each log row states its outcome as a `Tag` in the same status hue as its series in the chart, so the
+Each log row states its outcome as a `Table.CellStatus` in the same status hue as its series in the chart, so the
 chart and the log read the same scale. The card header's count (`<n> requests`) is also a `Tag`.
 
 ### L. Request log — `TableRoot` (required)

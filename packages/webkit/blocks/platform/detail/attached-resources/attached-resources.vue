@@ -1,14 +1,11 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
   import { computed } from 'vue'
 
   const domains = [
@@ -84,20 +81,10 @@
             </span>
           </template>
           <template #cell-actions="{ row }">
-            <DropdownMenuRoot
+            <Table.CellActions
               v-if="!row.generated"
-              placement="bottom-end"
+              :name="row.domain"
             >
-              <DropdownMenuTrigger>
-                <Tooltip text="Row actions">
-                  <IconButton
-                    icon="pi pi-ellipsis-h"
-                    kind="outlined"
-                    size="small"
-                    :aria-label="`Actions for ${row.domain}`"
-                  />
-                </Tooltip>
-              </DropdownMenuTrigger>
               <DropdownMenuGroup>
                 <DropdownMenuOption
                   value="edit"
@@ -122,7 +109,7 @@
                   /></template>
                 </DropdownMenuOption>
               </DropdownMenuGroup>
-            </DropdownMenuRoot>
+            </Table.CellActions>
           </template>
         </TableRoot>
 
