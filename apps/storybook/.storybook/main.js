@@ -8,8 +8,8 @@ const config = {
    * Story assets served at the origin root, so a story's `src` is the same string a
    * consumer writes — `/docs/…`, not a bundler hash. Frames need it: DocFrame takes a
    * URL, and its "Show code" snippet has to stay paste-and-run, which a hashed asset
-   * import would not be. Kept inside this app rather than pointed at webkit-sample's
-   * `public/`, so a story never breaks when the sample app reorganises.
+   * import would not be. Kept inside this app, so a story never depends on another
+   * app's public folder.
    */
   staticDirs: ['../static'],
   addons: [
