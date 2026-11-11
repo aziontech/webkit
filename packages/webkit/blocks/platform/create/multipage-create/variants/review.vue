@@ -1,0 +1,847 @@
+<script setup>
+  import Alert from '@aziontech/webkit/alert'
+  import Avatar from '@aziontech/webkit/avatar'
+  import Brand from '@aziontech/webkit/brand'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import Field from '@aziontech/webkit/field'
+  import GlobalHeader from '@aziontech/webkit/global-header'
+  import HelperText from '@aziontech/webkit/helper-text'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import RadioButton from '@aziontech/webkit/radio-button'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import SectionHeader from '@aziontech/webkit/section-header'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import Stepper from '@aziontech/webkit/stepper'
+  import Switch from '@aziontech/webkit/switch'
+  import Tag from '@aziontech/webkit/tag'
+  import Textarea from '@aziontech/webkit/textarea'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+
+  const breadcrumb = [
+    { label: 'Access Lists', href: '/access-lists' },
+    { label: 'Create Access List' }
+  ]
+  const policies = [
+    { value: 'acme-production', label: 'acme-production', description: 'acme-site', ready: true },
+    { value: 'acme-staging', label: 'acme-staging', description: 'acme-site', ready: false },
+    { value: 'api-hardening', label: 'api-hardening', description: 'legacy-api', ready: false },
+    {
+      value: 'checkout-shield',
+      label: 'checkout-shield',
+      description: 'ecommerce-v2',
+      ready: false
+    },
+    { value: 'dev-sandbox', label: 'dev-sandbox', description: 'internal', ready: false },
+    {
+      value: 'marketing-site',
+      label: 'marketing-site',
+      description: 'marketing-site',
+      ready: false
+    },
+    { value: 'payments-api', label: 'payments-api', description: 'ecommerce-v2', ready: false },
+    { value: 'partner-gateway', label: 'partner-gateway', description: 'legacy-api', ready: true },
+    { value: 'admin-allowlist', label: 'admin-allowlist', description: 'status-page', ready: true },
+    {
+      value: 'media-delivery',
+      label: 'media-delivery',
+      description: 'blog-platform',
+      ready: false
+    },
+    { value: 'acme-canary', label: 'acme-canary', description: 'acme-docs', ready: false },
+    {
+      value: 'search-api-shield',
+      label: 'search-api-shield',
+      description: 'ecommerce-storefront',
+      ready: false
+    },
+    {
+      value: 'legacy-storefront',
+      label: 'legacy-storefront',
+      description: 'ecommerce-storefront',
+      ready: false
+    },
+    { value: 'qa-sandbox', label: 'qa-sandbox', description: 'internal', ready: false }
+  ]
+  const types = [
+    {
+      value: 'asn',
+      label: 'ASN',
+      description: 'Identify networks by Autonomous System Number. Suited to grouping traffic.'
+    },
+    {
+      value: 'ip_cidr',
+      label: 'IP/CIDR',
+      description:
+        'Specific IP addresses or ranges in CIDR notation, for precise traffic segmentation.'
+    },
+    {
+      value: 'countries',
+      label: 'Countries',
+      description: 'Group traffic by country, for location-based rules.'
+    }
+  ]
+  const listFields = {
+    asn: {
+      label: 'List',
+      placeholder: '13335\n53331',
+      helper:
+        'One ASN per line, such as 13335. Public ASNs run from 1 to 64511, private ones from 64512 to 65535. Duplicate entries are removed.'
+    },
+    ip_cidr: {
+      label: 'List',
+      placeholder: '185.241.208.232\n194.26.192.64\n171.25.193.25 #comment',
+      helper:
+        'One address or range per line. Add a comment after #, and a date with --LT. Duplicate entries are removed.'
+    },
+    countries: {
+      label: 'Countries',
+      placeholder: 'BR\nUS',
+      helper: 'One or more countries, one two-letter ISO 3166-1 code per line, such as BR.'
+    }
+  }
+
+  const VISIBLE = 6
+
+  const current = ref('review')
+  const direction = ref(null)
+  const choice = ref('acme-production')
+  const enableModule = ref(false)
+  const query = ref('')
+  const form = reactive({
+    name: 'office-ranges',
+    type: 'asn',
+    items: '13335\n53331\n64512\n64513\n65001\n65002\n65010'
+  })
+  const errors = reactive({})
+  const unlocked = ref(['where-it-runs', 'general', 'settings', 'review'])
+
+  const moduleMissing = computed(
+    () => !!choice.value && !policies.find((option) => option.value === choice.value)?.ready
+  )
+
+  const definitions = computed(() => [
+    {
+      value: 'where-it-runs',
+      title: 'Where it runs',
+      description: 'Select the policy whose rules match it. It needs IP filtering on.',
+      heading: false,
+      fields: []
+    },
+    ...(moduleMissing.value
+      ? [
+          {
+            value: 'module',
+            title: 'IP filtering',
+            description: 'Off on ' + choice.value + '.',
+            fields: []
+          }
+        ]
+      : []),
+    {
+      value: 'general',
+      title: 'General',
+      description:
+        'Build allowlists, blocklists and greylists from IP addresses, countries or ASNs, and use them in policy rules.',
+      fields: ['name']
+    },
+    {
+      value: 'settings',
+      title: 'List settings',
+      description:
+        'The kind of entry the list holds, and the entries themselves. The type cannot be changed after the list is created, because every entry is validated against it.',
+      fields: ['type', 'items']
+    },
+    {
+      value: 'review',
+      title: 'Review',
+      description: 'Check what is created and where it runs. Edit any part, then create the list.',
+      fields: []
+    }
+  ])
+
+  const index = computed(() =>
+    Math.max(
+      0,
+      definitions.value.findIndex((entry) => entry.value === current.value)
+    )
+  )
+  const step = computed(() => definitions.value[index.value])
+  const isFirst = computed(() => index.value === 0)
+  const isLast = computed(() => index.value === definitions.value.length - 1)
+
+  const steps = computed(() =>
+    definitions.value.map((entry, position) => ({
+      value: entry.value,
+      title: entry.title,
+      description: entry.description,
+      state: entry.fields.some((field) => errors[field])
+        ? 'error'
+        : position < index.value
+          ? 'complete'
+          : 'upcoming',
+      disabled: !unlocked.value.includes(entry.value)
+    }))
+  )
+
+  const listField = computed(() => listFields[form.type])
+
+  const matches = computed(() => {
+    const term = query.value.trim().toLowerCase()
+    if (!term) return policies
+    return policies.filter((option) =>
+      [option.label, option.description].some((field) => field.toLowerCase().includes(term))
+    )
+  })
+  const visible = computed(() => {
+    const head = matches.value.slice(0, VISIBLE)
+    if (!choice.value || head.some((option) => option.value === choice.value)) return head
+    const picked = matches.value.find((option) => option.value === choice.value)
+    return picked ? [picked, ...head.slice(0, VISIBLE - 1)] : head
+  })
+  const hidden = computed(() => Math.max(0, matches.value.length - visible.value.length))
+
+  const validate = (fields) => {
+    for (const field of fields) delete errors[field]
+    if (fields.includes('name') && !form.name.trim()) {
+      errors.name = { kind: 'required', message: 'This field is required.' }
+    }
+    if (fields.includes('items') && !form.items.trim()) {
+      errors.items = { kind: 'required', message: 'This field is required.' }
+    }
+    return fields.every((field) => !errors[field])
+  }
+
+  const goNext = () => {
+    if (!validate(step.value.fields)) return
+    const next = definitions.value[index.value + 1]
+    if (!next) return
+    if (!unlocked.value.includes(next.value)) unlocked.value.push(next.value)
+    direction.value = 'forward'
+    current.value = next.value
+  }
+
+  const goBack = () => {
+    const previous = definitions.value[index.value - 1]
+    if (!previous) return
+    direction.value = 'back'
+    current.value = previous.value
+  }
+
+  const choose = (option) => {
+    choice.value = option.value
+    enableModule.value = false
+    goNext()
+  }
+
+  const skip = () => {
+    choice.value = ''
+    enableModule.value = false
+    goNext()
+  }
+
+  const onSearchEnter = () => {
+    if (matches.value.length) choose(matches.value[0])
+  }
+
+  const entries = computed(() =>
+    Array.from(
+      new Set(
+        form.items
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean)
+      )
+    )
+  )
+  const PREVIEW = 5
+  const typeLabel = computed(() => types.find((option) => option.value === form.type)?.label)
+  const consumers = [
+    {
+      by: 'Policy rules',
+      path: 'rules[].criteria[].argument',
+      as: 'Network list'
+    },
+    {
+      by: 'Rule sets',
+      path: 'rule_sets[].match.network_list',
+      as: 'Network list'
+    }
+  ]
+
+  const editStep = (value) => {
+    direction.value = 'back'
+    current.value = value
+  }
+
+  const creating = ref(false)
+  let timer
+
+  const commit = () => {
+    if (!isLast.value) {
+      goNext()
+      return
+    }
+    if (!validate(['name', 'type', 'items'])) {
+      const failed = definitions.value.find((entry) => entry.fields.some((field) => errors[field]))
+      if (failed) editStep(failed.value)
+      return
+    }
+    creating.value = true
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      creating.value = false
+      toast.success(`${form.name} created.`, {
+        description: choice.value
+          ? `Rules of ${choice.value} can match on it now.`
+          : 'Bind it to a policy to use it in rules.'
+      })
+    }, 900)
+  }
+
+  onBeforeUnmount(() => clearTimeout(timer))
+</script>
+
+<template>
+  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
+    <GlobalHeader aria-label="Console">
+      <GlobalHeader.Left>
+        <IconButton
+          icon="pi pi-chevron-left"
+          aria-label="Back to Access Lists"
+          kind="outlined"
+          size="small"
+        />
+        <GlobalHeader.Brand>
+          <a
+            href="/home"
+            aria-label="Azion home"
+            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+          >
+            <Brand
+              kind="default"
+              size="small"
+            />
+          </a>
+        </GlobalHeader.Brand>
+        <Breadcrumb :items="breadcrumb" />
+      </GlobalHeader.Left>
+      <GlobalHeader.Middle />
+      <GlobalHeader.Right>
+        <button
+          type="button"
+          aria-label="Account settings"
+          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+        >
+          <Avatar
+            label="name@example.com"
+            size="medium"
+            kind="square"
+          />
+        </button>
+      </GlobalHeader.Right>
+    </GlobalHeader>
+
+    <div class="flex min-h-0 flex-1">
+      <aside
+        class="hidden h-full w-64 shrink-0 overflow-auto border-e border-(--border-default) px-(--spacing-md) py-(--layout-section-gap) md:block"
+      >
+        <div class="flex h-full">
+          <Stepper
+            v-model="current"
+            aria-label="Create Access List"
+            class="w-full"
+          >
+            <Stepper.Step
+              v-for="entry in steps"
+              :key="entry.value"
+              :value="entry.value"
+              :title="entry.title"
+              :description="entry.value === current ? entry.description : ''"
+              :state="entry.state"
+              :disabled="entry.disabled"
+            />
+          </Stepper>
+        </div>
+      </aside>
+
+      <form
+        class="flex min-w-0 flex-1 flex-col"
+        :aria-label="step.title"
+        novalidate
+        @submit.prevent="commit"
+      >
+        <main
+          :data-direction="direction"
+          class="group/main data-[direction=forward]:[--page-enter-distance:calc(var(--layout-boundary-inline)*-1)] animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto"
+        >
+          <div class="flex min-h-full flex-col">
+            <div
+              class="layout-form-create layout-boundary-inline flex flex-1 flex-col pt-(--layout-section-gap) pb-(--layout-section-gap)"
+            >
+              <p class="pb-(--spacing-sm) text-label-sm text-(--text-muted) md:hidden">
+                Step {{ index + 1 }} of {{ steps.length }}
+              </p>
+
+              <PageHeader
+                v-if="step.heading !== false"
+                :title="step.title"
+                :description="step.description"
+                size="small"
+              />
+
+              <fieldset
+                class="mx-0 flex min-w-0 flex-1 flex-col border-0 p-0 data-headed:mt-(--layout-section-gap)"
+                :data-headed="step.heading !== false || null"
+              >
+                <legend class="sr-only">{{ step.title }}</legend>
+                <section
+                  v-if="current === 'where-it-runs'"
+                  data-wide
+                  class="mx-auto flex w-full max-w-(--container-2xs) flex-col items-center gap-(--spacing-lg) data-wide:max-w-(--container-md)"
+                  aria-labelledby="create-access-list-host-title"
+                >
+                  <header class="flex flex-col items-center gap-(--spacing-xs) text-center">
+                    <span
+                      class="flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                    >
+                      <i
+                        class="pi pi-list text-body-lg leading-none text-(--text-default)"
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <h1
+                      id="create-access-list-host-title"
+                      class="text-heading-xs text-(--text-default)"
+                    >
+                      Create Access List
+                    </h1>
+                    <p class="text-body-sm text-(--text-muted)">Select a policy to continue</p>
+                  </header>
+
+                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                    <Input
+                      v-model="query"
+                      size="large"
+                      class="w-full"
+                      placeholder="Search policies"
+                      aria-label="Search policies"
+                      autocomplete="off"
+                      @keydown.enter.prevent="onSearchEnter"
+                    />
+
+                    <div class="flex flex-col">
+                      <Item
+                        v-for="option in visible"
+                        :key="option.value"
+                        as-child
+                        size="small"
+                      >
+                        <button
+                          type="button"
+                          class="w-full text-start data-[selected]:bg-(--bg-selected)"
+                          :aria-pressed="choice === option.value"
+                          :data-selected="choice === option.value || null"
+                          @click="choose(option)"
+                        >
+                          <Item.Media>
+                            <i
+                              class="pi pi-shield text-body-md leading-none text-(--text-muted)"
+                              aria-hidden="true"
+                            />
+                          </Item.Media>
+                          <Item.Content>
+                            <Item.Title>{{ option.label }}</Item.Title>
+                          </Item.Content>
+                          <Item.Actions>
+                            <Tag
+                              v-if="!option.ready"
+                              label="IP filtering off"
+                              severity="warning"
+                              size="small"
+                            />
+                            <i
+                              v-if="choice === option.value"
+                              class="pi pi-check text-body-sm leading-none text-(--text-default)"
+                              aria-hidden="true"
+                            />
+                          </Item.Actions>
+                        </button>
+                      </Item>
+
+                      <p
+                        v-if="hidden"
+                        class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+                      >
+                        {{ hidden }} more. Type to narrow the list.
+                      </p>
+                      <p
+                        v-else-if="!matches.length"
+                        class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+                      >
+                        No policy matches “{{ query.trim() }}”.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col items-center gap-(--spacing-xxs)">
+                    <Button
+                      type="button"
+                      label="Create a policy"
+                      kind="transparent"
+                      size="small"
+                    />
+                    <Button
+                      type="button"
+                      label="Continue without a policy"
+                      kind="transparent"
+                      size="small"
+                      @click="skip"
+                    />
+                  </div>
+                </section>
+
+                <Card
+                  v-else-if="current === 'module'"
+                  :padded="false"
+                >
+                  <template #content>
+                    <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
+                      <Alert
+                        severity="warning"
+                        size="small"
+                        :label="
+                          'An access list is only read by policy rules, and ' +
+                          choice +
+                          ' has IP filtering off, so nothing reads this one until the module is on.'
+                        "
+                      />
+
+                      <Field.Label>
+                        <Field orientation="horizontal">
+                          <Switch v-model="enableModule" />
+                          <Field.Content>
+                            <Field.Title> Turn on IP filtering </Field.Title>
+                            <Field.Description>
+                              {{
+                                'Sets modules.ip_filtering on the policy ' +
+                                choice +
+                                ' when this access list is created.'
+                              }}
+                            </Field.Description>
+                          </Field.Content>
+                        </Field>
+                      </Field.Label>
+
+                      <p class="text-body-sm text-(--text-muted)">
+                        Leaving it off still creates the access list. It is not read until someone
+                        turns IP filtering on.
+                      </p>
+                    </div>
+                  </template>
+                </Card>
+
+                <section
+                  v-else-if="current === 'general'"
+                  class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+                >
+                  <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+                    <Card :padded="false">
+                      <template #content>
+                        <Item.List>
+                          <SettingRow
+                            title="Name"
+                            description="Give a unique and descriptive name to identify the access list."
+                          >
+                            <Input
+                              v-model="form.name"
+                              size="large"
+                              class="w-full"
+                              aria-label="Name"
+                              placeholder="office-ranges"
+                              autocomplete="off"
+                              :required="errors.name?.kind === 'required'"
+                              :aria-describedby="
+                                errors.name ? 'create-access-list-name-message' : undefined
+                              "
+                              @update:model-value="delete errors.name"
+                            />
+                            <HelperText
+                              v-if="errors.name"
+                              id="create-access-list-name-message"
+                              :kind="errors.name.kind"
+                              :label="errors.name.message"
+                            />
+                          </SettingRow>
+                        </Item.List>
+                      </template>
+                    </Card>
+                  </div>
+                </section>
+
+                <section
+                  v-else-if="current === 'settings'"
+                  class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+                >
+                  <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+                    <Card :padded="false">
+                      <template #content>
+                        <Item.List>
+                          <SettingRow
+                            title="Type"
+                            kind="stacked"
+                          >
+                            <fieldset
+                              class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
+                            >
+                              <legend class="sr-only">Type</legend>
+                              <Field.Label
+                                v-for="option in types"
+                                :key="option.value"
+                              >
+                                <Field orientation="horizontal">
+                                  <RadioButton
+                                    v-model="form.type"
+                                    :value="option.value"
+                                    name="access-lists-type"
+                                  />
+                                  <Field.Content>
+                                    <Field.Title>
+                                      {{ option.label }}
+                                    </Field.Title>
+                                    <Field.Description v-if="option.description">
+                                      {{ option.description }}
+                                    </Field.Description>
+                                  </Field.Content>
+                                </Field>
+                              </Field.Label>
+                            </fieldset>
+                          </SettingRow>
+                          <SettingRow
+                            :title="listField.label"
+                            :description="listField.helper"
+                            kind="stacked"
+                          >
+                            <Textarea
+                              v-model="form.items"
+                              class="w-full"
+                              :rows="5"
+                              :aria-label="listField.label"
+                              :placeholder="listField.placeholder"
+                              :required="errors.items?.kind === 'required'"
+                              :aria-describedby="
+                                errors.items ? 'create-access-list-items-message' : undefined
+                              "
+                              @update:model-value="delete errors.items"
+                            />
+                            <HelperText
+                              v-if="errors.items"
+                              id="create-access-list-items-message"
+                              :kind="errors.items.kind"
+                              :label="errors.items.message"
+                            />
+                          </SettingRow>
+                        </Item.List>
+                      </template>
+                    </Card>
+                  </div>
+                </section>
+                <section
+                  v-else
+                  class="flex min-w-0 flex-col gap-(--layout-section-gap)"
+                >
+                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                    <SectionHeader
+                      title="Where it runs"
+                      size="small"
+                    >
+                      <template #actions>
+                        <Button
+                          type="button"
+                          label="Edit"
+                          kind="outlined"
+                          size="small"
+                          aria-label="Edit where it runs"
+                          @click="editStep('where-it-runs')"
+                        />
+                      </template>
+                    </SectionHeader>
+                    <Alert
+                      key="alert-1"
+                      v-if="!choice"
+                      severity="warning"
+                    >
+                      Bound to no policy. The list is created, but no rule can match on it until a
+                      policy uses it.
+                    </Alert>
+                    <Alert
+                      key="alert-2"
+                      v-else-if="moduleMissing && !enableModule"
+                      severity="warning"
+                    >
+                      IP filtering is off on {{ choice }}, so no rule reads this list until it is
+                      on.
+                    </Alert>
+                    <Alert
+                      key="alert-3"
+                      v-else
+                      severity="success"
+                    >
+                      Runs on {{ choice }}.
+                    </Alert>
+                  </section>
+
+                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                    <SectionHeader
+                      title="What gets created"
+                      description="Each value is sent as the property named under it."
+                      size="small"
+                    >
+                      <template #actions>
+                        <Button
+                          type="button"
+                          label="Edit"
+                          kind="outlined"
+                          size="small"
+                          aria-label="Edit list settings"
+                          @click="editStep('settings')"
+                        />
+                      </template>
+                    </SectionHeader>
+                    <Card :padded="false">
+                      <template #content>
+                        <Item.List>
+                          <Item>
+                            <Item.Content>
+                              <Item.Title>Name</Item.Title>
+                              <Item.Description>name</Item.Description>
+                            </Item.Content>
+                            <Item.Actions>
+                              <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
+                                form.name
+                              }}</span>
+                            </Item.Actions>
+                          </Item>
+                          <Item>
+                            <Item.Content>
+                              <Item.Title>Type</Item.Title>
+                              <Item.Description>type</Item.Description>
+                            </Item.Content>
+                            <Item.Actions>
+                              <span class="text-label-sm text-(--text-default)">{{
+                                typeLabel
+                              }}</span>
+                            </Item.Actions>
+                          </Item>
+                          <Item>
+                            <Item.Content>
+                              <Item.Title>{{ listField.label }}</Item.Title>
+                              <Item.Description>items</Item.Description>
+                              <ul
+                                class="m-0 mt-(--spacing-xs) flex list-none flex-wrap gap-(--spacing-xxs) p-0"
+                                :aria-label="`${entries.length} entries`"
+                              >
+                                <li
+                                  v-for="entry in entries.slice(0, PREVIEW)"
+                                  :key="entry"
+                                >
+                                  <Tag
+                                    :label="entry"
+                                    severity="secondary"
+                                    size="small"
+                                  />
+                                </li>
+                                <li
+                                  v-if="entries.length > PREVIEW"
+                                  class="text-label-sm text-(--text-muted)"
+                                >
+                                  and {{ entries.length - PREVIEW }} more
+                                </li>
+                              </ul>
+                            </Item.Content>
+                            <Item.Actions>
+                              <span class="text-label-sm text-(--text-default)"
+                                >{{ entries.length }}
+                                {{ entries.length === 1 ? 'entry' : 'entries' }}</span
+                              >
+                            </Item.Actions>
+                          </Item>
+                        </Item.List>
+                      </template>
+                    </Card>
+                  </section>
+
+                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                    <SectionHeader
+                      title="What can reference it"
+                      description="Everything that can point at this list once it exists, and the field that carries the reference."
+                      size="small"
+                    />
+                    <Card :padded="false">
+                      <template #content>
+                        <Item.List>
+                          <Item
+                            v-for="row in consumers"
+                            :key="row.by"
+                          >
+                            <Item.Content>
+                              <Item.Title>{{ row.by }}</Item.Title>
+                              <Item.Description>{{ row.path }}</Item.Description>
+                            </Item.Content>
+                            <Item.Actions>
+                              <Tag
+                                :label="row.as"
+                                severity="secondary"
+                                size="small"
+                              />
+                            </Item.Actions>
+                          </Item>
+                        </Item.List>
+                      </template>
+                    </Card>
+                  </section>
+                </section>
+              </fieldset>
+            </div>
+          </div>
+        </main>
+
+        <div class="shrink-0 [--layout-measure-form:var(--layout-measure-form-create)]">
+          <SaveBar kind="plain">
+            <template #leading>
+              <Button
+                type="button"
+                label="Cancel"
+                kind="transparent"
+                size="medium"
+              />
+            </template>
+            <template #actions>
+              <Button
+                v-if="!isFirst"
+                type="button"
+                label="Back"
+                kind="outlined"
+                size="medium"
+                @click="goBack"
+              />
+              <Button
+                :label="isLast ? 'Create Access List' : 'Next'"
+                kind="primary"
+                size="medium"
+                type="submit"
+                :loading="creating"
+              />
+            </template>
+          </SaveBar>
+        </div>
+      </form>
+    </div>
+    <Toaster position="bottom-right" />
+  </div>
+</template>
