@@ -4,6 +4,13 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.12.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.11.1...@aziontech/webkit@5.12.0) (2026-11-11)
+
+
+### Features
+
+* **webkit:** add the ClosingCallToActionTemplates section ([#1174](https://github.com/aziontech/webkit/issues/1174)) ([d37e0ef](https://github.com/aziontech/webkit/commit/d37e0efd3ebd7ba5b6e9a2bcd43985386631aba4))
+
 ## [5.11.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.11.0...@aziontech/webkit@5.11.1) (2026-11-11)
 
 
