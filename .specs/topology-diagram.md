@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: f691c8a8b21c3e9128a6df4b809b55d77a940e9bf7efe910e234cff4ef783029
+checksum: 21dd619caa6a55ff0df3ae682688fa00b685abdcae23fe950054af2c37a2a863
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -82,7 +82,6 @@ Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`;
 
 | Event             | Payload                       | Notes                                               |
 | ----------------- | ----------------------------- | --------------------------------------------------- |
-| `update:expanded` | `string[]`                    | A node card opened or closed.                       |
 | `bind`            | `[key: string, value: string]` | An existing option was picked in the bind control.  |
 | `remove`          | `[key: string]`               | Remove was activated on a bound, removable node.    |
 | `create`          | `[key: string]`               | Create was picked in the bind control.              |

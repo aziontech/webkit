@@ -138,7 +138,8 @@
           name: 'web-app-origin',
           status: 'Active',
           severity: 'success',
-          message: 'Routes traffic from the service to its origin. It can be re-pointed but not removed.',
+          message:
+            'Routes traffic from the service to its origin. It can be re-pointed but not removed.',
           fields: [{ label: 'Origin', value: 'origin.example.com', copyable: true }]
         }
       ]

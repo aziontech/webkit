@@ -115,3 +115,35 @@ Scope: `Chart` gains `Chart.Scatter`, `Chart.Brush` (`v-model:range`), `labelSca
 
 - The volume histogram is `Chart.Bar stacked` by level with `Chart.Brush`; `range` is bound to `null` and `update:range` turns the span into the period filter, so the chart, the chips and the table agree on one window. Guidelines section F names `Chart`.
 - The metric panel example is a row of `ChartCard`s holding a `StatTile` with trend and footer period; no new component was needed for it.
+
+## WP deploy-release
+
+Scope: new `TopologyDiagram` (on `Flow`'s connector engine and anchors, no node-graph dependency) and `OutcomeMark`; new blocks `platform/create/release-impact` (primary plus Loading, Unavailable, MissingVersion, Failed) and `platform/create/deploy-progress-dialog` (primary plus Succeeded, PartialFailure, Drop); new variants `deploy-drawer#Environment`, `deploy-drawer#Dependencies` and `version-detail#Revert`. A mechanical pass over every changed SFC and example found no raw colours, palette classes, physical direction utilities or raw pixel sizes, and every transition carries a `motion-reduce` escape. Every deploy screen ends in the async-submit toast with **Edit** and **Redeploy** (`toast({ actions })`); none says View deployments.
+
+### TopologyDiagram
+
+- Columns are an `ol` of `li` (one per depth); node cards are disclosure buttons with `aria-expanded` and `aria-controls`, the closed body is `inert`. Connectors are the `Flow` paths, `aria-hidden`, dashed and flowing with `motion-reduce:animate-none`. An overflowing scroll area becomes a focusable named group, so keyboard users can pan. No defect.
+- Unbound slots read "Not bound" in a dashed card; the bind control is a `DropdownMenu` (existing options, Create, Remove) whose icon trigger is named "Bind <kind>" and carries a `Tooltip`. No defect.
+- Finding: the spec listed `update:expanded` in the Events table, which the compliance check reads as an emitted event; `v-model:expanded` already documents it. Fixed: row removed, checksum refreshed.
+- Finding: `topology-node.vue` is checked against the root spec's motion table and lacks `animate-flow-dash` (the root draws the connectors). Same checker limitation `Flow`'s sub-components carry; baselined like them.
+
+### OutcomeMark
+
+- `role="img"` with a name from the locale catalog per severity (Succeeded, Failed, Needs attention, Not set) or `ariaLabel`. The disc scales in and the glyph draws after it with the duration and ease tokens; static under reduced motion (the script checks the media query and skips the pending frame). Neutral uses the raised surface with a border so it does not read as disabled text. No defect.
+- Finding: the glyph delay used `delay-(--transition-duration-moderate-01)`, which the motion rule rejects as a hardcoded delay (there is no delay token). Fixed: `delay-150`, the same 150 ms, as `StickyStack` does.
+
+### release-impact
+
+- One primary action (Deploy release) behind a `ConfirmDialog` whose sentence names resources, versions and reach. A resource with no Ready version blocks the commit with a warning line that says why, until the resource is left out with its `Switch`. The impact card has Tree and Flow views on one `ToggleGroup`, and loading, unavailable (deploy stays possible) and partial states. No defect.
+- Finding: the per-dependency version `Select` was labelled by a `Field.Label` with `sr-only`, an override of a webkit component. Fixed: the `Select.Trigger` carries `aria-label="Version of <name>"`.
+- Finding: the footer buttons used `md:w-auto` and the impact spinner `size-4 text-(--text-muted)` on webkit tags. Fixed: wrappers (`w-full md:w-fit`, a `size-4` span with the colour) as the other blocks do.
+
+### deploy-progress-dialog
+
+- For the drop-to-deploy path only (the toast stays the standard for everything else, guidelines say so). The title counts while running and states the result when settled; a large animated `OutcomeMark` lands before it; rows lead with a small mark once settled; a `role="status"` line announces the result once. Close is disabled while the run goes on; Retry failed appears only after failures. No defect.
+- Finding: 33 consumer-lint overrides on webkit tags (`DialogDescription` text classes, `PanelContent` and `PanelFooter` layout, `mt-0.5` on `OutcomeMark`, `Spinner` size, `md:w-auto` on buttons). Fixed: the description takes its default style, layout moves to inner wrappers, the leading glyph sits in a `mt-0.5` span.
+
+### deploy-drawer#Environment, #Dependencies and version-detail#Revert
+
+- Environment: a locked Strict environment, an Also deploys tag, the replace and multi-environment `Alert`s, and Projects impacted grouped per environment and reloaded on switch; the toast names the targets. Dependencies: the open disclosure shows a shared dependency, a not-versioned integration and one with no ready version that blocks Deploy; the first run fails and its toast offers Edit and Redeploy. Revert: an earlier version is read-only with a Viewing `Tag` and `aria-current` in history; the primary action opens a `ConfirmDialog` with the diff in words. No defect.
+- Finding: guidelines for `version-detail` section H named `ConfirmDialog` and `Toaster`, which only the variant imports. Fixed: the heading names `Button` and `Tag`, the prose keeps the dialog and toast.

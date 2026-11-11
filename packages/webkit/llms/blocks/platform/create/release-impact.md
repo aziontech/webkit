@@ -29,27 +29,25 @@ The Review and deploy page of a release that carries several resources at once: 
 
 ## Building blocks
 
-### A. Page heading (required)
+The page opens with an `h1` reading Review and deploy and one sentence on what the page is for. No breadcrumb of its own; the shell gives it.
 
-An `h1` reading Review and deploy and one sentence on what the page is for. No breadcrumb of its own; the shell gives it.
-
-### B. Outcome — `Alert`, `Button` (required after a run)
+### A. Outcome — `Alert`, `Button` (required after a run)
 
 When a run ends, one `Alert` above the columns says how it ended: `severity="danger"` with what was refused and that nothing changed in traffic, or `severity="success"` with what serves now. Both carry **Edit** and **Redeploy** in the `action` slot, the same two actions as the toast.
 
-### C. Resource cards (required)
+### B. Resource cards — `Switch`, `Tag`, `Tooltip` (required)
 
 One bordered card per resource, in the order of the request path (service, policy, storage, error page). The header has the type icon and label and, on the end side, a Required `Tag` (warning), a Read-only `Tag` with a lock when the release keeps the active version, or an include `Switch` named by `aria-label` and explained by a `Tooltip` ("Leave edge-policy out of this release"). A left-out resource collapses to one sentence saying what keeps serving.
 
-### D. Resource and version — `Field`, `Select`, `Tag` (required)
+### C. Resource and version — `Field`, `Select`, `Tag` (required)
 
 Two `Field`s side by side from `sm` up: the resource (read-only box) and its version. The version `Select` offers Track latest Ready first (with "resolves at deploy") and a Pin a ready version group, each option with a Current `Tag` and its age. When the version tracks the latest, the `Field.Description` names the version it resolves to now. When nothing is Ready, the `Select` is disabled and `invalid`, `Field.Error` gives the reason, and a transparent Build a version `Button` links to its versions.
 
-### E. Dependencies — `Badge`, `Accordion`, `Alert`, `Tag`, `Tooltip`, `Select` (required when a resource references others)
+### D. Dependencies — `Badge`, `Accordion`, `Alert`, `Tag`, `Tooltip`, `Select` (required when a resource references others)
 
 A box under the resource fields headed Dependencies with a count `Badge`. A `type="multiple"` `Accordion`, open by default, groups them by type (Modules, Integrations) with a count each. Each dependency has its own version `Select` labelled "Version of <name>" for screen readers. A dependency referenced by other resources carries a Shared `Tag` whose `Tooltip` names them, and its group opens with one info `Alert`: a shared dependency deploys at one version.
 
-### F. Impact — `Card`, `ToggleGroup`, `Spinner`, `Skeleton`, `Alert`, `Button` (required)
+### E. Impact — `Card`, `ToggleGroup`, `Spinner`, `Skeleton`, `Alert`, `Button` (required)
 
 The right column, sticky from `xl`. The `Card` header has the title Impact and, once ready, a small `ToggleGroup` named Impact view with Tree and Flow.
 
@@ -61,7 +59,7 @@ The right column, sticky from `xl`. The `Card` header has the title Impact and, 
 
 The `Card` footer sums the reach in one sentence: projects, environments and Deployment Settings.
 
-### G. Footer and commit — `Button`, `ConfirmDialog`, `Toaster` (required)
+### F. Footer and commit — `Button`, `ConfirmDialog`, `Toaster` (required)
 
 A sticky bar: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`kind="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`platform/states/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments.
 
@@ -731,47 +729,47 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                 </span>
                               </Tooltip>
                             </div>
-                            <Field>
-                              <Field.Label class="sr-only">Version of {{ row.name }}</Field.Label>
-                              <Select
-                                v-model="row.versionId"
-                                size="medium"
-                                :disabled="deploying"
-                                :display-value="(value) => versionLabel(row, value)"
-                              >
-                                <Select.Trigger class="w-full" />
-                                <Select.Content>
+                            <Select
+                              v-model="row.versionId"
+                              size="medium"
+                              :disabled="deploying"
+                              :display-value="(value) => versionLabel(row, value)"
+                            >
+                              <Select.Trigger
+                                class="w-full"
+                                :aria-label="`Version of ${row.name}`"
+                              />
+                              <Select.Content>
+                                <Select.Option
+                                  :value="LATEST"
+                                  icon="pi pi-sync"
+                                >
+                                  Track latest Ready
+                                </Select.Option>
+                                <Select.Group label="Pin a ready version">
                                   <Select.Option
-                                    :value="LATEST"
-                                    icon="pi pi-sync"
+                                    v-for="version in row.versions"
+                                    :key="version.id"
+                                    :value="version.id"
                                   >
-                                    Track latest Ready
-                                  </Select.Option>
-                                  <Select.Group label="Pin a ready version">
-                                    <Select.Option
-                                      v-for="version in row.versions"
-                                      :key="version.id"
-                                      :value="version.id"
-                                    >
-                                      {{ version.id }}
-                                      <template #tag>
-                                        <span class="flex shrink-0 items-center gap-(--spacing-xs)">
-                                          <Tag
-                                            v-if="version.current"
-                                            label="Current"
-                                            severity="success"
-                                            size="small"
-                                          />
-                                          <span class="text-body-xs text-(--text-muted)">
-                                            {{ version.age }}
-                                          </span>
+                                    {{ version.id }}
+                                    <template #tag>
+                                      <span class="flex shrink-0 items-center gap-(--spacing-xs)">
+                                        <Tag
+                                          v-if="version.current"
+                                          label="Current"
+                                          severity="success"
+                                          size="small"
+                                        />
+                                        <span class="text-body-xs text-(--text-muted)">
+                                          {{ version.age }}
                                         </span>
-                                      </template>
-                                    </Select.Option>
-                                  </Select.Group>
-                                </Select.Content>
-                              </Select>
-                            </Field>
+                                      </span>
+                                    </template>
+                                  </Select.Option>
+                                </Select.Group>
+                              </Select.Content>
+                            </Select>
                           </div>
                         </div>
                       </Accordion.Content>
@@ -813,7 +811,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                     class="flex min-w-0 flex-col gap-(--spacing-sm)"
                   >
                     <span class="flex items-center gap-(--spacing-xs)">
-                      <Spinner class="size-4 shrink-0 text-(--text-muted)" />
+                      <span class="flex size-4 shrink-0 text-(--text-muted)">
+                        <Spinner class="w-full" />
+                      </span>
                       <span class="text-body-sm text-(--text-muted)">Computing impact…</span>
                     </span>
                     <Skeleton height="var(--size-4)" />
@@ -1061,14 +1061,16 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
               {{ blocker }}
             </p>
             <div class="flex flex-col gap-(--spacing-sm) md:flex-row md:items-center">
-              <Button
-                class="w-full md:w-auto"
-                label="Cancel"
-                kind="outlined"
-                size="medium"
-                href="/services/web-app"
-                :disabled="deploying"
-              />
+              <div class="w-full md:w-fit">
+                <Button
+                  class="w-full"
+                  label="Cancel"
+                  kind="outlined"
+                  size="medium"
+                  href="/services/web-app"
+                  :disabled="deploying"
+                />
+              </div>
               <ConfirmDialog
                 v-model:open="confirmOpen"
                 title="Deploy this release?"
@@ -1080,15 +1082,17 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                 @confirm="confirmDeploy"
               >
                 <template #trigger>
-                  <Button
-                    class="w-full md:w-auto"
-                    :label="deploying ? 'Deploying…' : 'Deploy release'"
-                    kind="primary"
-                    size="medium"
-                    icon="pi pi-cloud-upload"
-                    :disabled="!canDeploy"
-                    :loading="deploying"
-                  />
+                  <div class="w-full md:w-fit">
+                    <Button
+                      class="w-full"
+                      :label="deploying ? 'Deploying…' : 'Deploy release'"
+                      kind="primary"
+                      size="medium"
+                      icon="pi pi-cloud-upload"
+                      :disabled="!canDeploy"
+                      :loading="deploying"
+                    />
+                  </div>
                 </template>
               </ConfirmDialog>
             </div>

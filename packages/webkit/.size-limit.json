@@ -955,17 +955,17 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "6.7 KB"
+    "limit": "6.95 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "6.1 KB"
+    "limit": "6.35 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "6.15 KB"
+    "limit": "6.4 KB"
   },
   {
     "name": "phone-input",

@@ -57,9 +57,7 @@
   const bindLabel = computed<string>(() =>
     t(bound.value ? 'topologyDiagram.change' : 'topologyDiagram.bind', { kind: props.node.kind })
   )
-  const removeLabel = computed<string>(() =>
-    t('topologyDiagram.remove', { kind: props.node.kind })
-  )
+  const removeLabel = computed<string>(() => t('topologyDiagram.remove', { kind: props.node.kind }))
 
   const onSelect = (_event: unknown, value: string | number): void => {
     if (value === CREATE) emit('create')
@@ -107,7 +105,9 @@
       </button>
     </FlowAnchor>
 
-    <div class="flex min-h-9 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)">
+    <div
+      class="flex min-h-9 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"
+    >
       <span
         v-if="unbound"
         aria-hidden="true"

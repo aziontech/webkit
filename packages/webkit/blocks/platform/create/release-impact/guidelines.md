@@ -17,27 +17,25 @@ The Review and deploy page of a release that carries several resources at once: 
 
 ## Building blocks
 
-### A. Page heading (required)
+The page opens with an `h1` reading Review and deploy and one sentence on what the page is for. No breadcrumb of its own; the shell gives it.
 
-An `h1` reading Review and deploy and one sentence on what the page is for. No breadcrumb of its own; the shell gives it.
-
-### B. Outcome — `Alert`, `Button` (required after a run)
+### A. Outcome — `Alert`, `Button` (required after a run)
 
 When a run ends, one `Alert` above the columns says how it ended: `severity="danger"` with what was refused and that nothing changed in traffic, or `severity="success"` with what serves now. Both carry **Edit** and **Redeploy** in the `action` slot, the same two actions as the toast.
 
-### C. Resource cards (required)
+### B. Resource cards — `Switch`, `Tag`, `Tooltip` (required)
 
 One bordered card per resource, in the order of the request path (service, policy, storage, error page). The header has the type icon and label and, on the end side, a Required `Tag` (warning), a Read-only `Tag` with a lock when the release keeps the active version, or an include `Switch` named by `aria-label` and explained by a `Tooltip` ("Leave edge-policy out of this release"). A left-out resource collapses to one sentence saying what keeps serving.
 
-### D. Resource and version — `Field`, `Select`, `Tag` (required)
+### C. Resource and version — `Field`, `Select`, `Tag` (required)
 
 Two `Field`s side by side from `sm` up: the resource (read-only box) and its version. The version `Select` offers Track latest Ready first (with "resolves at deploy") and a Pin a ready version group, each option with a Current `Tag` and its age. When the version tracks the latest, the `Field.Description` names the version it resolves to now. When nothing is Ready, the `Select` is disabled and `invalid`, `Field.Error` gives the reason, and a transparent Build a version `Button` links to its versions.
 
-### E. Dependencies — `Badge`, `Accordion`, `Alert`, `Tag`, `Tooltip`, `Select` (required when a resource references others)
+### D. Dependencies — `Badge`, `Accordion`, `Alert`, `Tag`, `Tooltip`, `Select` (required when a resource references others)
 
 A box under the resource fields headed Dependencies with a count `Badge`. A `type="multiple"` `Accordion`, open by default, groups them by type (Modules, Integrations) with a count each. Each dependency has its own version `Select` labelled "Version of <name>" for screen readers. A dependency referenced by other resources carries a Shared `Tag` whose `Tooltip` names them, and its group opens with one info `Alert`: a shared dependency deploys at one version.
 
-### F. Impact — `Card`, `ToggleGroup`, `Spinner`, `Skeleton`, `Alert`, `Button` (required)
+### E. Impact — `Card`, `ToggleGroup`, `Spinner`, `Skeleton`, `Alert`, `Button` (required)
 
 The right column, sticky from `xl`. The `Card` header has the title Impact and, once ready, a small `ToggleGroup` named Impact view with Tree and Flow.
 
@@ -49,7 +47,7 @@ The right column, sticky from `xl`. The `Card` header has the title Impact and, 
 
 The `Card` footer sums the reach in one sentence: projects, environments and Deployment Settings.
 
-### G. Footer and commit — `Button`, `ConfirmDialog`, `Toaster` (required)
+### F. Footer and commit — `Button`, `ConfirmDialog`, `Toaster` (required)
 
 A sticky bar: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`kind="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`platform/states/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments.
 

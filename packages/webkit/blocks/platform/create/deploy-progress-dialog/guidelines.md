@@ -17,15 +17,15 @@ The modal progress of one deploy that activates several Deployment Settings, eac
 
 ## Building blocks
 
-### A. Drop confirm — `Dialog`, `PanelHeader`, `DialogTitle`, `DialogClose`, `DialogDescription`, `Tag`, `PanelFooter`, `Button` (required on the drop path)
+### A. Drop confirm — `Dialog`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `Tag`, `PanelFooter`, `Button` (required on the drop path)
 
-Titled "New production deployment" (the environment in lower case). The service name with the environment as a secondary `Tag`, one sentence on what the files replace and how many Deployment Settings the environment publishes with, then the dropped folder: its file count and total size, and a scrollable list (focusable, named "Dropped files") of paths in code type with their sizes. Sizes go through `Intl.NumberFormat` with `style: 'unit'`. The footer has Cancel (transparent) and "Deploy to Production" (primary).
+Titled "New production deployment" (the environment in lower case), with a `DialogClose` in the header. The service name with the environment as a secondary `Tag`, one sentence on what the files replace and how many Deployment Settings the environment publishes with, then the dropped folder: its file count and total size, and a scrollable list (focusable, named "Dropped files") of paths in code type with their sizes. Sizes go through `Intl.NumberFormat` with `style: 'unit'`. The footer has Cancel (transparent) and "Deploy to Production" (primary).
 
-### B. Progress frame — `Dialog`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeMark` (required)
+### B. Progress frame — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeMark` (required)
 
 `size="medium"`, `dismissible` only once settled. The title counts: "Deploying 2 of 5…" while running, "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeMark` stands before the title: success when all deployed, warning when some failed.
 
-### C. Progress — `Progress` (required)
+### C. Progress — `PanelContent`, `Progress` (required)
 
 The share of settled settings, named "Deploy progress", with "Activating <name>" under it while one runs.
 

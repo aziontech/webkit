@@ -103,7 +103,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
       :data-testid="`${testId}__glyph`"
-      class="stroke-(--success-contrast) [stroke-dasharray:1] group-data-[severity=danger]:stroke-(--danger-contrast) group-data-[severity=warning]:stroke-(--warning-contrast) group-data-[severity=neutral]:stroke-(--text-muted) group-data-[state=pending]:[stroke-dashoffset:1] group-data-[animated]:transition-[stroke-dashoffset] group-data-[animated]:delay-(--transition-duration-moderate-01) group-data-[animated]:duration-slow-01 group-data-[animated]:ease-expressive-entrance motion-reduce:transition-none"
+      class="stroke-(--success-contrast) [stroke-dasharray:1] group-data-[severity=danger]:stroke-(--danger-contrast) group-data-[severity=warning]:stroke-(--warning-contrast) group-data-[severity=neutral]:stroke-(--text-muted) group-data-[state=pending]:[stroke-dashoffset:1] group-data-[animated]:transition-[stroke-dashoffset] group-data-[animated]:delay-150 group-data-[animated]:duration-slow-01 group-data-[animated]:ease-expressive-entrance motion-reduce:transition-none"
     />
   </svg>
 </template>

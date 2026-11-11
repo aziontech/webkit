@@ -18,7 +18,12 @@ const settle = async () => {
 const menu = () => document.body.querySelector<HTMLElement>('[role="menu"]') as HTMLElement
 
 const levels: TopologyLevel[] = [
-  { key: 'project', nodes: [{ key: 'project', kind: 'Project', name: 'web-app', status: 'Live', severity: 'success' }] },
+  {
+    key: 'project',
+    nodes: [
+      { key: 'project', kind: 'Project', name: 'web-app', status: 'Live', severity: 'success' }
+    ]
+  },
   {
     key: 'policy',
     nodes: [
@@ -36,7 +41,18 @@ const levels: TopologyLevel[] = [
       }
     ]
   },
-  { key: 'page', nodes: [{ key: 'page', kind: 'Error page', bindable: true, terminal: true, message: 'Errors answer with the default page.' }] }
+  {
+    key: 'page',
+    nodes: [
+      {
+        key: 'page',
+        kind: 'Error page',
+        bindable: true,
+        terminal: true,
+        message: 'Errors answer with the default page.'
+      }
+    ]
+  }
 ]
 
 describe('TopologyDiagram', () => {

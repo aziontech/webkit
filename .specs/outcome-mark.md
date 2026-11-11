@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 23898f69a0926c2155f3628382fc4f9825a4fb7c0347a222c403fe753b7fc42f
+checksum: ca62191d90dd3051f8d68053ba4a1947a422013dc051c39f8e63f8f7a8f1e6d5
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -85,7 +85,7 @@ _none_
 | Trigger                         | Animation / Transition                                                                                  | Token                                         | Reduced-motion fallback                         |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ----------------------------------------------- |
 | appear or severity change (disc) | `transition-[scale,opacity] duration-moderate-02 ease-expressive-entrance`                             | duration `moderate-02`, curve `expressive-entrance` | `motion-reduce:transition-none`; the flip is skipped |
-| appear or severity change (glyph) | `transition-[stroke-dashoffset] duration-slow-01 ease-expressive-entrance`, delayed by `moderate-01` | duration `slow-01`, curve `expressive-entrance`     | `motion-reduce:transition-none`                 |
+| appear or severity change (glyph) | `transition-[stroke-dashoffset] duration-slow-01 ease-expressive-entrance`, delayed by `delay-150` (the `moderate-01` value; there is no delay token) | duration `slow-01`, curve `expressive-entrance`     | `motion-reduce:transition-none`                 |
 
 ## Tokens
 

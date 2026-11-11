@@ -603,47 +603,47 @@
                                 </span>
                               </Tooltip>
                             </div>
-                            <Field>
-                              <Field.Label class="sr-only">Version of {{ row.name }}</Field.Label>
-                              <Select
-                                v-model="row.versionId"
-                                size="medium"
-                                :disabled="deploying"
-                                :display-value="(value) => versionLabel(row, value)"
-                              >
-                                <Select.Trigger class="w-full" />
-                                <Select.Content>
+                            <Select
+                              v-model="row.versionId"
+                              size="medium"
+                              :disabled="deploying"
+                              :display-value="(value) => versionLabel(row, value)"
+                            >
+                              <Select.Trigger
+                                class="w-full"
+                                :aria-label="`Version of ${row.name}`"
+                              />
+                              <Select.Content>
+                                <Select.Option
+                                  :value="LATEST"
+                                  icon="pi pi-sync"
+                                >
+                                  Track latest Ready
+                                </Select.Option>
+                                <Select.Group label="Pin a ready version">
                                   <Select.Option
-                                    :value="LATEST"
-                                    icon="pi pi-sync"
+                                    v-for="version in row.versions"
+                                    :key="version.id"
+                                    :value="version.id"
                                   >
-                                    Track latest Ready
-                                  </Select.Option>
-                                  <Select.Group label="Pin a ready version">
-                                    <Select.Option
-                                      v-for="version in row.versions"
-                                      :key="version.id"
-                                      :value="version.id"
-                                    >
-                                      {{ version.id }}
-                                      <template #tag>
-                                        <span class="flex shrink-0 items-center gap-(--spacing-xs)">
-                                          <Tag
-                                            v-if="version.current"
-                                            label="Current"
-                                            severity="success"
-                                            size="small"
-                                          />
-                                          <span class="text-body-xs text-(--text-muted)">
-                                            {{ version.age }}
-                                          </span>
+                                    {{ version.id }}
+                                    <template #tag>
+                                      <span class="flex shrink-0 items-center gap-(--spacing-xs)">
+                                        <Tag
+                                          v-if="version.current"
+                                          label="Current"
+                                          severity="success"
+                                          size="small"
+                                        />
+                                        <span class="text-body-xs text-(--text-muted)">
+                                          {{ version.age }}
                                         </span>
-                                      </template>
-                                    </Select.Option>
-                                  </Select.Group>
-                                </Select.Content>
-                              </Select>
-                            </Field>
+                                      </span>
+                                    </template>
+                                  </Select.Option>
+                                </Select.Group>
+                              </Select.Content>
+                            </Select>
                           </div>
                         </div>
                       </Accordion.Content>
@@ -685,7 +685,9 @@
                     class="flex min-w-0 flex-col gap-(--spacing-sm)"
                   >
                     <span class="flex items-center gap-(--spacing-xs)">
-                      <Spinner class="size-4 shrink-0 text-(--text-muted)" />
+                      <span class="flex size-4 shrink-0 text-(--text-muted)">
+                        <Spinner class="w-full" />
+                      </span>
                       <span class="text-body-sm text-(--text-muted)">Computing impact…</span>
                     </span>
                     <Skeleton height="var(--size-4)" />
@@ -933,14 +935,16 @@
               {{ blocker }}
             </p>
             <div class="flex flex-col gap-(--spacing-sm) md:flex-row md:items-center">
-              <Button
-                class="w-full md:w-auto"
-                label="Cancel"
-                kind="outlined"
-                size="medium"
-                href="/services/web-app"
-                :disabled="deploying"
-              />
+              <div class="w-full md:w-fit">
+                <Button
+                  class="w-full"
+                  label="Cancel"
+                  kind="outlined"
+                  size="medium"
+                  href="/services/web-app"
+                  :disabled="deploying"
+                />
+              </div>
               <ConfirmDialog
                 v-model:open="confirmOpen"
                 title="Deploy this release?"
@@ -952,15 +956,17 @@
                 @confirm="confirmDeploy"
               >
                 <template #trigger>
-                  <Button
-                    class="w-full md:w-auto"
-                    :label="deploying ? 'Deploying…' : 'Deploy release'"
-                    kind="primary"
-                    size="medium"
-                    icon="pi pi-cloud-upload"
-                    :disabled="!canDeploy"
-                    :loading="deploying"
-                  />
+                  <div class="w-full md:w-fit">
+                    <Button
+                      class="w-full"
+                      :label="deploying ? 'Deploying…' : 'Deploy release'"
+                      kind="primary"
+                      size="medium"
+                      icon="pi pi-cloud-upload"
+                      :disabled="!canDeploy"
+                      :loading="deploying"
+                    />
+                  </div>
                 </template>
               </ConfirmDialog>
             </div>

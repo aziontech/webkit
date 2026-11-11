@@ -52,7 +52,11 @@ describe('OutcomeMark', () => {
   it('reads the active locale', () => {
     const Host = defineComponent({
       render: () =>
-        h(WebkitProvider, { locale: 'pt-BR' }, { default: () => h(OutcomeMark, { severity: 'danger' }) })
+        h(
+          WebkitProvider,
+          { locale: 'pt-BR' },
+          { default: () => h(OutcomeMark, { severity: 'danger' }) }
+        )
     })
     const view = render(Host)
     expect(view.getByRole('img', { name: 'Falhou' })).toBeTruthy()

@@ -8221,11 +8221,6 @@
    ],
    "events": [
     {
-     "name": "update:expanded",
-     "payload": "string[]",
-     "notes": "A node card opened or closed."
-    },
-    {
      "name": "bind",
      "payload": "[key: string, value: string]",
      "notes": "An existing option was picked in the bind control."

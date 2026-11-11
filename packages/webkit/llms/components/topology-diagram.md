@@ -44,7 +44,6 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:expanded` | `string[]` | A node card opened or closed. |
 | `bind` | `[key: string, value: string]` | An existing option was picked in the bind control. |
 | `remove` | `[key: string]` | Remove was activated on a bound, removable node. |
 | `create` | `[key: string]` | Create was picked in the bind control. |
@@ -248,7 +247,8 @@
           name: 'web-app-origin',
           status: 'Active',
           severity: 'success',
-          message: 'Routes traffic from the service to its origin. It can be re-pointed but not removed.',
+          message:
+            'Routes traffic from the service to its origin. It can be re-pointed but not removed.',
           fields: [{ label: 'Origin', value: 'origin.example.com', copyable: true }]
         }
       ]
