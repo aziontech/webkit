@@ -169,7 +169,7 @@
           :data-active="(activeIndex !== null && index === activeIndex) || null"
           :data-dimmed="(activeIndex !== null && index !== activeIndex) || null"
           :style="{ '--tracker-block': block.color }"
-          class="h-full min-w-0 flex-1 bg-(--tracker-block) transition-opacity duration-fast-02 ease-productive-entrance first:rounded-s-(--shape-elements) last:rounded-e-(--shape-elements) data-[dimmed]:opacity-40 motion-reduce:transition-none"
+          class="h-full min-w-0 flex-1 bg-(--tracker-block) forced-color-adjust-none transition-opacity duration-fast-02 ease-productive-entrance first:rounded-s-(--shape-elements) last:rounded-e-(--shape-elements) data-[dimmed]:opacity-40 motion-reduce:transition-none"
         />
       </div>
     </template>

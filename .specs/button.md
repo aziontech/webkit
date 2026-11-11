@@ -3,8 +3,8 @@ name: button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 02d5685f7b35e09e68733fdc784a0f06495fd8a59ae11ca078420abd8b6d265f
+spec_version: 2
+checksum: 59ce74852b25945d033aa2ba2c9a42425cac25e23065a3d274226a73964c1f3f
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -137,6 +137,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Forced colors: the filled kinds (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
 
 ## Right-to-left
 

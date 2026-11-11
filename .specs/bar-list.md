@@ -3,10 +3,10 @@ name: bar-list
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-11
-checksum: 9d2ba85e010f1086ece6bbccf6c41c037cb2bf55aca8faeb27124f97bb48e38f
+checksum: 80e25cf7aad10ac9afbaad4c60e2105579c5826d71c4a4dcd1b132b18fba8175
 ---
 
 # BarList — Component Spec
@@ -125,6 +125,7 @@ _No slots — the rows are data (`items`); the empty state is the package's `Emp
 - `aria-busy` on the root while `loading`.
 - Name and value text clear 4.5:1 on the tinted fill and on the bare surface in both themes.
 - Interactive rows are 32px tall and full width.
+- Forced colors: the bar fill keeps its colour (`forced-color-adjust: none`); forced to `Canvas` it vanished and left only the labels (`src/test/forced-colors-charts.test.ts`).
 
 ## Stories (Storybook)
 

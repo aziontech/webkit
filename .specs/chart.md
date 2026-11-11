@@ -3,8 +3,8 @@ name: chart
 category: chart
 structure: composition
 status: approved
-checksum: 53356d61d7853bb37b46cc720089bc5c550d2d6823cca55f9dd45fc37a38264f
-spec_version: 2
+checksum: c55ef37677821499c28e8314d5b4c5954766683ef90aa1b79263173c5cc057b9
+spec_version: 3
 template: 2
 created: 2026-10-20
 last_updated: 2026-11-11
@@ -282,6 +282,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the plot and every legend button.
 - Series colors clear 3:1 on the chart surfaces and on the tooltip in both themes (pinned by `packages/theme/test/chart-role.test.mjs`).
 - `motion-reduce:transition-none` on every transition.
+- Forced colors: SVG marks keep their series colours (Chromium does not force `fill`/`stroke`); the legend key keeps its colour too (`forced-color-adjust: none`), so the legend still maps names to series (`src/test/forced-colors-charts.test.ts`).
 
 ## Internationalization
 

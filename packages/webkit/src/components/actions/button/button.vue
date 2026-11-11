@@ -91,6 +91,7 @@
   const sharedClasses = [
     'group/button relative inline-flex items-center justify-center whitespace-nowrap',
     'rounded-(--shape-button)',
+    'forced-colors:border forced-colors:border-[ButtonBorder] forced-colors:disabled:border-[GrayText]',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)',
     ...ghostLayerClasses
