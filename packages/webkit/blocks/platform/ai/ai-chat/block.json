@@ -26,7 +26,13 @@
     "assistente virtual",
     "conversa com ia",
     "chat con ia",
-    "asistente de ia"
+    "asistente de ia",
+    "artifact",
+    "artifact canvas",
+    "generated file",
+    "code canvas",
+    "canvas de artefato",
+    "artefato gerado"
   ],
   "skills": ["webkit-genai", "webkit-ui-states", "webkit-microcopy"],
   "primary": {
@@ -48,6 +54,11 @@
       "name": "LongThread",
       "summary": "Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread.",
       "file": "variants/long-thread.vue"
+    },
+    {
+      "name": "Artifact",
+      "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; asking for a change streams a new version into the canvas, which locks its pager while it is written and then shows it.",
+      "file": "variants/artifact.vue"
     }
   ]
 }

@@ -39,11 +39,7 @@
     "importar csv",
     "importar dados"
   ],
-  "skills": [
-    "webkit-layout",
-    "webkit-tables",
-    "webkit-ui-states"
-  ],
+  "skills": ["webkit-layout", "webkit-tables", "webkit-ui-states"],
   "primary": {
     "name": "Tables",
     "file": "query-editor.vue"

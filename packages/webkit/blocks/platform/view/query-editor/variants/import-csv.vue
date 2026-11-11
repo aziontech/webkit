@@ -2575,11 +2575,11 @@ LIMIT 3;`
                           class="flex gap-(--spacing-xs) text-body-sm text-(--text-default)"
                         >
                           <i
-                            class="pi pi-times-circle mt-1 shrink-0 text-(--danger-contrast)"
+                            class="pi pi-times-circle mt-(--spacing-xxs) shrink-0 text-(--danger-contrast)"
                             aria-hidden="true"
                           />
                           <span
-                            ><span class="font-medium">Line {{ row.line }}:</span>
+                            ><span class="text-label-sm">Line {{ row.line }}:</span>
                             {{ row.problems.join(' ') }}</span
                           >
                         </li>

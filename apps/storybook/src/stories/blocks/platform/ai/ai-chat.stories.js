@@ -8,6 +8,8 @@ import State2 from '../../../../../../../packages/webkit/blocks/platform/ai/ai-c
 import source2 from '../../../../../../../packages/webkit/blocks/platform/ai/ai-chat/variants/error.vue?raw'
 import State3 from '../../../../../../../packages/webkit/blocks/platform/ai/ai-chat/variants/long-thread.vue'
 import source3 from '../../../../../../../packages/webkit/blocks/platform/ai/ai-chat/variants/long-thread.vue?raw'
+import State4 from '../../../../../../../packages/webkit/blocks/platform/ai/ai-chat/variants/artifact.vue'
+import source4 from '../../../../../../../packages/webkit/blocks/platform/ai/ai-chat/variants/artifact.vue?raw'
 
 export default {
   title: "Templates/Platform/AI/AiChat",
@@ -16,7 +18,7 @@ export default {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
     docs: { canvas: { sourceState: 'shown' }, description: { component: "The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`." } },
-    webkit: {"block":"platform/ai/ai-chat","intents":["ai chat","ai assistant","chatbot","copilot","chat with ai","generative ai chat","assistant page","ask ai","llm chat","conversational ui","prompt and response","streaming response","chat de ia","assistente de ia","assistente virtual","conversa com ia","chat con ia","asistente de ia"],"skills":["webkit-genai","webkit-ui-states","webkit-microcopy"],"primary":"Empty"}
+    webkit: {"block":"platform/ai/ai-chat","intents":["ai chat","ai assistant","chatbot","copilot","chat with ai","generative ai chat","assistant page","ask ai","llm chat","conversational ui","prompt and response","streaming response","chat de ia","assistente de ia","assistente virtual","conversa com ia","chat con ia","asistente de ia","artifact","artifact canvas","generated file","code canvas","canvas de artefato","artefato gerado"],"skills":["webkit-genai","webkit-ui-states","webkit-microcopy"],"primary":"Empty"}
   }
 }
 
@@ -38,4 +40,9 @@ export const Error = {
 export const LongThread = {
   render: () => ({ components: { Block: State3 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread." }, source: { code: source3 } } }
+}
+
+export const Artifact = {
+  render: () => ({ components: { Block: State4 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; asking for a change streams a new version into the canvas, which locks its pager while it is written and then shows it." }, source: { code: source4 } } }
 }
