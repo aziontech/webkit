@@ -395,6 +395,8 @@ RTL and mobile rendering against v5.11.0. Then run it on every release.
 
 ## M2.8 — Migrate the marketing site to the new WebKit
 
+**Deferred (2026-11-11, project owner):** not done in this branch; it runs later, after the v6 release. The steps below stay as the plan.
+
 Move the site to the new major with the smallest change possible: no re-implementation.
 
 - Run `npx @aziontech/webkit migrate v6` (M1.2 codemod) on the site and apply the
