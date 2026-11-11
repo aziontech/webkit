@@ -224,6 +224,49 @@ export const copyButton = {
   copied: 'Copied'
 } as const
 
+export const responseBranches = {
+  label: 'Response versions',
+  previous: 'Previous version',
+  next: 'Next version',
+  position: '{current} of {total}'
+} as const
+
+export const feedbackReason = {
+  title: 'What went wrong?',
+  description: 'Your answer helps improve future responses.',
+  reason: 'Reason',
+  details: 'Details (optional)',
+  detailsPlaceholder: 'What did you expect instead?',
+  required: 'Choose a reason.',
+  cancel: 'Cancel',
+  send: 'Send feedback',
+  inaccurate: 'Inaccurate or made up',
+  notHelpful: 'Not helpful',
+  ignoredRequest: 'Did not follow my request',
+  unsafe: 'Unsafe or harmful',
+  other: 'Other'
+} as const
+
+export const conversationHistory = {
+  label: 'Conversation history',
+  today: 'Today',
+  yesterday: 'Yesterday',
+  previous7: 'Previous 7 days',
+  previous30: 'Previous 30 days',
+  older: 'Older',
+  empty: 'No conversations yet.',
+  remove: 'Delete {title}'
+} as const
+
+export const promptInputMenu = {
+  results: {
+    one: '{count} suggestion',
+    other: '{count} suggestions'
+  },
+  noMatches: 'No matches',
+  references: 'References'
+} as const
+
 export const qrCode = {
   label: 'QR code'
 } as const
@@ -1113,6 +1156,10 @@ export const en = {
   copyButton,
   copyFallback,
   qrCode,
+  promptInputMenu,
+  conversationHistory,
+  feedbackReason,
+  responseBranches,
   dateRangePicker,
   dialog,
   docFrame,

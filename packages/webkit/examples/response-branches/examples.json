@@ -1,0 +1,11 @@
+{
+  "component": "response-branches",
+  "title": "Components/Primitives/AI/ResponseBranches",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "An assistant answer regenerated twice: the message shows one version at a time with `‹ 3 of 3 ›` under it, Regenerate adds a version and moves to it, and the pager is locked while the new version is written.",
+      "file": "default.vue"
+    }
+  ]
+}

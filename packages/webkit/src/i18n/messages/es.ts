@@ -279,6 +279,45 @@ export const es: Messages = {
     copy: 'Copiar',
     copied: 'Copiado'
   },
+  responseBranches: {
+    label: 'Versiones de la respuesta',
+    previous: 'Versión anterior',
+    next: 'Versión siguiente',
+    position: '{current} de {total}'
+  },
+  feedbackReason: {
+    title: '¿Qué salió mal?',
+    description: 'Tu respuesta ayuda a mejorar las próximas respuestas.',
+    reason: 'Motivo',
+    details: 'Detalles (opcional)',
+    detailsPlaceholder: '¿Qué esperabas?',
+    required: 'Elige un motivo.',
+    cancel: 'Cancelar',
+    send: 'Enviar comentarios',
+    inaccurate: 'Incorrecta o inventada',
+    notHelpful: 'No fue útil',
+    ignoredRequest: 'No siguió mi solicitud',
+    unsafe: 'Insegura o dañina',
+    other: 'Otro'
+  },
+  conversationHistory: {
+    label: 'Historial de conversaciones',
+    today: 'Hoy',
+    yesterday: 'Ayer',
+    previous7: 'Últimos 7 días',
+    previous30: 'Últimos 30 días',
+    older: 'Más antiguas',
+    empty: 'Aún no hay conversaciones.',
+    remove: 'Eliminar {title}'
+  },
+  promptInputMenu: {
+    results: {
+      one: '{count} sugerencia',
+      other: '{count} sugerencias'
+    },
+    noMatches: 'Sin resultados',
+    references: 'Referencias'
+  },
   qrCode: {
     label: 'Código QR'
   },

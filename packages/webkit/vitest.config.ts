@@ -32,6 +32,9 @@ export default defineConfig({
   define: {
     'process.env.NODE_ENV': JSON.stringify('test')
   },
+  optimizeDeps: {
+    include: ['monaco-editor']
+  },
   test: {
     include: ['src/**/*.test.{ts,js}'],
     setupFiles: ['./src/test/setup.ts'],

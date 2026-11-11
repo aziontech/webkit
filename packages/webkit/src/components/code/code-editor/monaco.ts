@@ -24,6 +24,7 @@ export interface CodeEditorMonacoEditor extends CodeEditorDisposable {
 export interface CodeEditorMonacoDiffEditor extends CodeEditorDisposable {
   setModel(model: { original: CodeEditorMonacoModel; modified: CodeEditorMonacoModel }): void
   getModifiedEditor(): CodeEditorMonacoEditor
+  getOriginalEditor?(): CodeEditorMonacoEditor
   updateOptions(options: Record<string, unknown>): void
 }
 

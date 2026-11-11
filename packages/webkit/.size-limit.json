@@ -1160,6 +1160,21 @@
     "limit": "32 KB"
   },
   {
+    "name": "conversation-history",
+    "path": "src/components/ai/conversation-history/conversation-history.vue",
+    "limit": "4.5 KB"
+  },
+  {
+    "name": "feedback-reason-dialog",
+    "path": "src/components/ai/feedback-reason-dialog/feedback-reason-dialog.vue",
+    "limit": "15 KB"
+  },
+  {
+    "name": "response-branches",
+    "path": "src/components/ai/response-branches/response-branches.vue",
+    "limit": "2.4 KB"
+  },
+  {
     "name": "suggestion-group",
     "path": "src/components/ai/suggestion-group/suggestion-group.vue",
     "limit": "2 KB"

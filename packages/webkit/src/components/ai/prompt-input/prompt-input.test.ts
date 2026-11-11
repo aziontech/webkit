@@ -3,6 +3,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
+import ShortcutMenus from '../../../../examples/prompt-input/shortcut-menus.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
@@ -160,5 +161,62 @@ describe('PromptInput', () => {
   it('has no axe violations', async () => {
     const { container } = harness({ initial: 'abc', maxLength: 10 }, { hint: () => 'Disclaimer.' })
     await expectNoA11yViolations(container)
+  })
+
+  describe('shortcut menus', () => {
+    const textbox = () => document.querySelector<HTMLTextAreaElement>('textarea')!
+    const listbox = () => document.querySelector<HTMLElement>('[role="listbox"]')
+
+    it('opens on a trigger at a word start, filters, and is driven from the text area', async () => {
+      render(ShortcutMenus)
+      const input = textbox()
+      expect(input).toHaveAttribute('aria-keyshortcuts', '/ @')
+      await userEvent.type(input, 'Check @im')
+      expect(listbox()).toHaveAccessibleName('Resources')
+      const options = [...listbox()!.querySelectorAll('[role="option"]')]
+      expect(options.map((option) => option.textContent?.trim())).toEqual(['image-resizeFunction'])
+      expect(input.getAttribute('aria-controls')).toBe(listbox()!.id)
+      expect(input.getAttribute('aria-activedescendant')).toBe(options[0]!.id)
+      expect(document.body.textContent).toContain('1 suggestion')
+      await expectNoA11yViolations(document.body.firstElementChild as HTMLElement)
+    })
+
+    it('inserts the choice, adds a reference chip and submits it with the text', async () => {
+      const view = render(ShortcutMenus)
+      const input = textbox()
+      await userEvent.type(input, 'Why does @')
+      await userEvent.keyboard('{ArrowDown}{Enter}')
+      expect(input.value).toBe('Why does @image-resize ')
+      expect(listbox()).toBeNull()
+      const refs = view.getByRole('list', { name: 'References' })
+      expect(refs.textContent).toContain('@image-resize')
+      await userEvent.type(input, 'fail')
+      await userEvent.keyboard('{Enter}')
+      expect(view.getByText(/Sent “Why does @image-resize fail” with @image-resize/)).toBeTruthy()
+    })
+
+    it('does not open mid-word, closes on Escape, and Enter submits once closed', async () => {
+      const view = render(ShortcutMenus)
+      const input = textbox()
+      await userEvent.type(input, 'a/b')
+      expect(listbox()).toBeNull()
+      await userEvent.type(input, ' /ex')
+      expect(listbox()).toHaveAccessibleName('Commands')
+      await userEvent.keyboard('{Escape}')
+      expect(listbox()).toBeNull()
+      await userEvent.keyboard('{Enter}')
+      expect(view.getByText(/Sent “a\/b \/ex” with no references/)).toBeTruthy()
+    })
+
+    it('removing a reference chip removes its text', async () => {
+      const view = render(ShortcutMenus)
+      const input = textbox()
+      await userEvent.type(input, '/sum')
+      await userEvent.keyboard('{Tab}')
+      expect(input.value).toBe('/summarize ')
+      await userEvent.click(view.getByRole('button', { name: /Remove/ }))
+      expect(input.value).toBe('')
+      expect(view.queryByRole('list', { name: 'References' })).toBeNull()
+    })
   })
 })

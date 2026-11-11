@@ -21,6 +21,11 @@
       "name": "WithToolbar",
       "summary": "The `toolbar` slot holds a Code / Arguments switch, a hint and a Run action; the markers follow the active document.",
       "file": "with-toolbar.vue"
+    },
+    {
+      "name": "Monaco",
+      "summary": "The real Monaco, loaded lazily: `loadMonaco` wires the editor and JSON workers with Vite's `?worker` imports, sets `MonacoEnvironment`, then returns `import('monaco-editor')`. `monaco-editor` is the app's dependency (an optional peer of WebKit), so it never enters WebKit's bundle. The editor and the diff take the theme tokens and the markers; the plain editor is live until Monaco mounts.",
+      "file": "monaco.vue"
     }
   ]
 }

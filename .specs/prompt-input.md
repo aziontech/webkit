@@ -3,9 +3,9 @@ name: prompt-input
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 239ddf978c3d234a82be415813f6e1136b7f41f1edc0cf0c422a1afc288b34fe
+checksum: c8d8345a6682a5e8cbb1c2952f25d24184dab81bb6ff165e8f5e17bb0ba016c5
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -66,7 +66,13 @@ submit it until the response ends or they press Stop.
 </script>
 
 <template>
-  <PromptInput v-model="prompt" :state="state" :max-length="4000" @submit="send" @stop="state = 'ready'">
+  <PromptInput
+    v-model="prompt"
+    :state="state"
+    :max-length="4000"
+    @submit="send"
+    @stop="state = 'ready'"
+  >
     <template #hint>The AI assistant can make mistakes. Check important information.</template>
   </PromptInput>
 </template>
@@ -80,36 +86,40 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 ## Props
 
-| Prop          | Type                                     | Default   | Required | JSDoc                                                                                                                         |
-| ------------- | ---------------------------------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `placeholder` | `string`                                 | `''`      | false    | Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`).       |
-| `ariaLabel`   | `string`                                 | `''`      | false    | Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`).                   |
-| `maxLength`   | `number`                                 | `0`       | false    | Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit.                                      |
-| `minRows`     | `number`                                 | `1`       | false    | Rows shown while empty.                                                                                                       |
-| `maxRows`     | `number`                                 | `6`       | false    | Rows the text area grows to before it scrolls.                                                                                |
-| `state`       | `'ready' \| 'submitted' \| 'streaming'`  | `'ready'` | false    | Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed.           |
-| `disabled`    | `boolean`                                | `false`   | false    | Disables the text area, the submit control and every control in the slots' row.                                               |
+| Prop          | Type                                    | Default   | Required | JSDoc                                                                                                                                                                                          |
+| ------------- | --------------------------------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `placeholder` | `string`                                | `''`      | false    | Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`).                                                                        |
+| `ariaLabel`   | `string`                                | `''`      | false    | Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`).                                                                                    |
+| `maxLength`   | `number`                                | `0`       | false    | Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit.                                                                                                       |
+| `minRows`     | `number`                                | `1`       | false    | Rows shown while empty.                                                                                                                                                                        |
+| `maxRows`     | `number`                                | `6`       | false    | Rows the text area grows to before it scrolls.                                                                                                                                                 |
+| `state`       | `'ready' \| 'submitted' \| 'streaming'` | `'ready'` | false    | Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed.                                                                            |
+| `disabled`    | `boolean`                               | `false`   | false    | Disables the text area, the submit control and every control in the slots' row.                                                                                                                |
+| `menus`       | `PromptInputMenu[]`                     | `[]`      | false    | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
+
+Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInputMenuOption[] }`, `PromptInputMenuOption = { value: string; label: string; description?: string; icon?: string }`, `PromptInputReference = { trigger: string; value: string; label: string }`.
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                  |
-| --------- | -------- | ------- | ------------------- | -------------------------------------------------------------------------------------- |
-| `v-model` | `string` | `''`    | `update:modelValue` | The prompt being written, via `defineModel`. The owner clears it in its `submit` handler. |
+| Model                | Type                     | Default | Emits               | Notes                                                                                                                                                 |
+| -------------------- | ------------------------ | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`            | `string`                 | `''`    | `update:modelValue` | The prompt being written, via `defineModel`. The owner clears it in its `submit` handler.                                                             |
+| `v-model:references` | `PromptInputReference[]` | `[]`    | `update:references` | What the prompt references, added by the menus and shown as removable chips above the text; removing a chip also removes its `<trigger><label>` text. |
 
 ## Events
 
-| Event               | Payload  | When                                                                 |
-| ------------------- | -------- | -------------------------------------------------------------------- |
-| `submit`            | `string` | Enter (without Shift, outside an IME composition) or Submit, with a non-empty prompt within the limit while `state` is `ready`. Payload is trimmed. |
-| `stop`              | —        | Stop pressed while `submitted` or `streaming`.                        |
+| Event    | Payload                                               | When                                                                                                                                                                                                                                 |
+| -------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `submit` | `(value: string, references: PromptInputReference[])` | Enter (without Shift, outside an IME composition) or Submit, with a non-empty prompt within the limit while `state` is `ready`. `value` is trimmed; `references` holds the references whose `<trigger><label>` is still in the text. |
+| `stop`   | —                                                     | Stop pressed while `submitted` or `streaming`.                                                                                                                                                                                       |
 
 ## Slots
 
-| Slot          | Scope | Notes                                                                 |
-| ------------- | ----- | --------------------------------------------------------------------- |
-| `attachments` | —     | Attached files or context chips, above the text.                      |
+| Slot          | Scope | Notes                                                                                               |
+| ------------- | ----- | --------------------------------------------------------------------------------------------------- |
+| `attachments` | —     | Attached files or context chips, above the text.                                                    |
 | `actions`     | —     | Secondary controls at the inline start of the toolbar; inside a `fieldset` disabled with the input. |
-| `hint`        | —     | Constraint text under the input; referenced by `aria-describedby`.    |
+| `hint`        | —     | Constraint text under the input; referenced by `aria-describedby`.                                  |
 
 ## States
 
@@ -120,20 +130,20 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition                                         | Token                      | Reduced-motion fallback          |
-| ------------------ | -------------------------------------------------------------- | -------------------------- | -------------------------------- |
-| focus / invalid    | `transition-colors duration-fast-02 ease-productive-entrance`   | `fast-02`, `productive-entrance` | `motion-reduce:transition-none` |
+| Trigger         | Animation / Transition                                        | Token                            | Reduced-motion fallback         |
+| --------------- | ------------------------------------------------------------- | -------------------------------- | ------------------------------- |
+| focus / invalid | `transition-colors duration-fast-02 ease-productive-entrance` | `fast-02`, `productive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region            | Token                                                    |
-| ----------------- | -------------------------------------------------------- |
-| container         | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`; focus `var(--border-strong)` + `var(--ring-color)` |
-| invalid border    | `var(--danger-border)`                                   |
-| disabled surface  | `var(--bg-disabled)`                                     |
-| text              | `.text-body-md`, `var(--text-default)`; placeholder `var(--text-muted)` |
-| counter, hint     | `.text-body-xs`, `var(--text-muted)`; over limit `var(--danger-contrast)` |
-| padding / gaps    | `var(--spacing-xs)`, `var(--spacing-xxs)`, `var(--spacing-sm)` |
+| Region           | Token                                                                                                                 |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------- |
+| container        | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`; focus `var(--border-strong)` + `var(--ring-color)` |
+| invalid border   | `var(--danger-border)`                                                                                                |
+| disabled surface | `var(--bg-disabled)`                                                                                                  |
+| text             | `.text-body-md`, `var(--text-default)`; placeholder `var(--text-muted)`                                               |
+| counter, hint    | `.text-body-xs`, `var(--text-muted)`; over limit `var(--danger-contrast)`                                             |
+| padding / gaps   | `var(--spacing-xs)`, `var(--spacing-xxs)`, `var(--spacing-sm)`                                                        |
 
 ## Theme gaps
 
@@ -143,20 +153,24 @@ _None._
 
 - Visible focus: the container shows `focus-within:ring-2 focus-within:ring-(--ring-color)`.
 - Keyboard map: `Enter` submits; `Shift+Enter` new line; `Tab` moves to the slot controls, then Submit / Stop. IME composition (`isComposing`) never submits.
+- Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"`); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
 - ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter and the hint, `aria-invalid` over the limit; Submit and Stop are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers).
 
 ## Internationalization
 
-| Key                      | English source                     | Override prop |
-| ------------------------ | ---------------------------------- | ------------- |
-| `promptInput.label`      | `Prompt`                           | `ariaLabel`   |
-| `promptInput.placeholder`| `Ask a question`                   | `placeholder` |
-| `promptInput.submit`     | `Submit`                           | —             |
-| `promptInput.stop`       | `Stop generating`                  | —             |
-| `promptInput.count`      | `{count}/{max}`                    | —             |
-| `promptInput.overLimit`  | `{count} characters over the limit`| —             |
+| Key                          | English source                      | Override prop |
+| ---------------------------- | ----------------------------------- | ------------- |
+| `promptInput.label`          | `Prompt`                            | `ariaLabel`   |
+| `promptInput.placeholder`    | `Ask a question`                    | `placeholder` |
+| `promptInput.submit`         | `Submit`                            | —             |
+| `promptInput.stop`           | `Stop generating`                   | —             |
+| `promptInput.count`          | `{count}/{max}`                     | —             |
+| `promptInput.overLimit`      | `{count} characters over the limit` | —             |
+| `promptInputMenu.results`    | `{count} suggestion(s)` (plural)    | —             |
+| `promptInputMenu.noMatches`  | `No matches`                        | —             |
+| `promptInputMenu.references` | `References`                        | —             |
 
 - Formatting: counts go through `Intl.NumberFormat` (the `t()` number formatting).
 
@@ -164,7 +178,7 @@ _None._
 
 - Layout: logical utilities; actions at the inline start, Submit at the inline end.
 - Icons: the arrow-up and stop glyphs are not mirrored.
-- Keyboard: no arrow-key behavior of its own.
+- Keyboard: arrows move in the shortcut menu only while it is open; vertical, so not mirrored.
 - User data: the text area follows the document direction; mixed prompts render with the browser's bidi.
 
 ## Responsive
@@ -182,7 +196,7 @@ _None._
 
 ## Stories (Storybook)
 
-_Storybook is retired in M2.5; examples in `packages/webkit/examples/prompt-input/`: Default, Streaming (Stop), Character limit, With attachments and actions, Disabled._
+_Storybook is retired in M2.5; examples in `packages/webkit/examples/prompt-input/`: Default, Streaming (Stop), Character limit, With attachments and actions, Disabled, Shortcut menus (`/` commands and `@` references)._
 
 ## Constraints — DO NOT
 
