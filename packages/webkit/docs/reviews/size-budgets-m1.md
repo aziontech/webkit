@@ -321,3 +321,13 @@ New sections and the sample's section variants. `ConsolePanel` carries `ToggleGr
 | ----------- | ------------- | ------------ | ---------- | ------------------------------------------------ |
 | line-figure | new           | 2.48         | 3          | New: entry only; figures are async chunks.       |
 | banner-art  | new           | 9.61         | 10.1       | New: `NetworkMap`, `SpinningGlobe`, the lattice. |
+
+M2.10 leftovers (blocks lane): `Table` gains `rowReorderable` (a pinned row keeps its place, used by `rules-list`) and `NetworkMap` gains `traffic` (the sample's `MapMesh`: a seeded mesh of links and Web Animations packets, turned on by `BannerArt` `art="network"`).
+
+| Entry           | Budget before | Measured now | New budget | Note                                    |
+| --------------- | ------------- | ------------ | ---------- | --------------------------------------- |
+| table-root      | 51.9          | 51.97        | 52.15      | Raised: `rowReorderable`.               |
+| listing-browser | 66.95         | 66.95        | 67.2       | Raised: carries `Table`.                |
+| listing-table   | 58            | 58.07        | 58.3       | Raised: carries `Table`.                |
+| network-map     | 6.5           | 7.30         | 7.5        | Raised: `traffic` mesh and packets.     |
+| banner-art      | 10.1          | 10.87        | 11.1       | Raised: carries `NetworkMap` `traffic`. |

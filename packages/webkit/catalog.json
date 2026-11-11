@@ -6867,6 +6867,13 @@
      "default": "'none'",
      "required": "false",
      "doc": "Fades the map out along an axis so it meets content without a hard edge."
+    },
+    {
+     "name": "traffic",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion."
     }
    ],
    "surface": "product",

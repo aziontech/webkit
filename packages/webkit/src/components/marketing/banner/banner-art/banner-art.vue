@@ -7,7 +7,7 @@
 
   defineOptions({ name: 'BannerArt', inheritAttrs: false })
 
-  /** The backdrop drawn behind a band: `globe` hangs a globe half past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit and a scrim over the copy column. */
+  /** The backdrop drawn behind a band: `globe` hangs a globe half past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, traffic crossing between them and a scrim over the copy column. */
   export type BannerArtKind = 'globe' | 'map' | 'network'
 
   interface Props {
@@ -87,6 +87,7 @@
           :scale="1.15"
           :opacity="0.5"
           :animated="animated"
+          traffic
         />
         <div
           class="absolute inset-0 [background-image:linear-gradient(to_right,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_72%,transparent)_22%,color-mix(in_srgb,var(--bg-canvas)_28%,transparent)_40%,transparent_56%)] rtl:[background-image:linear-gradient(to_left,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_72%,transparent)_22%,color-mix(in_srgb,var(--bg-canvas)_28%,transparent)_40%,transparent_56%)]"
