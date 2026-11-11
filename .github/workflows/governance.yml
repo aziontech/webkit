@@ -164,6 +164,9 @@ jobs:
       - name: TypeScript check
         run: pnpm run webkit:type-check
 
+      - name: Docs site TypeScript check
+        run: pnpm run docs:type-check
+
       - name: Type coverage (enforce 95% threshold)
         run: pnpm run webkit:type-coverage
 
@@ -262,6 +265,9 @@ jobs:
 
       - name: Naming (2.7) — kebab-case English ids, block ids match folders, no synonyms or retired v6 names
         run: pnpm --filter @aziontech/webkit run naming:check
+
+      - name: Declarations for the runtime .js modules are in sync
+        run: pnpm --filter @aziontech/webkit run js-dts:check
 
       - name: Marketing and docs inventory — no marketing or docs item leaves unrecorded
         run: pnpm --filter @aziontech/webkit run marketing:check

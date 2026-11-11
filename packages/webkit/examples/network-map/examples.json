@@ -26,6 +26,11 @@
       "name": "Animated",
       "summary": "The PoPs pulse in three staggered waves. The pulse stops under reduced motion, leaving the PoPs static.",
       "file": "animated.vue"
+    },
+    {
+      "name": "Traffic",
+      "summary": "`traffic` draws a mesh between lit PoPs: faint grey links and orange packets that grow out of one PoP and are absorbed into another, each ray on its own clock. Under reduced motion only the links remain.",
+      "file": "traffic.vue"
     }
   ]
 }

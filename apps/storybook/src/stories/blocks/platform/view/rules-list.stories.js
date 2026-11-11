@@ -14,6 +14,8 @@ import State5 from '../../../../../../../packages/webkit/blocks/platform/view/ru
 import source5 from '../../../../../../../packages/webkit/blocks/platform/view/rules-list/variants/empty.vue?raw'
 import State6 from '../../../../../../../packages/webkit/blocks/platform/view/rules-list/variants/loading.vue'
 import source6 from '../../../../../../../packages/webkit/blocks/platform/view/rules-list/variants/loading.vue?raw'
+import State7 from '../../../../../../../packages/webkit/blocks/platform/view/rules-list/variants/edit-rule.vue'
+import source7 from '../../../../../../../packages/webkit/blocks/platform/view/rules-list/variants/edit-rule.vue?raw'
 
 export default {
   title: "Templates/Platform/View/RulesList",
@@ -21,7 +23,7 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (stacking to cards when narrow) with Order, Name, Description, Status and Last modified. The Order cell carries a position `Input` (type a number and press Enter), a grip `IconButton` that drags the row or moves it with the up and down arrow keys, and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (stacking to cards when narrow) with the grip, Move, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Move cell adds Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`." } },
     webkit: {"block":"platform/view/rules-list","intents":["rules list","rules engine list","reorder rules","rule order","drag and drop reorder","firewall rules","request and response phases","review changes","enable disable rule","lista de regras","ordem das regras","reordenar regras","regras do firewall","fases de requisição e resposta","lista de reglas","reordenar reglas"],"skills":["webkit-lists","webkit-tables","webkit-form","webkit-errors"],"primary":"Application"}
   }
 }
@@ -59,4 +61,9 @@ export const Empty = {
 export const Loading = {
   render: () => ({ components: { Block: State6 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns." }, source: { code: source6 } } }
+}
+
+export const EditRule = {
+  render: () => ({ components: { Block: State7 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The list composed with `platform/edit/rule-builder`: a rule's name opens the large rule-builder `Drawer` as Edit Rule, seeded with that rule's criteria and behaviors and its phase locked; Add Rule in the header (or in an empty phase) opens it as Add Rule in that phase. Saving an edit updates the row in place and confirms it in a toast; a new rule lands last in its phase, the phase opens, and the toast offers Edit. Neither changes the run order, so the SaveBar only counts moves and status switches." }, source: { code: source7 } } }
 }

@@ -12,8 +12,8 @@
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
 
   const loading = true
@@ -728,10 +728,9 @@
                   </div>
                 </template>
                 <template #cell-verdict="{ row }">
-                  <Tag
+                  <Table.CellStatus
                     :label="verdicts[row.verdict].label"
                     :severity="verdicts[row.verdict].severity"
-                    size="small"
                   />
                 </template>
                 <template #cell-score="{ row }">

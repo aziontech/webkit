@@ -11,6 +11,7 @@
     "preview": "node scripts/serve.mjs",
     "smoke": "node scripts/smoke.mjs",
     "lint": "eslint . --max-warnings 0",
+    "type-check": "vue-tsc --noEmit",
     "format": "prettier --write \"**/*.{js,mjs,ts,vue,css,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,mjs,ts,vue,css,json,md}\""
   },
@@ -32,6 +33,7 @@
     "tailwindcss": "^4.3.3",
     "vite": "^8.3.4",
     "vite-ssg": "^28.3.0",
+    "vue-tsc": "^3.2.5",
     "vue-router": "^4.6.4"
   }
 }

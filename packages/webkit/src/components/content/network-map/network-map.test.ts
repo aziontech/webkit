@@ -254,4 +254,37 @@ describe('NetworkMap', () => {
     const { container } = render(NetworkMap, { props: { animated: true, fade: 'vignette' } })
     await expectNoA11yViolations(container)
   })
+
+  it('draws no traffic unless asked', () => {
+    const { container } = render(NetworkMap, { props: { region: 'atlantic', density: 'high' } })
+    expect(container.querySelector('[data-traffic]')).toBeNull()
+  })
+
+  it('draws the same mesh of links and parked packets on every render', () => {
+    const props = { region: 'atlantic', density: 'high', traffic: true } as const
+    const first = render(NetworkMap, { props })
+    const links = Array.from(first.container.querySelectorAll('[data-traffic-link]')).map((path) =>
+      path.getAttribute('d')
+    )
+    expect(links.length).toBeGreaterThanOrEqual(14)
+    const packets = first.container.querySelectorAll('[data-traffic-packet]')
+    expect(packets).toHaveLength(links.length)
+    expect(packets[0].getAttribute('stroke-dasharray')).toBe('0 200')
+    const second = render(NetworkMap, { props })
+    expect(
+      Array.from(second.container.querySelectorAll('[data-traffic-link]')).map((path) =>
+        path.getAttribute('d')
+      )
+    ).toEqual(links)
+  })
+
+  it('starts one packet animation per ray only when animated', async () => {
+    const props = { region: 'atlantic', density: 'high', traffic: true } as const
+    const still = render(NetworkMap, { props })
+    expect(still.container.querySelector('[data-traffic-packet]')!.getAnimations()).toHaveLength(0)
+    const moving = render(NetworkMap, { props: { ...props, animated: true } })
+    const packets = Array.from(moving.container.querySelectorAll('[data-traffic-packet]'))
+    const reduced = globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+    for (const packet of packets) expect(packet.getAnimations()).toHaveLength(reduced ? 0 : 1)
+  })
 })

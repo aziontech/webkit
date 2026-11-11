@@ -80,7 +80,7 @@ function currentViolations() {
   const keys = [...directionViolations()]
   for (const abs of walk(SRC)) {
     const rel = relative(ROOT, abs).split('\\').join('/')
-    if (rel.startsWith(WIP_PREFIX)) continue
+    if (rel.startsWith(WIP_PREFIX) || rel.endsWith('.d.ts')) continue
     const content = readFileSync(abs, 'utf-8')
     if (/\.(vue|ts|js)$/.test(rel)) {
       for (const id of scanFile(rel, content)) keys.push(`${rel}::${id}`)

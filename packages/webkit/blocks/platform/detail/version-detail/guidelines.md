@@ -25,6 +25,8 @@ The persistent console shell from `skills/webkit-navigation`: the collapsible `S
 
 The breadcrumb reads module, resource, then the version as a `Select` with `aria-label="Switch version"`. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
 
+Below md the header has no room for the breadcrumb, so a row under it (`md:hidden`, its own `nav` named Breadcrumb) carries a Back `IconButton` to the resource's Versions tab and the same `Select` crumbs, full width: the version, and in EnvironmentCrumb the environment before it. A phone keeps every switch the desktop breadcrumb offers.
+
 ### C. Workspace — `Resizable` (required)
 
 A horizontal `Resizable` named "Version workspace": the version settings pane, a handle named "Resize the version history", and the collapsible Version history pane. History is closed by default.

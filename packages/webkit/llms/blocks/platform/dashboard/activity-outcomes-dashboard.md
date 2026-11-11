@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/activity-outcomes-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -90,9 +90,9 @@ tokens are for. The legend toggles a series and shows its total for the range.
 Three ranked lists (by actor, by category, by destination), each with an `aria-label` naming what it
 ranks. Rank by count, largest first.
 
-### K. Outcome in the log — `Tag` (required)
+### K. Outcome in the log — `Table`, `Tag` (required)
 
-Each log row states its outcome as a `Tag` in the same status hue as its series in the chart, so the
+Each log row states its outcome as a `Table.CellStatus` in the same status hue as its series in the chart, so the
 chart and the log read the same scale. The card header's count (`<n> requests`) is also a `Tag`.
 
 ### L. Request log — `TableRoot` (required)
@@ -183,6 +183,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Select from '@aziontech/webkit/select'
   import SeverityTag from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
@@ -986,10 +987,9 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               :loading="loading"
             >
               <template #cell-outcome="{ row }">
-                <Tag
+                <Table.CellStatus
                   :label="outcomeTag(row.outcome).label"
                   :severity="outcomeTag(row.outcome).severity"
-                  size="small"
                 />
               </template>
               <template #cell-severity="{ row }">

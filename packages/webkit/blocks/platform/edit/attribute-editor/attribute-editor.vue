@@ -7,7 +7,6 @@
   import Checkbox from '@aziontech/webkit/checkbox'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -29,6 +28,7 @@
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Textarea from '@aziontech/webkit/textarea'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -704,31 +704,18 @@
                   </template>
 
                   <template #cell-id="{ value }">
-                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                      <span class="min-w-0 flex-1 truncate tabular-nums">{{ value }}</span>
-                      <CopyButton
-                        v-if="value"
-                        kind="outlined"
-                        :value="value"
-                        aria-label="Copy variable ID"
-                      />
-                    </div>
+                    <Table.CellId
+                      :value="value"
+                      resource="variable"
+                    />
                   </template>
 
                   <template #cell-value="{ row }">
-                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                      <span class="min-w-0 truncate">{{ displayValue(row) }}</span>
-                      <div
-                        v-if="!row.secret"
-                        class="shrink-0 ms-auto"
-                      >
-                        <CopyButton
-                          kind="outlined"
-                          :value="row.value"
-                          aria-label="Copy value"
-                        />
-                      </div>
-                    </div>
+                    <Table.CellLink
+                      :label="displayValue(row)"
+                      :copyable="!row.secret"
+                      :copy-value="row.value"
+                    />
                   </template>
 
                   <template #cell-lastModified="{ row, value }">
@@ -770,21 +757,10 @@
                   </template>
 
                   <template #cell-actions="{ row }">
-                    <DropdownMenu
-                      placement="bottom-end"
+                    <Table.CellActions
+                      :name="row.key"
                       @select="(event, value) => onRowAction(value, row)"
                     >
-                      <DropdownMenu.Trigger>
-                        <Tooltip text="Row actions">
-                          <IconButton
-                            icon="pi pi-ellipsis-h"
-                            kind="outlined"
-                            size="small"
-                            aria-label="Row actions"
-                          />
-                        </Tooltip>
-                      </DropdownMenu.Trigger>
-
                       <DropdownMenu.Group>
                         <DropdownMenu.Option
                           value="edit"
@@ -823,7 +799,7 @@
                           </template>
                         </DropdownMenu.Option>
                       </DropdownMenu.Group>
-                    </DropdownMenu>
+                    </Table.CellActions>
                   </template>
 
                   <template #empty>

@@ -107,6 +107,7 @@
   const lockReason = (phase, item) => {
     if (item.locked) return 'The default rule runs first and stays first.'
     if (searching.value) return 'Clear the search to change the order rules run in.'
+    if (saving.value) return 'Wait for the save to finish.'
     if (!canReorder(phase)) return 'There is no other rule in this phase to move it past.'
     return ''
   }
@@ -125,7 +126,10 @@
       const row = listEl.value?.querySelector(`[data-rule-id="${id}"]`)
       const target = row?.querySelector(`[data-control="${control}"]`)
       const usable =
-        target && !target.disabled ? target : row?.querySelector('[data-control="grip"]')
+        target && !target.disabled
+          ? target
+          : (row?.querySelector('[data-control]:not(:disabled)') ??
+            row?.closest('[data-reorder-row]')?.querySelector('[data-reorder-handle]'))
       usable?.focus({ preventScroll: false })
     })
 
@@ -146,81 +150,20 @@
     moveTo(phase, index, index + direction, control)
   }
 
-  const drafts = reactive({})
-  const positionValue = (item, index) => drafts[item.id] ?? String(index + 1)
-  const commitPosition = (phase, item) => {
-    const typed = Number.parseInt(drafts[item.id] ?? '', 10)
-    delete drafts[item.id]
-    if (!Number.isFinite(typed)) return
-    const from = rules[phase].indexOf(item)
-    moveTo(phase, from, typed - 1, 'position')
-  }
-  const cancelPosition = (item) => {
-    delete drafts[item.id]
-  }
-
-  const drag = reactive({ phase: null, from: -1, over: -1 })
-  const onDragStart = (phase, index, event) => {
-    if (!canReorder(phase) || index < pinned(phase)) return
-    drag.phase = phase
-    drag.from = index
-    if (event.dataTransfer) {
-      event.dataTransfer.effectAllowed = 'move'
-      event.dataTransfer.setData('text/plain', rules[phase][index].id)
-      const row = event.currentTarget?.closest?.('[data-rule-id]')
-      if (row) event.dataTransfer.setDragImage(row, 16, 16)
-    }
-  }
-  const onDragEnd = () => {
-    drag.phase = null
-    drag.from = -1
-    drag.over = -1
-  }
-  const onDrop = (phase, index) => {
-    const from = drag.from
-    const samePhase = drag.phase === phase
-    onDragEnd()
-    if (samePhase && from >= 0) moveTo(phase, from, index, null)
-  }
-  const isDragging = (phase, index) => drag.phase === phase && drag.from === index
-  const isDropTarget = (phase, index) =>
-    drag.phase === phase && drag.over === index && drag.from !== index && index >= pinned(phase)
   const position = (phase, item) => rules[phase].indexOf(item)
-  const cellState = (phase, item) => {
-    const index = position(phase, item)
-    return {
-      'data-rule-cell': item.id,
-      'data-dragging': isDragging(phase, index) || null,
-      'data-drop': isDropTarget(phase, index) || null
-    }
+  const reorderRows = (phase, next) => {
+    if (searching.value) return
+    rules[phase] = next
   }
-  const indexFromEvent = (phase, event) => {
-    const id = event.target?.closest?.('[data-rule-cell]')?.getAttribute('data-rule-cell')
-    return rules[phase].findIndex((item) => item.id === id)
-  }
-  const onPanelDragOver = (phase, event) => {
-    if (drag.phase !== phase) return
-    event.preventDefault()
-    const index = indexFromEvent(phase, event)
-    if (index >= 0) drag.over = index
-  }
-  const onPanelDrop = (phase, event) => {
-    if (drag.phase !== phase) return
-    event.preventDefault()
-    const index = indexFromEvent(phase, event)
-    if (index >= 0) onDrop(phase, index)
-    else onDragEnd()
-  }
+  const reorderable = (phase) => (row) => !lockReason(phase, row)
 
   const columns = [
-    { id: 'order', header: 'Order', width: 200, hideable: false },
+    { id: 'move', header: 'Move', width: 96, hideable: false },
     { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 3 },
     { id: 'status', header: 'Status', width: 152 },
     { accessorKey: 'modified', header: 'Last modified', grow: 2 }
   ]
-  const CELL_CLASS =
-    "relative flex w-full min-w-0 items-center gap-(--spacing-xxs) self-stretch transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-dragging:opacity-60 data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:top-0 data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
 
   const setActive = (item, value) => {
     item.active = value
@@ -381,10 +324,7 @@
                   </span>
                 </Accordion.Trigger>
                 <Accordion.Content>
-                  <div
-                    @dragover="onPanelDragOver(group.value, $event)"
-                    @drop="onPanelDrop(group.value, $event)"
-                  >
+                  <div>
                     <TableRoot
                       v-if="loading || group.total"
                       :data="loading ? [] : group.items"
@@ -392,81 +332,42 @@
                       row-key="id"
                       :bordered="false"
                       :loading="loading"
+                      reorderable
+                      :row-reorderable="reorderable(group.value)"
+                      :aria-label="`${group.label} phase rules, in the order they run`"
+                      @update:data="reorderRows(group.value, $event)"
                     >
-                      <template #cell-order="{ row }">
+                      <template #cell-move="{ row }">
                         <div
-                          v-bind="cellState(group.value, row)"
                           :data-rule-id="row.id"
-                          :class="CELL_CLASS"
+                          class="flex items-center gap-(--spacing-xxs)"
                         >
-                          <span class="w-14 shrink-0 [&_input]:text-center [&_input]:tabular-nums">
-                            <Input
-                              :model-value="positionValue(row, position(group.value, row))"
-                              size="small"
-                              inputmode="numeric"
-                              autocomplete="off"
-                              data-control="position"
-                              :disabled="Boolean(lockReason(group.value, row))"
-                              :aria-label="
-                                lockReason(group.value, row)
-                                  ? `Position ${position(group.value, row) + 1} of ${group.total} in the ${group.label} phase. ${lockReason(group.value, row)}`
-                                  : `Position of ${row.name} in the ${group.label} phase. Type a number from ${pinned(group.value) + 1} to ${group.total} and press Enter to move it.`
-                              "
-                              @update:model-value="drafts[row.id] = $event"
-                              @focus="$event.target.select?.()"
-                              @keydown.enter.prevent="commitPosition(group.value, row)"
-                              @keydown.esc.prevent="cancelPosition(row)"
-                              @blur="commitPosition(group.value, row)"
-                            />
-                          </span>
-                          <Tooltip
-                            :text="
-                              lockReason(group.value, row) ||
-                              'Drag to reorder, or use the arrow keys'
-                            "
-                          >
-                            <IconButton
-                              icon="pi pi-bars"
-                              kind="outlined"
-                              size="small"
-                              data-control="grip"
-                              :draggable="!lockReason(group.value, row)"
-                              :disabled="Boolean(lockReason(group.value, row))"
-                              :aria-label="
-                                lockReason(group.value, row)
-                                  ? `${row.name} cannot be reordered. ${lockReason(group.value, row)}`
-                                  : `Reorder ${row.name}, position ${position(group.value, row) + 1} of ${group.total} in the ${group.label} phase. Use the up and down arrow keys to move it.`
-                              "
-                              @dragstart="
-                                onDragStart(group.value, position(group.value, row), $event)
-                              "
-                              @dragend="onDragEnd"
-                              @keydown.up.prevent="
-                                step(group.value, position(group.value, row), -1, 'grip')
-                              "
-                              @keydown.down.prevent="
-                                step(group.value, position(group.value, row), 1, 'grip')
-                              "
-                            />
-                          </Tooltip>
-                          <Tooltip text="Move up">
+                          <Tooltip :text="lockReason(group.value, row) || 'Move up'">
                             <IconButton
                               icon="pi pi-chevron-up"
                               kind="outlined"
                               size="small"
                               data-control="up"
-                              :aria-label="`Move ${row.name} up`"
+                              :aria-label="
+                                lockReason(group.value, row)
+                                  ? `Move ${row.name} up. ${lockReason(group.value, row)}`
+                                  : `Move ${row.name} up`
+                              "
                               :disabled="!canMove(group.value, position(group.value, row), -1)"
                               @click="step(group.value, position(group.value, row), -1, 'up')"
                             />
                           </Tooltip>
-                          <Tooltip text="Move down">
+                          <Tooltip :text="lockReason(group.value, row) || 'Move down'">
                             <IconButton
                               icon="pi pi-chevron-down"
                               kind="outlined"
                               size="small"
                               data-control="down"
-                              :aria-label="`Move ${row.name} down`"
+                              :aria-label="
+                                lockReason(group.value, row)
+                                  ? `Move ${row.name} down. ${lockReason(group.value, row)}`
+                                  : `Move ${row.name} down`
+                              "
                               :disabled="!canMove(group.value, position(group.value, row), 1)"
                               @click="step(group.value, position(group.value, row), 1, 'down')"
                             />
@@ -474,10 +375,7 @@
                         </div>
                       </template>
                       <template #cell-name="{ row }">
-                        <div
-                          v-bind="cellState(group.value, row)"
-                          :class="CELL_CLASS"
-                        >
+                        <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
                           <a
                             :href="`#rule-${row.id}`"
                             data-rule-name
@@ -493,20 +391,12 @@
                         </div>
                       </template>
                       <template #cell-description="{ row }">
-                        <div
-                          v-bind="cellState(group.value, row)"
-                          :class="CELL_CLASS"
-                        >
-                          <span class="min-w-0 truncate text-(--text-muted)">{{
-                            row.description
-                          }}</span>
-                        </div>
+                        <span class="min-w-0 truncate text-(--text-muted)">{{
+                          row.description
+                        }}</span>
                       </template>
                       <template #cell-status="{ row }">
-                        <div
-                          v-bind="cellState(group.value, row)"
-                          :class="CELL_CLASS"
-                        >
+                        <div class="flex min-w-0 items-center">
                           <label
                             class="flex min-h-10 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
                           >
@@ -521,14 +411,9 @@
                         </div>
                       </template>
                       <template #cell-modified="{ row }">
-                        <div
-                          v-bind="cellState(group.value, row)"
-                          :class="CELL_CLASS"
+                        <span class="min-w-0 truncate text-body-sm text-(--text-muted)"
+                          >{{ row.modified }} by {{ row.author }}</span
                         >
-                          <span class="min-w-0 truncate text-body-sm text-(--text-muted)"
-                            >{{ row.modified }} by {{ row.author }}</span
-                          >
-                        </div>
                       </template>
                       <template #empty>
                         <p

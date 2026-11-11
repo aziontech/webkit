@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: b96dd07e922c28b1063fce55e28c91aafee4c88e468865b5139024952292e24d
+checksum: 31323d1de3b8c5a16d85d4343a9ead43d788a09e7eda5f5ab80d0d8d995efa0e
 created: 2026-09-26
 last_updated: 2026-09-26
 ---
@@ -77,6 +77,7 @@ import NetworkMap from '@aziontech/webkit/network-map'
 | `offsetX` | `number` | `0` | false | Horizontal shift as a fraction of the map width; negative moves it left, positive right, past the box edge if large enough. |
 | `offsetY` | `number` | `0` | false | Vertical shift as a fraction of the map height; negative moves it up, positive down, past the box edge if large enough. |
 | `fade` | `'none' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'edges' \| 'vignette'` | `'none'` | false | Fades the map out along an axis so it meets content without a hard edge. |
+| `traffic` | `boolean` | `false` | false | Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion. |
 
 ## Events
 
@@ -106,7 +107,9 @@ import NetworkMap from '@aziontech/webkit/network-map'
 |---|---|---|---|
 | `animated` set — PoP pulse, three waves at 0 / 700 / 1400ms | `animate-pulse` | catalog (`animate.js`, Tailwind stock loop) | `motion-reduce:animate-none` (static PoPs) |
 
-Static by default: without `animated` no PoP carries an animation class.
+| `traffic` with `animated` — a packet grows out of one PoP, crosses its ray and is absorbed into the other (dash length 0 → 30 → 0 and offset 0 → −100 over the first 45% of the ray's cycle, then parked) | Web Animations API on each packet path; every ray on its own 3.4–6.2 s clock so the field never pulses in step | — (one-off geometry, no token) | none: the packets stay parked at zero length and the links draw at 0.24 instead of 0.12, the still frame of the mesh |
+
+Static by default: without `animated` no PoP carries an animation class. `traffic` builds the mesh from the lit PoPs, deterministically (a fixed-seed generator, so server and client and every export draw the same network): 14 participants by farthest-point sampling, each linked to at least two and at most three others no closer than 60 map units, each ray a quadratic bowed 5–9% of its length to a random side. Links are `--border-strong`, packets `--primary`, both `non-scaling-stroke` so they stay hairlines at any size. The server renders the links and the parked packets; the packets start on mount.
 
 ## Tokens
 
@@ -138,6 +141,7 @@ Static by default: without `animated` no PoP carries an animation class.
 - Regions — composite story rendering every `region` value side-by-side.
 - Densities — composite story rendering every `density` value side-by-side.
 - Fades — composite story rendering every `fade` value side-by-side.
+- Traffic — `traffic` with `animated` over the Atlantic at high density.
 - Animated — state story; the Default args plus `animated: true`.
 
 ## Constraints — DO NOT

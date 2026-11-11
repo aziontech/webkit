@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useId } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
   import { NETWORK_MAP_LAND, NETWORK_MAP_REGIONS, NETWORK_MAP_TIERS } from './network-map-data'
 
@@ -54,6 +54,8 @@
     offsetY?: number
     /** Fades the map out along an axis so it meets content without a hard edge. */
     fade?: NetworkMapFade
+    /** Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion. */
+    traffic?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -65,7 +67,8 @@
     scale: 0.85,
     offsetX: 0,
     offsetY: 0,
-    fade: 'none'
+    fade: 'none',
+    traffic: false
   })
 
   const attrs = useAttrs()
@@ -134,6 +137,134 @@
       .filter((pop) => pop.d.length > 0)
   })
 
+  const MESH_SEED = 20260902
+  const MESH_PARTICIPANTS = 14
+  const MESH_DEGREE = { min: 2, max: 3 }
+  const MESH_MIN_CHORD = 60
+  const MESH_BOW = { min: 0.1, max: 0.18 }
+  const MESH_CYCLE = { min: 3400, max: 6200 }
+
+  interface MeshRay {
+    key: string
+    d: string
+    duration: number
+    delay: number
+  }
+
+  const meshRays = computed<MeshRay[]>(() => {
+    if (!props.traffic) return []
+    const points = popPhases.value.flatMap((pop) =>
+      Array.from(pop.d.matchAll(POP_CELL)).map(([, x, y]) => ({
+        x: Number(x) + 2.5,
+        y: Number(y) + 2.5
+      }))
+    )
+    if (points.length < 3) return []
+    let seed = MESH_SEED
+    const next = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648
+    const between = (range: { min: number; max: number }) =>
+      range.min + next() * (range.max - range.min)
+    const gap = (a: number, b: number) =>
+      Math.hypot(points[a].x - points[b].x, points[a].y - points[b].y)
+
+    const chosen = [Math.floor(next() * points.length)]
+    while (chosen.length < Math.min(MESH_PARTICIPANTS, points.length)) {
+      let best = -1
+      let bestGap = -1
+      points.forEach((_, index) => {
+        if (chosen.includes(index)) return
+        const nearest = Math.min(...chosen.map((other) => gap(index, other)))
+        if (nearest > bestGap) {
+          bestGap = nearest
+          best = index
+        }
+      })
+      if (best < 0) break
+      chosen.push(best)
+    }
+
+    const degree = new Map(chosen.map((index) => [index, 0]))
+    const edges: [number, number][] = []
+    const linked = (a: number, b: number) =>
+      edges.some(([x, y]) => (x === a && y === b) || (x === b && y === a))
+    for (const node of chosen) {
+      const candidates = chosen
+        .filter((other) => other !== node && gap(node, other) >= MESH_MIN_CHORD)
+        .sort((a, b) => gap(node, a) - gap(node, b))
+      for (const other of candidates) {
+        if ((degree.get(node) ?? 0) >= MESH_DEGREE.min) break
+        if ((degree.get(other) ?? 0) >= MESH_DEGREE.max || linked(node, other)) continue
+        edges.push([node, other])
+        degree.set(node, (degree.get(node) ?? 0) + 1)
+        degree.set(other, (degree.get(other) ?? 0) + 1)
+      }
+    }
+
+    return edges.map(([a, b], index) => {
+      const from = points[a]
+      const to = points[b]
+      const length = gap(a, b)
+      const bow = between(MESH_BOW) * (next() < 0.5 ? -1 : 1)
+      const cx = (from.x + to.x) / 2 - ((to.y - from.y) / length) * length * bow
+      const cy = (from.y + to.y) / 2 + ((to.x - from.x) / length) * length * bow
+      const duration = Math.round(between(MESH_CYCLE))
+      return {
+        key: `ray-${index}`,
+        d: `M${from.x} ${from.y}Q${cx.toFixed(1)} ${cy.toFixed(1)} ${to.x} ${to.y}`,
+        duration,
+        delay: Math.round(next() * duration)
+      }
+    })
+  })
+
+  const packetEls = ref<SVGPathElement[]>([])
+  let packetAnimations: Animation[] = []
+  let reducedMotion: MediaQueryList | null = null
+
+  const stopPackets = () => {
+    packetAnimations.forEach((animation) => animation.cancel())
+    packetAnimations = []
+  }
+  const startPackets = () => {
+    stopPackets()
+    if (!props.traffic || !props.animated || reducedMotion?.matches) return
+    packetAnimations = packetEls.value.flatMap((el, index) => {
+      const ray = meshRays.value[index]
+      if (!ray || typeof el.animate !== 'function') return []
+      return [
+        el.animate(
+          [
+            { strokeDashoffset: 0, strokeDasharray: '0 200', offset: 0 },
+            { strokeDashoffset: -50, strokeDasharray: '30 200', offset: 0.225 },
+            { strokeDashoffset: -100, strokeDasharray: '0 200', offset: 0.45 },
+            { strokeDashoffset: -100, strokeDasharray: '0 200', offset: 1 }
+          ],
+          {
+            duration: ray.duration,
+            delay: -ray.delay,
+            iterations: Infinity,
+            easing: 'linear'
+          }
+        )
+      ]
+    })
+  }
+
+  onMounted(() => {
+    reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null
+    reducedMotion?.addEventListener('change', startPackets)
+    startPackets()
+  })
+  onBeforeUnmount(() => {
+    reducedMotion?.removeEventListener('change', startPackets)
+    stopPackets()
+  })
+  watch(
+    () => [props.traffic, props.animated, meshRays.value],
+    () => startPackets(),
+    { flush: 'post' }
+  )
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'content-network-map'
   )
@@ -181,6 +312,36 @@
         :data-animated="animated || null"
         class="fill-(--primary) data-[animated]:animate-pulse data-[animated]:motion-reduce:animate-none data-[phase=1]:[animation-delay:700ms]! data-[phase=2]:[animation-delay:1400ms]!"
       />
+      <g
+        v-if="meshRays.length"
+        data-traffic
+        fill="none"
+      >
+        <path
+          v-for="ray in meshRays"
+          :key="`link-${ray.key}`"
+          :d="ray.d"
+          data-traffic-link
+          stroke="var(--border-strong)"
+          stroke-width="1"
+          :stroke-opacity="animated ? 0.12 : 0.24"
+          vector-effect="non-scaling-stroke"
+        />
+        <path
+          v-for="ray in meshRays"
+          ref="packetEls"
+          :key="`packet-${ray.key}`"
+          :d="ray.d"
+          data-traffic-packet
+          stroke="var(--primary)"
+          stroke-width="1.5"
+          stroke-linecap="butt"
+          pathLength="100"
+          stroke-dasharray="0 200"
+          stroke-dashoffset="-100"
+          vector-effect="non-scaling-stroke"
+        />
+      </g>
     </svg>
   </div>
 </template>

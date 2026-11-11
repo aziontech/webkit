@@ -16,8 +16,6 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -36,6 +34,7 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
@@ -1267,15 +1266,10 @@ legacy  IN HINFO "PC" "Linux"`
                       <span class="min-w-0 truncate">{{ value }}</span>
                     </template>
                     <template #cell-id="{ value }">
-                      <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                        <span class="min-w-0 flex-1 truncate tabular-nums">{{ value }}</span>
-                        <CopyButton
-                          v-if="value"
-                          kind="outlined"
-                          :value="value"
-                          aria-label="Copy record ID"
-                        />
-                      </div>
+                      <Table.CellId
+                        :value="value"
+                        resource="record"
+                      />
                     </template>
                     <template #cell-type="{ value }">
                       <Tag
@@ -1285,17 +1279,11 @@ legacy  IN HINFO "PC" "Linux"`
                       />
                     </template>
                     <template #cell-value="{ value }">
-                      <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                        <span class="min-w-0 truncate">{{ value }}</span>
-                        <div class="shrink-0 ms-auto">
-                          <CopyButton
-                            kind="outlined"
-                            :value="value"
-                            aria-label="Copy record value"
-                            @click.stop
-                          />
-                        </div>
-                      </div>
+                      <Table.CellLink
+                        :label="value"
+                        copyable
+                        @click.stop
+                      />
                     </template>
                     <template #cell-policy="{ value }">
                       <span class="min-w-0 truncate">{{ policyLabel(value) }}</span>
@@ -1306,18 +1294,8 @@ legacy  IN HINFO "PC" "Linux"`
                     <template #cell-description="{ value }">
                       <span class="min-w-0 truncate">{{ value || '—' }}</span>
                     </template>
-                    <template #cell-actions>
-                      <DropdownMenuRoot placement="bottom-end">
-                        <DropdownMenuTrigger>
-                          <Tooltip text="Row actions">
-                            <IconButton
-                              icon="pi pi-ellipsis-h"
-                              kind="outlined"
-                              size="small"
-                              aria-label="Row actions"
-                            />
-                          </Tooltip>
-                        </DropdownMenuTrigger>
+                    <template #cell-actions="{ row }">
+                      <Table.CellActions :name="row.name">
                         <DropdownMenuGroup>
                           <DropdownMenuOption
                             value="edit"
@@ -1342,7 +1320,7 @@ legacy  IN HINFO "PC" "Linux"`
                             /></template>
                           </DropdownMenuOption>
                         </DropdownMenuGroup>
-                      </DropdownMenuRoot>
+                      </Table.CellActions>
                     </template>
                   </TableRoot>
                 </template>
