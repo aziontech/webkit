@@ -1,0 +1,109 @@
+{
+ "name": "file-token-group",
+ "binding": "FileTokenGroup",
+ "import": "@aziontech/webkit/file-token-group",
+ "treeShakeableImport": "@aziontech/webkit/file-token-group",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The files a person picked for upload, shown as removable tokens before or while they upload: each token names the file with a glyph for its type, its size and, when asked, its last-modified date, carries a progress bar while it uploads and its own error or warning line when it cannot be sent. It pairs with `file-dropzone` (which receives the files) and with a Browse files button: the product keeps the list, the group renders it and reports which token was removed. Taken from Cloudscape's file token group; the Console Kit and the design sample list files by hand.",
+ "setup": null,
+ "useWhen": [
+  "Under a `FileDropzone` or a Browse files button in a form, to show what will be uploaded and let the person drop a file before submitting.",
+  "In an upload dialog, to show each file's progress and the files that were refused (too large, wrong type) with the reason.",
+  "Read-only, in a review step, to list the attachments that will be sent."
+ ],
+ "avoidWhen": [
+  "A running transfer that should follow the person around the console → use `upload-progress`.",
+  "Files already stored in a bucket or a repository → use `table` (the file browser block).",
+  "Free-text tags or labels → use `tag-editor` or `chip`."
+ ],
+ "related": [
+  "file-dropzone` — receives dropped files; the group lists them.",
+  "upload-progress` — the floating card for transfers that keep running after the dialog closes.",
+  "chip` — a removable label without file details."
+ ],
+ "bestPractices": [
+  "Keep the refused files in the list with their error, so the person sees why and can remove them; do not drop them silently.",
+  "Write each error as the reason and the limit (`Larger than 300 MB`), not as a code.",
+  "Use `limit` when more than five files are common, so the form below stays in view.",
+  "Remove the file from your list on `dismiss`; the group moves focus to the next token for you."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "FileTokenGroupItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The files, in order; each with its optional upload state, error and warning."
+  },
+  {
+   "name": "alignment",
+   "type": "'vertical' | 'horizontal'",
+   "default": "'vertical'",
+   "required": "false",
+   "doc": "Vertical stacks full-width tokens; horizontal wraps compact tokens in rows."
+  },
+  {
+   "name": "limit",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Shows this many tokens and a Show more toggle for the rest. 0 shows them all."
+  },
+  {
+   "name": "showFileSize",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the size beside the name, formatted for the locale."
+  },
+  {
+   "name": "showFileLastModified",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the last-modified date, formatted for the locale."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Hides the remove buttons; the list is for reading only."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list. Empty uses the locale catalog (`Files`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "dismiss",
+   "payload": "index: number, item: FileTokenGroupItem",
+   "notes": "The remove button of the token at `index` was pressed. The parent removes it from `items`."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import FileDropzone from '@aziontech/webkit/file-dropzone'\n  import FileTokenGroup from '@aziontech/webkit/file-token-group'\n  import { ref } from 'vue'\n\n  const LIMIT = 300 * 1024 * 1024\n\n  const input = ref(null)\n  const items = ref([\n    { file: { name: 'logo.svg', size: 4210, type: 'image/svg+xml' } },\n    { file: { name: 'index.html', size: 18432, type: 'text/html' } },\n    { file: { name: 'site-backup.tar', size: 412_000_000 }, error: 'Larger than 300 MB' },\n    { file: { name: 'notes.txt', size: 0, type: 'text/plain' }, warning: 'This file is empty' }\n  ])\n\n  const toItem = (file) => ({\n    file,\n    error: file.size > LIMIT ? 'Larger than 300 MB' : undefined,\n    warning: file.size === 0 ? 'This file is empty' : undefined\n  })\n\n  const add = (files) => {\n    items.value = [...items.value, ...Array.from(files).map(toItem)]\n  }\n\n  const onPick = (event) => {\n    add(event.target.files ?? [])\n    event.target.value = ''\n  }\n\n  const remove = (index) => {\n    items.value = items.value.filter((_, position) => position !== index)\n  }\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-md) flex-col gap-(--spacing-sm)\">\n    <FileDropzone\n      description=\"Up to 300 MB per file.\"\n      @drop=\"(event, files) => add(files)\"\n    >\n      <Button\n        label=\"Browse files\"\n        kind=\"secondary\"\n        size=\"medium\"\n        @click=\"input?.click()\"\n      />\n    </FileDropzone>\n    <input\n      ref=\"input\"\n      type=\"file\"\n      multiple\n      class=\"hidden\"\n      aria-hidden=\"true\"\n      tabindex=\"-1\"\n      @change=\"onPick\"\n    />\n    <FileTokenGroup\n      :items=\"items\"\n      @dismiss=\"remove\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Uploading",
+   "sfc": "<script setup>\n  import FileTokenGroup from '@aziontech/webkit/file-token-group'\n\n  const items = [\n    {\n      file: { name: 'hero.webp', size: 1_482_000, type: 'image/webp', lastModified: 1762790400000 },\n      loading: false\n    },\n    {\n      file: { name: 'app.js', size: 248_320, type: 'text/javascript' },\n      loading: true,\n      progress: 64\n    },\n    { file: { name: 'styles.css', size: 52_100, type: 'text/css' }, loading: true },\n    {\n      file: { name: 'archive.zip', size: 512_000_000, type: 'application/zip' },\n      error: 'Larger than 300 MB'\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <FileTokenGroup\n      :items=\"items\"\n      show-file-last-modified\n      aria-label=\"Files to upload\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Horizontal",
+   "sfc": "<script setup>\n  import FileTokenGroup from '@aziontech/webkit/file-token-group'\n  import { ref } from 'vue'\n\n  const items = ref(\n    ['robots.txt', 'favicon.ico', 'sitemap.xml', 'manifest.json', 'og-image.png', 'fonts.css'].map(\n      (name, index) => ({ file: { name, size: 1024 * (index + 2) } })\n    )\n  )\n\n  const remove = (index) => {\n    items.value = items.value.filter((_, position) => position !== index)\n  }\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-lg)\">\n    <FileTokenGroup\n      :items=\"items\"\n      alignment=\"horizontal\"\n      :limit=\"3\"\n      @dismiss=\"remove\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/file-token-group.md"
+}

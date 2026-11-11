@@ -203,6 +203,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Skeleton](components/skeleton.md): A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity.
 - [StatusIndicator](components/status-indicator.md): Communicates status, alerts, or progress to the user.
 - [Toast](components/toast.md): A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`…
+- [UploadProgress](components/upload-progress.md): A card that follows a file transfer to its end while the person keeps working: uploading files into a bucket, moving objects between folders or deleting them.
 
 ## Components: Inputs
 
@@ -214,6 +215,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DateRangePicker](components/date-range-picker.md): A time range for queries over time: logs, events, traces and metrics.
 - [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Checkbox`, `RadioButton`, `Switch`, `Slider` — with its…
 - [FileDropzone](components/file-dropzone.md): A FileDropzone is the target a user drags files from the operating system onto.
+- [FileTokenGroup](components/file-token-group.md): The files a person picked for upload, shown as removable tokens before or while they upload: each token names the file with a glyph for its type, its size and, when asked, its last-modified date, carries a progress ba…
 - [HelperText](components/helper-text.md): Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`).
 - [Hint](components/hint.md): Small info affordance — a muted `pi pi-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`.
 - [Input](components/input.md): Single-line text input for forms and inline editing.

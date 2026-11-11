@@ -1,0 +1,24 @@
+{
+ "purpose": "A card that follows a file transfer to its end while the person keeps working: uploading files into a bucket, moving objects between folders or deleting them. Its header says what is happening and how far it got (`Uploading 2 of 5 files`) over one overall bar; below it each file has its own bar, its state and a Cancel or Retry button. When every file has finished the header turns into the outcome (`5 files uploaded`, or `4 files uploaded, 1 failed` with Retry failed) and the card can be closed. It floats at the inline-end bottom corner by default, so it survives route changes in the console shell. Taken from the Console Kit's object storage progress card, extended with the per-file list the design sample's bucket browser needs.",
+ "useWhen": [
+  "A bucket upload that keeps running after the upload dialog closes.",
+  "A move or delete of many objects that takes more than a second or two.",
+  "Any batch of file transfers where the person should be able to cancel one file, or retry the ones that failed."
+ ],
+ "avoidWhen": [
+  "The files picked in a form before it is submitted → use `file-token-group`.",
+  "A single action with no per-file parts (a deploy, a build) → use the async-submit toast (`toast` with Edit and Redeploy).",
+  "Progress of a page load or a determinate step inside a form → use `progress`."
+ ],
+ "related": [
+  "file-token-group` — the files picked for upload, before the transfer starts.",
+  "progress` — the bar used for the overall and per-file progress.",
+  "toast` — reports the outcome of a single async action."
+ ],
+ "bestPractices": [
+  "Keep the card until the person closes it when anything failed; close it yourself a few seconds after a clean finish if you like.",
+  "Send `error` as the reason (`Connection lost`, `Larger than 300 MB`), not a status code.",
+  "Update `progress` no more than a few times a second; the bars animate between values.",
+  "Report the outcome with a toast only when the card is not in view (for example, after the person collapsed it and left the page)."
+ ]
+}

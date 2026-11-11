@@ -34,9 +34,9 @@ A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Its header
 
 A database with no tables replaces the pane with a `Card` holding an `EmptyState` (No tables yet) and a secondary Create Table `Button`. The side panel says the same thing in its own words; the tabs stay.
 
-### E. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `Checkbox` (required)
+### E. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `TableRoot` (required)
 
-The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. A header `Checkbox` selects all rows and each row has its own; the primary key column is marked, a Delete row `IconButton` sits on each row, and Previous page and Next page `IconButton`s page the data.
+The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `TableRoot` (`row-key="__k"`, `enable-row-selection`, `enable-sorting`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton`. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with Insert row and Import data from CSV; a filter that matches nothing says so with the filter text.
 
 ### F. Table definition — `Button`, `Card`, `TableRoot`, `Tag` (optional)
 
@@ -46,13 +46,21 @@ Definition shows a Columns heading with an Add column `Button`, over a flush `Ca
 
 On Editor the start `Sidebar` is named Query history, with a Search queries `Input` and one row per past query showing the statement on one line. Each row has a Query actions `DropdownMenu` with Run query and Delete query.
 
-### H. Editor — `Button`, `Textarea` (required)
+### H. Editor — `Button`, `CodeEditor` (required)
 
-A toolbar with the primary Run query `Button` (`:loading` while it runs) and outlined Prettify and Templates `Button`s, over a monospaced, vertically resizable `Textarea` named SQL editor. While a query runs the editor, Prettify and Templates are disabled.
+A toolbar with the primary Run query `Button` (`:loading` while it runs) and outlined Prettify and Templates `Button`s, over a `CodeEditor` (`language="sql"`, `path="query.sql"`, 14rem) named SQL editor. The plain editor ships by default; pass `loader` with `() => import('monaco-editor')` to get Monaco with SQL highlighting, themed from the tokens. While a query runs the editor is read-only and Prettify and Templates are disabled. A statement the database rejects puts an error marker on its line (`markers`) as well as the danger `Alert` in Results.
 
 ### I. Results — `Input`, `ToggleGroup`, `Tooltip`, `IconButton`, `TableRoot`, `Alert`, `EmptyState`, `PaginationRoot` (required)
 
 A Results band with its own search `Input`, a `ToggleGroup` switching Table and JSON, and Refresh, Download and Columns `IconButton`s named by `Tooltip`s. A successful run shows a success `Alert` with what ran and the rows in a `TableRoot`; a statement the database rejects shows a danger `Alert` with the reason and what to do (`The statement wasn't executed: near "SELEC", a syntax error. Check the statement and run it again.`), and the statement stays in the editor; before anything runs an `EmptyState` reads Ready to execute. A `PaginationRoot` at 50 rows sits under the band.
+
+### K. Bulk row delete — `Button`, `Toaster`, `toast` (TableData)
+
+With rows selected, a danger `Delete 2 rows` `Button` joins the Data toolbar (`:loading` while it runs). Deleting rows is not a deploy: the outcome is a success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Never View deployments, Edit or Redeploy.
+
+### L. Create database — `GlobalHeader`, `PageHeader`, `SettingsSection`, `SettingRow`, `Input`, `HelperText`, `Switch`, `SaveBar`, `toast` (CreateDatabase)
+
+The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-error rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
 
 ### J. Templates drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `Input` (optional)
 
@@ -62,7 +70,7 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 
 - Keep both tabs on the same layout: side panel to list, working pane to act.
 - Let the side panel resize and collapse, and keep its width when the user switches tabs.
-- Disable the editor and its toolbar while a query runs, and show Run query loading.
+- Make the editor read-only and disable its toolbar while a query runs, and show Run query loading.
 - Show the outcome of a run in the Results band: the rows, a success `Alert` with what ran, or a danger `Alert` with why it failed.
 - Offer JSON beside Table for results, so the raw shape is one click away.
 - Confirm Delete table with `platform/delete/delete-with-confirmation`.
@@ -90,8 +98,9 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 
 - One `main` landmark; the tabs are a real tab list, so arrow keys move between Tables and Editor.
 - Each side `Sidebar` is named (Tables, Query history) with its own collapse, expand and resize labels.
-- The editor `Textarea` has the `aria-label` "SQL editor"; its placeholder is never its only label.
-- Every icon-only button has an `aria-label` that matches its `Tooltip`; row checkboxes name their row, and the header checkbox reads "Select all rows".
+- The `CodeEditor` has the `aria-label` "SQL editor"; its markers are listed in its problems list as text, not by colour.
+- Every icon-only button has an `aria-label` that matches its `Tooltip`; the rows table is named `Rows of <table>` and its selection checkboxes come from `TableRoot`, named per row.
+- On Create Database, the Name error is the input's `aria-describedby` and focus returns to the input after a failed submit.
 - `ToggleGroup`s are named ("Table view", "Result view") and the pagination is named "Results pagination".
 - The templates drawer traps focus while open and closes on Escape.
 
@@ -102,6 +111,8 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 - EmptyDatabase: a database with no tables; the side panel says so and the pane shows the Create Table empty state.
 - Query: the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
 - Templates: the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer behind the Templates button.
+- TableData: the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the toolbar.
+- CreateDatabase: the create database page with its Name and Active fields; try `acme-store` for the name conflict and a name starting with `offline` for the failed request.
 - Failed: the selected table's rows did not load; the Data view shows a danger `Alert` that names the table and offers Retry.
 
 ## Related
@@ -109,5 +120,7 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 - `platform/view/table-view` — the database list this workspace is opened from.
 - `platform/delete/delete-with-confirmation` — the dialog behind Delete table.
 - `platform/edit/code-editor` — editing code that is not a query.
+- `platform/edit/schema-editor` — the Create Table, Add column, Add row, Alter column and Truncate table drawers and dialogs behind this page's buttons.
+- `platform/states/form-error` — the rule the Create Database name conflict follows.
 - `platform/detail/record-table` — records of a resource without SQL.
 - `TableRoot` — the definition and results tables; see `skills/webkit-tables` and `skills/webkit-layout`.
