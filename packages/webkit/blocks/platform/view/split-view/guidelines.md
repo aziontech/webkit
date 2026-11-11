@@ -40,7 +40,7 @@ A resizable, collapsible start `Sidebar` named Fields with its own Search fields
 
 ### F. Log — `Chart`, `TableRoot`, `Tag`, `EmptyState` (required)
 
-Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar stacked` with `Chart.Brush`, bound to `v-model:range`). Clicking a bucket filters the period to it and dragging selects a span; the arrow keys step through buckets and Enter applies one. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a `Tag`, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
+Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar stacked` with `Chart.Brush`, bound to `v-model:range`). Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a `Tag`, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
 
 ### G. Event document — `Sidebar`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
@@ -102,7 +102,7 @@ The document lists every field of the event. Search in this event narrows the li
 
 - **Search:** placeholder names what is searched, e.g. "Search events, hosts, paths or addresses"; `aria-label` "Search events".
 - **Summary labels:** short nouns, e.g. "Events", "Errors", "Avg request time".
-- **Chart hint:** one instruction, e.g. "Click to filter to this bucket, or drag to select a span."
+- **Chart hint:** one instruction, e.g. "Drag across the chart, or hold Shift with the arrow keys and press Enter, to filter the log to a span."
 - **Empty log:** title states the fact and the description says what to do, e.g. "No events in this window" with "Widen the period or clear a filter to see more of the log."
 - **Fields panel:** controls name the panel, e.g. "Hide the fields panel", "Show the fields panel".
 - **Document:** drawer title "Event"; close button "Close the event document".
@@ -115,7 +115,7 @@ The document lists every field of the event. Search in this event narrows the li
 ## Accessibility
 
 - One `main` landmark holds the explorer; each `Sidebar` is named (Fields, Event document) with its own collapse, expand and resize labels.
-- The chart is one focusable control with an `aria-label`; arrow keys move between buckets, Enter or Space applies one, the hover card is a `role="status"`, and a visually hidden summary describes the whole chart.
+- The chart is `Chart`'s one tab stop with an `aria-label` that carries the summary (busiest bucket) and the instruction; arrow keys move between buckets, Shift extends a span, Enter commits it, and the tooltip follows keyboard focus as it follows the pointer.
 - The Errors value carries an `aria-label` with its share of all events.
 - Every icon-only button has an `aria-label`; the filter `Badge` and decorative glyphs are `aria-hidden="true"`.
 - Value options in the popovers expose `aria-checked`, so applied values are announced.
