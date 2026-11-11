@@ -61,6 +61,8 @@
 
   const active = computed(() => interactive.value && !props.disabled)
 
+  const splitBody = computed(() => interactive.value && props.removable)
+
   const removeLabel = computed(() =>
     props.label ? t('chip.removeNamed', { label: props.label }) : t('chip.remove')
   )
@@ -107,26 +109,48 @@
     :data-clickable="active || null"
     :data-selected="(selectable && selected) || null"
     :data-disabled="disabled || null"
-    :role="interactive ? 'button' : undefined"
-    :tabindex="active ? 0 : undefined"
-    :aria-pressed="selectable ? selected : undefined"
-    :aria-disabled="interactive && disabled ? 'true' : undefined"
+    :role="interactive && !splitBody ? 'button' : undefined"
+    :tabindex="active && !splitBody ? 0 : undefined"
+    :aria-pressed="selectable && !splitBody ? selected : undefined"
+    :aria-disabled="interactive && !splitBody && disabled ? 'true' : undefined"
     :class="attrs.class"
-    class="relative inline-flex w-fit items-center justify-center overflow-hidden rounded-full border border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) leading-none transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance motion-reduce:transition-none text-label-sm before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none data-[kind=filled]:shadow-(--shadow-sm) data-[kind=dashed]:border-dashed data-[size=small]:h-6 data-[size=small]:px-(--spacing-xs) data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-sm) data-[size=small]:data-[removable]:pe-(--spacing-xxs) data-[size=medium]:data-[removable]:pe-(--spacing-xxs) data-[clickable]:cursor-pointer data-[clickable]:hover:border-(--border-strong) data-[clickable]:hover:before:opacity-100 data-[clickable]:active:before:opacity-100 data-[clickable]:active:border-(--border-strong) data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 data-[clickable]:focus-visible:ring-(--ring-color) data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-(--bg-canvas) data-[selected]:bg-(--bg-selected) data-[selected]:border-(--border-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
+    class="relative inline-flex w-fit items-center justify-center overflow-hidden rounded-full border border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) leading-none transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance motion-reduce:transition-none text-label-sm before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none data-[kind=filled]:shadow-(--shadow-sm) data-[kind=dashed]:border-dashed data-[size=small]:h-6 data-[size=small]:px-(--spacing-xs) data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-sm) data-[size=small]:data-[removable]:pe-(--spacing-xxs) data-[size=medium]:data-[removable]:pe-(--spacing-xxs) data-[clickable]:cursor-pointer data-[clickable]:hover:border-(--border-strong) data-[clickable]:hover:before:opacity-100 data-[clickable]:active:before:opacity-100 data-[clickable]:active:border-(--border-strong) data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 data-[clickable]:focus-visible:ring-(--ring-color) data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-(--bg-canvas) has-[[data-chip-body]:focus-visible]:ring-2 has-[[data-chip-body]:focus-visible]:ring-(--ring-color) has-[[data-chip-body]:focus-visible]:ring-offset-2 has-[[data-chip-body]:focus-visible]:ring-offset-(--bg-canvas) data-[selected]:bg-(--bg-selected) data-[selected]:border-(--border-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
     @click="onClick"
-    @keydown="onKeydown"
+    @keydown="splitBody ? undefined : onKeydown($event)"
   >
     <span
       class="relative z-(--z-input-field) inline-flex min-w-0 items-center justify-center gap-(--spacing-xxs)"
     >
-      <slot v-if="$slots['default']" />
       <span
-        v-else-if="label"
-        :data-testid="`${testId}__label`"
-        class="truncate"
+        v-if="splitBody"
+        data-chip-body
+        role="button"
+        :tabindex="active ? 0 : undefined"
+        :aria-pressed="selectable ? selected : undefined"
+        :aria-disabled="disabled ? 'true' : undefined"
+        :data-testid="`${testId}__body`"
+        class="inline-flex min-w-0 items-center gap-(--spacing-xxs) outline-none"
+        @keydown="onKeydown"
       >
-        {{ label }}
+        <slot v-if="$slots['default']" />
+        <span
+          v-else-if="label"
+          :data-testid="`${testId}__label`"
+          class="truncate"
+        >
+          {{ label }}
+        </span>
       </span>
+      <template v-else>
+        <slot v-if="$slots['default']" />
+        <span
+          v-else-if="label"
+          :data-testid="`${testId}__label`"
+          class="truncate"
+        >
+          {{ label }}
+        </span>
+      </template>
       <Tooltip
         v-if="removable"
         :text="removeLabel"

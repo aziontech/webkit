@@ -940,10 +940,6 @@
       event.preventDefault()
       startRename(id)
     }
-    if (event.key === 'Delete') {
-      event.preventDefault()
-      closeSession(id)
-    }
   }
 
   const onSessionAction = (event, value) => {
@@ -2010,7 +2006,9 @@
                       :key="session.id"
                       :value="session.id"
                       :label="session.name"
+                      :closable="sessions.length > 1"
                       :data-testid="`session-tab-${session.id}`"
+                      @close="closeSession(session.id)"
                     />
                   </Tabs.List>
                 </Tabs>

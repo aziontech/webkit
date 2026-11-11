@@ -35,12 +35,18 @@
 
 <template>
   <div
-    role="group"
+    role="listitem"
     data-flow-kind="parallel"
     :data-align="align ?? 'start'"
     :data-testid="testId"
     :class="rootClasses"
   >
-    <slot />
+    <div
+      role="list"
+      data-flow-branches
+      class="contents"
+    >
+      <slot />
+    </div>
   </div>
 </template>

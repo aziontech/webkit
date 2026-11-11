@@ -214,7 +214,7 @@ describe('Flow (composition compound)', () => {
   })
 
   describe('Flow.Parallel — flow-parallel.vue align prop', () => {
-    it('renders role=group with data-flow-kind=parallel and default align=start', () => {
+    it('renders the parallel step as a listitem holding a nested list, default align=start', () => {
       const { getByTestId } = renderTree(`
         <Flow>
           <FlowParallel>
@@ -224,7 +224,8 @@ describe('Flow (composition compound)', () => {
         </Flow>
       `)
       const group = getByTestId('data-flow__parallel')
-      expect(group.getAttribute('role')).toBe('group')
+      expect(group.getAttribute('role')).toBe('listitem')
+      expect(group.firstElementChild?.getAttribute('role')).toBe('list')
       expect(group.getAttribute('data-flow-kind')).toBe('parallel')
       expect(group.getAttribute('data-align')).toBe('start')
     })
@@ -357,7 +358,7 @@ describe('Flow (composition compound)', () => {
 
     it('renders the Parallel story with a parallel group between nodes', () => {
       const { getByTestId, getByText } = render(Parallel)
-      expect(getByTestId('data-flow__parallel').getAttribute('role')).toBe('group')
+      expect(getByTestId('data-flow__parallel').getAttribute('role')).toBe('listitem')
       expect(getByText('Branch A')).toBeTruthy()
       expect(getByText('Branch C')).toBeTruthy()
     })

@@ -223,7 +223,9 @@ describe('Tabs (composition)', () => {
       })
 
       const close = getByTestId('navigation-tabs-item__close')
-      expect(close.getAttribute('aria-label')).toBe('Close tab')
+      expect(close.getAttribute('aria-hidden')).toBe('true')
+      expect(close.getAttribute('role')).toBeNull()
+      expect(close.getAttribute('title')).toBe('Close tab')
 
       await fireEvent.click(close)
 
@@ -233,6 +235,23 @@ describe('Tabs (composition)', () => {
       // @click.stop on the close box stops propagation → the tab click is not emitted.
       expect(emitted().click).toBeUndefined()
     })
+    it('emits close on Delete from a closable tab, and nothing from a plain one', async () => {
+      const { getByTestId, emitted, rerender } = render(TabsItem, {
+        props: { value: 'a', label: 'Alpha', closable: true }
+      })
+      const tab = getByTestId('navigation-tabs-item')
+      expect(tab.getAttribute('aria-keyshortcuts')).toBe('Delete')
+
+      await fireEvent.keyDown(tab, { key: 'Delete' })
+      expect(emitted().close).toHaveLength(1)
+      expect(emitted().close[0][0]).toBeInstanceOf(KeyboardEvent)
+
+      await rerender({ value: 'a', label: 'Alpha', closable: false })
+      await fireEvent.keyDown(tab, { key: 'Delete' })
+      expect(emitted().close).toHaveLength(1)
+      expect(tab.hasAttribute('aria-keyshortcuts')).toBe(false)
+    })
+
     it('marks a dirty tab with a dot and a hidden "Unsaved changes"', async () => {
       const { getByRole, getByTestId, queryByTestId, rerender } = render(TabsItem, {
         props: { value: 'a', label: 'Alpha', dirty: true }

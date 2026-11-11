@@ -594,7 +594,7 @@
     :data-brushing="draft !== null || null"
     :aria-busy="loading || refetching || undefined"
     :style="{ '--chart-plot-min': `${height}px` }"
-    class="relative m-0 grid h-full min-w-0 grid-cols-1 grid-rows-[minmax(var(--chart-plot-min),1fr)_auto] transition-opacity duration-moderate-01 motion-reduce:transition-none data-[refetching]:opacity-60"
+    class="relative m-0 grid h-full min-w-0 grid-cols-1 grid-rows-[minmax(var(--chart-plot-min),1fr)_auto] [&_svg]:transition-opacity [&_svg]:duration-moderate-01 motion-reduce:[&_svg]:transition-none data-[refetching]:[&_svg]:opacity-60"
   >
     <div
       v-if="loading"

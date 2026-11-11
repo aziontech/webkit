@@ -647,10 +647,13 @@ describe('keyboard map (spec)', () => {
     await waitFor(() => expect(panel()).not.toBeNull())
   }
 
-  it.each(['{Enter}', ' '])('%s on the trigger opens the panel and keeps focus on the trigger', async (key) => {
-    await openWith(key)
-    expect(document.activeElement).toBe(control())
-  })
+  it.each(['{Enter}', ' '])(
+    '%s on the trigger opens the panel and keeps focus on the trigger',
+    async (key) => {
+      await openWith(key)
+      expect(document.activeElement).toBe(control())
+    }
+  )
 
   it('Tab from the trigger moves into the panel, to its first control', async () => {
     await openWith('{Enter}')
@@ -680,5 +683,28 @@ describe('keyboard map (spec)', () => {
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(panel()).toBeNull())
     expect(document.activeElement).toBe(control())
+  })
+})
+
+describe('text input as the trigger control', () => {
+  it('leaves the popup attributes off a textbox, where ARIA does not allow them', async () => {
+    const Host = defineComponent({
+      components: { Popover, PopoverTrigger, PopoverContent },
+      template: `
+        <Popover>
+          <PopoverTrigger>
+            <input type="text" aria-label="Domain" data-testid="domain-input" />
+          </PopoverTrigger>
+          <PopoverContent>Checks</PopoverContent>
+        </Popover>
+      `
+    })
+    const { getByTestId, container } = render(Host)
+    await nextTick()
+    const input = getByTestId('domain-input')
+    expect(input.hasAttribute('aria-expanded')).toBe(false)
+    expect(input.hasAttribute('aria-haspopup')).toBe(false)
+    expect(input.hasAttribute('aria-controls')).toBe(false)
+    await expectNoA11yViolations(container)
   })
 })

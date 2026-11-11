@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 2643f7e8a30ffdd484947519627c9800d556829fd6ed9f20cf120914bcd47970
+checksum: 7dbef717fd3835370e051f26898c6fe076d28f916b39237b502d392029ab7489
 created: 2026-06-16
 last_updated: 2026-11-11
 ---
@@ -409,7 +409,7 @@ Per-column slots (data-driven mode) are name-computed at runtime, one per column
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the sort button and any interactive cell content.
 - Keyboard map: `Tab` focuses sortable headers and interactive cell content; `Enter`/`Space` toggles a sortable header; row click is mouse/touch (no keyboard trap).
-- ARIA: root `role="table"`; `table-header`/`table-body`/`table-footer` `role="rowgroup"`; `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
+- ARIA: `role="table"` sits on the grid element inside the scroll viewport (testid `<testid>__table`), not on the root: the root also holds the toolbar, applied filters, the focusable scroll viewport, the stacked select-all, the empty state and the pagination, and any of those inside a `table` is an unallowed child (`aria-required-children`). `aria-label`, `aria-labelledby`, `aria-describedby` and `aria-description` passed to `Table` are forwarded to that element, as are `aria-busy` (loading) and `aria-rowcount` (windowed); every other attribute stays on the root. The data-driven pagination is a plain region under the viewport (`<testid>__footer`), not a `rowgroup`, and the `caption` slot renders as the table's first child. In composition mode the default slot is the table's content, so it holds rowgroups only; anything else goes in `footer` or around the `Table`. `table-header`/`table-body`/`table-footer` `role="rowgroup"`; `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
 - Virtual rows keep their position for assistive technology: `aria-rowcount` on the root (rows + header) and `aria-rowindex` on each rendered row.
 - Stacked layout: the select-all is a visible checkbox with a `<label>`, not a screen-reader-only header cell (WCAG 2.5.3, label in name).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including muted header text.

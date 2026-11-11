@@ -247,7 +247,7 @@
             </Tooltip>
           </span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-            <span class="truncate text-body-sm text-(--text-disabled)"> None </span>
+            <span class="truncate text-body-sm text-(--text-muted)"> None </span>
           </div>
         </div>
 

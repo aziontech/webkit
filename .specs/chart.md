@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: approved
-checksum: cbb6b2a4f84a1a7320fded06b4bdc8dcc73cb2b9803b2d4e9f912d7f2a893066
+checksum: 53356d61d7853bb37b46cc720089bc5c550d2d6823cca55f9dd45fc37a38264f
 spec_version: 2
 template: 2
 created: 2026-10-20
@@ -50,7 +50,7 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
 - Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.
 - Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.
 - Keep filters and the time range in one row above the dashboard, never inside a chart.
-- While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton.
+- While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).
 - Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.
 - Use `labelScale="linear"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.
 

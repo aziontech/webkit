@@ -3,7 +3,7 @@ name: file-dropzone
 category: inputs
 structure: monolithic
 status: implemented
-checksum: 010a850b1e994c2e47ef22a839de63e1eb5ed452978c92d562afbf3e0e641c02
+checksum: 04e32fb5aae0c681baf191dd77f0d1ef9a08cc7f2addad88ea5bfe2cca6430d1
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
@@ -217,7 +217,7 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 - Visible focus: the dropzone root is **not focusable** and has no focus ring. Focus belongs to the controls in the default slot, which carry their own `focus-visible` ring (e.g. `Button`).
 - Keyboard map: none on the dropzone. Drag and drop from the OS is a pointer gesture with no keyboard equivalent on the target. The keyboard path is the consumer's Browse button, which opens a native file input and reaches the same outcome. `Escape` during a drag hides the overlay (window `keydown` fallback; browsers also cancel the drag natively).
 - No `@click` on the root: clicking the region does nothing, so there is no click-without-key handler. The Browse button is the click target.
-- ARIA, inline: the root is a `<div role="group">` with `aria-labelledby` pointing at the title and `aria-describedby` pointing at the description (only when `description` is non-empty), both ids from `useId()`. A screen reader therefore reads the slotted Browse button in context ("Drop files to upload, group, PNG or JPG, up to 5 MB each, Browse files, button"). The title is a `<p>`, not a heading: the page owns its heading outline.
+- ARIA, inline: the root is a `<div role="group">` with `aria-labelledby` pointing at the title and `aria-describedby` pointing at the description (only when `description` is non-empty), both ids from `useId()`. A screen reader therefore reads the slotted Browse button in context ("Drop files to upload, group, PNG or JPG, up to 5 MB each, Browse files, button"). The title is a `<p>`, not a heading: the page owns its heading outline. When `disabled`, the group carries `aria-disabled="true"`, so the dimmed title and description are announced as part of a disabled control and fall under the WCAG 1.4.3 exemption for inactive components.
 - ARIA, overlay: the root is `aria-hidden="true"`. It is a pointer-only duplicate of an affordance that must exist elsewhere on the page, and it renders no interactive content.
 - No `aria-live` in the component. Announcing every drag that crosses the window is noise, and the outcome that matters (files accepted or skipped) is the consumer's to announce from `drop` / `reject` (a `toast`, or a live region on its file list). `aria-dropeffect` / `aria-grabbed` are deprecated in WAI-ARIA 1.1 and are not used.
 - The icon is decorative: `aria-hidden="true"`.

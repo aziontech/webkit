@@ -388,6 +388,39 @@ describe('Chip', () => {
       await expectNoA11yViolations(container)
     })
 
+    it('keeps the remove button beside, not inside, the button of a clickable removable chip', async () => {
+      const { getByTestId, emitted, container } = render(Chip, {
+        props: { label: 'Region', clickable: true, removable: true }
+      })
+      const root = getByTestId('input-chip')
+      const body = getByTestId('input-chip__body')
+      const remove = getByTestId('input-chip__remove')
+
+      expect(root).not.toHaveAttribute('role')
+      expect(root).not.toHaveAttribute('tabindex')
+      expect(body).toHaveAttribute('role', 'button')
+      expect(body).toHaveAttribute('tabindex', '0')
+      expect(body.contains(remove)).toBe(false)
+
+      body.focus()
+      await fireEvent.keyDown(body, { key: 'Enter' })
+      expect(emitted('click')).toHaveLength(1)
+      await fireEvent.click(remove)
+      expect(emitted('remove')).toHaveLength(1)
+      expect(emitted('click')).toHaveLength(1)
+      await expectNoA11yViolations(container)
+    })
+
+    it('puts aria-pressed on the body of a selectable removable chip', async () => {
+      const { getByTestId } = render(Chip, {
+        props: { label: 'Region', selectable: true, removable: true }
+      })
+      const body = getByTestId('input-chip__body')
+      expect(body).toHaveAttribute('aria-pressed', 'false')
+      await fireEvent.click(body)
+      expect(body).toHaveAttribute('aria-pressed', 'true')
+    })
+
     it('has no a11y violations for a removable chip (labelled remove button)', async () => {
       const { container } = render(Chip, { props: { label: 'Accessible', removable: true } })
       await expectNoA11yViolations(container)

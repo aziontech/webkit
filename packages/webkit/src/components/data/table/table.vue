@@ -52,7 +52,6 @@
   import TableBody from './table-body/table-body.vue'
   import TableCaption from './table-caption/table-caption.vue'
   import TableCell from './table-cell/table-cell.vue'
-  import TableFooter from './table-footer/table-footer.vue'
   import TableHeadCell from './table-head-cell/table-head-cell.vue'
   import TableHeader from './table-header/table-header.vue'
   import TableRow from './table-row/table-row.vue'
@@ -253,6 +252,14 @@
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'data-table'
+  )
+
+  const TABLE_ATTRS = ['aria-label', 'aria-labelledby', 'aria-describedby', 'aria-description']
+  const rootAttrs = computed(() =>
+    Object.fromEntries(Object.entries(attrs).filter(([key]) => !TABLE_ATTRS.includes(key)))
+  )
+  const tableAttrs = computed(() =>
+    Object.fromEntries(Object.entries(attrs).filter(([key]) => TABLE_ATTRS.includes(key)))
   )
 
   const viewportHeight = computed<string>(() => props.maxHeight || (props.virtual ? '40rem' : ''))
@@ -1184,15 +1191,12 @@
 <template>
   <div
     ref="rootEl"
-    v-bind="$attrs"
-    role="table"
+    v-bind="rootAttrs"
     :data-testid="testId"
     :data-border="bordered || null"
     :data-stacked="stacked || null"
     :data-density="density"
     :data-wrap="wrapLines || null"
-    :aria-busy="loading || undefined"
-    :aria-rowcount="windowed ? rowTotal + 1 : undefined"
     :style="viewportHeightVar"
     class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-xxs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
   >
@@ -1238,10 +1242,6 @@
       />
     </div>
 
-    <TableCaption v-if="dataDriven && $slots['caption']">
-      <slot name="caption" />
-    </TableCaption>
-
     <ScrollArea
       ref="viewportRef"
       :orientation="viewportHeight ? 'both' : 'horizontal'"
@@ -1250,160 +1250,99 @@
       @scroll.passive="onViewportScroll"
     >
       <div
-        role="presentation"
         class="flex w-max min-w-full flex-col"
         :class="stacked ? 'w-full!' : undefined"
       >
-        <template v-if="dataDriven">
-          <TableHeader
-            frozen
-            :kind="headerKind"
-            :class="stacked ? 'sr-only!' : undefined"
+        <div
+          v-if="dataDriven && stacked && enableRowSelection && !loading && rowTotal > 0"
+          :data-testid="`${testId}__stacked-select-all`"
+          class="flex min-h-10 items-center gap-(--spacing-xs) px-(--spacing-sm) pt-(--spacing-xs)"
+        >
+          <Checkbox
+            binary
+            :input-id="selectAllId"
+            :model-value="pageSelection === 'all'"
+            :indeterminate="pageSelection === 'some'"
+            @update:model-value="(v) => toggleAllPageRows(!!v)"
+          />
+          <label
+            :for="selectAllId"
+            class="cursor-pointer text-label-sm text-(--text-default)"
+            >{{ t('table.selectAll') }}</label
           >
-            <TableRow>
-              <TableHeadCell
-                v-if="enableRowSelection"
-                kind="checkbox"
-                :frozen="selectionFrozen ? 'start' : undefined"
-              >
-                <Checkbox
-                  v-if="!stacked"
-                  binary
-                  :model-value="pageSelection === 'all'"
-                  :indeterminate="pageSelection === 'some'"
-                  :aria-label="t('table.selectAll')"
-                  @update:model-value="(v) => toggleAllPageRows(!!v)"
-                />
-              </TableHeadCell>
-              <TableHeadCell
-                v-for="header in headers"
-                :key="header.id"
-                :kind="metaOf(header.column).kind ?? 'default'"
-                :grow="metaOf(header.column).grow ?? 1"
-                :align="metaOf(header.column).align ?? 'start'"
-                :frozen="metaOf(header.column).frozen"
-                :style="cellStyleOf(header.column)"
-                :sortable="header.column.getCanSort()"
-                :sort-direction="sortDirectionOf(header.column)"
-                :resizable="isResizableColumn(header.column)"
-                :resizing="resizingColumnId === header.column.id"
-                :resize-handler="(event) => startResize(header.column, event)"
-                @sort="(direction) => header.column.toggleSorting(direction === 'descending')"
-              >
-                <slot
-                  v-if="hasSlot('header-' + header.column.id)"
-                  :name="'header-' + header.column.id"
-                  :column="header.column"
-                />
-                <template v-else-if="header.column.columnDef.header">{{
-                  header.column.columnDef.header
-                }}</template>
-              </TableHeadCell>
-            </TableRow>
-          </TableHeader>
-
-          <div
-            v-if="stacked && enableRowSelection && !loading && rowTotal > 0"
-            role="presentation"
-            :data-testid="`${testId}__stacked-select-all`"
-            class="flex min-h-10 items-center gap-(--spacing-xs) px-(--spacing-sm) pt-(--spacing-xs)"
-          >
-            <Checkbox
-              binary
-              :input-id="selectAllId"
-              :model-value="pageSelection === 'all'"
-              :indeterminate="pageSelection === 'some'"
-              @update:model-value="(v) => toggleAllPageRows(!!v)"
-            />
-            <label
-              :for="selectAllId"
-              class="cursor-pointer text-label-sm text-(--text-default)"
-              >{{ t('table.selectAll') }}</label
+        </div>
+        <div
+          v-bind="tableAttrs"
+          role="table"
+          :data-testid="`${testId}__table`"
+          :aria-busy="loading || undefined"
+          :aria-rowcount="windowed ? rowTotal + 1 : undefined"
+          class="flex w-full flex-col"
+        >
+          <TableCaption v-if="dataDriven && $slots['caption']">
+            <slot name="caption" />
+          </TableCaption>
+          <template v-if="dataDriven">
+            <TableHeader
+              frozen
+              :kind="headerKind"
+              :class="stacked ? 'sr-only!' : undefined"
             >
-          </div>
+              <TableRow>
+                <TableHeadCell
+                  v-if="enableRowSelection"
+                  kind="checkbox"
+                  :frozen="selectionFrozen ? 'start' : undefined"
+                >
+                  <Checkbox
+                    v-if="!stacked"
+                    binary
+                    :model-value="pageSelection === 'all'"
+                    :indeterminate="pageSelection === 'some'"
+                    :aria-label="t('table.selectAll')"
+                    @update:model-value="(v) => toggleAllPageRows(!!v)"
+                  />
+                </TableHeadCell>
+                <TableHeadCell
+                  v-for="header in headers"
+                  :key="header.id"
+                  :kind="metaOf(header.column).kind ?? 'default'"
+                  :grow="metaOf(header.column).grow ?? 1"
+                  :align="metaOf(header.column).align ?? 'start'"
+                  :frozen="metaOf(header.column).frozen"
+                  :style="cellStyleOf(header.column)"
+                  :sortable="header.column.getCanSort()"
+                  :sort-direction="sortDirectionOf(header.column)"
+                  :resizable="isResizableColumn(header.column)"
+                  :resizing="resizingColumnId === header.column.id"
+                  :resize-handler="(event) => startResize(header.column, event)"
+                  @sort="(direction) => header.column.toggleSorting(direction === 'descending')"
+                >
+                  <slot
+                    v-if="hasSlot('header-' + header.column.id)"
+                    :name="'header-' + header.column.id"
+                    :column="header.column"
+                  />
+                  <template v-else-if="header.column.columnDef.header">{{
+                    header.column.columnDef.header
+                  }}</template>
+                </TableHeadCell>
+              </TableRow>
+            </TableHeader>
 
-          <TableBody
-            v-if="loading"
-            key="skeleton"
-            :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
-          >
-            <TableRow
-              v-for="n in skeletonRowCount"
-              :key="'sk-' + n"
-              :class="
-                stacked
-                  ? 'flex-wrap rounded-(--shape-elements) border! py-(--spacing-xxs)'
-                  : undefined
-              "
-            >
-              <TableCell
-                v-if="enableRowSelection"
-                kind="checkbox"
-                :frozen="selectionFrozen ? 'start' : undefined"
-                :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
-              >
-                <Skeleton
-                  kind="shape"
-                  width="16px"
-                  height="16px"
-                />
-              </TableCell>
-              <TableCell
-                v-for="header in headers"
-                :key="header.id"
-                :style="viewOf(header.column.id).style"
-                :grow="viewOf(header.column.id).grow"
-                :align="viewOf(header.column.id).align"
-                :frozen="viewOf(header.column.id).frozen"
-                :kind="viewOf(header.column.id).kind"
-                :class="viewOf(header.column.id).stackedClass"
-              >
-                <Skeleton
-                  v-if="viewOf(header.column.id).kind !== 'action'"
-                  height="0.875rem"
-                />
-              </TableCell>
-            </TableRow>
-          </TableBody>
-
-          <Transition
-            appear
-            :enter-active-class="bodyEnterActiveClass"
-            :enter-from-class="bodyEnterFromClass"
-            :enter-to-class="bodyEnterToClass"
-            @after-enter="onBodyEntered"
-            @enter-cancelled="onBodyEntered"
-          >
             <TableBody
-              v-if="!loading && rowTotal > 0"
-              key="rows"
+              v-if="loading"
+              key="skeleton"
               :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
-              :style="virtualPadding"
             >
               <TableRow
-                v-for="(row, index) in renderedRows"
-                :key="row.id"
-                :ref="virtualActive ? (el) => trackRow(el, row.id) : undefined"
-                v-memo="[
-                  row.getIsSelected(),
-                  row.original,
-                  columnViews,
-                  striped,
-                  windowed,
-                  virtualActive,
-                  windowStart + index
-                ]"
-                :selected="row.getIsSelected()"
-                :aria-rowindex="windowed ? windowStart + index + 2 : undefined"
-                :class="[
+                v-for="n in skeletonRowCount"
+                :key="'sk-' + n"
+                :class="
                   stacked
                     ? 'flex-wrap rounded-(--shape-elements) border! py-(--spacing-xxs)'
-                    : undefined,
-                  striped && (windowStart + index) % 2 === 1
-                    ? '[--table-row-bg:var(--bg-surface-raised)]'
                     : undefined
-                ]"
-                @click="onRowClick($event, row)"
+                "
               >
                 <TableCell
                   v-if="enableRowSelection"
@@ -1411,82 +1350,154 @@
                   :frozen="selectionFrozen ? 'start' : undefined"
                   :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                 >
-                  <Checkbox
-                    binary
-                    :model-value="row.getIsSelected()"
-                    :aria-label="t('table.selectRow')"
-                    @update:model-value="(v) => row.toggleSelected(!!v)"
+                  <Skeleton
+                    kind="shape"
+                    width="16px"
+                    height="16px"
                   />
                 </TableCell>
                 <TableCell
-                  v-for="cell in row.getVisibleCells()"
-                  :key="cell.id"
-                  :style="viewOf(cell.column.id).style"
-                  :grow="viewOf(cell.column.id).grow"
-                  :align="viewOf(cell.column.id).align"
-                  :frozen="viewOf(cell.column.id).frozen"
-                  :kind="viewOf(cell.column.id).kind"
-                  :class="viewOf(cell.column.id).stackedClass"
+                  v-for="header in headers"
+                  :key="header.id"
+                  :style="viewOf(header.column.id).style"
+                  :grow="viewOf(header.column.id).grow"
+                  :align="viewOf(header.column.id).align"
+                  :frozen="viewOf(header.column.id).frozen"
+                  :kind="viewOf(header.column.id).kind"
+                  :class="viewOf(header.column.id).stackedClass"
                 >
-                  <span
-                    v-if="viewOf(cell.column.id).stackedField"
-                    aria-hidden="true"
-                    :data-testid="`${testId}__stacked-label`"
-                    class="w-2/5 shrink-0 truncate text-label-sm text-(--text-muted)"
-                    >{{ stackedLabelOf(cell.column) }}</span
-                  >
-                  <slot
-                    v-if="hasSlot('cell-' + cell.column.id)"
-                    :name="'cell-' + cell.column.id"
-                    :row="row.original"
-                    :value="cell.getValue()"
+                  <Skeleton
+                    v-if="viewOf(header.column.id).kind !== 'action'"
+                    height="0.875rem"
                   />
-                  <span
-                    v-else
-                    class="min-w-0 flex-1 truncate"
-                    >{{ cell.getValue() }}</span
-                  >
                 </TableCell>
               </TableRow>
-              <div
-                v-if="lazyActive"
-                ref="lazySentinel"
-                role="presentation"
-                aria-hidden="true"
-                :data-testid="`${testId}__lazy-rows`"
-                :style="{ height: `${lazyGap}px` }"
-              />
             </TableBody>
-          </Transition>
 
-          <Transition
-            enter-active-class="transition-opacity duration-300 ease-out motion-reduce:transition-none"
-            enter-from-class="opacity-0"
-            enter-to-class="opacity-100"
-          >
-            <div
-              v-if="!loading && rowTotal === 0"
-              role="presentation"
-              :data-testid="`${testId}__empty`"
-              class="w-full"
+            <Transition
+              appear
+              :enter-active-class="bodyEnterActiveClass"
+              :enter-from-class="bodyEnterFromClass"
+              :enter-to-class="bodyEnterToClass"
+              @after-enter="onBodyEntered"
+              @enter-cancelled="onBodyEntered"
             >
-              <slot name="empty">
-                <EmptyState
-                  size="small"
-                  icon="pi pi-table"
-                  :title="t('table.emptyTitle')"
-                  :description="t('table.emptyDescription')"
+              <TableBody
+                v-if="!loading && rowTotal > 0"
+                key="rows"
+                :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
+                :style="virtualPadding"
+              >
+                <TableRow
+                  v-for="(row, index) in renderedRows"
+                  :key="row.id"
+                  :ref="virtualActive ? (el) => trackRow(el, row.id) : undefined"
+                  v-memo="[
+                    row.getIsSelected(),
+                    row.original,
+                    columnViews,
+                    striped,
+                    windowed,
+                    virtualActive,
+                    windowStart + index
+                  ]"
+                  :selected="row.getIsSelected()"
+                  :aria-rowindex="windowed ? windowStart + index + 2 : undefined"
+                  :class="[
+                    stacked
+                      ? 'flex-wrap rounded-(--shape-elements) border! py-(--spacing-xxs)'
+                      : undefined,
+                    striped && (windowStart + index) % 2 === 1
+                      ? '[--table-row-bg:var(--bg-surface-raised)]'
+                      : undefined
+                  ]"
+                  @click="onRowClick($event, row)"
+                >
+                  <TableCell
+                    v-if="enableRowSelection"
+                    kind="checkbox"
+                    :frozen="selectionFrozen ? 'start' : undefined"
+                    :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
+                  >
+                    <Checkbox
+                      binary
+                      :model-value="row.getIsSelected()"
+                      :aria-label="t('table.selectRow')"
+                      @update:model-value="(v) => row.toggleSelected(!!v)"
+                    />
+                  </TableCell>
+                  <TableCell
+                    v-for="cell in row.getVisibleCells()"
+                    :key="cell.id"
+                    :style="viewOf(cell.column.id).style"
+                    :grow="viewOf(cell.column.id).grow"
+                    :align="viewOf(cell.column.id).align"
+                    :frozen="viewOf(cell.column.id).frozen"
+                    :kind="viewOf(cell.column.id).kind"
+                    :class="viewOf(cell.column.id).stackedClass"
+                  >
+                    <span
+                      v-if="viewOf(cell.column.id).stackedField"
+                      aria-hidden="true"
+                      :data-testid="`${testId}__stacked-label`"
+                      class="w-2/5 shrink-0 truncate text-label-sm text-(--text-muted)"
+                      >{{ stackedLabelOf(cell.column) }}</span
+                    >
+                    <slot
+                      v-if="hasSlot('cell-' + cell.column.id)"
+                      :name="'cell-' + cell.column.id"
+                      :row="row.original"
+                      :value="cell.getValue()"
+                    />
+                    <span
+                      v-else
+                      class="min-w-0 flex-1 truncate"
+                      >{{ cell.getValue() }}</span
+                    >
+                  </TableCell>
+                </TableRow>
+                <div
+                  v-if="lazyActive"
+                  ref="lazySentinel"
+                  role="presentation"
+                  aria-hidden="true"
+                  :data-testid="`${testId}__lazy-rows`"
+                  :style="{ height: `${lazyGap}px` }"
                 />
-              </slot>
-            </div>
-          </Transition>
-        </template>
+              </TableBody>
+            </Transition>
+          </template>
 
-        <slot v-else />
+          <slot v-else />
+        </div>
+        <Transition
+          enter-active-class="transition-opacity duration-300 ease-out motion-reduce:transition-none"
+          enter-from-class="opacity-0"
+          enter-to-class="opacity-100"
+        >
+          <div
+            v-if="dataDriven && !loading && rowTotal === 0"
+            :data-testid="`${testId}__empty`"
+            class="w-full"
+          >
+            <slot name="empty">
+              <EmptyState
+                size="small"
+                icon="pi pi-table"
+                :title="t('table.emptyTitle')"
+                :description="t('table.emptyDescription')"
+              />
+            </slot>
+          </div>
+        </Transition>
       </div>
     </ScrollArea>
 
-    <TableFooter v-if="dataDriven && paginated">
+    <div
+      v-if="dataDriven && paginated"
+      :data-testid="`${testId}__footer`"
+      class="flex min-w-full flex-col border-t-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-(--text-muted)"
+    >
       <div class="flex items-center px-(--spacing-sm) py-(--spacing-xs)">
         <Pagination
           class="w-full"
@@ -1498,7 +1509,7 @@
           @update:page-size="(size) => table.setPageSize(size)"
         />
       </div>
-    </TableFooter>
+    </div>
     <slot
       v-else-if="!dataDriven"
       name="footer"
