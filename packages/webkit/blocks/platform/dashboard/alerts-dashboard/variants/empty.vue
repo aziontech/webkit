@@ -10,6 +10,7 @@
   import SeverityTag from '@aziontech/webkit/severity-tag'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
@@ -442,10 +443,9 @@
                 />
               </template>
               <template #cell-status="{ row }">
-                <Tag
+                <Table.CellStatus
                   :label="row.status"
                   :severity="statusSeverity[row.status]"
-                  size="small"
                 />
               </template>
             </TableRoot>

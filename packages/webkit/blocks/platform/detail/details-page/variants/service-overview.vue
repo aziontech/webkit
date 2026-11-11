@@ -1,5 +1,6 @@
 <script setup>
   import Accordion from '@aziontech/webkit/accordion'
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -11,32 +12,33 @@
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
+  import DrawerDescription from '@aziontech/webkit/drawer-description'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Flow from '@aziontech/webkit/flow'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
-  import Alert from '@aziontech/webkit/alert'
-  import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
+  import SectionHeader from '@aziontech/webkit/section-header'
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, reactive, ref, watch } from 'vue'
+  import TopologyDiagram from '@aziontech/webkit/topology-diagram'
+  import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
   const navGroups = [
     {
@@ -403,7 +405,100 @@
     }
   ]
 
-  const topologyLevels = [
+  const SERVICE = { name: 'service-01' }
+
+  const detailOpen = ref(false)
+
+  const targets = {
+    policy: {
+      kind: 'Policy',
+      icon: 'pi pi-shield',
+      options: [
+        { value: 'payments-api', label: 'payments-api' },
+        { value: 'api-hardening', label: 'api-hardening' },
+        { value: 'partner-gateway', label: 'partner-gateway' },
+        { value: 'production-policy', label: 'production-policy' },
+        { value: 'canary-policy', label: 'canary-policy' }
+      ],
+      unbound: 'Requests reach the resource without inspection.'
+    },
+    errorPage: {
+      kind: 'Error Page',
+      icon: 'pi pi-file',
+      options: [
+        { value: 'Branded 404', label: 'Branded 404' },
+        { value: 'Maintenance window', label: 'Maintenance window' },
+        { value: 'Server error', label: 'Server error' },
+        { value: 'Blocked by policy', label: 'Blocked by policy' },
+        { value: 'Rate limited', label: 'Rate limited' }
+      ],
+      unbound: 'Errors answer with the default page.'
+    },
+    origin: {
+      kind: 'Origin',
+      icon: 'pi pi-link',
+      options: [
+        { value: 'web-app-storage', label: 'web-app-storage' },
+        { value: 'api-primary', label: 'api-primary' },
+        { value: 'assets-storage', label: 'assets-storage' },
+        { value: 'api-failover', label: 'api-failover' },
+        { value: 'uploads', label: 'uploads' }
+      ],
+      removable: false,
+      bound:
+        'Provisioned with this service. It is the resource’s origin, so it can be re-pointed but not removed.',
+      fields: [
+        { label: 'ID', value: '1599818521' },
+        { label: 'Type', value: 'Storage' },
+        { label: 'Address', value: 'web-app-assets' }
+      ]
+    }
+  }
+
+  const deployed = reactive({ policy: '', errorPage: '', origin: 'web-app-storage' })
+  const staged = reactive({})
+  const expanded = ref([])
+  const stagedCount = computed(() => Object.keys(staged).length)
+  const stagedNote = ref('')
+
+  const slotNode = (key) => {
+    const target = targets[key]
+    const pick = staged[key]
+    const removing = pick === ''
+    const value = pick === undefined ? deployed[key] : pick
+    const base = {
+      key,
+      kind: target.kind,
+      icon: target.icon,
+      bindable: true,
+      bindOptions: target.options,
+      removable: target.removable !== false
+    }
+    if (!value) {
+      return {
+        ...base,
+        status: removing ? 'Staged' : '',
+        severity: removing ? 'warning' : 'neutral',
+        dashed: true,
+        message: removing ? `Deploy to remove this ${target.kind.toLowerCase()}.` : target.unbound
+      }
+    }
+    return {
+      ...base,
+      name: value,
+      boundValue: value,
+      status: pick === undefined ? 'Active' : 'Staged',
+      severity: pick === undefined ? 'success' : 'warning',
+      dashed: pick !== undefined,
+      message:
+        pick === undefined
+          ? target.bound || ''
+          : `Deploy to apply this ${target.kind.toLowerCase()}.`,
+      fields: pick === undefined ? target.fields : undefined
+    }
+  }
+
+  const topologyLevels = computed(() => [
     {
       key: 'domains',
       nodes: [
@@ -413,14 +508,13 @@
           icon: 'pi pi-globe',
           name: 'service-01.example.com',
           status: '1 domain',
-          severity: 'secondary',
-          add: true,
+          severity: 'neutral',
           fields: [
             {
               label: 'Generated domain',
               value: 'service-01.example.com',
-              copy: true,
-              url: 'https://service-01.example.com'
+              copyable: true,
+              href: 'https://service-01.example.com'
             }
           ]
         }
@@ -433,7 +527,7 @@
           key: 'service',
           kind: 'Service',
           icon: 'pi pi-server',
-          name: 'service-01',
+          name: SERVICE.name,
           status: 'Live',
           severity: 'success',
           href: '/services/1020655',
@@ -442,45 +536,15 @@
             {
               label: 'Domain',
               value: 'service-01.example.com',
-              copy: true,
-              url: 'https://service-01.example.com'
+              copyable: true,
+              href: 'https://service-01.example.com'
             },
             { label: 'Environment', value: 'Production' }
           ]
         }
       ]
     },
-    {
-      key: 'policy',
-      nodes: [
-        {
-          key: 'policy',
-          kind: 'Policy',
-          icon: 'pi pi-shield',
-          empty: true,
-          status: 'Not bound',
-          severity: 'secondary',
-          dashed: true,
-          message: 'Requests reach the resource without inspection.',
-          bind: {
-            bindLabel: 'Bind Policy',
-            changeLabel: 'Change Policy',
-            removeLabel: 'Remove Policy',
-            emptyLabel: 'No policies yet.',
-            groupLabel: 'Policies',
-            createLabel: 'Create Policy',
-            boundId: '',
-            options: [
-              { value: '5540123', label: 'payments-api' },
-              { value: '5540119', label: 'api-hardening' },
-              { value: '5540124', label: 'partner-gateway' },
-              { value: '5540117', label: 'production-policy' },
-              { value: '5540127', label: 'canary-policy' }
-            ]
-          }
-        }
-      ]
-    },
+    { key: 'policy', nodes: [slotNode('policy')] },
     {
       key: 'resource',
       nodes: [
@@ -498,72 +562,10 @@
             { label: 'Branch', value: 'main' }
           ]
         },
-        {
-          key: 'errorPage',
-          kind: 'Error Page',
-          icon: 'pi pi-file',
-          empty: true,
-          status: 'Not bound',
-          severity: 'secondary',
-          dashed: true,
-          terminal: true,
-          message: 'Errors answer with the default page.',
-          bind: {
-            bindLabel: 'Bind Error Page',
-            changeLabel: 'Change Error Page',
-            removeLabel: 'Remove Error Page',
-            emptyLabel: 'No error pages yet.',
-            groupLabel: 'Error Pages',
-            createLabel: 'Create Error Page',
-            boundId: '',
-            options: [
-              { value: 'cp-4013', label: 'Branded 404' },
-              { value: 'cp-4014', label: 'Maintenance window' },
-              { value: 'cp-4015', label: 'Server error' },
-              { value: 'cp-4016', label: 'Blocked by policy' },
-              { value: 'cp-4017', label: 'Rate limited' }
-            ]
-          }
-        }
+        { ...slotNode('errorPage'), terminal: true }
       ]
     },
-    {
-      key: 'origin',
-      nodes: [
-        {
-          key: 'origin',
-          kind: 'Origin',
-          icon: 'pi pi-link',
-          name: 'web-app-storage',
-          status: 'Active',
-          severity: 'success',
-          href: '/origins/1599818521/settings',
-          message:
-            'Provisioned with this service. It is the resource’s origin, so it can be re-pointed but not removed.',
-          bind: {
-            bindLabel: 'Bind Origin',
-            changeLabel: 'Change Origin',
-            removeLabel: 'Remove Origin',
-            emptyLabel: 'No origins yet.',
-            groupLabel: 'Origins',
-            createLabel: 'Create Origin',
-            boundId: '1599818521',
-            options: [
-              { value: '7710021', label: 'api-primary' },
-              { value: '7710022', label: 'assets-storage' },
-              { value: '7710023', label: 'api-failover' },
-              { value: '7710024', label: 'uploads' },
-              { value: '7710025', label: 'live-events' }
-            ]
-          },
-          fields: [
-            { label: 'ID', value: '1599818521' },
-            { label: 'Type', value: 'Storage' },
-            { label: 'Address', value: 'web-app-assets' }
-          ]
-        }
-      ]
-    },
+    { key: 'origin', nodes: [slotNode('origin')] },
     {
       key: 'storage',
       nodes: [
@@ -584,10 +586,80 @@
         }
       ]
     }
-  ]
+  ])
 
-  const detailOpen = ref(false)
-  const openNodes = reactive({})
+  const stagedChanges = computed(() =>
+    Object.entries(staged).map(([key, value]) => ({
+      key,
+      kind: targets[key].kind,
+      from: deployed[key] || 'Not bound',
+      to: value || 'Removed'
+    }))
+  )
+
+  const bind = (key, value) => {
+    if (value === deployed[key]) delete staged[key]
+    else staged[key] = value
+    stagedNote.value = `${value} staged on ${targets[key].kind.toLowerCase()}.`
+  }
+  const unbind = (key) => {
+    if (staged[key] !== undefined && staged[key] !== '') delete staged[key]
+    else if (deployed[key]) staged[key] = ''
+    stagedNote.value = `${targets[key].kind} staged for removal.`
+  }
+  const createTarget = (key) => {
+    stagedNote.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
+  }
+
+  const topologyRef = ref(null)
+  const showTopology = (key) => {
+    detailOpen.value = false
+    if (!expanded.value.includes(key)) expanded.value = [...expanded.value, key]
+    topologyRef.value?.scrollIntoView({ block: 'start' })
+  }
+
+  const deployOpen = ref(false)
+  const deploying = ref(false)
+  const RUN_TOAST = 'service-deploy'
+  let timer
+
+  const editStaged = () => {
+    toast.dismiss(RUN_TOAST)
+    topologyRef.value?.scrollIntoView({ block: 'start' })
+  }
+
+  const runDeploy = () => {
+    deployOpen.value = false
+    deploying.value = true
+    const changes = stagedChanges.value.length
+    toast.loading(`Deploying ${SERVICE.name}…`, {
+      id: RUN_TOAST,
+      description: 'It keeps running if you leave this page.'
+    })
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      for (const [key, value] of Object.entries(staged)) {
+        deployed[key] = value
+        delete staged[key]
+      }
+      deploying.value = false
+      stagedNote.value = ''
+      toast.success(`${SERVICE.name} is live.`, {
+        id: RUN_TOAST,
+        description: changes
+          ? `${changes} topology ${changes === 1 ? 'change' : 'changes'} now serve Production.`
+          : 'Production serves the active version.',
+        duration: 0,
+        closable: true,
+        actions: [
+          { label: 'Edit', onClick: editStaged },
+          { label: 'Redeploy', onClick: runDeploy }
+        ]
+      })
+    }, 1500)
+  }
+
+  onBeforeUnmount(() => clearTimeout(timer))
 
   const doneCount = computed(() => productionSteps.filter((step) => step.done).length)
   const complete = computed(
@@ -1095,12 +1167,22 @@
               :label="tab.label"
             />
             <template #actions>
-              <Button
-                label="Deploy"
-                kind="outlined"
-                size="medium"
-                icon="pi pi-cloud-upload"
-              />
+              <div class="flex items-center gap-(--spacing-xs)">
+                <Tag
+                  v-if="stagedCount"
+                  :label="`${stagedCount} ${stagedCount === 1 ? 'change' : 'changes'}`"
+                  severity="warning"
+                  size="small"
+                />
+                <Button
+                  label="Deploy"
+                  kind="outlined"
+                  size="medium"
+                  icon="pi pi-cloud-upload"
+                  :loading="deploying"
+                  @click="deployOpen = true"
+                />
+              </div>
             </template>
           </PageTabs>
 
@@ -1656,7 +1738,11 @@
                                   :label="step.actionLabel || step.title"
                                   kind="outlined"
                                   size="small"
-                                  @click="detailOpen = false"
+                                  @click="
+                                    step.id in targets
+                                      ? showTopology(step.id)
+                                      : (detailOpen = false)
+                                  "
                                 />
                               </Item.Footer>
                             </Item>
@@ -1677,253 +1763,36 @@
                     </DrawerPortal>
                   </Drawer>
 
-                  <div class="flex flex-col gap-(--layout-group-gap)">
-                    <PageHeader
+                  <div
+                    ref="topologyRef"
+                    class="flex scroll-mt-(--spacing-lg) flex-col gap-(--layout-group-gap)"
+                  >
+                    <SectionHeader
                       title="Deployment topology"
+                      description="How a request reaches this service in Production. Bind, change or remove a policy, an error page or the origin here; the change is staged until you deploy."
                       size="small"
                     />
-
-                    <Card :padded="false">
-                      <template #content>
-                        <div class="overflow-x-auto">
-                          <Flow align="start">
-                            <Flow.Parallel
-                              v-for="level in topologyLevels"
-                              :key="level.key"
-                              align="start"
-                            >
-                              <Flow.Node
-                                v-for="node in level.nodes"
-                                :key="node.key"
-                                unstyled
-                                :terminal="Boolean(node.terminal)"
-                                class="w-full"
-                              >
-                                <div
-                                  :data-state="openNodes[node.key] ? 'open' : 'closed'"
-                                  :data-dashed="node.dashed || null"
-                                  class="w-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) shadow-sm transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) data-dashed:border-dashed"
-                                >
-                                  <Flow.Anchor>
-                                    <button
-                                      :id="`${node.key}-trigger`"
-                                      type="button"
-                                      :aria-expanded="Boolean(openNodes[node.key])"
-                                      :aria-controls="`${node.key}-body`"
-                                      :data-state="openNodes[node.key] ? 'open' : 'closed'"
-                                      class="group flex w-full items-center gap-(--spacing-xxs) rounded-t-(--shape-card) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs) text-start outline-none transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none"
-                                      @click="openNodes[node.key] = !openNodes[node.key]"
-                                    >
-                                      <i
-                                        :class="node.icon"
-                                        class="shrink-0 text-body-xs leading-none text-(--text-muted)"
-                                        aria-hidden="true"
-                                      />
-                                      <span class="truncate text-label-sm text-(--text-muted)">{{
-                                        node.kind
-                                      }}</span>
-                                      <div class="shrink-0 ms-auto">
-                                        <Tag
-                                          :severity="node.severity"
-                                          :label="node.status"
-                                          size="small"
-                                        />
-                                      </div>
-                                      <i
-                                        class="pi pi-chevron-down shrink-0 text-(--text-muted) transition-transform duration-150 ease-out group-data-[state=open]:rotate-180 motion-reduce:transition-none"
-                                        aria-hidden="true"
-                                      />
-                                    </button>
-                                  </Flow.Anchor>
-
-                                  <div
-                                    class="flex min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"
-                                  >
-                                    <span
-                                      v-if="node.empty"
-                                      class="min-w-0 truncate text-label-sm text-(--text-default)"
-                                      >—</span
-                                    >
-                                    <div
-                                      v-else
-                                      class="min-w-0"
-                                    >
-                                      <Tooltip
-                                        :text="node.href ? `Open ${node.name} in ${node.kind}` : ''"
-                                        :disabled="!node.href"
-                                        class="w-full"
-                                      >
-                                        <component
-                                          :is="node.href ? 'a' : 'span'"
-                                          :href="node.href || undefined"
-                                          :data-link="Boolean(node.href) || null"
-                                          class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                                        >
-                                          <span
-                                            class="truncate underline-offset-2"
-                                            :class="node.href ? 'group-hover/link:underline' : ''"
-                                          >
-                                            {{ node.name || '—' }}
-                                          </span>
-                                          <i
-                                            v-if="node.href"
-                                            class="pi pi-external-link shrink-0 text-body-xs leading-none"
-                                            aria-hidden="true"
-                                          />
-                                        </component>
-                                      </Tooltip>
-                                    </div>
-
-                                    <div
-                                      v-if="node.bind || node.add"
-                                      class="ms-auto flex shrink-0 items-center"
-                                    >
-                                      <div
-                                        v-if="node.bind"
-                                        class="flex shrink-0 items-center gap-(--spacing-xxs)"
-                                      >
-                                        <DropdownMenu placement="bottom-end">
-                                          <DropdownMenu.Trigger>
-                                            <Tooltip
-                                              :text="
-                                                node.bind.boundId
-                                                  ? node.bind.changeLabel
-                                                  : node.bind.bindLabel
-                                              "
-                                            >
-                                              <IconButton
-                                                :icon="
-                                                  node.bind.boundId ? 'pi pi-pencil' : 'pi pi-plus'
-                                                "
-                                                kind="outlined"
-                                                size="small"
-                                                :aria-label="
-                                                  node.bind.boundId
-                                                    ? node.bind.changeLabel
-                                                    : node.bind.bindLabel
-                                                "
-                                              />
-                                            </Tooltip>
-                                          </DropdownMenu.Trigger>
-
-                                          <DropdownMenu.Group
-                                            :label="
-                                              node.bind.options.length ? node.bind.groupLabel : ''
-                                            "
-                                          >
-                                            <template
-                                              v-if="!node.bind.options.length"
-                                              #top
-                                            >
-                                              <span class="text-body-xs text-(--text-muted)">{{
-                                                node.bind.emptyLabel
-                                              }}</span>
-                                            </template>
-                                            <DropdownMenu.Option
-                                              v-for="option in node.bind.options"
-                                              :key="option.value"
-                                              :value="option.value"
-                                              :label="option.label"
-                                              :selected="
-                                                String(option.value) === String(node.bind.boundId)
-                                              "
-                                            />
-                                          </DropdownMenu.Group>
-
-                                          <DropdownMenu.Group>
-                                            <DropdownMenu.Option
-                                              value="__create__"
-                                              :label="node.bind.createLabel"
-                                            />
-                                          </DropdownMenu.Group>
-                                        </DropdownMenu>
-
-                                        <Tooltip
-                                          v-if="node.bind.boundId && node.removable"
-                                          :text="node.bind.removeLabel"
-                                        >
-                                          <IconButton
-                                            icon="pi pi-times"
-                                            kind="outlined"
-                                            size="small"
-                                            :aria-label="node.bind.removeLabel"
-                                          />
-                                        </Tooltip>
-                                      </div>
-                                      <Tooltip
-                                        v-else
-                                        text="Add Domain"
-                                      >
-                                        <IconButton
-                                          icon="pi pi-plus"
-                                          kind="outlined"
-                                          size="small"
-                                          aria-label="Add Domain"
-                                        />
-                                      </Tooltip>
-                                    </div>
-                                  </div>
-
-                                  <div
-                                    :id="`${node.key}-body`"
-                                    role="region"
-                                    :aria-labelledby="`${node.key}-trigger`"
-                                    :inert="!openNodes[node.key] || undefined"
-                                    :data-state="openNodes[node.key] ? 'open' : 'closed'"
-                                    class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-150 ease-out data-[state=open]:grid-rows-[1fr] motion-reduce:transition-none"
-                                  >
-                                    <div class="overflow-hidden">
-                                      <div
-                                        class="flex flex-col gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md)"
-                                      >
-                                        <p
-                                          v-if="node.message"
-                                          class="text-body-xs text-(--text-muted)"
-                                        >
-                                          {{ node.message }}
-                                        </p>
-
-                                        <div
-                                          v-for="field in node.fields"
-                                          :key="field.label"
-                                          class="flex flex-col gap-(--spacing-xxs)"
-                                        >
-                                          <span class="text-label-sm text-(--text-muted)">{{
-                                            field.label
-                                          }}</span>
-                                          <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                            <a
-                                              v-if="field.url"
-                                              :href="field.url"
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              class="truncate text-body-xs text-(--text-default) hover:underline"
-                                            >
-                                              {{ field.value }}
-                                            </a>
-                                            <span
-                                              v-else
-                                              class="truncate text-body-xs text-(--text-default)"
-                                              >{{ field.value }}</span
-                                            >
-                                            <CopyButton
-                                              v-if="field.copy"
-                                              kind="outlined"
-                                              :value="field.value"
-                                              :aria-label="`Copy ${node.kind} ${field.label.toLowerCase()}`"
-                                            />
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </Flow.Node>
-                            </Flow.Parallel>
-                          </Flow>
-                        </div>
-                      </template>
-                    </Card>
+                    <div
+                      class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
+                    >
+                      <TopologyDiagram
+                        v-model:expanded="expanded"
+                        :levels="topologyLevels"
+                        @bind="bind"
+                        @remove="unbind"
+                        @create="createTarget"
+                      />
+                    </div>
+                    <p
+                      role="status"
+                      class="m-0 text-body-sm text-(--text-muted)"
+                    >
+                      {{
+                        stagedCount
+                          ? `${stagedNote} ${stagedCount} staged. Deploy to apply.`
+                          : stagedNote
+                      }}
+                    </p>
                   </div>
                 </section>
               </div>
@@ -2122,5 +1991,77 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
+    <Drawer
+      v-model:open="deployOpen"
+      side="right"
+      size="medium"
+    >
+      <DrawerPortal>
+        <DrawerOverlay />
+        <DrawerContent>
+          <PanelHeader class="w-full">
+            <DrawerTitle>Deploy {{ SERVICE.name }}</DrawerTitle>
+            <DrawerClose />
+          </PanelHeader>
+          <PanelContent>
+            <div class="flex flex-col gap-(--spacing-md)">
+              <DrawerDescription>
+                The service goes to Production with the changes below. The deployment that is live
+                keeps serving until the new one is ready.
+              </DrawerDescription>
+              <section
+                aria-labelledby="service-deploy-changes"
+                class="flex flex-col gap-(--spacing-xs)"
+              >
+                <h3
+                  id="service-deploy-changes"
+                  class="m-0 text-label-md text-(--text-default)"
+                >
+                  Topology changes
+                </h3>
+                <ul
+                  v-if="stagedChanges.length"
+                  class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
+                >
+                  <li
+                    v-for="change in stagedChanges"
+                    :key="change.key"
+                    class="flex flex-wrap items-center justify-between gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
+                  >
+                    <span class="text-body-sm text-(--text-default)">{{ change.kind }}</span>
+                    <span class="text-body-sm text-(--text-muted)"
+                      >{{ change.from }} to {{ change.to }}</span
+                    >
+                  </li>
+                </ul>
+                <p
+                  v-else
+                  class="m-0 text-body-sm text-(--text-muted)"
+                >
+                  No topology change is staged. The deploy publishes the service as it is.
+                </p>
+              </section>
+            </div>
+          </PanelContent>
+          <PanelFooter>
+            <div class="flex w-full justify-end gap-(--spacing-xs)">
+              <Button
+                label="Cancel"
+                kind="outlined"
+                @click="deployOpen = false"
+              />
+              <Button
+                label="Deploy"
+                kind="primary"
+                icon="pi pi-cloud-upload"
+                @click="runDeploy"
+              />
+            </div>
+          </PanelFooter>
+        </DrawerContent>
+      </DrawerPortal>
+    </Drawer>
+
+    <Toaster position="bottom-right" />
   </div>
 </template>

@@ -1,18 +1,18 @@
 # RulesList (`platform/view/rules-list`)
 
-> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (stacking to cards when narrow) with Order, Name, Description, Status and Last modified. The Order cell carries a position `Input` (type a number and press Enter), a grip `IconButton` that drags the row or moves it with the up and down arrow keys, and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`.
+> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (stacking to cards when narrow) with the grip, Move, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Move cell adds Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`.
 
 - Surface: product
 - Source: `blocks/platform/view/rules-list/rules-list.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/rules-list")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [Switch](../../../components/switch.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
 
 rules list; rules engine list; reorder rules; rule order; drag and drop reorder; firewall rules; request and response phases; review changes; enable disable rule; lista de regras; ordem das regras; reordenar regras; regras do firewall; fases de requisição e resposta; lista de reglas; reordenar reglas
 
-An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys or a typed position move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves.
+An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys or Move up and Move down move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves.
 
 ## When to use
 
@@ -42,11 +42,11 @@ A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, th
 
 ### D. Rules table — `TableRoot`, `Tag`, `Switch` (required)
 
-A data-driven `TableRoot` per phase (`row-key="id"`, no sorting: order is the data's), so rows stack as cards in a narrow container: Order (200 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). Each cell slot wraps its content in one element carrying the rule id and the drag state, so the panel around the table handles drag over and drop for the whole phase and every cell of the target row draws the drop line.
+A data-driven `TableRoot` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`), so rows stack as cards in a narrow container: the table's own grip column (Order), Move (96 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
 
 ### E. Order controls — `Input`, `IconButton`, `Tooltip` (required)
 
-In the Order cell, in this order: a small position `Input` (numeric, centered; Enter or blur moves the rule there, Escape cancels), a grip `IconButton` (`pi pi-bars`) that is the drag handle and moves the rule one place with the up and down arrow keys, and Move up and Move down `IconButton`s. Each control is named after its rule and phase, and its `Tooltip` repeats the action or, when it is disabled, the reason. Leading locked rules are pinned: their controls are disabled and nothing can move above them. After a move, focus returns to the same control on the moved rule (the grip when that control is now disabled), and a polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
+The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow Up, Arrow Down, Home or End. `row-reorderable` returns false for a locked rule, while a search narrows the list and while saving, so those grips are disabled and no row can be dropped on or moved past a pinned rule. The Move cell holds Move up and Move down `IconButton`s, the single-pointer way to reorder (WCAG 2.5.7); each is named after its rule and, when disabled, carries the reason ("Move Default rule down. The default rule runs first and stays first."), which its `Tooltip` repeats. After a move with them, focus returns to the same button on the moved rule (the other one, or the grip, when that one is now disabled) and the block's polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
 
 ### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Toaster` (required)
 
@@ -59,7 +59,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 ## Do
 
 - Keep phases separate: a rule moves only within its phase, and drag ignores drops on another phase.
-- Offer every way to move: drag for a pointer, arrow keys on the grip, Move up and Move down for touch and switch access, and a typed position for long lists.
+- Offer every way to move: drag for a pointer, arrow keys, Home and End on the grip, and Move up and Move down for touch and switch access.
 - Say why a control is disabled, in its accessible name and its tooltip.
 - Collect changes and apply them only after Review changes and Save; the review lists every rule whose position changes, not only the one the user dragged.
 - Let a rule be turned off in place; an inactive rule keeps its position and is skipped at runtime.
@@ -76,7 +76,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 ## Copy
 
 - **Phase triggers:** "Request phase", "Response phase", with "5 rules" or "2 of 5" beside.
-- **Order control names:** "Reorder Docs rewrite, position 5 of 5 in the Request phase. Use the up and down arrow keys to move it.", "Move Docs rewrite up".
+- **Order control names:** "Reorder Docs rewrite, position 5 of 5" (the table's grip, described by its drag-or-arrow hint), "Move Docs rewrite up", and when disabled "Move Default rule down. The default rule runs first and stays first."
 - **Disabled reasons:** "The default rule runs first and stays first.", "Clear the search to change the order rules run in.", "There is no other rule in this phase to move it past."
 - **Announcements:** "Docs rewrite moved to position 3 of 5 in the Request phase.", "Changes discarded. The rules are back in their saved order."
 - **Save bar:** "3 changes to the rules, not saved yet." with Discard and Review changes.
@@ -89,7 +89,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 
 - Each phase is a disclosure: the trigger is a button inside an `h2` with `aria-expanded`, and the panel is a region named by it.
 - Every Order control has a name that includes the rule and the phase; disabled controls include the reason.
-- Keyboard: Tab reaches the position field, grip, Move up, Move down, the rule link and its switch, in that order; the grip moves the rule with Up and Down; Enter in the position field commits and Escape cancels. Focus follows the moved rule.
+- Keyboard: Tab reaches the grip, Move up, Move down, the rule link and its switch, in that order; the grip moves the rule with Up, Down, Home and End and Escape cancels a drag. Focus follows the moved rule.
 - Moves and discards are announced once in a polite `role="status"` region that exists from the first render.
 - The `Switch` is named "Run <rule>"; its visible Active or Inactive text is hidden from the accessibility tree so the state is read once, from `aria-checked`.
 - The review dialog traps focus, returns it to Review changes on close, and is not dismissible while saving; the failure `Alert` is read when it appears.
@@ -104,6 +104,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 - Searching: "cache" typed, reordering off with its `Alert`, phases reading "n of total".
 - Empty: a firewall with no rules, the Request phase showing its `EmptyState`.
 - Loading: skeleton rows in each phase.
+- EditRule: the list composed with `platform/edit/rule-builder`. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
 
@@ -121,6 +122,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 - `Searching` — A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip.
 - `Empty` — A firewall with no rules: the Request phase panel shows a small EmptyState with Add Rule instead of the table.
 - `Loading` — While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns.
+- `EditRule` — The list composed with `platform/edit/rule-builder`: a rule's name opens the large rule-builder `Drawer` as Edit Rule, seeded with that rule's criteria and behaviors and its phase locked; Add Rule in the header (or in an empty phase) opens it as Add Rule in that phase. Saving an edit updates the row in place and confirms it in a toast; a new rule lands last in its phase, the phase opens, and the toast offers Edit. Neither changes the run order, so the SaveBar only counts moves and status switches.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/rules-list", { variant })`, or the file under `blocks/platform/view/rules-list/variants/`.
 
@@ -320,6 +322,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
   const lockReason = (phase, item) => {
     if (item.locked) return 'The default rule runs first and stays first.'
     if (searching.value) return 'Clear the search to change the order rules run in.'
+    if (saving.value) return 'Wait for the save to finish.'
     if (!canReorder(phase)) return 'There is no other rule in this phase to move it past.'
     return ''
   }
@@ -338,7 +341,10 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
       const row = listEl.value?.querySelector(`[data-rule-id="${id}"]`)
       const target = row?.querySelector(`[data-control="${control}"]`)
       const usable =
-        target && !target.disabled ? target : row?.querySelector('[data-control="grip"]')
+        target && !target.disabled
+          ? target
+          : (row?.querySelector('[data-control]:not(:disabled)') ??
+            row?.closest('[data-reorder-row]')?.querySelector('[data-reorder-handle]'))
       usable?.focus({ preventScroll: false })
     })
 
@@ -359,81 +365,20 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
     moveTo(phase, index, index + direction, control)
   }
 
-  const drafts = reactive({})
-  const positionValue = (item, index) => drafts[item.id] ?? String(index + 1)
-  const commitPosition = (phase, item) => {
-    const typed = Number.parseInt(drafts[item.id] ?? '', 10)
-    delete drafts[item.id]
-    if (!Number.isFinite(typed)) return
-    const from = rules[phase].indexOf(item)
-    moveTo(phase, from, typed - 1, 'position')
-  }
-  const cancelPosition = (item) => {
-    delete drafts[item.id]
-  }
-
-  const drag = reactive({ phase: null, from: -1, over: -1 })
-  const onDragStart = (phase, index, event) => {
-    if (!canReorder(phase) || index < pinned(phase)) return
-    drag.phase = phase
-    drag.from = index
-    if (event.dataTransfer) {
-      event.dataTransfer.effectAllowed = 'move'
-      event.dataTransfer.setData('text/plain', rules[phase][index].id)
-      const row = event.currentTarget?.closest?.('[data-rule-id]')
-      if (row) event.dataTransfer.setDragImage(row, 16, 16)
-    }
-  }
-  const onDragEnd = () => {
-    drag.phase = null
-    drag.from = -1
-    drag.over = -1
-  }
-  const onDrop = (phase, index) => {
-    const from = drag.from
-    const samePhase = drag.phase === phase
-    onDragEnd()
-    if (samePhase && from >= 0) moveTo(phase, from, index, null)
-  }
-  const isDragging = (phase, index) => drag.phase === phase && drag.from === index
-  const isDropTarget = (phase, index) =>
-    drag.phase === phase && drag.over === index && drag.from !== index && index >= pinned(phase)
   const position = (phase, item) => rules[phase].indexOf(item)
-  const cellState = (phase, item) => {
-    const index = position(phase, item)
-    return {
-      'data-rule-cell': item.id,
-      'data-dragging': isDragging(phase, index) || null,
-      'data-drop': isDropTarget(phase, index) || null
-    }
+  const reorderRows = (phase, next) => {
+    if (searching.value) return
+    rules[phase] = next
   }
-  const indexFromEvent = (phase, event) => {
-    const id = event.target?.closest?.('[data-rule-cell]')?.getAttribute('data-rule-cell')
-    return rules[phase].findIndex((item) => item.id === id)
-  }
-  const onPanelDragOver = (phase, event) => {
-    if (drag.phase !== phase) return
-    event.preventDefault()
-    const index = indexFromEvent(phase, event)
-    if (index >= 0) drag.over = index
-  }
-  const onPanelDrop = (phase, event) => {
-    if (drag.phase !== phase) return
-    event.preventDefault()
-    const index = indexFromEvent(phase, event)
-    if (index >= 0) onDrop(phase, index)
-    else onDragEnd()
-  }
+  const reorderable = (phase) => (row) => !lockReason(phase, row)
 
   const columns = [
-    { id: 'order', header: 'Order', width: 200, hideable: false },
+    { id: 'move', header: 'Move', width: 96, hideable: false },
     { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 3 },
     { id: 'status', header: 'Status', width: 152 },
     { accessorKey: 'modified', header: 'Last modified', grow: 2 }
   ]
-  const CELL_CLASS =
-    "relative flex w-full min-w-0 items-center gap-(--spacing-xxs) self-stretch transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-dragging:opacity-60 data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:top-0 data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
 
   const setActive = (item, value) => {
     item.active = value
@@ -594,10 +539,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                   </span>
                 </Accordion.Trigger>
                 <Accordion.Content>
-                  <div
-                    @dragover="onPanelDragOver(group.value, $event)"
-                    @drop="onPanelDrop(group.value, $event)"
-                  >
+                  <div>
                     <TableRoot
                       v-if="loading || group.total"
                       :data="loading ? [] : group.items"
@@ -605,81 +547,42 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                       row-key="id"
                       :bordered="false"
                       :loading="loading"
+                      reorderable
+                      :row-reorderable="reorderable(group.value)"
+                      :aria-label="`${group.label} phase rules, in the order they run`"
+                      @update:data="reorderRows(group.value, $event)"
                     >
-                      <template #cell-order="{ row }">
+                      <template #cell-move="{ row }">
                         <div
-                          v-bind="cellState(group.value, row)"
                           :data-rule-id="row.id"
-                          :class="CELL_CLASS"
+                          class="flex items-center gap-(--spacing-xxs)"
                         >
-                          <span class="w-14 shrink-0 [&_input]:text-center [&_input]:tabular-nums">
-                            <Input
-                              :model-value="positionValue(row, position(group.value, row))"
-                              size="small"
-                              inputmode="numeric"
-                              autocomplete="off"
-                              data-control="position"
-                              :disabled="Boolean(lockReason(group.value, row))"
-                              :aria-label="
-                                lockReason(group.value, row)
-                                  ? `Position ${position(group.value, row) + 1} of ${group.total} in the ${group.label} phase. ${lockReason(group.value, row)}`
-                                  : `Position of ${row.name} in the ${group.label} phase. Type a number from ${pinned(group.value) + 1} to ${group.total} and press Enter to move it.`
-                              "
-                              @update:model-value="drafts[row.id] = $event"
-                              @focus="$event.target.select?.()"
-                              @keydown.enter.prevent="commitPosition(group.value, row)"
-                              @keydown.esc.prevent="cancelPosition(row)"
-                              @blur="commitPosition(group.value, row)"
-                            />
-                          </span>
-                          <Tooltip
-                            :text="
-                              lockReason(group.value, row) ||
-                              'Drag to reorder, or use the arrow keys'
-                            "
-                          >
-                            <IconButton
-                              icon="pi pi-bars"
-                              kind="outlined"
-                              size="small"
-                              data-control="grip"
-                              :draggable="!lockReason(group.value, row)"
-                              :disabled="Boolean(lockReason(group.value, row))"
-                              :aria-label="
-                                lockReason(group.value, row)
-                                  ? `${row.name} cannot be reordered. ${lockReason(group.value, row)}`
-                                  : `Reorder ${row.name}, position ${position(group.value, row) + 1} of ${group.total} in the ${group.label} phase. Use the up and down arrow keys to move it.`
-                              "
-                              @dragstart="
-                                onDragStart(group.value, position(group.value, row), $event)
-                              "
-                              @dragend="onDragEnd"
-                              @keydown.up.prevent="
-                                step(group.value, position(group.value, row), -1, 'grip')
-                              "
-                              @keydown.down.prevent="
-                                step(group.value, position(group.value, row), 1, 'grip')
-                              "
-                            />
-                          </Tooltip>
-                          <Tooltip text="Move up">
+                          <Tooltip :text="lockReason(group.value, row) || 'Move up'">
                             <IconButton
                               icon="pi pi-chevron-up"
                               kind="outlined"
                               size="small"
                               data-control="up"
-                              :aria-label="`Move ${row.name} up`"
+                              :aria-label="
+                                lockReason(group.value, row)
+                                  ? `Move ${row.name} up. ${lockReason(group.value, row)}`
+                                  : `Move ${row.name} up`
+                              "
                               :disabled="!canMove(group.value, position(group.value, row), -1)"
                               @click="step(group.value, position(group.value, row), -1, 'up')"
                             />
                           </Tooltip>
-                          <Tooltip text="Move down">
+                          <Tooltip :text="lockReason(group.value, row) || 'Move down'">
                             <IconButton
                               icon="pi pi-chevron-down"
                               kind="outlined"
                               size="small"
                               data-control="down"
-                              :aria-label="`Move ${row.name} down`"
+                              :aria-label="
+                                lockReason(group.value, row)
+                                  ? `Move ${row.name} down. ${lockReason(group.value, row)}`
+                                  : `Move ${row.name} down`
+                              "
                               :disabled="!canMove(group.value, position(group.value, row), 1)"
                               @click="step(group.value, position(group.value, row), 1, 'down')"
                             />
@@ -687,10 +590,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                         </div>
                       </template>
                       <template #cell-name="{ row }">
-                        <div
-                          v-bind="cellState(group.value, row)"
-                          :class="CELL_CLASS"
-                        >
+                        <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
                           <a
                             :href="`#rule-${row.id}`"
                             data-rule-name
@@ -706,20 +606,12 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                         </div>
                       </template>
                       <template #cell-description="{ row }">
-                        <div
-                          v-bind="cellState(group.value, row)"
-                          :class="CELL_CLASS"
-                        >
-                          <span class="min-w-0 truncate text-(--text-muted)">{{
-                            row.description
-                          }}</span>
-                        </div>
+                        <span class="min-w-0 truncate text-(--text-muted)">{{
+                          row.description
+                        }}</span>
                       </template>
                       <template #cell-status="{ row }">
-                        <div
-                          v-bind="cellState(group.value, row)"
-                          :class="CELL_CLASS"
-                        >
+                        <div class="flex min-w-0 items-center">
                           <label
                             class="flex min-h-10 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
                           >
@@ -734,14 +626,9 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                         </div>
                       </template>
                       <template #cell-modified="{ row }">
-                        <div
-                          v-bind="cellState(group.value, row)"
-                          :class="CELL_CLASS"
+                        <span class="min-w-0 truncate text-body-sm text-(--text-muted)"
+                          >{{ row.modified }} by {{ row.author }}</span
                         >
-                          <span class="min-w-0 truncate text-body-sm text-(--text-muted)"
-                            >{{ row.modified }} by {{ row.author }}</span
-                          >
-                        </div>
                       </template>
                       <template #empty>
                         <p

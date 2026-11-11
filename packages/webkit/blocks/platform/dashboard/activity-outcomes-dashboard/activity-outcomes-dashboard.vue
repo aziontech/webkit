@@ -11,6 +11,7 @@
   import Select from '@aziontech/webkit/select'
   import SeverityTag from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
@@ -814,10 +815,9 @@
               :loading="loading"
             >
               <template #cell-outcome="{ row }">
-                <Tag
+                <Table.CellStatus
                   :label="outcomeTag(row.outcome).label"
                   :severity="outcomeTag(row.outcome).severity"
-                  size="small"
                 />
               </template>
               <template #cell-severity="{ row }">

@@ -97,6 +97,7 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 
 - Default: Add Rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
 - Composed: Edit Rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
+- In a list: `platform/view/rules-list#EditRule` drives this drawer without its trigger (`v-model:open` from a rule's name and from Add Rule) and writes the saved rule back to its row.
 
 ## Related
 

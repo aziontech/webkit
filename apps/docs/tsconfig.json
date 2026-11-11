@@ -9,7 +9,15 @@
     "skipLibCheck": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "paths": {
+      "virtual:docs-index": ["./src/lib/virtual/docs-index.d.ts"],
+      "virtual:docs-tokens": ["./src/lib/virtual/docs-tokens.d.ts"],
+      "virtual:docs-component-loaders": ["./src/lib/virtual/docs-component-loaders.d.ts"]
+    }
   },
-  "include": ["src/**/*", "plugins/**/*", "vite.config.ts"]
+  "include": ["src/**/*", "plugins/**/*", "vite.config.ts"],
+  "vueCompilerOptions": {
+    "htmlAttributes": []
+  }
 }

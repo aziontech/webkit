@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 59b938c7265e382f7c4c1a34651b2ef29c2ca746ccc3af2f5a14bdc7e568c8d7
+checksum: aa0056a3655bf4f07753a8d4b4b2ef6af9421cf8a19fe06008b0f26adde42ceb
 created: 2026-08-22
 last_updated: 2026-08-22
 ---
@@ -106,7 +106,7 @@ _none_
 
 ## Examples
 
-- DocStep has no story file of its own, which is justified in writing here: a step cannot render outside its `DocSteps` provider (the context composable throws by design), so its anatomy — title-only steps, a step with body content, and the last step dropping its connector — is documented by the `DocSteps` stories (`Default`, `With step content`) in `DocSteps.stories.js`.
+- DocStep has no examples of its own, which is justified in writing here: a step cannot render outside its `DocSteps` provider (the context composable throws by design), so its anatomy — title-only steps, a step with body content, and the last step dropping its connector — is documented by the `DocSteps` examples in `packages/webkit/examples/doc-steps/`.
 
 ## Constraints — DO NOT
 

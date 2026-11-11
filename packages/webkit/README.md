@@ -172,6 +172,7 @@ This package lives in the [`aziontech/webkit`](https://github.com/aziontech/webk
 
 - Vue 3.5+ (components use `defineModel` and `useId`)
 - VeeValidate 4.x (form fields only)
+- TypeScript (optional): WebKit ships `.vue` and `.ts` sources with declarations for its few `.js` modules, so `vue-tsc --noEmit` checks it under `strict`. Required ARIA props such as `IconButton`'s `ariaLabel` are written `aria-label` in templates (as in the examples); add `"vueCompilerOptions": { "htmlAttributes": [] }` to your `tsconfig.json` so `vue-tsc` maps `aria-*` attributes to those props, as `apps/docs/tsconfig.json` does.
 
 ## License
 

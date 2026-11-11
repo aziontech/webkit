@@ -1,11 +1,11 @@
 # AttributeEditor (`platform/edit/attribute-editor`)
 
-> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `CopyButton`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.
+> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.
 
 - Surface: product
 - Source: `blocks/platform/edit/attribute-editor/attribute-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/attribute-editor")`
-- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -37,13 +37,13 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 The same controls row as `platform/view/table-view`, all bound to one client-mode `useCollection` call: a `PropertyFilter` labeled "Filter variables" (free text over key, ID, author and type, plus Key, Author and Type properties), outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` last. The filter, sort and page live in the URL; page size and columns are saved. See `skills/webkit-lists`.
 
-### C. Variables table — `Card`, `TableRoot`, `CopyButton`, `Avatar`, `Tooltip` (required)
+### C. Variables table — `Card`, `TableRoot`, `Table.CellId`, `Table.CellLink`, `Avatar`, `Tooltip` (required)
 
-`Card :padded="false"` around a borderless data-driven `TableRoot` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID and Value end with a `CopyButton`; a secret value shows its mask and loses its copy control. Last modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time. See `skills/webkit-tables`.
+`Card :padded="false"` around a borderless data-driven `TableRoot` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID is `Table.CellId` ("Copy variable ID") and Value is `Table.CellLink` with `copyable`; a secret value shows its mask and loses its copy control (`:copyable="!row.secret"`). Last modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time. See `skills/webkit-tables`.
 
-### D. Row actions — `DropdownMenu`, `Tooltip`, `IconButton` (required)
+### D. Row actions — `Table`, `DropdownMenu` (required)
 
-An ellipsis `IconButton` named Row actions opens a `DropdownMenu` placed `bottom-end`: Edit and Clone in the first group, Delete alone in the last. Edit opens the drawer on that variable; Clone inserts a copy right below it with `_COPY` appended to the key; Delete opens the confirmation dialog.
+`Table.CellActions`, named after the variable ("Actions for API_URL"), opens its menu of `DropdownMenu.Group`s placed `bottom-end`: Edit and Clone in the first group, Delete alone in the last. Edit opens the drawer on that variable; Clone inserts a copy right below it with `_COPY` appended to the key; Delete opens the confirmation dialog.
 
 ### E. Create and edit drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent` (required)
 
@@ -169,7 +169,6 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
   import Checkbox from '@aziontech/webkit/checkbox'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -191,6 +190,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Textarea from '@aziontech/webkit/textarea'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -866,31 +866,18 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                   </template>
 
                   <template #cell-id="{ value }">
-                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                      <span class="min-w-0 flex-1 truncate tabular-nums">{{ value }}</span>
-                      <CopyButton
-                        v-if="value"
-                        kind="outlined"
-                        :value="value"
-                        aria-label="Copy variable ID"
-                      />
-                    </div>
+                    <Table.CellId
+                      :value="value"
+                      resource="variable"
+                    />
                   </template>
 
                   <template #cell-value="{ row }">
-                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                      <span class="min-w-0 truncate">{{ displayValue(row) }}</span>
-                      <div
-                        v-if="!row.secret"
-                        class="shrink-0 ms-auto"
-                      >
-                        <CopyButton
-                          kind="outlined"
-                          :value="row.value"
-                          aria-label="Copy value"
-                        />
-                      </div>
-                    </div>
+                    <Table.CellLink
+                      :label="displayValue(row)"
+                      :copyable="!row.secret"
+                      :copy-value="row.value"
+                    />
                   </template>
 
                   <template #cell-lastModified="{ row, value }">
@@ -932,21 +919,10 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                   </template>
 
                   <template #cell-actions="{ row }">
-                    <DropdownMenu
-                      placement="bottom-end"
+                    <Table.CellActions
+                      :name="row.key"
                       @select="(event, value) => onRowAction(value, row)"
                     >
-                      <DropdownMenu.Trigger>
-                        <Tooltip text="Row actions">
-                          <IconButton
-                            icon="pi pi-ellipsis-h"
-                            kind="outlined"
-                            size="small"
-                            aria-label="Row actions"
-                          />
-                        </Tooltip>
-                      </DropdownMenu.Trigger>
-
                       <DropdownMenu.Group>
                         <DropdownMenu.Option
                           value="edit"
@@ -985,7 +961,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                           </template>
                         </DropdownMenu.Option>
                       </DropdownMenu.Group>
-                    </DropdownMenu>
+                    </Table.CellActions>
                   </template>
 
                   <template #empty>

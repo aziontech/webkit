@@ -1,11 +1,11 @@
 # FileBrowser (`platform/view/file-browser`)
 
-> The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last modified pairs the editor `Avatar` (named in a `Tooltip`) with the relative time; folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `PopoverRoot`, `Switch`, `Breadcrumb`, `SplitButton`, `Avatar`, `DropdownMenuRoot` and `EmptyState`.
+> The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last modified is `Table.CellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `PopoverRoot`, `Switch`, `Breadcrumb`, `SplitButton`, `Table.CellTime`, `Table.CellActions` and `EmptyState`.
 
 - Surface: product
 - Source: `blocks/platform/view/file-browser/file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/file-browser")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SplitButton](../../../components/split-button.md), [Switch](../../../components/switch.md), `TableRoot`, `TableSearch`, [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), [UploadProgress](../../../components/upload-progress.md)
+- Components: [Alert](../../../components/alert.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SplitButton](../../../components/split-button.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, `TableSearch`, [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), [UploadProgress](../../../components/upload-progress.md)
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -50,13 +50,13 @@ A Columns `IconButton` opens a popover placed `bottom-end` with one `Switch` per
 
 A `Breadcrumb` of the folder path starts at the storage name; each crumb jumps back to that depth. Beside it the primary medium Add to files `SplitButton` offers Upload file and Add folder. It is the page's only primary action.
 
-### F. Cell recipes — `Avatar`, `Tooltip` (optional)
+### F. Cell recipes — `Table.CellTime` (optional)
 
-Folders sort first with a link-coloured folder glyph and open on row click; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified pairs the editor's small square `Avatar`, named in a `Tooltip`, with the relative time.
+Folders sort first with a link-coloured folder glyph and open on row click; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified is `Table.CellTime`: the editor's avatar and a relative time that updates every minute, with the absolute time in its tooltip.
 
-### G. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `IconButton`, `Tooltip` (required)
+### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
-A small ellipsis `IconButton` named File actions opens a menu placed `bottom-end`: Open for a folder or Download for a file in the first group, Delete alone in the last group. The `..` row has no menu.
+`Table.CellActions`, named after the file ("Actions for logo.svg"), opens a menu placed `bottom-end`: Open for a folder or Download for a file in the first group, Delete alone in the last group. The `..` row has no menu.
 
 ### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
@@ -116,7 +116,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - **Storage name:** the resource name as created, e.g. "acme-assets"; never prefixed with the type.
 - **Search:** placeholder names the scope, e.g. "Search in folder".
 - **Add action:** "Add to files", with options "Upload file" and "Add folder".
-- **Row menu:** one verb per option, e.g. "Open", "Download", "Delete"; the trigger is named "File actions".
+- **Row menu:** one verb per option, e.g. "Open", "Download", "Delete"; the trigger is named "Actions for <file>".
 - **Delete dialog:** title and confirm `Delete file` or `Delete folder`, consequence `The selected folder will be deleted, along with all its files.`, prompt `Type <name> to confirm.`
 - **Column headers:** short fragments, e.g. "Name", "Size", "Last modified".
 - **Empty folder:** title states the fact, e.g. "This folder is empty"; description is one sentence, e.g. "Upload files or create a folder to get started."
@@ -133,7 +133,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - The `Breadcrumb` crumbs are links the keyboard reaches in order; the last crumb is the current folder.
 - Folder rows open on click and the Open option in the row menu gives the same action to keyboard users.
 - Focus order follows reading order: search, Refresh, Download CSV, Columns, path, Add to files, the rows.
-- The `Avatar` carries the author name as `alt`, repeated by its `Tooltip`.
+- `Table.CellTime` names the author and reads the absolute time to screen readers.
 - The drop overlay is `aria-hidden`: dragging is a pointer path, and Add to files with Browse files is the keyboard path to the same upload.
 - `UploadProgress` is a region named File transfers with a polite status that announces each file finishing and the outcome; percentages are not announced. The toast repeats the outcome for people who collapsed the card.
 - In the upload dialog each refused file's reason is the `aria-describedby` of its Remove button, and removing a file moves focus to the next one.
@@ -170,15 +170,12 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
 ```vue
 <script setup>
   import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -187,6 +184,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
   import SplitButton from '@aziontech/webkit/split-button'
   import Switch from '@aziontech/webkit/switch'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import TableSearch from '@aziontech/webkit/table-search'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -334,6 +332,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
         icon: GLYPHS[entry.ext] ?? 'pi pi-file',
         size: entry.size,
         lastModified: relativeTime(entry.lastModified),
+        modifiedAt: entry.lastModified,
         author: people[index % people.length]
       }))
     const list = [...folders, ...files]
@@ -584,42 +583,20 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
                 <span class="text-(--text-muted)">{{ value }}</span>
               </template>
 
-              <template #cell-lastModified="{ value, row }">
-                <div
-                  v-if="row.author || value"
-                  class="flex min-w-0 items-center gap-(--spacing-xs)"
-                >
-                  <Tooltip
-                    v-if="row.author"
-                    :text="row.author"
-                  >
-                    <Avatar
-                      :alt="row.author"
-                      :label="row.author"
-                      size="small"
-                      kind="square"
-                    />
-                  </Tooltip>
-                  <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
-                </div>
+              <template #cell-lastModified="{ row }">
+                <Table.CellTime
+                  v-if="row.modifiedAt"
+                  :value="row.modifiedAt"
+                  :author="row.author"
+                />
               </template>
 
               <template #cell-actions="{ row }">
-                <DropdownMenuRoot
+                <Table.CellActions
                   v-if="row.kind !== 'parent'"
-                  placement="bottom-end"
+                  :name="row.name"
                   @select="(event, value) => onRowAction(value, row)"
                 >
-                  <DropdownMenuTrigger>
-                    <Tooltip text="File actions">
-                      <IconButton
-                        icon="pi pi-ellipsis-h"
-                        kind="outlined"
-                        size="small"
-                        aria-label="File actions"
-                      />
-                    </Tooltip>
-                  </DropdownMenuTrigger>
                   <DropdownMenuGroup>
                     <DropdownMenuOption
                       v-if="row.kind === 'folder'"
@@ -658,7 +635,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
                       /></template>
                     </DropdownMenuOption>
                   </DropdownMenuGroup>
-                </DropdownMenuRoot>
+                </Table.CellActions>
               </template>
 
               <template #empty>

@@ -47,6 +47,7 @@
 | `offsetX` | `number` | `0` | false | Horizontal shift as a fraction of the map width; negative moves it left, positive right, past the box edge if large enough. |
 | `offsetY` | `number` | `0` | false | Vertical shift as a fraction of the map height; negative moves it up, positive down, past the box edge if large enough. |
 | `fade` | `'none' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'edges' \| 'vignette'` | `'none'` | false | Fades the map out along an axis so it meets content without a hard edge. |
+| `traffic` | `boolean` | `false` | false | Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion. |
 
 ## States
 

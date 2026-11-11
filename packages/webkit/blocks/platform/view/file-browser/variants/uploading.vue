@@ -1,6 +1,5 @@
 <script setup>
   import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -13,8 +12,6 @@
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import EmptyState from '@aziontech/webkit/empty-state'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
@@ -28,6 +25,7 @@
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
   import SplitButton from '@aziontech/webkit/split-button'
   import Switch from '@aziontech/webkit/switch'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import TableSearch from '@aziontech/webkit/table-search'
   import { toast, Toaster } from '@aziontech/webkit/toast'
@@ -186,6 +184,7 @@
         icon: GLYPHS[entry.ext] ?? 'pi pi-file',
         size: entry.size,
         lastModified: relativeTime(entry.lastModified),
+        modifiedAt: entry.lastModified,
         author: people[index % people.length]
       }))
     const list = [...folders, ...files]
@@ -633,42 +632,20 @@
                 <span class="text-(--text-muted)">{{ value }}</span>
               </template>
 
-              <template #cell-lastModified="{ value, row }">
-                <div
-                  v-if="row.author || value"
-                  class="flex min-w-0 items-center gap-(--spacing-xs)"
-                >
-                  <Tooltip
-                    v-if="row.author"
-                    :text="row.author"
-                  >
-                    <Avatar
-                      :alt="row.author"
-                      :label="row.author"
-                      size="small"
-                      kind="square"
-                    />
-                  </Tooltip>
-                  <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
-                </div>
+              <template #cell-lastModified="{ row }">
+                <Table.CellTime
+                  v-if="row.modifiedAt"
+                  :value="row.modifiedAt"
+                  :author="row.author"
+                />
               </template>
 
               <template #cell-actions="{ row }">
-                <DropdownMenuRoot
+                <Table.CellActions
                   v-if="row.kind !== 'parent'"
-                  placement="bottom-end"
+                  :name="row.name"
                   @select="(event, value) => onRowAction(value, row)"
                 >
-                  <DropdownMenuTrigger>
-                    <Tooltip text="File actions">
-                      <IconButton
-                        icon="pi pi-ellipsis-h"
-                        kind="outlined"
-                        size="small"
-                        aria-label="File actions"
-                      />
-                    </Tooltip>
-                  </DropdownMenuTrigger>
                   <DropdownMenuGroup>
                     <DropdownMenuOption
                       v-if="row.kind === 'folder'"
@@ -707,7 +684,7 @@
                       /></template>
                     </DropdownMenuOption>
                   </DropdownMenuGroup>
-                </DropdownMenuRoot>
+                </Table.CellActions>
               </template>
 
               <template #empty>

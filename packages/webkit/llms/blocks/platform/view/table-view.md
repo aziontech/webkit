@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/view/table-view/table-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/table-view")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [PropertyFilter](../../../components/property-filter.md), [Skeleton](../../../components/skeleton.md), `TableRoot`, [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md), `use-collection`, `utils/csv`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [Table](../../../components/table.md), `TableRoot`, [Tooltip](../../../components/tooltip.md), `use-collection`, `utils/csv`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -52,13 +52,13 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 `Card :padded="false"` around `TableRoot :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `enable-sorting` makes Name, Status and Last Modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. Below the container width the rows stack into label and value cards instead of scrolling sideways.
 
-### F. Cell recipes — `CopyButton`, `Tag`, `Tooltip`, `Avatar`, `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Input`, `Skeleton`, `Button` (optional)
+### F. Cell presets — `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime` (optional)
 
-The name cell pairs the resource glyph with a truncated, underline-on-hover name. ID and domain cells end with a `CopyButton`. The domain is a link that opens in a new tab, named by a `Tooltip`; a resource with more domains adds a `+N` `Tag` that opens a popover with its own count, a search `Input` past ten domains, a `Skeleton` per row while more load and a Load more `Button`. Status is a `Tag`. Last Modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time in one column.
+Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `Table.CellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `Table.CellId` (copy button named after the resource). The domain is `Table.CellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `Table.CellStatus`. Last Modified is `Table.CellTime`: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
 
-### G. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `IconButton`, `Tooltip` (required)
+### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
-An ellipsis `IconButton` named Row actions opens a menu placed `bottom-end`: the everyday actions (Deploy, View details, Clone) in one group, Delete alone in the last group. The root's `select` event hands the option value and the row to the page; Delete opens the confirmation below.
+`Table.CellActions` (an ellipsis button named after the row, e.g. "Actions for resource-01") opens a menu: the everyday actions (Deploy, View details, Clone) in one group, Delete alone in the last group. The root's `select` event hands the option value and the row to the page; Delete opens the confirmation below.
 
 ### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
@@ -115,7 +115,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 - The delete dialog traps focus, is named by its title and labels its input by the prompt.
 - The preferences dialog traps focus, is named by its title and returns focus to its trigger when it closes.
 - Sorting is announced by the table header; the row menu is reachable by keyboard and closes back to its trigger.
-- Links that open a new tab add "(opens in a new tab)" in visually hidden text; the domain popover announces its count and its loading in a `status` region.
+- Links that open a new tab add "(opens in a new tab)" in visually hidden text; the `+N` popover names its count and the copy buttons name what they copy.
 
 ## States
 
@@ -144,27 +144,19 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
 ```vue
 <script setup>
   import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PopoverContent from '@aziontech/webkit/popover-content'
-  import PopoverRoot from '@aziontech/webkit/popover-root'
-  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref, useId } from 'vue'
@@ -272,51 +264,6 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
   const resourcesTable = ref(null)
   const exportCsv = () => resourcesTable.value?.exportCsv({ filename: 'resources.csv' })
 
-  const DOMAIN_PAGE = 10
-  const WIRE_WIDTHS = ['92%', '74%', '86%', '68%', '90%', '78%', '84%', '70%', '88%', '76%']
-  const domainQuery = ref({})
-  const domainShown = ref({})
-  const domainLoading = ref({})
-  const matchingDomains = (row) => {
-    const needle = (domainQuery.value[row.id] ?? '').trim().toLowerCase()
-    return needle
-      ? row.domains.filter((domain) => domain.toLowerCase().includes(needle))
-      : row.domains
-  }
-  const visibleDomains = (row) =>
-    matchingDomains(row).slice(0, domainShown.value[row.id] ?? DOMAIN_PAGE)
-  const remainingDomains = (row) => matchingDomains(row).length - visibleDomains(row).length
-  const nextDomains = (row) => Math.min(DOMAIN_PAGE, remainingDomains(row))
-  const domainSummary = (row) => {
-    const total = row.domains.length
-    const shown = visibleDomains(row).length
-    const matched = matchingDomains(row).length
-    const searching = Boolean(domainQuery.value[row.id])
-    if (remainingDomains(row)) {
-      return searching ? `${shown} of ${matched} matching domains` : `${shown} of ${total} domains`
-    }
-    return searching ? `${matched} of ${total} domains` : `${total} domains`
-  }
-  const searchDomains = (row, value) => {
-    domainQuery.value = { ...domainQuery.value, [row.id]: value }
-    domainShown.value = { ...domainShown.value, [row.id]: DOMAIN_PAGE }
-    domainLoading.value = { ...domainLoading.value, [row.id]: false }
-  }
-  const openDomains = (row, open) => {
-    if (open) searchDomains(row, '')
-  }
-  const loadMoreDomains = (row) => {
-    if (domainLoading.value[row.id] || !remainingDomains(row)) return
-    domainLoading.value = { ...domainLoading.value, [row.id]: true }
-    setTimeout(() => {
-      domainShown.value = {
-        ...domainShown.value,
-        [row.id]: (domainShown.value[row.id] ?? DOMAIN_PAGE) + DOMAIN_PAGE
-      }
-      domainLoading.value = { ...domainLoading.value, [row.id]: false }
-    }, 420)
-  }
-
   const pending = ref(null)
   const deleteOpen = ref(false)
   const confirmation = ref('')
@@ -408,6 +355,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
           </header>
           <section class="flex min-h-0 flex-col">
             <Card
+              key="card-1"
               v-if="status === 'empty'"
               :padded="false"
             >
@@ -440,6 +388,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
               </template>
             </Card>
             <Card
+              key="card-2"
               v-else
               :padded="false"
             >
@@ -451,206 +400,47 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                   enable-sorting
                   :bordered="false"
                 >
-                  <template #cell-name="{ value }">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <i
-                        class="pi pi-box shrink-0 text-body-lg text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                      <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
-                    </div>
-                  </template>
-                  <template #cell-id="{ value }">
-                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                      <span class="min-w-0 flex-1 truncate tabular-nums">{{ value }}</span>
-                      <CopyButton
-                        v-if="value"
-                        kind="outlined"
-                        :value="value"
-                        aria-label="Copy resource ID"
-                      />
-                    </div>
-                  </template>
-                  <template #cell-domain="{ row, value }">
-                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                      <i
-                        class="pi pi-globe shrink-0 text-body-lg text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                      <div class="min-w-0">
-                        <Tooltip
-                          :text="'Open ' + value + ' in a new tab'"
-                          class="w-full"
-                        >
-                          <a
-                            :href="'https://' + value"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            data-link
-                            class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                            @click.stop
-                          >
-                            <span
-                              dir="ltr"
-                              class="truncate underline-offset-2 group-hover/link:underline"
-                              >{{ value }}</span
-                            >
-                            <span class="sr-only">(opens in a new tab)</span>
-                            <i
-                              class="pi pi-external-link shrink-0 text-body-xs leading-none"
-                              aria-hidden="true"
-                            />
-                          </a>
-                        </Tooltip>
-                      </div>
-                      <PopoverRoot
-                        v-if="row.domainCount"
-                        placement="bottom-start"
-                        width="small"
-                        @update:open="(open) => openDomains(row, open)"
-                      >
-                        <PopoverTrigger @click.stop>
-                          <div class="shrink-0 cursor-pointer">
-                            <Tag
-                              :label="'+' + row.domainCount"
-                              severity="secondary"
-                              size="small"
-                            />
-                          </div>
-                        </PopoverTrigger>
-                        <PopoverContent @click.stop>
-                          <div
-                            class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
-                          >
-                            <p class="text-label-sm text-(--text-muted)">
-                              {{ domainSummary(row) }}
-                            </p>
-                            <Input
-                              v-if="row.domains.length > 10"
-                              :model-value="domainQuery[row.id] ?? ''"
-                              size="medium"
-                              placeholder="Search domains"
-                              aria-label="Search domains"
-                              @update:model-value="(value) => searchDomains(row, value)"
-                            >
-                              <template #iconLeft>
-                                <i
-                                  class="pi pi-search"
-                                  aria-hidden="true"
-                                />
-                              </template>
-                            </Input>
-                          </div>
-                          <div
-                            class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
-                          >
-                            <a
-                              v-for="domain in visibleDomains(row)"
-                              :key="domain"
-                              :href="'https://' + domain"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                              @click.stop
-                            >
-                              <span class="truncate">{{ domain }}</span>
-                              <i
-                                class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
-                                aria-hidden="true"
-                              />
-                            </a>
-                            <div v-if="domainLoading[row.id]">
-                              <div
-                                v-for="index in nextDomains(row)"
-                                :key="index"
-                                class="flex h-7 items-center px-(--spacing-xs)"
-                              >
-                                <Skeleton
-                                  height="var(--size-3)"
-                                  :width="WIRE_WIDTHS[(index - 1) % WIRE_WIDTHS.length]"
-                                />
-                              </div>
-                            </div>
-                            <p
-                              v-if="!matchingDomains(row).length"
-                              class="px-(--spacing-xs) py-(--spacing-sm) text-center text-body-sm text-(--text-muted)"
-                            >
-                              No domain matches “{{ domainQuery[row.id] }}”.
-                            </p>
-                          </div>
-                          <div
-                            v-if="remainingDomains(row)"
-                            class="border-t border-(--border-default) p-(--spacing-xxs)"
-                          >
-                            <Button
-                              :label="'Load ' + nextDomains(row) + ' more'"
-                              kind="transparent"
-                              size="small"
-                              :loading="domainLoading[row.id]"
-                              class="w-full"
-                              @click.stop="loadMoreDomains(row)"
-                            />
-                          </div>
-                          <span
-                            class="sr-only"
-                            role="status"
-                          >
-                            {{
-                              domainLoading[row.id]
-                                ? 'Loading ' + nextDomains(row) + ' more domains'
-                                : domainSummary(row)
-                            }}
-                          </span>
-                        </PopoverContent>
-                      </PopoverRoot>
-                      <div class="shrink-0 ms-auto">
-                        <CopyButton
-                          kind="outlined"
-                          :value="value"
-                          aria-label="Copy domain name"
-                        />
-                      </div>
-                    </div>
-                  </template>
-                  <template #cell-status="{ value }">
-                    <Tag
-                      :label="value"
-                      :severity="value === 'Live' ? 'success' : 'secondary'"
-                      size="medium"
+                  <template #cell-name="{ row }">
+                    <Table.CellLink
+                      :label="row.name"
+                      :to="`/resources/${row.id}`"
+                      destination="Resources"
                     />
                   </template>
-                  <template #cell-lastModified="{ row, value }">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <Tooltip
-                        v-if="row.owner"
-                        :text="row.owner"
-                      >
-                        <Avatar
-                          :src="avatars[row.owner]"
-                          :alt="row.owner"
-                          :label="row.owner"
-                          size="small"
-                          kind="square"
-                        />
-                      </Tooltip>
-                      <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
-                    </div>
+                  <template #cell-id="{ value }">
+                    <Table.CellId
+                      :value="value"
+                      resource="resource"
+                    />
+                  </template>
+                  <template #cell-domain="{ row }">
+                    <Table.CellLink
+                      :label="row.domain"
+                      :href="`https://${row.domain}`"
+                      :more="
+                        row.domains.slice(1).map((label) => ({ label, href: `https://${label}` }))
+                      "
+                      :more-noun="{ one: 'domain', other: 'domains' }"
+                      copyable
+                    />
+                  </template>
+                  <template #cell-status="{ value }">
+                    <Table.CellStatus
+                      :label="value"
+                      :severity="value === 'Live' ? 'success' : 'secondary'"
+                    />
+                  </template>
+                  <template #cell-lastModified="{ row }">
+                    <Table.CellTime
+                      :value="row.modifiedAt"
+                      :author="row.owner"
+                    />
                   </template>
                   <template #cell-actions="{ row }">
-                    <DropdownMenuRoot
-                      placement="bottom-end"
+                    <Table.CellActions
+                      :name="row.name"
                       @select="(event, value) => onRowAction(value, row)"
                     >
-                      <DropdownMenuTrigger>
-                        <Tooltip text="Row actions">
-                          <IconButton
-                            icon="pi pi-ellipsis-h"
-                            kind="outlined"
-                            size="small"
-                            aria-label="Row actions"
-                          />
-                        </Tooltip>
-                      </DropdownMenuTrigger>
                       <DropdownMenuGroup>
                         <DropdownMenuOption
                           value="deploy"
@@ -695,7 +485,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                           /></template>
                         </DropdownMenuOption>
                       </DropdownMenuGroup>
-                    </DropdownMenuRoot>
+                    </Table.CellActions>
                   </template>
                   <template #empty>
                     <EmptyState

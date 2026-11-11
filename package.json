@@ -42,6 +42,7 @@
     "webkit:lint:style": "stylelint \"packages/webkit/**/*.{css,scss,vue}\"",
     "webkit:lint:style:fix": "stylelint \"packages/webkit/**/*.{css,scss,vue}\" --fix",
     "webkit:type-check": "pnpm --filter webkit type-check",
+    "docs:type-check": "pnpm --filter @aziontech/webkit-docs type-check",
     "webkit:type-coverage": "pnpm --filter webkit type-coverage",
     "webkit:test": "pnpm --filter webkit test",
     "webkit:test:coverage": "pnpm --filter webkit test:coverage",
@@ -50,7 +51,7 @@
     "webkit:format": "pnpm --filter webkit format",
     "webkit:format:check": "pnpm --filter webkit format:check",
     "security:audit": "pnpm audit",
-    "governance": "pnpm run webkit:lint && pnpm run webkit:lint:style && pnpm run webkit:format:check && pnpm run webkit:type-check && pnpm run webkit:type-coverage && pnpm run security:audit"
+    "governance": "pnpm run webkit:lint && pnpm run webkit:lint:style && pnpm run webkit:format:check && pnpm run webkit:type-check && pnpm run docs:type-check && pnpm run webkit:type-coverage && pnpm run security:audit"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",

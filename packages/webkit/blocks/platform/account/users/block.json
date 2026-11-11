@@ -1,0 +1,60 @@
+{
+  "id": "platform/account/users",
+  "name": "Users",
+  "title": "Templates/Platform/Account/Users",
+  "surface": "product",
+  "summary": "The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over a search `Input` and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email, Owner marked, the email under it), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `Input`, `Card`, `Table`, `Avatar`, `MultiSelect`, `Tooltip`, `DropdownMenu`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `EmptyState`, `Alert` and `Toaster`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "users",
+    "users management",
+    "invite user",
+    "invite teammates",
+    "members",
+    "account members",
+    "assign teams",
+    "resend invitation",
+    "remove user",
+    "usuários",
+    "gerenciar usuários",
+    "convidar usuário",
+    "membros da conta",
+    "atribuir times"
+  ],
+  "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-microcopy"
+  ],
+  "primary": {
+    "name": "Default",
+    "file": "users.vue"
+  },
+  "variants": [
+    {
+      "name": "Invite",
+      "summary": "The Invite User drawer open over the list: Email and Teams (Developers preselected), Cancel and Send invitation; Send with an empty, malformed or existing email or no team shows the error on that field and focuses it.",
+      "file": "variants/invite.vue"
+    },
+    {
+      "name": "OnlyOwner",
+      "summary": "An account with only its owner: the owner's row, then a small EmptyState that invites the first teammate.",
+      "file": "variants/only-owner.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: the search row and the table's loading rows.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The users did not load: a danger Alert with Retry replaces the table; Retry loads them.",
+      "file": "variants/failed.vue"
+    }
+  ]
+}

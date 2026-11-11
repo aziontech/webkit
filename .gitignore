@@ -46,6 +46,37 @@ yarn.lock
 *.tsbuildinfo
 *.d.ts
 *d.ts.map
+# Declarations for WebKit's runtime .js modules (node packages/webkit/scripts/build-js-dts.mjs)
+!packages/webkit/src/components/actions/icon-button/presets/icon-transition.d.ts
+!packages/webkit/src/components/content/item/merge-as-child.d.ts
+!packages/webkit/src/components/inputs/presets/interactive-states.d.ts
+!packages/webkit/src/components/layout/global-header/index.d.ts
+!packages/webkit/src/components/navigation/breadcrumb/index.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/composables/create-change-event-details.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/composables/get-css-dimensions.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/composables/navigation-menu-css-vars.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/composables/resolve-host-element.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-context.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-list-highlight-context.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-list-highlight.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-positioner-context.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-positioner.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-root.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/composables/use-transition-status.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/index.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/presets/animations.d.ts
+!packages/webkit/src/components/navigation/navigation-menu/presets/styles.d.ts
+!packages/webkit/src/components/navigation/tabs/index.d.ts
+!packages/webkit/src/components/overlay/composables/use-overlay-mobile.d.ts
+!packages/webkit/src/components/overlay/drawer/presets/sizes.d.ts
+!packages/webkit/src/components/overlay/panel/presets/sizes.d.ts
+!packages/webkit/src/components/overlay/presets/bottom-sheet-transitions.d.ts
+!packages/webkit/src/components/overlay/presets/mobile-position.d.ts
+!packages/webkit/src/components/overlay/tooltip/presets/popup-scale-transition.d.ts
+!packages/webkit/src/composables/use-focus-trap/index.d.ts
+!packages/webkit/src/utils/cn.d.ts
+!apps/docs/src/env.d.ts
+!apps/docs/src/lib/virtual/*.d.ts
 
 CLAUDE.md
 # Claude Code — personal state and runtime caches (ignored)

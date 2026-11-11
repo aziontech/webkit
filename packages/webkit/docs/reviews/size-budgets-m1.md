@@ -322,16 +322,24 @@ New sections and the sample's section variants. `ConsolePanel` carries `ToggleGr
 | line-figure | new           | 2.48         | 3          | New: entry only; figures are async chunks.       |
 | banner-art  | new           | 9.61         | 10.1       | New: `NetworkMap`, `SpinningGlobe`, the lattice. |
 
+M2.10 leftovers (blocks lane): `Table` gains `rowReorderable` (a pinned row keeps its place, used by `rules-list`) and `NetworkMap` gains `traffic` (the sample's `MapMesh`: a seeded mesh of links and Web Animations packets, turned on by `BannerArt` `art="network"`).
+
+| Entry           | Budget before | Measured now | New budget | Note                                    |
+| --------------- | ------------- | ------------ | ---------- | --------------------------------------- |
+| table-root      | 51.9          | 51.97        | 52.15      | Raised: `rowReorderable`.               |
+| listing-browser | 66.95         | 66.95        | 67.2       | Raised: carries `Table`.                |
+| listing-table   | 58            | 58.07        | 58.3       | Raised: carries `Table`.                |
+| network-map     | 6.5           | 7.30         | 7.5        | Raised: `traffic` mesh and packets.     |
+| banner-art      | 10.1          | 10.87        | 11.1       | Raised: carries `NetworkMap` `traffic`. |
+
 ## M2.5 — styled geometry fixes (2026-11-11)
 
 The styled visual suite showed that `Table`'s frozen-edge fades covered the first letters of the
 next column even with nothing scrolled, and that the drag outline and drop line stopped at the
 frozen columns. `Table` now measures whether content scrolls under each frozen edge (one
 `ResizeObserver` on the viewport plus the scroll handler) and draws the drag outline and drop
-line on a row pseudo-element above the frozen cells.
+line on a row pseudo-element above the frozen cells. Measured after merging `rowReorderable`.
 
-| Entry           | Budget before | Measured now | New budget | Note                                          |
-| --------------- | ------------- | ------------ | ---------- | --------------------------------------------- |
-| table-root      | 51.9          | 52.09        | 52.3       | Raised: scroll-aware frozen-edge fades.       |
-| listing-browser | 66.95         | 67.07        | 67.3       | Raised: carries `Table`.                      |
-| listing-table   | 58            | 58.15        | 58.4       | Raised: carries `Table`.                      |
+| Entry      | Budget before | Measured now | New budget | Note                                    |
+| ---------- | ------------- | ------------ | ---------- | --------------------------------------- |
+| table-root | 52.15         | 52.16        | 52.35      | Raised: scroll-aware frozen-edge fades. |
