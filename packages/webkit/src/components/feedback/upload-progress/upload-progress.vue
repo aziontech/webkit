@@ -135,7 +135,9 @@
     return ''
   }
 
-  const showActions = computed<boolean>(() => state.value !== 'running' && Boolean(slots['actions']))
+  const showActions = computed<boolean>(
+    () => state.value !== 'running' && Boolean(slots['actions'])
+  )
 </script>
 
 <template>
