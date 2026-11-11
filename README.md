@@ -40,7 +40,7 @@ Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use
 
 ## Building with WebKit (consume)
 
-The path for apps and screens that use the packages. AI agents start with the patterns in the `webkit` MCP (above).
+The path for apps and screens that use the packages. AI agents start with the patterns in the `webkit` MCP (above); agents without the MCP read `node_modules/@aziontech/webkit/llms/llms.txt`, a page per block, component and foundation.
 
 ### Use in your app
 

@@ -1,0 +1,95 @@
+{
+ "name": "item",
+ "binding": "Item",
+ "import": "@aziontech/webkit/item",
+ "treeShakeableImport": "@aziontech/webkit/item-root",
+ "category": "content",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/item-group",
+  "@aziontech/webkit/item-list",
+  "@aziontech/webkit/item-separator",
+  "@aziontech/webkit/item-media",
+  "@aziontech/webkit/item-content",
+  "@aziontech/webkit/item-title",
+  "@aziontech/webkit/item-description",
+  "@aziontech/webkit/item-actions",
+  "@aziontech/webkit/item-header",
+  "@aziontech/webkit/item-footer"
+ ],
+ "purpose": "Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `Card`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).",
+ "setup": null,
+ "useWhen": [
+  "A row that pairs a title and description with leading media (icon, avatar, image) and trailing actions — settings entries, team members, next steps, notifications.",
+  "A list of such rows: `Item.Group` for gapped rows off a card, `Item.List` for divided rows inside a `card`.",
+  "A whole row that is one link or button — set `as-child` and pass a single `a` / `button` as the item's child."
+ ],
+ "avoidWhen": [
+  "Records that share columns and need sorting, selection or paging → use `table`.",
+  "Hierarchical navigation rows in a sidebar → use `menu`.",
+  "A grid of selectable option cards → use `radio-cards`.",
+  "A single surface that frames arbitrary content → use `card`."
+ ],
+ "related": [
+  "card` — the surface an `Item.List` sits in (with `:padded=\"false\"`).",
+  "table` — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.",
+  "menu` — navigation rows with nesting and drill levels.",
+  "avatar` — the usual leading media for people rows inside `Item.Media`."
+ ],
+ "bestPractices": [
+  "Use `Item.Group` off-card and `Item.List` inside a `card` with `:padded=\"false\"`; both force their child items' `kind` (`inline` in a group, `default` in a list), so do not set `kind` on rows inside them.",
+  "Item.List` draws its own dividers — do not add `Item.Separator` inside it.",
+  "With `as-child`, pass exactly one child element; the row's hover, active and focus ring move onto it, so do not also put buttons inside that row.",
+  "Set `Item.Media` `kind=\"icon\"` for a glyph and `kind=\"image\"` for a picture; the frame sizes and clips the content.",
+  "Use `size=\"small\"` for dense lists; `medium` is the default."
+ ],
+ "props": [
+  {
+   "name": "kind",
+   "type": "'default' | 'outlined' | 'muted' | 'inline'",
+   "default": "'default'",
+   "required": "false",
+   "doc": "Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Item root density (padding and gap)."
+  },
+  {
+   "name": "asChild",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Every sub-component exposes `default` for its region."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Item from '@aziontech/webkit/item'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <Item>\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+  },
+  {
+   "name": "Outline",
+   "sfc": "<script setup>\n  import Item from '@aziontech/webkit/item'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <Item kind=\"outlined\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+  },
+  {
+   "name": "Muted",
+   "sfc": "<script setup>\n  import Item from '@aziontech/webkit/item'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <Item kind=\"muted\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+  }
+ ],
+ "docs": "components/item.md"
+}

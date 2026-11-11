@@ -12,3 +12,4 @@ lint-canaries/
 # Generated from packages/webkit/blocks and examples (apps/storybook/scripts/gen-block-stories.mjs).
 apps/storybook/src/stories/blocks/
 apps/storybook/src/stories/site/
+packages/webkit/llms/

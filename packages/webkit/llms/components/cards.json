@@ -1,0 +1,100 @@
+{
+ "name": "cards",
+ "binding": "Cards",
+ "import": "@aziontech/webkit/cards",
+ "treeShakeableImport": "@aziontech/webkit/cards",
+ "category": "data",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It shares Table's item and selection model — `items`, `trackBy`, `selectedKeys` — so `useCollection` binds it through `cardsProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.",
+ "setup": null,
+ "useWhen": [
+  "Items people recognise by a few fields or a picture rather than compare column by column (applications, templates, environments).",
+  "The card form of a list page (`platform/view/card-view`), filtered and paged by `useCollection`."
+ ],
+ "avoidWhen": [
+  "Records compared, sorted or scanned across many fields → use `table`.",
+  "A fixed marketing grid of features or links → use `card-grid`.",
+  "A single content box → use `card`."
+ ],
+ "related": [
+  "use-collection` — filters, pages and selects; `cardsProps` is the binding.",
+  "table` — the same collection as rows; same item and selection model.",
+  "property-filter`, `collection-preferences`, `pagination` — the controls around it.",
+  "card` — one standalone card."
+ ],
+ "bestPractices": [
+  "Put the item's name, as a link to the item, in the `header` slot: it also names the selection control.",
+  "Keep each card to a handful of label and value pairs; let `collection-preferences` choose which.",
+  "Use `selectionMode=\"multi\"` only when a bulk action exists next to the list."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "Record<string, unknown>[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The items, one card each."
+  },
+  {
+   "name": "trackBy",
+   "type": "string",
+   "default": "'id'",
+   "required": "false",
+   "doc": "Field that identifies an item; selection keys read it."
+  },
+  {
+   "name": "selectionMode",
+   "type": "'none' | 'single' | 'multi'",
+   "default": "'none'",
+   "required": "false",
+   "doc": "No selection, one card, or several cards with a select-all above them."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows placeholder cards and sets aria-busy while true."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list. Empty uses the locale catalog."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "header",
+   "scope": "{ item: Record<string, unknown>; index: number; selected: boolean }",
+   "notes": "Card title; names the card and its selection control."
+  },
+  {
+   "name": "default",
+   "scope": "{ item: Record<string, unknown>; index: number; selected: boolean }",
+   "notes": "Card body: the item's fields."
+  },
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Shown when there are no items."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Cards from '@aziontech/webkit/cards'\n  import Tag from '@aziontech/webkit/tag'\n\n  const applications = [\n    {\n      id: 'app-1',\n      name: 'storefront',\n      status: 'Active',\n      domain: 'shop.example.com',\n      requests: '1.2M'\n    },\n    {\n      id: 'app-2',\n      name: 'checkout',\n      status: 'Active',\n      domain: 'pay.example.com',\n      requests: '310K'\n    },\n    { id: 'app-3', name: 'blog', status: 'Inactive', domain: 'blog.example.com', requests: '0' },\n    { id: 'app-4', name: 'docs', status: 'Active', domain: 'docs.example.com', requests: '88K' }\n  ]\n</script>\n\n<template>\n  <Cards :items=\"applications\">\n    <template #header=\"{ item }\">{{ item.name }}</template>\n    <template #default=\"{ item }\">\n      <dl class=\"grid grid-cols-[auto_1fr] gap-x-(--spacing-sm) gap-y-(--spacing-xxs)\">\n        <dt class=\"text-(--text-muted)\">Status</dt>\n        <dd>\n          <Tag\n            :label=\"item.status\"\n            :severity=\"item.status === 'Active' ? 'success' : 'secondary'\"\n            size=\"small\"\n          />\n        </dd>\n        <dt class=\"text-(--text-muted)\">Domain</dt>\n        <dd class=\"truncate\">\n          <bdi>{{ item.domain }}</bdi>\n        </dd>\n        <dt class=\"text-(--text-muted)\">Requests</dt>\n        <dd class=\"tabular-nums\">{{ item.requests }}</dd>\n      </dl>\n    </template>\n  </Cards>\n</template>"
+  },
+  {
+   "name": "Selectable",
+   "sfc": "<script setup>\n  import Cards from '@aziontech/webkit/cards'\n  import Pagination from '@aziontech/webkit/pagination-root'\n  import { useCollection } from '@aziontech/webkit/use-collection'\n\n  const edges = Array.from({ length: 14 }, (_, i) => ({\n    id: `edge-${i + 1}`,\n    name: `Edge node ${i + 1}`,\n    region: ['sa-east', 'us-east', 'eu-west'][i % 3]\n  }))\n\n  const { cardsProps, paginationProps, selectedCount } = useCollection({\n    items: edges,\n    pagination: { pageSize: 6 },\n    selection: { mode: 'multi' }\n  })\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <p\n      class=\"text-body-sm text-(--text-muted)\"\n      role=\"status\"\n    >\n      {{ selectedCount }} selected\n    </p>\n    <Cards v-bind=\"cardsProps\">\n      <template #header=\"{ item }\">{{ item.name }}</template>\n      <template #default=\"{ item }\">\n        <span class=\"text-(--text-muted)\">{{ item.region }}</span>\n      </template>\n    </Cards>\n    <Pagination v-bind=\"paginationProps\" />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/cards.md"
+}

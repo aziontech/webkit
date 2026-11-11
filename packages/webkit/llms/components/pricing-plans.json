@@ -1,0 +1,68 @@
+{
+ "name": "pricing-plans",
+ "binding": "PricingPlans",
+ "import": "@aziontech/webkit/pricing-plans",
+ "treeShakeableImport": "@aziontech/webkit/pricing-plans",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `card-grid`, `card-pricing` and `button`; the picked period is local state.",
+ "setup": null,
+ "useWhen": [
+  "At the top of Pricing, to lay the plans side by side with a price per billing period."
+ ],
+ "avoidWhen": [
+  "To compare plans feature by feature → use `compare-plans`."
+ ],
+ "related": [
+  "card-pricing` — the card each plan renders with.",
+  "compare-plans` — the matrix that sits under these cards."
+ ],
+ "bestPractices": [
+  "Give every plan one price per period, matched by `period`; a price without a `period` applies to every period.",
+  "Highlight one plan; it is raised and is the only card that shows its tag.",
+  "Keep `features` to five or so short labels led by an icon."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "periods",
+   "type": "PricingPlansPeriod[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The billing periods of the toggle, in order; each is `{ label, value }`. The toggle shows with two or more and opens on the first."
+  },
+  {
+   "name": "periodsAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the billing-period toggle."
+  },
+  {
+   "name": "plans",
+   "type": "PricingPlansPlan[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The plan cards, in order; each is `{ name, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; a plan without a name is dropped, and an action without a label or href is dropped."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import PricingPlans from '@aziontech/webkit/pricing-plans'\n\n  const periods = [\n    {\n      label: 'Monthly',\n      value: 'monthly'\n    },\n    {\n      label: 'Annual',\n      value: 'annual'\n    }\n  ]\n\n  const plans = [\n    {\n      name: 'Hobby',\n      highlighted: false,\n      prices: [\n        {\n          value: 'Free',\n          details: 'Free forever, no card required. Included limits reset every month.'\n        }\n      ],\n      featuresTitle: 'All features included.',\n      features: [\n        {\n          icon: 'pi pi-globe',\n          label: 'Global infrastructure'\n        },\n        {\n          icon: 'ai ai-edge-functions',\n          label: 'Serverless functions'\n        },\n        {\n          icon: 'ai ai-edge-storage',\n          label: 'Storage and database'\n        },\n        {\n          icon: 'pi pi-image',\n          label: 'Image Processor'\n        },\n        {\n          icon: 'ai ai-edge-firewall',\n          label: 'DDoS mitigation and firewall'\n        }\n      ],\n      action: {\n        label: 'Start for free',\n        href: 'https://console.azion.com/signup?plan=hobby'\n      }\n    },\n    {\n      name: 'Pro',\n      highlighted: true,\n      tagLabel: 'Popular',\n      prices: [\n        {\n          period: 'monthly',\n          value: '25',\n          prefix: '$',\n          suffix: '/mo',\n          details:\n            'Billed monthly, cancel anytime. Usage past the included limits is charged on demand.'\n        },\n        {\n          period: 'annual',\n          value: '20',\n          prefix: '$',\n          suffix: '/mo',\n          details: 'Billed annually, save 20%. Usage past the included limits is charged on demand.'\n        }\n      ],\n      featuresTitle: 'All Hobby features, plus:',\n      features: [\n        {\n          icon: 'ai ai-workloads',\n          label: 'Additional workloads'\n        },\n        {\n          icon: 'ai ai-edge-application',\n          label: 'Higher application limits'\n        },\n        {\n          icon: 'ai ai-store',\n          label: 'More storage capacity'\n        },\n        {\n          icon: 'ai ai-waf-rules',\n          label: 'Broader security coverage'\n        },\n        {\n          icon: 'pi pi-wallet',\n          label: 'Configurable spend limit'\n        }\n      ],\n      action: {\n        label: 'Start with Pro',\n        href: 'https://console.azion.com/signup?plan=pro&billing-cycle=monthly'\n      }\n    },\n    {\n      name: 'Enterprise',\n      highlighted: false,\n      prices: [\n        {\n          value: 'Custom',\n          details: 'Custom terms and payment schedule. Commit up front and save on usage.'\n        }\n      ],\n      featuresTitle: 'All Pro features, plus:',\n      features: [\n        {\n          icon: 'pi pi-chart-line',\n          label: 'On-demand pricing'\n        },\n        {\n          icon: 'pi pi-arrow-down',\n          label: 'Cut costs with commitments'\n        },\n        {\n          icon: 'ai ai-layers',\n          label: 'Capacity Reservation available'\n        },\n        {\n          icon: 'pi pi-calendar',\n          label: 'Savings Plan available'\n        },\n        {\n          icon: 'ai ai-business-support',\n          label: 'Advanced support available'\n        }\n      ],\n      action: {\n        label: 'Talk to a specialist',\n        href: '#contact'\n      }\n    }\n  ]\n</script>\n\n<template>\n  <PricingPlans\n    anchor=\"plans\"\n    :periods=\"periods\"\n    periods-aria-label=\"Billing period\"\n    :plans=\"plans\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/pricing-plans.md"
+}

@@ -1,0 +1,272 @@
+# Media Tabs
+
+> A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `position` decides where the tabs sit: `left` or `right` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.
+
+- Import: `import MediaTabs from '@aziontech/webkit/media-tabs'`
+- Category: marketing · Surface: marketing · Structure: monolithic
+- API as JSON: [media-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/media-tabs.json)
+
+## When to use
+
+- For a run of peer claims that share one picture frame — three ways a platform is fast, four things a product does.
+- When each claim needs a sentence of its own, not a bullet: the copy is the content and the media illustrates it.
+- As a product-page band that rewards watching but does not require it.
+
+## Do
+
+- Write the tabs as peers. A reader arrives mid-rotation, so no row may depend on the row above it.
+- Keep a tab's title to one line and its description to two. The row has a fixed height, and copy that overruns it pushes the media column taller than the design.
+- Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.
+- Use scenes of the same shape. The frame does not resize between tabs.
+- Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step so five claims fit.
+- Leave `autoplay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion.
+
+## Don’t
+
+- For one claim beside one picture → use `media-split`.
+- For questions and answers → use `faq`.
+- For switching a page's content between peer views the reader navigates → use `tabs`, which is a real ARIA tab set.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [media-split](media-split.md) — one claim, one picture, no selection.
+- [illustration](illustration.md) — the official scene a tab's `media` slot usually holds.
+- [frame-box](frame-box.md) — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.
+- [section-title](section-title.md) — the heading above the band; this component carries no title of its own.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `MediaTabsItem[]` | `[]` | false | The tabs, in order, at most three when `position` is `left` or `right` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered. |
+| `position` | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'` | false | Which side of the media the tabs sit on. Below the `lg` breakpoint every position stacks, with the active tab's media inside its row. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down. |
+| `selectOn` | `'hover' \| 'click'` | `'hover'` | false | What moves the selection as the reader points at a row. A click always selects, on either setting. |
+| `autoplay` | `boolean` | `true` | false | Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. |
+| `autoplayInterval` | `number` | `5000` | false | Milliseconds each tab is held before the band advances. |
+| `showProgress` | `boolean` | `true` | false | Advances a hairline along the active row's bottom edge while the timer runs. |
+| `texture` | `TextureMaterialKind` | `'none'` | false | Texture the media column is grounded with; `none` leaves it bare. |
+| `textureSize` | `TextureMaterialSize` | `'medium'` | false | Pitch of the ground's tiling — how far apart its cells sit. |
+| `textureFade` | `TextureMaterialFade` | `'vignette'` | false | How the ground fades out before the column's edges. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `tab-change` | `(event: Event, index: number)` | The selection moved; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `media` | { item: MediaTabsItem, index: number, active: boolean } | The tab's media; replaces the image built from `item.src`. |
+
+## States
+
+- Visual states: `default`, `hover`, `focus-visible` on each row
+- Hover paints `--bg-hover` as a `::before` ghost layer over a resting row (the design system's interactive-state pattern); the selected row already sits on the raised surface and shows no ghost
+- `data-active` marks the selected row; it steps up to the raised surface while the others rest on the plain one
+- `data-autoplay` is present on the root while the timer is running, so a page can tell a moving band from a resting one
+- `data-size` carries the size token, which sets the row height every column measures from beside the media and the title scale of a row of tabs
+- `data-select-on` carries the interaction mode
+- The media frame shows exactly one medium at full opacity; the rest are present and transparent, which is what lets them cross-fade
+- A tab's frame carries no padding of its own; the title and description sit in an inset block, so the mobile media runs flush to the frame's edges
+- Every tab and the media column are `frame-box` cells with `borders="all"` and `marks="all"`, minus the top rule they flush against whatever sits above the band
+- The band holds at most three tabs when the position is `left` or `right` and five when it is `top` or `bottom`; `items` past the limit are dropped, so the tabs, the rotation and the media frame always agree on the same set
+- Tabs in a row (`top`, `bottom`) are compact from `lg` up: no minimum row height, `--spacing-md` of inset, the title keeps `.text-heading-md` (`.text-heading-xs` at `size` `small`, with the description at `.text-body-xs`) and the description drops to `.text-body-sm`; below `lg` they stack at the full-size treatment
+- With the tabs in a row, the media of every tab sits stacked in one cell, so the frame is as tall as the tallest medium and no shorter than `--media-tabs-media-min-lg` (`24rem` unless set); `--media-tabs-media-min` floors the active tab's media inside its row below `lg`; `--media-tabs-media-bg` sets the media's fill (`--bg-canvas` unless set)
+- `data-position` carries the position and `data-orientation` the axis it implies (`vertical` for `left` and `right`, `horizontal` for `top` and `bottom`); `top` and `bottom` share each tab's frame edges with the next so the row draws one hairline between tabs, `right` shares the seam with the media on the tabs' side and `bottom` puts the media above the row, and every position keeps one hairline at the seam between the tabs and the media
+- The media column is grounded on a `texture-material` the band paints itself, behind the media: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the column's edges. The default `none` leaves the column bare
+- Empty: when `items` is empty the band renders nothing
+
+## Accessibility
+
+- Visible focus: each row's title is a real `<button>` carrying `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
+- Keyboard map: `Tab` moves between rows and `Enter` / `Space` selects one — the rows are buttons, not clickable containers, so no key handler is bolted onto a `div`.
+- ARIA: the rows are a `<ul>` of `<li>`, each holding the button; the active button carries `aria-current="true"`. Each medium carries its tab's `alt` text, and the inactive media are `aria-hidden` so the frame announces one picture rather than all of them.
+- **Not `role="tablist"`.** A tab's label here is a heading and a paragraph — the copy is the content, and the media only illustrates it. Real tabs promise a roving `tabindex` and arrow-key navigation over short labels; this band is a list of claims a reader tabs through one at a time, so it is announced as the list it is rather than as a tab set whose keyboard contract it does not honour.
+- **WCAG 2.2.2 (pause, stop, hide):** autoplay is moving content, so it must be stoppable. It pauses while the band has hover or keyboard focus, resumes when they leave, and does not start at all under `prefers-reduced-motion`. A click selects a tab and restarts the count from that tab; it does not end the rotation.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the description is `var(--text-muted)`, a known theme-level shortfall on the light canvas (see `big-numbers`); every other text region is `var(--text-default)`.
+- Touch target ≥40×40 px — each row's button spans the whole row, well past the minimum.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Illustration from '@aziontech/webkit/illustration'
+  import MediaTabs from '@aziontech/webkit/media-tabs'
+
+  const scenes = ['ai-applications', 'live-debugging', 'deploy-secure-mcp-server']
+
+  const items = [
+    {
+      title: 'Run AI models close to users',
+      description:
+        'Execute models on the Azion Web Platform across hundreds of locations to deliver real-time responses with median latency under 30 ms.'
+    },
+    {
+      title: 'Watch every inference as it happens',
+      description:
+        'Tokens, latency and error rate per model arrive as the traffic does, with no agent to install and no sampling window to wait out.'
+    },
+    {
+      title: 'Ship a model the way you ship code',
+      description:
+        'One command puts a new revision in every location at once, and the one before it stays a rollback away.'
+    }
+  ]
+</script>
+
+<template>
+  <MediaTabs :items="items">
+    <template #media="{ index }">
+      <Illustration :name="scenes[index]" />
+    </template>
+  </MediaTabs>
+</template>
+```
+
+### Positions
+
+```vue
+<script setup>
+  import Illustration from '@aziontech/webkit/illustration'
+  import MediaTabs from '@aziontech/webkit/media-tabs'
+
+  const scenes = [
+    'ai-applications',
+    'live-debugging',
+    'deploy-secure-mcp-server',
+    'modern-frontends',
+    'content-and-media-delivery'
+  ]
+
+  const items = [
+    {
+      title: 'Run AI models close to users',
+      description: 'Answer in under 30 ms from the location closest to the user who asked.'
+    },
+    {
+      title: 'Watch every request live',
+      description: 'Traces arrive as the traffic does, with no agent to install.'
+    },
+    {
+      title: 'Deploy secure MCP servers',
+      description: 'Put a server next to every user, behind the same policies.'
+    },
+    {
+      title: 'Ship modern frontends',
+      description: 'Render pages beside the reader and keep the origin quiet.'
+    },
+    {
+      title: 'Deliver media at scale',
+      description: 'Serve video and images from a cache that is already warm.'
+    }
+  ]
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-xxl)">
+    <MediaTabs
+      position="left"
+      :autoplay="false"
+      :items="items"
+    >
+      <template #media="{ index }">
+        <Illustration :name="scenes[index]" />
+      </template>
+    </MediaTabs>
+    <MediaTabs
+      position="right"
+      :autoplay="false"
+      :items="items"
+    >
+      <template #media="{ index }">
+        <Illustration :name="scenes[index]" />
+      </template>
+    </MediaTabs>
+    <MediaTabs
+      position="top"
+      :autoplay="false"
+      :items="items"
+    >
+      <template #media="{ index }">
+        <Illustration :name="scenes[index]" />
+      </template>
+    </MediaTabs>
+    <MediaTabs
+      position="bottom"
+      :autoplay="false"
+      :items="items"
+    >
+      <template #media="{ index }">
+        <Illustration :name="scenes[index]" />
+      </template>
+    </MediaTabs>
+  </div>
+</template>
+```
+
+### Sizes
+
+```vue
+<script setup>
+  import Illustration from '@aziontech/webkit/illustration'
+  import MediaTabs from '@aziontech/webkit/media-tabs'
+
+  const scenes = ['ai-applications', 'live-debugging', 'deploy-secure-mcp-server']
+
+  const items = [
+    {
+      title: 'Run AI models close to users',
+      description:
+        'Execute models on the Azion Web Platform across hundreds of locations to deliver real-time responses with median latency under 30 ms.'
+    },
+    {
+      title: 'Watch every inference as it happens',
+      description:
+        'Tokens, latency and error rate per model arrive as the traffic does, with no agent to install and no sampling window to wait out.'
+    },
+    {
+      title: 'Ship a model the way you ship code',
+      description:
+        'One command puts a new revision in every location at once, and the one before it stays a rollback away.'
+    }
+  ]
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-xxl)">
+    <MediaTabs
+      size="small"
+      :autoplay="false"
+      :items="items"
+    >
+      <template #media="{ index }">
+        <Illustration :name="scenes[index]" />
+      </template>
+    </MediaTabs>
+    <MediaTabs
+      size="medium"
+      :autoplay="false"
+      :items="items"
+    >
+      <template #media="{ index }">
+        <Illustration :name="scenes[index]" />
+      </template>
+    </MediaTabs>
+    <MediaTabs
+      size="large"
+      :autoplay="false"
+      :items="items"
+    >
+      <template #media="{ index }">
+        <Illustration :name="scenes[index]" />
+      </template>
+    </MediaTabs>
+  </div>
+</template>
+```

@@ -1,0 +1,183 @@
+{
+ "name": "donut-chart",
+ "binding": "DonutChart",
+ "import": "@aziontech/webkit/donut-chart",
+ "treeShakeableImport": "@aziontech/webkit/donut-chart",
+ "category": "chart",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per series, the total in the center, a legend beside it. It shares the cartesian chart's data model, palette, legend behavior and loading / empty / error surface, so a dashboard reads as one system. Each slice is the sum of its series values, so a time series passes straight in as its share of the range.",
+ "setup": null,
+ "useWhen": [
+  "Share of a small whole at a glance: top countries by blocked threats, traffic by protocol, cache hit versus miss.",
+  "A dashboard card where the total is the headline and the split is the context."
+ ],
+ "avoidWhen": [
+  "Comparing close values or more than six slices → use `chart` with horizontal bars; angles are hard to compare.",
+  "Two slices → use `stat-tile` with the ratio; a two-slice pie says less than the number.",
+  "Change over time → use `chart`."
+ ],
+ "related": [
+  "chart` — the cartesian sibling; same series model, so a dataset moves between them without reshaping.",
+  "chart-card` — the box a dashboard donut sits in.",
+  "stat-tile` — the total alone, with a delta."
+ ],
+ "bestPractices": [
+  "Keep it to six slices or fewer; the seventh and beyond fold into Other automatically.",
+  "Order series by size so the largest slice starts at the top.",
+  "Use the center for the total and let hover or focus swap it to the active slice.",
+  "Pair it with the bar form of the same data when exact ranks matter (the console's country pie plus ordered bar)."
+ ],
+ "props": [
+  {
+   "name": "series",
+   "type": "ChartSeries[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "One slice per series; a slice is the sum of its values. The first six take the categorical slots, the rest fold into Other."
+  },
+  {
+   "name": "kind",
+   "type": "'donut' | 'pie'",
+   "default": "'donut'",
+   "required": "false",
+   "doc": "Ring or solid disc."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Diameter of the ring: 128, 176 or 240 pixels."
+  },
+  {
+   "name": "cap",
+   "type": "number",
+   "default": "6",
+   "required": "false",
+   "doc": "Slices kept before the rest fold into Other."
+  },
+  {
+   "name": "otherLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Name of the folded slice. Empty uses the locale catalog (`Other`)."
+  },
+  {
+   "name": "totalLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Caption under the total in the center. Empty uses the locale catalog (`Total`)."
+  },
+  {
+   "name": "formatValue",
+   "type": "(value: number) => string",
+   "default": "formatCompact",
+   "required": "false",
+   "doc": "Formats the center value and legend values."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders a circular Skeleton and suppresses interaction."
+  },
+  {
+   "name": "refetching",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Holds the previous render at reduced opacity while new data loads."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Error message; when set, a danger Alert replaces the ring."
+  },
+  {
+   "name": "emptyTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the empty state shown when every slice is zero. Empty uses the locale catalog (`No data available`)."
+  },
+  {
+   "name": "emptyDescription",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting line under the empty title: why the range is empty, or what to do next."
+  },
+  {
+   "name": "tableView",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the data table in place of the ring. The table is always present for assistive tech."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the chart."
+  }
+ ],
+ "events": [
+  {
+   "name": "slice-click",
+   "payload": "(event: MouseEvent | KeyboardEvent, series: ChartSeries)",
+   "notes": "Click on a slice, or Enter / Space on the focused chart; `series` is the consumer's own series object."
+  },
+  {
+   "name": "legend-toggle",
+   "payload": "(event: MouseEvent, series: ChartSeries)",
+   "notes": "A legend entry toggled."
+  }
+ ],
+ "slots": [
+  {
+   "name": "center",
+   "scope": "{ total: number; active: ChartSeries",
+   "notes": "null }` | Replaces the center readout."
+  },
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Replaces the default EmptyState."
+  },
+  {
+   "name": "empty-actions",
+   "scope": "—",
+   "notes": "Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it."
+  },
+  {
+   "name": "error",
+   "scope": "—",
+   "notes": "Replaces the default danger Alert."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import DonutChart from '@aziontech/webkit/donut-chart'\n\n  const series = [\n    {\n      id: 'Brazil',\n      name: 'Brazil',\n      values: [48210]\n    },\n    {\n      id: 'United States',\n      name: 'United States',\n      values: [31620]\n    },\n    {\n      id: 'Germany',\n      name: 'Germany',\n      values: [18930]\n    },\n    {\n      id: 'India',\n      name: 'India',\n      values: [12480]\n    },\n    {\n      id: 'Netherlands',\n      name: 'Netherlands',\n      values: [9370]\n    },\n    {\n      id: 'Singapore',\n      name: 'Singapore',\n      values: [6120]\n    }\n  ]\n</script>\n\n<template>\n  <DonutChart\n    :series=\"series\"\n    total-label=\"Blocked threats\"\n    aria-label=\"Top WAF threat requests by country\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import DonutChart from '@aziontech/webkit/donut-chart'\n\n  const series = [\n    {\n      id: 'Brazil',\n      name: 'Brazil',\n      values: [48210]\n    },\n    {\n      id: 'United States',\n      name: 'United States',\n      values: [31620]\n    },\n    {\n      id: 'Germany',\n      name: 'Germany',\n      values: [18930]\n    },\n    {\n      id: 'India',\n      name: 'India',\n      values: [12480]\n    },\n    {\n      id: 'Netherlands',\n      name: 'Netherlands',\n      values: [9370]\n    },\n    {\n      id: 'Singapore',\n      name: 'Singapore',\n      values: [6120]\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-(--spacing-xl)\">\n    <DonutChart\n      :series=\"series\"\n      kind=\"donut\"\n      total-label=\"Blocked threats\"\n      aria-label=\"Donut\"\n    />\n    <DonutChart\n      :series=\"series\"\n      kind=\"pie\"\n      aria-label=\"Pie\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import DonutChart from '@aziontech/webkit/donut-chart'\n\n  const series = [\n    {\n      id: 'Brazil',\n      name: 'Brazil',\n      values: [48210]\n    },\n    {\n      id: 'United States',\n      name: 'United States',\n      values: [31620]\n    },\n    {\n      id: 'Germany',\n      name: 'Germany',\n      values: [18930]\n    },\n    {\n      id: 'India',\n      name: 'India',\n      values: [12480]\n    },\n    {\n      id: 'Netherlands',\n      name: 'Netherlands',\n      values: [9370]\n    },\n    {\n      id: 'Singapore',\n      name: 'Singapore',\n      values: [6120]\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <DonutChart\n      :series=\"series\"\n      size=\"small\"\n      aria-label=\"Small\"\n    />\n    <DonutChart\n      :series=\"series\"\n      size=\"medium\"\n      aria-label=\"Medium\"\n    />\n    <DonutChart\n      :series=\"series\"\n      size=\"large\"\n      aria-label=\"Large\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/donut-chart.md"
+}

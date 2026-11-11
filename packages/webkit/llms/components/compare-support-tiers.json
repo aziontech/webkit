@@ -1,0 +1,96 @@
+{
+ "name": "compare-support-tiers",
+ "binding": "CompareSupportTiers",
+ "import": "@aziontech/webkit/compare-support-tiers",
+ "treeShakeableImport": "@aziontech/webkit/compare-support-tiers",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The tier-by-tier comparison on the Support page: one column per support tier with its name, who it is for and its action button pinned in the header while the page scrolls, one band per service family with an overline and a title, and one row per service saying what each tier includes — a tick, a dash, or the allowance as text. Each band closes on its own link to the matching pricing documentation, the recommended tier carries an accent bar, and below the large breakpoint the table folds to one tier picked from a select. It is a page section — the site places it from a `{ _id: 'compare-support-tiers', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `button`, `overline` and `link`.",
+ "setup": null,
+ "useWhen": [
+  "On the Support page, to show what each support tier includes service by service."
+ ],
+ "avoidWhen": [
+  "To compare platform plans → use `compare-plans`.",
+  "To compare Azion with a competitor → use `comparison-table`."
+ ],
+ "related": [
+  "compare-plans` — the same matrix for platform plans, with hints and tags on rows and one closing link."
+ ],
+ "bestPractices": [
+  "Give every tier a stable `id`; the narrow-screen picker selects by it.",
+  "Mark one tier `highlighted`; it gets the accent bar, the secondary button and opens the picker.",
+  "Give every row's `values` one entry per tier, in tier order."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "caption",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Screen-reader caption naming the table."
+  },
+  {
+   "name": "columnLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Heading of the service column, shown from the large breakpoint up."
+  },
+  {
+   "name": "pickerAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the tier picker shown below the large breakpoint."
+  },
+  {
+   "name": "includedLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Screen-reader text of a ticked cell."
+  },
+  {
+   "name": "excludedLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Screen-reader text of a dashed cell."
+  },
+  {
+   "name": "tiers",
+   "type": "CompareSupportTiersTier[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The tier columns, in order; each is `{ id, name, description, highlighted?, action }` with `action` as `{ label, href }`; a tier without a name is dropped."
+  },
+  {
+   "name": "sections",
+   "type": "CompareSupportTiersSection[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The service bands, in order; each is `{ eyebrow, title, action?, rows }` where `action` is the closing `{ label, href }` link, and a row is `{ label, values, group? }` with one value per tier: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'\n\n  const tiers = [\n    {\n      id: 'developer',\n      name: 'Developer',\n      description: 'Ideal for exploring the platform independently.',\n      highlighted: false,\n      action: {\n        label: 'Start for free',\n        href: '/signup'\n      }\n    },\n    {\n      id: 'business',\n      name: 'Business',\n      description: 'Ideal for teams that need support from specialists.',\n      highlighted: false,\n      action: {\n        label: 'Talk to a specialist',\n        href: '/contact'\n      }\n    },\n    {\n      id: 'enterprise',\n      name: 'Enterprise',\n      description: 'Ideal for organizations that require advanced support and ongoing services.',\n      highlighted: true,\n      action: {\n        label: 'Talk to a specialist',\n        href: '/contact'\n      }\n    },\n    {\n      id: 'mission-critical',\n      name: 'Mission-Critical',\n      description:\n        'Ideal for mission-critical operations that need priority and proactive support.',\n      highlighted: false,\n      action: {\n        label: 'Talk to a specialist',\n        href: '/contact'\n      }\n    }\n  ]\n\n  const sections = [\n    {\n      eyebrow: 'Support',\n      title: 'Get help when it matters most',\n      action: {\n        label: 'See pricing',\n        href: 'https://www.azion.com/en/documentation/products/pricing/#support'\n      },\n      rows: [\n        {\n          label: 'Self-service support',\n          group: true,\n          values: ['', '', '', '']\n        },\n        {\n          label: 'Learning Center',\n          values: [true, true, true, true]\n        },\n        {\n          label: 'Azion Copilot (AI)',\n          values: [true, true, true, true]\n        },\n        {\n          label: 'Technical Support',\n          group: true,\n          values: ['', '', '', '']\n        },\n        {\n          label: 'Community Support (Discord)',\n          values: [true, true, true, true]\n        },\n        {\n          label: '24/7 support via ticket and email',\n          values: ['—', true, true, true]\n        },\n        {\n          label: 'Phone and video support',\n          values: ['—', '—', true, true]\n        },\n        {\n          label: 'Slack channel',\n          values: ['—', '—', 'Paid add-on', 'Paid add-on']\n        },\n        {\n          label: 'First response time',\n          group: true,\n          values: ['', '', '', '']\n        },\n        {\n          label: 'General guidance',\n          values: ['—', '< 24 hours', '< 24 hours', '< 12 hours']\n        },\n        {\n          label: 'System impaired',\n          values: ['—', '< 12 hours', '< 12 hours', '< 12 hours']\n        },\n        {\n          label: 'Production system impaired',\n          values: ['—', '< 4 hours', '< 4 hours', '< 2 hours']\n        },\n        {\n          label: 'Production system down',\n          values: ['—', '< 2 hours', '< 1 hour', '< 30 minutes']\n        },\n        {\n          label: 'Business system down',\n          values: ['—', '—', '< 15 minutes', '< 15 minutes']\n        }\n      ]\n    },\n    {\n      eyebrow: 'Professional Services',\n      title: 'Move faster with specialist guidance',\n      action: {\n        label: 'See pricing',\n        href: 'https://www.azion.com/en/documentation/products/pricing/#professional-services'\n      },\n      rows: [\n        {\n          label: 'Integration Services',\n          group: true,\n          values: ['—', '5 hours/year included', '20 hours/year included', '60 hours/year included']\n        },\n        {\n          label: 'Best Practices Review',\n          group: true,\n          values: ['—', 'Paid add-on', '20 hours/year included', '40 hours/year included']\n        },\n        {\n          label: 'Business Events Support',\n          group: true,\n          values: ['—', '—', '1 event per year', '100 hours/year included']\n        },\n        {\n          label: 'Technical Account Manager',\n          group: true,\n          values: ['—', '—', 'Paid add-on', '20 hours/month included']\n        },\n        {\n          label: 'Instructor-Led Training',\n          group: true,\n          values: ['—', '—', 'Paid add-on', 'Paid add-on']\n        },\n        {\n          label: 'Managed Configuration Service',\n          group: true,\n          values: ['—', '—', 'Paid add-on', 'Paid add-on']\n        },\n        {\n          label: 'Security Response Team',\n          group: true,\n          values: ['—', '—', 'Paid add-on', 'Paid add-on']\n        }\n      ]\n    }\n  ]\n</script>\n\n<template>\n  <CompareSupportTiers\n    anchor=\"tiers\"\n    caption=\"Support and Professional Services comparison across the Developer, Business, Enterprise and Mission-Critical tiers.\"\n    column-label=\"Support\"\n    picker-aria-label=\"Tier being compared\"\n    included-label=\"Included\"\n    excluded-label=\"Not included\"\n    :tiers=\"tiers\"\n    :sections=\"sections\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/compare-support-tiers.md"
+}

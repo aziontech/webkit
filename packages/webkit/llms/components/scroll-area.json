@@ -1,0 +1,80 @@
+{
+ "name": "scroll-area",
+ "binding": "ScrollArea",
+ "import": "@aziontech/webkit/scroll-area",
+ "treeShakeableImport": "@aziontech/webkit/scroll-area",
+ "category": "layout",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling. With `fade`, the edges that still have content to scroll to fade out, each sized by the distance left on that side (capped at 64px or a sixth of the viewport), so a list reads as continuing past its frame. A sticky header inside the viewport keeps its full opacity; the top fade starts below it.",
+ "setup": null,
+ "useWhen": [
+  "A region that must scroll inside a bounded box: a navigation list, a panel body, a wide table (`orientation=\"horizontal\"`), a code region (`orientation=\"both\"`).",
+  "A long list whose edges should fade while more content lies beyond them (`fade`)."
+ ],
+ "avoidWhen": [
+  "The region is one of several the reader resizes by dragging → use `resizable`, with a ScrollArea inside a pane if its content overflows.",
+  "It is an application navigation rail → use `sidebar`, which already scrolls its items.",
+  "It is a code sample → use `code-block`, which already scrolls its lines."
+ ],
+ "related": [
+  "sidebar` — scrolls its navigation inside a built-in ScrollArea.",
+  "code-block` — runs its code lines in a ScrollArea with `orientation=\"both\"`.",
+  "resizable` — draggable regions; each pane can hold a ScrollArea."
+ ],
+ "bestPractices": [
+  "Give it a bounded height, or a flex parent that constrains it. Without a limit the content never overflows and nothing scrolls.",
+  "The root is focusable (`tabindex` 0) and scrolls with the arrow keys, Page Up/Down and Home/End. Set `aria-label` when no visible heading names the region.",
+  "Pass `tabindex=\"-1\"` only when the content is itself focusable and keyboard users can already reach all of it.",
+  "Match `orientation` to the overflow axis: `vertical` clips horizontal overflow, and `horizontal` clips vertical overflow."
+ ],
+ "props": [
+  {
+   "name": "orientation",
+   "type": "'vertical' | 'horizontal' | 'both'",
+   "default": "'vertical'",
+   "required": "false",
+   "doc": "Scroll direction: `vertical` (lists, sidebars), `horizontal` (wide tables), `both` for two-axis overflow."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name when the region is not labelled by visible text; omit when content provides context."
+  },
+  {
+   "name": "fade",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Fades the edges that still have content to scroll to, sized by the distance left on each side."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "—"
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ScrollArea from '@aziontech/webkit/scroll-area'\n</script>\n\n<template>\n  <ScrollArea\n    orientation=\"vertical\"\n    aria-label=\"Scrollable content\"\n    class=\"h-[200px] max-w-(--container-md) rounded-(--shape-elements) border border-(--border-default) p-(--spacing-4) text-body-sm text-(--text-default)\"\n  >\n    Jokester began sneaking into the castle in the middle of the night and leaving jokes all over\n    the place: under the king's pillow, in his soup, even in the royal toilet. The king was furious,\n    but he couldn't seem to stop Jokester. And then one day, the king tripped over one of Jokester's\n    whoopee cushions and fell into the moat. He was so embarrassed that he decided to make Jokester\n    the official court jester.\n  </ScrollArea>\n</template>"
+  },
+  {
+   "name": "Orientations",
+   "sfc": "<script setup>\n  import ScrollArea from '@aziontech/webkit/scroll-area'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-start gap-(--spacing-6)\">\n    <ScrollArea\n      orientation=\"vertical\"\n      aria-label=\"Vertical scroll\"\n      class=\"h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default) p-(--spacing-3) text-body-sm text-(--text-default)\"\n    >\n      <div class=\"h-[320px]\">Tall content that scrolls along the vertical axis.</div>\n    </ScrollArea>\n    <ScrollArea\n      orientation=\"horizontal\"\n      aria-label=\"Horizontal scroll\"\n      class=\"w-[240px] rounded-(--shape-elements) border border-(--border-default) p-(--spacing-3) text-body-sm text-(--text-default)\"\n    >\n      <p class=\"m-0 w-max whitespace-nowrap\">\n        This line is intentionally wider than the container so horizontal scrolling is required.\n      </p>\n    </ScrollArea>\n    <ScrollArea\n      orientation=\"both\"\n      aria-label=\"Two-axis scroll\"\n      class=\"h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default) p-(--spacing-3) text-body-sm text-(--text-default)\"\n    >\n      <div class=\"h-[320px] w-[480px]\">Tall and wide content for two-axis scrolling.</div>\n    </ScrollArea>\n  </div>\n</template>"
+  },
+  {
+   "name": "Fade",
+   "sfc": "<script setup>\n  import ScrollArea from '@aziontech/webkit/scroll-area'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-start gap-(--spacing-6)\">\n    <div\n      class=\"w-[280px] overflow-hidden rounded-(--shape-elements) border border-(--border-default)\"\n    >\n      <ScrollArea\n        fade\n        aria-label=\"Deployments\"\n        class=\"h-[240px] p-(--spacing-xs)\"\n      >\n        <ul class=\"m-0 flex list-none flex-col gap-(--spacing-xxs) p-0\">\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            edge-app-production\n          </li>\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            edge-app-staging\n          </li>\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            marketing-site\n          </li>\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            docs-portal\n          </li>\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            image-optimizer\n          </li>\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            api-gateway\n          </li>\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            auth-service\n          </li>\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            checkout-function\n          </li>\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            search-indexer\n          </li>\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            media-transcoder\n          </li>\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            waf-rules-engine\n          </li>\n          <li\n            class=\"rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            analytics-collector\n          </li>\n        </ul>\n      </ScrollArea>\n    </div>\n    <div\n      class=\"w-[280px] overflow-hidden rounded-(--shape-elements) border border-(--border-default)\"\n    >\n      <ScrollArea\n        fade\n        orientation=\"horizontal\"\n        aria-label=\"Regions\"\n        class=\"p-(--spacing-xs)\"\n      >\n        <div class=\"flex w-max gap-(--spacing-xs)\">\n          <span\n            class=\"rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n            >São Paulo</span\n          >\n          <span\n            class=\"rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n            >Miami</span\n          >\n          <span\n            class=\"rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n            >Frankfurt</span\n          >\n          <span\n            class=\"rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n            >Tokyo</span\n          >\n          <span\n            class=\"rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n            >Sydney</span\n          >\n          <span\n            class=\"rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n            >Mumbai</span\n          >\n        </div>\n      </ScrollArea>\n    </div>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/scroll-area.md"
+}

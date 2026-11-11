@@ -1,0 +1,99 @@
+{
+ "name": "compare-plans",
+ "binding": "ComparePlans",
+ "import": "@aziontech/webkit/compare-plans",
+ "treeShakeableImport": "@aziontech/webkit/compare-plans",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — a tick, a dash, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a select. It is a page section — the site places it from a `{ _id: 'compare-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `button`, `overline`, `hint`, `tag` and `link`.",
+ "setup": null,
+ "useWhen": [
+  "On Pricing, under the plan cards, to show what every plan includes product by product."
+ ],
+ "avoidWhen": [
+  "To compare support tiers → use `compare-support-tiers`.",
+  "To compare Azion with a competitor → use `comparison-table`."
+ ],
+ "related": [
+  "pricing-plans` — the plan cards this matrix sits under.",
+  "compare-support-tiers` — the same matrix for the Support page."
+ ],
+ "bestPractices": [
+  "Give every plan a stable `id`; the narrow-screen picker selects by it.",
+  "Mark one plan `highlighted`; it gets the accent bar, the secondary button and opens the picker.",
+  "Give every row's `values` one entry per plan, in plan order."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "caption",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Screen-reader caption naming the table."
+  },
+  {
+   "name": "columnLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Heading of the feature column, shown from the large breakpoint up."
+  },
+  {
+   "name": "pickerAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the plan picker shown below the large breakpoint."
+  },
+  {
+   "name": "includedLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Screen-reader text of a ticked cell."
+  },
+  {
+   "name": "excludedLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Screen-reader text of a dashed cell."
+  },
+  {
+   "name": "plans",
+   "type": "ComparePlansPlan[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The plan columns, in order; each is `{ id, name, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped."
+  },
+  {
+   "name": "sections",
+   "type": "ComparePlansSection[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The product bands, in order; each is `{ eyebrow, title, description, rows }` and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank."
+  },
+  {
+   "name": "primaryAction",
+   "type": "ComparePlansAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [],
+ "docs": "components/compare-plans.md"
+}

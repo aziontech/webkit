@@ -1,0 +1,115 @@
+{
+ "name": "listing-browser",
+ "binding": "ListingBrowser",
+ "import": "@aziontech/webkit/listing-browser",
+ "treeShakeableImport": "@aziontech/webkit/listing-browser",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The full, browsable listing of a page such as the Careers jobs list: a headline over a toolbar (a search field, one select per facet and one for the order) and every row under its group, as a table from the small breakpoint up and as a list of items below it, with an empty state when nothing matches. Search, facets and order are local state over the rows the page carries; a facet is seeded from `?<key>=` in the URL when the value is one the page offers. It is a page section — the site places it from a `{ _id: 'listing-browser', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `input`, `select`, `table`, `item`, `empty-state` and `button` rather than owning any anatomy of its own.",
+ "setup": null,
+ "useWhen": [
+  "For a listing a reader narrows by text and by a few facets, such as open positions grouped by department.",
+  "When every row links to its own page and the listing fits in the page JSON."
+ ],
+ "avoidWhen": [
+  "For a short, unfiltered preview of the same rows → use `listing-table`.",
+  "For a data table with sorting, selection and pagination inside the product → use `table`.",
+  "For a grid of linked topic cards → use `subject-library`."
+ ],
+ "related": [
+  "table` — the composed rows and cells the listing renders from the small breakpoint up.",
+  "item` — the list rows the listing renders below the small breakpoint.",
+  "empty-state` — the state shown when the search and facets match nothing."
+ ],
+ "bestPractices": [
+  "Name the first column after what the row is (`Role`); it is the row's link, and the second column describes the row on phones.",
+  "Give every row the facet values it carries under the facet's `key`, so the selects narrow it.",
+  "Keep `groups` in the order the reader scans; rows of a group not listed there are not shown.",
+  "Make the first entry of `sorts` the order the page is authored in, with an empty `by`."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page `id` of the band, the target of a `#hash` link."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline over the listing, rendered by the section title as its `h2` and naming the band."
+  },
+  {
+   "name": "columns",
+   "type": "ListingBrowserColumn[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The columns, left to right; each is `{ key, label, grow?, align? }`. The first names the row and links it, the second describes it on phones."
+  },
+  {
+   "name": "rows",
+   "type": "ListingBrowserRow[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Every row, in source order; each is `{ href, group, values, facets }` where `values` and `facets` are keyed by column and facet."
+  },
+  {
+   "name": "groups",
+   "type": "string[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The groups the rows are listed under, in order; a group with no matching row is not shown."
+  },
+  {
+   "name": "facets",
+   "type": "ListingBrowserFacet[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The facet selects; each is `{ key, label, allLabel, options }` where `key` matches a row facet and seeds it from `?key=` in the URL, and every option is `{ value, label }`."
+  },
+  {
+   "name": "sorts",
+   "type": "ListingBrowserSort[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The orders, the first the default; each is `{ value, label, by? }` where `by` is the column it sorts on and an empty `by` keeps the source order."
+  },
+  {
+   "name": "sortAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the order select."
+  },
+  {
+   "name": "search",
+   "type": "ListingBrowserSearch",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The search field; `{ placeholder, shortPlaceholder, label }` where `shortPlaceholder` is used below the large breakpoint and `label` names the field. Omitted when absent."
+  },
+  {
+   "name": "empty",
+   "type": "ListingBrowserEmpty",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The state shown when nothing matches; `{ title, description, clearLabel }` where `clearLabel` is the button that clears the search and every facet. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ListingBrowser from '@aziontech/webkit/listing-browser'\n</script>\n\n<template>\n  <ListingBrowser\n    title=\"Open positions\"\n    :columns=\"[\n      { key: 'role', label: 'Role', grow: 2 },\n      { key: 'team', label: 'Team and location', grow: 2 },\n      { key: 'type', label: 'Work type', align: 'end' }\n    ]\"\n    :rows=\"[\n      {\n        href: '/careers/software-engineer-go',\n        group: 'Engineering',\n        values: {\n          role: 'Software Engineer (Go)',\n          team: 'Engineering · Porto Alegre',\n          type: 'Hybrid · Full-time'\n        },\n        facets: { area: ['Engineering'], location: ['Porto Alegre'] }\n      },\n      {\n        href: '/careers/grc-analyst',\n        group: 'Security',\n        values: {\n          role: 'GRC Analyst (Governance, Risk & Compliance)',\n          team: 'Compliance and Corporate IT · Porto Alegre / São Paulo',\n          type: 'Hybrid · Full-time'\n        },\n        facets: { area: ['Security'], location: ['Porto Alegre', 'São Paulo'] }\n      }\n    ]\"\n    :groups=\"['Engineering', 'Security']\"\n    :facets=\"[\n      {\n        key: 'area',\n        label: 'Department',\n        allLabel: 'All departments',\n        options: [\n          { value: 'Engineering', label: 'Engineering' },\n          { value: 'Security', label: 'Security' }\n        ]\n      },\n      {\n        key: 'location',\n        label: 'Location',\n        allLabel: 'All locations',\n        options: [\n          { value: 'São Paulo', label: 'São Paulo, Brazil' },\n          { value: 'Porto Alegre', label: 'Porto Alegre, Brazil' }\n        ]\n      }\n    ]\"\n    :sorts=\"[\n      { value: 'newest', label: 'Newest posted', by: '' },\n      { value: 'title', label: 'Title (A–Z)', by: 'role' }\n    ]\"\n    sort-aria-label=\"Sort positions\"\n    :search=\"{\n      placeholder: 'Search by title, team, or location',\n      shortPlaceholder: 'Search positions',\n      label: 'Search positions'\n    }\"\n    :empty=\"{\n      title: 'Nothing here yet',\n      description: 'No open positions match your search.',\n      clearLabel: 'View all open positions'\n    }\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/listing-browser.md"
+}

@@ -1,0 +1,96 @@
+{
+ "name": "closing-call-to-action-agents",
+ "binding": "ClosingCallToActionAgents",
+ "import": "@aziontech/webkit/closing-call-to-action-agents",
+ "treeShakeableImport": "@aziontech/webkit/closing-call-to-action-agents",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The close for a reader who may be a person or an agent: one centred ask in the loud `primary` register of the call to action, under a pixelated, waving texture, with a small segmented switch under the title that picks the way in. Each audience carries an optional copyable line and its actions; under them, a line types its words one after another behind a blinking cursor, then a closing sentence, both the same for every audience so the band keeps its height when the switch changes. The hatched closing frame follows. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-agents', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `toggle-group`, `input-group`, `copy-button`, `button`, `frame-box` and `texture-material`. The switch and the typed word are local state.",
+ "setup": null,
+ "useWhen": [
+  "To close a developer page whose reader may be a person or the person's agent."
+ ],
+ "avoidWhen": [
+  "For a close on one or two link actions → use `closing-call-to-action` (`primary` for the same loud register without the switch).",
+  "For a newsletter sign-up → use `closing-call-to-action-newsletter`."
+ ],
+ "related": [
+  "closing-call-to-action` — the same close without the audience switch."
+ ],
+ "bestPractices": [
+  "Keep two audiences; the first one opens.",
+  "Keep each copyable line short enough to fit the field; the copy button copies exactly what it shows.",
+  "Keep `typedWords` to a few short words; screen readers and reduced motion get the whole list at once."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty."
+  },
+  {
+   "name": "typedLead",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fixed opening of the typed line, before the typed word."
+  },
+  {
+   "name": "typedWords",
+   "type": "string[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only when there are words."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Closing sentence under the typed line, the same for every audience."
+  },
+  {
+   "name": "audiences",
+   "type": "ClosingCallToActionAgentsAudience[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The ways in, in switch order; each is `{ value, label, copy?, actions? }` and the first one opens. The switch renders only with two or more."
+  },
+  {
+   "name": "audiencesAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the audience switch."
+  },
+  {
+   "name": "lineAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the read-only field that shows an audience's copyable line."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'\n\n  const typedWords = ['Console', 'CLI', 'MCP server']\n\n  const audiences = [\n    {\n      value: 'humans',\n      label: 'For humans',\n      actions: [\n        {\n          label: 'Start for free',\n          href: '/signup',\n          kind: 'secondary',\n          trailing: true\n        },\n        {\n          label: 'Talk to a specialist',\n          href: '/site/contact',\n          kind: 'outlined',\n          trailing: true\n        }\n      ]\n    },\n    {\n      value: 'agents',\n      label: 'For agents',\n      copy: {\n        label: 'Copy prompt',\n        text: 'Connect Azion MCP: https://mcp.azion.com'\n      },\n      actions: [\n        {\n          label: 'Read the agent docs',\n          href: '/site/docs/agent-setup',\n          kind: 'outlined',\n          trailing: true\n        }\n      ]\n    }\n  ]\n</script>\n\n<template>\n  <ClosingCallToActionAgents\n    anchor=\"contact\"\n    title=\"Built by you, or your agents.\"\n    typed-lead=\"Drive one platform from the\"\n    :typed-words=\"typedWords\"\n    description=\"A person and an agent ship the same way.\"\n    audiences-aria-label=\"Audience\"\n    line-aria-label=\"Prompt\"\n    :audiences=\"audiences\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/closing-call-to-action-agents.md"
+}

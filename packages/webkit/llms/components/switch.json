@@ -1,0 +1,90 @@
+{
+ "name": "switch",
+ "binding": "Switch",
+ "import": "@aziontech/webkit/switch",
+ "treeShakeableImport": "@aziontech/webkit/switch",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.",
+ "setup": null,
+ "useWhen": [
+  "An on/off setting that takes effect as soon as it flips (enable a feature, turn a rule on).",
+  "A row that already names the setting outside the control, such as an `item` row whose title is the label.",
+  "A visibility or access toggle: `kind=\"privacy\"` shows a closed lock when off and an open lock when on."
+ ],
+ "avoidWhen": [
+  "The toggle needs its own label, description, or helper text in a form → wrap it in a horizontal `field` (`Field orientation=\"horizontal\"` + `Field.Content`).",
+  "The toggle should sit in a bordered card with a description → use a `field` choice card (`Field.Label` wrapping a horizontal `Field`).",
+  "A text value that only applies while a feature is on → compose a `Field` with an `InputGroup` (`InputGroup.Input` + an `InputGroup.Addon` holding the switch).",
+  "The choice is submitted with a form instead of applied immediately → use `checkbox`."
+ ],
+ "related": [
+  "field` — a horizontal `Field` gives the switch its label and description; a `Field.Label` wrapping it is a card-style option.",
+  "input-group` — a text input with a trailing switch addon that enables it, inside a `Field`.",
+  "checkbox` — boolean selection submitted with a form.",
+  "item` — list row whose title names a bare switch."
+ ],
+ "bestPractices": [
+  "The switch renders no text: give it an accessible name with `aria-label`, or `aria-labelledby` pointing at the visible label.",
+  "Set `disabled` on the switch itself; it renders a native disabled button, so it leaves the tab order and ignores clicks and keys.",
+  "focused` moves real focus and forces the ring; use it only to mirror an external focus state, never as decoration.",
+  "Keep `kind=\"default\"` unless the setting is about visibility or access."
+ ],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Toggled-on state. Bind with `v-model=\"value\"`. Mirrors the Figma checked/on variant."
+  },
+  {
+   "name": "kind",
+   "type": "'default' | 'privacy'",
+   "default": "'default'",
+   "required": "false",
+   "doc": "Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on)."
+  },
+  {
+   "name": "focused",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies the disabled tokens."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:modelValue",
+   "payload": "boolean",
+   "notes": "Emitted when the user toggles the switch. Paired with `v-model`."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const modelValue = ref(false)\n</script>\n\n<template>\n  <Switch\n    v-model=\"modelValue\"\n    aria-label=\"Toggle setting\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const defaultOff = ref(false)\n  const defaultOn = ref(true)\n  const privacyOff = ref(false)\n  const privacyOn = ref(true)\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-4)\">\n    <Switch\n      v-model=\"defaultOff\"\n      kind=\"default\"\n      aria-label=\"Default off\"\n    />\n    <Switch\n      v-model=\"defaultOn\"\n      kind=\"default\"\n      aria-label=\"Default on\"\n    />\n    <Switch\n      v-model=\"privacyOff\"\n      kind=\"privacy\"\n      aria-label=\"Privacy off\"\n    />\n    <Switch\n      v-model=\"privacyOn\"\n      kind=\"privacy\"\n      aria-label=\"Privacy on\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const lockedOff = ref(false)\n  const lockedOn = ref(true)\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-4)\">\n    <Switch\n      v-model=\"lockedOff\"\n      disabled\n      aria-label=\"Locked off\"\n    />\n    <Switch\n      v-model=\"lockedOn\"\n      disabled\n      aria-label=\"Locked on\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/switch.md"
+}

@@ -299,7 +299,16 @@ Exit: all suites green on the integrated branch.
 
 ## M2.2 — `llms.txt` and Markdown pages
 
-`llms.txt` plus one `.md` per component, block and foundation page, and `.json` APIs, generated from the catalog — for agents without the MCP.
+Done: `packages/webkit/scripts/build-llms.mjs` writes `packages/webkit/llms/` from `catalog.json`
+and the specs: `llms.txt` (llmstxt.org format, 262 linked pages), one `.md` per component (191:
+import, when to use, do and don't, related, props, events, slots, sub-components, states,
+accessibility, RTL, examples with code) with its API as `components/<name>.json`, one per block
+(61: intents, `guidelines.md`, variants, primary SFC), ten foundation pages (tokens, color,
+typography, spacing, motion, i18n, RTL, devices, accessibility, usage) and `llms-full.txt` (every
+page, ~2.1 MB, 3 MB budget: block guidelines without code, first example per component).
+`catalog:build` regenerates it, `catalog:check` and the `llms` gate check it, `test/llms/` tests it,
+and it ships in the npm package. Skills, rules, adapters and both READMEs point agents without the
+MCP at `node_modules/@aziontech/webkit/llms/llms.txt`. The docs site (M2.3) serves the folder as is.
 
 ## M2.3 — Docs site
 
@@ -321,8 +330,17 @@ Needs M2.3.
 
 ## M2.6 — Search quality
 
-Tune pattern and component search (synonyms en / pt-BR, ranking) with a fixed query set and an
-expected-result table run in CI; today "onboarding" and "upgrade plan" rank the wrong block first.
+Done: search understands en, pt-BR and es through `packages/webkit/src/mcp/search-lexicon.js`
+(synonym groups for patterns, translated names for components, stopwords; the longest phrase wins
+when two groups overlap). Ranking: an exact id or name first, then the whole query as an intent,
+then synonym groups (each counted once), then words in the name, components and summary; a verb
+alone ("criar") favours the block that has "<verb> page" as an intent. `search_patterns`,
+`search_components` and `suggest_component` take `surface`. `test/mcp/search-queries.json` holds
+187 queries (89 en, 56 pt-BR, 42 es; expected top-1 and acceptable top-3) run by
+`test/mcp/search-quality.test.mjs` in the toolkit tests (fails under 95 % top-1 or on any top-3
+miss). Before: top-1 70.6 %, top-3 77.0 % (es patterns 11/29, pt-BR and es components 2/26).
+After: 100 % and 100 %. "onboarding" and "upgrade plan" already ranked right when the set was
+written (the M1 intents fixed them); both are in the set.
 
 ## M2.7 — Final AI evaluation
 

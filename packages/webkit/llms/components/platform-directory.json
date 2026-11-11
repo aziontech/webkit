@@ -1,0 +1,64 @@
+{
+ "name": "platform-directory",
+ "binding": "PlatformDirectory",
+ "import": "@aziontech/webkit/platform-directory",
+ "treeShakeableImport": "@aziontech/webkit/platform-directory",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product. It is a page section — the site places it from a `{ _id: 'platform-directory', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box` and `column-navigation` rather than owning any anatomy of its own.",
+ "setup": null,
+ "useWhen": [
+  "On Home, right under the hero, to show every product the platform offers at a glance.",
+  "On a solution, product or pricing page that repeats the full product map."
+ ],
+ "avoidWhen": [
+  "For a handful of icon-led use cases → use `use-cases`.",
+  "For a site-wide navigation menu → use `navigation-menu`.",
+  "Inside another band's cell → compose `column-navigation` directly."
+ ],
+ "related": [
+  "column-navigation` — the named navigation landmark whose columns and rows this band fills.",
+  "section-title` — the headline over the directory."
+ ],
+ "bestPractices": [
+  "Keep to four groups; the directory fans out to four columns at the large breakpoint.",
+  "Give each item an `href`; an item without a title or a link is skipped, and a group left with no items is skipped too.",
+  "Set `ariaLabel` so the directory's navigation landmark is told apart from the site navigation."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline over the directory, rendered by the section title as its `h2`; the band renders no header when empty."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the directory's navigation landmark."
+  },
+  {
+   "name": "groups",
+   "type": "PlatformDirectoryGroup[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The columns, in order; each is `{ title, items }` where every item is `{ icon, title, description, href }`. Items without a title or an `href` are skipped, and so are groups left empty."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import PlatformDirectory from '@aziontech/webkit/platform-directory'\n</script>\n\n<template>\n  <PlatformDirectory\n    title=\"Everything you need to build and run applications\"\n    aria-label=\"Azion products\"\n    :groups=\"[\n      {\n        title: 'Build',\n        items: [\n          {\n            icon: 'ai ai-edge-functions',\n            title: 'Functions',\n            description: 'Run code globally with no cold starts',\n            href: '/products/functions'\n          },\n          {\n            icon: 'ai ai-edge-ai',\n            title: 'AI Inference',\n            description: 'Run models close to the user',\n            href: 'https://www.azion.com/en/products/ai-inference/'\n          }\n        ]\n      },\n      {\n        title: 'Store',\n        items: [\n          {\n            icon: 'ai ai-edge-kv',\n            title: 'KV Store',\n            description: 'Store key-value data with low latency',\n            href: 'https://www.azion.com/en/products/kv-store/'\n          }\n        ]\n      },\n      {\n        title: 'Secure',\n        items: [\n          {\n            icon: 'ai ai-waf-rules',\n            title: 'WAF',\n            description: 'Block common attacks close to traffic',\n            href: 'https://www.azion.com/en/products/web-application-firewall/'\n          }\n        ]\n      },\n      {\n        title: 'Observe',\n        items: [\n          {\n            icon: 'ai ai-real-time-metrics',\n            title: 'Real-Time Metrics',\n            description: 'Watch traffic, errors and latency as they happen',\n            href: 'https://www.azion.com/en/products/real-time-metrics/'\n          }\n        ]\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/platform-directory.md"
+}

@@ -1,0 +1,78 @@
+{
+ "name": "texture-material",
+ "binding": "TextureMaterial",
+ "import": "@aziontech/webkit/texture-material",
+ "treeShakeableImport": "@aziontech/webkit/texture-material",
+ "category": "marketing",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it. It is a material, not a container — it takes no content and claims no space, so a band composes it into its own backdrop slot and keeps ownership of its layout.",
+ "setup": null,
+ "useWhen": [
+  "In a band's `background` slot (`hero`), where the opening band needs the site's own lattice under its copy.",
+  "Behind a panel, dropzone or slide that would read as empty at a flat fill.",
+  "Anywhere a surface should look like a technical drawing ground without shipping an image."
+ ],
+ "avoidWhen": [
+  "To draw the rules between real content cells → use `frame-box`, whose rules are structural.",
+  "For the ruled divider between sections → use `section-gap`, which composes this layer's `lines` kind and owns that treatment.",
+  "For a meaningful image or diagram → use `illustration`.",
+  "As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it, inside the positioned ancestor."
+ ],
+ "related": [
+  "hero` — the band whose `background` slot this is composed into.",
+  "frame-box` — structural rules and corner marks, not decoration.",
+  "section-gap` — the hatched rhythm band between sections.",
+  "hero` — the marketing band that paints this texture behind its own copy."
+ ],
+ "bestPractices": [
+  "Give the layer a positioned ancestor (`relative`) that also clips it; it fills that box and nothing else.",
+  "Keep the texture behind copy, never over it. `dots` is the quiet default; `lines` is quieter still and reads as ruled paper; `dither` and `pixelate` are loud enough to need their ink dropped or their dense end steered away from the words.",
+  "Do not stack two layers at different pitches — that reads as a moiré, not as a texture.",
+  "Quiet a texture with `--texture-ink` rather than with `opacity`, so the ground keeps showing through at full strength.",
+  "Leave it out when the band already sits inside a `frame-box`; rules plus texture is usually one layer too many."
+ ],
+ "props": [
+  {
+   "name": "kind",
+   "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
+   "default": "'dots'",
+   "required": "false",
+   "doc": "Which texture to paint; `none` renders the layer with no texture at all."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Pitch of the tiling — how far apart the cells sit."
+  },
+  {
+   "name": "fade",
+   "type": "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'",
+   "default": "'none'",
+   "required": "false",
+   "doc": "Fades the layer out along an axis so it meets content without a hard edge."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"relative h-80 w-full overflow-hidden bg-(--bg-canvas)\">\n    <TextureMaterial\n      kind=\"dots\"\n      size=\"medium\"\n      fade=\"none\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Kinds",
+   "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2\">\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"dots\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"grid\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"lines\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"dither\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"pixelate\" />\n    </div>\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-3\">\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial size=\"small\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial size=\"medium\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial size=\"large\" />\n    </div>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/texture-material.md"
+}

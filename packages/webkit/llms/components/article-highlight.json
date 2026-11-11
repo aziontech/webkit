@@ -1,0 +1,68 @@
+{
+ "name": "article-highlight",
+ "binding": "ArticleHighlight",
+ "import": "@aziontech/webkit/article-highlight",
+ "treeShakeableImport": "@aziontech/webkit/article-highlight",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The band that opens a blog under its hero. One article is shown large — its cover beside its overline, headline, deck, read time and a button into it — over a wall of the highlight articles that acts as its selector. The wall is a tablist and the large article its panel; selecting a title on the wall swaps the panel, and every article is drawn invisibly under the panel so the band keeps the height of its tallest article and never jumps. With four or more articles the wall runs four across. It is a page section — the site places it from a `{ _id: 'article-highlight', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid` and `button`; the selection is local state.",
+ "setup": null,
+ "useWhen": [
+  "To open a blog or a resource page with its newest or most important articles."
+ ],
+ "avoidWhen": [
+  "For a closing row of related articles → use `article-cards`.",
+  "For the full list of articles → use `article-index-blog`."
+ ],
+ "related": [
+  "article-cards` — the closing row of related articles.",
+  "card-grid` — the frame grid the wall of titles sits on."
+ ],
+ "bestPractices": [
+  "Feature three or four articles; four fill the wall four across.",
+  "Give a `highlightImage` cropped for the panel when the cover does not read at that size."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "items",
+   "type": "ArticleHighlightItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The highlight articles in wall order, the first selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`."
+  },
+  {
+   "name": "actionLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the button into the selected article; the button is omitted when empty."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the wall of titles."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ArticleHighlight from '@aziontech/webkit/article-highlight'\n</script>\n\n<template>\n  <ArticleHighlight\n    anchor=\"articles\"\n    action-label=\"Read article\"\n    aria-label=\"Highlight articles\"\n    :items=\"[\n      {\n        key: 'ship-portfolio-two-commands-azion-cli',\n        href: '/blog/ship-portfolio-two-commands-azion-cli',\n        image: '/media/blog/ship-portfolio-two-commands.png',\n        highlightImage: '/media/blog/ship-portfolio-two-commands-highlight.png',\n        meta: 'Developers • SEP 25, 2026',\n        title: 'How I Shipped My Portfolio in Just Two Commands',\n        description:\n          'See how a portfolio site went from template to live URL with just azion init and azion deploy.',\n        readTime: '9 min read'\n      },\n      {\n        key: 'how-to-reduce-ai-agent-latency',\n        href: '/blog/how-to-reduce-ai-agent-latency',\n        image: '/media/blog/reduce-ai-agent-latency.png',\n        highlightImage: '/media/blog/reduce-ai-agent-latency-highlight.png',\n        meta: 'Serverless • SEP 23, 2026',\n        title: 'How Do You Reduce AI Agent Latency?',\n        description:\n          'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state.',\n        readTime: '8 min read'\n      },\n      {\n        key: 'cloudflare-alternatives-and-competitors',\n        href: '/blog/cloudflare-alternatives-and-competitors',\n        image: '/media/blog/best-cloudflare-alternatives.png',\n        highlightImage: '/media/blog/best-cloudflare-alternatives-highlight.png',\n        meta: 'Security • SEP 22, 2026',\n        title: 'Best Cloudflare Alternatives and Competitors',\n        description:\n          'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting.',\n        readTime: '13 min read'\n      },\n      {\n        key: 'which-azion-plan-is-right-for-your-project',\n        href: '/blog/which-azion-plan-is-right-for-your-project',\n        image: '/media/blog/which-azion-plan.png',\n        highlightImage: '/media/blog/which-azion-plan-highlight.png',\n        meta: 'Company news • SEP 22, 2026',\n        title: 'Which Azion Plan Is Right for Your Project?',\n        description: 'Compare Azion’s Hobby, Pro, and Enterprise plans.',\n        readTime: '7 min read'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/article-highlight.md"
+}

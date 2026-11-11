@@ -1,0 +1,89 @@
+{
+ "name": "hero-copy-on-top-art",
+ "binding": "HeroCopyOnTopArt",
+ "import": "@aziontech/webkit/hero-copy-on-top-art",
+ "treeShakeableImport": "@aziontech/webkit/hero-copy-on-top-art",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The opening band of a product page whose copy sits centered on top of a topology scene: the page `h1` with its overline, sentence and up to two actions over columns of status cards wired left to right. It is a page section — the site places it from a `{ _id: 'hero-copy-on-top-art', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button`, `flow` and `tag`. It is a separate section from `hero-band` because the scene is a data model of its own: levels of cards, each with a status and an optional focus.",
+ "setup": null,
+ "useWhen": [
+  "To open a product page whose object is best shown as a small topology (domains feeding a workload that binds an application and a firewall)."
+ ],
+ "avoidWhen": [
+  "For an opening band with no scene → use `hero-band`.",
+  "For an opening band followed by a grid of arguments → use `hero-with-opening`."
+ ],
+ "related": [
+  "hero-band` — the sibling opening band with the same copy and actions and no scene.",
+  "flow` — the diagram primitive the scene is rendered with."
+ ],
+ "bestPractices": [
+  "Keep three levels of one or two cards so the scene fits the column on a tablet.",
+  "Mark exactly one card `lit`, the focus of the scene."
+ ],
+ "props": [
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Short overline above the headline."
+  },
+  {
+   "name": "highlight",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Opening words of the headline, painted in the brand accent; reads as one sentence with `title`."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Page headline, rendered as the page `h1`; the band renders nothing when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Sentence under the headline."
+  },
+  {
+   "name": "primaryAction",
+   "type": "HeroCopyOnTopArtAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "HeroCopyOnTopArtAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+  },
+  {
+   "name": "levels",
+   "type": "HeroCopyOnTopArtLevel[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The columns of the topology, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped, and the scene renders only when a level has a card."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import HeroCopyOnTopArt from '@aziontech/webkit/hero-copy-on-top-art'\n</script>\n\n<template>\n  <HeroCopyOnTopArt\n    eyebrow=\"Workloads\"\n    title=\"Put your application close to users in seconds\"\n    description=\"A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick.\"\n    :primary-action=\"{ label: 'Start for free', href: 'https://console.azion.com/signup' }\"\n    :secondary-action=\"{\n      label: 'Docs',\n      href: 'https://www.azion.com/en/documentation/',\n      trailing: true\n    }\"\n    :levels=\"[\n      {\n        nodes: [\n          {\n            eyebrow: 'Domain',\n            icon: 'ai ai-domains',\n            title: 'shop.example.com',\n            label: 'Public',\n            severity: 'info'\n          },\n          {\n            eyebrow: 'Domain',\n            icon: 'ai ai-domains',\n            title: 'api.example.com',\n            label: 'Public',\n            severity: 'info'\n          }\n        ]\n      },\n      {\n        nodes: [\n          {\n            eyebrow: 'Workload',\n            icon: 'ai ai-workloads',\n            title: 'shop-prod',\n            label: 'Live',\n            severity: 'success',\n            lit: true\n          }\n        ]\n      },\n      {\n        nodes: [\n          {\n            eyebrow: 'Application',\n            icon: 'ai ai-edge-application',\n            title: 'storefront',\n            label: 'Active',\n            severity: 'success'\n          },\n          {\n            eyebrow: 'Firewall',\n            icon: 'ai ai-edge-firewall',\n            title: 'shop-rules',\n            label: 'Active',\n            severity: 'success'\n          }\n        ]\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/hero-copy-on-top-art.md"
+}

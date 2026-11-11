@@ -1,0 +1,76 @@
+{
+ "name": "listing-table",
+ "binding": "ListingTable",
+ "import": "@aziontech/webkit/listing-table",
+ "treeShakeableImport": "@aziontech/webkit/listing-table",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `table` and, below `sm`, `item`. Each row is one link named by its first column; the whole row is clickable with the pointer and the first column's link is the keyboard and screen-reader path. Below `sm` the same rows become a list of items, the first column as the title and the second as the description, with the button going full width.",
+ "setup": null,
+ "useWhen": [
+  "To preview the latest entries of a listing (open roles, releases, events) with a way into the full list."
+ ],
+ "avoidWhen": [
+  "For a filterable or paginated listing → use `listing-browser`.",
+  "For a comparison of plans or features → use the pricing matrix."
+ ],
+ "related": [
+  "table` — the composition table the wide layout renders.",
+  "listing-browser` — the full listing this band links into."
+ ],
+ "bestPractices": [
+  "Keep three columns at most; the first names the row and the second describes it on phones.",
+  "Give the wide columns `grow: 2` and align a short trailing column to `end`.",
+  "Keep the preview to a handful of rows and point `primaryAction` at the full listing."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty."
+  },
+  {
+   "name": "columns",
+   "type": "ListingTableColumn[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones."
+  },
+  {
+   "name": "rows",
+   "type": "ListingTableRow[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text."
+  },
+  {
+   "name": "primaryAction",
+   "type": "ListingTableAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ListingTable from '@aziontech/webkit/listing-table'\n</script>\n\n<template>\n  <ListingTable\n    title=\"Latest roles\"\n    :columns=\"[\n      { key: 'role', label: 'Role', grow: 2 },\n      { key: 'team', label: 'Team and location', grow: 2 },\n      { key: 'type', label: 'Work type', align: 'end' }\n    ]\"\n    :rows=\"[\n      {\n        href: '/careers/senior-platform-engineer',\n        values: {\n          role: 'Senior Platform Engineer',\n          team: 'Delivery Engineering · Porto Alegre',\n          type: 'Hybrid · Full-time'\n        }\n      },\n      {\n        href: '/careers/senior-quality-automation-engineer',\n        values: {\n          role: 'Senior Quality Automation Engineer',\n          team: 'Delivery Engineering · Porto Alegre',\n          type: 'Hybrid · Full-time'\n        }\n      },\n      {\n        href: '/careers/software-engineer-go',\n        values: {\n          role: 'Software Engineer (Go)',\n          team: 'Engineering · Porto Alegre',\n          type: 'Hybrid · Full-time'\n        }\n      },\n      {\n        href: '/careers/software-engineer-rust',\n        values: {\n          role: 'Software Engineer (Rust and/or C/C++)',\n          team: 'Platform Engineering · Porto Alegre / São Paulo',\n          type: 'Hybrid · Full-time'\n        }\n      },\n      {\n        href: '/careers/senior-infrastructure-analyst',\n        values: {\n          role: 'Senior Infrastructure Analyst',\n          team: 'SRE · Porto Alegre / São Paulo',\n          type: 'Hybrid · Full-time'\n        }\n      },\n      {\n        href: '/careers/software-engineer-frontend',\n        values: {\n          role: 'Software Engineer (Frontend)',\n          team: 'UX Engineering · Porto Alegre',\n          type: 'Hybrid · Full-time'\n        }\n      }\n    ]\"\n    :primary-action=\"{ label: 'See all 23 roles', href: '/careers/jobs', trailing: true }\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/listing-table.md"
+}

@@ -1,0 +1,132 @@
+{
+ "name": "stat-tile",
+ "binding": "StatTile",
+ "import": "@aziontech/webkit/stat-tile",
+ "treeShakeableImport": "@aziontech/webkit/stat-tile",
+ "category": "chart",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses.",
+ "setup": null,
+ "useWhen": [
+  "The headline numbers of a dashboard: total requests, blocked threats, cache hit ratio, error rate.",
+  "A single value whose change matters more than its history; the sparkline adds the shape of that history."
+ ],
+ "avoidWhen": [
+  "The history itself is the point → use `chart`.",
+  "A share of a whole → use `donut-chart`.",
+  "Marketing figures on a site band → use `big-numbers`."
+ ],
+ "related": [
+  "chart` — the full history behind a tile.",
+  "chart-card` — the box for a chart; a tile is its own small surface and does not sit in one.",
+  "big-numbers` — the marketing figure band, with no delta and no live data.",
+  "spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.",
+  "tag` — the delta renders as a `Tag`; the empty band's \"No data\" is a `Tag` too.",
+  "divider` — carries the \"No data\" `Tag` across the empty band."
+ ],
+ "bestPractices": [
+  "Name the comparison period in `deltaLabel` (\"vs previous 24 hours\"); a bare percentage is ambiguous.",
+  "Set `inverse` on every metric where a rise is bad, so a growing threat count reads as a regression.",
+  "Keep the label in sentence case with no trailing colon.",
+  "Put the unit in `unit` (\"GB\", \"ms\", \"%\"), not inside `formatValue`, so it reads muted beside the figure.",
+  "Leave `trend` out for a strip of figures with no history; the tile then has no chart band.",
+  "Give the sparkline the same buckets as the chart below it, about twelve points."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Metric name, in sentence case. Fallback for the default slot."
+  },
+  {
+   "name": "value",
+   "type": "number | null",
+   "default": "null",
+   "required": "false",
+   "doc": "The current value. It counts up from the previous value on change; null renders a dash."
+  },
+  {
+   "name": "formatValue",
+   "type": "(value: number) => string",
+   "default": "formatCompact",
+   "required": "false",
+   "doc": "Formats the figure."
+  },
+  {
+   "name": "unit",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Unit read after the figure, in a muted tone. Empty hides it."
+  },
+  {
+   "name": "delta",
+   "type": "number | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Signed change against the named period, in percent. Null hides the delta."
+  },
+  {
+   "name": "deltaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The comparison period, read after the delta."
+  },
+  {
+   "name": "inverse",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "A rise is bad for this metric; flips the delta between success and danger."
+  },
+  {
+   "name": "trend",
+   "type": "number[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Sparkline values, oldest first. Empty hides the sparkline."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders Skeleton lines in place of the figure, delta and sparkline."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Replaces the label text."
+  },
+  {
+   "name": "aside",
+   "scope": "—",
+   "notes": "Trailing content beside the label, such as an info icon or a menu."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n</script>\n\n<template>\n  <StatTile\n    label=\"Blocked threats\"\n    :value=\"48210\"\n    :delta=\"12.4\"\n    delta-label=\"vs previous 24 hours\"\n    inverse\n    :trend=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n  />\n</template>"
+  },
+  {
+   "name": "Deltas",
+   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2 lg:grid-cols-4\">\n    <StatTile\n      label=\"Data transferred\"\n      :value=\"842\"\n      unit=\"GB\"\n      :delta=\"8.2\"\n      delta-label=\"vs previous 24 hours\"\n    />\n    <StatTile\n      label=\"Blocked threats\"\n      :value=\"48210\"\n      :delta=\"12.4\"\n      delta-label=\"vs previous 24 hours\"\n      inverse\n    />\n    <StatTile\n      label=\"Cache hit ratio\"\n      :value=\"96.2\"\n      unit=\"%\"\n      :delta=\"0\"\n      delta-label=\"vs previous 24 hours\"\n    />\n    <StatTile\n      label=\"Edge locations\"\n      :value=\"120\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "CountUp",
+   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n  import Button from '@aziontech/webkit/button'\n  import { ref } from 'vue'\n\n  const value = ref(48210)\n</script>\n\n<template>\n  <div class=\"flex max-w-(--container-xs) flex-col gap-(--spacing-sm)\">\n    <StatTile\n      label=\"Blocked threats\"\n      :value=\"value\"\n    />\n    <Button\n      kind=\"secondary\"\n      size=\"medium\"\n      label=\"Refresh\"\n      @click=\"value += 4210\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/stat-tile.md"
+}

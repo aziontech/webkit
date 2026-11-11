@@ -1,0 +1,94 @@
+{
+ "name": "radio-cards",
+ "binding": "RadioCards",
+ "import": "@aziontech/webkit/radio-cards",
+ "treeShakeableImport": "@aziontech/webkit/radio-cards",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Horizontal grid of selectable cards for mutually exclusive choices (plans, roles, feature tiers). Each option shows label, optional icon and description, with optional trailing content via the `tag` slot. Migrated from the legacy `radio-cards` core component into the webkit inputs layer.",
+ "setup": null,
+ "useWhen": [
+  "One choice among a few options where each option needs a label plus an optional icon or one-line description: usage intent, role, plan tier.",
+  "Options laid out side by side as cards that wrap onto new rows, bound to one `v-model` value for the whole group.",
+  "A card needs small trailing content under its text, such as a price or a \"Recommended\" tag, through the `tag` slot."
+ ],
+ "avoidWhen": [
+  "You place each card-style radio by hand, or the choice must submit through a native form `name` → use `field` choice cards (`Field.Label` wrapping a horizontal `Field` with a `radio-button`).",
+  "The options don't need card weight and read fine as inline rows → use horizontal `field`s with a `radio-button`.",
+  "There are more options than fit in a row or two, or the choice sits in a compact form → use `select` inside a `field`.",
+  "More than one option can be picked → use `field` choice cards with a `checkbox`."
+ ],
+ "related": [
+  "field` — a `Field.Label` choice card is a single card-style radio (or checkbox) with title and description; compose several by hand with a shared `name`, or use a horizontal `Field` for an inline labelled row.",
+  "select` — dropdown for long option lists.",
+  "onboarding-form` — uses this component for its usage-intent question."
+ ],
+ "bestPractices": [
+  "Give every item a unique `value`; it is both the `v-model` payload and the render key.",
+  "Name the group by passing `aria-labelledby` or `aria-label` on the component: it renders a `role=\"radiogroup\"` with no visible label of its own. Set an item's `ariaLabel` when its `label` alone is ambiguous.",
+  "disabled` applies to the whole group; there is no per-item disabled state, so leave unavailable options out of `items`.",
+  "Use the `tag` slot for trailing content. The `default` slot replaces the whole card body (icon, label, description and `tag`), so use it only when the card needs a different layout.",
+  "Arrow keys move and select in one step, as in any radio group, so `update:modelValue` fires while a keyboard user browses. Don't trigger navigation or requests on every change."
+ ],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "string | number | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Currently selected item value (v-model)."
+  },
+  {
+   "name": "items",
+   "type": "RadioCardsItem[]",
+   "default": "undefined",
+   "required": "true",
+   "doc": "Options rendered as selectable cards; each entry must include `value` and `label`."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables all options and applies disabled tokens."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:modelValue",
+   "payload": "string | number",
+   "notes": "v-model when the user selects an option."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "{ item: RadioCardsItem; selected: boolean }",
+   "notes": "Overrides the entire card body for an option."
+  },
+  {
+   "name": "tag",
+   "scope": "{ item: RadioCardsItem; selected: boolean }",
+   "notes": "Trailing content below label/description (e.g. plan badge)."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import RadioCards from '@aziontech/webkit/radio-cards'\n  import { ref } from 'vue'\n\n  const items = [\n    {\n      value: 'option1',\n      icon: 'pi pi-check',\n      label: 'Option One',\n      description: 'First option description'\n    },\n    {\n      value: 'option2',\n      icon: 'pi pi-times',\n      label: 'Option Two',\n      description: 'Second option description'\n    },\n    {\n      value: 'option3',\n      icon: 'pi pi-star',\n      label: 'Option Three',\n      description: 'Third option description'\n    }\n  ]\n  const selected = ref('option1')\n</script>\n\n<template>\n  <RadioCards\n    v-model=\"selected\"\n    :items=\"items\"\n  />\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import RadioCards from '@aziontech/webkit/radio-cards'\n  import { ref } from 'vue'\n\n  const items = [\n    {\n      value: 'option1',\n      icon: 'pi pi-check',\n      label: 'Option One',\n      description: 'First option description'\n    },\n    {\n      value: 'option2',\n      icon: 'pi pi-times',\n      label: 'Option Two',\n      description: 'Second option description'\n    },\n    {\n      value: 'option3',\n      icon: 'pi pi-star',\n      label: 'Option Three',\n      description: 'Third option description'\n    }\n  ]\n  const selected = ref('option1')\n</script>\n\n<template>\n  <RadioCards\n    v-model=\"selected\"\n    :items=\"items\"\n    disabled\n  />\n</template>"
+  },
+  {
+   "name": "WithTag",
+   "sfc": "<script setup>\n  import RadioCards from '@aziontech/webkit/radio-cards'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const items = [\n    {\n      value: 'hobby',\n      icon: 'pi pi-sparkles',\n      label: 'Hobby',\n      description: 'For learning and small personal projects.',\n      ariaLabel: 'Hobby plan',\n      tag: 'Hobby Plan'\n    },\n    {\n      value: 'pro',\n      icon: 'pi pi-chart-line',\n      label: 'Pro',\n      description: 'For professional or commercial applications.',\n      ariaLabel: 'Pro plan',\n      tag: 'Pro Plan'\n    },\n    {\n      value: 'scale',\n      icon: 'pi pi-file-check',\n      label: 'Scale',\n      description: 'For businesses requiring advanced security and compliance.',\n      ariaLabel: 'Scale plan',\n      tag: 'Scale Plan'\n    }\n  ]\n  const selected = ref('hobby')\n</script>\n\n<template>\n  <RadioCards\n    v-model=\"selected\"\n    :items=\"items\"\n  >\n    <template #tag=\"{ item }\">\n      <Tag\n        :label=\"item.tag\"\n        severity=\"info\"\n      />\n    </template>\n  </RadioCards>\n</template>"
+  }
+ ],
+ "docs": "components/radio-cards.md"
+}

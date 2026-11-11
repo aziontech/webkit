@@ -1,0 +1,96 @@
+{
+ "name": "article-body",
+ "binding": "ArticleBody",
+ "import": "@aziontech/webkit/article-body",
+ "treeShakeableImport": "@aziontech/webkit/article-body",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the \"On this page\" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `section-container` instead of sitting in the page column. The prose arrives as markdown: blank-line separated blocks render as `##` / `###` headings (each with an id slugged from its text, feeding the outline), `-` lists and paragraphs. It is a page section — the site places it from a `{ _id: 'article-body', props }` entry and binds `props` straight onto it — and it composes `section-container`, `section-module`, `frame-box`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button` and `doc-on-this-page`; copying to the clipboard is local behaviour.",
+ "setup": null,
+ "useWhen": [
+  "To open every blog post and every success story page."
+ ],
+ "avoidWhen": [
+  "For a list of articles → use `article-index-blog`.",
+  "For a closing row of related articles → use `article-cards`."
+ ],
+ "related": [
+  "doc-prose` — the reading-measure typography the body renders in.",
+  "doc-on-this-page` — the outline rail fed by the body's headings."
+ ],
+ "bestPractices": [
+  "Write the body as plain blocks — headings, paragraphs and `-` lists separated by blank lines; inline markdown is rendered as text.",
+  "Mark the last breadcrumb entry `current`."
+ ],
+ "props": [
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the headline."
+  },
+  {
+   "name": "article",
+   "type": "ArticleBodyArticle",
+   "default": "—",
+   "required": "true",
+   "doc": "The piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`."
+  },
+  {
+   "name": "trail",
+   "type": "ArticleBodyCrumb[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The breadcrumb over the headline, each a `label` and an `href`, the last one marked `current`."
+  },
+  {
+   "name": "body",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The article as markdown; its `##` and `###` headings feed the outline."
+  },
+  {
+   "name": "banner",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "URL of the image over the masthead; the banner frame is omitted when empty."
+  },
+  {
+   "name": "share",
+   "type": "ArticleBodyShare",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`; the group is omitted when absent."
+  },
+  {
+   "name": "community",
+   "type": "ArticleBodyCommunity",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The community group: a `title` and `links`, each a `label`, an `href` and an `icon`; omitted when absent."
+  },
+  {
+   "name": "copyPage",
+   "type": "ArticleBodyCopyPage",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The copy-page split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`; omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ArticleBody from '@aziontech/webkit/article-body'\n</script>\n\n<template>\n  <ArticleBody\n    eyebrow=\"Blog\"\n    banner=\"/media/blog/banner.svg\"\n    body=\"## Challenge&#10;&#10;Magalu is the most innovative retail company in LATAM.&#10;&#10;## Solution&#10;&#10;Magalu counts on Azion’s platform to evolve its security posture.&#10;&#10;## Results and Impact&#10;&#10;Magalu simplified security operations by blocking millions of threats per year.\"\n    :article=\"{\n      title: 'Magalu Ensures High Availability at Scale with Azion',\n      description:\n        'Explore how Magalu enhances cybersecurity with Azion’s Firewall and WAF, improving threat intelligence and bot management in retail.',\n      date: 'FEB 4, 2022',\n      readTime: '5 min read',\n      href: 'https://www.azion.com/en/success-case/magalu/'\n    }\"\n    :trail=\"[\n      { label: 'Success cases', href: '/success-cases' },\n      { label: 'Retail', href: '/success-cases?industry=Retail' },\n      { label: 'Magalu Ensures High Availability at Scale with Azion', current: true }\n    ]\"\n    :share=\"{\n      title: 'Share this article',\n      copyLink: 'Copy link',\n      shareX: 'Share on X',\n      shareLinkedIn: 'Share on LinkedIn'\n    }\"\n    :community=\"{\n      title: 'Community',\n      links: [\n        {\n          label: 'Join us on Discord',\n          href: 'https://discord.com/invite/Yp9N7RMVZy',\n          icon: 'pi pi-discord'\n        },\n        { label: 'Read our blog posts', href: '/blog', icon: 'pi pi-comment' },\n        { label: 'Follow us on X', href: 'https://twitter.com/aziontech', icon: 'ai ai-x' }\n      ]\n    }\"\n    :copy-page=\"{\n      label: 'Copy page',\n      menu: [\n        { value: 'link', label: 'Get page link', icon: 'pi pi-link' },\n        { value: 'markdown', label: 'View page as markdown', icon: 'pi pi-eye' }\n      ]\n    }\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/article-body.md"
+}

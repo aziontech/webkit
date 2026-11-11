@@ -25,14 +25,18 @@ the props and the classes. Pattern ids are grouped by task (`platform/create/…
 whose states are its variants (pass `variant` to `get_pattern`). Use `suggest_component` / `get_component` only for pieces the pattern does
 not cover. A marketing band is a page section: `suggest_component` returns it (rule `webkit-sections`).
 Every export carries a `surface`: `product` (console and apps), `marketing` (the azion.com site) or
-`docs` (the documentation site). A console screen uses `product` only (`list_components` takes
-`surface`).
+`docs` (the documentation site). A console screen uses `product` only (`list_components`,
+`search_patterns` and `suggest_component` take `surface`). The search tools understand English,
+Portuguese and Spanish ("cadastro", "crear cuenta"). Without the MCP, read
+`node_modules/@aziontech/webkit/llms/llms.txt`: one Markdown page per block, component and
+foundation, a JSON API per component, and `llms-full.txt` with everything in one file.
 
 ### Invariants — always follow
 
 - **Patterns, then components.** Screens start from a pattern (above). Pieces reach for an
   `@aziontech/webkit` component before writing custom UI — find one via the `webkit` MCP
-  (`suggest_component`) or `node_modules/@aziontech/webkit/catalog.json`.
+  (`suggest_component`), `node_modules/@aziontech/webkit/llms/llms.txt` or
+  `node_modules/@aziontech/webkit/catalog.json`.
 - **Flat imports.** `import Button from '@aziontech/webkit/button'` (PascalCase binding = the subpath);
   page sections too (`@aziontech/webkit/pricing-plans`). Never category-prefixed, `/src/`,
   deep-internal, or a bare-package barrel.

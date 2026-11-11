@@ -1,0 +1,80 @@
+{
+ "name": "resizable",
+ "binding": "Resizable",
+ "import": "@aziontech/webkit/resizable",
+ "treeShakeableImport": "@aziontech/webkit/resizable-root",
+ "category": "layout",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/resizable-handle",
+  "@aziontech/webkit/resizable-pane"
+ ],
+ "purpose": "A group of adjacent regions whose shared edges the reader can drag. It is the layout primitive behind a workspace — an editor with a terminal under it and a preview beside it — where every region is content the reader is working in and the split between them is theirs to set. It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's NAVIGATION rail: it collapses to icons, it hides, it is the thing you leave to go somewhere. A terminal, a preview and a code editor are not places you navigate to — they are the work — and dressing two of them as navigation rails made a screen with three \"sidebars\" and one document, on an axis `Sidebar` does not even have (it has no horizontal edge, so a terminal under an editor had to hand-roll its own splitter). This component owns the EDGE; `Sidebar` goes back to owning navigation.",
+ "setup": null,
+ "useWhen": [
+  "Two or more content regions share an edge the reader should be able to move (editor + terminal, editor + preview, list + detail).",
+  "The split is a working preference the reader sets many times in a session, not a one-time layout decision.",
+  "A region has to shrink to nothing and come back without losing its state (an editor's undo history, a scroll position).",
+  "The layout needs a horizontal edge — one region above another — which no other component in the package provides."
+ ],
+ "avoidWhen": [
+  "The panel is the app's navigation rail → use `sidebar`, which owns the icon rail, the collapse and the nav semantics.",
+  "The content is a temporary overlay over the page → use `drawer` (a panel that comes and goes) or `dialog`.",
+  "The regions have a fixed relationship the reader should not change → use plain flex/grid layout with the layout tokens.",
+  "The panel is one scrolling region with no movable edge → use `scroll-area`."
+ ],
+ "related": [
+  "sidebar` — the navigation rail. Collapses to icons, hides, and carries nav semantics; reach for it when the panel is how the reader gets somewhere, not what they work in.",
+  "scroll-area` — one region that scrolls. A pane usually contains one.",
+  "drawer` — a panel that arrives over the page and leaves; a resizable pane is always there."
+ ],
+ "bestPractices": [
+  "Give exactly ONE pane in a group no `basis`. That pane absorbs the remaining space, so the group always fills its container and the reader never sees a gap or a scrollbar they did not cause.",
+  "Put the `basis` on the pane whose size the reader cares about (the terminal's height, the preview's width) and let the document be the flexible one.",
+  "Keep the pane's own state alive when it is collapsed — collapse renders it at zero length, it does not unmount it. A code editor that loses its undo history when the reader drags an edge shut has lost the reader's work.",
+  "Give every handle an `ariaLabel` naming the edge it moves (\"Resize the terminal\"), never the generic default: a screen with three handles otherwise reads as three identical controls.",
+  "A control that reopens a collapsed pane belongs OUTSIDE that pane, in the surrounding chrome. A control that only exists inside the thing it hides cannot bring it back."
+ ],
+ "props": [
+  {
+   "name": "orientation",
+   "type": "'horizontal' | 'vertical'",
+   "default": "'horizontal'",
+   "required": "false",
+   "doc": "Axis the panes are laid out on; horizontal places them side by side, vertical stacks them."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name for the group as a whole."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "On the root, the panes and handles in the order they appear. On a pane, its content. The handle takes no slot."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Resizable from '@aziontech/webkit/resizable'\n  import { ref } from 'vue'\n\n  const basis = ref(240)\n</script>\n\n<template>\n  <Resizable\n    orientation=\"horizontal\"\n    aria-label=\"Workspace\"\n    class=\"h-64\"\n  >\n    <Resizable.Pane aria-label=\"Document\"\n      >Flexible — no basis, so it takes what is left.</Resizable.Pane\n    >\n    <Resizable.Handle aria-label=\"Resize the panel\" />\n    <Resizable.Pane\n      v-model:basis=\"basis\"\n      :min=\"160\"\n      :max=\"480\"\n      aria-label=\"Panel\"\n      >Sized</Resizable.Pane\n    >\n  </Resizable>\n</template>"
+  },
+  {
+   "name": "Orientations",
+   "sfc": "<script setup>\n  import Resizable from '@aziontech/webkit/resizable'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-2\">\n    <Resizable\n      orientation=\"horizontal\"\n      aria-label=\"Side by side\"\n      class=\"h-64 overflow-hidden rounded-(--shape-card) border border-(--border-default)\"\n    >\n      <Resizable.Pane aria-label=\"Editor\">Editor</Resizable.Pane>\n      <Resizable.Handle aria-label=\"Resize the preview\" />\n      <Resizable.Pane\n        :basis=\"200\"\n        :min=\"120\"\n        :max=\"400\"\n        aria-label=\"Preview\"\n        >Preview</Resizable.Pane\n      >\n    </Resizable>\n    <Resizable\n      orientation=\"vertical\"\n      aria-label=\"Stacked\"\n      class=\"h-64 overflow-hidden rounded-(--shape-card) border border-(--border-default)\"\n    >\n      <Resizable.Pane aria-label=\"Editor\">Editor</Resizable.Pane>\n      <Resizable.Handle aria-label=\"Resize the terminal\" />\n      <Resizable.Pane\n        :basis=\"96\"\n        :min=\"48\"\n        :max=\"200\"\n        aria-label=\"Terminal\"\n        >Terminal</Resizable.Pane\n      >\n    </Resizable>\n  </div>\n</template>"
+  },
+  {
+   "name": "Collapsed",
+   "sfc": "<script setup>\n  import Resizable from '@aziontech/webkit/resizable'\n  import { ref } from 'vue'\n\n  const collapsed = ref(true)\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <button\n      type=\"button\"\n      @click=\"collapsed = !collapsed\"\n    >\n      {{ collapsed ? 'Show' : 'Hide' }} the preview\n    </button>\n    <Resizable\n      aria-label=\"Workspace\"\n      class=\"h-64\"\n    >\n      <Resizable.Pane aria-label=\"Editor\">Editor</Resizable.Pane>\n      <Resizable.Handle aria-label=\"Resize the preview\" />\n      <Resizable.Pane\n        v-model:collapsed=\"collapsed\"\n        :basis=\"240\"\n        :min=\"160\"\n        collapsible\n        aria-label=\"Preview\"\n        >Preview</Resizable.Pane\n      >\n    </Resizable>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/resizable.md"
+}

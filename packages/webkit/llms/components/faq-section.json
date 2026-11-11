@@ -1,0 +1,63 @@
+{
+ "name": "faq-section",
+ "binding": "FaqSection",
+ "import": "@aziontech/webkit/faq-section",
+ "treeShakeableImport": "@aziontech/webkit/faq-section",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The frequently asked questions band near the end of a landing page: the heading in the left column and the questions on the right, each answer closed until the reader opens it, one at a time. It is a page section — the site places it from a `{ _id: 'faq-section', props }` entry and binds `props` straight onto it — and it composes `section-module` and `faq`. An answer is a markdown string, so it can run to several paragraphs (split by a blank line) and `- ` bullet lists, and a sentence can carry a link, bold or italic text, all without a slot or `v-html`.",
+ "setup": null,
+ "useWhen": [
+  "To answer the handful of questions a reader still has before the closing call to action."
+ ],
+ "avoidWhen": [
+  "For answers that need content beyond paragraphs, bullet lists and inline links (tables, images, code) → compose `faq` with its `answer` slot.",
+  "For a single highlighted question with an action → use `call-to-action`."
+ ],
+ "related": [
+  "faq` — the framed accordion band this section renders.",
+  "closing-call-to-action` — the band that usually follows it."
+ ],
+ "bestPractices": [
+  "Use one FAQ section per page and give it `anchor: 'faq'` so a page can link straight to it.",
+  "Keep an answer short; links use `[label](https://github.com/aziontech/webkit/blob/main/.specs/href)`, bold `**text**` and italic `*text*`.",
+  "Separate paragraphs with a blank line; start each bullet with `- ` and keep the list in its own block.",
+  "Absolute `https://` links open in a new tab; site-relative links stay in the tab."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the FAQ as its `h2` in the left column."
+  },
+  {
+   "name": "items",
+   "type": "FaqSectionItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The questions in display order; each is `{ question, answer }` where `answer` is markdown carrying paragraphs, bullet lists, links, bold and italic text."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import FaqSection from '@aziontech/webkit/faq-section'\n</script>\n\n<template>\n  <FaqSection\n    anchor=\"faq\"\n    title=\"Frequently asked questions\"\n    :items=\"[\n      {\n        question: 'What types of storefronts can I build and deploy on Azion?',\n        answer:\n          'You can build and deploy storefronts, marketplaces, campaign pages, and supporting retail apps. Any web app or website runs on Azion. The platform also covers much of the backend, for static and dynamic workloads on a distributed architecture.'\n      },\n      {\n        question: 'Which frameworks are compatible?',\n        answer:\n          'Azion is compatible with modern frameworks such as Next.js, React, Vue, Astro, Angular, Nuxt, Svelte, and others, so you can reuse your current stack without a full rewrite. See the full [frameworks compatibility list](https://github.com/aziontech/webkit/blob/main/.specs/en/documentation/products/devtools/azion-edge-runtime/frameworks-compatibility/).'\n      },\n      {\n        question: 'How do preview deployments work?',\n        answer:\n          'You can validate storefront changes in preview environments before release, share results across teams, and promote approved versions to production with a controlled workflow.'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/faq-section.md"
+}

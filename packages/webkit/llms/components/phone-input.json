@@ -1,0 +1,121 @@
+{
+ "name": "phone-input",
+ "binding": "PhoneInput",
+ "import": "@aziontech/webkit/phone-input",
+ "treeShakeableImport": "@aziontech/webkit/phone-input",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type=\"tel\"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `update:phone` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (it replaces the v5 `field-phone-number`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.",
+ "setup": null,
+ "useWhen": [
+  "International phone entry where the user picks a country and types the national number with that country's mask.",
+  "Forms that need the full E.164 number and whether it is complete, without per-country length rules in the form."
+ ],
+ "avoidWhen": [
+  "The value may include characters the masks reject (extensions, free-form notes) → use `input`.",
+  "The input needs addons other than the dial code → use `input-group` and compose it yourself."
+ ],
+ "related": [
+  "field` — wraps the control with its label, description and error.",
+  "input-group` — the container this control renders around the dial-code select and the input.",
+  "select` — the dial-code picker inside the group."
+ ],
+ "bestPractices": [
+  "Put it in a `Field` with a `Field.Label`; the label targets the tel input.",
+  "v-model` holds the national digits only; read `number` from the `update:phone` payload when you need the E.164 value.",
+  "Use `complete` from `update:phone` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.",
+  "v-model:country` defaults to `'BR'`; seed it with the user's country when you know it.",
+  "searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs."
+ ],
+ "props": [
+  {
+   "name": "countries",
+   "type": "Country[]",
+   "default": "(built-in list — see Notes)",
+   "required": "false",
+   "doc": "Countries offered by the dial-code Select. When omitted, uses the built-in curated list."
+  },
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder of the tel input. Falls back to the selected country's mask when empty."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables both the dial-code Select and the internal input."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the internal input read-only; dial-code Select is also disabled while readonly."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Applies the required border on the InputGroup and sets required on the input."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Applies the invalid border on the InputGroup and sets aria-invalid on the input."
+  },
+  {
+   "name": "name",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "HTML name for the internal input (form + vee-validate integration)."
+  },
+  {
+   "name": "searchPlaceholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`)."
+  },
+  {
+   "name": "searchEmptyLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:phone",
+   "payload": "[value: PhoneNumber]",
+   "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+5511999999999'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import Field from '@aziontech/webkit/field'\n  import PhoneInput from '@aziontech/webkit/phone-input'\n\n  const digits = ref('')\n  const country = ref('BR')\n  const phone = ref(null)\n</script>\n\n<template>\n  <Field\n    required\n    class=\"max-w-(--container-xs)\"\n  >\n    <Field.Label>Phone</Field.Label>\n    <PhoneInput\n      v-model=\"digits\"\n      v-model:country=\"country\"\n      name=\"phone\"\n      @update:phone=\"phone = $event\"\n    />\n    <Field.Description>We'll use this to send the verification code.</Field.Description>\n  </Field>\n</template>"
+  }
+ ],
+ "docs": "components/phone-input.md"
+}

@@ -1,0 +1,90 @@
+{
+ "name": "section-header",
+ "binding": "SectionHeader",
+ "import": "@aziontech/webkit/section-header",
+ "treeShakeableImport": "@aziontech/webkit/section-header",
+ "category": "layout",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The heading of one band inside a page: an h2 with a one-line description, a copy-link button that appears when the heading is hovered or focused (when it has an `anchor`), and the band's own actions on the right. Below `md` the actions drop under the copy.",
+ "setup": null,
+ "useWhen": [
+  "A band of a page that holds a card, a table or a list: Payment information on Billing, Get started on a resource, General in a create form.",
+  "A band that someone should be able to link to (`anchor`)."
+ ],
+ "avoidWhen": [
+  "The page title → use `page-header`.",
+  "A settings band whose guidance sits in a Hint and whose body is a card of setting rows → use `settings-section`."
+ ],
+ "related": [
+  "page-header` — the page's h1.",
+  "settings-section` — the settings band with a Hint, a gutter copy-link and an optional disclosure.",
+  "copy-button` — the copy-link affordance it renders."
+ ],
+ "bestPractices": [
+  "Keep the description to one sentence; put longer guidance in the band body.",
+  "Set `anchor` on bands people link to, so the h2 takes the id and the copy-link button appears.",
+  "Keep band actions to one or two outlined medium buttons."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "The band title, rendered as an h2."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One sentence under the title."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Heading scale of the title (subset: no `large`)."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id of the h2 that a hash link targets; when set, a copy-link button appears beside the title on hover or focus."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "description",
+   "scope": "—",
+   "notes": "Rich description content (links, inline code); replaces the `description` prop."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "The band's own actions, on the right of the copy."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SectionHeader from '@aziontech/webkit/section-header'\n</script>\n\n<template>\n  <SectionHeader\n    title=\"Payment information\"\n    description=\"Where invoices are sent, and whether the plan renews on its own.\"\n    anchor=\"payment-information\"\n  >\n    <template #actions>\n      <Button\n        label=\"Update\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n    </template>\n  </SectionHeader>\n</template>"
+  },
+  {
+   "name": "WithActions",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SectionHeader from '@aziontech/webkit/section-header'\n</script>\n\n<template>\n  <SectionHeader\n    title=\"Payment methods\"\n    description=\"Every card on the account. Invoices are charged to the default one.\"\n    anchor=\"payment-methods\"\n  >\n    <template #actions>\n      <Button\n        label=\"Add payment method\"\n        kind=\"outlined\"\n        size=\"medium\"\n        icon=\"pi pi-plus\"\n      />\n    </template>\n  </SectionHeader>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import SectionHeader from '@aziontech/webkit/section-header'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <SectionHeader\n      title=\"Delivery Settings\"\n      description=\"How the service answers requests at the edge.\"\n    />\n    <SectionHeader\n      title=\"Recent activity\"\n      size=\"small\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/section-header.md"
+}

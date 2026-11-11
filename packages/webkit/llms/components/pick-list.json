@@ -1,0 +1,108 @@
+{
+ "name": "pick-list",
+ "binding": "PickList",
+ "import": "@aziontech/webkit/pick-list",
+ "treeShakeableImport": "@aziontech/webkit/pick-list-root",
+ "category": "data",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/pick-list-source",
+  "@aziontech/webkit/pick-list-target",
+  "@aziontech/webkit/pick-list-controls"
+ ],
+ "purpose": "Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them. Use it when the consumer needs to build a subset from a pool of options where both the chosen set and the remaining pool stay visible. Derived from the PrimeVue PickList behavior but rewritten to our conventions (no Figma); the visual surface is a best-effort first draft to validate. Compound, composition API: the root (`<PickList>`) owns the bound data (`v-model` = `[sourceItems, targetItems]`) and the shared selection/move state, and provides it through `provide`/`inject`. The consumer composes the anatomy — `<PickList.Source>`, `<PickList.Controls>`, `<PickList.Target>` — and the context-aware `<PickList.Controls>` wires the move buttons with no props. Each list is data-driven: items come from the root's bound pair and render through the list's `#item` slot (repeated data stays as props, not hand-authored rows). Double-clicking an option moves it to the opposite list (emitting `item-double-click`); this auto-move can be turned off with `move-on-double-click`. The two lists sit side by side on wider viewports and stack vertically (with the controls as a horizontal row between them) on narrow ones; the move arrows point left/right side-by-side and up/down when stacked.",
+ "setup": null,
+ "useWhen": [
+  "Building a subset from a pool where both the chosen and the remaining items stay visible (domains assigned to an application, members of a team).",
+  "Moving many items at once with move-all and multi-selection.",
+  "Lists that load separately, each with its own `loading` state."
+ ],
+ "avoidWhen": [
+  "Picking a few values in a compact field → use `multi-select`.",
+  "Selecting rows of tabular data with columns, sorting, or pagination → use `table` with row selection.",
+  "A handful of fixed options → use a horizontal `field` with a `checkbox` for each."
+ ],
+ "related": [
+  "multi-select` — compact dropdown for multi-pick when the remaining pool does not need to stay visible.",
+  "table` — row selection over tabular data.",
+  "checkbox` — independent boolean or small-set multi-pick."
+ ],
+ "bestPractices": [
+  "Set `data-key` to a unique item field so rows keep stable keys across moves; without it rows are keyed by their index.",
+  "Set `title` on both `PickList.Source` and `PickList.Target`; it is the listbox's accessible name.",
+  "Listen to `move` for side effects such as saving the assignment instead of diffing `v-model`.",
+  "Set `:move-on-double-click=\"false\"` when double-click should do something else; `item-double-click` still fires."
+ ],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "[unknown[], unknown[]]",
+   "default": "() => [[], []]",
+   "required": "false",
+   "doc": "Bound pair of lists as `[sourceItems, targetItems]` (v-model)."
+  },
+  {
+   "name": "dataKey",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Item field used as each row's render key (falls back to the index). Selection is always tracked by index."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables all selection and move controls and applies disabled tokens."
+  },
+  {
+   "name": "moveOnDoubleClick",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:modelValue",
+   "payload": "[unknown[], unknown[]]",
+   "notes": "v-model update with the new `[sourceItems, targetItems]` pair."
+  },
+  {
+   "name": "move",
+   "payload": "{ direction: 'to-target' | 'to-source'; items: unknown[] }",
+   "notes": "Fired after items move between lists, with the moved items."
+  },
+  {
+   "name": "item-double-click",
+   "payload": "(event: MouseEvent, payload: { list: 'source' | 'target'; item: unknown; index: number })",
+   "notes": "Fired when an option is double-clicked. `event` is the dblclick; `payload` carries the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "{ move, moveAll, hasSelection, count, disabled, loading }",
+   "notes": "Composition slot; receives `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<PickList.Controls>`."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    data-key=\"id\"\n  >\n    <PickList.Source title=\"Available\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    data-key=\"id\"\n    disabled\n  >\n    <PickList.Source title=\"Available\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
+  },
+  {
+   "name": "Loading",
+   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    data-key=\"id\"\n  >\n    <PickList.Source\n      title=\"Available\"\n      loading\n    >\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
+  }
+ ],
+ "docs": "components/pick-list.md"
+}

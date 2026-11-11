@@ -1,0 +1,108 @@
+{
+ "name": "link",
+ "binding": "Link",
+ "import": "@aziontech/webkit/link",
+ "treeShakeableImport": "@aziontech/webkit/link",
+ "category": "navigation",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover/active handled in CSS).",
+ "setup": null,
+ "useWhen": [
+  "A standalone navigation link: a domain, a repository, a docs page, \"View all\".",
+  "An in-console navigation action (\"Add custom domain\") with `showIcon` set to false."
+ ],
+ "avoidWhen": [
+  "A link inside a sentence → use a plain anchor with the text-link class.",
+  "An action that changes something instead of navigating → use `button`.",
+  "A compact marketing CTA with a brand-colored icon inside a card → use `mini-button`."
+ ],
+ "related": [
+  "mini-button` — same anatomy in default text color with a brand-colored icon; `large` and `medium` only.",
+  "button` — set `href` when a link must look like a button.",
+  "breadcrumb` — a trail of links for hierarchical location."
+ ],
+ "bestPractices": [
+  "Always set `href` and a `label` that names the destination; the defaults (`'#'`, `'Learn more'`) are placeholders.",
+  "Keep the default `pi pi-external-link` icon for off-site targets with `target=\"_blank\"` (`rel=\"noopener noreferrer\"` is added for you); turn `showIcon` off for in-app destinations.",
+  "Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).",
+  "disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Visible label rendered inside the link. Empty uses the locale catalog (`Learn more`)."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'large'",
+   "required": "false",
+   "doc": "Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies disabled tokens."
+  },
+  {
+   "name": "showIcon",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "When true, renders the trailing icon."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "'pi pi-external-link'",
+   "required": "false",
+   "doc": "PrimeIcons class for the trailing icon."
+  },
+  {
+   "name": "href",
+   "type": "string",
+   "default": "'#'",
+   "required": "false",
+   "doc": "Destination URL for the anchor."
+  },
+  {
+   "name": "target",
+   "type": "'_blank' | '_self'",
+   "default": "'_self'",
+   "required": "false",
+   "doc": "Link target when navigating."
+  }
+ ],
+ "events": [
+  {
+   "name": "click",
+   "payload": "MouseEvent",
+   "notes": "—"
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <Link\n    label=\"Learn more\"\n    size=\"large\"\n    href=\"#\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Link\n      size=\"large\"\n      label=\"Learn more\"\n    />\n    <Link\n      size=\"medium\"\n      label=\"Learn more\"\n    />\n    <Link\n      size=\"small\"\n      label=\"Learn more\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <Link\n    label=\"Learn more\"\n    disabled\n  />\n</template>"
+  }
+ ],
+ "docs": "components/link.md"
+}

@@ -1,0 +1,90 @@
+{
+ "name": "tag",
+ "binding": "Tag",
+ "import": "@aziontech/webkit/tag",
+ "treeShakeableImport": "@aziontech/webkit/tag",
+ "category": "content",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Compact status or category label with severity-based color coding. Supports optional icon, pill shape via `rounded`, and two sizes aligned with the Webkit Figma Tag component set.",
+ "setup": null,
+ "useWhen": [
+  "Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.",
+  "Show a status/category with severity color via `kind`."
+ ],
+ "avoidWhen": [
+  "It is purely a count or one-glance status label → use `badge`.",
+  "The user can select or remove it (filters, multi-select values) → use `chip`."
+ ],
+ "related": [
+  "badge` — denser count/short-label indicator with no icon affordance.",
+  "chip` — interactive/removable token."
+ ],
+ "bestPractices": [
+  "Severity comes from `kind`; the optional icon is decorative — keep it `aria-hidden`.",
+  "Use `rounded` for the pill shape rather than a custom radius."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fallback text when the default slot is empty."
+  },
+  {
+   "name": "severity",
+   "type": "'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'",
+   "default": "'primary'",
+   "required": "false",
+   "doc": "Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; `medium` is 24px tall, `small` is 20px."
+  },
+  {
+   "name": "rounded",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Pill shape when true."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "PrimeIcons class for the leading icon."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Main content."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <Tag\n    label=\"Label\"\n    severity=\"primary\"\n    size=\"medium\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Tag\n      label=\"Label\"\n      severity=\"primary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"secondary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"accent\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"success\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"warning\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"danger\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"info\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"contrast\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4\">\n    <div class=\"flex flex-wrap items-center gap-4\">\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"medium\"\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"medium\"\n        rounded\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"medium\"\n        icon=\"pi pi-box\"\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"medium\"\n        icon=\"pi pi-box\"\n        rounded\n      />\n    </div>\n    <div class=\"flex flex-wrap items-center gap-4\">\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"small\"\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"small\"\n        rounded\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"small\"\n        icon=\"pi pi-box\"\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"small\"\n        icon=\"pi pi-box\"\n        rounded\n      />\n    </div>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/tag.md"
+}

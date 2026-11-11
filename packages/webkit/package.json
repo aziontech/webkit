@@ -26,7 +26,9 @@
     "type-check": "vue-tsc --noEmit",
     "type-coverage": "type-coverage -p . --at-least 95 --detail",
     "catalog:build": "node scripts/build-catalog.mjs",
-    "catalog:check": "node scripts/build-catalog.mjs --check",
+    "catalog:check": "node scripts/build-catalog.mjs --check && node scripts/build-llms.mjs --check",
+    "llms:build": "node scripts/build-llms.mjs",
+    "llms:check": "node scripts/build-llms.mjs --check",
     "size": "node scripts/check-size.mjs",
     "test:toolkit": "node --test \"test/**/*.test.mjs\"",
     "test:ssr": "node --test src/test/ssr.test.mjs",
@@ -120,6 +122,7 @@
     "examples",
     "catalog.json",
     "catalog",
+    "llms",
     "package.json",
     "MIGRATION-v6.md"
   ],
