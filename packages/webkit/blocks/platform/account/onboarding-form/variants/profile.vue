@@ -1,4 +1,5 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Field from '@aziontech/webkit/field'
   import Switch from '@aziontech/webkit/switch'
   import Avatar from '@aziontech/webkit/avatar'
@@ -34,6 +35,20 @@
   const role = ref()
   const session = ref(false)
   const submitted = ref(false)
+  const creating = ref(false)
+  const outcome = ref('')
+
+  const createOrganization = () => {
+    if (creating.value) return
+    submitted.value = true
+    outcome.value = ''
+    if (!usage.value || !role.value) return
+    creating.value = true
+    setTimeout(() => {
+      creating.value = false
+      outcome.value = navigator.onLine ? 'created' : 'failed'
+    }, 900)
+  }
 </script>
 
 <template>
@@ -92,7 +107,7 @@
                   class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)"
                   aria-labelledby="onboarding-title"
                   novalidate
-                  @submit.prevent="submitted = true"
+                  @submit.prevent="createOrganization"
                 >
                   <header class="flex flex-col gap-(--spacing-xs)">
                     <div class="flex flex-col gap-(--spacing-xxs)">
@@ -111,7 +126,34 @@
                     </p>
                   </header>
 
-                  <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
+                  <Alert
+                    v-if="outcome === 'failed'"
+                    key="failed"
+                    severity="danger"
+                    size="small"
+                    label="The organization wasn't created. Check your connection, then retry. Your answers are kept."
+                  >
+                    <template #action>
+                      <Button
+                        label="Retry"
+                        kind="secondary"
+                        size="small"
+                        @click="createOrganization"
+                      />
+                    </template>
+                  </Alert>
+                  <Alert
+                    v-else-if="outcome === 'created'"
+                    key="created"
+                    severity="success"
+                    size="small"
+                    label="Organization created."
+                  />
+
+                  <fieldset
+                    class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+                    :disabled="creating"
+                  >
                     <legend class="sr-only">Tell us about your work</legend>
 
                     <div class="animate-fade-in motion-reduce:animate-none">
@@ -171,6 +213,7 @@
                       label="Back"
                       kind="outlined"
                       size="large"
+                      :disabled="creating"
                     />
                     <div class="flex flex-1">
                       <Button
@@ -179,6 +222,7 @@
                         size="large"
                         class="w-full"
                         type="submit"
+                        :loading="creating"
                       />
                     </div>
                   </div>

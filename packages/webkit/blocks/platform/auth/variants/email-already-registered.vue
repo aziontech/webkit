@@ -13,7 +13,7 @@
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS
   } from '@aziontech/webkit/password-requirements'
-  import { reactive, ref } from 'vue'
+  import { nextTick, reactive, ref } from 'vue'
 
   const failure = ref('email-taken')
   const screen = ref('signup')
@@ -45,16 +45,22 @@
       typeof rule.test === 'function' ? rule.test(value) : rule.test.test(value)
     )
 
+  const focusField = (id) => nextTick(() => document.getElementById(id)?.focus())
+
   const signIn = () => {
     errors.signinEmail = emailError(signin.email)
     errors.signinPassword = signin.password ? '' : 'This field is required.'
-    if (errors.signinEmail || errors.signinPassword) return
+    if (errors.signinEmail || errors.signinPassword) {
+      focusField(errors.signinEmail ? 'auth-signin-email' : 'auth-signin-password')
+      return
+    }
     if (failure.value === 'bad-credentials') {
       cardNotice.value = {
         severity: 'danger',
         label: 'Incorrect email or password. Check both and try again.'
       }
       signin.password = ''
+      focusField('auth-signin-password')
     } else if (failure.value === 'service-unavailable')
       cardNotice.value = {
         severity: 'warning',
@@ -178,10 +184,10 @@
                       />
 
                       <Transition
-                        enter-active-class="transition duration-150 ease-out motion-reduce:transition-none"
+                        enter-active-class="transition duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
                         enter-from-class="translate-y-2 opacity-0"
                         enter-to-class="translate-y-0 opacity-100"
-                        leave-active-class="transition duration-100 ease-in motion-reduce:transition-none"
+                        leave-active-class="transition duration-fast-02 ease-productive-exit motion-reduce:transition-none"
                         leave-from-class="translate-y-0 opacity-100"
                         leave-to-class="-translate-y-2 opacity-0"
                       >
@@ -265,8 +271,9 @@
                           :required="!!errors.signinPassword && !signin.password"
                           :invalid="!!errors.signinPassword && !!signin.password"
                         >
-                          <Field.Label>Password</Field.Label>
+                          <Field.Label for="auth-signin-password">Password</Field.Label>
                           <PasswordInput
+                            id="auth-signin-password"
                             v-model="signin.password"
                             name="password"
                             autocomplete="current-password"
@@ -307,10 +314,10 @@
                       <PageHeader title="Sign up for a free account" />
 
                       <Transition
-                        enter-active-class="transition duration-150 ease-out motion-reduce:transition-none"
+                        enter-active-class="transition duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
                         enter-from-class="translate-y-2 opacity-0"
                         enter-to-class="translate-y-0 opacity-100"
-                        leave-active-class="transition duration-100 ease-in motion-reduce:transition-none"
+                        leave-active-class="transition duration-fast-02 ease-productive-exit motion-reduce:transition-none"
                         leave-from-class="translate-y-0 opacity-100"
                         leave-to-class="-translate-y-2 opacity-0"
                       >

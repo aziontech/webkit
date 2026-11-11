@@ -1,4 +1,5 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
@@ -45,6 +46,9 @@
         : ''
   }))
 
+  const conflict = computed(
+    () => submitted.value && Boolean(form.key) && form.key === takenKey.value
+  )
   const busy = computed(() => status.value === 'loading' || status.value === 'submitting')
   const missing = (field) => submitted.value && !form[field]
   const invalid = (field) => submitted.value && Boolean(form[field]) && Boolean(errors.value[field])
@@ -143,6 +147,11 @@
           v-else
           class="flex flex-col gap-(--spacing-md)"
         >
+          <Alert
+            v-if="conflict"
+            severity="danger"
+            :label="`A variable named ${form.key} already exists in this account, so it wasn't created. Your entries are kept: change the key and press Create again.`"
+          />
           <Field
             :required="missing('key')"
             :invalid="invalid('key')"

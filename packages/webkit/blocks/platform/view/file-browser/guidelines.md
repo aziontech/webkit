@@ -40,13 +40,17 @@ A `Breadcrumb` of the folder path starts at the storage name; each crumb jumps b
 
 ### F. Cell recipes — `Avatar`, `Tooltip` (optional)
 
-Folders sort first with a link-coloured folder glyph and open on row click; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last Modified pairs the editor's small square `Avatar`, named in a `Tooltip`, with the relative time.
+Folders sort first with a link-coloured folder glyph and open on row click; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified pairs the editor's small square `Avatar`, named in a `Tooltip`, with the relative time.
 
 ### G. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `IconButton`, `Tooltip` (required)
 
 A small ellipsis `IconButton` named File actions opens a menu placed `bottom-end`: Open for a folder or Download for a file in the first group, Delete alone in the last group. The `..` row has no menu.
 
-### H. Empty folder — `EmptyState`, `SplitButton` (required)
+### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
+
+The root's `select` event hands the option and the row to the page: Open enters the folder, Delete opens the `platform/delete/delete-with-confirmation` dialog without a trigger of its own. A medium `ConfirmDialog` titled `Delete file` or `Delete folder`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence (a folder goes with all its files), and an `Input` labelled by `Type <name> to confirm.`; the danger confirm repeats the title and enables only when the typed text matches the name. The typed text resets each time it opens.
+
+### I. Empty folder — `EmptyState`, `SplitButton` (required)
 
 The table's `#empty` slot holds a medium `EmptyState` with one sentence and a secondary Add to files `SplitButton` with the same options as the toolbar's. Inside a folder the `..` row always remains, so the user can still go back up.
 
@@ -73,7 +77,8 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 - **Search:** placeholder names the scope, e.g. "Search in folder".
 - **Add action:** "Add to files", with options "Upload file" and "Add folder".
 - **Row menu:** one verb per option, e.g. "Open", "Download", "Delete"; the trigger is named "File actions".
-- **Column headers:** short fragments, e.g. "Name", "Size", "Last Modified".
+- **Delete dialog:** title and confirm `Delete file` or `Delete folder`, consequence `The selected folder will be deleted, along with all its files.`, prompt `Type <name> to confirm.`
+- **Column headers:** short fragments, e.g. "Name", "Size", "Last modified".
 - **Empty folder:** title states the fact, e.g. "This folder is empty"; description is one sentence, e.g. "Upload files or create a folder to get started."
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 

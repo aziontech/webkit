@@ -36,7 +36,7 @@ Twice: in the rail footer next to the user's name, and in the header inside a bu
 
 ### F. Account menu — `DropdownMenu` (required)
 
-Opens upward from the rail footer: identity, then Account Settings and Personal Tokens, the theme, links out (Home Page, Changelog, Feedback, Docs), Log out, and the Upgrade to Pro and system status foot.
+Opens upward from the rail footer: identity, then Account settings and Personal tokens, the theme, links out (Home page, Changelog, Feedback, Docs), Log out, and the Upgrade to Pro and system status foot.
 
 ### G. Hints — `Tooltip` (required)
 
@@ -44,7 +44,7 @@ Names every icon-only control: the account menu, the navigation trigger, the col
 
 ### H. Icon actions — `IconButton` (required)
 
-The account menu trigger, the navigation trigger below `md`, search below `--container-2xl`, Create and Agent below `md`, and the page toolbar (Refresh, Download CSV, Columns).
+The account menu trigger, the navigation trigger below `md`, search below `--container-2xl` (the `@2xl:` container variant), Create and Agent below `md`, and the page toolbar (Refresh, Download CSV, Columns).
 
 ### I. Theme — `ThemeSwitcher` (required)
 
@@ -60,7 +60,7 @@ At the foot of the account menu: `All systems normal` with `success` severity; s
 
 ### L. Header — `GlobalHeader` (required)
 
-One header, inside the content zone (an `@container`), `aria-label="Console"`. The breadcrumb joins it from the second level (see the DetailPage state).
+One header, inside the content zone (an `@container`), `aria-label="Console"`. The breadcrumb names the location on every level from `md`: one unlinked crumb on a first-level page, the module and the resource from the second level (see the DetailPage state).
 
 ### M. Shortcut — `Kbd` (required)
 
@@ -70,13 +70,13 @@ One header, inside the content zone (an `@container`), `aria-label="Console"`. T
 
 The AI assistant entry in the header from `md`.
 
-### O. Page title — `PageHeader` (stand-in body)
+### O. Location — `Breadcrumb` (required)
 
-Title, description and actions of the sample list page. Real pages follow `skills/webkit-navigation`: a first-level list opens on its controls row, a tabbed page has no `PageHeader`.
+In the header from `md`: `Resources` alone on the ListPage, with no link; module, resource and the environment `Select` on the DetailPage. A tab is never a crumb.
 
 ### P. Search field — `Input` (stand-in body)
 
-The sample list's search, with a leading icon and an `aria-label`.
+The sample list's search, with a leading icon and an `aria-label`. The ListPage has no `PageHeader`: per `skills/webkit-navigation` the crumb names the first-level list and the page opens on its controls row, search and Filter on the start side, the toolbar icons, Documentation (outlined) and Create Resource (primary, large, the page's only large control) on the end side.
 
 ### Q. Table frame — `Card` (stand-in body)
 
@@ -114,9 +114,10 @@ Dims the page behind the open drawer.
 ## Copy
 
 - **Palette placeholder:** what can be searched: `Search resources, pages and commands`. **Empty:** a full sentence: `No resource, page or command matches your search.`
-- **Navigation and menu items:** nouns as the module pages are titled; product entities keep their capitalization (`Personal Tokens`).
+- **Navigation and menu items:** nouns as the module pages are titled, in sentence case (`Personal tokens`, `Activity history`, `Build and deployment`, `Account settings`); Azion product names keep theirs (`Edge DNS`). No ampersand.
 - **Status:** a short state, not a sentence: `All systems normal`.
 - **Header actions:** `Create`, `Agent`, `Search`.
+- **Module create:** `Create` plus the entity, on the controls row: `Create Resource`.
 
 ## Accessibility
 
@@ -127,7 +128,7 @@ Dims the page behind the open drawer.
 
 ## States
 
-- ListPage: a first-level list page in the content zone, header without breadcrumb.
+- ListPage: a first-level list page in the content zone; the header carries the single unlinked `Resources` crumb and the page opens on its controls row.
 - DetailPage: a resource detail page; the breadcrumb reads module, resource, then an environment Select, and a full-bleed tab bar carries Overview, Deployments and Settings with the outlined Deploy action.
 
 ## Related
@@ -135,5 +136,3 @@ Dims the page behind the open drawer.
 - `headers/resource-header` — this shell's header on its own.
 - `headers/creation-header` — the focused shell for create, edit and deploy.
 - `platform/view/table-view`, `platform/detail/details-page`, `platform/dashboard/home-dashboard` — the real page bodies.
-
-Known gap: the ListPage stand-in body renders a `PageHeader` on a first-level list and the header shows no crumb, while `skills/webkit-navigation` asks for a single unlinked crumb and no `PageHeader` on first-level lists.

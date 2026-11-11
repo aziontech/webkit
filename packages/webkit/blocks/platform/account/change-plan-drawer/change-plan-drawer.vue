@@ -19,8 +19,9 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   const changePlanOpen = ref(false)
   const changePlanPeriod = ref('yearly')
@@ -31,7 +32,7 @@
       current: true,
       action: 'current',
       actionLabel: 'Current plan',
-      featuresTitle: 'All Features Included.',
+      featuresTitle: 'All features included',
       features: [
         { icon: 'pi pi-globe', label: 'Global infrastructure' },
         { icon: 'pi pi-code', label: 'Serverless compute' },
@@ -144,35 +145,35 @@
     { value: 'yearly', label: 'Yearly' }
   ]
   const upgradeFeatures = [
-    { title: '100 Resources', detail: 'then $0.10 per resource per month' },
-    { title: '10M Requests', detail: 'then as low as $0.90 per 1M' },
-    { title: '50 hours Compute time', detail: 'then $0.18 per hour' },
-    { title: '10 GB Event log storage', detail: 'then $0.10 per GB-month' },
-    { title: '100 GB File storage', detail: 'then as low as $0.021 per GB-month' },
-    { title: '1 GB Database storage', detail: 'then $0.75 per GB-month' },
-    { title: '100M Security rule evaluations', detail: 'then as low as $0.30 per 1M' },
-    { title: 'DDoS Protection included', detail: '' },
+    { title: '100 resources', detail: 'then $0.10 per resource per month' },
+    { title: '10M requests', detail: 'then as low as $0.90 per 1M' },
+    { title: '50 hours of compute time', detail: 'then $0.18 per hour' },
+    { title: '10 GB of event log storage', detail: 'then $0.10 per GB-month' },
+    { title: '100 GB of file storage', detail: 'then as low as $0.021 per GB-month' },
+    { title: '1 GB of database storage', detail: 'then $0.75 per GB-month' },
+    { title: '100M security rule evaluations', detail: 'then as low as $0.30 per 1M' },
+    { title: 'DDoS protection included', detail: '' },
     { title: 'PCI DSS 4.0.1 Level 1', detail: '' },
     { title: 'SOC 2 Type 2 / SOC 3', detail: '' },
     { title: 'Data migration assistance', detail: '' }
   ]
   const pricingLinks = [
-    { label: 'Learn more about Pricing', href: 'https://example.com/pricing' },
-    { label: 'Compare Plans', href: 'https://example.com/pricing#comparison' }
+    { label: 'Learn more about pricing', href: 'https://example.com/pricing' },
+    { label: 'Compare plans', href: 'https://example.com/pricing#comparison' }
   ]
   const charges = {
     monthly: {
       rows: [
-        { label: 'Next Charge Value', value: '$ 200', suffix: '' },
+        { label: 'Next charge', value: '$ 200', suffix: '' },
         { label: 'Subtotal', value: '$ 3.000', suffix: 'per month' }
       ],
       total: { value: '$ 3.000', suffix: 'per year' }
     },
     yearly: {
       rows: [
-        { label: 'Next Charge Value', value: '$ 200', suffix: '' },
+        { label: 'Next charge', value: '$ 200', suffix: '' },
         { label: 'Subtotal', value: '$ 3.000', suffix: 'per month' },
-        { label: 'Yearly Discount', value: '$ 2.200', suffix: 'per month' }
+        { label: 'Yearly discount', value: '$ 2.200', suffix: 'per month' }
       ],
       total: { value: '$ 2.200', suffix: 'per year' }
     }
@@ -185,19 +186,86 @@
     { value: 'Argentina', label: 'Argentina' },
     { value: 'Mexico', label: 'Mexico' }
   ]
+  const cardFieldIds = {
+    holder: 'card-holder',
+    number: 'card-number',
+    expiry: 'card-expiry',
+    code: 'card-code'
+  }
   const editingCard = ref(false)
   const cardLast4 = ref('8888')
   const blankCard = () => ({ holder: '', country: 'Brazil', number: '', expiry: '', code: '' })
   const cardForm = reactive(blankCard())
+  const cardErrors = reactive({ holder: '', number: '', expiry: '', code: '' })
+  const cardDeclined = ref(false)
+
+  const focusById = (id) => nextTick(() => document.getElementById(id)?.focus())
+
+  const clearCardErrors = () => {
+    Object.assign(cardErrors, { holder: '', number: '', expiry: '', code: '' })
+    cardDeclined.value = false
+  }
+
+  const validateCard = () => {
+    const digits = cardForm.number.replace(/\D/g, '')
+    const code = cardForm.code.trim()
+    cardErrors.holder = cardForm.holder.trim() ? '' : 'This field is required.'
+    cardErrors.number = !digits
+      ? 'This field is required.'
+      : digits.length >= 12 && digits.length <= 19
+        ? ''
+        : 'Enter the 12 to 19 digits on the front of the card.'
+    cardErrors.expiry = !cardForm.expiry.trim()
+      ? 'This field is required.'
+      : /^(0[1-9]|1[0-2])\s*\/\s*\d{2}$/.test(cardForm.expiry.trim())
+        ? ''
+        : 'Enter the month and year as MM/YY.'
+    cardErrors.code = !code
+      ? 'This field is required.'
+      : /^\d{3,4}$/.test(code)
+        ? ''
+        : 'Enter the 3 or 4 digits on the back of the card.'
+    const first = Object.keys(cardFieldIds).find((field) => cardErrors[field])
+    if (first) focusById(cardFieldIds[first])
+    return !first
+  }
+
   const startEditingCard = () => {
     Object.assign(cardForm, blankCard())
+    clearCardErrors()
     editingCard.value = true
+    focusById(cardFieldIds.holder)
   }
-  const updateCard = () => {
-    const digits = cardForm.number.replace(/\D/g, '')
-    if (digits.length >= 4) cardLast4.value = digits.slice(-4)
+
+  const cancelEditingCard = () => {
+    clearCardErrors()
     editingCard.value = false
+    focusById('card-change')
   }
+
+  const declineCard = () => {
+    cardDeclined.value = true
+    cardErrors.number = 'The issuer declined this card.'
+    focusById(cardFieldIds.number)
+  }
+
+  const updateCard = () => {
+    cardDeclined.value = false
+    if (!validateCard()) return
+    const digits = cardForm.number.replace(/\D/g, '')
+    if (digits.endsWith('0002')) {
+      declineCard()
+      return
+    }
+    cardLast4.value = digits.slice(-4)
+    editingCard.value = false
+    focusById('card-change')
+  }
+
+  const fieldState = (field) => ({
+    required: !!cardErrors[field] && !String(cardForm[field]).trim(),
+    invalid: !!cardErrors[field] && !!String(cardForm[field]).trim()
+  })
 
   const accountAddress = {
     country: 'Brazil',
@@ -235,22 +303,49 @@
     address.useAccountInformation = true
     Object.assign(address, accountAddress)
     submitting.value = false
+    editingCard.value = false
+    clearCardErrors()
   })
+
+  const UPGRADE_TOAST = 'upgrade-result'
 
   const submitUpgrade = () => {
     if (submitting.value) return
+    cardDeclined.value = false
+    if (editingCard.value && !validateCard()) return
+    const digits = editingCard.value ? cardForm.number.replace(/\D/g, '') : cardLast4.value
     submitting.value = true
+    toast.dismiss(UPGRADE_TOAST)
     setTimeout(() => {
       submitting.value = false
+      if (digits.endsWith('0002')) {
+        declineCard()
+        return
+      }
+      if (digits.endsWith('0119')) {
+        toast.error('The upgrade failed. The account is still on Free.', {
+          id: UPGRADE_TOAST,
+          description: 'The payment service did not answer. Your entries are kept.',
+          action: { label: 'Retry', onClick: () => submitUpgrade() }
+        })
+        return
+      }
+      if (editingCard.value) {
+        cardLast4.value = digits.slice(-4)
+        editingCard.value = false
+      }
       upgradeOpen.value = false
       changePlanOpen.value = false
+      toast.success('The account was upgraded to Pro.', { id: UPGRADE_TOAST })
     }, 900)
   }
 </script>
 
 <template>
+  <Toaster position="bottom-right" />
+
   <Button
-    label="Change Plan"
+    label="Change plan"
     kind="outlined"
     size="medium"
     @click="changePlanOpen = true"
@@ -458,7 +553,7 @@
                   </template>
                 </Card>
                 <Card
-                  title="Payment Method"
+                  title="Payment method"
                   :padded="false"
                 >
                   <template #content>
@@ -500,9 +595,10 @@
                           </svg>
                         </span>
                         <p class="min-w-0 flex-1 text-label-md text-(--text-default)">
-                          Ended with {{ cardLast4 }}
+                          Ending in {{ cardLast4 }}
                         </p>
                         <Button
+                          id="card-change"
                           label="Change"
                           kind="outlined"
                           size="small"
@@ -511,28 +607,39 @@
                         />
                       </div>
                       <template v-else>
+                        <Alert
+                          v-if="cardDeclined"
+                          severity="danger"
+                          size="small"
+                          label="The card was declined, so the account is still on Free. Check the number or use another card, then select Upgrade again."
+                        />
                         <fieldset
                           class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
                           :disabled="submitting"
                         >
-                          <legend class="sr-only">Payment Method</legend>
-                          <Field>
-                            <Field.Label>Cardholder's full name</Field.Label>
+                          <legend class="sr-only">Payment method</legend>
+                          <Field v-bind="fieldState('holder')">
+                            <Field.Label :for="cardFieldIds.holder">Cardholder name</Field.Label>
                             <Input
+                              :id="cardFieldIds.holder"
                               v-model="cardForm.holder"
                               name="cardholderName"
                               size="large"
                               placeholder="Jane A. Doe"
                               autocomplete="cc-name"
+                              @update:model-value="cardErrors.holder = ''"
                             />
+                            <Field.Description v-if="cardErrors.holder">{{
+                              cardErrors.holder
+                            }}</Field.Description>
                           </Field>
                           <Field>
-                            <Field.Label>Country/Region</Field.Label>
+                            <Field.Label for="card-country">Country or region</Field.Label>
                             <Select
                               v-model="cardForm.country"
                               size="large"
                             >
-                              <Select.Trigger />
+                              <Select.Trigger id="card-country" />
                               <Select.Content>
                                 <Select.Option
                                   v-for="option in countryOptions"
@@ -545,39 +652,54 @@
                               </Select.Content>
                             </Select>
                           </Field>
-                          <Field>
-                            <Field.Label>Credit card number</Field.Label>
+                          <Field v-bind="fieldState('number')">
+                            <Field.Label :for="cardFieldIds.number">Card number</Field.Label>
                             <Input
+                              :id="cardFieldIds.number"
                               v-model="cardForm.number"
                               name="cardNumber"
                               size="large"
                               placeholder="1234 5678 9012 3456"
                               autocomplete="cc-number"
                               inputmode="numeric"
+                              @update:model-value="cardErrors.number = ''"
                             />
+                            <Field.Description v-if="cardErrors.number">{{
+                              cardErrors.number
+                            }}</Field.Description>
                           </Field>
                           <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-                            <Field>
-                              <Field.Label>Expiration Date (MM/YY)</Field.Label>
+                            <Field v-bind="fieldState('expiry')">
+                              <Field.Label :for="cardFieldIds.expiry">Expiration date</Field.Label>
                               <Input
+                                :id="cardFieldIds.expiry"
                                 v-model="cardForm.expiry"
                                 name="cardExpiry"
                                 size="large"
-                                placeholder="08 / 26"
+                                placeholder="MM / YY"
                                 autocomplete="cc-exp"
                                 inputmode="numeric"
+                                @update:model-value="cardErrors.expiry = ''"
                               />
+                              <Field.Description>{{
+                                cardErrors.expiry || 'Month and year, as MM/YY.'
+                              }}</Field.Description>
                             </Field>
-                            <Field>
-                              <Field.Label>Security Code (CVC/CVV)</Field.Label>
+                            <Field v-bind="fieldState('code')">
+                              <Field.Label :for="cardFieldIds.code">Security code</Field.Label>
                               <Input
+                                :id="cardFieldIds.code"
                                 v-model="cardForm.code"
                                 name="cardSecurityCode"
                                 size="large"
-                                placeholder="999"
+                                placeholder="123"
                                 autocomplete="cc-csc"
                                 inputmode="numeric"
+                                @update:model-value="cardErrors.code = ''"
                               />
+                              <Field.Description>{{
+                                cardErrors.code || '3 or 4 digits on the back.'
+                              }}</Field.Description>
                             </Field>
                           </div>
                           <Alert
@@ -590,16 +712,18 @@
                           <div class="w-full sm:w-fit">
                             <Button
                               class="w-full"
+                              type="button"
                               label="Cancel"
                               kind="outlined"
                               size="medium"
                               :disabled="submitting"
-                              @click="editingCard = false"
+                              @click="cancelEditingCard"
                             />
                           </div>
                           <div class="w-full sm:w-fit">
                             <Button
                               class="w-full"
+                              type="button"
                               label="Update"
                               kind="primary"
                               size="medium"
@@ -658,7 +782,7 @@
                           </Select>
                         </Field>
                         <Field>
-                          <Field.Label>Postal Code</Field.Label>
+                          <Field.Label>Postal code</Field.Label>
                           <Input
                             v-model="address.postalCode"
                             name="postalCode"
@@ -668,7 +792,7 @@
                           />
                         </Field>
                         <Field>
-                          <Field.Label>State/Region</Field.Label>
+                          <Field.Label>State or region</Field.Label>
                           <Select
                             v-model="address.state"
                             placeholder="Select an option"
@@ -709,14 +833,14 @@
                         </Field>
                       </div>
                       <Field>
-                        <Field.Label>Apartment, floor, etc.</Field.Label>
+                        <Field.Label>Address line 2</Field.Label>
                         <Input
                           v-model="address.line2"
                           name="addressLine2"
                           size="large"
-                          placeholder="Optional"
                           autocomplete="address-line2"
                         />
+                        <Field.Description>Optional. Apartment, suite or floor.</Field.Description>
                       </Field>
                     </fieldset>
                   </template>

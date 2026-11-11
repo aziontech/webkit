@@ -42,11 +42,11 @@ One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centre
 The one place every outcome lands. It sits under the card heading and above **both** fields, always `size="small"`, always in the same slot:
 
 - **Session expired** (primary, `SessionExpired`): `severity="info"`, clears on the next action.
-- **401** (`IncorrectCredentials`): `danger`, no action. The fields under it are the recovery. The password is cleared.
+- **401** (`IncorrectCredentials`): `danger`, no action. The fields under it are the recovery. The password is cleared and takes focus.
 - **503** (`ServiceUnavailable`) and **no response** (`Timeout`): `warning`, with **Retry** in the `#action` slot. Severity follows certainty: a timeout is an unknown.
 - **500** (`ServerError`): `danger`, with **Retry**. Tied to no field, so where the console would toast, the card keeps it.
 - **409** (`EmailAlreadyRegistered`): `danger`, carrying the two exits as links in the default slot: Sign in or reset your password. The address stays in the field.
-- **Success** (signed in, account created): `success`, no action.
+- **Success** (signed in, account created): `success`, no action. Sign up reads `Account created. We sent a verification link to name@example.com.`
 
 Put the copy in the default slot when it carries links; animate the entrance on a wrapper, not on the `Alert` itself.
 
@@ -107,14 +107,13 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Don't put client-side validation in the `Alert`; it belongs on the field.
 - Don't call a timeout a failure (`danger`) or say the account was not created; the request may have landed.
 - Don't stack notices: a new outcome replaces the one in the slot.
-- Known gap: the IncorrectCredentials variant clears the password but does not move focus back to it, as `skills/webkit-errors` asks.
-- Known gap: the SignUp variant titles the card `Sign Up for a Free Account` and labels the email `Work Email` in title case, against `skills/webkit-microcopy` (sentence case: `Sign up for a free account`, `Work email`). The check-your-inbox link `Resend Email` has the same issue.
 
 ## Copy
 
-- **Card heading:** names the step, sentence case, no punctuation: `Welcome back`, `Reset your password`, `Check your inbox`. The lead under it is one full sentence: `Sign in to your account.`
+- **Card heading:** names the step, sentence case, no punctuation: `Welcome back`, `Reset your password`, `Check your inbox`, `Sign up for a free account`. The lead under it is one full sentence: `Sign in to your account.`
 - **Primary action:** a verb for what happens: `Continue with email`, `Sign in`, `Send reset link`, `Reset password`, `Return to sign in`.
-- **Field labels:** one to two words, no colon, no parentheses: `Email`, `Password`, `New password`, `Confirm password`.
+- **Field labels:** one to two words, no colon, no parentheses: `Email`, `Work email`, `Password`, `New password`, `Confirm password`.
+- **Links:** sentence case: `Forgot your password?`, `Resend email`.
 - **Field errors:** what is wrong, with a period: `This field is required.`, `Enter a valid email address.`, `Passwords don't match.`
 - **401 notice:** `Incorrect email or password. Check both and try again.`
 - **503 notice:** says what is down and what is not lost: `Sign-in is unavailable right now. Your credentials are fine.`
@@ -141,7 +140,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - SignUp: create an account with a work email (and a password checked by `PasswordRequirements`), Google or GitHub.
 - SessionExpired: opens on the password step for the same email, with an info notice that clears on the next action.
 - CheckInbox: the `/signup/verify` card: where the link went, the resend prompt and a secondary Return to sign in.
-- IncorrectCredentials: 401 on Sign in; a danger notice above both fields, no action, the password cleared.
+- IncorrectCredentials: 401 on Sign in; a danger notice above both fields, no action, the password cleared and focused.
 - ServiceUnavailable: 503 on Sign in; a warning notice with Retry, credentials kept.
 - ServerError: 500 on the request; a danger notice with Retry in the card instead of a toast.
 - Timeout: no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.

@@ -47,7 +47,7 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 
 ## Do
 
-- Show the Name error only after a failed Save, never on first render.
+- Show the Name error only after a failed Save, never on first render, and move focus to the first field in error.
 - Read the logic aloud in the layout: If, And, Or, Then, in that order.
 - Make every argument field follow what was picked before it, so the user never types a value the operator or behavior cannot take.
 - Offer both drag and buttons to reorder; the buttons are the keyboard path.

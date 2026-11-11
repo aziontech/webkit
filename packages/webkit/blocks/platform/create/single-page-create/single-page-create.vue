@@ -147,14 +147,14 @@
                         />
                       </SettingRow>
                       <SettingRow
-                        title="Domain Name"
+                        title="Domain name"
                         description="The root hostname this domain answers for, without a subdomain. Pasting a zone file here imports its records instead."
                       >
                         <Input
                           v-model="form.domain"
                           size="large"
                           class="w-full"
-                          aria-label="Domain Name"
+                          aria-label="Domain name"
                           placeholder="example.com"
                           autocomplete="off"
                           :required="!!errors.domain && errors.domainKind === 'required'"
@@ -229,7 +229,7 @@
                 @click="openImport"
               />
               <p class="min-w-0 text-body-sm text-(--text-muted)">
-                or paste zone file contents in Domain Name
+                or paste zone file contents in Domain name
               </p>
               <input
                 ref="fileRef"

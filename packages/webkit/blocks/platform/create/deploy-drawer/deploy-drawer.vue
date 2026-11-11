@@ -569,7 +569,7 @@
                           >
                             <Popover.Trigger>
                               <Button
-                                label="Change Version"
+                                label="Change version"
                                 kind="outlined"
                                 size="small"
                                 icon="pi pi-chevron-down"
@@ -735,7 +735,7 @@
                                         >
                                           <Popover.Trigger>
                                             <Button
-                                              label="Change Version"
+                                              label="Change version"
                                               kind="outlined"
                                               size="small"
                                               icon="pi pi-chevron-down"
@@ -1108,7 +1108,7 @@
               </SettingsSection>
 
               <SettingsSection
-                title="Projects Impacted"
+                title="Projects impacted"
                 hint="This environment publishes with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-md)">

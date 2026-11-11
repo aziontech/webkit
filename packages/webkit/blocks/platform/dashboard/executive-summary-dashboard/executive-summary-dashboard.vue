@@ -438,7 +438,7 @@
                 :format-value="formatters[trend.format]"
                 :height="160"
                 :empty-title="'No results for ' + quarter"
-                empty-description="Nothing was reported in this period. Choose a later quarter."
+                empty-description="Nothing was reported in this period. Select a later quarter."
                 :loading="loading"
               >
                 <Chart.Grid />
@@ -539,6 +539,7 @@
           >
             <template #content>
               <Item.List
+                key="item.list-1"
                 v-if="loading"
                 aria-busy="true"
               >
@@ -566,7 +567,10 @@
                   </Item.Content>
                 </Item>
               </Item.List>
-              <Item.List v-else-if="notes.length">
+              <Item.List
+                key="item.list-2"
+                v-else-if="notes.length"
+              >
                 <Item
                   v-for="note in notes"
                   :key="note.id"

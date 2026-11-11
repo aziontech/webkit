@@ -50,6 +50,10 @@ Description. Optionality is said in the description (`Optional. Up to 200 charac
 
 One `Toaster` mounted with the form, `position="bottom-right"`. It shows the result of a save that no field owns: `toast.error` with **Retry** when the request failed and no field is to blame (row 3 of `skills/webkit-errors`), `toast.success` naming the new object when the save went through. Both use one `id`, and the previous result is dismissed when a new submit starts, so attempts never stack.
 
+### I. Section notice — `Alert` (conflict and rejection only)
+
+A server rejection a field owns lands in two places, never in a toast: a danger `Alert` at the top of the section that owns the field (on this one-section form, above the fields; on the long form, under the Origin heading with **Reload origins**), and the field's `invalid` state with its reason. The `Alert` says what happened, that nothing typed was lost and what to do; it closes once the user changes the value or recovers.
+
 ## Do
 
 - Validate on submit, not on every keystroke; after the first submit, a field's message updates as the user fixes it.
@@ -58,7 +62,8 @@ One `Toaster` mounted with the form, `position="bottom-right"`. It shows the res
 - Keep every entry after a failed or rejected save, and say so in the copy.
 - Clear the form after a success, so the next entry starts clean, and name the new object in the toast.
 - On a long form, put a section-scoped server rejection in a danger `Alert` under that section's heading, carrying the recovery action (`Reload origins`), and set the field it names to `invalid` with its reason (`This origin no longer exists.`). Both surfaces, never one.
-- On a long form, scroll the rejected section into view and focus the field, honouring `prefers-reduced-motion`.
+- On the one-section form, a key already in use raises the danger `Alert` above the fields as well as the `invalid` Key, and focus moves to Key.
+- On a long form, scroll the rejected section into view and focus the field, honouring `prefers-reduced-motion` (an instant scroll when it is set).
 
 ## Don't
 
@@ -67,8 +72,6 @@ One `Toaster` mounted with the form, `position="bottom-right"`. It shows the res
 - Don't use the amber `required` prompt for a value the server rejected; the value is present, so it is `invalid`.
 - Don't disable Create to signal missing values; let submit run and show the messages.
 - Don't auto-dismiss an `Alert` that names a required action; it stays until the user recovers (the Reloaded state closes it).
-- Known gap: the Conflict variant marks Key `invalid` with `A variable named API_TOKEN already exists.` but shows no `Alert`; on this one-section form the field message stands in for it, while `skills/webkit-errors` row 2 asks for an `Alert` in the owning section as well.
-- Known gap: the Rejected variant does not scroll to the Origin section or move focus to the Origin select after the save is rejected, and its message splices two sentences with an em dash, against `skills/webkit-microcopy`.
 
 ## Copy
 
@@ -77,7 +80,10 @@ One `Toaster` mounted with the form, `position="bottom-right"`. It shows the res
 - **Field descriptions:** a constraint or purpose, one sentence with a period: `Uppercase letters, digits and underscores, for example API_TOKEN.`, `Optional. Up to 200 characters.`
 - **Required message:** names the field: `Key is required.`; for a select, the action: `Select an environment.`
 - **Invalid message:** what is wrong and the rule: `Use uppercase letters, digits and underscores, starting with a letter.`
-- **Conflict message:** the fact, on the field: `A variable named API_TOKEN already exists.`
+- **Conflict message:** the fact, on the field: `A variable named API_TOKEN already exists.` The section `Alert` adds what happened and what to do: `A variable named API_TOKEN already exists in this account, so it wasn't created. Your entries are kept: change the key and press Create again.`
+- **Long form required messages:** name the field: `Name is required.`, `Host header is required.`, `Select an origin.`
+- **Long form labels:** sentence case, the unit in the description: `Browser maximum TTL` with `How long browsers may keep a cached response, in seconds.`
+- **Simulation panel:** a colon, never a dash: `Simulation: the other user`.
 - **Error toast:** what did not happen, then what was kept: title `The variable wasn't created.`, description `The request didn't reach the server. Your entries are kept.`, action `Retry`.
 - **Success toast:** past tense, names the object and where it applies: `API_TOKEN was created.` / `It is available in Production.`
 - **Section rejection Alert:** what happened, why, what was not lost and what to do, as separate sentences: `Origin "web-origin-prod" no longer exists. Another user deleted it while you were filling in this form, so the service wasn't created. Nothing else was lost: reload the origin list and select another one.` Action: `Reload origins`.
@@ -98,11 +104,11 @@ One `Toaster` mounted with the form, `position="bottom-right"`. It shows the res
 - ValidationErrors: Create pressed with gaps; empty Value and Environment take `required`, the malformed Key takes `invalid`, each with its own message, and focus moves to Key.
 - Submitting: the request is in flight; Create shows `loading`, the fields and Cancel are disabled.
 - ServerError: the request failed and no field owns it; an error toast with Retry, the lock released, every entry kept.
-- Conflict: the key is already in use; the error lands on Key and nowhere else.
+- Conflict: the key is already in use; the danger `Alert` opens above the fields, Key takes `invalid` with its reason and focus, and nothing toasts.
 - Saved: the save went through; a success toast names the variable and where it is available, and the form is cleared.
 - Loading: the form data is still arriving; `Skeleton` rows hold the layout and Create is disabled.
 - InSync: the long Create Service form while the linked origin still exists, with the dashed panel that plays the other user.
-- Rejected: the origin was deleted and Save pressed; the danger `Alert` opens under the Origin heading with Reload origins, and the Origin select reads This origin no longer exists.
+- Rejected: the origin was deleted and Save pressed; the page scrolls to the Origin section, the danger `Alert` opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
 - Reloading: Reload origins in flight; its button loads, the select gives way to a `Skeleton`, Save is disabled.
 - Reloaded: the list is back without the deleted origin; the `Alert` closes and the select is cleared and flagged `required` with Select an origin to continue.
 

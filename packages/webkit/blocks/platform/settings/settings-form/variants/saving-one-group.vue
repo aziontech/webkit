@@ -12,6 +12,7 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import GlobalHeader from '@aziontech/webkit/global-header'
+  import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -25,7 +26,7 @@
   import Switch from '@aziontech/webkit/switch'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   const navGroups = [
     {
@@ -170,7 +171,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -185,11 +186,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -230,18 +231,15 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
 
-  const breadcrumb = [
-    { label: 'Forms', href: '/forms' },
-    { label: 'ItemGroup with independent saves' }
-  ]
+  const breadcrumb = [{ label: 'Account settings', href: '/account' }, { label: 'Preferences' }]
 
-  const activeId = ref('forms')
+  const activeId = ref('')
   const navOpen = ref(false)
   const paletteOpen = ref(false)
   const paletteQuery = ref('')
@@ -297,12 +295,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -347,7 +345,17 @@
     }, 900)
   }
 
-  const saveGeneral = () => saveGroup(savingGeneral)
+  const generalSubmitted = ref(false)
+  const nameEmpty = computed(() => !general.fullName.trim())
+  const saveGeneral = () => {
+    generalSubmitted.value = true
+    if (nameEmpty.value) {
+      nextTick(() => document.getElementById('group-full-name')?.focus())
+      return
+    }
+    generalSubmitted.value = false
+    saveGroup(savingGeneral)
+  }
   const saveNotifications = () => saveGroup(savingNotifications)
 </script>
 
@@ -520,7 +528,7 @@
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -531,7 +539,7 @@
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -557,7 +565,7 @@
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -767,7 +775,7 @@
         <main class="flex w-full flex-col">
           <PageHeader
             title="Preferences"
-            description="The same partitioned-save idea as Card, on the ItemGroup surface: Item rows in a flush card, each topic group owning its own save, so changes commit in parts."
+            description="Define the language and notifications of your account."
             size="small"
           />
 
@@ -782,17 +790,30 @@
                   <legend class="sr-only">General</legend>
                   <Item.List>
                     <SettingRow
-                      title="Full Name"
+                      title="Full name"
                       description="The name shown across your account."
                     >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                        <Input
-                          v-model="general.fullName"
-                          size="large"
-                          :disabled="savingGeneral"
-                          class="w-full"
-                          aria-label="Full Name"
-                        />
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <Input
+                            id="group-full-name"
+                            v-model="general.fullName"
+                            size="large"
+                            :disabled="savingGeneral"
+                            class="w-full"
+                            aria-label="Full name"
+                            :required="generalSubmitted && nameEmpty"
+                            :aria-describedby="
+                              generalSubmitted && nameEmpty ? 'group-full-name-error' : undefined
+                            "
+                          />
+                          <HelperText
+                            v-if="generalSubmitted && nameEmpty"
+                            id="group-full-name-error"
+                            kind="required"
+                            label="This field is required."
+                          />
+                        </div>
                       </div>
                     </SettingRow>
 
@@ -965,7 +986,7 @@
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -976,7 +997,7 @@
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -1002,7 +1023,7 @@
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i

@@ -95,7 +95,7 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 
 - Each `ToggleGroup` names its chart.
 - The rail's `Item.Group` has `aria-label="Open alerts"`. An independently scrolling region must be reachable by keyboard.
-- Known gap: the rail's scroll container in the SFC has no `tabindex`, so in browsers that do not focus scroll containers a keyboard user cannot scroll it; give it `tabindex="0"` and a label.
+- The rail's scroll container is a `region` labelled by the `Open alerts` heading with `tabindex="0"`, so a keyboard user can scroll it in every browser.
 - State and level are words (`StatusIndicator`, `Tag`), never color alone.
 - Latency figures use `tabular-nums`.
 

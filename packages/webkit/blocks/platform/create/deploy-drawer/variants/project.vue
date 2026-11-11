@@ -287,7 +287,7 @@
                           >
                             <Popover.Trigger>
                               <Button
-                                label="Change Version"
+                                label="Change version"
                                 kind="outlined"
                                 size="small"
                                 icon="pi pi-chevron-down"
@@ -453,7 +453,7 @@
                                         >
                                           <Popover.Trigger>
                                             <Button
-                                              label="Change Version"
+                                              label="Change version"
                                               kind="outlined"
                                               size="small"
                                               icon="pi pi-chevron-down"

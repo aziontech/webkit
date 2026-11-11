@@ -176,7 +176,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -191,11 +191,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -236,8 +236,8 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
@@ -298,12 +298,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -384,7 +384,7 @@
     { value: '1h', label: 'Last hour' },
     { value: '6h', label: 'Last 6 hours' },
     { value: '24h', label: 'Last 24 hours' },
-    { value: 'custom', label: 'Custom…', custom: true }
+    { value: 'custom', label: 'Custom range', custom: true }
   ]
 
   const periodMinutes = { '15m': 15, '1h': 60, '6h': 360, '24h': 1440 }
@@ -433,8 +433,8 @@
     const from = `${dayFormat.format(start)}, ${formatEventClock(start)}`
     if (!end) return `Since ${from}`
     return sameDay
-      ? `${from} – ${formatEventClock(end)}`
-      : `${from} – ${dayFormat.format(end)}, ${formatEventClock(end)}`
+      ? `${from} to ${formatEventClock(end)}`
+      : `${from} to ${dayFormat.format(end)}, ${formatEventClock(end)}`
   }
 
   const eventFieldCategories = [
@@ -460,7 +460,7 @@
     { id: 'status', label: 'Status', category: 'response', align: 'end', minWidth: 80, mono: true },
     {
       id: 'requestTimeMs',
-      label: 'Request Time',
+      label: 'Request time',
       category: 'performance',
       align: 'end',
       minWidth: 80,
@@ -468,20 +468,20 @@
     },
     {
       id: 'bytesSent',
-      label: 'Bytes Sent',
+      label: 'Bytes sent',
       category: 'response',
       align: 'end',
       minWidth: 80,
       format: (value) => value.toLocaleString('en-US')
     },
-    { id: 'cacheStatus', label: 'Cache Status', category: 'cache', minWidth: 80, mono: true },
+    { id: 'cacheStatus', label: 'Cache status', category: 'cache', minWidth: 80, mono: true },
     { id: 'country', label: 'Country', category: 'geolocation', minWidth: 80 },
-    { id: 'remoteAddress', label: 'Remote Address', category: 'client', minWidth: 80, mono: true },
+    { id: 'remoteAddress', label: 'Remote address', category: 'client', minWidth: 80, mono: true },
     { id: 'ruleName', label: 'Rule', category: 'security', minWidth: 80 },
     { id: 'serviceName', label: 'Service', category: 'services', minWidth: 80, mono: true },
     {
       id: 'serviceDurationMs',
-      label: 'Service Duration',
+      label: 'Service duration',
       category: 'services',
       align: 'end',
       minWidth: 80,
@@ -489,7 +489,7 @@
     },
     { id: 'requestId', label: 'Request ID', category: 'identifiers', minWidth: 80, mono: true },
     { id: 'resourceId', label: 'Resource ID', category: 'identifiers', minWidth: 80, mono: true },
-    { id: 'userAgent', label: 'User Agent', category: 'client', grow: 3, mono: true }
+    { id: 'userAgent', label: 'User agent', category: 'client', grow: 3, mono: true }
   ]
 
   const coreFields = eventFields.filter((field) => field.core)
@@ -1441,7 +1441,7 @@
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -1452,7 +1452,7 @@
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -1478,7 +1478,7 @@
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -1786,7 +1786,7 @@
                                   mode="range"
                                   size="medium"
                                   :show-fields="false"
-                                  placeholder="Pick a range"
+                                  placeholder="Select a range"
                                   class="w-full"
                                   @update:model-value="commitCustomRange"
                                 />
@@ -1800,8 +1800,8 @@
                                     class="w-full"
                                     :placeholder="
                                       filterField
-                                        ? `Filter ${filterField.label.toLowerCase()}…`
-                                        : 'Filter by…'
+                                        ? `Filter ${filterField.label.toLowerCase()}`
+                                        : 'Filter by'
                                     "
                                     :aria-label="
                                       filterField
@@ -2079,7 +2079,7 @@
                         <Popover.Trigger
                           role="button"
                           tabindex="0"
-                          :aria-label="`Filter by ${field.label} — ${fieldCounts[field.id]} values`"
+                          :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
                         >
                           {{ fieldCounts[field.id] }}
                         </Popover.Trigger>
@@ -2198,7 +2198,7 @@
                                 <Popover.Trigger
                                   role="button"
                                   tabindex="0"
-                                  :aria-label="`Filter by ${field.label} — ${fieldCounts[field.id]} values`"
+                                  :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
                                 >
                                   {{ fieldCounts[field.id] }}
                                 </Popover.Trigger>
@@ -2773,7 +2773,7 @@
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -2784,7 +2784,7 @@
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -2810,7 +2810,7 @@
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i

@@ -16,6 +16,7 @@ import test from 'node:test'
 import {
   checkPatternGuidelines,
   checkPatternMetadata,
+  checkSummaryComponents,
   compareToBaseline,
   parseCheckArgs
 } from '../../scripts/check-patterns.mjs'
@@ -237,6 +238,39 @@ test('checkPatternMetadata reports a block without a pattern, empty intents and 
   assert.match(errors[0], /no entry/)
   assert.match(errors[1], /no-such-skill/)
   assert.equal(warnings.length, 1)
+})
+
+test('checkSummaryComponents flags a backticked component the primary and variant SFCs do not import', () => {
+  const variant = [
+    '<script setup>',
+    "import { toast, Toaster } from '@aziontech/webkit/toast'",
+    "import TableRoot from '@aziontech/webkit/table-root'",
+    '</script>',
+    '<template><TableRoot /><Toaster /></template>'
+  ].join('\n')
+  const patterns = {
+    'platform/x': {
+      summary:
+        'A list in `PageHeader` over a `TableRoot`, with `Button`, `Toaster` and `toast.error`; built from `Table`, `Hint` and `Hint`.',
+      sfc: SFC,
+      variants: [{ name: 'Loading', sfc: variant }]
+    }
+  }
+  const errors = checkSummaryComponents(patterns)
+  assert.equal(errors.length, 2)
+  assert.match(errors[0], /blocks\/platform\/x\/block\.json: the summary names `Table`/)
+  assert.match(errors[1], /`Hint`/)
+  assert.deepEqual(
+    checkSummaryComponents({
+      'platform/x': { ...patterns['platform/x'], summary: 'Built from `PageHeader`.' }
+    }),
+    []
+  )
+})
+
+test('every block.json summary names only components its SFCs import', () => {
+  const blocks = readBlocks(fileURLToPath(new URL('../..', import.meta.url)))
+  assert.deepEqual(checkSummaryComponents(blocks), [])
 })
 
 test('compareToBaseline only reports counts above the baseline', () => {

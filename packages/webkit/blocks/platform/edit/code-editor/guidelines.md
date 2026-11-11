@@ -55,7 +55,7 @@ The form column with four `SettingsSection`s: General (Name, required on Save), 
 
 ### J. Save bar — `SaveBar`, `Button` (required)
 
-A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab to show the error.
+A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab.
 
 ## Do
 

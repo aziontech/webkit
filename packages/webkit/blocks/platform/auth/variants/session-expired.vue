@@ -16,7 +16,7 @@
   import Alert from '@aziontech/webkit/alert'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, ref } from 'vue'
 
   const expiredEmail = 'myemail@example.com'
 
@@ -28,6 +28,7 @@
   const resetEmail = ref('')
   const newPassword = ref('')
   const confirmPassword = ref('')
+  const signedIn = ref(false)
   const errors = reactive({
     email: '',
     password: '',
@@ -78,12 +79,14 @@
   })
 
   const backToEmail = () => {
+    signedIn.value = false
     step.value = 'email'
     password.value = ''
     errors.password = ''
   }
 
   const forgotPassword = () => {
+    signedIn.value = false
     expiredNotice.value = false
     returnStep.value = step.value === 'password' ? 'password' : 'email'
     resetEmail.value = email.value
@@ -103,16 +106,23 @@
     step.value = 'new-password'
   }
 
+  const focusField = (id) => nextTick(() => document.getElementById(id)?.focus())
+
   const handlePrimary = () => {
     expiredNotice.value = false
+    signedIn.value = false
     if (step.value === 'email') {
       errors.email = emailError(email.value)
-      if (!errors.email) step.value = 'password'
+      if (errors.email) focusField('login-email')
+      else step.value = 'password'
     } else if (step.value === 'password') {
       errors.password = password.value ? '' : 'This field is required.'
+      if (errors.password) focusField('login-password')
+      else signedIn.value = true
     } else if (step.value === 'reset') {
       errors.resetEmail = emailError(resetEmail.value)
-      if (!errors.resetEmail) step.value = 'sent'
+      if (errors.resetEmail) focusField('reset-email')
+      else step.value = 'sent'
     } else if (step.value === 'new-password') {
       errors.newPassword = newPasswordError(newPassword.value)
       errors.confirmPassword = !confirmPassword.value
@@ -120,7 +130,9 @@
         : confirmPassword.value === newPassword.value
           ? ''
           : "Passwords don't match."
-      if (!errors.newPassword && !errors.confirmPassword) {
+      if (errors.newPassword || errors.confirmPassword)
+        focusField(errors.newPassword ? 'new-password' : 'confirm-password')
+      else {
         email.value = resetEmail.value
         password.value = ''
         returnStep.value = 'password'
@@ -190,9 +202,17 @@
 
                     <Alert
                       v-if="expiredNotice"
+                      key="expired"
                       severity="info"
                       size="small"
                       label="Your session expired. Sign in again to pick up where you left off."
+                    />
+                    <Alert
+                      v-else-if="signedIn"
+                      key="signed-in"
+                      severity="success"
+                      size="small"
+                      label="Signed in."
                     />
 
                     <div class="flex flex-col">
@@ -424,7 +444,7 @@
                             class="text-link text-body-sm"
                             href="#"
                             @click.prevent
-                            >Resend Email</a
+                            >Resend email</a
                           >
                         </div>
                         <div class="flex items-center gap-(--spacing-xs)">

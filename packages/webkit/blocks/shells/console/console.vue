@@ -1,6 +1,7 @@
 <script setup>
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
@@ -15,7 +16,6 @@
   import Input from '@aziontech/webkit/input'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
-  import PageHeader from '@aziontech/webkit/page-header'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
@@ -165,7 +165,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -180,11 +180,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -225,8 +225,8 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
@@ -239,6 +239,7 @@
   const railWidth = ref(null)
   const railCollapsed = ref(false)
   const search = ref('')
+  const crumbs = [{ label: 'Resources' }]
 
   watch(paletteOpen, () => {
     paletteQuery.value = ''
@@ -288,12 +289,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -487,7 +488,7 @@
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -498,7 +499,7 @@
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -524,7 +525,7 @@
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -632,11 +633,18 @@
                   size="small"
                 />
               </a>
+
+              <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
+                <Breadcrumb
+                  :items="crumbs"
+                  class="w-full"
+                />
+              </div>
             </div>
           </GlobalHeader.Left>
           <GlobalHeader.Middle />
           <GlobalHeader.Right>
-            <span class="contents @min-[47rem]:hidden">
+            <span class="contents @2xl:hidden">
               <IconButton
                 icon="pi pi-search"
                 kind="outlined"
@@ -650,7 +658,7 @@
               type="button"
               aria-label="Search"
               aria-keyshortcuts="Meta+K"
-              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
+              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @2xl:flex"
               @click="paletteOpen = true"
             >
               <span
@@ -725,29 +733,7 @@
         class="min-h-0 flex-1 overflow-auto layout-boundary animate-page-enter motion-reduce:animate-none"
       >
         <main class="layout-column flex min-h-full flex-col">
-          <PageHeader
-            title="Resources"
-            description="View and manage your resources."
-          >
-            <template #actions>
-              <Button
-                label="Documentation"
-                icon="pi pi-book"
-                kind="outlined"
-                size="medium"
-                href="https://example.com/docs/resources"
-                target="_blank"
-              />
-              <Button
-                label="Create Resource"
-                icon="pi pi-plus"
-                kind="outlined"
-                size="medium"
-              />
-            </template>
-          </PageHeader>
-
-          <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+          <section class="flex min-w-0 flex-col gap-(--layout-section-gap)">
             <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
               <header class="flex items-center gap-(--layout-group-gap)">
                 <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
@@ -805,6 +791,20 @@
                       aria-label="Columns"
                     />
                   </Tooltip>
+                  <Button
+                    label="Documentation"
+                    icon="pi pi-book"
+                    kind="outlined"
+                    size="medium"
+                    href="https://example.com/docs/resources"
+                    target="_blank"
+                  />
+                  <Button
+                    label="Create Resource"
+                    icon="pi pi-plus"
+                    kind="primary"
+                    size="large"
+                  />
                 </div>
               </header>
 
@@ -896,7 +896,7 @@
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -907,7 +907,7 @@
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -933,7 +933,7 @@
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i

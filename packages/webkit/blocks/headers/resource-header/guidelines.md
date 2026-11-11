@@ -1,6 +1,6 @@
 # Resource header
 
-The top bar of every page inside the persistent console shell. It sits in the content zone beside the navigation rail and carries what the user needs on any browse page: where they are (brand at the first level, a breadcrumb from the second), search, the two ways to start something (Create and the Agent), and their account. It is the header that `shells/console` renders.
+The top bar of every page inside the persistent console shell. It sits in the content zone beside the navigation rail and carries what the user needs on any browse page: where they are (a single unlinked crumb at the first level, the module and the resource from the second), search, the two ways to start something (Create and the Agent), and their account. It is the header that `shells/console` renders.
 
 ## When to use
 
@@ -20,11 +20,11 @@ Default `content` placement, `aria-label="Azion Console"`, in the content zone, 
 
 ### B. Navigation trigger and search — `IconButton` (required)
 
-Below `md` an outlined `pi-bars` icon button opens the rail as a drawer. In the end cluster, Search comes first. From a bar width of `--container-2xl` the search widens into a field with the ⌘K shortcut; both thresholds come from theme tokens, never raw px. Below `md`, Create and Agent also collapse into icon buttons.
+Below `md` an outlined `pi-bars` icon button opens the rail as a drawer. In the end cluster, Search comes first. From a bar width of `--container-2xl` (the `@2xl:` container variant) the search widens into a field-button with the ⌘K shortcut; both thresholds come from theme tokens, never raw px. Below `md`, Create and Agent also collapse into icon buttons.
 
 ### C. Brand — `Brand` (required)
 
-Linked to the home route with `aria-label="Azion home"`. At the first level it is the only thing in the start cluster.
+Linked to the home route with `aria-label="Azion home"`, before the breadcrumb.
 
 ### D. Create — `Button` (required)
 
@@ -38,9 +38,17 @@ The AI assistant entry, medium, `ai-ask-azion` icon. It is the only highlight bu
 
 Inside a button labelled `Account settings`, always last.
 
-### G. Location — `Breadcrumb` (second level only)
+### G. Location — `Breadcrumb` (required)
 
-Imported for the SecondLevel state: the module with an `href`, then the resource's own name with no link. Shows from `md`. A tab is never a crumb.
+Shows from `md`, on every level. First level: one crumb, the module, with no link (`Applications`). Second level: the module with an `href`, then the resource's own name with no link. A tab is never a crumb.
+
+### H. Shortcut — `Kbd` (required)
+
+`meta` + `K` inside the search field-button shown while the bar is at least `--container-2xl` wide.
+
+### I. Hints — `Tooltip` (required)
+
+Names every icon-only control: the navigation trigger, the collapsed search, and Create and Agent below `md`.
 
 ## Do
 
@@ -68,7 +76,7 @@ Imported for the SecondLevel state: the module with an `href`, then the resource
 
 ## States
 
-- FirstLevel: a module page the rail routes to; brand alone at the start, no breadcrumb.
+- FirstLevel: a module page the rail routes to; one unlinked crumb names the module (`Applications`).
 - SecondLevel: a resource inside a module; the breadcrumb names the module and the resource from `md`, last crumb unlinked.
 
 ## Related
@@ -76,5 +84,3 @@ Imported for the SecondLevel state: the module with an `href`, then the resource
 - `shells/console` — the shell that renders this bar with the rail.
 - `headers/creation-header` — the bar for focused flows.
 - `platform/detail/details-page`, `platform/view/table-view` — the second- and first-level pages under it.
-
-Known gap: `skills/webkit-navigation` asks for a single unlinked crumb on first-level pages; the FirstLevel state shows the brand alone and no crumb.

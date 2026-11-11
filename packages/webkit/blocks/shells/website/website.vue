@@ -209,7 +209,7 @@
         >
           <template #actions>
             <Button
-              label="Start for Free"
+              label="Start for free"
               kind="primary"
               size="large"
               href="#"
@@ -295,7 +295,7 @@
         <template #status>
           <StatusIndicator
             severity="success"
-            label="All Systems Operational"
+            label="All systems operational"
           />
         </template>
 

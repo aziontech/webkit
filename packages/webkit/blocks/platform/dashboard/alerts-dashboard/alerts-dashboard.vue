@@ -541,7 +541,7 @@
               :format-value="formatters.count"
               :height="240"
               empty-title="No alerts in this period"
-              empty-description="Nothing was raised in the last 30 days. Choose a longer period."
+              empty-description="Nothing was raised in the last 30 days. Select a longer period."
               :loading="loading"
             >
               <Chart.Grid />
@@ -672,7 +672,7 @@
               v-else
               size="small"
               icon="pi pi-users"
-              title="No entity has risk yet"
+              title="No entities at risk yet"
               description="Entities appear here once an alert names them."
             />
           </ChartCard.Content>
@@ -718,7 +718,7 @@
               size="small"
               icon="pi pi-bell"
               title="No open alerts"
-              description="Alerts appear here when a detection rule matches. Choose a longer period to see closed ones."
+              description="Alerts appear here when a detection rule matches. Select a longer period to see closed ones."
             />
           </ChartCard.Content>
         </ChartCard>

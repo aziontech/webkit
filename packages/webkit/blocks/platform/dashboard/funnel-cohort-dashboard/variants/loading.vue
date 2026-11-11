@@ -525,7 +525,7 @@
               :format-value="formatters.compact"
               :height="200"
               empty-title="No visitors match these filters"
-              empty-description="Choose another segment or widen the period."
+              empty-description="Select another segment or widen the period."
               :loading="loading"
             >
               <Chart.Grid />
@@ -610,7 +610,7 @@
             :max="100"
             :format-value="formatters.percent"
             empty-title="No cohorts match these filters"
-            empty-description="Choose another segment or widen the period."
+            empty-description="Select another segment or widen the period."
             :loading="loading"
           >
             <Chart.Grid />
@@ -673,7 +673,7 @@
                 size="small"
                 icon="pi pi-filter-slash"
                 title="No cohorts match these filters"
-                description="Choose another segment or widen the period."
+                description="Select another segment or widen the period."
               >
                 <template #actions>
                   <Button

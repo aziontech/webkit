@@ -13,7 +13,7 @@ export default {
   parameters: {
     layout: "padded",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button that opens the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Drawer`, the `Panel` parts and `Button`." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button that opens the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`." } },
     webkit: {"block":"platform/detail/production-checklist","intents":["production checklist","go-live checklist","checklist","setup progress","launch steps","onboarding checklist","checklist de produção","lista de verificação","passos para produção"],"skills":["webkit-ui-states","webkit-microcopy"],"primary":"Card"}
   }
 }

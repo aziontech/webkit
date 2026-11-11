@@ -175,7 +175,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -190,11 +190,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -235,8 +235,8 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
@@ -299,12 +299,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -372,9 +372,6 @@
   const openParent = () => {
     parentOpen.value = true
   }
-  const cancelParent = () => {
-    parentOpen.value = false
-  }
 
   watch(parentOpen, (open) => {
     if (!open) return
@@ -385,7 +382,7 @@
   })
 
   const submitParent = () => {
-    errors.name = form.name.trim() ? '' : 'Name is required.'
+    errors.name = form.name.trim() ? '' : 'This field is required.'
     errors.serviceId = form.serviceId ? '' : 'Select a service.'
     if (errors.name || errors.serviceId) return
     instances.value = [
@@ -393,10 +390,6 @@
       ...instances.value
     ]
     parentOpen.value = false
-  }
-
-  const cancelChild = () => {
-    childOpen.value = false
   }
 
   watch(childOpen, (open) => {
@@ -408,8 +401,8 @@
   })
 
   const submitChild = () => {
-    childErrors.name = childForm.name.trim() ? '' : 'Name is required.'
-    childErrors.runtime = childForm.runtime ? '' : 'Runtime is required.'
+    childErrors.name = childForm.name.trim() ? '' : 'This field is required.'
+    childErrors.runtime = childForm.runtime ? '' : 'This field is required.'
     if (childErrors.name || childErrors.runtime) return
     const value = `svc-${uid()}`
     services.value = [{ value, label: childForm.name.trim() }, ...services.value]
@@ -588,7 +581,7 @@
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -599,7 +592,7 @@
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -625,7 +618,7 @@
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -835,7 +828,7 @@
         <main class="flex h-full flex-col">
           <PageHeader
             title="Instances"
-            description="Create a resource whose Select needs a related resource that may not exist yet — the quick-add opens a second drawer, then selects the new resource back into the parent. Each drawer is its own scoped save."
+            description="Create a resource whose Select needs a related resource that may not exist yet. The quick-add opens a second drawer, then selects the new resource back into the parent. Each drawer is its own scoped save."
             size="small"
           >
             <template #actions>
@@ -881,8 +874,8 @@
                   <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                     <DrawerTitle>Add Instance</DrawerTitle>
                     <p class="text-body-sm text-(--text-muted)">
-                      Instantiate a service in this project — pick an existing service or create a
-                      new one inline.
+                      Instantiate a service in this project. Select an existing service or create
+                      one inline.
                     </p>
                   </div>
                   <DrawerClose />
@@ -945,7 +938,7 @@
                           <Item.List>
                             <SettingRow
                               title="Service"
-                              description="Pick the service to instantiate, or create a new one."
+                              description="Select the service to instantiate, or create one."
                             >
                               <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                                 <div class="flex w-full flex-col gap-(--spacing-xs)">
@@ -1009,18 +1002,7 @@
                     <div class="w-full md:w-fit">
                       <Button
                         class="w-full"
-                        type="button"
-                        label="Cancel"
-                        kind="outlined"
-                        size="medium"
-                        :disabled="submitting"
-                        @click="cancelParent"
-                      />
-                    </div>
-                    <div class="w-full md:w-fit">
-                      <Button
-                        class="w-full"
-                        label="Save"
+                        label="Add Instance"
                         kind="primary"
                         size="medium"
                         :loading="submitting"
@@ -1050,10 +1032,10 @@
               >
                 <PanelHeader class="w-full">
                   <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <DrawerTitle>Create service</DrawerTitle>
+                    <DrawerTitle>Create Service</DrawerTitle>
                     <p class="text-body-sm text-(--text-muted)">
-                      Create a service to instantiate — it becomes available in the selector when
-                      saved.
+                      Create a service to instantiate. Once saved, it is available in the Service
+                      select.
                     </p>
                   </div>
                   <DrawerClose />
@@ -1064,7 +1046,7 @@
                     class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
                     :disabled="childSubmitting"
                   >
-                    <legend class="sr-only">Create service</legend>
+                    <legend class="sr-only">Create Service</legend>
 
                     <section class="flex flex-col gap-(--layout-group-gap)">
                       <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
@@ -1158,18 +1140,7 @@
                     <div class="w-full md:w-fit">
                       <Button
                         class="w-full"
-                        type="button"
-                        label="Cancel"
-                        kind="outlined"
-                        size="medium"
-                        :disabled="childSubmitting"
-                        @click="cancelChild"
-                      />
-                    </div>
-                    <div class="w-full md:w-fit">
-                      <Button
-                        class="w-full"
-                        label="Save"
+                        label="Create Service"
                         kind="primary"
                         size="medium"
                         :loading="childSubmitting"
@@ -1256,7 +1227,7 @@
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -1267,7 +1238,7 @@
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -1293,7 +1264,7 @@
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i

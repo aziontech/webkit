@@ -33,7 +33,7 @@
   const policyLabels = { single_version: 'Single', versioned_urls: 'Versioned' }
   const resourceEnvironments = ['Production', 'Preview']
   const certificateOptions = [
-    { value: '', label: 'Platform (free)', subject: '' },
+    { value: '', label: 'Free platform certificate', subject: '' },
     { value: 'cert-8801', label: 'example.com wildcard', subject: '*.example.com' },
     { value: 'cert-8803', label: 'api.example.com', subject: 'api.example.com' },
     { value: 'cert-8805', label: 'staging wildcard', subject: '*.staging.example.com' },
@@ -47,7 +47,7 @@
     },
     {
       value: 'own',
-      label: 'Bring my own Domain',
+      label: 'Bring my own domain',
       description: 'Use your own DNS and point it to this resource.'
     }
   ]

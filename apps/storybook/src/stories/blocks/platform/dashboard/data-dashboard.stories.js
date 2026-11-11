@@ -11,9 +11,9 @@ export default {
   title: "Templates/Platform/Dashboard/DataDashboard",
   tags: ['autodocs'],
   parameters: {
-    layout: "padded",
+    layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated TableRoot lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated TableRoot lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`." } },
     webkit: {"block":"platform/dashboard/data-dashboard","intents":["data dashboard","metrics dashboard","kpi dashboard","stat tiles","data transferred","usage dashboard","breakdown charts","métricas","painel de dados","painel de uso"],"skills":["webkit-data-viz","webkit-tables","webkit-ui-states"],"primary":"Default"}
   }
 }

@@ -129,7 +129,7 @@
         </div>
 
         <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-          <span class="text-label-sm text-(--text-muted)">Last Modified</span>
+          <span class="text-label-sm text-(--text-muted)">Last modified</span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <span class="truncate text-body-sm text-(--text-default)">
               6 days ago by Robson Junior

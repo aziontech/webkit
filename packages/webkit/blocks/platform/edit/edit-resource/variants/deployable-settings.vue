@@ -6,6 +6,7 @@
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
@@ -36,7 +37,7 @@
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
   const navGroups = [
     {
@@ -181,7 +182,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -196,11 +197,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -241,8 +242,8 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
@@ -338,12 +339,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -532,7 +533,20 @@
     if (value) form.protocols.useHttps = true
   }
 
+  const nameError = ref(false)
+  watch(
+    () => form.name,
+    () => {
+      nameError.value = false
+    }
+  )
+
   const save = () => {
+    if (!form.name.trim()) {
+      nameError.value = true
+      nextTick(() => document.getElementById('resource-name')?.focus())
+      return
+    }
     saving.value = true
     setTimeout(() => {
       baseline.value = JSON.stringify(form)
@@ -541,6 +555,20 @@
   }
 
   const discard = () => Object.assign(form, JSON.parse(baseline.value))
+
+  const deleteOpen = ref(false)
+  const deleteConfirmation = ref('')
+  const deleteLabelId = useId()
+  const canDelete = computed(() => deleteConfirmation.value.trim() === record.name)
+
+  watch(deleteOpen, (isOpen) => {
+    if (isOpen) deleteConfirmation.value = ''
+  })
+
+  const confirmDelete = () => {
+    if (!canDelete.value) return
+    deleteOpen.value = false
+  }
 </script>
 
 <template>
@@ -712,7 +740,7 @@
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -723,7 +751,7 @@
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -749,7 +777,7 @@
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -1087,13 +1115,26 @@
                               title="Name"
                               description="A unique and descriptive name to identify the resource."
                             >
-                              <Input
-                                v-model="form.name"
-                                size="large"
-                                class="w-full"
-                                aria-label="Name"
-                                :disabled="saving"
-                              />
+                              <div class="flex w-full flex-col gap-(--spacing-xs)">
+                                <Input
+                                  id="resource-name"
+                                  v-model="form.name"
+                                  size="large"
+                                  class="w-full"
+                                  aria-label="Name"
+                                  :disabled="saving"
+                                  :required="nameError"
+                                  :aria-describedby="
+                                    nameError ? 'resource-name-message' : undefined
+                                  "
+                                />
+                                <HelperText
+                                  v-if="nameError"
+                                  id="resource-name-message"
+                                  kind="required"
+                                  label="This field is required."
+                                />
+                              </div>
                             </SettingRow>
                             <SettingRow
                               title="Active"
@@ -1232,7 +1273,7 @@
                     </SettingsSection>
 
                     <SettingsSection
-                      title="Advanced Settings"
+                      title="Advanced settings"
                       hint="Deployment Settings, protocols and mutual authentication, which most resources never change."
                       anchor="advanced-settings"
                       v-model:open="advancedOpen"
@@ -1293,7 +1334,7 @@
                                       "
                                       size="large"
                                       class="w-full"
-                                      placeholder="Select a Deployment Setting"
+                                      placeholder="Select a deployment setting"
                                       :disabled="saving"
                                       :display-value="settingName"
                                       @update:model-value="
@@ -1322,7 +1363,7 @@
                         </SettingsSection>
 
                         <SettingsSection
-                          title="Protocol Settings"
+                          title="Protocol settings"
                           hint="Which protocols and ports this resource answers on, and the TLS floor it accepts."
                           anchor="protocol-settings"
                         >
@@ -1330,7 +1371,7 @@
                             <template #content>
                               <Item.List>
                                 <SettingRow
-                                  title="HTTP Ports"
+                                  title="HTTP ports"
                                   description="The ports this resource answers plain HTTP on."
                                 >
                                   <MultiSelect
@@ -1341,7 +1382,7 @@
                                     :disabled="saving"
                                     :display-value="portsLabel"
                                   >
-                                    <MultiSelect.Trigger aria-label="HTTP Ports" />
+                                    <MultiSelect.Trigger aria-label="HTTP ports" />
                                     <MultiSelect.Content>
                                       <MultiSelect.Option
                                         v-for="option in httpPortOptions"
@@ -1374,7 +1415,7 @@
                                 <SettingRow
                                   v-if="form.protocols.useHttps"
                                   key="https-ports"
-                                  title="HTTPS Ports"
+                                  title="HTTPS ports"
                                   description="The ports this resource answers TLS traffic on."
                                 >
                                   <MultiSelect
@@ -1385,7 +1426,7 @@
                                     :disabled="saving"
                                     :display-value="portsLabel"
                                   >
-                                    <MultiSelect.Trigger aria-label="HTTPS Ports" />
+                                    <MultiSelect.Trigger aria-label="HTTPS ports" />
                                     <MultiSelect.Content>
                                       <MultiSelect.Option
                                         v-for="option in httpsPortOptions"
@@ -1418,7 +1459,7 @@
                                 <SettingRow
                                   v-if="form.protocols.useHttp3"
                                   key="http3-ports"
-                                  title="HTTP/3 Ports"
+                                  title="HTTP/3 ports"
                                   description="The ports QUIC is answered on."
                                 >
                                   <MultiSelect
@@ -1429,7 +1470,7 @@
                                     :disabled="saving"
                                     :display-value="portsLabel"
                                   >
-                                    <MultiSelect.Trigger aria-label="HTTP/3 Ports" />
+                                    <MultiSelect.Trigger aria-label="HTTP/3 ports" />
                                     <MultiSelect.Content>
                                       <MultiSelect.Option
                                         v-for="option in http3PortOptions"
@@ -1509,7 +1550,7 @@
                         </SettingsSection>
 
                         <SettingsSection
-                          title="Mutual Authentication"
+                          title="Mutual authentication"
                           hint="Require the client to present a certificate the resource can verify, as well as presenting its own."
                           anchor="mutual-authentication"
                         >
@@ -1517,13 +1558,13 @@
                             <template #content>
                               <Item.List>
                                 <SettingRow
-                                  title="Mutual Authentication"
+                                  title="Mutual authentication"
                                   description="Require the client to present a certificate the resource can verify, as well as presenting its own."
                                   kind="compact"
                                 >
                                   <Switch
                                     v-model="form.mtls.enabled"
-                                    aria-label="Mutual Authentication"
+                                    aria-label="Mutual authentication"
                                     :disabled="saving || !form.protocols.useHttps"
                                   />
                                 </SettingRow>
@@ -1536,7 +1577,7 @@
                                 >
                                   <div
                                     role="radiogroup"
-                                    aria-label="Mutual Authentication mode"
+                                    aria-label="Mutual authentication mode"
                                     class="flex w-full flex-col gap-(--spacing-sm)"
                                   >
                                     <Field.Label
@@ -1566,7 +1607,7 @@
                                 <SettingRow
                                   v-if="armed"
                                   key="mtls-certificate"
-                                  title="Trusted CA Certificate"
+                                  title="Trusted CA certificate"
                                   description="The authority a client certificate is verified against."
                                 >
                                   <Select
@@ -1579,7 +1620,7 @@
                                   >
                                     <Select.Trigger
                                       class="w-full"
-                                      aria-label="Trusted CA Certificate"
+                                      aria-label="Trusted CA certificate"
                                     />
                                     <Select.Content>
                                       <Select.Option
@@ -1595,13 +1636,13 @@
                                     v-if="!form.mtls.certificate"
                                     id="mtls-certificate-message"
                                     :kind="'required'"
-                                    :label="'Mutual Authentication requires a Trusted CA certificate.'"
+                                    :label="'Mutual authentication requires a Trusted CA certificate.'"
                                   />
                                 </SettingRow>
                                 <SettingRow
                                   v-if="armed"
                                   key="mtls-crl"
-                                  title="Certificate Revocation List"
+                                  title="Certificate revocation list"
                                   description="Revoked certificates are rejected during the handshake."
                                 >
                                   <MultiSelect
@@ -1612,7 +1653,7 @@
                                     :disabled="saving"
                                     :display-value="crlLabel"
                                   >
-                                    <MultiSelect.Trigger aria-label="Certificate Revocation List" />
+                                    <MultiSelect.Trigger aria-label="Certificate revocation list" />
                                     <MultiSelect.Content>
                                       <MultiSelect.Option
                                         v-for="option in revocationListOptions"
@@ -1632,7 +1673,7 @@
                     </SettingsSection>
 
                     <SettingsSection
-                      title="Danger Zone"
+                      title="Danger zone"
                       hint="Actions that cannot be undone."
                       anchor="danger-zone"
                     >
@@ -1644,13 +1685,59 @@
                               description="Once deleted, the resource and its deployments cannot be recovered."
                               kind="compact"
                             >
-                              <Button
-                                type="button"
-                                label="Delete Resource"
-                                kind="danger"
+                              <ConfirmDialog
+                                v-model:open="deleteOpen"
+                                title="Delete resource"
                                 size="medium"
-                                icon="pi pi-trash"
-                              />
+                              >
+                                <template #trigger>
+                                  <Button
+                                    type="button"
+                                    label="Delete resource"
+                                    kind="danger"
+                                    size="medium"
+                                    icon="pi pi-trash"
+                                  />
+                                </template>
+                                <div class="flex flex-col gap-(--spacing-md)">
+                                  <Alert
+                                    severity="warning"
+                                    label="Once confirmed, this action can't be reversed."
+                                  />
+                                  <p class="m-0 text-body-sm text-(--text-muted)">
+                                    The resource will be deleted, along with its domains and
+                                    deployments.
+                                  </p>
+                                  <p
+                                    :id="deleteLabelId"
+                                    class="m-0 text-body-sm text-(--text-default)"
+                                  >
+                                    Type {{ record.name }} to confirm.
+                                  </p>
+                                  <Input
+                                    v-model="deleteConfirmation"
+                                    :aria-labelledby="deleteLabelId"
+                                    autocomplete="off"
+                                    class="w-full"
+                                    @keydown.enter="confirmDelete"
+                                  />
+                                </div>
+                                <template #actions="{ close }">
+                                  <Button
+                                    label="Cancel"
+                                    kind="outlined"
+                                    size="medium"
+                                    @click="close"
+                                  />
+                                  <Button
+                                    label="Delete resource"
+                                    kind="danger"
+                                    size="medium"
+                                    :disabled="!canDelete"
+                                    @click="confirmDelete"
+                                  />
+                                </template>
+                              </ConfirmDialog>
                             </SettingRow>
                           </Item.List>
                         </template>
@@ -1765,7 +1852,7 @@
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -1776,7 +1863,7 @@
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -1802,7 +1889,7 @@
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i

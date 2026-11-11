@@ -47,7 +47,7 @@ The user's initials in the account row and the header's account button.
 
 ### F. Account and row actions — `DropdownMenu` (required)
 
-The account menu (`Account Settings`, `Personal Tokens`, theme, `Home Page`, `Changelog`, `Feedback`,
+The account menu (`Account settings`, `Personal tokens`, theme, `Home page`, `Changelog`, `Feedback`,
 `Docs`, `Log out`, `Upgrade to Pro`, system status) and, on each resource row, the hover-revealed
 actions (`View details`, `Edit`, `Delete`).
 
@@ -137,12 +137,11 @@ The labelled panel (`Navigation`) that contains the `Sidebar`.
 ## Copy
 
 - **Greeting:** time of day and first name. `Good morning, Alex`.
-- **Tile labels:** the metric in sentence case. `Data transferred` (see the known gap below).
+- **Tile labels:** the metric in sentence case. `Data transferred`, `Requests per second`.
 - **Tile tooltips:** one sentence with a period. `Total bytes delivered across all your resources.`
 - **Agent card:** imperative title plus one sentence. `Set up your coding agent` / `Give your editor a prompt that teaches it to build and deploy here.`
 - **Empty panel:** `Nothing here yet.`
 - **Palette placeholder:** `Search resources, pages and commands`.
-- Known gap: the SFC's tile labels (`Data Transferred`, `Requests / Second`, `Bandwidth Saving`, `Data Offload`) and some account menu items (`Account Settings`, `Personal Tokens`, `Home Page`) are in title case; `webkit-microcopy` requires sentence case.
 
 ## Accessibility
 

@@ -1,4 +1,5 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -13,11 +14,12 @@
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS
   } from '@aziontech/webkit/password-requirements'
-  import { reactive, ref } from 'vue'
+  import { nextTick, reactive, ref } from 'vue'
 
   const email = ref('')
   const password = ref('')
   const errors = reactive({ email: '', password: '' })
+  const created = ref('')
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -38,6 +40,13 @@
   const signUp = () => {
     errors.email = emailError(email.value)
     errors.password = newPasswordError(password.value)
+    created.value = ''
+    if (errors.email || errors.password) {
+      const id = errors.email ? 'signup-email' : 'signup-password'
+      nextTick(() => document.getElementById(id)?.focus())
+      return
+    }
+    created.value = `Account created. We sent a verification link to ${email.value.trim()}.`
   }
 </script>
 
@@ -88,7 +97,14 @@
                       novalidate
                       @submit.prevent="signUp"
                     >
-                      <PageHeader title="Sign Up for a Free Account" />
+                      <PageHeader title="Sign up for a free account" />
+
+                      <Alert
+                        v-if="created"
+                        severity="success"
+                        size="small"
+                        :label="created"
+                      />
 
                       <div class="flex flex-col gap-(--spacing-sm)">
                         <Button
@@ -117,7 +133,7 @@
                         <div class="flex flex-col gap-(--spacing-xs)">
                           <Label
                             for="signup-email"
-                            label="Work Email"
+                            label="Work email"
                             required
                           />
                           <Input

@@ -9,7 +9,7 @@
   const steps = [
     {
       key: 'token',
-      title: 'Access Token',
+      title: 'Access token',
       description: 'Deploy token created and added to the CLI',
       status: 'done',
       duration: '3s',
@@ -42,7 +42,7 @@
     },
     {
       key: 'clone',
-      title: 'Clone Template',
+      title: 'Clone template',
       description: 'Template cloned into the GitHub scope',
       status: 'done',
       duration: '4s',
@@ -165,6 +165,14 @@
   ]
 
   const openStep = ref('build')
+
+  const stepStatusLabels = {
+    done: 'Done',
+    failed: 'Failed',
+    skipped: 'Skipped',
+    running: 'Running',
+    pending: 'Not started'
+  }
 </script>
 
 <template>
@@ -172,8 +180,11 @@
     <div
       class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
     >
-      <p class="shrink-0 text-heading-xxs text-(--text-default)">Deployment Logs</p>
-      <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
+      <p class="shrink-0 text-heading-xxs text-(--text-default)">Deployment logs</p>
+      <div
+        role="status"
+        class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)"
+      >
         <span class="shrink-0 text-label-sm text-(--text-default)">3/8 steps</span>
         <span class="truncate text-label-sm text-(--text-muted)">Build</span>
       </div>
@@ -217,6 +228,7 @@
                 class="size-3.5 rounded-full border border-dashed border-(--border-default)"
               />
             </span>
+            <span class="sr-only">{{ stepStatusLabels[step.status] }}</span>
             <span
               :data-state="step.status"
               class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"

@@ -1,14 +1,17 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
   import PopoverContent from '@aziontech/webkit/popover-content'
   import PopoverRoot from '@aziontech/webkit/popover-root'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
@@ -17,7 +20,7 @@
   import TableRoot from '@aziontech/webkit/table-root'
   import TableSearch from '@aziontech/webkit/table-search'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref, watch } from 'vue'
+  import { computed, ref, useId, watch } from 'vue'
 
   const folderPath = ref([])
   const rootName = 'acme-assets'
@@ -82,7 +85,7 @@
       grow: 3
     },
     { accessorKey: 'size', header: 'Size', enableSorting: true, minWidth: 80 },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'lastModified', header: 'Last modified', enableSorting: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -105,6 +108,30 @@
     return `${years} ${years === 1 ? 'year' : 'years'} ago`
   }
 
+  const removed = ref([])
+  const pending = ref(null)
+  const deleteOpen = ref(false)
+  const confirmation = ref('')
+  const confirmLabelId = useId()
+  const entryPath = (name) => [...folderPath.value, name].join('')
+  const canDelete = computed(
+    () => Boolean(pending.value) && confirmation.value.trim() === pending.value.name
+  )
+
+  const onRowAction = (value, row) => {
+    if (value === 'open') enterFolder(row.name)
+    if (value !== 'delete') return
+    pending.value = row
+    confirmation.value = ''
+    deleteOpen.value = true
+  }
+
+  const confirmDelete = () => {
+    if (!canDelete.value) return
+    removed.value = [...removed.value, entryPath(pending.value.name)]
+    deleteOpen.value = false
+  }
+
   const tableRef = ref(null)
   const isFolder = (entry) => Boolean(entry && entry.children)
 
@@ -118,7 +145,9 @@
   })
 
   const rows = computed(() => {
-    const entries = Object.entries(currentFolder.value)
+    const entries = Object.entries(currentFolder.value).filter(
+      ([name]) => !removed.value.includes(entryPath(name))
+    )
     const folders = entries
       .filter(([, entry]) => isFolder(entry))
       .sort(([a], [b]) => a.localeCompare(b))
@@ -407,6 +436,7 @@
                 <DropdownMenuRoot
                   v-if="row.kind !== 'parent'"
                   placement="bottom-end"
+                  @select="(event, value) => onRowAction(value, row)"
                 >
                   <DropdownMenuTrigger>
                     <Tooltip text="File actions">
@@ -481,5 +511,52 @@
         </Card>
       </section>
     </main>
+    <ConfirmDialog
+      v-model:open="deleteOpen"
+      :title="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
+      size="medium"
+    >
+      <div class="flex flex-col gap-(--spacing-md)">
+        <Alert
+          severity="warning"
+          label="Once confirmed, this action can't be reversed."
+        />
+        <p class="m-0 text-body-sm text-(--text-muted)">
+          {{
+            pending?.kind === 'folder'
+              ? 'The selected folder will be deleted, along with all its files.'
+              : 'The selected file will be deleted.'
+          }}
+        </p>
+        <p
+          :id="confirmLabelId"
+          class="m-0 text-body-sm text-(--text-default)"
+        >
+          Type <code class="text-label-code-sm">{{ pending?.name }}</code> to confirm.
+        </p>
+        <Input
+          v-model="confirmation"
+          :aria-labelledby="confirmLabelId"
+          autocomplete="off"
+          class="w-full"
+          @keydown.enter="confirmDelete"
+        />
+      </div>
+      <template #actions="{ close }">
+        <Button
+          label="Cancel"
+          kind="outlined"
+          size="medium"
+          @click="close"
+        />
+        <Button
+          :label="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
+          kind="danger"
+          size="medium"
+          :disabled="!canDelete"
+          @click="confirmDelete"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>

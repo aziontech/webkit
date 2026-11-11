@@ -25574,7 +25574,7 @@
    "title": "Templates/Headers/ResourceHeader",
    "source": "blocks/headers/resource-header/resource-header.vue",
    "surface": "product",
-   "summary": "The console bar for every page inside the persistent shell, at its first and second level of resource. A `GlobalHeader` in its default `content` placement, sitting in the content zone beside the navigation rail. Start: the navigation trigger below `md`, the brand, and the breadcrumb from the second level. End: search first, then Create, the Agent button and the account avatar. The first level of a resource names itself with its own page, so the bar carries the brand alone; the second level adds the module and the resource name as a breadcrumb. Below `md` the sample collapses Create and Agent into icon buttons, and from a bar width of `--container-2xl` it widens the search into a field with the ⌘K shortcut. Both thresholds are read from the theme tokens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Button`, `ButtonHighlight`, `Avatar` and `Brand`.",
+   "summary": "The console bar for every page inside the persistent shell, at its first and second level of resource. A `GlobalHeader` in its default `content` placement, sitting in the content zone beside the navigation rail. Start: the navigation trigger below `md`, the brand, and the breadcrumb on every level from `md`. End: search first, then Create, the Agent button and the account avatar. The first level carries one unlinked crumb, the module; the second level names the module and the resource. Below `md` the sample collapses Create and Agent into icon buttons, and from a bar width of `--container-2xl` it widens the search into a field with the ⌘K shortcut. Both thresholds are read from the theme tokens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `Kbd`, `Button`, `ButtonHighlight`, `Avatar` and `Brand`.",
    "intents": [
     "console header",
     "app header",
@@ -25598,7 +25598,9 @@
     "Button",
     "ButtonHighlight",
     "GlobalHeader",
-    "IconButton"
+    "IconButton",
+    "Kbd",
+    "Tooltip"
    ],
    "imports": [
     "@aziontech/webkit/avatar",
@@ -25607,10 +25609,12 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/global-header",
-    "@aziontech/webkit/icon-button"
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/kbd",
+    "@aziontech/webkit/tooltip"
    ],
    "primary": "FirstLevel",
-   "guidelinesSummary": "The top bar of every page inside the persistent console shell. It sits in the content zone beside the navigation rail and carries what the user needs on any browse page: where they are (brand at the first level, a breadcrumb from the second), search, the two ways to start something (Create and the Agent), and their account. It is the header that `shells/console` renders.",
+   "guidelinesSummary": "The top bar of every page inside the persistent console shell. It sits in the content zone beside the navigation rail and carries what the user needs on any browse page: where they are (a single unlinked crumb at the first level, the module and the resource from the second), search, the two ways to start something (Create and the Agent), and their account. It is the header that `shells/console` renders.",
    "variants": [
     {
      "name": "SecondLevel",
@@ -25665,7 +25669,7 @@
    "title": "Templates/Platform/Account/ChangePlanDrawer",
    "source": "blocks/platform/account/change-plan-drawer/change-plan-drawer.vue",
    "surface": "product",
-   "summary": "The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, and Contact sales closes it. Built from `Drawer`, `PanelHeader`, `PanelContent`, `ToggleGroup`, `CardPricing` and `Button`.",
+   "summary": "The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelContent`, `ToggleGroup`, `CardPricing` and `Button`.",
    "intents": [
     "change plan",
     "plan selection",
@@ -25715,6 +25719,7 @@
     "PanelHeader",
     "Select",
     "Separator",
+    "toast",
     "ToggleGroup"
    ],
    "imports": [
@@ -25738,6 +25743,7 @@
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
     "@aziontech/webkit/separator",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group"
    ],
    "primary": "Default",
@@ -25855,7 +25861,7 @@
    "title": "Templates/Platform/Account/PaymentMethodCard",
    "source": "blocks/platform/account/payment-method-card/payment-method-card.vue",
    "surface": "product",
-   "summary": "The Payment Method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert` and `Button`; the Visa plate is an inline monochrome card-brand mark drawn in theme tokens (`--bg-surface`, `--border-default`, `--text-default`), since webkit ships no card-brand asset.",
+   "summary": "The Payment method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert` and `Button`; the Visa plate is an inline monochrome card-brand mark drawn in theme tokens (`--bg-surface`, `--border-default`, `--text-default`), since webkit ships no card-brand asset.",
    "intents": [
     "payment method",
     "credit card form",
@@ -25902,7 +25908,7 @@
     "@aziontech/webkit/select"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The Payment Method card of the Upgrade to Pro drawer. The user needs to confirm which card will be charged and, if needed, replace it without leaving the upgrade: the card on file shows as one row (brand plate, last four digits, Change), and Change swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade submits.",
+   "guidelinesSummary": "The Payment method card of the Upgrade to Pro drawer. The user needs to confirm which card will be charged and, if needed, replace it without leaving the upgrade: the card on file shows as one row (brand plate, last four digits, Change), and Change swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade submits.",
    "variants": [
     {
      "name": "Editing",
@@ -25920,7 +25926,7 @@
    "title": "Templates/Platform/Account/Profile",
    "source": "blocks/platform/account/profile/profile.vue",
    "surface": "product",
-   "summary": "The profile page of a signed-in account, and the layout every account settings page follows, rendered inside the app shell: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account Name and Billing emails come filled from the account; the Appearance font picker defaults to Rubik. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `Hint` and `Button`.",
+   "summary": "The profile page of a signed-in account, and the layout every account settings page follows, rendered inside the app shell: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account name and Billing emails come filled from the account and are checked on Save; the Appearance font picker defaults to Rubik. A save that fails with no field to blame raises an error toast with Retry and keeps the changes. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `HelperText`, `Toaster` and `Button`.",
    "intents": [
     "profile",
     "profile page",
@@ -25950,6 +25956,7 @@
    "components": [
     "Button",
     "Card",
+    "HelperText",
     "Input",
     "Item",
     "PageHeader",
@@ -25959,11 +25966,13 @@
     "SettingsSection",
     "Switch",
     "Tag",
-    "Textarea"
+    "Textarea",
+    "toast"
    ],
    "imports": [
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/helper-text",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/page-header",
@@ -25973,7 +25982,8 @@
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/tag",
-    "@aziontech/webkit/textarea"
+    "@aziontech/webkit/textarea",
+    "@aziontech/webkit/toast"
    ],
    "primary": "Default",
    "guidelinesSummary": "The profile page of a signed-in account, and the layout every account settings page follows. The user comes to check or change how the account is identified, billed and signed into: a small page heading over stacked sections, each a flush card of setting rows in the form column, with a save bar that rises once a saved field changes. Billing, credentials, users and teams keep the same column and swap the sections for their own cards or tables.",
@@ -26120,7 +26130,7 @@
    "title": "Templates/Platform/Create/CreateHub",
    "source": "blocks/platform/create/create-hub/create-hub.vue",
    "surface": "product",
-   "summary": "The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead also offers to pick a file or a folder, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a dashed EmptyState with Continue with GitHub until an account is connected, then an account Select with an Add GitHub Account option, a search that also takes a repository URL, and a flush list of repositories with an Import button each, shown as skeleton rows while a scope loads. On the right, Start from Template: a Filter button over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column cards with the vendor beside the title. Dragging a folder onto the page shows the drop target plotted in ProjectIntake. Built from `PageHeader`, `GlobalHeader`, `Breadcrumb`, `EmptyState`, `Link`, `Select`, `Input`, `Card`, `Item`, `Skeleton`, `ScrollArea` and `Button`.",
+   "summary": "The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead also offers to pick a file or a folder, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a dashed EmptyState with Continue with GitHub until an account is connected, then an account Select with an Add GitHub account option, a search that also takes a repository URL, and a flush list of repositories with an Import button each, shown as skeleton rows while a scope loads. On the right, Start from template: a Filter button over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column cards with the vendor beside the title. Dragging a folder onto the page shows the drop target plotted in ProjectIntake. Built from `PageHeader`, `GlobalHeader`, `Breadcrumb`, `EmptyState`, `Link`, `Select`, `Input`, `Card`, `Item`, `Skeleton`, `ScrollArea` and `Button`.",
    "intents": [
     "create hub",
     "creation center",
@@ -26176,7 +26186,7 @@
     "@aziontech/webkit/skeleton"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The Creation Center, where a new project starts. The user arrives from Home or a Create action with something to deploy and needs to pick its source in one look: a repository from their Git account, a template, or a file or folder from their machine. The page puts the two main sources side by side, Import from GitHub and Start from Template, under one heading, and accepts a dropped folder anywhere.",
+   "guidelinesSummary": "The Creation Center, where a new project starts. The user arrives from Home or a Create action with something to deploy and needs to pick its source in one look: a repository from their Git account, a template, or a file or folder from their machine. The page puts the two main sources side by side, Import from GitHub and Start from template, under one heading, and accepts a dropped folder anywhere.",
    "variants": [
     {
      "name": "Connected",
@@ -26194,7 +26204,7 @@
    "title": "Templates/Platform/Create/CreateInDrawer",
    "source": "blocks/platform/create/create-in-drawer/create-in-drawer.vue",
    "surface": "product",
-   "summary": "The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `Section` bands, each a heading with a `Hint` glyph over its stacked `Field` components; and one submit button in the footer that flags empty required fields only after it is pressed and shows its loading state while the save is in flight. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own Domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup` and `RadioButton` choice cards), `Label` and `HelperText` around `Select`, `NumberInput`, `Input`, `Textarea`, `Hint`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, a list page whose Create Service drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Instance drawer whose Service select creates the missing service in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build & Deployment settings panel. The variants add `PageHeader`, `SettingRow`, the platform shell, `Card`, `Item` and `Switch`.",
+   "summary": "The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer that flags empty required fields only after it is pressed and shows its loading state while the save is in flight. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup` and `RadioButton` choice cards), `Label` and `HelperText` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, a list page whose Create Service drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Instance drawer whose Service select creates the missing service in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. The variants add `PageHeader`, `SettingRow`, the platform shell, `Card`, `Item` and `Switch`.",
    "intents": [
     "create domain",
     "add domain",
@@ -26372,7 +26382,7 @@
     },
     {
      "name": "DeploymentSettings",
-     "summary": "The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of a Build & Deployment settings panel. A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across services switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `SettingsSection`, `Drawer`, the `Panel` parts, `Field` with `Input`, `Textarea`, `RadioButton` and `Switch` choice cards, `Label`, `HelperText`, `Hint` and `Button`."
+     "summary": "The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of a Build and deployment settings panel. A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across services switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `SettingsSection`, `Drawer`, the `Panel` parts, `Field` with `Input`, `Textarea`, `RadioButton` and `Switch` choice cards, `Label`, `HelperText`, `Hint` and `Button`."
     }
    ],
    "file": "catalog/patterns/platform/create/create-in-drawer.json"
@@ -26382,7 +26392,7 @@
    "title": "Templates/Platform/Create/DeployDrawer",
    "source": "blocks/platform/create/deploy-drawer/deploy-drawer.vue",
    "surface": "product",
-   "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change Version popover, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects Impacted lists every project the environment’s shared Deployment Settings publish to. A deploy started without a pinned version first builds one, so the drawer opens as Build and Deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also publish elsewhere. Built from `SettingsSection`, `Drawer`, the `Panel` parts, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `Field` choice cards with `RadioButton`, `Input`, `Avatar`, `Tag`, `Hint`, `Spinner`, `Alert`, `Tooltip` and `Button`.",
+   "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version popover, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings publish to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also publish elsewhere. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `Field` choice cards with `RadioButton`, `Input`, `Avatar`, `Tag`, `Spinner`, `Alert`, `Tooltip` and `Button`.",
    "intents": [
     "deploy drawer",
     "deploy panel",
@@ -26462,7 +26472,7 @@
    "variants": [
     {
      "name": "Building",
-     "summary": "Deploy without a pinned version: the drawer opens as Build and Deployment, a Building row with the new version and its elapsed seconds stands in for the Resources card, and the Project, Environment and Projects Impacted sections stay faded and inert, with Deploy disabled, until the build lands."
+     "summary": "Deploy without a pinned version: the drawer opens as Build and deployment, a Building row with the new version and its elapsed seconds stands in for the Resources card, and the Project, Environment and Projects impacted sections stay faded and inert, with Deploy disabled, until the build lands."
     },
     {
      "name": "ServiceProjectFirst",
@@ -26532,7 +26542,7 @@
    "title": "Templates/Platform/Create/DeployTemplate",
    "source": "blocks/platform/create/deploy-template/deploy-template.vue",
    "surface": "product",
-   "summary": "The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a Template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse Templates under it. Without a Git provider the step is the Connect a Git provider card; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings, and the Deploy button that stays disabled until every required setting is filled. Deploying hands the same column to the build logs (the DeploymentFlow template) and then to the success screen (the DeploySuccess template). Import from Git and Upload a Project reach the same page with the form trimmed to the repository or the uploaded files. Built from `GlobalHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `Label`, `InputGroup`, `Switch`, `Input` and `Button`.",
+   "summary": "The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse templates under it. Without a Git provider the step is the Connect a Git provider card; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings, and the Deploy button that stays disabled until every required setting is filled. Deploying hands the same column to the build logs (the DeploymentFlow template) and then to the success screen (the DeploySuccess template). Import from Git and Upload a Project reach the same page with the form trimmed to the repository or the uploaded files. Built from `GlobalHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `Label`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Switch`, `Input` and `Button`.",
    "intents": [
     "deploy template",
     "clone template",
@@ -26566,6 +26576,7 @@
     "IconButton",
     "Input",
     "InputGroupAddon",
+    "InputGroupInput",
     "InputGroupRoot",
     "Label",
     "Link",
@@ -26585,6 +26596,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group-addon",
+    "@aziontech/webkit/input-group-input",
     "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/label",
     "@aziontech/webkit/link",
@@ -26761,7 +26773,7 @@
    "title": "Templates/Platform/Create/ProvisionWizard",
    "source": "blocks/platform/create/provision-wizard/provision-wizard.vue",
    "surface": "product",
-   "summary": "A two-step creation wizard that provisions a resource and binds it to another: the creation header, a Stepper rail that only lets you go back, a page heading over the form column, and a footer that fades in over the canvas with Back and the primary action, Next and then Create and deploy. Step one binds the project the service serves, either an existing one from the paged list (ResourcePicker) or a new one whose cache settings and origin are set right there. Step two reads the chosen project back with a Change button, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), the environment and certificate, the deployment the first release is cut against, and an Advanced disclosure. Submitting runs the provisioning log plotted in DeploymentFlow and ends on DeploySuccess. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `GlobalHeader`, `Stepper`, `Card`, `ToggleGroup`, `Field`, `Label`, `Input`, `HelperText`, `Item`, `Skeleton`, `Switch`, `RadioCards`, `Select`, `Hint` and `Button`.",
+   "summary": "A two-step creation wizard that provisions a resource and binds it to another: the creation header, a Stepper rail that only lets you go back, a page heading over the form column, and a footer that fades in over the canvas with Back and the primary action, Next and then Create and deploy. Step one binds the project the service serves, either an existing one from the paged list (ResourcePicker) or a new one whose cache settings and origin are set right there. Step two reads the chosen project back with a Change button, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), the environment and certificate, the deployment the first release is cut against, and an Advanced disclosure. Submitting runs the provisioning log plotted in DeploymentFlow and ends on DeploySuccess. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `GlobalHeader`, `Stepper`, `Card`, `ToggleGroup`, `Field`, `Label`, `Input`, `HelperText`, `Item`, `Skeleton`, `Switch`, `RadioCards`, `Select` and `Button`.",
    "intents": [
     "provision wizard",
     "create service wizard",
@@ -26907,7 +26919,7 @@
    "title": "Templates/Platform/Create/SinglePageCreate",
    "source": "blocks/platform/create/single-page-create/single-page-create.vue",
    "surface": "product",
-   "summary": "The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a fixed bar under the scrolling form, the same bar Version Detail uses, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings and ends in a full-bleed sticky footer. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Hint`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `Field` choice cards with `RadioButton`, `Textarea`, `Alert`, `MultiSelect`, `NumberInput` and `Button`. ImportFromGit is the same job inside the platform shell with standalone `Field` stacks under plain headings instead of `Item` rows: the Git scope and repository side by side, Template Settings, Deployment, Build and Runtime, Notifications and Alerts and Delivery features, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer; ImportFromGitSubmitted is that form after Deploy on the untouched fields.",
+   "summary": "The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a fixed bar under the scrolling form, the same bar Version Detail uses, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings and ends in a full-bleed sticky footer. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `Field` choice cards with `RadioButton`, `Textarea`, `Alert`, `MultiSelect`, `NumberInput` and `Button`. ImportFromGit is the same job inside the platform shell with standalone `Field` stacks under plain headings instead of `Item` rows: the Git scope and repository side by side, Template settings, Deployment, Build and Runtime, Notifications and Alerts and Delivery features, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer; ImportFromGitSubmitted is that form after Deploy on the untouched fields.",
    "intents": [
     "create page",
     "create resource page",
@@ -27028,11 +27040,11 @@
    "variants": [
     {
      "name": "CreatePurge",
-     "summary": "Create Purge: a Target section of wide rows choosing the Layer and the Purge Type with RadioButton choice cards, an Arguments section whose code-font Textarea follows the chosen type, a warning Alert, and a bar with only Cancel and Purge. Choosing Tiered Cache leaves Cache Key as the only allowed type."
+     "summary": "Create Purge: a Target section of wide rows choosing the Layer and the Purge type with RadioButton choice cards, an Arguments section whose code-font Textarea follows the chosen type, a warning Alert, and a bar with only Cancel and Purge. Choosing Tiered Cache leaves Cache Key as the only allowed type."
     },
     {
      "name": "CreateService",
-     "summary": "A long create, Create Service, in five groups of Item rows (General, Delivery Settings, Origins, Cache Expiration Policies and Debug Rules) over a full-bleed sticky footer with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}."
+     "summary": "A long create, Create Service, in five groups of Item rows (General, Delivery settings, Origins, Cache expiration policies and Debug rules) over a full-bleed sticky footer with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}."
     },
     {
      "name": "RequiredFields",
@@ -27040,7 +27052,7 @@
     },
     {
      "name": "ImportFromGit",
-     "summary": "Standalone field stacks in one column: the platform shell with an unpadded scroll region, a page heading, then the Git scope and repository side by side and sections of field stacks under plain headings, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer. Import from Git is the example: Template Settings, Deployment, Build and Runtime, Notifications and Alerts, Delivery features. Every required field flags only after Deploy is pressed, through the field’s own required state and helper text. Built from `PageHeader`, the platform shell, `Label`, `Select`, `Field` (with its `FieldLabel`, `FieldDescription`, `FieldContent` and `FieldTitle` parts and choice cards), `Input`, `InputGroup`, `RadioButton`, `MultiSelect`, `PasswordInput`, `Textarea`, `PhoneInput`, `Switch`, `Checkbox`, `HelperText` and `Button`."
+     "summary": "Standalone field stacks in one column: the platform shell with an unpadded scroll region, a page heading, then the Git scope and repository side by side and sections of field stacks under plain headings, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer. Import from Git is the example: Template settings, Deployment, Build and Runtime, Notifications and Alerts, Delivery features. Every required field flags only after Deploy is pressed, through the field’s own required state and helper text. Built from `PageHeader`, the platform shell, `Label`, `Select`, `Field` (with its `FieldLabel`, `FieldDescription`, `FieldContent` and `FieldTitle` parts and choice cards), `Input`, `InputGroup`, `RadioButton`, `MultiSelect`, `PasswordInput`, `Textarea`, `PhoneInput`, `Switch`, `Checkbox`, `HelperText` and `Button`."
     },
     {
      "name": "ImportFromGitSubmitted",
@@ -27256,7 +27268,7 @@
    "title": "Templates/Platform/Dashboard/AnalyticsDashboard",
    "source": "blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue",
    "surface": "product",
-   "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated TableRoot of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton, and a DropdownMenu with Copy query and Export CSV. Built from `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`.",
+   "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated TableRoot of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton, and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`.",
    "intents": [
     "metrics",
     "metric panel",
@@ -27286,6 +27298,7 @@
     "Hint",
     "IconButton",
     "Input",
+    "PageHeader",
     "StatTile",
     "TableRoot",
     "Tag",
@@ -27300,6 +27313,7 @@
     "@aziontech/webkit/hint",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/page-header",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
@@ -27396,7 +27410,7 @@
    "title": "Templates/Platform/Dashboard/ConfigurableDashboard",
    "source": "blocks/platform/dashboard/configurable-dashboard/configurable-dashboard.vue",
    "surface": "product",
-   "summary": "A configurable dashboard: the reader arranges the cards. An Edit layout Button turns on the ChartCard drag handle and resize corner on every card of a 12-column grid; a card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. The page owns the layout, an array of id, span and height bound with v-model:span and v-model:height, and the order, which it changes on drop or on the arrow keys of a focused drag handle, then puts focus back on the moved handle and announces the move in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `ChartCard` (with `DragHandle` and `ResizeHandle`), `Chart`, `DonutChart`, `BarList`, `Hint`, `Tag` and `Button`.",
+   "summary": "A configurable dashboard: the reader arranges the cards. An Edit layout Button turns on the ChartCard drag handle and resize corner on every card of a 12-column grid; a card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. The page owns the layout, an array of id, span and height bound with v-model:span and v-model:height, and the order, which it changes on drop or on the arrow keys of a focused drag handle, then puts focus back on the moved handle and announces the move in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `ChartCard` (with its drag handle and resize corner), `Chart`, `DonutChart`, `BarList`, `Hint`, `Tag` and `Button`.",
    "intents": [
     "configurable dashboard",
     "custom dashboard",
@@ -27420,6 +27434,7 @@
     "ChartCard",
     "DonutChart",
     "Hint",
+    "PageHeader",
     "Tag"
    ],
    "imports": [
@@ -27429,6 +27444,7 @@
     "@aziontech/webkit/chart-card",
     "@aziontech/webkit/donut-chart",
     "@aziontech/webkit/hint",
+    "@aziontech/webkit/page-header",
     "@aziontech/webkit/tag"
    ],
    "primary": "Default",
@@ -27454,7 +27470,7 @@
    "title": "Templates/Platform/Dashboard/DataDashboard",
    "source": "blocks/platform/dashboard/data-dashboard/data-dashboard.vue",
    "surface": "product",
-   "summary": "The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated TableRoot lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`.",
+   "summary": "The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated TableRoot lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`.",
    "intents": [
     "data dashboard",
     "metrics dashboard",
@@ -27480,6 +27496,7 @@
     "Hint",
     "IconButton",
     "Input",
+    "PageHeader",
     "StatTile",
     "TableRoot",
     "Tag",
@@ -27494,6 +27511,7 @@
     "@aziontech/webkit/hint",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/page-header",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
@@ -27814,7 +27832,7 @@
    "title": "Templates/Platform/Dashboard/ProjectStatusDashboard",
    "source": "blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue",
    "surface": "product",
-   "summary": "A project status dashboard: where a project stands against its plan, for one project and sprint at a time. The page opens with a heading over a filter row of two Selects (project and sprint), then a row of four StatTiles (completion, tasks done, open tasks and overdue, each against the previous sprint), over a 12-column grid of ChartCards. A DonutChart splits every task by status (done, in progress, not started, and blocked in the danger color) beside the sprint burndown, a Chart of two Lines (actual story points left against the ideal straight line to zero) tagged with how far behind the sprint runs. The milestone timeline and the at-risk list share the next row: the timeline is an Item list with the date, title and a StatusIndicator per checkpoint, since there is no timeline component; the at-risk list is Item rows with the reason and a Tag. The owners table closes the grid, a data-driven Table with each owner’s Avatar and name, open and done counts, and overdue as a danger Tag. Every card carries the same header: title with a Hint, its tags, and a menu with Copy link and Export CSV. Built from `StatTile`, `ChartCard`, `DonutChart`, `Chart`, `Item`, `StatusIndicator`, `Table`, `Avatar`, `Tag`, `Select`, `Hint`, `DropdownMenu`, `EmptyState`, `Skeleton` and `Button`.",
+   "summary": "A project status dashboard: where a project stands against its plan, for one project and sprint at a time. The page opens with a PageHeader whose actions hold two Selects (project and sprint), then a row of four StatTiles (completion, tasks done, open tasks and overdue, each against the previous sprint), over a 12-column grid of ChartCards. A DonutChart splits every task by status (done, in progress, not started, and blocked in the danger color) beside the sprint burndown, a Chart of two Lines (actual story points left against the ideal straight line to zero) tagged with how far behind the sprint runs. The milestone timeline and the at-risk list share the next row: the timeline is an Item list with the date, title and a StatusIndicator per checkpoint, since there is no timeline component; the at-risk list is Item rows with the reason and a Tag. The owners table closes the grid, a TableRoot with each owner’s Avatar and name, open and done counts, and overdue as a danger Tag. Every card carries the same header: title with a Hint, its tags, and a menu with Copy link and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `DonutChart`, `Chart`, `Item`, `StatusIndicator`, `TableRoot`, `Avatar`, `Tag`, `Select`, `Hint`, `DropdownMenu`, `EmptyState`, `Skeleton` and `Button`.",
    "intents": [
     "project status",
     "sprint dashboard",
@@ -27842,6 +27860,7 @@
     "Hint",
     "IconButton",
     "Item",
+    "PageHeader",
     "Select",
     "Skeleton",
     "StatTile",
@@ -27860,6 +27879,7 @@
     "@aziontech/webkit/hint",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/page-header",
     "@aziontech/webkit/select",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/stat-tile",
@@ -27956,7 +27976,7 @@
    "title": "Templates/Platform/Dashboard/SecurityDashboard",
    "source": "blocks/platform/dashboard/security-dashboard/security-dashboard.vue",
    "surface": "product",
-   "summary": "The security dashboard pattern: blocked and allowed requests over time, breakdowns by attack category and origin, the top sources and an attention list. A row of three StatTiles (Requests blocked, Requests inspected, Block rate, each with its delta against the previous period and a sparkline) sits over a 12-column grid of ChartCards. Matched requests over time plots blocked and logged requests; Needs attention lists the settings and traffic that ask for a decision, each with a severity Tag and one action Link; attack categories and countries read as ranked BarLists, and the top source IPs as a searchable, paginated TableRoot. With no rule set in place the tiles stay as dashes and one setup EmptyState that offers Add rule set replaces the grid. Built from `StatTile`, `ChartCard`, `Chart`, `BarList`, `Item`, `Tag`, `Link`, `TableRoot`, `Hint`, `ToggleGroup`, `DropdownMenu`, `Skeleton`, `EmptyState` and `Button`.",
+   "summary": "The security dashboard pattern: blocked and allowed requests over time, breakdowns by attack category and origin, the top sources and an attention list. A row of three StatTiles (Requests blocked, Requests inspected, Block rate, each with its delta against the previous period and a sparkline) sits over a 12-column grid of ChartCards. Matched requests over time plots blocked and logged requests; Needs attention lists the settings and traffic that ask for a decision, each with a severity Tag and one action Link; attack categories and countries read as ranked BarLists, and the top source IPs as a searchable, paginated TableRoot. With no rule set in place the tiles stay as dashes and one setup EmptyState that offers Add rule set replaces the grid. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `BarList`, `Item`, `Tag`, `Link`, `TableRoot`, `Hint`, `ToggleGroup`, `DropdownMenu`, `Skeleton`, `EmptyState` and `Button`.",
    "intents": [
     "security dashboard",
     "waf dashboard",
@@ -27985,6 +28005,7 @@
     "Input",
     "Item",
     "Link",
+    "PageHeader",
     "Skeleton",
     "StatTile",
     "TableRoot",
@@ -28004,6 +28025,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
+    "@aziontech/webkit/page-header",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table-root",
@@ -28210,7 +28232,7 @@
    "title": "Templates/Platform/Detail/AttachedResources",
    "source": "blocks/platform/detail/attached-resources/attached-resources.vue",
    "surface": "product",
-   "summary": "An attached-resources card in a resource settings tab, here its domains: a borderless table of the addresses the resource answers on, each with its environment, deployment policy and certificate as medium rounded tags and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `Table`, `Tag`, `DropdownMenu`, `IconButton`, `Tooltip` and `Button`.",
+   "summary": "An attached-resources card in a resource settings tab, here its domains: a borderless table of the addresses the resource answers on, each with its environment, deployment policy and certificate as medium rounded tags and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `TableRoot`, `Tag`, `DropdownMenuRoot`, `IconButton`, `Tooltip` and `Button`.",
    "intents": [
     "domains section",
     "domains card",
@@ -28263,7 +28285,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Default",
-   "guidelinesSummary": "A short list of the things one resource is attached to, shown in place inside its Settings tab. Here they are its domains: the user sees every address the resource answers on, which environment, deployment policy and certificate each one uses, and can edit, remove or add one without leaving the settings page.",
+   "guidelinesSummary": "A short list of the things one resource is attached to, shown in place inside its Settings tab. Here they are its domains: the user sees every address the resource answers on, which environment, deployment policy and certificate each one uses, and can edit, delete or add one without leaving the settings page.",
    "variants": [],
    "file": "catalog/patterns/platform/detail/attached-resources.json"
   },
@@ -28272,7 +28294,7 @@
    "title": "Templates/Platform/Detail/DeploymentLogs",
    "source": "blocks/platform/detail/deployment-logs/deployment-logs.vue",
    "surface": "product",
-   "summary": "The deploy logs block on its own: a Logs row that reports the step count and the step in flight while the run goes, or the outcome Tag, the time and the Phased or Complete switch once it has settled; then the pipeline as an Accordion of steps, each with its status glyph, its title and sentence, its time and its own LogView, or every line as one continuous LogView in the Complete view; and a flush Progress on the bottom edge while it runs. Inside a deploy flow card it moves its controls up to the card header; on a deployment detail page it sits inside a Deployment Logs card without its Logs row and progress bar. Built from Accordion, LogView, Spinner, Tag, ToggleGroup and Progress.",
+   "summary": "The deploy logs block on its own: a Logs row that reports the step count and the step in flight while the run goes, or the outcome Tag, the time and the Phased or Complete switch once it has settled; then the pipeline as an Accordion of steps, each with its status glyph, its title and sentence, its time and its own LogView, or every line as one continuous LogView in the Complete view; and a flush Progress on the bottom edge while it runs. Inside a deploy flow card it moves its controls up to the card header; on a deployment detail page it sits inside a Deployment logs card without its Logs row and progress bar. Built from Accordion, LogView, Spinner, Tag, ToggleGroup and Progress.",
    "intents": [
     "deployment logs",
     "deploy logs",
@@ -28333,7 +28355,7 @@
    "title": "Templates/Platform/Detail/DetailsPage",
    "source": "blocks/platform/detail/details-page/details-page.vue",
    "surface": "product",
-   "summary": "The Overview tab of a resource detail page: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview ends its breadcrumb on the environment picker and follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page sits in the same shell without tabs: a status banner, the Deployment Details card with its Deployment Settings band, and the Deployment Logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Select`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroup`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `Flow`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`.",
+   "summary": "The Overview tab of a resource detail page: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview ends its breadcrumb on the environment picker and follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page sits in the same shell without tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Select`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `Flow`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`.",
    "intents": [
     "overview page",
     "resource overview",
@@ -28485,7 +28507,7 @@
     },
     {
      "name": "ResourceVersions",
-     "summary": "The Versions tab of the same resource: the small Versions heading with New Version, the controls row (Filter, search, Refresh, Download CSV, Columns) and the paginated versions table, each row with its code-set name and Latest mark, the comment, the state Tag, who built it and when, and the Open configuration or Deploy actions."
+     "summary": "The Versions tab of the same resource: the small Versions heading with Add Version, the controls row (Filter, search, Refresh, Download CSV, Columns) and the paginated versions table, each row with its code-set name and Latest mark, the comment, the state Tag, who built it and when, and the Open configuration or Deploy actions."
     },
     {
      "name": "ResourceBuild",
@@ -28497,11 +28519,11 @@
     },
     {
      "name": "DeploymentDetail",
-     "summary": "A deployment that went live: the success banner, the Deployment Details card with every fact and its Deployment Settings band for Default, and the Deployment Logs card with the run duration and the Phased or Complete switch over the phased steps."
+     "summary": "A deployment that went live: the success banner, the Deployment details card with every fact and its Deployment Settings band for Default, and the Deployment logs card with the run duration and the Phased or Complete switch over the phased steps."
     },
     {
      "name": "DeploymentFailed",
-     "summary": "A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment Logs card with the Error status, open on the failed step with the rest skipped."
+     "summary": "A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment logs card with the Error status, open on the failed step with the rest skipped."
     }
    ],
    "file": "catalog/patterns/platform/detail/details-page.json"
@@ -28553,7 +28575,7 @@
    "title": "Templates/Platform/Detail/ProductionChecklist",
    "source": "blocks/platform/detail/production-checklist/production-checklist.vue",
    "surface": "product",
-   "summary": "A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button that opens the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Drawer`, the `Panel` parts and `Button`.",
+   "summary": "A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button that opens the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`.",
    "intents": [
     "production checklist",
     "go-live checklist",
@@ -28620,7 +28642,7 @@
    "title": "Templates/Platform/Detail/RecordTable",
    "source": "blocks/platform/detail/record-table/record-table.vue",
    "surface": "product",
-   "summary": "A DNS zone detail page, opened from its index: a full-bleed tab bar with Main Settings and Records over a scrolling tab panel. Main Settings is a settings form in the form column: four stacked sections (General, Configure your nameserver, DNSSEC, Status), each an anchored heading with a `Hint` over a flush `Card` of `Item` rows. Name and Domain Name are required `Input`s that show a required `HelperText` only after a failed save; the three nameservers and, while DNSSEC is on, the key tag, algorithm, digest type and digest are read-only code `Input`s in an `InputGroup` with a transparent `CopyButton`; DNSSEC and Active are `Switch`es; editing anything raises the save bar at the bottom. Records is a small-heading list inside the tab (Documentation and Add Record actions) with the TableView controls row (Type and Policy filters) and a records table: the value cell pins a copy button, Weight and Description fall back to an em dash, and the row menu carries Edit and Delete. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `Item`, `Input`, `InputGroup`, `CopyButton`, `Switch`, `HelperText`, `Hint`, `Button` and the TableView controls row and table recipes.",
+   "summary": "A DNS zone detail page, opened from its index: a full-bleed tab bar with Main settings and Records over a scrolling tab panel. Main settings is a settings form in the form column: four stacked sections (General, Configure your nameserver, DNSSEC, Status), each an anchored heading with a hint glyph over a flush `Card` of `ItemList` rows. Name and Domain Name are required `Input`s that show a required `HelperText` only after a failed save; the three nameservers and, while DNSSEC is on, the key tag, algorithm, digest type and digest are read-only code `Input`s in an `InputGroupRoot` with a transparent `CopyButton`; DNSSEC and Active are `Switch`es; editing anything raises the save bar at the bottom. Records is a small-heading list inside the tab (Documentation and Add Record actions) with the TableView controls row (Type and Policy filters) and a records table: the value cell pins a copy button, Weight and Description fall back to an em dash, and the row menu carries Edit and Delete. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `ItemList`, `Input`, `InputGroupRoot`, `CopyButton`, `Switch`, `HelperText`, `Button` and the TableView controls row and table recipes.",
    "intents": [
     "dns zone",
     "dns records",
@@ -28715,7 +28737,7 @@
    "title": "Templates/Platform/Detail/VersionDetail",
    "source": "blocks/platform/detail/version-detail/version-detail.vue",
    "surface": "product",
-   "summary": "One version of a resource, opened from its Versions tab: the platform shell whose last breadcrumb is a Select that switches between the resource versions, each with its state Tag, or creates a new one. Under it a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and Deploy `SplitButton` on a draft or New Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, the platform shell, `Breadcrumb`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `Hint`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.",
+   "summary": "One version of a resource, opened from its Versions tab: the platform shell whose last breadcrumb is a Select that switches between the resource versions, each with its state Tag, or creates a new one. Under it a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, the platform shell, `Breadcrumb`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.",
    "intents": [
     "version detail",
     "resource version",
@@ -28811,7 +28833,7 @@
    "variants": [
     {
      "name": "Deployed",
-     "summary": "The deployed version, read-only: the creation date beside the Deployed Tag, the settings fieldset disabled, and the version bar reading Viewing a Deployed version and Read Only with its description, New Version and Redeploy."
+     "summary": "The deployed version, read-only: the creation date beside the Deployed Tag, the settings fieldset disabled, and the version bar reading Viewing a deployed version and Read-only with its description, Add Version and Redeploy."
     },
     {
      "name": "VersionHistory",
@@ -28825,7 +28847,7 @@
    "title": "Templates/Platform/Edit/AttributeEditor",
    "source": "blocks/platform/edit/attribute-editor/attribute-editor.vue",
    "surface": "product",
-   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. Each variable is entered as a pair of `InputGroup` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroup` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. An account with no variables renders the first-use empty state in place of the list. Built from `PageHeader`, `SettingsSection`, `TableRoot`, `Card`, `CopyButton`, `Avatar`, `DropdownMenu`, `Popover`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText`, `Hint` and `Button`; the JSON view is a webkit `Textarea`.",
+   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. Each variable is entered as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `PageHeader`, `SettingsSection`, `TableRoot`, `Card`, `CopyButton`, `Avatar`, `DropdownMenu`, `Popover`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.",
    "intents": [
     "variables",
     "environment variables",
@@ -28914,7 +28936,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "List",
-   "guidelinesSummary": "A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and choose where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step.",
+   "guidelinesSummary": "A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step.",
    "variants": [
     {
      "name": "Create",
@@ -29062,7 +29084,7 @@
    "title": "Templates/Platform/Edit/EditResource",
    "source": "blocks/platform/edit/edit-resource/edit-resource.vue",
    "surface": "product",
-   "summary": "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `Section` bands in the form column, each a heading with an anchor-link button and a `Hint` glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `Table`, `Tag`, `Tooltip`, `Alert`, `HelperText`, `Hint` and `Button`.",
+   "summary": "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `Table`, `Tag`, `Tooltip`, `Alert`, `HelperText` and `Button`.",
    "intents": [
     "settings page",
     "resource settings",
@@ -29100,6 +29122,7 @@
     "ButtonHighlight",
     "Card",
     "Command",
+    "ConfirmDialog",
     "Drawer",
     "DrawerContent",
     "DrawerOverlay",
@@ -29140,6 +29163,7 @@
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
     "@aziontech/webkit/command",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-overlay",
@@ -29176,11 +29200,11 @@
    "variants": [
     {
      "name": "DeployableSettings",
-     "summary": "A deployable resource’s Settings tab, under the environment switcher in the breadcrumb and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced Settings band holding Deployment Settings, Protocol Settings and Mutual Authentication, and the Danger Zone. The bar sits under the page here, outside the tab’s own scroll region."
+     "summary": "A deployable resource’s Settings tab, under the environment switcher in the breadcrumb and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region."
     },
     {
      "name": "PolicySettings",
-     "summary": "A security policy’s Settings tab, with the Documentation action in the heading: General, Modules with DDoS Protection locked on, Debug Rules and Status."
+     "summary": "A security policy’s Settings tab, with the Documentation action in the heading: General, Modules with DDoS Protection locked on, Debug rules and Status."
     },
     {
      "name": "ResourceSettings",
@@ -29188,7 +29212,7 @@
     },
     {
      "name": "UnsavedChanges",
-     "summary": "The policy Settings tab after Debug Rules was switched on: the bar is up; Discard restores the record and the bar leaves, Save holds its loading state and then leaves."
+     "summary": "The policy Settings tab after Debug rules was switched on: the bar is up; Discard restores the record and the bar leaves, Save holds its loading state and then leaves."
     },
     {
      "name": "Saving",
@@ -29202,7 +29226,7 @@
    "title": "Templates/Platform/Edit/RuleBuilder",
    "source": "blocks/platform/edit/rule-builder/rule-builder.vue",
    "surface": "product",
-   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are groups of variable, operator and argument rows, the variable picked from a suggestion list, added with And or Or and read as If / Or across groups; behaviors are a Then list whose argument field follows the behavior picked, from a searchable list filtered by phase. Groups, conditions and behaviors reorder by dragging the grip or with the arrow buttons. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule; a resource that only acts on requests opens the same drawer with a single Request phase (so no Phase section) and its own behaviors. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `ScrollArea`, `RadioButton` choice cards, `Card`, `Separator`, `Item`, `Switch`, `Hint`, `IconButton`, `Tooltip` and `Button`.",
+   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are groups of variable, operator and argument rows, the variable picked from a suggestion list, added with And or Or and read as If / Or across groups; behaviors are a Then list whose argument field follows the behavior picked, from a searchable list filtered by phase. Groups, conditions and behaviors reorder by dragging the grip or with the arrow buttons. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule; a resource that only acts on requests opens the same drawer with a single Request phase (so no Phase section) and its own behaviors. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `ScrollArea`, `RadioButton` choice cards, `Card`, `Separator`, `Item`, `Switch`, `IconButton`, `Tooltip` and `Button`.",
    "intents": [
     "rules engine",
     "rule form",
@@ -29289,7 +29313,7 @@
    "title": "Templates/Platform/Settings/SettingsForm",
    "source": "blocks/platform/settings/settings-form/settings-form.vue",
    "surface": "product",
-   "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, the platform shell with an unpadded scroll region, the form column opening with a small page heading, topic sections each a small heading over a flush `Card` of rows, and one full-bleed sticky footer with Cancel and Save; Profile is the example, with General (Full Name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full Name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Saving one group or card disables just its own fieldset; the others stay editable. Built from `PageHeader`, `SettingRow`, `SaveBar`, the platform shell, `Card`, `Item`, `Alert`, `Label`, `Input`, `Select`, `Switch`, `Link`, `HelperText` and `Button`.",
+   "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, the platform shell with an unpadded scroll region, the form column opening with a small page heading, topic sections each a small heading over a flush `Card` of rows, and one full-bleed sticky footer with Cancel and Save; Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Saving one group or card disables just its own fieldset; the others stay editable. Built from `PageHeader`, `SettingRow`, `SaveBar`, the platform shell, `Card`, `Item`, `Alert`, `Label`, `Input`, `Select`, `Switch`, `Link`, `HelperText` and `Button`.",
    "intents": [
     "save all",
     "single save for the page",
@@ -29399,7 +29423,7 @@
     },
     {
      "name": "SavePerGroup",
-     "summary": "A settings page split into topic groups that each save on their own: the platform shell, a page heading, then one section per topic, each a small heading over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full Name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `SettingRow`, the platform shell, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`."
+     "summary": "A settings page split into topic groups that each save on their own: the platform shell, a page heading, then one section per topic, each a small heading over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `SettingRow`, the platform shell, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`."
     },
     {
      "name": "SavingOneGroup",
@@ -29407,7 +29431,7 @@
     },
     {
      "name": "SavePerCard",
-     "summary": "A long configuration page split into titled cards that each own their save: the platform shell, a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project Settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, the platform shell, `Card`, `Alert`, `Label`, `Select`, `Switch`, `Link` and `Button`."
+     "summary": "A long configuration page split into titled cards that each own their save: the platform shell, a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, the platform shell, `Card`, `Alert`, `Label`, `Select`, `Switch`, `Link` and `Button`."
     },
     {
      "name": "SavingOneCard",
@@ -29421,7 +29445,7 @@
    "title": "Templates/Platform/States/AsyncSubmit",
    "source": "blocks/platform/states/async-submit/async-submit.vue",
    "surface": "product",
-   "summary": "The async counterpart of the server rejection in the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Redeploy and View deployments over the stopped logs when it fails, and a success `Alert` with Open service once it is live. In a full app the run lives outside the page, so progress and the outcome also ride a toast wherever the user is; the toast is not plotted here. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`).",
+   "summary": "The async counterpart of the server rejection in the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: one `Toast` region is mounted with the page, the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`).",
    "intents": [
     "async submit",
     "long running action",
@@ -29467,6 +29491,7 @@
     "StatusIndicator",
     "Tag",
     "ThemeSwitcher",
+    "Toast",
     "ToggleGroup",
     "Tooltip"
    ],
@@ -29499,6 +29524,7 @@
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip"
    ],
@@ -29507,15 +29533,15 @@
    "variants": [
     {
      "name": "Running",
-     "summary": "Mid-run: the heading reads Deploying, the simulation controls are disabled while Deploy shows its loading state, and the logs card streams under the Building status."
+     "summary": "Mid-run: the progress toast reads Deploying web-app…, the heading reads Deploying, the simulation controls are disabled while Deploy shows its loading state, and the logs card streams under the Building status."
     },
     {
      "name": "Failed",
-     "summary": "The routing rules were refused: the heading reads Failed, the danger Alert carries the reason with Redeploy and View deployments, and the logs card stays open on the failed step with the Phased or Complete switch."
+     "summary": "The routing rules were refused: the heading reads Failed, the danger Alert carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs card stays open on the failed step with the Phased or Complete switch."
     },
     {
      "name": "Succeeded",
-     "summary": "The run is live: the heading reads Deployed and the success Alert names the new address with Open service; the logs card is gone."
+     "summary": "The run is live: the heading reads Deployed and the success Alert names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone."
     }
    ],
    "file": "catalog/patterns/platform/states/async-submit.json"
@@ -29587,7 +29613,7 @@
    "title": "Templates/Platform/States/FormValidation",
    "source": "blocks/platform/states/form-validation/form-validation.vue",
    "surface": "product",
-   "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error `Toast` with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and never toasts. A successful save raises a success `Toast` and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. The InSync, Rejected, Reloading and Reloaded variants show where a field-scoped server rejection renders: a Create Service page whose linked origin is deleted by another user while the form is open, so the save lands as a danger `Alert` under the Origin section heading with Reload origins, the Origin select takes the invalid state, and a dashed simulation panel plays the other user; never a toast, never a validation summary.",
+   "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. The InSync, Rejected, Reloading and Reloaded variants show where a field-scoped server rejection renders: a Create Service page whose linked origin is deleted by another user while the form is open, so the save scrolls to the Origin section and lands as a danger `Alert` under its heading with Reload origins, the Origin select takes the invalid state and the focus, and a dashed simulation panel plays the other user; never a toast, never a validation summary.",
    "intents": [
     "form validation",
     "validation errors",
@@ -29686,7 +29712,7 @@
     },
     {
      "name": "Conflict",
-     "summary": "The server rejected a value one field owns: the key is already in use. The error lands on Key and nowhere else."
+     "summary": "The server rejected a value one field owns: the key is already in use. A danger Alert above the fields says so and that the entries are kept, Key takes the invalid state with its reason and the focus, and nothing toasts."
     },
     {
      "name": "Saved",
@@ -29702,7 +29728,7 @@
     },
     {
      "name": "Rejected",
-     "summary": "User 2 deleted web-origin-prod and Save was pressed: the danger Alert opens under the Origin heading with Reload origins, and the Origin select reads This origin no longer exists."
+     "summary": "User 2 deleted web-origin-prod and Save was pressed: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists."
     },
     {
      "name": "Reloading",
@@ -29815,7 +29841,7 @@
    "title": "Templates/Platform/View/CardView",
    "source": "blocks/platform/view/card-view/card-view.vue",
    "surface": "product",
-   "summary": "The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the Documentation and Create actions, then the controls row — a `PropertyFilter` (Name, Status, Region, Requests, or free text) that grows to fill the row, a Delete button that counts the selected cards, and `CollectionPreferences` for the page size and which fields every card shows — then `Cards` and a `Pagination`. Each card is named by a link to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter, the sort and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a medium `EmptyState` with a Create action; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`.",
+   "summary": "The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the outlined medium Documentation action beside a primary large Create Application, the page's only large control, then the controls row: a `PropertyFilter` (Name, Status, Region, Requests, or free text) that grows to fill the row, a Delete button that counts the selected cards and opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert`, the selected names and an `Input` that must read delete), and `CollectionPreferences` for the page size and which fields every card shows; then `Cards` and a `Pagination`. Each card is named by a link to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter, the sort and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a medium `EmptyState` with a Create action; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`.",
    "intents": [
     "card view",
     "cards view",
@@ -29839,10 +29865,13 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "Button",
     "Cards",
     "CollectionPreferences",
+    "ConfirmDialog",
     "EmptyState",
+    "Input",
     "PageHeader",
     "Pagination",
     "PropertyFilter",
@@ -29850,10 +29879,13 @@
     "use-collection"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/button",
     "@aziontech/webkit/cards",
     "@aziontech/webkit/collection-preferences",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/pagination-root",
     "@aziontech/webkit/property-filter",
@@ -29875,7 +29907,7 @@
    "title": "Templates/Platform/View/FileBrowser",
    "source": "blocks/platform/view/file-browser/file-browser.vue",
    "surface": "product",
-   "summary": "The file browser a storage resource opens on: one flush `Card` holding a borderless `Table` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last Modified pairs the editor `Avatar` (named in a `Tooltip`) with the relative time; folders carry Open and files Download in their row menu, with Delete below. Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `Card`, `Table` with `Table.Search`, `IconButton`, `Tooltip`, `Popover`, `Switch`, `Breadcrumb`, `SplitButton`, `Avatar`, `DropdownMenu` and `EmptyState`.",
+   "summary": "The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last modified pairs the editor `Avatar` (named in a `Tooltip`) with the relative time; folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `PopoverRoot`, `Switch`, `Breadcrumb`, `SplitButton`, `Avatar`, `DropdownMenuRoot` and `EmptyState`.",
    "intents": [
     "file browser",
     "file manager",
@@ -29894,16 +29926,19 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "Avatar",
     "Breadcrumb",
     "Button",
     "Card",
+    "ConfirmDialog",
     "DropdownMenuGroup",
     "DropdownMenuOption",
     "DropdownMenuRoot",
     "DropdownMenuTrigger",
     "EmptyState",
     "IconButton",
+    "Input",
     "PopoverContent",
     "PopoverRoot",
     "PopoverTrigger",
@@ -29914,16 +29949,19 @@
     "Tooltip"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/breadcrumb",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-option",
     "@aziontech/webkit/dropdown-menu-root",
     "@aziontech/webkit/dropdown-menu-trigger",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
     "@aziontech/webkit/popover-content",
     "@aziontech/webkit/popover-root",
     "@aziontech/webkit/popover-trigger",
@@ -29948,7 +29986,7 @@
    "title": "Templates/Platform/View/QueryEditor",
    "source": "blocks/platform/view/query-editor/query-editor.vue",
    "surface": "product",
-   "summary": "The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run Query, Prettify and Templates toolbar, the editor, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL Quick Templates drawer. Its page-level parts are `PageTabs`.",
+   "summary": "The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the editor, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`.",
    "intents": [
     "query editor",
     "sql editor",
@@ -30063,11 +30101,11 @@
     },
     {
      "name": "Query",
-     "summary": "The Editor tab after the Select All query ran: the query history in the side panel, the statement in the editor, and its three rows in the Results band, switchable to Json."
+     "summary": "The Editor tab after the Select all query ran: the query history in the side panel, the statement in the editor, and its three rows in the Results band, switchable to JSON."
     },
     {
      "name": "Templates",
-     "summary": "The Editor tab before anything ran, with the Results band ready to execute; the Templates button opens the SQL Quick Templates drawer, and choosing a card loads its SQL into the editor."
+     "summary": "The Editor tab before anything ran, with the Results band ready to execute; the Templates button opens the SQL quick templates drawer, and choosing a card loads its SQL into the editor."
     }
    ],
    "file": "catalog/patterns/platform/view/query-editor.json"
@@ -30186,7 +30224,7 @@
    "title": "Templates/Platform/View/TableView",
    "source": "blocks/platform/view/table-view/table-view.vue",
    "surface": "product",
-   "summary": "The canonical first-level list page: a medium page heading with the resource name and its one-line description, the Documentation and Create actions on the medium step (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then a small secondary Create and a small outlined Docs on one row), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`.",
+   "summary": "The canonical first-level list page: a medium page heading with the resource name and its one-line description, the outlined medium Documentation action and a primary large Create Resource, the page's only large control (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. The row menu's Delete opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert` and an `Input` that must match the resource name). A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then a small secondary Create Resource and a small outlined Documentation on one row), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`.",
    "intents": [
     "list",
     "list page",
@@ -30295,10 +30333,12 @@
     "webkit-ui-states"
    ],
    "components": [
+    "Alert",
     "Avatar",
     "Button",
     "Card",
     "CollectionPreferences",
+    "ConfirmDialog",
     "CopyButton",
     "DropdownMenuGroup",
     "DropdownMenuOption",
@@ -30320,10 +30360,12 @@
     "utils/csv"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-option",
@@ -30349,7 +30391,7 @@
    "variants": [
     {
      "name": "Empty",
-     "summary": "Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with a small secondary Create Resource and a small outlined Docs button."
+     "summary": "Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with a small secondary Create Resource and a small outlined Documentation button."
     }
    ],
    "file": "catalog/patterns/platform/view/table-view.json"
@@ -30359,7 +30401,7 @@
    "title": "Templates/Shells/Console",
    "source": "blocks/shells/console/console.vue",
    "surface": "product",
-   "summary": "The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb from the second level on, the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; below `md` the rail becomes a Drawer opened from the hamburger that leads the wordmark. First-level lists, detail pages with their tabs and Home all render inside it. Built from `PageHeader`, `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd`, `Drawer` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.",
+   "summary": "The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; below `md` the rail becomes a Drawer opened from the hamburger that leads the wordmark. First-level lists, detail pages with their tabs and Home all render inside it. Built from `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd`, `Drawer` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.",
    "intents": [
     "platform shell",
     "console shell",
@@ -30398,7 +30440,6 @@
     "Input",
     "Kbd",
     "Menu",
-    "PageHeader",
     "PageTabs",
     "Select",
     "Sidebar",
@@ -30426,7 +30467,6 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/kbd",
     "@aziontech/webkit/menu",
-    "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/select",
     "@aziontech/webkit/sidebar",
@@ -30451,7 +30491,7 @@
    "title": "Templates/Shells/Documentation",
    "source": "blocks/shells/documentation/documentation.vue",
    "surface": "docs",
-   "summary": "The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `Menu` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `Menu`, `ScrollArea`, `ThemeSwitcher` and `Footer`.",
+   "summary": "The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`.",
    "intents": [
     "docs shell",
     "documentation layout",

@@ -3,7 +3,7 @@
   "name": "AttachedResources",
   "title": "Templates/Platform/Detail/AttachedResources",
   "surface": "product",
-  "summary": "An attached-resources card in a resource settings tab, here its domains: a borderless table of the addresses the resource answers on, each with its environment, deployment policy and certificate as medium rounded tags and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `Table`, `Tag`, `DropdownMenu`, `IconButton`, `Tooltip` and `Button`.",
+  "summary": "An attached-resources card in a resource settings tab, here its domains: a borderless table of the addresses the resource answers on, each with its environment, deployment policy and certificate as medium rounded tags and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `TableRoot`, `Tag`, `DropdownMenuRoot`, `IconButton`, `Tooltip` and `Button`.",
   "preview": {
     "layout": "padded",
     "background": "dark"

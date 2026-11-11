@@ -30,9 +30,9 @@ A `Stepper` labelled with the create label. Steps reached earlier are `complete`
 
 `PageHeader size="small"` with the create label and two or three sentences on what the resource is and what the last step does. It labels the `form` through `title-id`. The first step hides it and uses the chooser's own centred heading instead.
 
-### D. Where it runs — `Input`, `Button` (required)
+### D. Where it runs — `Input`, `Item`, `Button` (required)
 
-A centred chooser: an icon, the create label as `h1`, one line of instruction, a large search `Input` and up to six service rows, each a native `button` with `aria-pressed`, `data-selected` and a check on the chosen one. A chosen service past the first six stays visible. Picking a row answers the step and advances. A count line says how many more match, a no-match line replaces the rows, an inline Create Service row starts a new one, and a transparent small `Button` continues without a service. Enter in the search picks the first match, or starts creating one when nothing matches.
+A centred chooser: an icon, the create label as `h1`, one line of instruction, a large search `Input` and up to six service rows, each a small `Item` rendered `as-child` on a native `button` with `aria-pressed`, `data-selected` and a check on the chosen one. A chosen service past the first six stays visible. Picking a row answers the step and advances. A count line says how many more match, a no-match line replaces the rows, an inline Create Service row starts a new one, and a transparent small `Button` continues without a service. Enter in the search picks the first match, or starts creating one when nothing matches.
 
 ### E. Inline create — `Field`, `Input`, `Button` (optional)
 
@@ -67,8 +67,8 @@ Mounted only when it has something to offer: outlined Back from step two on, and
 
 - **Title and breadcrumb:** the create label with the entity's capitalization, e.g. "Create Project".
 - **Step titles:** short, with "Select" for a choice, e.g. "Where it runs", "Select a method", "Select a source", "Create and deploy".
-- **Chooser instruction:** e.g. "Select a service to continue". Search placeholder and `aria-label`: e.g. "Find service".
-- **No match:** the fact, e.g. "No service matches “api”." A count line states the rest, e.g. "4 more. Type to narrow."
+- **Chooser instruction:** e.g. "Select a service to continue". Search placeholder and `aria-label`: e.g. "Search services".
+- **No match:** the fact, e.g. "No service matches “api”." A count line states the rest, e.g. "4 more. Type to narrow the list."
 - **Inline create row:** the create label, e.g. "Create Service". The field label: "New service".
 - **Skip:** verb first, e.g. "Continue without a service".
 - **Method card title:** the question, e.g. "How do you want to start?".

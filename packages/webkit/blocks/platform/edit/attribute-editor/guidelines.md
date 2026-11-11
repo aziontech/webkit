@@ -1,6 +1,6 @@
 # Attribute editor
 
-A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and choose where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step.
+A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step.
 
 ## When to use
 
@@ -19,15 +19,15 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` titled Variables with a one-sentence description and two actions: an outlined Documentation and the primary `Create Variable`, which opens the drawer.
+`PageHeader` titled Variables with a one-sentence description and two actions: an outlined medium Documentation and the primary large `Create Variable`, the page's only large control, which opens the drawer.
 
 ### B. Controls row — `Popover`, `Button`, `Input`, `Tooltip`, `IconButton`, `Switch` (optional)
 
-The same controls row as `platform/view/table-view`: a Filter `Popover` (Author, Type and Last Modified fields), a search `Input` labeled "Search variables", and outlined `IconButton`s for Refresh, Download CSV and Columns, each named by a `Tooltip`. The Columns popover holds a `Switch` per hideable column and a Show all columns `Button`.
+The same controls row as `platform/view/table-view`: a Filter `Popover` (Author, Type and Last modified fields), a search `Input` labeled "Search variables", and outlined `IconButton`s for Refresh, Download CSV and Columns, each named by a `Tooltip`. The Columns popover holds a `Switch` per hideable column and a Show all columns `Button`.
 
 ### C. Variables table — `Card`, `TableRoot`, `CopyButton`, `Avatar`, `Tooltip` (required)
 
-`Card :padded="false"` around a borderless `TableRoot` with Key as the `principal`, unhideable column, then ID, Value, Scope and Last Modified. ID and Value end with a `CopyButton`; a secret value shows its mask and loses its copy control. Last Modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time. See `skills/webkit-tables`.
+`Card :padded="false"` around a borderless `TableRoot` with Key as the `principal`, unhideable column, then ID, Value, Scope and Last modified. ID and Value end with a `CopyButton`; a secret value shows its mask and loses its copy control. Last modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time. See `skills/webkit-tables`.
 
 ### D. Row actions — `DropdownMenu`, `Tooltip`, `IconButton` (required)
 
@@ -59,7 +59,7 @@ A `SettingsSection` titled Scope with one large `InputGroupRoot` per scope type:
 
 ## Do
 
-- Validate only after Save is pressed; then flag each empty, malformed or duplicated key under its own pair.
+- Validate only after Save is pressed; then flag each empty, malformed or duplicated key under its own pair and move focus to the first field in error.
 - Keep secret values masked in the list and in the drawer, and say in the hint that secrets are write-only once saved.
 - Let users bring pairs in bulk: Upload, paste into a key, or edit as JSON.
 - Keep the label of each field inside its `InputGroupAddon`, tied to the field by `for`.

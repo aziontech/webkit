@@ -78,7 +78,7 @@
             <p
               class="flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
             >
-              You deployed a new resource. into
+              You deployed a new resource. Source:
               <Tag
                 label="acme"
                 severity="secondary"

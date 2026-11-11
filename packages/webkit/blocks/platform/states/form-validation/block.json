@@ -3,7 +3,7 @@
   "name": "FormValidation",
   "title": "Templates/Platform/States/FormValidation",
   "surface": "product",
-  "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error `Toast` with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and never toasts. A successful save raises a success `Toast` and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. The InSync, Rejected, Reloading and Reloaded variants show where a field-scoped server rejection renders: a Create Service page whose linked origin is deleted by another user while the form is open, so the save lands as a danger `Alert` under the Origin section heading with Reload origins, the Origin select takes the invalid state, and a dashed simulation panel plays the other user; never a toast, never a validation summary.",
+  "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. The InSync, Rejected, Reloading and Reloaded variants show where a field-scoped server rejection renders: a Create Service page whose linked origin is deleted by another user while the form is open, so the save scrolls to the Origin section and lands as a danger `Alert` under its heading with Reload origins, the Origin select takes the invalid state and the focus, and a dashed simulation panel plays the other user; never a toast, never a validation summary.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -53,7 +53,7 @@
     },
     {
       "name": "Conflict",
-      "summary": "The server rejected a value one field owns: the key is already in use. The error lands on Key and nowhere else.",
+      "summary": "The server rejected a value one field owns: the key is already in use. A danger Alert above the fields says so and that the entries are kept, Key takes the invalid state with its reason and the focus, and nothing toasts.",
       "file": "variants/conflict.vue"
     },
     {
@@ -73,7 +73,7 @@
     },
     {
       "name": "Rejected",
-      "summary": "User 2 deleted web-origin-prod and Save was pressed: the danger Alert opens under the Origin heading with Reload origins, and the Origin select reads This origin no longer exists.",
+      "summary": "User 2 deleted web-origin-prod and Save was pressed: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.",
       "file": "variants/rejected.vue"
     },
     {

@@ -202,7 +202,7 @@
             <DropdownMenu.Group>
               <DropdownMenu.Option
                 value="manage-domains"
-                label="Manage Domains"
+                label="Manage domains"
               >
                 <template #left>
                   <i
@@ -317,7 +317,7 @@
                   class="shrink-0"
                 />
                 <div class="pointer-events-auto">
-                  <Tooltip text="Open acme-production in Build & Deployment settings">
+                  <Tooltip text="Open acme-production in Build and deployment settings">
                     <a
                       href="/account/build-deployment"
                       class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"

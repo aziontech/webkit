@@ -5,7 +5,7 @@ The user started a deployment and wants to know where it is, whether it went liv
 ## When to use
 
 - Inside the deploy flow card of a create flow, while the deployment runs and once it finishes.
-- In the Deployment Logs card of a deployment detail page, for a run that has already settled.
+- In the Deployment logs card of a deployment detail page, for a run that has already settled.
 - Any build or deploy pipeline with a fixed, known list of steps whose output the user needs to read.
 
 ## When not to use
@@ -38,7 +38,7 @@ A small, flat `Progress` flush on the bottom edge with `aria-label="Deployment p
 - Show the Logs row with the step count and the step in flight, e.g. "3/8 steps" and "Build", while the run goes.
 - Once settled, replace the count with the outcome `Tag`, the total time, and a medium `ToggleGroup` between Phased and Complete labelled "Log view".
 - Open the failed step automatically and mark every step after it Skipped.
-- Inside a deploy flow card, move the Logs row controls up to the card header; on a deployment page, drop the Logs row and progress and put the controls in the Deployment Logs card header.
+- Inside a deploy flow card, move the Logs row controls up to the card header; on a deployment page, drop the Logs row and progress and put the controls in the Deployment logs card header.
 - Keep step times in a code label at the end of each trigger.
 
 ## Don't
@@ -51,19 +51,21 @@ A small, flat `Progress` flush on the bottom edge with `aria-label="Deployment p
 
 ## Copy
 
-- **Header:** "Deployment Logs".
+- **Header:** "Deployment logs".
 - **Running status:** count and step, e.g. "3/8 steps", "Build".
 - **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed on Routing Rules".
 - **Run time:** past tense with the duration, e.g. "Deployed in 42s", "Failed after 42s".
-- **Step titles:** a short noun phrase, e.g. "Install dependencies", "Routing Rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
+- **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing Rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
 - **Waiting:** "Waiting to start…", the only place an ellipsis appears, because the step is in progress.
+- **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing Rules."
 - **View switch:** "Phased" and "Complete".
 - Follow `skills/webkit-microcopy` and `skills/webkit-errors`: say what failed and why, no "please", no exclamation in console copy.
 
 ## Accessibility
 
 - Each step is an accordion trigger, a button that announces expanded or collapsed and is reachable by keyboard in run order.
-- Status glyphs are `aria-hidden`; the step title, the outcome sentence and the outcome tag carry the status in words, so it never depends on color.
+- Status glyphs are `aria-hidden`; each step trigger carries its status as screen-reader text (Done, Running, Failed, Skipped, Not started) before its title, and the outcome tag carries the run's, so it never depends on color.
+- While the run goes, the Logs row's step count and step in flight sit in a `role="status"` region, so a screen reader hears each step as it starts.
 - The progress bar has `aria-label="Deployment progress"`; the view switch has `aria-label="Log view"`.
 - Copy buttons on the logs announce what they copy.
 - Shimmer and spinner animations stop under `prefers-reduced-motion`.
@@ -79,6 +81,6 @@ A small, flat `Progress` flush on the bottom edge with `aria-label="Deployment p
 ## Related
 
 - `platform/create/deployment-flow` — the deploy flow card that hosts this block in a create flow.
-- `platform/detail/details-page` — the deployment page whose Deployment Logs card hosts it.
+- `platform/detail/details-page` — the deployment page whose Deployment logs card hosts it.
 - `platform/create/deploy-success` — where a create flow lands once the run goes live.
 - `LogView` — the log reader each step and the Complete view use; see `skills/webkit-ui-states` for the running and failed states.

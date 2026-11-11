@@ -170,7 +170,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -185,11 +185,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -230,15 +230,15 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
 
-  const breadcrumb = [{ label: 'Forms', href: '/forms' }, { label: 'Card with independent saves' }]
+  const breadcrumb = [{ label: 'Projects', href: '/projects' }, { label: 'Project settings' }]
 
-  const activeId = ref('forms')
+  const activeId = ref('projects')
   const navOpen = ref(false)
   const paletteOpen = ref(false)
   const paletteQuery = ref('')
@@ -294,12 +294,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -324,7 +324,7 @@
   }
 
   const toolbarOptions = [
-    { label: 'Default (controlled at the team level)', value: 'default' },
+    { label: 'Team default', value: 'default' },
     { label: 'Enabled', value: 'enabled' },
     { label: 'Disabled', value: 'disabled' }
   ]
@@ -334,9 +334,9 @@
   const savingToolbar = ref(false)
 
   const protectionOptions = [
-    { label: 'Standard Protection', value: 'standard' },
-    { label: 'Only Preview Deployments', value: 'preview' },
-    { label: 'All Deployments', value: 'all' }
+    { label: 'Standard protection', value: 'standard' },
+    { label: 'Only preview deployments', value: 'preview' },
+    { label: 'All deployments', value: 'all' }
   ]
   const protectionLabel = (value) =>
     protectionOptions.find((option) => option.value === value)?.label ?? ''
@@ -524,7 +524,7 @@
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -535,7 +535,7 @@
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -561,7 +561,7 @@
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -770,8 +770,8 @@
       >
         <main class="flex w-full flex-col">
           <PageHeader
-            title="Project Settings"
-            description="A long configuration page split into cards. Each card owns its own save, so changes commit in parts."
+            title="Project settings"
+            description="Configure how the deployments of this project are previewed and protected."
             size="small"
           />
 
@@ -791,7 +791,7 @@
 
                   <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
                     <div class="flex flex-col gap-(--spacing-xs)">
-                      <Label for="tb-preprod">Pre-Production Deployments</Label>
+                      <Label for="tb-preprod">Pre-production deployments</Label>
                       <Select
                         v-model="toolbar.preprod"
                         size="large"
@@ -811,7 +811,7 @@
                       </Select>
                     </div>
                     <div class="flex flex-col gap-(--spacing-xs)">
-                      <Label for="tb-prod">Production Deployments</Label>
+                      <Label for="tb-prod">Production deployments</Label>
                       <Select
                         v-model="toolbar.prod"
                         size="large"
@@ -863,7 +863,7 @@
 
                   <Alert
                     severity="info"
-                    label="Control who can access your Deployments. Standard Protection challenges every visitor before a Deployment loads; shareable links let you grant bypass access with a generated URL."
+                    label="Control who can access your deployments. Standard protection challenges every visitor before a deployment loads; shareable links let you grant bypass access with a generated URL."
                   />
 
                   <div class="flex flex-col gap-(--spacing-xs)">
@@ -891,7 +891,7 @@
 
                   <div class="flex items-center justify-between gap-(--spacing-md)">
                     <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                      <Label id="dp-links-label">Shareable Links</Label>
+                      <Label id="dp-links-label">Shareable links</Label>
                       <p class="text-body-sm text-(--text-muted)">
                         Allow bypassing protection with a generated link.
                       </p>
@@ -992,7 +992,7 @@
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -1003,7 +1003,7 @@
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -1029,7 +1029,7 @@
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i

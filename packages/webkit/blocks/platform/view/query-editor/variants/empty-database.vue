@@ -179,7 +179,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -194,11 +194,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -239,8 +239,8 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
@@ -303,12 +303,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -384,7 +384,7 @@
   const filterPlaceholder = computed(() => {
     const names = (selectedTable.value?.columns ?? []).map((column) => column.name)
     return names.length
-      ? `Filter by ${names.slice(0, 3).join(', ')}${names.length > 3 ? '…' : ''} or ask AI`
+      ? `Filter by ${names.slice(0, 3).join(', ')} or ask AI`
       : 'Filter rows or ask AI'
   })
   const tableRows = computed(() => selectedTable.value?.rows ?? [])
@@ -483,7 +483,7 @@
   const resultView = ref('table')
   const resultViewOptions = [
     { label: 'Table', value: 'table' },
-    { label: 'Json', value: 'json' }
+    { label: 'JSON', value: 'json' }
   ]
   const resultSearch = ref('')
   const resultRows = computed(() => (results.value?.type === 'rows' ? results.value.rows : []))
@@ -514,6 +514,18 @@
   const deleteHistory = (event, item) => {
     history.value = history.value.filter((entry) => entry.id !== item.id)
   }
+  const SQL_VERBS = [
+    'SELECT',
+    'INSERT',
+    'UPDATE',
+    'DELETE',
+    'CREATE',
+    'ALTER',
+    'DROP',
+    'WITH',
+    'PRAGMA'
+  ]
+
   const runQuery = () => {
     const sql = editorSql.value.trim()
     if (!sql || running.value) return
@@ -530,7 +542,14 @@
           : verb === 'INSERT'
             ? 'Rows inserted.'
             : 'Statement executed.'
-      results.value = verb === 'SELECT' ? structuredClone(selectResult) : { type: 'message', text }
+      results.value = !SQL_VERBS.includes(verb)
+        ? {
+            type: 'error',
+            text: `The statement wasn't executed: near "${verb}", a syntax error. Check the statement and run it again.`
+          }
+        : verb === 'SELECT'
+          ? structuredClone(selectResult)
+          : { type: 'message', text }
       running.value = false
     }, 700)
   }
@@ -538,7 +557,7 @@
   const templates = [
     {
       id: 'create-table',
-      title: 'Create Table',
+      title: 'Create table',
       description: 'Create a basic customers table with auto-increment ID and timestamp',
       icon: 'pi pi-table',
       sql: `CREATE TABLE IF NOT EXISTS customers (
@@ -550,7 +569,7 @@
     },
     {
       id: 'insert-data',
-      title: 'Insert Data',
+      title: 'Insert data',
       description: 'Insert sample customer records into the customers table',
       icon: 'pi pi-plus-circle',
       sql: `INSERT INTO customers (name, email) VALUES
@@ -560,7 +579,7 @@
     },
     {
       id: 'select-all',
-      title: 'Select All',
+      title: 'Select all',
       description: 'Retrieve all records from customers table with limit',
       icon: 'pi pi-list',
       sql: `SELECT id, name, email, created_at
@@ -570,14 +589,14 @@ LIMIT 100;`
     },
     {
       id: 'count-records',
-      title: 'Count Records',
+      title: 'Count records',
       description: 'Count total number of records in customers table',
       icon: 'pi pi-hashtag',
       sql: 'SELECT COUNT(*) AS total_customers FROM customers;'
     },
     {
       id: 'related-table',
-      title: 'Related Table',
+      title: 'Related table',
       description: 'Create an orders table that references the customers table',
       icon: 'pi pi-box',
       sql: `CREATE TABLE IF NOT EXISTS orders (
@@ -588,7 +607,7 @@ LIMIT 100;`
     },
     {
       id: 'insert-related',
-      title: 'Insert Related Rows',
+      title: 'Insert related rows',
       description: 'Insert sample orders for existing customers',
       icon: 'pi pi-arrow-right-arrow-left',
       sql: `INSERT INTO orders (customer_id, total) VALUES
@@ -597,7 +616,7 @@ LIMIT 100;`
     },
     {
       id: 'join-tables',
-      title: 'Join Tables',
+      title: 'Join tables',
       description: 'List every order with the name of the customer who placed it',
       icon: 'pi pi-search',
       sql: `SELECT orders.id, customers.name, orders.total
@@ -607,7 +626,7 @@ ORDER BY orders.id DESC;`
     },
     {
       id: 'create-index',
-      title: 'Create Index',
+      title: 'Create index',
       description: 'Create an index to speed up lookups of orders by customer',
       icon: 'pi pi-sitemap',
       sql: `CREATE INDEX IF NOT EXISTS orders_customer_id_idx
@@ -615,7 +634,7 @@ ON orders (customer_id);`
     },
     {
       id: 'top-customers',
-      title: 'Top Customers',
+      title: 'Top customers',
       description: 'Find the 3 customers with the highest order totals',
       icon: 'pi pi-sort-amount-down',
       sql: `SELECT customers.name, SUM(orders.total) AS total_spent
@@ -814,7 +833,7 @@ LIMIT 3;`
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -825,7 +844,7 @@ LIMIT 3;`
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -851,7 +870,7 @@ LIMIT 3;`
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -1206,7 +1225,7 @@ LIMIT 3;`
                           <span class="relative flex size-10 items-center justify-center">
                             <span
                               aria-hidden="true"
-                              class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
+                              class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-(--radius-xl) border border-(--border-strong) bg-(--bg-canvas) opacity-5"
                             />
                             <span
                               aria-hidden="true"
@@ -1611,7 +1630,7 @@ LIMIT 3;`
                 class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
               >
                 <Button
-                  label="Run Query"
+                  label="Run query"
                   kind="primary"
                   size="medium"
                   icon="pi pi-play"
@@ -1729,11 +1748,11 @@ LIMIT 3;`
                     class="overflow-auto p-(--spacing-md) font-code text-label-code-sm text-(--text-default)"
                     >{{ resultJson }}</pre>
                   <div
-                    v-else-if="results && results.type === 'message'"
+                    v-else-if="results && (results.type === 'message' || results.type === 'error')"
                     class="p-(--spacing-md)"
                   >
                     <Alert
-                      severity="success"
+                      :severity="results.type === 'error' ? 'danger' : 'success'"
                       :label="results.text"
                     />
                   </div>
@@ -1771,7 +1790,7 @@ LIMIT 3;`
             <DrawerContent>
               <PanelHeader class="w-full">
                 <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                  <DrawerTitle>SQL Quick Templates</DrawerTitle>
+                  <DrawerTitle>SQL quick templates</DrawerTitle>
                   <p class="text-body-sm text-(--text-muted)">
                     Pick a snippet to load it into the editor.
                   </p>
@@ -1908,7 +1927,7 @@ LIMIT 3;`
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -1919,7 +1938,7 @@ LIMIT 3;`
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -1945,7 +1964,7 @@ LIMIT 3;`
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i

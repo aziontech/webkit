@@ -1,6 +1,6 @@
 # Create hub
 
-The Creation Center, where a new project starts. The user arrives from Home or a Create action with something to deploy and needs to pick its source in one look: a repository from their Git account, a template, or a file or folder from their machine. The page puts the two main sources side by side, Import from GitHub and Start from Template, under one heading, and accepts a dropped folder anywhere.
+The Creation Center, where a new project starts. The user arrives from Home or a Create action with something to deploy and needs to pick its source in one look: a repository from their Git account, a template, or a file or folder from their machine. The page puts the two main sources side by side, Import from GitHub and Start from template, under one heading, and accepts a dropped folder anywhere.
 
 ## When to use
 
@@ -32,7 +32,7 @@ Under the Import from GitHub heading, a `Card` with a medium `EmptyState` on a d
 
 ### D. Repository search — `Select`, `Input` (required once connected)
 
-A large `Select` of the connected scopes with the scope avatar in the trigger and Add GitHub Account as the last option, beside a large search `Input` that filters by name and also accepts a repository URL. Picking a scope reloads the list.
+A large `Select` of the connected scopes with the scope avatar in the trigger and Add GitHub account as the last option, beside a large search `Input` that filters by name and also accepts a repository URL. Picking a scope reloads the list.
 
 ### E. Repository list — `Card`, `Item`, `Button`, `Skeleton` (required once connected)
 
@@ -40,7 +40,7 @@ A flush `Card` with an `Item` list, one small row per repository: glyph, name, i
 
 ### F. Template gallery — `Button`, `ScrollArea`, `Card` (required)
 
-Under the Start from Template heading, an outlined medium Filter `Button`, then a faded `ScrollArea` with an `aria-label`. Inside, sections in fixed order: Recommended framework cards in three columns from the large breakpoint, the starter templates one per kind of resource, then every other framework in two columns with the vendor beside the title. Each template is a whole `Card` acting as a button with its glyph, title and one sentence.
+Under the Start from template heading, an outlined medium Filter `Button`, then a faded `ScrollArea` with an `aria-label`. Inside, sections in fixed order: Recommended framework cards in three columns from the large breakpoint, the starter templates one per kind of resource, then every other framework in two columns with the vendor beside the title. Each template is a whole `Card` acting as a button with its glyph, title and one sentence.
 
 ## Do
 
@@ -64,7 +64,7 @@ Under the Start from Template heading, an outlined medium Filter `Button`, then 
 - **Column titles:** short fragments, e.g. "Import from GitHub".
 - **Connect state:** title states the task, e.g. "Connect your repository"; description one sentence, e.g. "Select a Git provider to connect your repository and start the deployment process."
 - **Buttons:** verb first, three words or fewer, e.g. "Continue with GitHub", "Import", "Filter".
-- **Search:** placeholder and `aria-label` name what it takes, e.g. "Search project or enter a Git repository URL".
+- **Search:** placeholder and `aria-label` name what it takes, e.g. "Search projects or enter a Git repository URL".
 - **Template cards:** title is the template name; description one sentence, e.g. "Compile Rust to WebAssembly and run it."
 - Follow `skills/webkit-microcopy`: sentence case, select rather than choose or pick, no em dash.
 

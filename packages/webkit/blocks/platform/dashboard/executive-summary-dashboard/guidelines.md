@@ -74,7 +74,7 @@ beside it in tabular numbers.
 ### L. Empty regions — `EmptyState` (required)
 
 Each region names the quarter in its empty state: trend cards
-(`No results for Q3` / `Nothing was reported in this period. Choose a later quarter.`), goals and
+(`No results for Q3` / `Nothing was reported in this period. Select a later quarter.`), goals and
 commentary (`Leads add notes here when they review the quarter.`).
 
 ### M. Notes — `Item` (required)

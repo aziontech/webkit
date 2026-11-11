@@ -359,7 +359,7 @@
                     >
                       Create Access List
                     </h1>
-                    <p class="text-body-sm text-(--text-muted)">Choose a policy to continue</p>
+                    <p class="text-body-sm text-(--text-muted)">Select a policy to continue</p>
                   </header>
 
                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
@@ -367,47 +367,56 @@
                       v-model="query"
                       size="large"
                       class="w-full"
-                      placeholder="Find policy…"
-                      aria-label="Find policy"
+                      placeholder="Search policies"
+                      aria-label="Search policies"
                       autocomplete="off"
                       @keydown.enter.prevent="onSearchEnter"
                     />
 
                     <div class="flex flex-col">
-                      <button
+                      <Item
                         v-for="option in visible"
                         :key="option.value"
-                        type="button"
-                        :aria-pressed="choice === option.value"
-                        :data-selected="choice === option.value || null"
-                        class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none data-selected:bg-(--bg-selected) motion-reduce:transition-none"
-                        @click="choose(option)"
+                        as-child
+                        size="small"
                       >
-                        <i
-                          class="pi pi-shield shrink-0 text-body-md leading-none text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                        <span class="min-w-0 flex-1 truncate text-body-md text-(--text-default)">
-                          {{ option.label }}
-                        </span>
-                        <Tag
-                          v-if="!option.ready"
-                          label="IP filtering off"
-                          severity="warning"
-                          size="small"
-                        />
-                        <i
-                          v-if="choice === option.value"
-                          class="pi pi-check shrink-0 text-body-sm leading-none text-(--text-default)"
-                          aria-hidden="true"
-                        />
-                      </button>
+                        <button
+                          type="button"
+                          class="w-full text-start data-[selected]:bg-(--bg-selected)"
+                          :aria-pressed="choice === option.value"
+                          :data-selected="choice === option.value || null"
+                          @click="choose(option)"
+                        >
+                          <Item.Media>
+                            <i
+                              class="pi pi-shield text-body-md leading-none text-(--text-muted)"
+                              aria-hidden="true"
+                            />
+                          </Item.Media>
+                          <Item.Content>
+                            <Item.Title>{{ option.label }}</Item.Title>
+                          </Item.Content>
+                          <Item.Actions>
+                            <Tag
+                              v-if="!option.ready"
+                              label="IP filtering off"
+                              severity="warning"
+                              size="small"
+                            />
+                            <i
+                              v-if="choice === option.value"
+                              class="pi pi-check text-body-sm leading-none text-(--text-default)"
+                              aria-hidden="true"
+                            />
+                          </Item.Actions>
+                        </button>
+                      </Item>
 
                       <p
                         v-if="hidden"
                         class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
                       >
-                        {{ hidden }} more — type to narrow.
+                        {{ hidden }} more. Type to narrow the list.
                       </p>
                       <p
                         v-else-if="!matches.length"
@@ -447,7 +456,7 @@
                         :label="
                           'An access list is only read by policy rules, and ' +
                           choice +
-                          ' has IP filtering off — so nothing reads this one until the module is on.'
+                          ' has IP filtering off, so nothing reads this one until the module is on.'
                         "
                       />
 
@@ -468,8 +477,8 @@
                       </Field.Label>
 
                       <p class="text-body-sm text-(--text-muted)">
-                        Leaving it off still creates the access list — it simply is not read until
-                        someone turns IP filtering on.
+                        Leaving it off still creates the access list. It is not read until someone
+                        turns IP filtering on.
                       </p>
                     </div>
                   </template>
@@ -605,7 +614,7 @@
                 @click="goBack"
               />
               <Button
-                :label="isLast ? 'Create access list' : 'Next'"
+                :label="isLast ? 'Create Access List' : 'Next'"
                 kind="primary"
                 size="medium"
                 type="submit"

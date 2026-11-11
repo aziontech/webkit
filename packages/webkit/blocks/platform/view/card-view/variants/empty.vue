@@ -1,14 +1,17 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Cards from '@aziontech/webkit/cards'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import Pagination from '@aziontech/webkit/pagination-root'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Tag from '@aziontech/webkit/tag'
   import { useCollection } from '@aziontech/webkit/use-collection'
-  import { computed } from 'vue'
+  import { computed, ref, useId, watch } from 'vue'
 
   const applications = []
 
@@ -16,7 +19,7 @@
     { id: 'status', header: 'Status' },
     { id: 'domain', header: 'Domain' },
     { id: 'region', header: 'Region' },
-    { id: 'requests', header: 'Requests (24h)' },
+    { id: 'requests', header: 'Requests in 24h' },
     { id: 'owner', header: 'Owner' }
   ]
 
@@ -35,6 +38,8 @@
     { key: 'requests', label: 'Requests', type: 'number' }
   ]
 
+  const items = ref([...applications])
+
   const {
     cardsProps,
     paginationProps,
@@ -44,9 +49,11 @@
     status,
     totalCount,
     selectedCount,
+    selectedItems,
+    clearSelection,
     clearFilters
   } = useCollection({
-    items: applications,
+    items,
     columns: fields,
     filtering: { fields: ['name', 'domain', 'owner'] },
     propertyFiltering: { properties },
@@ -69,6 +76,32 @@
   const requestsFormat = new Intl.NumberFormat('en-US', { notation: 'compact' })
   const severityOf = (value) =>
     value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'secondary'
+
+  const CONFIRM_WORD = 'delete'
+  const deleteOpen = ref(false)
+  const confirmation = ref('')
+  const confirmLabelId = useId()
+  const deleteNoun = computed(() =>
+    selectedCount.value === 1 ? 'application' : `${selectedCount.value} applications`
+  )
+  const deleteConsequence = computed(() =>
+    selectedCount.value === 1
+      ? 'The selected application will be deleted, along with its domains and settings:'
+      : 'The selected applications will be deleted, along with their domains and settings:'
+  )
+  const canDelete = computed(() => confirmation.value.trim().toLowerCase() === CONFIRM_WORD)
+
+  watch(deleteOpen, (isOpen) => {
+    if (isOpen) confirmation.value = ''
+  })
+
+  const confirmDelete = () => {
+    if (!canDelete.value) return
+    const doomed = new Set(selectedItems.value.map((item) => item.id))
+    items.value = items.value.filter((item) => !doomed.has(item.id))
+    clearSelection()
+    deleteOpen.value = false
+  }
 </script>
 
 <template>
@@ -90,8 +123,8 @@
           <Button
             label="Create Application"
             icon="pi pi-plus"
-            kind="outlined"
-            size="medium"
+            kind="primary"
+            size="large"
           />
         </template>
       </PageHeader>
@@ -106,13 +139,62 @@
               />
             </div>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-              <Button
-                :label="selectedCount ? `Delete (${selectedCount})` : 'Delete'"
-                icon="pi pi-trash"
-                kind="outlined"
+              <ConfirmDialog
+                v-model:open="deleteOpen"
+                :title="`Delete ${deleteNoun}`"
                 size="medium"
-                :disabled="!selectedCount"
-              />
+              >
+                <template #trigger>
+                  <Button
+                    :label="selectedCount ? `Delete (${selectedCount})` : 'Delete'"
+                    icon="pi pi-trash"
+                    kind="outlined"
+                    size="medium"
+                    :disabled="!selectedCount"
+                  />
+                </template>
+                <div class="flex flex-col gap-(--spacing-md)">
+                  <Alert
+                    severity="warning"
+                    label="Once confirmed, this action can't be reversed."
+                  />
+                  <p class="m-0 text-body-sm text-(--text-muted)">
+                    {{ deleteConsequence }}
+                    <bdi class="text-(--text-default)">{{
+                      selectedItems.map((item) => item.name).join(', ')
+                    }}</bdi
+                    >.
+                  </p>
+                  <p
+                    :id="confirmLabelId"
+                    class="m-0 text-body-sm text-(--text-default)"
+                  >
+                    Type <code class="text-label-code-sm">{{ CONFIRM_WORD }}</code> to confirm.
+                  </p>
+                  <Input
+                    v-model="confirmation"
+                    :aria-labelledby="confirmLabelId"
+                    autocomplete="off"
+                    class="w-full"
+                    @keydown.enter="confirmDelete"
+                  />
+                </div>
+                <template #actions="{ close }">
+                  <Button
+                    label="Cancel"
+                    kind="outlined"
+                    size="medium"
+                    @click="close"
+                  />
+                  <Button
+                    :label="selectedCount === 1 ? 'Delete application' : 'Delete applications'"
+                    kind="danger"
+                    size="medium"
+                    :disabled="!canDelete"
+                    @click="confirmDelete"
+                  />
+                </template>
+              </ConfirmDialog>
               <CollectionPreferences
                 v-bind="preferencesProps"
                 title="Card preferences"

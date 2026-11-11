@@ -49,7 +49,7 @@ A `Field` with its label and an `InputGroup` whose addon shows the free platform
 
 ### H. Certificate — `Label`, `Select`, `HelperText` (optional)
 
-Shown only for Bring my own Domain. The `Select` preselects a certificate that already covers the address and the `HelperText` says so; once the user picks one, it stops following the address.
+Shown only for Bring my own domain. The `Select` preselects a certificate that already covers the address and the `HelperText` says so; once the user picks one, it stops following the address.
 
 ### I. Context alert — `Alert` (optional)
 
@@ -101,7 +101,7 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 - Default: Add Domain opened from the resource's Settings tab, blank, on the free domain option.
 - AddEnvironment: the same form opened from the environment menu, titled and saved as Add Environment.
 - EditDomain: opened from a domain row menu on www.example.com, with the Certificate select showing the covering wildcard.
-- AddRecord: the DNS zone record form; Name and Value are flagged as required only after an empty Save.
+- AddRecord: the DNS zone record form; Name and Value are flagged as required only after an empty Add Record.
 - ItemRows: a large drawer whose sections are `Item` rows in flush cards, saved together by one Create.
 - NestedDrawer: Add Instance with a Service select whose Create Service option opens a second, medium drawer and selects the new service back.
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.

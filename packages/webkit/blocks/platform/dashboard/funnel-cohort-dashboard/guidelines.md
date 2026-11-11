@@ -71,7 +71,7 @@ heatmap.
 
 ### K. Empty regions — `EmptyState` (required)
 
-`No visitors match these filters` / `Choose another segment or widen the period.` and
+`No visitors match these filters` / `Select another segment or widen the period.` and
 `No cohorts match these filters`, each with `Clear filters`.
 
 ## Do
@@ -95,7 +95,7 @@ heatmap.
 - **Step names:** the state the user reached, one or two words. `Sign-ups`, `Activated`, `Paid`.
 - **Cohort names:** the start date. `Oct 5 cohort`.
 - **Column headers:** `Week 1` … `Week 6`.
-- **Empty state:** `No visitors match these filters` / `Choose another segment or widen the period.`, action `Clear filters`.
+- **Empty state:** `No visitors match these filters` / `Select another segment or widen the period.`, action `Clear filters`.
 
 ## Accessibility
 

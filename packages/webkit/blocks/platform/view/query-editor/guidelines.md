@@ -48,38 +48,38 @@ On Editor the start `Sidebar` is named Query history, with a Search queries `Inp
 
 ### H. Editor — `Button`, `Textarea` (required)
 
-A toolbar with the primary Run Query `Button` (`:loading` while it runs) and outlined Prettify and Templates `Button`s, over a monospaced, vertically resizable `Textarea` named SQL editor. While a query runs the editor, Prettify and Templates are disabled.
+A toolbar with the primary Run query `Button` (`:loading` while it runs) and outlined Prettify and Templates `Button`s, over a monospaced, vertically resizable `Textarea` named SQL editor. While a query runs the editor, Prettify and Templates are disabled.
 
 ### I. Results — `Input`, `ToggleGroup`, `Tooltip`, `IconButton`, `TableRoot`, `Alert`, `EmptyState`, `PaginationRoot` (required)
 
-A Results band with its own search `Input`, a `ToggleGroup` switching Table and Json, and Refresh, Download and Columns `IconButton`s named by `Tooltip`s. A successful run shows a success `Alert` with what ran and the rows in a `TableRoot`; before anything runs an `EmptyState` reads Ready to execute. A `PaginationRoot` at 50 rows sits under the band.
+A Results band with its own search `Input`, a `ToggleGroup` switching Table and JSON, and Refresh, Download and Columns `IconButton`s named by `Tooltip`s. A successful run shows a success `Alert` with what ran and the rows in a `TableRoot`; a statement the database rejects shows a danger `Alert` with the reason and what to do (`The statement wasn't executed: near "SELEC", a syntax error. Check the statement and run it again.`), and the statement stays in the editor; before anything runs an `EmptyState` reads Ready to execute. A `PaginationRoot` at 50 rows sits under the band.
 
 ### J. Templates drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `Input` (optional)
 
-Templates opens a large right `Drawer` titled SQL Quick Templates with a one-line description, a Search templates `Input` and one card per snippet. Choosing a card loads its SQL into the editor and closes the drawer.
+Templates opens a large right `Drawer` titled SQL quick templates with a one-line description, a Search templates `Input` and one card per snippet. Choosing a card loads its SQL into the editor and closes the drawer.
 
 ## Do
 
 - Keep both tabs on the same layout: side panel to list, working pane to act.
 - Let the side panel resize and collapse, and keep its width when the user switches tabs.
-- Disable the editor and its toolbar while a query runs, and show Run Query loading.
-- Show the outcome of a run in the Results band: the rows, or a success `Alert` with what ran.
-- Offer Json beside Table for results, so the raw shape is one click away.
+- Disable the editor and its toolbar while a query runs, and show Run query loading.
+- Show the outcome of a run in the Results band: the rows, a success `Alert` with what ran, or a danger `Alert` with why it failed.
+- Offer JSON beside Table for results, so the raw shape is one click away.
 - Confirm Delete table with `platform/delete/delete-with-confirmation`.
 
 ## Don't
 
 - Don't open a separate page for a table or a query; they open in the pane.
-- Don't run a query on every keystroke; Run Query is the only trigger.
+- Don't run a query on every keystroke; Run query is the only trigger.
 - Don't hide the tabs when the database is empty.
-- Don't put a second primary action in a pane; Insert on Data and Run Query on Editor are the only ones.
+- Don't put a second primary action in a pane; Insert on Data and Run query on Editor are the only ones.
 - Don't let the results scroll the page sideways; they scroll inside their band.
 
 ## Copy
 
 - **Tabs:** one noun each, e.g. "Tables", "Editor".
 - **Create action:** `Create <Object>`, e.g. "Create Table", the same in the panel and the empty state.
-- **Editor toolbar:** verb-first, e.g. "Run Query", "Prettify", "Templates".
+- **Editor toolbar:** verb-first, e.g. "Run query", "Prettify", "Templates".
 - **Editor placeholder:** one instruction, e.g. "Write your SQL query here".
 - **Search:** names the scope, e.g. "Search tables", "Search queries", "Search templates".
 - **Empty states:** title states the fact and the description says what to do, e.g. "No tables yet" with "Create your first table to store your data."; "Ready to execute" with "Execute a query to see the results here."
@@ -101,7 +101,7 @@ Templates opens a large right `Drawer` titled SQL Quick Templates with a one-lin
 - Schema: the Definition view of customers, with the Columns heading, Add column and a card of column name, type and constraints.
 - EmptyDatabase: a database with no tables; the side panel says so and the pane shows the Create Table empty state.
 - Query: the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
-- Templates: the Editor tab before anything ran, with Results ready to execute and the SQL Quick Templates drawer behind the Templates button.
+- Templates: the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer behind the Templates button.
 
 ## Related
 

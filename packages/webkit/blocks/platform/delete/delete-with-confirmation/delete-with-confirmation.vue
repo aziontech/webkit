@@ -39,7 +39,7 @@
 <template>
   <ConfirmDialog
     v-model:open="open"
-    title="Delete Resource"
+    title="Delete resource"
     size="medium"
   >
     <template #trigger>
@@ -59,7 +59,7 @@
         Check the
         <a
           href="https://example.com/docs"
-          class="text-link"
+          class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
           >Help Center</a
         >
         for more details.
@@ -68,7 +68,7 @@
         :id="confirmLabelId"
         class="m-0 flex flex-wrap items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
       >
-        <span>To confirm, type</span>
+        <span>Type</span>
         <Tooltip
           text="Copy to clipboard"
           class="max-w-full"
@@ -98,7 +98,7 @@
             </span>
           </button>
         </Tooltip>
-        <span>in the box below:</span>
+        <span>to confirm.</span>
       </p>
       <Input
         v-model="confirmation"
@@ -116,7 +116,7 @@
         @click="close"
       />
       <Button
-        label="Delete"
+        label="Delete resource"
         kind="danger"
         size="medium"
         :disabled="!canDelete"

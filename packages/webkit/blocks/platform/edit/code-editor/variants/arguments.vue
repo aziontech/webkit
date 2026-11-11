@@ -184,7 +184,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -199,11 +199,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -244,8 +244,8 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
@@ -308,12 +308,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -380,7 +380,7 @@ export async function handleRequest(request, args = {}) {
         type: 'string',
         title: 'Default format',
         description:
-          'Used when the request does not ask for a format. Only these are rewritten — anything else passes through untouched.',
+          'Used when the request does not ask for a format. Only these are rewritten. Anything else passes through untouched.',
         enum: ['webp', 'avif'],
         default: 'webp'
       },
@@ -413,7 +413,7 @@ export async function handleRequest(request, args = {}) {
       type: 'select',
       title: 'Default format',
       description:
-        'Used when the request does not ask for a format. Only these are rewritten — anything else passes through untouched.',
+        'Used when the request does not ask for a format. Only these are rewritten. Anything else passes through untouched.',
       required: true,
       default: 'webp',
       minLength: '',
@@ -559,7 +559,11 @@ export async function handleRequest(request, args = {}) {
       activeDocument.value = 'code'
     }
     if (nameError.value) activeTab.value = 'settings'
-    if (nameError.value || codeError.value) return
+    if (nameError.value || codeError.value) {
+      const target = nameError.value ? 'service-name' : 'service-source-code'
+      nextTick(() => document.getElementById(target)?.focus())
+      return
+    }
     baseline.value = snapshot()
   }
 </script>
@@ -733,7 +737,7 @@ export async function handleRequest(request, args = {}) {
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -744,7 +748,7 @@ export async function handleRequest(request, args = {}) {
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -770,7 +774,7 @@ export async function handleRequest(request, args = {}) {
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -1022,6 +1026,7 @@ export async function handleRequest(request, args = {}) {
                           <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                             <div class="flex flex-1 font-code">
                               <Textarea
+                                id="service-source-code"
                                 v-model="form.code"
                                 resizable="none"
                                 :invalid="!!codeError"
@@ -1603,6 +1608,7 @@ export async function handleRequest(request, args = {}) {
                               description="Give a unique and descriptive name to identify your service."
                             >
                               <Input
+                                id="service-name"
                                 v-model="form.name"
                                 size="large"
                                 class="w-full"
@@ -1830,7 +1836,7 @@ export async function handleRequest(request, args = {}) {
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -1841,7 +1847,7 @@ export async function handleRequest(request, args = {}) {
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -1867,7 +1873,7 @@ export async function handleRequest(request, args = {}) {
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i

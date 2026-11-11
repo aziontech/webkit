@@ -17,7 +17,7 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run Query, Prettify and Templates toolbar, the editor, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL Quick Templates drawer. Its page-level parts are `PageTabs`." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the editor, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`." } },
     webkit: {"block":"platform/view/query-editor","intents":["query editor","sql editor","run query","query results","sql query page","query history","sql code editor","código sql","editor de consultas","editor sql","executar consulta","sql database","database tables","database detail","table schema","data grid","sql templates","banco de dados","banco de dados sql","tabelas do banco"],"skills":["webkit-layout","webkit-tables","webkit-ui-states"],"primary":"Tables"}
   }
 }
@@ -39,10 +39,10 @@ export const EmptyDatabase = {
 
 export const Query = {
   render: () => ({ components: { Block: State3 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "The Editor tab after the Select All query ran: the query history in the side panel, the statement in the editor, and its three rows in the Results band, switchable to Json." }, source: { code: source3 } } }
+  parameters: { docs: { description: { story: "The Editor tab after the Select all query ran: the query history in the side panel, the statement in the editor, and its three rows in the Results band, switchable to JSON." }, source: { code: source3 } } }
 }
 
 export const Templates = {
   render: () => ({ components: { Block: State4 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "The Editor tab before anything ran, with the Results band ready to execute; the Templates button opens the SQL Quick Templates drawer, and choosing a card loads its SQL into the editor." }, source: { code: source4 } } }
+  parameters: { docs: { description: { story: "The Editor tab before anything ran, with the Results band ready to execute; the Templates button opens the SQL quick templates drawer, and choosing a card loads its SQL into the editor." }, source: { code: source4 } } }
 }

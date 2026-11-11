@@ -1,6 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -11,7 +12,8 @@
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
-  import { computed, reactive, ref } from 'vue'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { computed, nextTick, reactive, ref } from 'vue'
 
   const form = reactive({
     accountName: 'Acme',
@@ -31,14 +33,48 @@
   const saving = ref(false)
   const baseline = ref(JSON.stringify(form))
   const dirty = computed(() => JSON.stringify(form) !== baseline.value)
+  const errors = reactive({ accountName: '', billingEmails: '' })
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const SAVE_TOAST = 'profile-save'
+
+  const validate = () => {
+    const emails = form.billingEmails
+      .split(';')
+      .map((value) => value.trim())
+      .filter(Boolean)
+    errors.accountName = form.accountName.trim() ? '' : 'This field is required.'
+    errors.billingEmails = !emails.length
+      ? 'This field is required.'
+      : emails.every((value) => emailPattern.test(value))
+        ? ''
+        : 'Enter valid email addresses, separated by semicolons.'
+    const first = ['accountName', 'billingEmails'].find((field) => errors[field])
+    if (first) nextTick(() => document.getElementById(`profile-${first}`)?.focus())
+    return !first
+  }
+
   const save = () => {
+    if (saving.value || !validate()) return
     saving.value = true
+    toast.dismiss(SAVE_TOAST)
     setTimeout(() => {
-      baseline.value = JSON.stringify(form)
       saving.value = false
+      if (form.accountName.trim().toLowerCase() === 'offline') {
+        toast.error("The profile wasn't saved.", {
+          id: SAVE_TOAST,
+          description: "The request didn't reach the server. Your changes are kept.",
+          action: { label: 'Retry', onClick: () => save() }
+        })
+        return
+      }
+      baseline.value = JSON.stringify(form)
+      toast.success('Profile saved.', { id: SAVE_TOAST })
     }, 900)
   }
-  const discard = () => Object.assign(form, JSON.parse(baseline.value))
+  const discard = () => {
+    Object.assign(form, JSON.parse(baseline.value))
+    Object.assign(errors, { accountName: '', billingEmails: '' })
+  }
 
   const places = [
     {
@@ -52,7 +88,7 @@
     },
     {
       key: 'state',
-      label: 'State/Region',
+      label: 'State or region',
       options: [
         { label: 'Rio Grande do Sul', value: 'rs' },
         { label: 'São Paulo', value: 'sp' },
@@ -72,17 +108,17 @@
   const sourceControls = [
     {
       key: 'github',
-      name: 'Github',
+      name: 'GitHub',
       icon: 'ai ai-github',
       connected: true,
       tag: 'Active',
       description:
-        'Connected as rafael.umman: to repositories in organizations: acme, rafael-personal.',
+        'Connected as rafael.umann, with access to the acme and rafael-personal organizations.',
       action: 'Manage'
     },
     {
       key: 'gitlab',
-      name: 'Gitlab',
+      name: 'GitLab',
       icon: 'ai-cor ai-gitlab',
       connected: false,
       tag: '',
@@ -100,7 +136,6 @@
     }
   ]
   const fonts = [
-    { value: 'rubik', label: 'Rubik (Default)' },
     { value: 'rubik', label: 'Rubik' },
     { value: 'inter', label: 'Inter' },
     { value: 'ibm-plex-sans', label: 'IBM Plex Sans' },
@@ -120,6 +155,7 @@
 </script>
 
 <template>
+  <Toaster position="bottom-right" />
   <main class="flex h-screen flex-col bg-(--bg-canvas)">
     <div class="flex min-h-0 flex-1 flex-col">
       <form
@@ -151,16 +187,30 @@
                   <template #content>
                     <Item.List>
                       <SettingRow
-                        title="Account Name"
+                        title="Account name"
                         description="What this account is called across the console."
                       >
-                        <Input
-                          v-model="form.accountName"
-                          size="large"
-                          class="w-full"
-                          aria-label="Account Name"
-                          :disabled="saving"
-                        />
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <Input
+                            id="profile-accountName"
+                            v-model="form.accountName"
+                            size="large"
+                            class="w-full"
+                            aria-label="Account name"
+                            :required="!!errors.accountName"
+                            :aria-describedby="
+                              errors.accountName ? 'profile-accountName-error' : undefined
+                            "
+                            :disabled="saving"
+                            @update:model-value="errors.accountName = ''"
+                          />
+                          <HelperText
+                            v-if="errors.accountName"
+                            id="profile-accountName-error"
+                            kind="required"
+                            :label="errors.accountName"
+                          />
+                        </div>
                       </SettingRow>
                       <SettingRow
                         title="Client ID"
@@ -188,14 +238,14 @@
                   <template #content>
                     <Item.List>
                       <SettingRow
-                        title="Company Name"
+                        title="Company name"
                         description="The legal entity that owns this account."
                       >
                         <Input
                           v-model="form.companyName"
                           size="large"
                           class="w-full"
-                          aria-label="Company Name"
+                          aria-label="Company name"
                           placeholder="Company S.A."
                           :disabled="saving"
                         />
@@ -215,16 +265,31 @@
                       </SettingRow>
                       <SettingRow
                         title="Billing emails"
-                        description="Billing is forwarded to every address listed here. Separate each one with a semicolon ( ; )."
+                        description="Invoices go to every address listed here. Separate addresses with a semicolon."
                         kind="stacked"
                       >
-                        <Textarea
-                          v-model="form.billingEmails"
-                          class="w-full"
-                          :rows="3"
-                          aria-label="Billing emails"
-                          :disabled="saving"
-                        />
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <Textarea
+                            id="profile-billingEmails"
+                            v-model="form.billingEmails"
+                            class="w-full"
+                            :rows="3"
+                            aria-label="Billing emails"
+                            :required="!!errors.billingEmails && !form.billingEmails.trim()"
+                            :invalid="!!errors.billingEmails && !!form.billingEmails.trim()"
+                            :aria-describedby="
+                              errors.billingEmails ? 'profile-billingEmails-error' : undefined
+                            "
+                            :disabled="saving"
+                            @update:model-value="errors.billingEmails = ''"
+                          />
+                          <HelperText
+                            v-if="errors.billingEmails"
+                            id="profile-billingEmails-error"
+                            :kind="form.billingEmails.trim() ? 'invalid' : 'required'"
+                            :label="errors.billingEmails"
+                          />
+                        </div>
                       </SettingRow>
                     </Item.List>
                   </template>
@@ -238,13 +303,13 @@
                 <Card :padded="false">
                   <template #content>
                     <Item.List>
-                      <SettingRow title="Postal Code">
+                      <SettingRow title="Postal code">
                         <Input
                           v-model="form.postalCode"
                           size="large"
                           class="w-full"
                           autocomplete="postal-code"
-                          aria-label="Postal Code"
+                          aria-label="Postal code"
                           :disabled="saving"
                         />
                       </SettingRow>
@@ -286,13 +351,16 @@
                           :disabled="saving"
                         />
                       </SettingRow>
-                      <SettingRow title="Apartment, floor, etc.">
+                      <SettingRow
+                        title="Address line 2"
+                        description="Optional. Apartment, suite or floor."
+                      >
                         <Input
                           v-model="form.apartment"
                           size="large"
                           class="w-full"
                           autocomplete="address-line2"
-                          aria-label="Apartment, floor, etc."
+                          aria-label="Address line 2"
                           placeholder="1st floor"
                           :disabled="saving"
                         />
@@ -302,7 +370,7 @@
                 </Card>
               </SettingsSection>
               <SettingsSection
-                title="Login Settings"
+                title="Login settings"
                 hint="How the users linked to this account sign in."
                 anchor="login-settings"
               >
@@ -465,7 +533,7 @@
                 </Card>
               </SettingsSection>
               <SettingsSection
-                title="Danger Zone"
+                title="Danger zone"
                 hint="Actions that cannot be undone."
                 anchor="danger-zone"
               >
@@ -473,8 +541,8 @@
                   <template #content>
                     <Item.List>
                       <SettingRow
-                        title="Remove personal account"
-                        description="Permanently deletes this Personal Account and all associated data from the platform. It cannot be undone."
+                        title="Delete personal account"
+                        description="Permanently deletes this personal account and all its data. It cannot be undone."
                         kind="compact"
                       >
                         <Button

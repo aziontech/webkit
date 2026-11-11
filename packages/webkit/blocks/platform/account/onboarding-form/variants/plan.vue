@@ -60,20 +60,20 @@
     pro: {
       name: 'Pro',
       features: [
-        { title: '100 Resources', detail: 'then $0.10 per resource per month' },
-        { title: '10M Requests', detail: 'then as low as $0.90 per 1M' },
-        { title: '50 hours Compute time', detail: 'then $0.18 per hour' },
-        { title: '10 GB Event log storage', detail: 'then $0.10 per GB-month' },
+        { title: '100 resources', detail: 'then $0.10 per resource per month' },
+        { title: '10M requests', detail: 'then as low as $0.90 per 1M' },
+        { title: '50 hours of compute time', detail: 'then $0.18 per hour' },
+        { title: '10 GB of event log storage', detail: 'then $0.10 per GB-month' },
         {
-          title: '100 GB File storage',
+          title: '100 GB of file storage',
           detail: 'then as low as $0.021 per GB-month'
         },
-        { title: '1 GB Database storage', detail: 'then $0.75 per GB-month' },
+        { title: '1 GB of database storage', detail: 'then $0.75 per GB-month' },
         {
-          title: '100M Security rule evaluations',
+          title: '100M security rule evaluations',
           detail: 'then as low as $0.30 per 1M'
         },
-        { title: 'DDoS Protection included' },
+        { title: 'DDoS protection included' },
         { title: 'PCI DSS 4.0.1 Level 1' },
         { title: 'SOC 2 Type 2 / SOC 3' },
         { title: 'Data migration assistance' }
@@ -81,16 +81,16 @@
       charge: {
         monthly: {
           rows: [
-            { label: 'Next Charge Value', value: '$ 200' },
+            { label: 'Next charge', value: '$ 200' },
             { label: 'Subtotal', value: '$ 3.000', suffix: 'per month' }
           ],
           total: { value: '$ 3.000', suffix: 'per year' }
         },
         yearly: {
           rows: [
-            { label: 'Next Charge Value', value: '$ 200' },
+            { label: 'Next charge', value: '$ 200' },
             { label: 'Subtotal', value: '$ 3.000', suffix: 'per month' },
-            { label: 'Yearly Discount', value: '$ 2.200', suffix: 'per month' }
+            { label: 'Yearly discount', value: '$ 2.200', suffix: 'per month' }
           ],
           total: { value: '$ 2.200', suffix: 'per year' }
         }
@@ -99,20 +99,20 @@
     enterprise: {
       name: 'Enterprise',
       features: [
-        { title: 'Unlimited Resources' },
-        { title: '1B Requests', detail: 'then as low as $0.60 per 1M' },
-        { title: '500 hours Compute time', detail: 'then $0.12 per hour' },
-        { title: '1 TB Event log storage', detail: 'then $0.08 per GB-month' },
+        { title: 'Unlimited resources' },
+        { title: '1B requests', detail: 'then as low as $0.60 per 1M' },
+        { title: '500 hours of compute time', detail: 'then $0.12 per hour' },
+        { title: '1 TB of event log storage', detail: 'then $0.08 per GB-month' },
         {
-          title: '10 TB File storage',
+          title: '10 TB of file storage',
           detail: 'then as low as $0.015 per GB-month'
         },
-        { title: '100 GB Database storage', detail: 'then $0.50 per GB-month' },
+        { title: '100 GB of database storage', detail: 'then $0.50 per GB-month' },
         {
-          title: '1B Security rule evaluations',
+          title: '1B security rule evaluations',
           detail: 'then as low as $0.20 per 1M'
         },
-        { title: 'DDoS Protection included' },
+        { title: 'DDoS protection included' },
         { title: 'PCI DSS 4.0.1 Level 1' },
         { title: 'SOC 2 Type 2 / SOC 3' },
         { title: 'Data migration assistance' },
@@ -122,16 +122,16 @@
       charge: {
         monthly: {
           rows: [
-            { label: 'Next Charge Value', value: '$ 2.000' },
+            { label: 'Next charge', value: '$ 2.000' },
             { label: 'Subtotal', value: '$ 24.000', suffix: 'per month' }
           ],
           total: { value: '$ 24.000', suffix: 'per year' }
         },
         yearly: {
           rows: [
-            { label: 'Next Charge Value', value: '$ 2.000' },
+            { label: 'Next charge', value: '$ 2.000' },
             { label: 'Subtotal', value: '$ 24.000', suffix: 'per month' },
-            { label: 'Yearly Discount', value: '$ 4.800', suffix: 'per month' }
+            { label: 'Yearly discount', value: '$ 4.800', suffix: 'per month' }
           ],
           total: { value: '$ 19.200', suffix: 'per year' }
         }
@@ -140,11 +140,11 @@
   }
   const pricingLinks = [
     {
-      label: 'Learn more about Pricing',
+      label: 'Learn more about pricing',
       href: 'https://example.com/pricing'
     },
     {
-      label: 'Compare Plans',
+      label: 'Compare plans',
       href: 'https://example.com/pricing#comparison'
     }
   ]
@@ -500,7 +500,7 @@
                                       </Card>
 
                                       <Card
-                                        title="Payment Method"
+                                        title="Payment method"
                                         :padded="false"
                                       >
                                         <template #content>
@@ -544,7 +544,7 @@
                                               <p
                                                 class="min-w-0 flex-1 text-label-md text-(--text-default)"
                                               >
-                                                Ended with {{ card.last4 }}
+                                                Ending in {{ card.last4 }}
                                               </p>
                                               <Button
                                                 label="Change"
@@ -558,10 +558,10 @@
                                               <fieldset
                                                 class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
                                               >
-                                                <legend class="sr-only">Payment Method</legend>
+                                                <legend class="sr-only">Payment method</legend>
 
                                                 <Field>
-                                                  <Field.Label>Cardholder's full name</Field.Label>
+                                                  <Field.Label>Cardholder name</Field.Label>
                                                   <Input
                                                     v-model="card.holder"
                                                     name="cardholderName"
@@ -572,7 +572,7 @@
                                                 </Field>
 
                                                 <Field>
-                                                  <Field.Label>Country/Region</Field.Label>
+                                                  <Field.Label>Country or region</Field.Label>
                                                   <Select
                                                     v-model="card.country"
                                                     size="large"
@@ -592,7 +592,7 @@
                                                 </Field>
 
                                                 <Field>
-                                                  <Field.Label>Credit card number</Field.Label>
+                                                  <Field.Label>Card number</Field.Label>
                                                   <Input
                                                     v-model="card.number"
                                                     name="cardNumber"
@@ -607,30 +607,32 @@
                                                   class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2"
                                                 >
                                                   <Field>
-                                                    <Field.Label
-                                                      >Expiration Date (MM/YY)</Field.Label
-                                                    >
+                                                    <Field.Label>Expiration date</Field.Label>
                                                     <Input
                                                       v-model="card.expiry"
                                                       name="cardExpiry"
                                                       size="large"
-                                                      placeholder="08 / 26"
+                                                      placeholder="MM / YY"
                                                       autocomplete="cc-exp"
                                                       inputmode="numeric"
                                                     />
+                                                    <Field.Description
+                                                      >Month and year, as MM/YY.</Field.Description
+                                                    >
                                                   </Field>
                                                   <Field>
-                                                    <Field.Label
-                                                      >Security Code (CVC/CVV)</Field.Label
-                                                    >
+                                                    <Field.Label>Security code</Field.Label>
                                                     <Input
                                                       v-model="card.code"
                                                       name="cardSecurityCode"
                                                       size="large"
-                                                      placeholder="999"
+                                                      placeholder="123"
                                                       autocomplete="cc-csc"
                                                       inputmode="numeric"
                                                     />
+                                                    <Field.Description
+                                                      >3 or 4 digits on the back.</Field.Description
+                                                    >
                                                   </Field>
                                                 </div>
 
@@ -720,7 +722,7 @@
                                                 </Select>
                                               </Field>
                                               <Field>
-                                                <Field.Label>Postal Code</Field.Label>
+                                                <Field.Label>Postal code</Field.Label>
                                                 <Input
                                                   v-model="address.postalCode"
                                                   name="postalCode"
@@ -730,7 +732,7 @@
                                                 />
                                               </Field>
                                               <Field>
-                                                <Field.Label>State/Region</Field.Label>
+                                                <Field.Label>State or region</Field.Label>
                                                 <Select
                                                   v-model="address.state"
                                                   placeholder="Select an option"
@@ -772,14 +774,17 @@
                                             </div>
 
                                             <Field>
-                                              <Field.Label>Apartment, floor, etc.</Field.Label>
+                                              <Field.Label>Address line 2</Field.Label>
                                               <Input
                                                 v-model="address.line2"
                                                 name="addressLine2"
                                                 size="large"
-                                                placeholder="Optional"
                                                 autocomplete="address-line2"
                                               />
+                                              <Field.Description
+                                                >Optional. Apartment, suite or
+                                                floor.</Field.Description
+                                              >
                                             </Field>
                                           </fieldset>
                                         </template>

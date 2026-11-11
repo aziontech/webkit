@@ -71,8 +71,8 @@ alerts. The word is always visible; color never carries severity alone.
 ### J. Empty regions — `EmptyState` (required)
 
 Every region renders its own empty state with a reason and the next step: the chart
-(`No alerts in this period` / `Choose a longer period.`), Open by severity (`No open alerts`), Highest
-risk (`No entity has risk yet`) and the table.
+(`No alerts in this period` / `Select a longer period.`), Open by severity (`No open alerts`), Highest
+risk (`No entities at risk yet`) and the table.
 
 ### K. Alerts by type — `BarList` (required)
 
@@ -109,7 +109,7 @@ so it is a `Tag`, separate from severity.
 - **Description:** one sentence on the page's job. `What is open, how severe it is, what kind it is and who is involved.`
 - **Tile labels:** sentence case, no parentheses. `Critical or high open`, `False positives`.
 - **Hint:** one sentence definition ending with a period. `Alerts nobody has closed yet, at any severity.`
-- **Empty states:** state the fact, then the next step. `No alerts in this period` / `Nothing was raised in the last 30 days. Choose a longer period.`
+- **Empty states:** state the fact, then the next step. `No alerts in this period` / `Nothing was raised in the last 30 days. Select a longer period.`
 - **Severity labels:** the level only. `Critical`, `High`, `Medium`, `Low`, `Info`.
 
 ## Accessibility

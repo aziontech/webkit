@@ -4,11 +4,11 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
 
   const loading = false
@@ -554,7 +554,12 @@
           size="small"
         />
       </div>
-      <div class="min-h-0 flex-1 p-(--spacing-md) xl:overflow-y-auto">
+      <div
+        class="min-h-0 flex-1 p-(--spacing-md) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) xl:overflow-y-auto"
+        role="region"
+        aria-labelledby="open-alerts-title"
+        tabindex="0"
+      >
         <div
           v-if="loading"
           class="flex flex-col gap-(--spacing-lg)"

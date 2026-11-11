@@ -5,7 +5,7 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import { readBlocks } from './lib/blocks.mjs'
-import { checkGuidelines } from './lib/guidelines.mjs'
+import { checkGuidelines, primaryComponents } from './lib/guidelines.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
@@ -34,6 +34,23 @@ export function checkPatternMetadata(patterns, blockIds) {
     }
   }
   return { errors, warnings }
+}
+
+export function checkSummaryComponents(patterns) {
+  const errors = []
+  for (const [id, p] of Object.entries(patterns)) {
+    const imported = new Set(
+      [p.sfc, ...(p.variants || []).map((v) => v.sfc)].flatMap((sfc) => primaryComponents(sfc))
+    )
+    const named = [...String(p.summary || '').matchAll(/`([A-Z][A-Za-z0-9]*)`/g)].map((m) => m[1])
+    for (const name of new Set(named)) {
+      if (!imported.has(name))
+        errors.push(
+          `blocks/${id}/block.json: the summary names \`${name}\`, which neither the primary nor a variant SFC imports`
+        )
+    }
+  }
+  return errors
 }
 
 export function checkPatternGuidelines(patterns, { pending = [], only = [] } = {}) {
@@ -131,7 +148,8 @@ async function main() {
   for (const n of guidelines.notes) process.stdout.write(`ℹ ${n}\n`)
   const errors = [
     ...(warnIntents ? metadata.errors : [...metadata.errors, ...metadata.warnings]),
-    ...guidelines.errors
+    ...guidelines.errors,
+    ...checkSummaryComponents(blocks)
   ]
   if (warnIntents) {
     for (const w of metadata.warnings) process.stdout.write(`⚠ ${w}\n`)
