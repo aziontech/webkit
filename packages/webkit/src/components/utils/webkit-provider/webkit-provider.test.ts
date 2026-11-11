@@ -2,9 +2,9 @@ import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import CustomMessages from '../../../../examples/provider/custom-messages.vue'
-import Default from '../../../../examples/provider/default.vue'
-import RightToLeft from '../../../../examples/provider/right-to-left.vue'
+import CustomMessages from '../../../../examples/webkit-provider/custom-messages.vue'
+import Default from '../../../../examples/webkit-provider/default.vue'
+import RightToLeft from '../../../../examples/webkit-provider/right-to-left.vue'
 import { useLocale } from '../../../composables/use-locale'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Pagination from '../../data/pagination/pagination.vue'
@@ -15,7 +15,7 @@ import DialogClose from '../../overlay/dialog/dialog-close.vue'
 import DialogContent from '../../overlay/dialog/dialog-content.vue'
 import DialogPortal from '../../overlay/dialog/dialog-portal.vue'
 import DialogTitle from '../../overlay/dialog/dialog-title.vue'
-import WebkitProvider from './provider.vue'
+import WebkitProvider from './webkit-provider.vue'
 
 const withProvider = (props: Record<string, unknown>, child: () => ReturnType<typeof h>) =>
   defineComponent({ setup: () => () => h(WebkitProvider, props, { default: child }) })

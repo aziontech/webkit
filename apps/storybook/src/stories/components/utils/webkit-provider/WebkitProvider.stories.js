@@ -1,11 +1,11 @@
 import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
-import Example0 from '../../../../../../../packages/webkit/examples/provider/default.vue'
-import source0 from '../../../../../../../packages/webkit/examples/provider/default.vue?raw'
-import Example1 from '../../../../../../../packages/webkit/examples/provider/custom-messages.vue'
-import source1 from '../../../../../../../packages/webkit/examples/provider/custom-messages.vue?raw'
-import Example2 from '../../../../../../../packages/webkit/examples/provider/right-to-left.vue'
-import source2 from '../../../../../../../packages/webkit/examples/provider/right-to-left.vue?raw'
+import Example0 from '../../../../../../../packages/webkit/examples/webkit-provider/default.vue'
+import source0 from '../../../../../../../packages/webkit/examples/webkit-provider/default.vue?raw'
+import Example1 from '../../../../../../../packages/webkit/examples/webkit-provider/custom-messages.vue'
+import source1 from '../../../../../../../packages/webkit/examples/webkit-provider/custom-messages.vue?raw'
+import Example2 from '../../../../../../../packages/webkit/examples/webkit-provider/right-to-left.vue'
+import source2 from '../../../../../../../packages/webkit/examples/webkit-provider/right-to-left.vue?raw'
 
 export default {
   title: 'Components/Primitives/Utils/WebkitProvider',
