@@ -3,9 +3,9 @@ name: file-token-group
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: f85003c214d796aa86ba07bb703f59603240dc4350e16cd4059b11e2f349db95
+checksum: 045e302876b82ebedc95a4503ec6cce4d6b7c8b910f9b0dfa4ac843bfd9bc8d2
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -74,7 +74,7 @@ The files a person picked for upload, shown as removable tokens before or while 
 | `readonly`             | `boolean`                    | `false`      | false    | Hides the remove buttons; the list is for reading only.                       |
 | `ariaLabel`            | `string`                     | `''`         | false    | Accessible name of the list. Empty uses the locale catalog (`Files`).         |
 
-Types: `FileTokenGroupFile = { name: string; size?: number; type?: string; lastModified?: number }`; `FileTokenGroupItem = { file: File | FileTokenGroupFile; loading?: boolean; progress?: number; error?: string; warning?: string }`. `progress` is 0–100; `loading` without `progress` shows an indeterminate bar.
+Types: `FileTokenGroupFile = { name: string; webkitRelativePath?: string; size?: number; type?: string; lastModified?: number }`; `FileTokenGroupItem = { file: File | FileTokenGroupFile; loading?: boolean; progress?: number; error?: string; warning?: string }`. `progress` is 0–100; `loading` without `progress` shows an indeterminate bar.
 
 ## Events
 
@@ -91,6 +91,7 @@ _none_
 - Root `data-alignment`: `vertical` | `horizontal`; `data-readonly` when read-only.
 - Token `data-status`: `idle` | `loading` | `warning` | `error` (error wins over warning, both over loading).
 - Show more toggle: `aria-expanded` `true` | `false`.
+- A file with a `webkitRelativePath` (picked with a folder picker or dropped as a folder on `FileDropzone directories`) is named by that path (`site/css/main.css`) in the token, its title, the remove button and the progress bar; otherwise by `name`.
 
 ## Motion & Animations
 

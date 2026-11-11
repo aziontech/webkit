@@ -44,6 +44,22 @@ describe('FileTokenGroup', () => {
     ])
   })
 
+  it('names a file from a folder by its relative path', () => {
+    const file = new File(['x'], 'main.css', { type: 'text/css' })
+    Object.defineProperty(file, 'webkitRelativePath', { value: 'site/css/main.css' })
+    const view = render(FileTokenGroup, {
+      props: {
+        items: [
+          { file },
+          { file: { name: 'logo.svg', webkitRelativePath: 'site/logo.svg' }, loading: true }
+        ]
+      }
+    })
+    expect(view.getByText('site/css/main.css')).toHaveAttribute('title', 'site/css/main.css')
+    expect(view.getByRole('button', { name: 'Remove site/css/main.css' })).toBeTruthy()
+    expect(view.getByRole('progressbar', { name: 'Uploading site/logo.svg' })).toBeTruthy()
+  })
+
   it('describes the remove button with the error', () => {
     const view = render(FileTokenGroup, { props: { items: files() } })
     const remove = view.getByRole('button', { name: 'Remove b.png' })
