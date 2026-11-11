@@ -93,6 +93,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Components: Actions
 
 - [Button](components/button.md): Interactive control for user actions.
+- [ButtonGroup](components/button-group.md): A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group.
 - [ButtonHighlight](components/button-highlight.md): Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button).
 - [CopyButton](components/copy-button.md): Icon-only control that copies a string to the clipboard and briefly confirms success.
 - [IconButton](components/icon-button.md): Interactive control for user actions.
@@ -112,6 +113,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Components: Code
 
 - [CodeBlock](components/code-block.md): Read-only code viewer for docs, API examples, and configuration previews.
+- [CodeEditor](components/code-editor.md): An editable code surface with line numbers, diagnostics and a read-only and a diff mode.
 - [LogView](components/log-view.md): Composition-based terminal log viewer for CI/deploy output.
 
 ## Components: Content
@@ -175,9 +177,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Components: Inputs
 
+- [AttributeEditor](components/attribute-editor.md): An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`.
 - [Calendar](components/calendar.md): Date-range picker.
 - [Checkbox](components/checkbox.md): Binary selection control.
 - [Chip](components/chip.md): A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view.
+- [Combobox](components/combobox.md): A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed.
 - [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Checkbox`, `RadioButton`, `Switch`, `Slider` — with its…
 - [FileDropzone](components/file-dropzone.md): A FileDropzone is the target a user drags files from the operating system onto.
 - [HelperText](components/helper-text.md): Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`).
@@ -192,9 +196,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [PhoneInput](components/phone-input.md): International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly…
 - [RadioButton](components/radio-button.md): Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper).
 - [RadioCards](components/radio-cards.md): Horizontal grid of selectable cards for mutually exclusive choices (plans, roles, feature tiers).
+- [SchemaForm](components/schema-form.md): A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend.
 - [Select](components/select.md): Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list.
 - [Slider](components/slider.md): Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled.
 - [Switch](components/switch.md): Control-only pill toggle `Switch` (36×20 px).
+- [TagEditor](components/tag-editor.md): Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`.
 - [Textarea](components/textarea.md): Collects multi-line free-form text from the user.
 - [ThemeSwitcher](components/theme-switcher.md): A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments.
 

@@ -56,19 +56,6 @@
     errors: SchemaFormErrors
   }
 
-  /** Scope of a `field:<path>` slot, which replaces that field's control. */
-  export interface SchemaFormFieldSlotProps {
-    path: string
-    schema: SchemaFormSchema
-    value: unknown
-    setValue: (value: unknown) => void
-    invalid: boolean
-    error: string
-    required: boolean
-    disabled: boolean
-    readonly: boolean
-  }
-
   defineOptions({
     name: 'SchemaForm',
     inheritAttrs: false
@@ -87,6 +74,19 @@
     disabled?: boolean
     /** Shows every value without letting it change. */
     readonly?: boolean
+  }
+
+  /** Scope of a `field:<path>` slot, which replaces that field's control. */
+  export interface SchemaFormFieldSlotProps {
+    path: string
+    schema: SchemaFormSchema
+    value: unknown
+    setValue: (value: unknown) => void
+    invalid: boolean
+    error: string
+    required: boolean
+    disabled: boolean
+    readonly: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {

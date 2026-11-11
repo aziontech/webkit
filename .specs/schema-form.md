@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: aee5ea5aca31142f857256cd4831ae4f44921bbb3928c76f9538caf6d56703b8
+checksum: 76a1ceea192fa0f8c856fb244551d8472e4a3a782f17c3bdb239c35da7ff3a79
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -118,15 +118,13 @@ A form rendered from a JSON schema: each property of an object schema becomes a 
 
 ## Events
 
-| Event               | Payload                   | Notes    |
-| ------------------- | ------------------------- | -------- |
-| `update:modelValue` | `Record<string, unknown>` | v-model. |
+| _none_ | — | — |
 
 ## Slots
 
-| Slot           | Scope                      | Notes                                                                                                                                                                                                                                                                                                 |
-| -------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `field:<path>` | `SchemaFormFieldSlotProps` | Replaces the control of the field at `<path>` (`field:region`; a nested path such as `origin.host` needs the dynamic form `#[\`field:origin.host\`]`). Scope: `path`, `schema`, `value`, `setValue`, `invalid`, `error`, `required`, `disabled`, `readonly`. The label, description and message stay. |
+| _none_ | — | — |
+
+Dynamic slot `field:<path>` (scope `SchemaFormFieldSlotProps`): Replaces the control of the field at `<path>` (`field:region`; a nested path such as `origin.host` needs the dynamic form `#[\`field:origin.host\`]`). Scope: `path`, `schema`, `value`, `setValue`, `invalid`, `error`, `required`, `disabled`, `readonly`. The label, description and message stay.
 
 ## States
 

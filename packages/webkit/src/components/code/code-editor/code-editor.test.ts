@@ -91,16 +91,16 @@ const fakeMonaco = () => {
 }
 
 const textarea = (container: Element) =>
-  container.querySelector<HTMLTextAreaElement>('[data-testid="code-editor__input"]')!
+  container.querySelector<HTMLTextAreaElement>('[data-testid="code-code-editor__input"]')!
 
 describe('CodeEditor', () => {
   it('renders the plain editor with a gutter and updates v-model', async () => {
     const view = render(CodeEditor, {
       props: { modelValue: 'one\ntwo\nthree', ariaLabel: 'Script' }
     })
-    const root = view.getByTestId('code-editor')
+    const root = view.getByTestId('code-code-editor')
     expect(root.getAttribute('data-mode')).toBe('plain')
-    expect(view.getByTestId('code-editor__gutter').querySelectorAll('li')).toHaveLength(3)
+    expect(view.getByTestId('code-code-editor__gutter').querySelectorAll('li')).toHaveLength(3)
     const input = view.getByRole('textbox', { name: 'Script' })
     await fireEvent.update(input, 'one\ntwo')
     expect(view.emitted()['update:modelValue']?.at(-1)).toEqual(['one\ntwo'])
@@ -152,11 +152,11 @@ describe('CodeEditor', () => {
         ]
       }
     })
-    const lines = view.getByTestId('code-editor__gutter').querySelectorAll('li')
+    const lines = view.getByTestId('code-code-editor__gutter').querySelectorAll('li')
     expect(lines[1]?.getAttribute('data-severity')).toBe('warning')
     expect(lines[2]?.getAttribute('data-severity')).toBe('error')
     expect(view.getByRole('status').textContent?.trim()).toBe('2 problems')
-    const problems = view.getAllByTestId('code-editor__problem')
+    const problems = view.getAllByTestId('code-code-editor__problem')
     expect(problems.map((p) => p.textContent?.replace(/\s+/g, ' ').trim())).toEqual([
       'Warning: Line 2 Careful',
       'Error: Line 3 Broken'
@@ -187,7 +187,7 @@ describe('CodeEditor', () => {
     expect(input.id).toBe('code')
     expect(input.getAttribute('aria-invalid')).toBe('true')
     expect(input.getAttribute('aria-describedby')?.split(' ')[0]).toBe('help')
-    expect(view.getByTestId('code-editor').hasAttribute('data-invalid')).toBe(true)
+    expect(view.getByTestId('code-code-editor').hasAttribute('data-invalid')).toBe(true)
   })
 
   it('mounts Monaco from the loader with a token theme and syncs value and markers', async () => {
@@ -209,7 +209,7 @@ describe('CodeEditor', () => {
           })
       })
     )
-    const root = view.getByTestId('code-editor')
+    const root = view.getByTestId('code-code-editor')
     await waitFor(() => expect(root.getAttribute('data-mode')).toBe('monaco'))
     expect(onReady).toHaveBeenCalledOnce()
     expect(fake.calls.themes[0]?.name).toBe('webkit')
@@ -218,7 +218,7 @@ describe('CodeEditor', () => {
     expect(fake.calls.markers.at(-1)).toEqual([
       expect.objectContaining({ startLineNumber: 1, severity: 8, message: 'Nope', endColumn: 10 })
     ])
-    expect(view.queryByTestId('code-editor__input')).toBeNull()
+    expect(view.queryByTestId('code-code-editor__input')).toBeNull()
 
     fake.models[0]!.setValue('let a = 2')
     expect(value.value).toBe('let a = 2')
@@ -239,7 +239,7 @@ describe('CodeEditor', () => {
       props: { loader: () => Promise.resolve(fake.api), ariaLabel: 'Code' }
     })
     await waitFor(() =>
-      expect(view.getByTestId('code-editor').getAttribute('data-mode')).toBe('monaco')
+      expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('monaco')
     )
     const before = fake.calls.themes.length
     document.documentElement.setAttribute('data-theme', 'dark')
@@ -259,8 +259,8 @@ describe('CodeEditor', () => {
       }
     })
     await waitFor(() => expect(onError).toHaveBeenCalledOnce())
-    expect(view.getByTestId('code-editor').getAttribute('data-mode')).toBe('plain')
-    expect(view.getByTestId('code-editor__status').textContent).toContain('could not load')
+    expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('plain')
+    expect(view.getByTestId('code-code-editor__status').textContent).toContain('could not load')
     expect(textarea(view.container)).toBeTruthy()
   })
 

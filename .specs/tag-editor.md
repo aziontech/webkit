@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 0dcd842f2757a71d442f2f2dd7b4fed2c7dd7f247caad23706daf2afffb93f45
+checksum: 1826f26e9e46c762e604e743f5dda7b44359db743b6b4411f515fe41b72e1f38
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -94,9 +94,7 @@ Types: `TagEditorTag = { key: string; value: string; existing?: boolean; markedF
 
 ## Slots
 
-| Slot   | Scope | Notes |
-| ------ | ----- | ----- |
-| _none_ | —     | —     |
+| _none_ | — | — |
 
 ## States
 

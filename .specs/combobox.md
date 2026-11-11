@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 845f7bd2ce1d49a6eec1be8d5227bbd935359997401ec395e2901e2022bd93b2
+checksum: 9b14e51d6e104d5807c0504087110b60e6d3e5113b96d1f3b1fd23dcad2c86ac
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -86,7 +86,6 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 | Prop          | Type                             | Default    | Required | JSDoc                                                                                                      |
 | ------------- | -------------------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------- |
-| `modelValue`  | `string`                         | `''`       | false    | The committed value. Supports v-model. Changes on pick, Enter, Tab, blur and clear, not on each keystroke. |
 | `options`     | `ComboboxOption[]`               | `[]`       | false    | Suggestions: `{ value, label?, description?, group?, disabled? }`.                                         |
 | `placeholder` | `string`                         | `''`       | false    | Placeholder of the field.                                                                                  |
 | `ariaLabel`   | `string`                         | `''`       | false    | Accessible name when no `Field` label names the field.                                                     |
@@ -103,11 +102,16 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 `ComboboxOption`: `value: string` (committed and matched), `label?: string` (shown instead of the value), `description?: string` (muted, at the end of the row), `group?: string` (rows with the same group sit under one title, in first-seen order), `disabled?: boolean`.
 
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `string` | `''` | `update:modelValue` | The committed value via `defineModel`. Changes on pick, Enter, Tab, blur and clear, not on each keystroke. |
+
 ## Events
 
 | Event               | Payload  | Notes                                                                      |
 | ------------------- | -------- | -------------------------------------------------------------------------- |
-| `update:modelValue` | `string` | v-model: the committed value.                                              |
 | `search`            | `string` | The typed text, on each keystroke while the list is open (server filters). |
 | `create`            | `string` | A value that matches no option was committed (`allowCustom`).              |
 

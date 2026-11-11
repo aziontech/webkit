@@ -169,7 +169,6 @@ export function isDark(hex: string | undefined): boolean {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b < 0.5
 }
 
-/** Builds the Monaco theme from the design tokens resolved on `element`. */
 export function themeFromTokens(element: Element): CodeEditorMonacoTheme {
   const rules: CodeEditorMonacoTheme['rules'] = []
   for (const rule of RULES) {
@@ -196,7 +195,6 @@ export function themeFromTokens(element: Element): CodeEditorMonacoTheme {
   }
 }
 
-/** Font settings for Monaco from the `.text-body-code-sm` typography tokens. */
 export function fontFromTokens(element: Element) {
   const style = getComputedStyle(element)
   const root = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16

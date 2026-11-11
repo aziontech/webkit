@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 0891fc86ded0a84f22b8db7289283b042f6b648e24587099d41baa0e81293053
+checksum: 909ddfc9c34bb7009f15fbf4b480618d23a4a8c5bfc0a24cb37bb7cb472f06eb
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -92,7 +92,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 | `groupLimit`        | `number`                                 | `undefined` | false    | Most groups allowed in grouped mode.                                                                         |
 | `minItems`          | `number`                                 | `0`         | false    | Fewest rows kept; rows at the minimum lose their Remove button.                                              |
 | `newItem`           | `() => AttributeEditorItem`              | `undefined` | false    | Builds a new row. Unset creates an item with an empty string per column key.                                 |
-| `isItemRemovable`   | `(item: AttributeEditorItem) => boolean` | `undefined` | false    | Hides Remove on the rows it returns false for. Unset makes every row removable.                              |
+| `itemRemovable`   | `(item: AttributeEditorItem) => boolean` | `undefined` | false    | Hides Remove on the rows it returns false for. Unset makes every row removable.                              |
 | `size`              | `'small' \| 'medium' \| 'large'`         | `'medium'`  | false    | Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm.                              |
 | `disabled`          | `boolean`                                | `false`     | false    | Disables every control, Add and Remove.                                                                      |
 | `addDisabled`       | `boolean`                                | `false`     | false    | Disables Add only, for example until the last row is filled in.                                              |
@@ -113,13 +113,14 @@ Types: `AttributeEditorItem = Record<string, unknown>`; `AttributeEditorColumn =
 
 | Slot          | Scope                                                                         | Notes                                                                                                                       |
 | ------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `cell-<key>`  | `{ item, index, groupIndex, value, update, invalid }`                         | Replaces the default `Input` of one column; the control sits inside the cell's `Field`.                                     |
 | `row`         | `{ item, index, groupIndex, errors, update, remove, removable, removeLabel }` | Replaces the whole row; the column header is not drawn.                                                                     |
 | `row-actions` | `{ item, index, groupIndex, remove, removable, removeLabel }`                 | Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it). |
 | `empty`       | —                                                                             | Replaces the empty text.                                                                                                    |
 | `actions`     | —                                                                             | Extra buttons after Add (for example Upload or Paste .env).                                                                 |
 | `info`        | —                                                                             | Extra help text under the buttons, after the limit text.                                                                    |
 | `limit`       | `{ count, limit, left }`                                                      | Replaces the limit text in list mode (for example "You can add 3 more tags.").                                              |
+
+Dynamic slot `cell-<key>` (scope `{ item, index, groupIndex, value, update, invalid }`): replaces the default `Input` of one column; the control sits inside the cell's `Field`.
 
 ## States
 

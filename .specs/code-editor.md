@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: c81b700803c1c72aa9df4b951e0cd86741d0a9492524b0d1134ed6d58eff7de5
+checksum: f41f149904eef8c08b35e747d17e7ef83380a0e096b6327dc1b7ddf5a50c57be
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -85,7 +85,6 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 
 | Prop          | Type                              | Default       | Required | JSDoc                                                                                                    |
 | ------------- | --------------------------------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------- |
-| `modelValue`  | `string`                          | `''`          | false    | The code. Supports v-model.                                                                              |
 | `language`    | `string`                          | `'plaintext'` | false    | Monaco language id (`javascript`, `typescript`, `json`, `sql`, `lua`, `yaml`…). The fallback ignores it. |
 | `loader`      | `() => Promise<CodeEditorMonaco>` | `undefined`   | false    | Loads Monaco lazily; without it the plain editor is the editor.                                          |
 | `readonly`    | `boolean`                         | `false`       | false    | The code can be read, selected and copied but not changed.                                               |
@@ -102,11 +101,16 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 
 Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; endColumn?: number; severity: 'error' | 'warning' | 'info'; message: string }`. `CodeEditorMonaco` is a structural subset of the `monaco-editor` module (`editor.create`, `editor.createDiffEditor`, `editor.createModel`, `editor.defineTheme`, `editor.setTheme`, `editor.setModelMarkers`, `MarkerSeverity`), so `import('monaco-editor')` satisfies it without WebKit depending on Monaco's types.
 
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `string` | `''` | `update:modelValue` | The code via `defineModel`. Updated on every edit, from the plain editor or from Monaco. |
+
 ## Events
 
 | Event               | Payload   | Notes                                                             |
 | ------------------- | --------- | ----------------------------------------------------------------- |
-| `update:modelValue` | `string`  | Every edit, from the plain editor or from Monaco.                 |
 | `ready`             | `unknown` | Monaco mounted; the payload is the editor instance (for actions). |
 | `load-error`        | `unknown` | The loader rejected; the plain editor stays.                      |
 

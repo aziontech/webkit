@@ -68,10 +68,6 @@ export interface UseUnsavedChangesReturn<T> {
 
 const snapshot = (value: unknown) => JSON.stringify(value ?? null)
 
-/**
- * Dirty baseline and leave guard for a form: compares the source with the last committed value,
- * warns before a reload while dirty, and drives a `ConfirmDialog` from a router leave guard.
- */
 export function useUnsavedChanges<T>(
   source: MaybeRefOrGetter<T>,
   options: UseUnsavedChangesOptions<T> = {}

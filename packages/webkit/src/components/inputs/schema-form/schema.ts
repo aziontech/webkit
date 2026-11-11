@@ -77,7 +77,6 @@ export interface SchemaFormIssue {
   line?: number
 }
 
-/** Keywords SchemaForm does not apply. A schema that uses them still renders; they are ignored. */
 export const UNSUPPORTED_KEYWORDS = [
   '$ref',
   'allOf',
@@ -276,7 +275,6 @@ export const listLines = (text: string) =>
     .map((line) => line.trim())
     .filter(Boolean)
 
-/** Validates one field. `draft` is the text a number, list or JSON control holds. */
 export function validateNode(
   node: SchemaFormNode,
   value: unknown,
@@ -323,7 +321,6 @@ export function validateNode(
   return checkString(schema, String(value))
 }
 
-/** Every leaf of the tree, depth first. */
 export function leavesOf(nodes: SchemaFormNode[]): SchemaFormNode[] {
   return nodes.flatMap((node) => (node.widget === 'fieldset' ? leavesOf(node.children) : [node]))
 }

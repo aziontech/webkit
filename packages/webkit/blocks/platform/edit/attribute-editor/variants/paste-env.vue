@@ -495,15 +495,16 @@
                         class="text-label-sm text-(--text-default)"
                         >Paste .env contents</label
                       >
-                      <Textarea
-                        :id="pasteId"
-                        v-model="pasteText"
-                        :rows="6"
-                        class="font-mono"
-                        spellcheck="false"
-                        :invalid="pasteReport.invalidLines.length > 0"
-                        :aria-describedby="`${pasteId}-report`"
-                      />
+                      <div class="[&_textarea]:font-mono">
+                        <Textarea
+                          :id="pasteId"
+                          v-model="pasteText"
+                          :rows="6"
+                          spellcheck="false"
+                          :invalid="pasteReport.invalidLines.length > 0"
+                          :aria-describedby="`${pasteId}-report`"
+                        />
+                      </div>
                       <div
                         :id="`${pasteId}-report`"
                         class="flex flex-col gap-(--spacing-xxs)"

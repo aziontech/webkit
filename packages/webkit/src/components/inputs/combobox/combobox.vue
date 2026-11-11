@@ -38,8 +38,6 @@
   })
 
   interface Props {
-    /** The committed value. Supports v-model. Changes on pick, Enter, Tab, blur and clear. */
-    modelValue?: string
     /** Suggestions: `{ value, label?, description?, group?, disabled? }`. */
     options?: ComboboxOption[]
     /** Placeholder of the field. */
@@ -69,7 +67,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: '',
     options: () => [],
     placeholder: '',
     ariaLabel: '',
@@ -85,8 +82,9 @@
     invalid: false
   })
 
+  const model = defineModel<string>({ default: '' })
+
   const emit = defineEmits<{
-    'update:modelValue': [value: string]
     search: [text: string]
     create: [value: string]
   }>()
@@ -107,7 +105,7 @@
     disabled: () => props.disabled
   })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'combobox')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-combobox')
 
   const inputAttrs = computed(() => {
     const rest: Record<string, unknown> = { ...attrs }
@@ -130,12 +128,12 @@
     return match ? labelOf(match) : value
   }
 
-  const text = ref(displayOf(props.modelValue))
+  const text = ref(displayOf(model.value))
 
   watch(
-    () => [props.modelValue, props.options] as const,
+    () => [model.value, props.options] as const,
     () => {
-      if (!typing.value) text.value = displayOf(props.modelValue)
+      if (!typing.value) text.value = displayOf(model.value)
     }
   )
 
@@ -240,7 +238,7 @@
   }
 
   const setModel = (value: string) => {
-    if (value !== props.modelValue) emit('update:modelValue', value)
+    if (value !== model.value) model.value = value
   }
 
   const commitOption = (option: ComboboxOption) => {
@@ -254,7 +252,7 @@
   const commitCustom = (value: string) => {
     typing.value = false
     text.value = value
-    if (value !== props.modelValue) {
+    if (value !== model.value) {
       setModel(value)
       emit('create', value)
     }
@@ -268,7 +266,7 @@
 
   const restore = () => {
     typing.value = false
-    text.value = displayOf(props.modelValue)
+    text.value = displayOf(model.value)
   }
 
   const commitText = () => {
@@ -373,7 +371,7 @@
         close()
         return
       }
-      if (text.value !== displayOf(props.modelValue)) {
+      if (text.value !== displayOf(model.value)) {
         event.preventDefault()
         event.stopPropagation()
         restore()
@@ -514,10 +512,10 @@
                 :id="row.id"
                 :key="row.id"
                 role="option"
-                :aria-selected="row.kind === 'option' && row.option.value === modelValue"
+                :aria-selected="row.kind === 'option' && row.option.value === model"
                 :aria-disabled="isDisabledRow(row) || undefined"
                 :data-active="(activeId === row.id && !isDisabledRow(row)) || null"
-                :data-selected="(row.kind === 'option' && row.option.value === modelValue) || null"
+                :data-selected="(row.kind === 'option' && row.option.value === model) || null"
                 :data-disabled="isDisabledRow(row) || null"
                 :data-kind="row.kind"
                 :data-testid="`${testId}__option`"
@@ -531,7 +529,7 @@
                     name="option"
                     :option="row.option"
                     :active="activeId === row.id"
-                    :selected="row.option.value === modelValue"
+                    :selected="row.option.value === model"
                   >
                     <span class="min-w-0 flex-1 truncate"
                       ><bdi>{{ labelOf(row.option) }}</bdi></span
@@ -543,7 +541,7 @@
                     >
                   </slot>
                   <i
-                    v-if="row.option.value === modelValue"
+                    v-if="row.option.value === model"
                     class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
                     aria-hidden="true"
                   />

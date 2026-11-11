@@ -134,7 +134,7 @@
     disabled: () => props.disabled
   })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-editor')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-code-editor')
 
   const rootAttrs = computed(() => {
     const rest: Record<string, unknown> = {}

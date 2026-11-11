@@ -88,7 +88,7 @@
     /** Builds a new row. Unset creates an item with an empty string per column key. */
     newItem?: () => AttributeEditorItem
     /** Hides Remove on the rows it returns false for. Unset makes every row removable. */
-    isItemRemovable?: (item: AttributeEditorItem) => boolean
+    itemRemovable?: (item: AttributeEditorItem) => boolean
     /** Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm. */
     size?: AttributeEditorSize
     /** Disables every control, Add and Remove. */
@@ -112,7 +112,7 @@
     groupLimit: undefined,
     minItems: 0,
     newItem: undefined,
-    isItemRemovable: undefined,
+    itemRemovable: undefined,
     size: 'medium',
     disabled: false,
     addDisabled: false,
@@ -206,7 +206,7 @@
   const removable = (item: AttributeEditorItem) =>
     !props.disabled &&
     total.value > props.minItems &&
-    (props.isItemRemovable ? props.isItemRemovable(item) : true)
+    (props.itemRemovable ? props.itemRemovable(item) : true)
 
   const position = (index: number, groupIndex: number | undefined) => {
     if (groupIndex === undefined) return index + 1

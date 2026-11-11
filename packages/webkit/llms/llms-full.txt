@@ -7110,17 +7110,17 @@ The code of every state is in [blocks/platform/detail/version-detail.md](blocks/
 
 # AttributeEditor (`platform/edit/attribute-editor`)
 
-> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer each variable is entered as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `CopyButton`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.
+> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `CopyButton`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.
 
 - Surface: product
 - Source: `blocks/platform/edit/attribute-editor/attribute-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/attribute-editor")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Textarea](../../../components/textarea.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Textarea](../../../components/textarea.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
 
-variables; environment variables; env vars; secrets; create variable; edit variable; variables list; version history; variáveis; variáveis de ambiente; segredos; criar variável; key value editor; attribute editor; .env upload; editor de chave e valor; delete variable; clone variable
+variables; environment variables; env vars; secrets; create variable; edit variable; variables list; version history; variáveis; variáveis de ambiente; segredos; criar variável; key value editor; attribute editor; .env upload; editor de chave e valor; delete variable; clone variable; paste .env; paste env file; import .env; colar .env; importar variáveis; dotenv
 
 A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step.
 
@@ -7163,27 +7163,31 @@ A right-side `Drawer` whose content is one `form` labeled Create Variable or Edi
 
 A `SettingsSection` titled Variables with a hint that says what variables are for. Its toolbar holds an outlined Upload `Button` that reads a `.env` or text file into rows, and a medium `ToggleGroup` that switches between the Form and JSON views of the same data.
 
-### G. Key and value rows — `InputGroupRoot`, `InputGroupAddon`, `Input`, `Tooltip`, `IconButton`, `Checkbox`, `HelperText` (required)
+### G. Key and value rows — `AttributeEditor`, `InputGroupRoot`, `InputGroupAddon`, `Input`, `Tooltip`, `IconButton`, `Checkbox`, `HelperText` (required)
 
-Each variable is two large `InputGroupRoot` rows. The Key row joins a Key label addon, a code-font field that turns spaces into underscores, and a Remove variable `IconButton` (hidden while only one pair is left). The Value row joins a Value label addon, the field, a Show value `IconButton` and a Secret `Checkbox` named by a `Tooltip`. Errors render as `HelperText` under the pair. An outlined Add variable `Button` below the list is enabled only when the last pair is filled. Pasting `.env` or JSON contents into an empty key creates one row per variable.
+The rows are one `AttributeEditor` (`v-model:items`, `min-items` 1, `add-disabled` until the last pair is filled), which owns the list semantics, Add variable, Remove, the focus after each, the polite "Item n added / removed" announcement and, while editing one variable, the limit of 1 with the note "Edit one variable at a time.". Its `row` slot draws each variable as two large `InputGroupRoot` rows. The Key row joins a Key label addon, a code-font field that turns spaces into underscores, and a Remove variable `IconButton` (hidden while only one pair is left). The Value row joins a Value label addon, the field, a Show value `IconButton` and a Secret `Checkbox` named by a `Tooltip`. Errors render as `HelperText` under the pair. The editor's outlined Add variable button is enabled only when the last pair is filled, and its `info` slot carries the hint that pasting `.env` or JSON contents into an empty key creates one row per variable. Remove is named with the row number ("Remove variable 2").
 
-### H. JSON view — `Textarea`, `HelperText` (optional)
+### H. Paste .env panel — `Button`, `Textarea`, `HelperText` (optional)
+
+In the PasteEnv state an outlined Paste .env `Button` (with `aria-expanded`) beside Upload opens an inline panel above the rows: a labelled monospace `Textarea`, a report of what the text holds ("3 variables found.", the lines that are not `KEY=value` and will be skipped, keys repeated in the text, keys already in the list whose value will be replaced), and a primary Add N variables `Button` beside Cancel. Applying merges the pairs into the rows (replace by key, append the rest), closes the panel, announces the count and returns focus to Paste .env. Parsing follows the design sample: blank lines and `#` comments are ignored, `export` is accepted, quotes are removed, the last value of a repeated key wins.
+
+### I. JSON view — `Textarea`, `HelperText` (optional)
 
 The JSON view replaces the rows with one `Textarea` labeled Variables JSON over the same entries; a `HelperText` reports a parse error in place. Switching back to Form keeps what was typed.
 
-### I. Scope — `SettingsSection`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `HelperText` (required)
+### J. Scope — `SettingsSection`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `HelperText` (required)
 
 A `SettingsSection` titled Scope with one large `InputGroupRoot` per scope type: a label addon, a `MultiSelect` of resources with a search `Input` (Global shows "The entire account" instead), and an enable `Switch`. Global turns off when any specific scope turns on. An enabled scope with no resource selected shows a required `HelperText`.
 
-### J. Drawer footer — `PanelFooter`, `Button` (required)
+### K. Drawer footer — `PanelFooter`, `Button` (required)
 
 `PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving.
 
-### K. List states — `EmptyState`, `Button` (required)
+### L. List states — `EmptyState`, `Button` (required)
 
 With no variables at all, the card holds a first-use `EmptyState` (`No variables yet`) with Create Variable and Documentation. When the filter matches nothing, the table's `#empty` slot holds a no-match `EmptyState` (`No matching variables`) with an outlined Clear filters `Button`.
 
-### L. Delete confirmation — `ConfirmDialog`, `Alert`, `Input`, `Button` (required)
+### M. Delete confirmation — `ConfirmDialog`, `Alert`, `Input`, `Button` (required)
 
 The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable: a warning `Alert`, one sentence on the consequence, and an `Input` where the user types the key. The danger Delete variable `Button` stays disabled until the trimmed value equals the key; Cancel closes the dialog.
 
@@ -7191,7 +7195,9 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 
 - Validate only after Save is pressed; then flag each empty, malformed or duplicated key under its own pair and move focus to the first field in error.
 - Keep secret values masked in the list and in the drawer, and say in the hint that secrets are write-only once saved.
-- Let users bring pairs in bulk: Upload, paste into a key, or edit as JSON.
+- Let users bring pairs in bulk: Upload, Paste .env, paste into a key, or edit as JSON.
+- Before pasted pairs land, say how many were found, which lines are skipped and which keys will be replaced.
+- Build the rows on `AttributeEditor` so add, remove, focus and announcements behave the same on every key and value editor.
 - Keep the label of each field inside its `InputGroupAddon`, tied to the field by `for`.
 - Reset the drawer on open so a closed and reopened drawer never shows stale rows.
 - Follow `skills/webkit-form` for required states and `skills/webkit-lists` for the list page.
@@ -7200,6 +7206,7 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 
 - Don't show required errors on first render or while the user is still typing the first pair.
 - Don't offer Remove on the last remaining pair.
+- Don't drop invalid pasted lines silently, and don't add duplicate keys from a paste: replace the existing value and say so.
 - Don't reveal a saved secret value in the table, a tooltip or the copy control.
 - Don't add a Cancel button beside Save; `DrawerClose` and the overlay close the drawer.
 - Don't keep Global on together with a specific scope.
@@ -7212,6 +7219,7 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 - **Field placeholders:** show the format, e.g. "MY_VARIABLE" for the key, "my-variable-value" for the value.
 - **Errors:** short and specific, e.g. "Key is required.", "Use only uppercase letters, numbers, and underscores.", "Select at least one resource for this scope."
 - **Secret control:** "Mark as secret" and "Unmark as secret"; the hint states the rule, e.g. "Secret values are hidden and write-only after saving."
+- **Paste panel:** label "Paste .env contents"; report "3 variables found. Lines starting with # are ignored.", "Line 5 is not KEY=value with an uppercase key and will be skipped.", "CACHE_TTL is already in the list; its value will be replaced."; buttons "Paste .env", "Add 3 variables", "Cancel".
 - **Buttons:** verb first, three words or fewer, e.g. "Upload", "Add variable", "Save".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
@@ -7221,7 +7229,8 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 - Icon-only controls (Remove variable, Show value, Hide value, row actions, toolbar) carry an `aria-label` that matches their `Tooltip`.
 - The Secret `Checkbox` and each scope `Switch` have an `aria-label` naming what they toggle, e.g. "Enable Project scope".
 - The `ToggleGroup` is labeled "Variables view"; the hidden file input is removed from the tab order and the Upload button triggers it.
-- Adding a pair moves focus to its new Key field.
+- Adding a pair moves focus to its new Key field; removing one moves focus to the pair now in its place (or Add variable); both are announced in a polite live region by `AttributeEditor`.
+- The paste panel's `Textarea` is described by its report, so skipped lines and replaced keys are read with the field; Paste .env exposes `aria-expanded`, and applying announces how many variables were added.
 - The drawer traps focus while open and returns it to Create Variable on close.
 
 ## States
@@ -7232,6 +7241,7 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 - Edit: a row's Edit opens the drawer on that variable; Save replaces it in the list.
 - Delete: a row's Delete opens the typed confirmation; confirming removes the row.
 - Create: the drawer open with one empty pair, the Form view and Global on; errors appear only after Save.
+- PasteEnv: Create Variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
 
 ## Related
 
@@ -7240,11 +7250,13 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 - `platform/edit/rule-builder` — a drawer for ordered conditions and behaviors instead of free pairs.
 - `platform/states/form-validation` — when and how errors appear after Save.
 - `InputGroupRoot` — joins label, field and actions into one row; see `skills/webkit-form`.
+- `AttributeEditor` and `TagEditor` — the components behind the rows; `TagEditor` for resource tags.
 
 ## Variants
 
 - `List` — primary (the code below)
-- `Create` — Closed until Create Variable opens it: one empty Key and Value pair, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Save flags the empty or malformed fields only after it is pressed.
+- `Create` — Closed until Create Variable opens it: one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed.
+- `PasteEnv` — Create Variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env.
 
 Each variant is the same screen in another state: `get_pattern("platform/edit/attribute-editor", { variant })`, or the file under `blocks/platform/edit/attribute-editor/variants/`.
 
@@ -7392,17 +7404,17 @@ The code of every state is in [blocks/platform/edit/code-editor.md](blocks/platf
 
 # EditResource (`platform/edit/edit-resource`)
 
-> The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `HelperText` and `Button`.
+> The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.
 
 - Surface: product
 - Source: `blocks/platform/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/edit-resource")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md), `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
 
-settings page; resource settings; settings tab; application settings; workload settings; firewall settings; edit settings; página de configurações; configurações do recurso; aba de configurações; save bar; unsaved changes bar; sticky save bar; discard and save; commit bar; barra de salvar; alterações não salvas; salvar alterações; edit resource; editar recurso
+settings page; resource settings; settings tab; application settings; workload settings; firewall settings; edit settings; página de configurações; configurações do recurso; aba de configurações; save bar; unsaved changes bar; sticky save bar; discard and save; commit bar; barra de salvar; alterações não salvas; salvar alterações; edit resource; editar recurso; stale record; changed elsewhere; overwrite changes; conflict on save; danger zone; delete resource; type the name to confirm; zona de perigo; excluir recurso; alterado em outro lugar; leave page guard; unsaved changes dialog
 
 The settings page of one existing resource. The user comes here to change how the resource is named, what it runs with and whether it is active, review the change, and commit it or throw it away. Every field sits in a labeled section of the form column, and one save band appears only once something has changed, so the page reads as the resource's current state until the user edits it.
 
@@ -7446,6 +7458,18 @@ A setting the user cannot change here (a paid module, a module that is always on
 
 Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, the fieldset is disabled, Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record.
 
+### G. Leave guard — `Tabs`, `SaveBar` (optional)
+
+`useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Item` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/webkit-form`.
+
+### H. Changed elsewhere — `Button`, `SaveBar` (optional)
+
+When the record was saved by someone else after the form opened, a warning `Alert` sits between the heading and the first section: a bold "Changed elsewhere." lead, one sentence that says nothing was lost and what Save will do, and a secondary Reload button in its action slot. Save does not overwrite silently: it opens a `ConfirmDialog` (kind `primary`) with Go back and Overwrite and save. Reload swaps the edits for the saved values and the notice becomes an info `Alert` "Edits discarded." with Undo, which brings the edits back. The save bar's hint and Discard label follow the notice ("Saving overwrites the version saved elsewhere.", "Discard and reload"). This is the form-error rule (`platform/states/form-error`) applied to an edit: one message above the form, the recovery action on it.
+
+### I. Danger zone — `SettingsSection`, `Card`, `SettingRow`, `Button`, `Input` (optional)
+
+The last section, titled Danger zone with the hint "Actions that cannot be undone.", holds one compact `SettingRow` per irreversible action with a medium danger `Button` and a trash icon. The action opens a medium `ConfirmDialog`: a warning `Alert` that it cannot be reversed, one paragraph on what goes with it and a docs link, then "To confirm, type" the name in a code chip with a `CopyButton`, and an `Input` labelled by that sentence. The danger confirm button stays disabled until the typed name matches and shows its loading state while the request runs; Enter in the input confirms. See `platform/delete/delete-with-confirmation`.
+
 ## Do
 
 - Show the save bar only while the form differs from the saved record.
@@ -7454,6 +7478,11 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - Keep locked settings visible, disabled, with the reason and the way to unlock them.
 - Put destructive actions in a Danger zone section at the end, never in the save bar.
 - Check every field when Save is pressed and show errors only then; see `skills/webkit-errors`.
+- Mark the tab that holds unsaved changes with `dirty`, and ask before leaving it while dirty.
+- Offer Save changes in the leave dialog when the form can be saved from there; the user keeps their work without going back.
+- Say when the record changed elsewhere as soon as it is known, and ask before Save overwrites it.
+- Keep the edits on screen after a reload with an Undo, so a stale form never loses work silently.
+- Ask for the resource name before a delete, with a copy button beside the name.
 
 ## Don't
 
@@ -7462,6 +7491,10 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - Don't hide fields the user cannot change; lock them and say why.
 - Don't use `size="medium"` or larger for the Settings heading; the tab bar or breadcrumb already names the resource.
 - Don't add a Cancel button that leaves the page; Discard restores the record in place.
+- Don't rely on the dot alone: the dirty tab also says "Unsaved changes" to screen readers.
+- Don't overwrite a record that changed elsewhere without the overwrite confirmation.
+- Don't put Delete in the save bar, the page heading or a menu of the form; it lives in the Danger zone.
+- Don't enable the delete confirm button before the typed name matches.
 
 ## Copy
 
@@ -7470,6 +7503,9 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - **Row descriptions:** one sentence that says what the setting does, e.g. "When disabled, the project stops serving traffic."
 - **Save bar:** state what changed and when it applies, e.g. "Project settings changed." with the hint "Saving publishes them on the next deployment."; buttons "Discard" and "Save".
 - **Locked reason:** one sentence with the way out, e.g. "Contact sales to activate this module."
+- **Leave dialog:** "Unsaved changes", "This page has changes you haven't saved. If you leave now, they're discarded." (with Save: "Save them before you leave, or discard them and continue."); buttons "Keep editing", "Discard changes", "Save changes". These are the built-in `unsavedChanges` messages in en, pt-BR and es.
+- **Changed elsewhere:** "Changed elsewhere." + "This project was saved by someone else after you opened it. …"; button "Reload"; dialog "Overwrite changes made elsewhere?" with "Go back" and "Overwrite and save"; after a reload "Edits discarded." with "Undo".
+- **Danger zone:** section "Danger zone" with "Actions that cannot be undone."; row "Delete this project"; dialog "Delete project", "Once confirmed, this action can't be reversed.", "To confirm, type <name>"; buttons "Cancel" and "Delete project".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -7479,6 +7515,10 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - A disabled `Switch` keeps its `Tooltip`, so keyboard and pointer users can still read why it is locked.
 - External links open in a new tab with `rel="noopener noreferrer"` and an icon marked `aria-hidden="true"`.
 - The save bar enters after the form in reading order and its motion respects reduced motion.
+- The dirty tab mark is `aria-hidden`; a visually hidden "Unsaved changes" joins the tab's accessible name, and under forced colors the dot paints in `CanvasText`.
+- The leave dialog is a `ConfirmDialog`: focus moves into it, Escape and the close button count as Keep editing, and focus returns to the control that asked to leave.
+- The changed-elsewhere notice sits in a polite live region and takes focus after Reload so the change of values is announced; both its actions are real buttons.
+- The delete confirmation `Input` is labelled by the "To confirm, type …" sentence (`aria-labelledby`); the `CopyButton` has its own name ("Copy the project name") and announces Copied.
 
 ## States
 
@@ -7488,6 +7528,9 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; Save is loading and Discard is disabled.
+- StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
+- DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
+- UnsavedChanges (leave guard): the Settings tab carries the dirty dot, and switching tabs while dirty opens the Unsaved changes dialog.
 
 ## Related
 
@@ -7497,6 +7540,8 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - `platform/delete/delete-with-confirmation` — the dialog behind the Danger zone action.
 - `platform/settings/settings-form` — account settings that end with the same save band.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
+- `useUnsavedChanges` — the dirty baseline and leave guard behind the save bar, the tab mark and the leave dialog.
+- `platform/states/form-error` — the rule the changed-elsewhere notice follows.
 
 ## Variants
 
@@ -7504,8 +7549,10 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - `DeployableSettings` — A deployable resource’s Settings tab, under the environment switcher in the breadcrumb and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region.
 - `PolicySettings` — A security policy’s Settings tab, with the Documentation action in the heading: General, Modules with DDoS Protection locked on, Debug rules and Status.
 - `ResourceSettings` — The settings page of a first-level resource with no tabs, drawn from the same field list as its create page: here an access list at /access-lists/:id/settings, with its name under General and the type and entries under List settings. The entries field follows the selected type, and Save checks every field before it commits.
-- `UnsavedChanges` — The policy Settings tab after Debug rules was switched on: the bar is up; Discard restores the record and the bar leaves, Save holds its loading state and then leaves.
+- `UnsavedChanges` — The policy Settings tab after Debug rules was switched on: the bar is up and the Settings tab carries the unsaved-changes dot. Discard restores the record and the bar leaves, Save holds its loading state and then leaves. Switching tabs while dirty asks first, through `useUnsavedChanges`: Keep editing, Discard changes, or Save changes and go.
 - `Saving` — While the save request is in flight: Save shows its loading state and Discard is disabled.
+- `StaleRecord` — The record was saved by someone else after the form opened, and the form holds edits: a warning `Alert` above the sections says it changed elsewhere, with Reload. Save asks before it overwrites (Go back / Overwrite and save); Reload replaces the edits with the saved values and the notice turns into Edits discarded with Undo.
+- `DangerZone` — The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs.
 
 Each variant is the same screen in another state: `get_pattern("platform/edit/edit-resource", { variant })`, or the file under `blocks/platform/edit/edit-resource/variants/`.
 
@@ -9842,6 +9889,168 @@ The code of every state is in [blocks/shells/website.md](blocks/shells/website.m
 
 ---
 
+<!-- components/button-group.md -->
+
+# Button Group
+
+> A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group. Each item is an icon button that names itself in a tooltip: a plain action, an on / off toggle, or a menu of options. Items past `visibleCount` collapse into one More actions menu. The toolbar is one tab stop with roving focus, so a row of six icons costs the keyboard user one Tab, not six.
+
+- Import: `import ButtonGroup from '@aziontech/webkit/button-group'`
+- Category: actions · Surface: product · Structure: monolithic
+- API as JSON: [button-group.json](https://github.com/aziontech/webkit/blob/main/.specs/button-group.json)
+
+## When to use
+
+- A row of icon actions on one surface: Copy, Format, Wrap lines, Download above a code editor.
+- Compact actions in a panel header where labels would not fit, each explained by its tooltip.
+- A mix of actions and on / off view toggles (wrap lines, show whitespace) that sit together.
+- More actions than the space allows: keep the frequent ones visible and move the rest into the overflow menu with `visibleCount`.
+
+## Do
+
+- Give the toolbar an `aria-label` that names the surface ("Editor actions"), and every item a `label` that says what it does ("Copy code", not "Copy").
+- Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.
+- Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.
+- Set `loading` on an action while its request runs instead of disabling the whole group.
+- Use `kind="transparent"` on a surface that already has a border (a panel header) and `outlined` on the canvas.
+- Do not mix text buttons into the group; a text action belongs beside it as its own `Button`.
+
+## Don’t
+
+- A choice of exactly one option among several (view mode, period) → use `toggle-group`.
+- One primary action with related alternatives → use `split-button`.
+- A single icon action → use `icon-button` (with a `tooltip`).
+- Page or form actions with text labels (Save, Cancel, Create) → use `button`s laid out by the page.
+- A long list of commands or navigation → use `dropdown-menu`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [icon-button](icon-button.md) — every item renders one; ButtonGroup adds the toolbar role, roving focus and overflow.
+- [toggle-group](toggle-group.md) — a radiogroup of mutually exclusive options; ButtonGroup toggles are independent (`aria-pressed`).
+- [split-button](split-button.md) — one main action plus a menu, with a visible text label.
+- [dropdown-menu](dropdown-menu.md) — the menu behind menu items and the More actions overflow.
+- [tooltip](tooltip.md) — the visible name of each icon.
+- [code-editor](code-editor.md) — the usual host of an editor toolbar (`toolbar` slot).
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `ButtonGroupItem[]` | `[]` | false | Actions, toggles and menus, in reading order. |
+| `ariaLabel` | `string` | `—` | true | Accessible name of the toolbar. |
+| `kind` | `'transparent' \| 'outlined'` | `'transparent'` | false | Visual variant of every button. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of every button. |
+| `visibleCount` | `number` | `undefined` | false | Items shown as buttons; the rest go into the More actions menu. Unset shows every item. |
+| `overflowLabel` | `string` | `''` | false | Label of the overflow button. Empty uses the locale catalog (`More actions`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `click` | `{ id: string }` | An action or a menu option was chosen (from the bar or the overflow). |
+| `toggle` | `{ id: string; pressed: boolean }` | A toggle was activated; `pressed` is the new state to store. |
+
+## Sub-components
+
+_none_ — items are data (`items`), because every item has the same anatomy (icon, label, state) and the overflow menu must re-render the same items as menu options.
+
+## States
+
+- Visual states per item: `default`, `hover`, `focus-visible`, `pressed` (toggle, `data-pressed`, `--bg-selected`), `loading` (action), `disabled`.
+- Root data attributes: `data-kind`, `data-size`; each item `data-button-group-item="<id>"`.
+- Overflow: a pressed toggle shows a check and a hidden "On" in the More actions menu; a menu item becomes a labelled group of its options.
+
+## Accessibility
+
+- `role="toolbar"` with `aria-orientation="horizontal"` and the required `aria-label`.
+- Keyboard map: one tab stop (the last focused item, else the first enabled); `ArrowRight` / `ArrowLeft` move and wrap (swapped under `dir="rtl"` through `logicalArrowKey`); `Home` / `End` jump to the ends; `Enter` / `Space` activate; on a menu item `Enter`, `Space` or `ArrowDown` open the menu, `Escape` closes it and returns focus to its button.
+- Each icon button's accessible name is its `label`; the tooltip shows the same text on hover and focus.
+- Toggles expose `aria-pressed`; the pressed fill is backed by an outline in forced colors.
+- Disabled items leave the roving order; loading actions keep focus and announce through the button's busy state.
+- Contrast: icon buttons follow `IconButton` (≥ 3:1 for the glyph, ≥ 4.5:1 for focus ring and labels).
+
+## Right-to-left
+
+- Layout: the row follows the inline direction; the overflow button is always last (inline end).
+- Icons: not mirrored (the consumer passes a directional icon when meaning depends on direction).
+- Keyboard: arrows follow the visual order under `dir="rtl"`.
+
+## Internationalization
+
+| Key                       | English source | Override prop   |
+| ------------------------- | -------------- | --------------- |
+| `buttonGroup.moreActions` | `More actions` | `overflowLabel` |
+| `buttonGroup.pressed`     | `On`           | —               |
+
+- Item labels are consumer copy.
+
+## Responsive
+
+- The row wraps (`flex-wrap`) instead of overflowing a narrow container; use `visibleCount` to keep one line on small screens.
+- Touch: targets follow `IconButton` sizes; prefer `size="large"` on touch-first surfaces.
+- No hover-only affordance: every label is the accessible name and is reachable by focus.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ButtonGroup from '@aziontech/webkit/button-group'
+  import { computed, ref } from 'vue'
+
+  const wrap = ref(false)
+  const last = ref('')
+
+  const items = [
+    { id: 'copy', label: 'Copy code', icon: 'pi pi-copy' },
+    { id: 'format', label: 'Format document', icon: 'pi pi-align-left' },
+    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'pi pi-arrows-h' },
+    {
+      id: 'download',
+      type: 'menu',
+      label: 'Download',
+      icon: 'pi pi-download',
+      options: [
+        { id: 'download-js', label: 'Download as .js' },
+        { id: 'download-zip', label: 'Download as .zip' }
+      ]
+    }
+  ]
+
+  const resolved = computed(() =>
+    items.map((item) => (item.type === 'toggle' ? { ...item, pressed: wrap.value } : item))
+  )
+
+  const onToggle = ({ id, pressed }) => {
+    if (id === 'wrap') wrap.value = pressed
+    last.value = `${id}: ${pressed ? 'on' : 'off'}`
+  }
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-(--spacing-sm)">
+    <ButtonGroup
+      :items="resolved"
+      aria-label="Editor actions"
+      @click="({ id }) => (last = id)"
+      @toggle="onToggle"
+    />
+    <p
+      class="m-0 text-body-sm text-(--text-muted)"
+      aria-live="polite"
+    >
+      Last action: {{ last || 'none' }}
+    </p>
+  </div>
+</template>
+```
+
+1 more example(s) in [components/button-group.md](https://github.com/aziontech/webkit/blob/main/.specs/components/button-group.md).
+
+---
+
 <!-- components/button-highlight.md -->
 
 # Button Highlight
@@ -11384,6 +11593,179 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 ```
 
 2 more example(s) in [components/code-block.md](https://github.com/aziontech/webkit/blob/main/.specs/components/code-block.md).
+
+---
+
+<!-- components/code-editor.md -->
+
+# Code Editor
+
+> An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (for example `() => import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.
+
+- Import: `import CodeEditor from '@aziontech/webkit/code-editor'`
+- Category: code · Surface: product · Structure: monolithic
+- API as JSON: [code-editor.json](https://github.com/aziontech/webkit/blob/main/.specs/code-editor.json)
+
+## When to use
+
+- Editing a function, a script, a SQL query, a JSON or YAML document inside the product.
+- Showing the change between two versions of code side by side (diff mode), for example before a deploy or a revert.
+- Code that the server validates: the diagnostics come back as `markers` and show on their lines and in a list.
+- A read-only view of code that still needs the editor's navigation (find, folding) once Monaco is loaded.
+
+## Do
+
+- Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.
+- Pass `loader` from the app (`() => import('monaco-editor')`) so Monaco is code-split and never part of the WebKit bundle; set up Monaco's workers in that module.
+- Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.
+- Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.
+- Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.
+- In diff mode, `original` is the left side and `v-model` the right side; keep the right side editable only when the change can still be edited.
+
+## Don’t
+
+- Showing a snippet to copy, with tabs and a file name → use `code-block`.
+- A one-line value such as a header, a regex or a path → use `input` inside a `field`.
+- Free prose or a description → use `textarea`.
+- A stream of log lines → use `log-view`.
+- A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both).
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [code-block](code-block.md) — read-only snippets with copy; same syntax colour tokens.
+- [textarea](textarea.md) — plain multi-line text; the fallback editor is built in its spirit but keeps code typography and a gutter.
+- [field](field.md) — wraps the editor with a label, a description and an error; the editor reads id, `aria-describedby`, invalid and disabled from it.
+- [toggle-group](toggle-group.md) — the document switch (Code / Arguments) placed in the `toolbar` slot.
+- [log-view](log-view.md) — output of a run next to the editor.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `language` | `string` | `'plaintext'` | false | Monaco language id (`javascript`, `typescript`, `json`, `sql`, `lua`, `yaml`…). The fallback ignores it. |
+| `loader` | `() => Promise<CodeEditorMonaco>` | `undefined` | false | Loads Monaco lazily; without it the plain editor is the editor. |
+| `readonly` | `boolean` | `false` | false | The code can be read, selected and copied but not changed. |
+| `disabled` | `boolean` | `false` | false | Locks the editor; it leaves the tab order. |
+| `invalid` | `boolean` | `false` | false | Paints the danger border; also set by a surrounding `Field`. |
+| `diff` | `boolean` | `false` | false | Shows `original` beside the value as a side-by-side diff. |
+| `original` | `string` | `''` | false | The left side of the diff. |
+| `markers` | `CodeEditorMarker[]` | `[]` | false | Diagnostics shown on their lines and in the problems list. |
+| `height` | `string` | `'16rem'` | false | CSS height of the editing area. |
+| `fill` | `boolean` | `false` | false | Fills a flex column instead of using `height`. |
+| `lineNumbers` | `boolean` | `true` | false | Shows the line-number gutter. |
+| `path` | `string` | `''` | false | Model path for Monaco language services (`index.ts`, `args.json`). |
+| `ariaLabel` | `string` | `''` | false | Accessible name when no `Field` label names it. Empty uses the locale catalog. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `ready` | `unknown` | Monaco mounted; the payload is the editor instance (for actions). |
+| `load-error` | `unknown` | The loader rejected; the plain editor stays. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `toolbar` | — | A bar above the editing area: a document switch, the file name, a Format or Run action. |
+
+## Sub-components
+
+_none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the toolbar bar and the problems list are fixed parts.
+
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `string` | `''` | `update:modelValue` | The code via `defineModel`. Updated on every edit, from the plain editor or from Monaco. |
+
+## States
+
+- Visual states: `default`, `focus-visible` (ring on the frame), `invalid`, `readonly`, `disabled`, `loading` (Monaco on the way, the plain editor is live)
+- `data-mode`: `plain` | `loading` | `monaco` — which editor is live
+- `data-invalid`, `data-readonly`, `data-disabled`, `data-diff`, `data-fill` mirror their props
+- Each gutter line with a marker carries `data-severity` (`error` | `warning` | `info`)
+- Load failure: the plain editor stays and a muted note says the full editor could not load
+
+## Accessibility
+
+- Visible focus: the frame shows `focus-within:ring-2 ring-(--ring-color)` for both editors.
+- Keyboard map (plain editor): typing edits; `Tab` inserts two spaces and `Shift+Tab` removes them at the line start; `Escape` releases the trap so the next `Tab` / `Shift+Tab` leaves the editor (WCAG 2.1.2); the problems list buttons move the caret to the marker's line. Monaco runs in tab-focus mode by default, so `Tab` moves focus out unless the user toggles it with `Ctrl+M`.
+- ARIA: the textarea is a native multi-line text box named by the `Field` label or `ariaLabel`; `aria-invalid`, `aria-readonly` and `aria-describedby` (the field's description plus the problems summary); the gutter is `aria-hidden`; the problems list is a named list; the problem count is a polite `status`.
+- Diagnostics are never colour only: each one is a list item with its line and severity in text.
+- Contrast ≥4.5:1: code and line numbers use the code syntax tokens tuned for both themes.
+- Forced colors: the frame keeps a system border and the gutter marker becomes a system glyph colour.
+
+## Right-to-left
+
+- Layout: logical utilities only; the gutter sits at the start edge.
+- Code: the textarea and Monaco host are `dir="ltr"` (code reads left to right in every locale); the toolbar and problems list follow the page direction.
+- Keyboard: no direction-dependent keys.
+- User data: problem messages sit in `<bdi>`.
+
+## Internationalization
+
+| Key                                     | English source                                             | Override prop |
+| --------------------------------------- | ---------------------------------------------------------- | ------------- |
+| `codeEditor.label`                      | Code editor                                                | `ariaLabel`   |
+| `codeEditor.original`                   | Original                                                   | —             |
+| `codeEditor.modified`                   | Modified                                                   | —             |
+| `codeEditor.problems`                   | Problems                                                   | —             |
+| `codeEditor.problemCount`               | No problems / {count} problem / {count} problems (plural)  | —             |
+| `codeEditor.line`                       | Line {line}                                                | —             |
+| `codeEditor.error` / `warning` / `info` | Error / Warning / Info                                     | —             |
+| `codeEditor.loading`                    | Loading the full editor…                                   | —             |
+| `codeEditor.loadFailed`                 | The full editor could not load. You can keep editing here. | —             |
+| `codeEditor.tabHint`                    | Press Escape, then Tab, to leave the editor.               | —             |
+
+- Formatting: the problem count goes through the plural rules of the active locale.
+
+## Responsive
+
+- Container queries: `@container/code-editor` on the root; in diff mode the two panes sit side by side from `@lg` and stack below.
+- Narrow: the editing area keeps its height and scrolls in both axes; long lines never wrap in code.
+- Touch: problem buttons are 32 px high (44 px on `pointer: coarse`).
+- Reflow: the page never scrolls horizontally; the editor scrolls inside its frame.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import CodeEditor from '@aziontech/webkit/code-editor'
+  import Field from '@aziontech/webkit/field'
+  import { ref } from 'vue'
+
+  const code = ref(`export default async function handler(request) {
+  const url = new URL(request.url)
+  const name = url.searchParams.get('name')
+  return new Response(\`Hello, \${name}\`)
+}
+`)
+
+  const markers = [
+    { line: 3, severity: 'warning', message: 'name can be null; give it a default value.' },
+    { line: 4, severity: 'info', message: 'Set a Content-Type header on the response.' }
+  ]
+</script>
+
+<template>
+  <Field>
+    <Field.Label>Function code</Field.Label>
+    <CodeEditor
+      v-model="code"
+      language="javascript"
+      :markers="markers"
+      height="14rem"
+    />
+    <Field.Description>Runs on every request that reaches this function.</Field.Description>
+  </Field>
+</template>
+```
+
+2 more example(s) in [components/code-editor.md](https://github.com/aziontech/webkit/blob/main/.specs/components/code-editor.md).
 
 ---
 
@@ -17137,6 +17519,183 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ---
 
+<!-- components/attribute-editor.md -->
+
+# Attribute Editor
+
+> An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`. It owns the row anatomy every hand-built editor repeats: a label per cell, one control per cell, a per-cell error under the field, Add and Remove, an item limit, the empty text, focus after add and remove, and a polite announcement of each change. A grouped mode lays rows out as AND groups joined by OR, the shape of rule criteria. It edits an array and validates nothing itself: the consumer passes `errors`.
+
+- Import: `import AttributeEditor from '@aziontech/webkit/attribute-editor'`
+- Category: inputs · Surface: product · Structure: monolithic
+- API as JSON: [attribute-editor.json](https://github.com/aziontech/webkit/blob/main/.specs/attribute-editor.json)
+
+## When to use
+
+- Users add, edit and remove a variable number of pairs or tuples: environment variables, request headers, query arguments, labels, metadata.
+- Rule criteria: conditions inside a group must all match (and), groups are alternatives (or).
+- A bulk form where each row has the same two to four fields and a row-level error can occur.
+
+## Do
+
+- Keep two to four columns; more columns belong in a drawer per row.
+- Pass `errors` only after the first Save (rule of the form-error block), then keep them live while the user fixes the rows.
+- Use `minItems: 1` when the form needs at least one row, so the last row keeps its fields and loses its Remove.
+- Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.
+- Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.
+- Name the editor (`ariaLabel`) after what the rows are: "Environment variables", "Request headers".
+
+## Don’t
+
+- Key and value tags with limits, reserved prefixes and removal of saved tags → use `tag-editor`, which is built on this component.
+- A fixed set of named settings on one resource → use `field` controls in a form.
+- Many records the user browses, filters and acts on → use `table` with row actions.
+- An ordered list of actions with drag and drop and per-type arguments → compose it by hand as in the `platform/edit/rule-builder` block.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [tag-editor](tag-editor.md) — key and value tags with limits and validation, on top of AttributeEditor.
+- [field](field.md) — every cell is a `Field` with its label, control and error.
+- [input](input.md) — the default control of a cell; any control can replace it through `cell-<key>`.
+- [button](button.md), `icon-button` — Add and Remove.
+- [separator](separator.md) — the "or" between groups in grouped mode.
+- platform/edit/rule-builder` (block) — its criteria editor is the grouped mode (AND rows inside a group, OR between groups); the block keeps its own markup until it moves onto this component.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `AttributeEditorItem[]` | `[]` | false | Rows in list mode. Supports v-model:items. |
+| `groups` | `AttributeEditorItem[][]` | `undefined` | false | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups. |
+| `definition` | `AttributeEditorColumn[]` | `[]` | false | Columns of every row: key of the item field, label, placeholder, required. |
+| `errors` | `AttributeEditorErrors` | `[]` | false | Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none. |
+| `addButtonLabel` | `string` | `''` | false | Label of the Add button. Empty uses the locale catalog. |
+| `removeButtonLabel` | `string` | `''` | false | Accessible name of the Remove button, followed by the row number. Empty uses the locale catalog. |
+| `addGroupLabel` | `string` | `''` | false | Label of the Add group button in grouped mode. Empty uses the locale catalog. |
+| `empty` | `string` | `''` | false | Text shown when there are no rows. Empty uses the locale catalog. |
+| `limit` | `number` | `undefined` | false | Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced. |
+| `groupLimit` | `number` | `undefined` | false | Most groups allowed in grouped mode. |
+| `minItems` | `number` | `0` | false | Fewest rows kept; rows at the minimum lose their Remove button. |
+| `newItem` | `() => AttributeEditorItem` | `undefined` | false | Builds a new row. Unset creates an item with an empty string per column key. |
+| `itemRemovable` | `(item: AttributeEditorItem) => boolean` | `undefined` | false | Hides Remove on the rows it returns false for. Unset makes every row removable. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm. |
+| `disabled` | `boolean` | `false` | false | Disables every control, Add and Remove. |
+| `addDisabled` | `boolean` | `false` | false | Disables Add only, for example until the last row is filled in. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the list of rows. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `update:items` | `AttributeEditorItem[]` | A row was added, removed or edited in list mode. |
+| `update:groups` | `AttributeEditorItem[][]` | A row or group was added, removed or edited in grouped mode. |
+| `add` | `{ index: number; groupIndex?: number }` | After a row is added; `groupIndex` only in grouped mode. |
+| `remove` | `{ index: number; item: AttributeEditorItem; groupIndex?: number }` | After a row is removed. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `row` | { item, index, groupIndex, errors, update, remove, removable, removeLabel } | Replaces the whole row; the column header is not drawn. |
+| `row-actions` | { item, index, groupIndex, remove, removable, removeLabel } | Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it). |
+| `empty` | — | Replaces the empty text. |
+| `actions` | — | Extra buttons after Add (for example Upload or Paste .env). |
+| `info` | — | Extra help text under the buttons, after the limit text. |
+| `limit` | { count, limit, left } | Replaces the limit text in list mode (for example "You can add 3 more tags."). |
+
+## States
+
+- Visual states: `default`, `empty`, `at limit` (Add disabled), `invalid` (per cell), `disabled`
+- `data-size` mirrors `size`; `data-disabled` mirrors `disabled`; `data-mode` is `list` or `grouped`
+- Each row carries `data-row` with its index (and `data-group` in grouped mode)
+
+## Accessibility
+
+- Visible focus: every control and button keeps its own ring.
+- Keyboard map: Tab moves through the cells of a row, its Remove, then the next row; Add moves focus to the first control of the new row; Remove moves focus to the same position in the next row, else the previous row, else Add.
+- ARIA: the rows are a `list` named by `ariaLabel`; each cell is a `Field` whose label is programmatically tied to its control (visually hidden on wide containers, where one header row shows the labels and is `aria-hidden`); an error is a `FieldError` referenced by `aria-describedby` and sets `aria-invalid`; each Remove is named "Remove item n" (or `removeButtonLabel` n); groups are `group`s named "Group n"; a polite `status` region announces "Item n added" and "Item n removed".
+- Contrast ≥4.5:1 from the semantic text tokens, including the disabled state.
+- Touch target: Remove follows `size` (40 px at `large`); the stacked layout keeps it at the row's end.
+
+## Right-to-left
+
+- Layout: logical utilities only; the Remove column sits at the inline end.
+- Icons: the trash and plus glyphs are not mirrored.
+- Keyboard: no arrow-key handling of its own.
+- User data: values stay in their controls, which set no direction of their own.
+
+## Internationalization
+
+| Key                            | English source                               | Override prop       |
+| ------------------------------ | -------------------------------------------- | ------------------- |
+| `attributeEditor.add`          | Add new item                                 | `addButtonLabel`    |
+| `attributeEditor.remove`       | Remove item                                  | `removeButtonLabel` |
+| `attributeEditor.rowAction`    | {label} {index}                              | —                   |
+| `attributeEditor.addGroup`     | Add OR group                                 | `addGroupLabel`     |
+| `attributeEditor.empty`        | No items yet.                                | `empty`             |
+| `attributeEditor.remaining`    | You can add {count} more item(s) (plural)    | —                   |
+| `attributeEditor.limitReached` | You have reached the limit of {limit} items. | —                   |
+| `attributeEditor.added`        | Item {index} added.                          | —                   |
+| `attributeEditor.removed`      | Item {index} removed.                        | —                   |
+| `attributeEditor.group`        | Group {index}                                | —                   |
+| `attributeEditor.and` / `or`   | and / or                                     | —                   |
+
+- Formatting: the rows left go through the plural rules of the active locale.
+
+## Responsive
+
+- Container queries: `@container/attribute-editor` on the root; at `@md` (448 px) the cells sit in one grid row under a shared header, below it every cell stacks with its own visible label and rows are divided by a line.
+- Narrow (≤ 640 px or a narrow container): stacked cells, Remove at the end of the row.
+- Touch: buttons follow `size`; nothing depends on hover (the Remove tooltip repeats its accessible name).
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import AttributeEditor from '@aziontech/webkit/attribute-editor'
+  import { computed, ref } from 'vue'
+
+  const definition = [
+    { key: 'key', label: 'Key', placeholder: 'MY_VARIABLE', required: true },
+    { key: 'value', label: 'Value', placeholder: 'my-value' }
+  ]
+
+  const items = ref([
+    { key: 'API_BASE_URL', value: 'https://api.example.com' },
+    { key: 'max uploads', value: '25' }
+  ])
+
+  const errors = computed(() =>
+    items.value.map((item) => {
+      if (!item.key.trim()) return { key: 'Key is required.' }
+      if (!/^[A-Z0-9_]+$/.test(item.key))
+        return { key: 'Use only uppercase letters, numbers, and underscores.' }
+      return undefined
+    })
+  )
+</script>
+
+<template>
+  <AttributeEditor
+    v-model:items="items"
+    :definition="definition"
+    :errors="errors"
+    :limit="10"
+    :min-items="1"
+    add-button-label="Add variable"
+    remove-button-label="Remove variable"
+    aria-label="Environment variables"
+  />
+</template>
+```
+
+2 more example(s) in [components/attribute-editor.md](https://github.com/aziontech/webkit/blob/main/.specs/components/attribute-editor.md).
+
+---
+
 <!-- components/calendar.md -->
 
 # Calendar
@@ -17511,6 +18070,175 @@ The imperative API is backed by a small reactive store composable, declared here
 ```
 
 2 more example(s) in [components/chip.md](https://github.com/aziontech/webkit/blob/main/.specs/components/chip.md).
+
+---
+
+<!-- components/combobox.md -->
+
+# Combobox
+
+> A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed. It holds one string value, after the design sample's `ComboboxInput` and the ARIA 1.2 combobox pattern. It differs from `Select`, whose value must be one of its options and whose trigger is a button, and from `Command`, which runs commands from a palette instead of filling a form field.
+
+- Import: `import Combobox from '@aziontech/webkit/combobox'`
+- Category: inputs · Surface: product · Structure: monolithic
+- API as JSON: [combobox.json](https://github.com/aziontech/webkit/blob/main/.specs/combobox.json)
+
+## When to use
+
+- A form field whose usual values are known but a new one is valid: an environment variable name, a header, a path, a region tag, a branch.
+- A long option list the user would rather type than scroll, with the list as a reminder.
+- Options that come from the server as the user types (`search` event, `loading`, `filter: false`).
+- Suggestions grouped by origin (Recent, Suggested, System) in one field.
+
+## Do
+
+- Put the Combobox in a `Field` so it gets a visible label; use `ariaLabel` only where no label can be shown.
+- Keep `allowCustom` on only when a new value is genuinely valid; with it off, the field restores the last valid value when the typed text matches nothing.
+- Give options a `description` for what tells them apart (a scope, a count), not a second copy of the label.
+- For server data set `filter` to `false`, listen to `search` (debounce on your side), and drive `loading` from the request.
+- Validate the committed value (`update:modelValue`) in the form, not each keystroke; `search` is for suggestions only.
+- Use `group` when options come from distinct sources; keep group titles one or two words.
+
+## Don’t
+
+- The value must be one of a short fixed list → use `select` (or `radio-group` for 2–5 visible choices).
+- Several values at once → use `multi-select`.
+- Searching and running commands or jumping to a page → use `command`.
+- Filtering a collection by properties → use `property-filter`.
+- Key/value pairs or tags → use `attribute-editor` or `tag-editor` (their key cells may hold a Combobox).
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [select](select.md) — closed list, button trigger, no free entry.
+- [input](input.md) — the field Combobox is built on; use it alone when there are no suggestions.
+- [field](field.md) — label, description and error around the Combobox; it reads id, invalid, disabled and required from it.
+- [command](command.md) — palette of actions, not a form value.
+- [property-filter](property-filter.md) — token-based filtering with the same listbox look.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `options` | `ComboboxOption[]` | `[]` | false | Suggestions: `{ value, label?, description?, group?, disabled? }`. |
+| `placeholder` | `string` | `''` | false | Placeholder of the field. |
+| `ariaLabel` | `string` | `''` | false | Accessible name when no `Field` label names the field. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token, as `Input`: 28 / 32 / 40 px. |
+| `allowCustom` | `boolean` | `true` | false | Accepts a typed value that matches no option, offered as `Use "…"`. |
+| `filter` | `boolean` | `true` | false | Filters `options` by the typed text. Turn off when the server filters on `search`. |
+| `clearable` | `boolean` | `false` | false | Shows a clear button while the field has a value. |
+| `loading` | `boolean` | `false` | false | Shows a spinner and the loading row while options are fetched. |
+| `emptyText` | `string` | `''` | false | Text of the list when nothing matches. Empty uses the locale catalog. |
+| `disabled` | `boolean` | `false` | false | Disables the field. |
+| `readonly` | `boolean` | `false` | false | Shows the value without the list or editing. |
+| `required` | `boolean` | `false` | false | Marks the field required (`aria-required`). |
+| `invalid` | `boolean` | `false` | false | Marks the field invalid (`aria-invalid`, danger border). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `search` | `string` | The typed text, on each keystroke while the list is open (server filters). |
+| `create` | `string` | A value that matches no option was committed (`allowCustom`). |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `option` | { option: ComboboxOption, active: boolean, selected: boolean } | Replaces the content of one option row. |
+
+## Sub-components
+
+_none_ — one `.vue` file. The list is rendered by the component itself (teleported to `body`, positioned with `usePlacement`); options are data, rendered through the optional `option` slot.
+
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `string` | `''` | `update:modelValue` | The committed value via `defineModel`. Changes on pick, Enter, Tab, blur and clear, not on each keystroke. |
+
+## States
+
+- Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`, `readonly`, `invalid`, `loading`, empty list
+- `data-state` on the root: `open` | `closed`
+- `data-disabled`, `data-invalid` on the root mirror the resolved props (prop or `Field`)
+- Option rows: `data-active` (the keyboard/pointer highlight), `data-selected` (equals the committed value), `data-disabled`
+- The field shows the selected option's `label` when the value equals an option's `value`, otherwise the value itself
+
+## Accessibility
+
+- ARIA 1.2 combobox: the `<input>` has `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` (the listbox id) and `aria-activedescendant` (the highlighted option); the list is `role="listbox"`, rows are `role="option"` with `aria-selected` and `aria-disabled`; grouped rows sit in `role="group"` named by their title (`aria-labelledby`).
+- Keyboard map: focus or `ArrowDown` opens the list; `ArrowDown`/`ArrowUp` move the highlight (wrapping, skipping disabled rows); `Home`/`End` move it to the first/last option while the list is open (otherwise the caret moves); `Enter` commits the highlighted option, or the typed text when nothing is highlighted (`allowCustom`); `Escape` closes the list, and a second `Escape` restores the last committed text; `Tab` commits the highlighted option or the typed text and moves on; `Alt+ArrowUp` closes.
+- Focus stays in the input the whole time; pointer clicks on rows do not move focus (`mousedown.prevent`).
+- A polite status region announces the number of options after each change of the typed text ("3 options"), "No matches" and "Loading options"; it is visually hidden.
+- The clear button is a real button with an accessible name ("Clear"), reachable by Tab only while there is a value, and returns focus to the input.
+- `Field` integration through `Input`: label `for`/`id`, `aria-describedby`, `aria-invalid`, `aria-required`, disabled.
+- Contrast: option text and muted descriptions ≥4.5:1 on `--bg-surface-raised` in both themes; the active row is marked by its fill and `aria-activedescendant`, never colour alone for selection (a check icon marks the selected row).
+- Touch targets: rows are 32 px tall, 44 px on `pointer: coarse`.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ps-`/`pe-`, `text-start`, `ms-auto`); the list anchors at `bottom-start` and mirrors.
+- Icons: the search glyph and the check mark are not mirrored.
+- Keyboard: arrows are vertical, no change under rtl; `Home`/`End` keep their meaning.
+- User data: option labels and the field value render with `dir="auto"` / `<bdi>`, so Latin identifiers inside rtl text keep their order.
+
+## Internationalization
+
+| Key                    | English source                                | Override prop |
+| ---------------------- | --------------------------------------------- | ------------- |
+| `combobox.empty`       | `No matches`                                  | `emptyText`   |
+| `combobox.loading`     | `Loading options`                             | —             |
+| `combobox.useValue`    | `Use "{value}"`                               | —             |
+| `combobox.clear`       | `Clear`                                       | —             |
+| `combobox.suggestions` | `Suggestions`                                 | —             |
+| `combobox.count`       | `{count} option` / `{count} options` (plural) | —             |
+
+- Formatting: plural rules through the locale catalog (`Intl.PluralRules`); matching is case- and accent-insensitive with `String.prototype.normalize('NFD')` and `toLocaleLowerCase(locale)`.
+
+## Responsive
+
+- Container queries: none; the field fills its container and the list is at least as wide as the field (`matchTriggerWidth` floor, may grow to the longest row within the viewport).
+- Narrow (≤ 640 px): the list flips above the field when there is no room below, and rows truncate with an ellipsis.
+- Touch: rows grow to 44 px on `pointer: coarse`; no hover-only affordance (the highlight follows the pointer and the keyboard).
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Combobox from '@aziontech/webkit/combobox'
+  import Field from '@aziontech/webkit/field'
+  import { ref } from 'vue'
+
+  const name = ref('API_URL')
+
+  const options = [
+    { value: 'API_URL', description: 'Suggested' },
+    { value: 'API_TOKEN', description: 'Suggested' },
+    { value: 'NODE_ENV', description: 'System' },
+    { value: 'LOG_LEVEL' },
+    { value: 'CACHE_TTL' }
+  ]
+</script>
+
+<template>
+  <Field class="max-w-(--container-xs)">
+    <Field.Label>Variable name</Field.Label>
+    <Combobox
+      v-model="name"
+      :options="options"
+      placeholder="Search or type a name"
+      clearable
+    />
+    <Field.Description>Pick a known variable or type a new one.</Field.Description>
+  </Field>
+</template>
+```
+
+2 more example(s) in [components/combobox.md](https://github.com/aziontech/webkit/blob/main/.specs/components/combobox.md).
 
 ---
 
@@ -19080,6 +19808,190 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ---
 
+<!-- components/schema-form.md -->
+
+# Schema Form
+
+> A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend. It edits one value object through `v-model`, seeds the schema's defaults, validates the supported draft-07 keywords with built-in messages (on leaving a field, or only after `validate()`), and shows server messages passed by field path. It is for forms whose fields are data (a function's arguments, an integration's settings), not for forms a designer lays out by hand.
+
+- Import: `import SchemaForm from '@aziontech/webkit/schema-form'`
+- Category: inputs · Surface: product · Structure: monolithic
+- API as JSON: [schema-form.json](https://github.com/aziontech/webkit/blob/main/.specs/schema-form.json)
+
+## When to use
+
+- A function, template or integration declares its own arguments as a JSON schema and the console must ask for them.
+- The same settings form must follow a schema the server sends (fields added or removed without a release).
+- A form of typed values (text, choices, numbers, switches, lists) with constraints that already live in a schema.
+
+## Do
+
+- Give every property a `title` and a one-sentence `description`; the key is only the fallback label.
+- Put limits in the schema (`minimum`, `maxLength`, `pattern`, `enum`) so the form checks them; say the rule in the `description` when it is a `pattern`, since the built-in message cannot name it.
+- Keep the default `validate-on="blur"` for short forms; use `submit` when the form sits in a drawer or dialog with one Save.
+- Call `validate()` on submit and stop when it returns `valid: false`; it shows every message and focuses the first invalid field.
+- Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-error rule). Put a section-level failure in an `Alert` above the form, not in `errors`.
+- Use a `field:<path>` slot for a control the schema cannot express (`RadioCards`, a resource picker); the slot keeps the label, description and messages.
+- Do not rely on unsupported keywords (`$ref`, `oneOf`, `anyOf`, `allOf`, `if`/`then`, `const`, `format`, `uniqueItems`, `multipleOf`, `additionalProperties`): they are ignored, so validate them on the server.
+
+## Don’t
+
+- A form with a fixed, designed layout (settings sections, create pages) → compose `field`, `input`, `select` and `switch` by hand (`platform/edit/edit-resource`, `platform/create/single-page-create`).
+- Rows of key/value pairs the user adds and removes → use `attribute-editor`.
+- Editing the schema itself, or raw JSON → use `code-editor`.
+- A single choice or value → use the control directly inside a `field`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [field](field.md) — the wrapper every generated field uses; SchemaForm adds no field chrome of its own.
+- [input](input.md), `select`, `switch`, `textarea` — the controls it renders per type.
+- [attribute-editor](attribute-editor.md) — user-defined key/value rows, where SchemaForm renders a fixed set of keys.
+- [code-editor](code-editor.md) — the JSON view of the same value, when the user prefers to type it.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `schema` | `SchemaFormSchema` | `—` | true | JSON schema of an object (draft-07 subset); each property becomes a Field. |
+| `errors` | `Record<string, string>` | `{}` | false | Server or external messages by field path; a field shows its message until it is edited. |
+| `ui` | `Record<string, SchemaFormUi>` | `{}` | false | Presentation overrides by field path: widget, placeholder, hidden, and key order (`''` is the root). |
+| `validateOn` | `'blur' \| 'submit'` | `'blur'` | false | When fields first show their validation message: on leaving the field, or only after `validate()`. |
+| `disabled` | `boolean` | `false` | false | Disables every field. |
+| `readonly` | `boolean` | `false` | false | Shows every value without letting it change. |
+
+## v-model
+
+| Model     | Type                      | Default | Emits               | Notes                                                                                                                                                                              |
+| --------- | ------------------------- | ------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `Record<string, unknown>` | `{}`    | `update:modelValue` | The edited object. Each change emits a new object; an emptied field removes its key, and an emptied nested object is removed. Defaults are seeded on mount and on a schema change. |
+
+## States
+
+- Visual states per field come from `Field`: `default`, `invalid` (message under the control), `disabled`, read-only.
+- `data-disabled` and `data-readonly` on the root mirror the props; each field carries `data-path` and `data-widget`.
+- Validation timing: a field shows its own message after the user leaves it (`validate-on="blur"`), after `validate()` in both modes, and from then on updates as the user types. Opening a `Select` does not count as leaving its field.
+- Server messages (`errors`) show at once, win over the field's own message and leave once that field is edited; a new `errors` object shows them again.
+- Draft text: a number, list or JSON field keeps what the user typed while it does not parse; the value then holds no key for it, and the field reports "Enter a number." or "Enter valid JSON."
+
+## Accessibility
+
+- Every control is wrapped in a `Field` (`role="group"`): `Field.Label` targets the control by id, the description and the message join `aria-describedby`, `required` and `invalid` set `aria-required` and `aria-invalid`.
+- A nested object is a real `<fieldset>` with a `<legend>`, so its fields are announced with the group name.
+- Messages are text under the control, never colour alone; the message replaces the description while it shows, as the design sample does.
+- `validate()` moves focus to the first invalid control, in reading order, so keyboard and screen-reader users land on the problem.
+- Keyboard map: no keys of its own; Tab moves through the controls in schema order (or `ui` order); each control keeps its own keys.
+- A `field:<path>` slot control must name itself (the scope gives `invalid`, `required`, `disabled`); WebKit inputs read the Field context and need nothing.
+- Visible focus, contrast and touch targets come from the composed controls.
+
+## Right-to-left
+
+- Layout: no layout of its own beyond a column of `Field`s; the composed controls use logical utilities.
+- Icons: none of its own.
+- Keyboard: no arrow keys of its own.
+- User data: list and JSON text keep the browser's own direction per line; values are not wrapped in `<bdi>`.
+
+## Internationalization
+
+| Key                            | English source                                | Override prop          |
+| ------------------------------ | --------------------------------------------- | ---------------------- |
+| `schemaForm.required`          | This field is required.                       | —                      |
+| `schemaForm.minLength`         | Use at least {min} characters.                | —                      |
+| `schemaForm.maxLength`         | Use at most {max} characters.                 | —                      |
+| `schemaForm.pattern`           | This value doesn't match the expected format. | —                      |
+| `schemaForm.minimum`           | Enter {min} or more.                          | —                      |
+| `schemaForm.maximum`           | Enter {max} or less.                          | —                      |
+| `schemaForm.number`            | Enter a number.                               | —                      |
+| `schemaForm.integer`           | Enter a whole number.                         | —                      |
+| `schemaForm.enum`              | Choose one of the options.                    | —                      |
+| `schemaForm.minItems`          | Add at least {min} values.                    | —                      |
+| `schemaForm.maxItems`          | Add at most {max} values.                     | —                      |
+| `schemaForm.listItem`          | Line {line}: {message}                        | —                      |
+| `schemaForm.json`              | Enter valid JSON.                             | —                      |
+| `schemaForm.selectPlaceholder` | Select an option                              | `ui[path].placeholder` |
+| `schemaForm.numberPlaceholder` | A number                                      | `ui[path].placeholder` |
+| `schemaForm.numberFrom`        | From {min}                                    | `ui[path].placeholder` |
+| `schemaForm.listPlaceholder`   | One value per line                            | `ui[path].placeholder` |
+| `schemaForm.jsonPlaceholder`   | A JSON value                                  | `ui[path].placeholder` |
+
+- Formatting: `{min}` and `{max}` go through the locale's number format (`useTranslate`). Labels and descriptions come from the schema, so a translated form needs a translated schema.
+
+## Responsive
+
+- Container queries: none of its own; the root is a `@container/schema-form` so slot content can react to the form's width.
+- Narrow: fields are full width at any size; there is no side-by-side layout.
+- Touch: targets come from the composed controls.
+- Reflow: no horizontal scroll at 320 px; long values wrap in the textarea.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import SchemaForm from '@aziontech/webkit/schema-form'
+  import { ref } from 'vue'
+
+  const schema = {
+    type: 'object',
+    required: ['greeting', 'region'],
+    properties: {
+      greeting: {
+        type: 'string',
+        title: 'Greeting',
+        description: 'The text the function returns on every request.',
+        default: 'Hello from the edge',
+        maxLength: 80
+      },
+      region: {
+        type: 'string',
+        title: 'Region',
+        description: 'Where the function reads its data from.',
+        enum: ['sa-east', 'us-east', 'eu-west']
+      },
+      timeout: {
+        type: 'integer',
+        title: 'Timeout (ms)',
+        description: 'How long the function waits for its origin.',
+        minimum: 100,
+        maximum: 30000,
+        default: 3000
+      },
+      debug: {
+        type: 'boolean',
+        title: 'Debug headers',
+        description: 'Adds timing headers to every response.',
+        default: false
+      },
+      allowedPaths: {
+        type: 'array',
+        title: 'Allowed paths',
+        description: 'Requests to other paths return 404.',
+        items: { type: 'string', pattern: '^/' }
+      }
+    }
+  }
+
+  const args = ref({})
+</script>
+
+<template>
+  <div class="flex w-full max-w-(--container-sm) flex-col gap-(--spacing-lg)">
+    <SchemaForm
+      v-model="args"
+      :schema="schema"
+    />
+    <pre
+      class="m-0 overflow-auto rounded-(--shape-elements) bg-(--bg-surface) p-(--spacing-sm) font-code text-body-xs text-(--text-muted)"
+      >{{ JSON.stringify(args, null, 2) }}</pre>
+  </div>
+</template>
+```
+
+2 more example(s) in [components/schema-form.md](https://github.com/aziontech/webkit/blob/main/.specs/components/schema-form.md).
+
+---
+
 <!-- components/select.md -->
 
 # Select
@@ -19446,6 +20358,148 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ```
 
 2 more example(s) in [components/switch.md](https://github.com/aziontech/webkit/blob/main/.specs/components/switch.md).
+
+---
+
+<!-- components/tag-editor.md -->
+
+# Tag Editor
+
+> Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`. It adds what tags need on top of the rows: key and value suggestions while typing, a tag limit (50 by default) that ignores tags marked for removal, the built-in key checks (required when the row has a value, unique, length, allowed characters, no reserved `azion:` prefix), and a removal that only marks a saved tag, with Undo, until the form is saved.
+
+- Import: `import TagEditor from '@aziontech/webkit/tag-editor'`
+- Category: inputs · Surface: product · Structure: monolithic
+- API as JSON: [tag-editor.json](https://github.com/aziontech/webkit/blob/main/.specs/tag-editor.json)
+
+## When to use
+
+- The Tags section of a create or settings form of any resource.
+- Labels used for cost allocation, ownership or search, where keys repeat across resources and suggestions help keep them consistent.
+
+## Do
+
+- Mark saved tags with `existing: true`: their key is read-only, and Remove marks them `markedForRemoval` (Undo puts them back) so the save request knows what to delete.
+- Call the exposed `validate()` on Save; it also flags empty keys, which are not flagged while typing.
+- Feed `keySuggestions` with the keys already used in the account so tags stay consistent.
+- Pass server errors per row through `errors`; they replace the built-in message of that cell.
+- Keep the default `limit` unless the backend has another one.
+
+## Don’t
+
+- Environment variables, headers or any pairs without tag rules → use `attribute-editor`.
+- Showing tags read-only → use `tag` (or `key-value-pairs`).
+- Picking from a fixed list of labels → use `multi-select`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [attribute-editor](attribute-editor.md) — the rows, Add, Remove, limit text, focus and announcements underneath.
+- [input](input.md) — key and value controls; suggestions come from a native `datalist`.
+- [tag](tag.md) — how the saved tags read outside the editor.
+- platform/states/form-error` — the rule for server errors passed through `errors`.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `tags` | `TagEditorTag[]` | `[]` | false | Tags being edited. Saved tags carry `existing`; Remove marks them `markedForRemoval` until Undo. Supports v-model:tags. |
+| `keySuggestions` | `string[]` | `[]` | false | Keys offered while typing a key, for example the keys already used in the account. |
+| `valueSuggestions` | `Record<string, string[]>` | `{}` | false | Values offered per key while typing a value. |
+| `limit` | `number` | `50` | false | Most tags allowed; tags marked for removal do not count. |
+| `keyMaxLength` | `number` | `128` | false | Longest key allowed, in characters. |
+| `valueMaxLength` | `number` | `256` | false | Longest value allowed, in characters. |
+| `reservedPrefix` | `string` | `'azion:'` | false | Prefix reserved for the platform; keys may not start with it. Empty allows every prefix. |
+| `errors` | `TagEditorErrors` | `[]` | false | Server errors per row, aligned with `tags`; shown in place of the built-in checks. |
+| `disabled` | `boolean` | `false` | false | Disables every control. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the list of tags. Empty uses the locale catalog. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `update:tags` | `TagEditorTag[]` | A tag was added, edited, removed, marked for removal or restored. |
+
+## States
+
+- Visual states: `default`, `empty`, `at limit` (Add disabled), `invalid` (per cell), `marked for removal` (controls disabled, a muted note, Undo), `disabled`
+- Saved tags (`existing`) render the key read-only.
+
+## Accessibility
+
+- Visible focus: every control keeps its own ring.
+- Keyboard map: as `attribute-editor`; suggestions open with the browser's native `datalist` keys (ArrowDown, Enter, Escape).
+- ARIA: rows, labels, errors and announcements come from `attribute-editor`; Undo is named "Undo removal of tag n"; a marked tag keeps a visible note ("This tag will be removed when you save.").
+- Contrast ≥4.5:1 from the semantic text tokens.
+- Touch target: Remove and Undo are 32 px buttons (`medium`).
+
+## Right-to-left
+
+- Layout: inherited from `attribute-editor` (logical utilities only).
+- Icons: the trash glyph is not mirrored.
+- Keyboard: no arrow-key handling of its own.
+- User data: keys and values keep the direction of their own text.
+
+## Internationalization
+
+| Key                          | English source                                         | Override prop                    |
+| ---------------------------- | ------------------------------------------------------ | -------------------------------- |
+| `tagEditor.label`            | Tags                                                   | `ariaLabel`                      |
+| `tagEditor.key` / `value`    | Key / Value                                            | —                                |
+| `tagEditor.keyPlaceholder`   | Enter key                                              | —                                |
+| `tagEditor.valuePlaceholder` | Enter value                                            | —                                |
+| `tagEditor.add`              | Add new tag                                            | —                                |
+| `tagEditor.remove`           | Remove tag                                             | —                                |
+| `tagEditor.undo`             | Undo                                                   | —                                |
+| `tagEditor.undoLabel`        | Undo removal of tag {index}                            | —                                |
+| `tagEditor.markedForRemoval` | This tag will be removed when you save.                | —                                |
+| `tagEditor.empty`            | No tags associated with the resource.                  | —                                |
+| `tagEditor.remaining`        | You can add {count} more tag(s) (plural)               | —                                |
+| `tagEditor.limitReached`     | You have reached the limit of {limit} tags.            | —                                |
+| `tagEditor.keyRequired`      | Enter a key.                                           | —                                |
+| `tagEditor.keyDuplicate`     | This key is already used by another tag.               | —                                |
+| `tagEditor.keyReserved`      | Keys cannot start with "{prefix}".                     | `reservedPrefix`                 |
+| `tagEditor.keyInvalid`       | Use letters, numbers, spaces and + - = . _ : / @ only. | —                                |
+| `tagEditor.tooLong`          | Use {max} characters or fewer.                         | `keyMaxLength`, `valueMaxLength` |
+
+- Formatting: the tags left go through the plural rules of the active locale. Allowed key characters include letters of every script (`\p{L}`).
+
+## Responsive
+
+- Container queries: inherited from `attribute-editor` (cells side by side from `@md`, stacked below).
+- Narrow (≤ 640 px or a narrow container): stacked key and value with their own labels.
+- Touch: nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import TagEditor from '@aziontech/webkit/tag-editor'
+  import { ref } from 'vue'
+
+  const tags = ref([
+    { key: 'team', value: 'payments', existing: true },
+    { key: 'cost-center', value: 'cc-1042', existing: true },
+    { key: 'environment', value: 'staging' }
+  ])
+
+  const keySuggestions = ['team', 'cost-center', 'environment', 'owner', 'project']
+  const valueSuggestions = { environment: ['production', 'staging', 'preview'] }
+</script>
+
+<template>
+  <TagEditor
+    v-model:tags="tags"
+    :key-suggestions="keySuggestions"
+    :value-suggestions="valueSuggestions"
+    aria-label="Resource tags"
+  />
+</template>
+```
+
+1 more example(s) in [components/tag-editor.md](https://github.com/aziontech/webkit/blob/main/.specs/components/tag-editor.md).
 
 ---
 
@@ -26026,12 +27080,14 @@ even when the row carries nothing but its title.
 - A page or panel holds several peer views and only one is shown at a time (Overview / Settings / Logs on a resource page).
 - The tab row may outgrow its container — `Tabs.List` scrolls horizontally with edge fades instead of wrapping.
 - Tabs that the user can close: set `closable` on the item and remove it from your data on `@close`.
+- A tab whose form holds unsaved changes: set `dirty` on the item (bind it to `useUnsavedChanges().isDirty`) so the reader sees which section still needs a save.
 
 ## Do
 
 - Give each `Tabs.Item` and its `Tabs.Panel` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility.
 - Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.
 - closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
+- dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - Use the item's `selected` prop only for a standalone `Tabs.Item` outside a root; inside a root the selection comes from the root's value.
 - Put spacing between the list and the panels on `Tabs.Content` (e.g. a top margin), not inside each panel.
 
@@ -26062,7 +27118,7 @@ even when the row carries nothing but its title.
 
 ## Sub-components
 
-- `tab-view-item.vue` — Public sub-component `tabs-item`.
+- `tab-view-item.vue` — Public sub-component `tabs-item`. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-contrast)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
 - `tab-view-list.vue` — Public sub-component `tabs-list`.
 - `tab-view-panel.vue` — Public sub-component `tabs-panel`.
 
@@ -26076,6 +27132,7 @@ even when the row carries nothing but its title.
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values on panels: `active` | `inactive`
+- Dirty: `data-dirty` on a `Tabs.Item` with `dirty`; the dot is not the only cue for assistive tech (a hidden "Unsaved changes" joins the tab's name).
 - Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
 
 ## Accessibility
@@ -26083,7 +27140,7 @@ even when the row carries nothing but its title.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `ArrowRight`/`ArrowLeft` move to the next/previous enabled tab and wrap, swapped under `dir="rtl"` (`useDirection`); `Home`/`End` select the first/last; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state. The dirty dot is `var(--warning-contrast)` (≥3:1 on the canvas in both themes) and the tab's accessible name carries "Unsaved changes", so colour is never the only cue.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: the tab item is 32 px tall (`var(--size-8)`) — a justified deviation from 40×40 px matching the Figma tab-item size token, mitigated by the full label + padding being the hit area and by the tab list's own keyboard model.
 
