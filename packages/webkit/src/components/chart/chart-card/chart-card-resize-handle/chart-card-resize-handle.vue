@@ -66,7 +66,9 @@
       previousHeight: ctx.height.value,
       columnWidth: measure.columnWidth
     }
-    handleRef.value?.setPointerCapture(event.pointerId)
+    try {
+      handleRef.value?.setPointerCapture(event.pointerId)
+    } catch {}
     event.preventDefault()
     ctx.startResize(event)
   }

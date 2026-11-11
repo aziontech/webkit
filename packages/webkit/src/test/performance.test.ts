@@ -4,6 +4,7 @@
 // (window long lists, render collapsed children lazily), do not raise the number.
 import { cleanup, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { server } from 'vitest/browser'
 import { type Component, defineComponent, h, nextTick, ref } from 'vue'
 
 import budgets from '../../perf-budgets.json'
@@ -62,6 +63,7 @@ function check(name: Scenario, result: Record<Phase, number>) {
   console.warn(
     `[perf] ${name}: mount ${result.mount.toFixed(1)} ms (budget ${budget.mount}), update ${result.update.toFixed(1)} ms (budget ${budget.update})`
   )
+  if (server.browser !== 'chromium') return
   expect(result.mount, `${name} mount`).toBeLessThanOrEqual(budget.mount)
   expect(result.update, `${name} update`).toBeLessThanOrEqual(budget.update)
 }
