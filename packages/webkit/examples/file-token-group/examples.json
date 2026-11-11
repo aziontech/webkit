@@ -1,0 +1,21 @@
+{
+  "component": "file-token-group",
+  "title": "Components/Primitives/Inputs/FileTokenGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Under a `FileDropzone` with a Browse files button: dropped or picked files join the list as tokens with a type glyph and size, a file over 300 MB stays in the list with its error, and each token's remove button takes it out.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Uploading",
+      "summary": "While the files upload: a determinate bar on the file with a known progress, an indeterminate bar on the one still starting, a finished file with its last-modified date, and a refused one with its reason.",
+      "file": "uploading.vue"
+    },
+    {
+      "name": "Horizontal",
+      "summary": "`alignment=\"horizontal\"` wraps compact tokens in rows; `limit` shows three and a Show more toggle for the rest.",
+      "file": "horizontal.vue"
+    }
+  ]
+}

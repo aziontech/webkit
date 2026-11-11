@@ -1122,5 +1122,15 @@
     "name": "use-unsaved-changes",
     "path": "src/composables/use-unsaved-changes/index.ts",
     "limit": "1.75 KB"
+  },
+  {
+    "name": "file-token-group",
+    "path": "src/components/inputs/file-token-group/file-token-group.vue",
+    "limit": "10 KB"
+  },
+  {
+    "name": "upload-progress",
+    "path": "src/components/feedback/upload-progress/upload-progress.vue",
+    "limit": "12 KB"
   }
 ]

@@ -1,0 +1,21 @@
+{
+  "component": "upload-progress",
+  "title": "Components/Primitives/Feedback/UploadProgress",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "An upload into a bucket: the header counts finished files over one overall bar, each file has its size, state and bar, and Cancel stops one file or, in the footer, all of them. Start upload replays the transfer.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Finished",
+      "summary": "Every file finished and one failed: the header states the outcome beside a danger mark, the failed row says why and offers Retry, Retry failed retries them all, and the `actions` slot adds Open folder beside Close.",
+      "file": "finished.vue"
+    },
+    {
+      "name": "Move",
+      "summary": "A move between folders with `operation=\"move\"`, collapsed with `v-model:collapsed` so only the header and overall bar show.",
+      "file": "move.vue"
+    }
+  ]
+}
