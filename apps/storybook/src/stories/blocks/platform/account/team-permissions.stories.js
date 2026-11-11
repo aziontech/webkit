@@ -4,12 +4,14 @@ import State0 from '../../../../../../../packages/webkit/blocks/platform/account
 import source0 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/team-permissions.vue?raw'
 import State1 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/create-team.vue'
 import source1 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/create-team.vue?raw'
-import State2 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/empty.vue'
-import source2 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/empty.vue?raw'
-import State3 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/loading.vue'
-import source3 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/loading.vue?raw'
-import State4 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/failed.vue'
-import source4 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/failed.vue?raw'
+import State2 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/edit-team.vue'
+import source2 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/edit-team.vue?raw'
+import State3 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/empty.vue'
+import source3 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/empty.vue?raw'
+import State4 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/loading.vue'
+import source4 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/loading.vue?raw'
+import State5 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/failed.vue'
+import source5 from '../../../../../../../packages/webkit/blocks/platform/account/team-permissions/variants/failed.vue?raw'
 
 export default {
   title: "Templates/Platform/Account/TeamPermissions",
@@ -17,8 +19,8 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`." } },
-    webkit: {"block":"platform/account/team-permissions","intents":["teams","teams and permissions","roles","roles and permissions","permission matrix","access control","rbac","create team","user groups","times e permissões","papéis e permissões","matriz de permissões","controle de acesso","criar time"],"skills":["webkit-lists","webkit-tables","webkit-form","webkit-ui-states","webkit-microcopy"],"primary":"Default"}
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team." } },
+    webkit: {"block":"platform/account/team-permissions","intents":["teams","teams and permissions","roles","roles and permissions","permission matrix","access control","rbac","create team","user groups","times e permissões","papéis e permissões","matriz de permissões","controle de acesso","criar time","edit team","team members","editar time","membros do time"],"skills":["webkit-lists","webkit-tables","webkit-form","webkit-ui-states","webkit-microcopy"],"primary":"Default"}
   }
 }
 
@@ -32,17 +34,22 @@ export const CreateTeam = {
   parameters: { docs: { description: { story: "The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Save in a SaveBar; errors on the name field and above the matrix." }, source: { code: source1 } } }
 }
 
-export const Empty = {
+export const EditTeam = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table." }, source: { code: source2 } } }
+  parameters: { docs: { description: { story: "The Edit Team page: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and a `SaveBar` that offers Discard and Save changes only once something changed." }, source: { code: source2 } } }
+}
+
+export const Empty = {
+  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table." }, source: { code: source3 } } }
 }
 
 export const Loading = {
-  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "The first load: the search row and the table's loading rows." }, source: { code: source3 } } }
+  render: () => ({ components: { Block: State4 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The first load: the search row and the table's loading rows." }, source: { code: source4 } } }
 }
 
 export const Failed = {
-  render: () => ({ components: { Block: State4 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "The teams did not load: a danger Alert with Retry replaces the table; Retry loads them." }, source: { code: source4 } } }
+  render: () => ({ components: { Block: State5 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The teams did not load: a danger Alert with Retry replaces the table; Retry loads them." }, source: { code: source5 } } }
 }

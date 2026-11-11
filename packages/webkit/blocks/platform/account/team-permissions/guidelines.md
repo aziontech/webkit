@@ -39,7 +39,15 @@ A search `Input` bound with `v-bind="filterProps"` (name, description, status) a
 
 When the teams do not load, a danger `Alert` with Retry takes the table's place and the heading stays.
 
-### G. Outcomes — `Toaster` (required)
+### G. Members — `Combobox`, `Button`, `Avatar`, `IconButton` (EditTeam)
+
+On the Edit Team page, a Members section above the matrix: an Add member `Combobox` over the account's users (`allow-custom` off, each option the name with the email as its description) with an Add button, then the members as a list with a square `Avatar`, name, email and a Remove `IconButton` named `Remove <name>`. With no member, a dashed sentence says the team grants nothing until someone joins. Members join from existing users only; inviting a new person belongs to `platform/account/users`.
+
+### H. Delete team and save — `ConfirmDialog`, `SaveBar` (EditTeam)
+
+A Delete team section at the end of the form opens a `ConfirmDialog` that says how many members lose what the team grants; the confirm button spins while the request runs. The `SaveBar` says `You have unsaved changes.` and offers Discard and Save changes only once something differs from the saved team; unchanged, it offers Back to teams and a disabled Save changes.
+
+### I. Outcomes — `Toaster` (required)
 
 Duplicate and Delete end in a success toast. Team changes are not deploys, so the toast has no Edit or Redeploy.
 
@@ -63,6 +71,8 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 - **Permissions:** `View <Resource>`, `Edit <Resource>`; the whole set reads `All permissions`.
 - **Matrix hint:** `What this team can see and change. 3 of 15 selected.`
 - **Errors:** `This field is required.` under Name; `Select at least one permission.` above the matrix.
+- **Edit:** the page title is `Edit Team`, the save button `Save changes`; `Team "Developers" updated.` after saving.
+- **Members:** `Add member`, `Search users of this account`, `Remove <name>`; `Choose a user to add.` when Add is pressed with nothing chosen.
 - **Delete:** `Delete team`; `The 12 members of “Developers” lose the permissions it grants, unless another team grants them.`
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
@@ -71,12 +81,14 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 - The matrix is a real `table` with a caption, column headers View and Edit, one `tbody` per area whose first row is a `rowgroup` header holding the area's checkbox, and a row header per resource.
 - Each matrix checkbox is named `View <Resource>` or `Edit <Resource>`; the area checkbox is named by its label and reports mixed when partly checked.
 - After a failed save, focus moves to the name field or to the permissions filter.
+- Members are a list named `Members`; after Remove, focus moves to the next member's Remove button, or to Add member when the list is empty.
 - Table name links say where they go on their tooltip; the row menu is named `Actions for <team>`.
 
 ## States
 
 - Default: five teams (one with every permission, one inactive with no members) with search, refresh, sorting, row menus, duplicate and delete wired.
 - CreateTeam: the create page with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create.
+- EditTeam: a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
 - Empty: no team yet; the heading and an empty state with Create Team.
 - Loading: the first load; the search row and the table's loading rows.
 - Failed: the teams did not load; a danger Alert with Retry.
@@ -85,5 +97,6 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 
 - `platform/view/table-view` — the list page this one follows.
 - `platform/create/single-page-create` — the create page frame of the CreateTeam variant.
+- `platform/account/users` — invites people and assigns teams per person.
 - `platform/account/activity-history` — where role and team changes are audited.
 - `platform/account/tokens` — tokens act with the permissions of the person who created them.

@@ -25432,7 +25432,7 @@
    "title": "Templates/Platform/Account/TeamPermissions",
    "source": "blocks/platform/account/team-permissions/team-permissions.vue",
    "surface": "product",
-   "summary": "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`.",
+   "summary": "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team.",
    "intents": [
     "teams",
     "teams and permissions",
@@ -25447,7 +25447,11 @@
     "papéis e permissões",
     "matriz de permissões",
     "controle de acesso",
-    "criar time"
+    "criar time",
+    "edit team",
+    "team members",
+    "editar time",
+    "membros do time"
    ],
    "skills": [
     "webkit-lists",
@@ -25462,6 +25466,7 @@
     "Button",
     "Card",
     "Checkbox",
+    "Combobox",
     "ConfirmDialog",
     "DropdownMenu",
     "EmptyState",
@@ -25484,6 +25489,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/checkbox",
+    "@aziontech/webkit/combobox",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
@@ -25506,6 +25512,10 @@
     {
      "name": "CreateTeam",
      "summary": "The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Save in a SaveBar; errors on the name field and above the matrix."
+    },
+    {
+     "name": "EditTeam",
+     "summary": "The Edit Team page: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and a `SaveBar` that offers Discard and Save changes only once something changed."
     },
     {
      "name": "Empty",
