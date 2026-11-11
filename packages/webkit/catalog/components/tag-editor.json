@@ -1,0 +1,25 @@
+{
+ "purpose": "Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`. It adds what tags need on top of the rows: key and value suggestions while typing, a tag limit (50 by default) that ignores tags marked for removal, the built-in key checks (required when the row has a value, unique, length, allowed characters, no reserved `azion:` prefix), and a removal that only marks a saved tag, with Undo, until the form is saved.",
+ "useWhen": [
+  "The Tags section of a create or settings form of any resource.",
+  "Labels used for cost allocation, ownership or search, where keys repeat across resources and suggestions help keep them consistent."
+ ],
+ "avoidWhen": [
+  "Environment variables, headers or any pairs without tag rules → use `attribute-editor`.",
+  "Showing tags read-only → use `tag` (or `key-value-pairs`).",
+  "Picking from a fixed list of labels → use `multi-select`."
+ ],
+ "related": [
+  "attribute-editor` — the rows, Add, Remove, limit text, focus and announcements underneath.",
+  "input` — key and value controls; suggestions come from a native `datalist`.",
+  "tag` — how the saved tags read outside the editor.",
+  "platform/states/form-error` — the rule for server errors passed through `errors`."
+ ],
+ "bestPractices": [
+  "Mark saved tags with `existing: true`: their key is read-only, and Remove marks them `markedForRemoval` (Undo puts them back) so the save request knows what to delete.",
+  "Call the exposed `validate()` on Save; it also flags empty keys, which are not flagged while typing.",
+  "Feed `keySuggestions` with the keys already used in the account so tags stay consistent.",
+  "Pass server errors per row through `errors`; they replace the built-in message of that cell.",
+  "Keep the default `limit` unless the backend has another one."
+ ]
+}

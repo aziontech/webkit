@@ -1,0 +1,167 @@
+{
+ "name": "gauge-chart",
+ "binding": "GaugeChart",
+ "import": "@aziontech/webkit/gauge-chart",
+ "treeShakeableImport": "@aziontech/webkit/gauge-chart",
+ "category": "chart",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.",
+ "setup": null,
+ "useWhen": [
+  "A utilization or ratio with a fixed range: CPU, memory, cache hit ratio, quota used.",
+  "A latency or score against a target, where bands (healthy, busy, critical) carry the meaning.",
+  "A headline reading on a detail page or in a dashboard card, beside the time series that explains it."
+ ],
+ "avoidWhen": [
+  "A number with a change against a period and a trend → use `stat-tile`.",
+  "A value over time → use `chart` (line or area).",
+  "Progress of a task toward done → use `progress-bar`.",
+  "Several readings to compare with each other → use `bar-list` or `chart` with horizontal bars; dials side by side compare badly."
+ ],
+ "related": [
+  "stat-tile` — one figure with a delta and a sparkline, for a KPI row.",
+  "chart-card` — the box a dashboard gauge sits in; the gauge takes its accessible name from the card title.",
+  "progress-bar` — completion of a task, not a reading."
+ ],
+ "bestPractices": [
+  "Give the range that means something for the reading (0 to 100 for a ratio, 0 to the quota for usage); the dial is meaningless without it.",
+  "Name every band (`label`) so the value is read with its meaning, not only with a color.",
+  "Use status colors for bands (`success`, `warning`, `danger`) and severity colors only when the reading is a severity.",
+  "Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`."
+ ],
+ "props": [
+  {
+   "name": "value",
+   "type": "number | null",
+   "default": "null",
+   "required": "false",
+   "doc": "The reading. Null or absent renders the empty state."
+  },
+  {
+   "name": "min",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Start of the scale."
+  },
+  {
+   "name": "max",
+   "type": "number",
+   "default": "100",
+   "required": "false",
+   "doc": "End of the scale."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Caption under the reading: what is measured, or the unit."
+  },
+  {
+   "name": "thresholds",
+   "type": "GaugeChartThreshold[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Bands from low to high; the arc takes the color of the band the value falls in, and each band start is marked on the track."
+  },
+  {
+   "name": "formatValue",
+   "type": "(value: number) => string",
+   "default": "formatCompact",
+   "required": "false",
+   "doc": "Formats the reading and the scale ends."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Width of the dial: 160, 224 or 288 pixels."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders a Skeleton sized to the dial."
+  },
+  {
+   "name": "refetching",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Holds the previous reading at reduced opacity while new data loads."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Error message; when set, a danger Alert replaces the dial."
+  },
+  {
+   "name": "emptyTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the empty state shown when there is no reading. Empty uses the locale catalog (`No data available`)."
+  },
+  {
+   "name": "emptyDescription",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting line under the empty title: why there is no reading, or what to do next."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the meter when it is not inside a ChartCard with a title."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "value",
+   "scope": "{ value: number; text: string; status: string }",
+   "notes": "Replaces the reading and caption under the arc."
+  },
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Replaces the default EmptyState."
+  },
+  {
+   "name": "empty-actions",
+   "scope": "—",
+   "notes": "Actions under the default EmptyState."
+  },
+  {
+   "name": "error",
+   "scope": "—",
+   "notes": "Replaces the default danger Alert."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import GaugeChart from '@aziontech/webkit/gauge-chart'\n\n  const thresholds = [\n    { value: 0, color: 'success', label: 'Healthy' },\n    { value: 70, color: 'warning', label: 'Busy' },\n    { value: 90, color: 'danger', label: 'Critical' }\n  ]\n  const formatValue = (value) => `${value}%`\n</script>\n\n<template>\n  <GaugeChart\n    :value=\"74\"\n    label=\"Cache hit ratio\"\n    :thresholds=\"thresholds\"\n    :format-value=\"formatValue\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import GaugeChart from '@aziontech/webkit/gauge-chart'\n\n  const formatValue = (value) => `${value} ms`\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-end gap-(--spacing-lg)\">\n    <GaugeChart\n      :value=\"38\"\n      :max=\"200\"\n      size=\"small\"\n      label=\"Edge latency, p50\"\n      :format-value=\"formatValue\"\n    />\n    <GaugeChart\n      :value=\"92\"\n      :max=\"200\"\n      size=\"medium\"\n      label=\"Edge latency, p95\"\n      :format-value=\"formatValue\"\n    />\n    <GaugeChart\n      :value=\"164\"\n      :max=\"200\"\n      size=\"large\"\n      label=\"Edge latency, p99\"\n      :format-value=\"formatValue\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "States",
+   "sfc": "<script setup>\n  import GaugeChart from '@aziontech/webkit/gauge-chart'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-lg) md:grid-cols-3\">\n    <GaugeChart\n      loading\n      aria-label=\"Cache hit ratio\"\n    />\n    <GaugeChart\n      :value=\"null\"\n      label=\"Cache hit ratio\"\n      empty-description=\"No request reached this application in the last hour.\"\n    />\n    <GaugeChart\n      label=\"Cache hit ratio\"\n      error=\"Could not load the cache hit ratio. Try again in a few seconds.\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/gauge-chart.md"
+}

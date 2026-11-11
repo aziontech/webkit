@@ -1,0 +1,26 @@
+{
+  "component": "map-chart",
+  "title": "Components/Primitives/Chart/MapChart",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Requests by country on the dotted network map, in five sequential steps from the lowest to the highest value. Focus the map and use the arrow keys to read each country, highest first.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Points",
+      "summary": "Locations as bubbles whose area follows the value, for points of presence or cities.",
+      "file": "points.vue"
+    },
+    {
+      "name": "View",
+      "summary": "The map framed on one part of the world, with shaded countries and bubbles together.",
+      "file": "view.vue"
+    },
+    {
+      "name": "States",
+      "summary": "Loading holds the map footprint, empty says why nothing matched, error replaces the map with a danger Alert, and table view shows the accessible twin.",
+      "file": "states.vue"
+    }
+  ]
+}

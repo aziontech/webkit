@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel switches between Relative range (quick ranges plus a custom duration) and Absolute range (month grid with start and end date and time, and the time zone), and commits only on Apply.",
+   "sfc": "<script setup>\n  import DateRangePicker from '@aziontech/webkit/date-range-picker'\n  import { ref } from 'vue'\n\n  const range = ref({ type: 'relative', amount: 15, unit: 'minute', key: 'last-15-minutes' })\n</script>\n\n<template>\n  <DateRangePicker\n    v-model=\"range\"\n    aria-label=\"Events time range\"\n  />\n</template>"
+  },
+  {
+   "name": "Absolute",
+   "summary": "`range-selector-mode=\"absolute-only\"` with a `max`: only the grid and the date and time fields, the trigger prints the range in the zone with its UTC offset, and Apply refuses an end before the start or past the limit with an inline message.",
+   "sfc": "<script setup>\n  import DateRangePicker from '@aziontech/webkit/date-range-picker'\n  import { ref } from 'vue'\n\n  const range = ref({\n    type: 'absolute',\n    start: '2026-11-10T12:00:00.000Z',\n    end: '2026-11-10T18:30:00.000Z'\n  })\n</script>\n\n<template>\n  <DateRangePicker\n    v-model=\"range\"\n    range-selector-mode=\"absolute-only\"\n    time-zone=\"UTC\"\n    :max=\"new Date('2026-11-11T00:00:00.000Z')\"\n    aria-label=\"Billing window\"\n  />\n</template>"
+  },
+  {
+   "name": "RelativeOnly",
+   "summary": "`range-selector-mode=\"relative-only\"` with the product's own quick ranges, for a metrics interval that is always measured back from now.",
+   "sfc": "<script setup>\n  import DateRangePicker from '@aziontech/webkit/date-range-picker'\n  import { ref } from 'vue'\n\n  const options = [\n    { key: 'last-1-hour', amount: 1, unit: 'hour' },\n    { key: 'last-24-hours', amount: 24, unit: 'hour' },\n    { key: 'last-7-days', amount: 7, unit: 'day' },\n    { key: 'last-30-days', amount: 30, unit: 'day' }\n  ]\n\n  const range = ref({ type: 'relative', amount: 24, unit: 'hour', key: 'last-24-hours' })\n</script>\n\n<template>\n  <DateRangePicker\n    v-model=\"range\"\n    :relative-options=\"options\"\n    range-selector-mode=\"relative-only\"\n    aria-label=\"Metrics interval\"\n  />\n</template>"
+  }
+ ]
+}

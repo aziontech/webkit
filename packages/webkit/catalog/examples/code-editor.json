@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The plain editor inside a `Field`: line numbers, two-space Tab indentation (Escape then Tab leaves), and server diagnostics as `markers` painted on their lines and listed under the editor. Pass `loader: () => import('monaco-editor')` and Monaco takes over the same value and markers once it loads.",
+   "sfc": "<script setup>\n  import CodeEditor from '@aziontech/webkit/code-editor'\n  import Field from '@aziontech/webkit/field'\n  import { ref } from 'vue'\n\n  const code = ref(`export default async function handler(request) {\n  const url = new URL(request.url)\n  const name = url.searchParams.get('name')\n  return new Response(\\`Hello, \\${name}\\`)\n}\n`)\n\n  const markers = [\n    { line: 3, severity: 'warning', message: 'name can be null; give it a default value.' },\n    { line: 4, severity: 'info', message: 'Set a Content-Type header on the response.' }\n  ]\n</script>\n\n<template>\n  <Field>\n    <Field.Label>Function code</Field.Label>\n    <CodeEditor\n      v-model=\"code\"\n      language=\"javascript\"\n      :markers=\"markers\"\n      height=\"14rem\"\n    />\n    <Field.Description>Runs on every request that reaches this function.</Field.Description>\n  </Field>\n</template>"
+  },
+  {
+   "name": "Diff",
+   "summary": "`diff` with `original`: the saved version on the left (read-only) beside the edited one, side by side on a wide container and stacked on a narrow one.",
+   "sfc": "<script setup>\n  import CodeEditor from '@aziontech/webkit/code-editor'\n  import { ref } from 'vue'\n\n  const original = `{\n  \"cache\": {\n    \"ttl\": 60,\n    \"bypass\": false\n  }\n}\n`\n\n  const next = ref(`{\n  \"cache\": {\n    \"ttl\": 300,\n    \"bypass\": false,\n    \"stale\": true\n  }\n}\n`)\n</script>\n\n<template>\n  <CodeEditor\n    v-model=\"next\"\n    :original=\"original\"\n    language=\"json\"\n    diff\n    height=\"12rem\"\n    aria-label=\"Cache settings\"\n  />\n</template>"
+  },
+  {
+   "name": "ReadOnly",
+   "summary": "`readonly` code that can be read, selected and copied but not changed.",
+   "sfc": "<script setup>\n  import CodeEditor from '@aziontech/webkit/code-editor'\n\n  const query = `SELECT country, count(*) AS requests\nFROM events\nWHERE status >= 500\nGROUP BY country\nORDER BY requests DESC\nLIMIT 10;\n`\n</script>\n\n<template>\n  <CodeEditor\n    :model-value=\"query\"\n    language=\"sql\"\n    readonly\n    height=\"10rem\"\n    aria-label=\"Saved query\"\n  />\n</template>"
+  }
+ ]
+}

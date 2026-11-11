@@ -1,0 +1,18 @@
+{
+ "purpose": "The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a \"read the case study\" link, and a mark cell carries only the client's linked logo on a chosen fill. The layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `bento-grid` and `mini-button`.",
+ "useWhen": [
+  "On the home page, to show the best customer stories and a wall of marks in one band."
+ ],
+ "avoidWhen": [
+  "For three equal story columns → use `client-mosaic-columns`.",
+  "For a plain wall with one quote → use `logo-wall-quote`."
+ ],
+ "related": [
+  "bento-grid` — the grid the cells are laid in.",
+  "client-mosaic-columns` — the three-column sibling with brand-coloured faces."
+ ],
+ "bestPractices": [
+  "Two stories and six marks fill the four-column grid exactly.",
+  "Pick `fill` and `logoTreatment` together: a `knockout` mark reads on `white` or `primary`, a `monochrome` one on `canvas` or `surface`."
+ ]
+}

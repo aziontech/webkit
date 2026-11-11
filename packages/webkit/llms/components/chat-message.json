@@ -1,0 +1,129 @@
+{
+ "name": "chat-message",
+ "binding": "ChatMessage",
+ "import": "@aziontech/webkit/chat-message",
+ "treeShakeableImport": "@aziontech/webkit/chat-message-root",
+ "category": "ai",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/chat-message-actions",
+  "@aziontech/webkit/chat-message-feedback"
+ ],
+ "purpose": "One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes on it (copy, regenerate, thumbs up / down). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `complete` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). User messages sit in a filled bubble; assistant messages are flat, full width, beside the assistant mark; system messages are a muted centered line. Alignment comes from the enclosing `Conversation`.",
+ "setup": null,
+ "useWhen": [
+  "Every turn of a chat with the generative AI assistant: the person's prompt, the assistant's response, a system note (\"Conversation restarted\").",
+  "A response that must show its lifecycle (loading, streaming, failure) and its actions."
+ ],
+ "avoidWhen": [
+  "A generated block outside a conversation (a summary on a page) → `StreamingResponse` alone.",
+  "A notification or toast about the product → `alert` / `toast`.",
+  "A comment thread between people → not this component; it carries AI semantics (feedback thumbs, regenerate)."
+ ],
+ "related": [
+  "conversation` — the log that holds messages, sets alignment and announces finished ones.",
+  "streaming-response` — the safe Markdown renderer for assistant content.",
+  "reasoning`, `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.",
+  "copy-button`, `icon-button` — the actions composed into `ChatMessage.Actions`.",
+  "ai-loading` — what `pending` renders."
+ ],
+ "bestPractices": [
+  "Pass `state` from your request: `pending` until the first token, `streaming` while tokens arrive, then `complete` or `error`.",
+  "Keep actions to five or fewer, always visible (no hover-only): copy, regenerate, feedback.",
+  "Use `grouped` for a second message by the same author so stacked bubbles read as one turn (only the first shows the avatar).",
+  "Never put the feedback thumbs on non-AI content."
+ ],
+ "props": [
+  {
+   "name": "from",
+   "type": "'user' | 'assistant' | 'system'",
+   "default": "'assistant'",
+   "required": "false",
+   "doc": "Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`)."
+  },
+  {
+   "name": "author",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
+  },
+  {
+   "name": "timestamp",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name."
+  },
+  {
+   "name": "state",
+   "type": "'pending' | 'streaming' | 'complete' | 'error'",
+   "default": "'complete'",
+   "required": "false",
+   "doc": "Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `complete` shows the actions, `error` shows the error line with Try again."
+  },
+  {
+   "name": "grouped",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn."
+  },
+  {
+   "name": "errorMessage",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Error text shown while `state` is `error`. Empty uses the locale catalog."
+  },
+  {
+   "name": "loadingLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Loading text shown while `state` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "retry",
+   "payload": "—",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`."
+  },
+  {
+   "name": "avatar",
+   "scope": "—",
+   "notes": "Replaces the default avatar (person glyph for the user, the assistant mark for the AI)."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `state` is `complete`."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ChatMessage from '@aziontech/webkit/chat-message'\n  import StreamingResponse from '@aziontech/webkit/streaming-response'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-lg)\">\n    <ChatMessage\n      from=\"user\"\n      author=\"Ana Lima\"\n      timestamp=\"10:41\"\n    >\n      How do I purge the cache of one URL?\n    </ChatMessage>\n    <ChatMessage timestamp=\"10:41\">\n      <StreamingResponse\n        content=\"Open **Real-Time Purge**, choose *URL* as the purge type and paste the address. The purge reaches every edge location in a few seconds.\"\n      />\n    </ChatMessage>\n  </div>\n</template>"
+  },
+  {
+   "name": "Actions",
+   "sfc": "<script setup>\n  import ChatMessage from '@aziontech/webkit/chat-message'\n  import CopyButton from '@aziontech/webkit/copy-button'\n  import IconButton from '@aziontech/webkit/icon-button'\n  import StreamingResponse from '@aziontech/webkit/streaming-response'\n  import { ref } from 'vue'\n\n  const answer =\n    'Set **Cache by query string** to *Allowlist* and keep only `page` and `lang`. Campaign parameters such as `utm_source` stop creating new cache keys.'\n  const feedback = ref(null)\n  const sending = ref(false)\n\n  function send(value) {\n    feedback.value = value\n    sending.value = true\n    setTimeout(() => (sending.value = false), 800)\n  }\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ChatMessage timestamp=\"10:44\">\n      <StreamingResponse :content=\"answer\" />\n      <template #actions>\n        <ChatMessage.Actions>\n          <CopyButton :value=\"answer\" />\n          <IconButton\n            icon=\"pi pi-refresh\"\n            aria-label=\"Regenerate response\"\n            kind=\"transparent\"\n            size=\"small\"\n          />\n          <ChatMessage.Feedback\n            :model-value=\"feedback\"\n            :loading=\"sending\"\n            @update:model-value=\"send\"\n          />\n        </ChatMessage.Actions>\n      </template>\n    </ChatMessage>\n  </div>\n</template>"
+  },
+  {
+   "name": "Lifecycle",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ChatMessage from '@aziontech/webkit/chat-message'\n  import CopyButton from '@aziontech/webkit/copy-button'\n  import StreamingResponse from '@aziontech/webkit/streaming-response'\n  import { onBeforeUnmount, onMounted, ref } from 'vue'\n\n  const full =\n    'The 502 responses started at 14:05, when the **origin certificate** expired. Upload the renewed certificate and the errors stop.'\n  const state = ref('pending')\n  const content = ref('')\n  let timer\n\n  function play() {\n    clearTimeout(timer)\n    clearInterval(timer)\n    state.value = 'pending'\n    content.value = ''\n    timer = setTimeout(() => {\n      state.value = 'streaming'\n      let index = 0\n      timer = setInterval(() => {\n        index = Math.min(full.length, index + 3)\n        content.value = full.slice(0, index)\n        if (index >= full.length) {\n          clearInterval(timer)\n          state.value = 'complete'\n        }\n      }, 40)\n    }, 1500)\n  }\n\n  onMounted(play)\n  onBeforeUnmount(() => {\n    clearTimeout(timer)\n    clearInterval(timer)\n  })\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col items-start gap-(--spacing-md)\">\n    <ChatMessage :state=\"state\">\n      <StreamingResponse\n        :content=\"content\"\n        :streaming=\"state === 'streaming'\"\n      />\n      <template #actions>\n        <ChatMessage.Actions>\n          <CopyButton :value=\"full\" />\n        </ChatMessage.Actions>\n      </template>\n    </ChatMessage>\n    <Button\n      label=\"Replay\"\n      kind=\"outlined\"\n      size=\"small\"\n      icon=\"pi pi-refresh\"\n      :disabled=\"state !== 'complete'\"\n      @click=\"play\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/chat-message.md"
+}

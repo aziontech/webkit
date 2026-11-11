@@ -110,6 +110,7 @@ Dims the page behind the open drawer.
 - Don't render the rail on create, edit or deploy pages.
 - Don't add page actions to the global header; they belong to the page's controls row or tab row.
 - Don't hide the avatar when the rail is collapsed or in the drawer.
+- Don't open the notifications region as a popover over the page; it is a region beside the content that the reader keeps open while working.
 
 ## Copy
 
@@ -125,11 +126,13 @@ Dims the page behind the open drawer.
 - ⌘K opens the palette and is announced with `aria-keyshortcuts="Meta+K"`; focus returns to the trigger on close.
 - The drawer traps focus while open and returns it to the navigation trigger.
 - Icon-only controls have both an `aria-label` and a tooltip.
+- The bell is a toggle (`aria-pressed`) and names the unread count; unread items carry a visually hidden `Unread:` prefix, not colour alone.
 
 ## States
 
 - ListPage: a first-level list page in the content zone; the header carries the single unlinked `Resources` crumb and the page opens on its controls row.
 - DetailPage: a resource detail page; the breadcrumb reads module, resource, then an environment Select, and a full-bleed tab bar carries Overview, Deployments and Settings with the outlined Deploy action.
+- Notifications: the bell opens the notifications region beside the content (a drawer when narrow), with unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState once cleared; the failed deploy also shows as a flash Alert above the page. This state is built on `AppLayout` (rail in `#navigation`, header in `#header`, flash in `#notifications`, list in `#tools`), which measures its own width, so the rail and the list become drawers in a narrow host. The bell's `aria-label` carries the unread count and the `Badge` on it is hidden from assistive technology.
 
 ## Related
 

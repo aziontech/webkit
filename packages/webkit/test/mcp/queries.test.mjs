@@ -438,7 +438,8 @@ test('getComponent carries the agent docs and story examples (D2)', () => {
 
 test('every exported component has purpose, when to use and when not to use', async () => {
   const { missingComponentDocs } = await import('../../scripts/lib/component-docs.mjs')
-  assert.deepEqual(missingComponentDocs(catalog.imports), [])
+  const detailed = Object.fromEntries(catalog.subpaths.map((sub) => [sub, catalog.getDetails(sub)]))
+  assert.deepEqual(missingComponentDocs(detailed), [])
   assert.deepEqual(
     missingComponentDocs({ x: { kind: 'component', purpose: 'p', useWhen: ['a'], avoidWhen: [] } }),
     ['x: When NOT to use']

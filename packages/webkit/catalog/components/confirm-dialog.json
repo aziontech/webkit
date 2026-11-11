@@ -1,0 +1,24 @@
+{
+ "purpose": "A small confirmation dialog: a title with a close button, one sentence of description, and a Cancel plus a confirm button whose `kind` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts and `Button`.",
+ "useWhen": [
+  "Before a removal (Remove domain, Delete resource) or a re-run (Clear again).",
+  "When someone leaves a form with unsaved changes.",
+  "A deletion that needs typed confirmation: put the field in the default slot and set `disabled` until it matches."
+ ],
+ "avoidWhen": [
+  "A form of several fields → use `dialog` with your own body.",
+  "A non-blocking notice → use `toast` or `alert`.",
+  "A settings save that needs no decision → use `save-bar`."
+ ],
+ "related": [
+  "dialog` — the overlay it composes; use it directly for anything that is not a yes-or-no decision.",
+  "button` — the trigger and the actions.",
+  "save-bar` — the unsaved-changes bar this dialog guards."
+ ],
+ "bestPractices": [
+  "The confirm label repeats the verb of the title (Remove Domain, Discard changes), never OK or Yes.",
+  "kind=\"danger\"` only when the outcome removes or discards something; a commit is `primary`.",
+  "Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.",
+  "Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`."
+ ]
+}

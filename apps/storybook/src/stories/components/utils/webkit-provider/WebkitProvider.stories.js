@@ -18,7 +18,7 @@ export default {
       canvas: { sourceState: 'shown' },
       description: {
         component:
-          "Sets the language and text direction of every WebKit component below it. Mount it once at the app root with the user's locale: built-in strings come from the `en`, `pt-BR` or `es` catalog, dates, numbers and plurals go through `Intl`, and the root carries `lang` and `dir`. With no provider, components fall back to English."
+          "Sets the language and text direction of every WebKit component below it. Mount it once at the app root with the user's locale: built-in strings come from the English catalog, or from `pt-BR` and `es` once the app imports them from `@aziontech/webkit/locales/<tag>` and passes them through `catalogs`; dates, numbers and plurals go through `Intl`, and the root carries `lang` and `dir`. With no provider, components fall back to English."
       }
     }
   }
@@ -30,7 +30,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'Mounted with `locale="pt-BR"`: Pagination and ConfirmDialog read their built-in labels in Portuguese and format numbers for Brazil.'
+          'Mounted with `locale="pt-BR"` and the Portuguese catalog in `catalogs`: Pagination and ConfirmDialog read their built-in labels in Portuguese and format numbers for Brazil.'
       },
       source: { code: source0 }
     }

@@ -5,12 +5,12 @@
 - Surface: product
 - Source: `blocks/platform/view/split-view/split-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/split-view")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), `CalendarRoot`, [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), `PanelHeader`, [Popover](../../../components/popover.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), `CalendarRoot`, [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), `PanelHeader`, [Popover](../../../components/popover.md), [PropertyFilter](../../../components/property-filter.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
 
-real-time events; events visualizer; event explorer; log explorer; logs viewer; request logs; events search; eventos em tempo real; visualizador de eventos; explorador de logs; split view; master detail; list and detail panes; visão dividida
+real-time events; events visualizer; event explorer; log explorer; logs viewer; request logs; events search; eventos em tempo real; visualizador de eventos; explorador de logs; split view; master detail; list and detail panes; visão dividida; query language; events query; saved searches; saved queries; query history; date range; time range picker; investigation tabs; event document; consulta de eventos; buscas salvas; intervalo de datas
 
 The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.
 
@@ -50,9 +50,9 @@ One medium `Chip` per applied field under the controls row. A chip summarizes it
 
 A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values that applies a value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
-### F. Log — `TableRoot`, `Tag`, `EmptyState` (required)
+### F. Log — `Chart`, `TableRoot`, `Tag`, `EmptyState` (required)
 
-Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume chart by level. Clicking a bucket filters the period to it and dragging selects a span; the arrow keys step through buckets and Enter applies one. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a `Tag`, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
+Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar stacked` with `Chart.Brush`, bound to `v-model:range`). Clicking a bucket filters the period to it and dragging selects a span; the arrow keys step through buckets and Enter applies one. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a `Tag`, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
 
 ### G. Event document — `Sidebar`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
@@ -62,6 +62,32 @@ Clicking a row opens the event in a resizable end `Sidebar` beside the log when 
 
 Below that width the same document opens in a medium right `Drawer` titled Event, with `PanelHeader`, `DrawerTitle` and `DrawerClose`. Crossing the breakpoint moves an open event between the pane and the drawer instead of closing it.
 
+The fields panel (E) is the `split-view#Fields` piece of the inventory; it lives in the primary and every variant, so it has no variant of its own.
+
+### I. Query bar — `Tooltip`, `IconButton` (optional)
+
+Variant Query only; it adds `PropertyFilter` (`mode="query"`) and `DateRangePicker` to the page, in place of the Filter popover and the search field.
+
+For people who type their questions. `DateRangePicker` replaces the Period field of the Filter popover: relative ranges (Last 15 minutes to Last 24 hours), an absolute range typed in the chosen time zone and bounded to the retained days, and Previous and Next, which move the window by its own length. The times in the log, the chart axis and the document follow that zone. `PropertyFilter` in query mode replaces both the Filter popover and the search field: one query string (`level = Error AND host = api.example.com`), suggestions for the word at the caret, the reason under the field when the query is invalid, and the match count. Enter applies it; a query that mixes AND and OR shows a message instead of guessing. A value picked in the fields panel adds or removes its `field = value` clause, so the panel and the query never disagree.
+
+### J. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Button`, `Tooltip` (optional)
+
+Variant Query only.
+
+Two outlined `IconButton`s beside the bar open a `Popover` each. Saved queries lists name and query text, applies one on click, deletes one with a small Delete button, and saves the applied query under a typed name. Recent queries lists the last eight queries run, newest first, with Clear history. Applying an entry fills the bar and runs it.
+
+### K. Investigation tabs — `IconButton`, `DropdownMenu`, `Input`, `Tooltip` (optional)
+
+Variant Sessions only; it adds `Tabs` to the page.
+
+Above the controls row, one tab per open investigation; each keeps its own filters, search and period, and switching tabs closes the open document. New investigation (a transparent `IconButton`) adds a tab, up to five; past the limit a status line says to close one. The actions `DropdownMenu` renames, duplicates or closes the active tab. Rename opens an inline `Input` over the tab (also F2 or a double click on it): Enter keeps the name, Escape restores it. Delete on a focused tab closes it; the last tab cannot be closed. A close button inside each tab waits for a `Tabs` item close control that is its own focusable element (the current `closable` nests a button inside the tab); it is listed in ROADMAP M2.10.
+
+### L. Document tools — `Input`, `IconButton`, `Tooltip`, `Chip` (optional)
+
+Variant EventDocument only; it adds `CopyButton` to the page.
+
+The document lists every field of the event. Search in this event narrows the list to fields whose name or value matches and highlights the match. Each filterable value has Filter by (keep only events with it) and Exclude (hide them) buttons that apply to the log; an exclusion shows as a `Host is not legacy.example.com` chip with the other filters. Copy copies the fields shown as JSON; the full JSON document stays below.
+
 ## Do
 
 - Drive the summary, the chart and the table from one filtered set, so every number agrees.
@@ -69,6 +95,9 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - Keep the row selected while its document is open, and switch between pane and drawer by the explorer's width, not the viewport's.
 - Count applied fields on the Filter `Badge` and show each one as a `Chip` in field order.
 - Pick the empty message that matches why the log is empty.
+- In query mode, keep the applied query text as the user typed it, and save and list that text.
+- Keep each investigation tab self-contained: its own filters, search and period.
+- Let the document act on the log (Filter by, Exclude), so a pivot is one click from the value.
 
 ## Don't
 
@@ -77,6 +106,9 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - Don't hide the controls row or the summary when the log is empty.
 - Don't encode level by colour alone; the chart has a card with level names and counts, and the table shows level as text.
 - Don't let a wide log scroll the page sideways.
+- Don't offer the query bar and the Filter popover at once; pick the one that fits the users.
+- Don't guess the meaning of a query that mixes AND and OR; say so and let the user fix it.
+- Don't let investigation tabs grow without a limit, and never close the last one.
 
 ## Copy
 
@@ -86,6 +118,10 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - **Empty log:** title states the fact and the description says what to do, e.g. "No events in this window" with "Widen the period or clear a filter to see more of the log."
 - **Fields panel:** controls name the panel, e.g. "Hide the fields panel", "Show the fields panel".
 - **Document:** drawer title "Event"; close button "Close the event document".
+- **Query bar:** `aria-label` "Query events"; placeholder with one real example; the range "Events time range".
+- **Saved queries:** "Name the current query", Save, "Delete <name>"; empty "No saved queries yet. Name the current query to keep it."
+- **Tabs:** "New investigation", "Actions for <name>", Rename, Duplicate, "Close investigation"; limit "Up to 5 investigations stay open. Close one to start another."
+- **Document tools:** "Search in this event", "Filter by <field> <value>", "Exclude <field> <value>", "Copy the fields shown as JSON"; no match "No field matches “<text>”."
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -96,6 +132,9 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - Every icon-only button has an `aria-label`; the filter `Badge` and decorative glyphs are `aria-hidden="true"`.
 - Value options in the popovers expose `aria-checked`, so applied values are announced.
 - The document drawer traps focus while open and closes on Escape; motion is turned off under `prefers-reduced-motion`.
+- Query: the bar is a `combobox` whose invalid state sets `aria-invalid` and points `aria-describedby` at the reason; the mixed AND / OR message and the saved-query confirmations are `role="status"`.
+- Sessions: the tabs follow the `Tabs` keyboard map (arrows, Home, End); F2 renames and Delete closes the focused tab, and the same actions sit in a named menu for pointer and screen-reader users; focus returns to the tab after rename or close.
+- EventDocument: Filter by and Exclude are toggle buttons (`aria-pressed`) named with the field and value; the match count of the document search is announced in a `role="status"`.
 
 ## States
 
@@ -103,6 +142,9 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a chip.
 - Empty: a workspace with no traffic yet; the summary reads zero, the chart is flat and the log shows No events yet.
 - Failed: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry.
+- Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
+- Sessions: three investigation tabs, API errors active.
+- EventDocument: an error event's document open, with Host is not legacy.example.com applied.
 
 ## Related
 
@@ -118,6 +160,9 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - `Filtered` — Errors from the Security and Access Control sources: the Filter button counts three applied fields and each shows as a chip that reopens the popover on that field or removes it.
 - `Empty` — A workspace with no traffic yet: the summary reads zero, the chart is flat and the log shows its No events yet state.
 - `Failed` — The event log request failed: the fields panel stays, and the log pane shows a danger Alert that says the events did not load and offers Retry.
+- `Query` — The Console Kit query bar on the sample design: a `DateRangePicker` (relative ranges, an absolute range typed in the chosen time zone, Previous and Next) drives the period, and `PropertyFilter` in query mode takes `level = Error AND host = api.example.com`, suggests fields, operators and values at the caret, explains an invalid query under the field and applies it on Enter. Saved queries (name, apply, delete) and Recent queries sit in two popovers beside the bar; the field values in the fields panel add or remove clauses of the query; the log, chart and times follow the chosen zone.
+- `Sessions` — Several investigations open as tabs above the explorer, each keeping its own filters, search and period: API errors is active, with All traffic and Security blocks beside it. New investigation adds a tab (up to five, then a message says to close one); the actions menu renames (also F2 or a double click, with an inline field: Enter keeps, Escape cancels), duplicates or closes the active one (also Delete on the focused tab).
+- `EventDocument` — An error event selected with its document open beside the log. The document lists every field of the event with a Search in this event field that narrows and highlights the fields, a Filter by and an Exclude button per value that apply to the log (an exclusion shows as an is not chip), and Copy that copies the fields shown as JSON; the full JSON document follows.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/split-view", { variant })`, or the file under `blocks/platform/view/split-view/variants/`.
 
@@ -132,6 +177,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import CalendarRoot from '@aziontech/webkit/calendar-root'
+  import Chart from '@aziontech/webkit/chart'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Chip from '@aziontech/webkit/chip'
   import CodeBlock from '@aziontech/webkit/code-block'
@@ -475,22 +521,12 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
     hour12: false,
     timeZone: 'UTC'
   })
-  const stampFormat = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: '2-digit',
-    year: 'numeric',
-    timeZone: 'UTC'
-  })
-
   const isDate = (value) => value instanceof Date && !Number.isNaN(value.getTime())
 
   const formatEventTime = (date) =>
     isDate(date) ? `${dayFormat.format(date)}, ${clockFormat.format(date)}` : ''
 
   const formatEventClock = (date) => (isDate(date) ? axisFormat.format(date) : '')
-
-  const formatEventStamp = (date) =>
-    isDate(date) ? `${stampFormat.format(date)} ${axisFormat.format(date)}` : ''
 
   const eventSources = {
     http: 'HTTP Requests',
@@ -509,8 +545,6 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
   const eventLevelSeverity = (level) => eventLevels[level] ?? 'secondary'
 
   const levelOrder = Object.keys(eventLevels)
-
-  const stackOrder = [...levelOrder].reverse()
 
   const eventLevelOptions = levelOrder.map((value) => ({ value, label: value }))
 
@@ -1250,10 +1284,18 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
     ]
   })
 
-  const hoveredBucket = ref(-1)
-  const bucketAnchor = ref(-1)
+  const levelColors = { Error: 'danger', Warning: 'warning', Info: 'info', Debug: 'other' }
 
-  const bucketPeak = computed(() => Math.max(1, ...buckets.value.map((bucket) => bucket.total)))
+  const volumeLabels = computed(() => buckets.value.map((bucket) => bucket.at))
+
+  const volumeSeries = computed(() =>
+    levelOrder.map((level) => ({
+      id: level,
+      name: level,
+      color: levelColors[level] ?? 'other',
+      values: buckets.value.map((bucket) => bucket.levels[level] ?? 0)
+    }))
+  )
 
   const busiestIndex = computed(() =>
     buckets.value.reduce(
@@ -1265,87 +1307,12 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
 
   const busiestBucket = computed(() => buckets.value[busiestIndex.value] ?? null)
 
-  const activeBucket = computed(() => buckets.value[hoveredBucket.value] ?? null)
-
-  const bucketShare = (value) => `${((value / bucketPeak.value) * 100).toFixed(2)}%`
-
-  const bucketCentre = computed(() =>
-    buckets.value.length && hoveredBucket.value >= 0
-      ? `${((hoveredBucket.value + 0.5) / buckets.value.length) * 100}%`
-      : '0%'
-  )
-
-  const bucketCardAlign = computed(() => {
-    const count = buckets.value.length
-    if (!count || hoveredBucket.value < 0) return 'center'
-    if (hoveredBucket.value < count / 5) return 'start'
-    if (hoveredBucket.value > (count * 4) / 5) return 'end'
-    return 'center'
-  })
-
-  const bucketSelection = computed(() => {
-    if (bucketAnchor.value < 0 || hoveredBucket.value < 0) return null
-    return {
-      from: Math.min(bucketAnchor.value, hoveredBucket.value),
-      to: Math.max(bucketAnchor.value, hoveredBucket.value)
-    }
-  })
-
-  const isBucketSelected = (index) => {
-    const range = bucketSelection.value
-    return Boolean(range && index >= range.from && index <= range.to)
+  const selectVolume = (span) => {
+    if (!span) return
+    const from = buckets.value[span[0]]
+    const to = buckets.value[span[1]]
+    if (from && to) selectTimeRange({ start: from.at, end: to.end })
   }
-
-  const enterBucket = (index) => {
-    hoveredBucket.value = index
-  }
-
-  const leaveChart = () => {
-    if (bucketAnchor.value < 0) hoveredBucket.value = -1
-  }
-
-  const commitBuckets = () => {
-    const range = bucketSelection.value
-    bucketAnchor.value = -1
-    if (!range) return
-    const from = buckets.value[range.from]
-    const to = buckets.value[range.to]
-    if (!from || !to) return
-    selectTimeRange({ start: from.at, end: to.end })
-  }
-
-  const releaseBuckets = () => {
-    commitBuckets()
-    window.removeEventListener('pointerup', releaseBuckets)
-  }
-
-  const pressBucket = (index, event) => {
-    if (event.button !== 0) return
-    bucketAnchor.value = index
-    hoveredBucket.value = index
-    window.addEventListener('pointerup', releaseBuckets)
-    event.preventDefault()
-  }
-
-  const stepBucket = (delta) => {
-    if (!buckets.value.length) return
-    const from = hoveredBucket.value === -1 ? busiestIndex.value : hoveredBucket.value
-    hoveredBucket.value = Math.min(Math.max(from + delta, 0), buckets.value.length - 1)
-  }
-
-  const applyBucket = () => {
-    const bucket = activeBucket.value
-    if (bucket) selectTimeRange({ start: bucket.at, end: bucket.end })
-  }
-
-  const chartAxis = computed(() => {
-    if (!buckets.value.length) return []
-    return [
-      buckets.value[0],
-      buckets.value[Math.floor(buckets.value.length / 2)],
-      buckets.value.at(-1)
-    ].map((bucket) => formatEventClock(bucket.at))
-  })
 
   const chartSummary = computed(() => {
     if (!busiestBucket.value?.total) return `No events in the ${windowLabel.value.toLowerCase()}.`
@@ -1354,7 +1321,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
 
   const chartLabel = computed(
     () =>
-      `Event volume, ${windowLabel.value.toLowerCase()}. ${chartSummary.value} Use the arrow keys to read each bucket and Enter to filter the log to it.`
+      `Event volume, ${windowLabel.value.toLowerCase()}. ${chartSummary.value} Drag across the chart, or hold Shift with the arrow keys and press Enter, to filter the log to a span.`
   )
 
   const filterCount = computed(
@@ -1548,7 +1515,6 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
   onBeforeUnmount(() => {
     clearTimeout(refreshTimer)
     explorerObserver?.disconnect()
-    window.removeEventListener('pointerup', releaseBuckets)
   })
 </script>
 
@@ -2586,123 +2552,24 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                   </dl>
                 </div>
 
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                  <div class="relative z-30">
-                    <div
-                      role="button"
-                      tabindex="0"
-                      :aria-label="chartLabel"
-                      class="flex h-20 w-full cursor-crosshair items-end gap-px border-b border-(--border-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                      @pointerleave="leaveChart"
-                      @keydown.left.prevent="stepBucket(-1)"
-                      @keydown.right.prevent="stepBucket(1)"
-                      @keydown.enter.prevent="applyBucket"
-                      @keydown.space.prevent="applyBucket"
-                    >
-                      <div
-                        v-for="(bucket, index) in buckets"
-                        :key="bucket.at.getTime()"
-                        :data-active="hoveredBucket === index || null"
-                        :data-selected="isBucketSelected(index) || null"
-                        aria-hidden="true"
-                        class="flex h-full min-w-0 flex-1 flex-col justify-end transition-colors duration-fast-02 ease-productive-entrance data-active:bg-(--bg-hover) data-selected:bg-(--bg-selected) motion-reduce:transition-none"
-                        @pointerenter="enterBucket(index)"
-                        @pointerdown="pressBucket(index, $event)"
-                      >
-                        <div
-                          v-for="level in stackOrder"
-                          :key="level"
-                          :data-level="level"
-                          class="w-full transition-[height] duration-fast-02 ease-productive-entrance data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-contrast) data-[level=Warning]:bg-(--warning-contrast) data-[level=Error]:bg-(--danger-contrast) motion-reduce:transition-none"
-                          :style="{ height: bucketShare(bucket.levels[level]) }"
-                        />
-                      </div>
-                    </div>
-
-                    <Transition
-                      enter-active-class="transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                      enter-from-class="opacity-0"
-                      leave-active-class="transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                      leave-to-class="opacity-0"
-                    >
-                      <div
-                        v-if="activeBucket"
-                        aria-hidden="true"
-                        class="pointer-events-none absolute inset-y-0 w-px -translate-x-1/2 bg-(--border-strong) transition-[left] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                        :style="{ left: bucketCentre }"
-                      />
-                    </Transition>
-
-                    <Transition
-                      enter-active-class="transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                      enter-from-class="opacity-0"
-                      leave-active-class="transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                      leave-to-class="opacity-0"
-                    >
-                      <div
-                        v-if="activeBucket"
-                        role="status"
-                        :data-align="bucketCardAlign"
-                        class="pointer-events-none absolute top-[calc(100%+var(--spacing-xxs))] z-30 w-max min-w-(--container-3xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) transition-[left] duration-fast-02 ease-productive-entrance data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full motion-reduce:transition-none"
-                        :style="{ left: bucketCentre }"
-                      >
-                        <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                          <p class="text-label-code-sm tabular-nums text-(--text-default)">
-                            {{ formatEventStamp(activeBucket.at) }}
-                          </p>
-
-                          <dl
-                            class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs)"
-                          >
-                            <template
-                              v-for="level in levelOrder"
-                              :key="level"
-                            >
-                              <span
-                                :data-level="level"
-                                aria-hidden="true"
-                                class="size-2 shrink-0 rounded-(--shape-elements) data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-contrast) data-[level=Warning]:bg-(--warning-contrast) data-[level=Error]:bg-(--danger-contrast)"
-                              />
-                              <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">
-                                {{ level }}
-                              </dt>
-                              <dd class="m-0 text-label-code-sm tabular-nums text-(--text-default)">
-                                {{ activeBucket.levels[level] }}
-                              </dd>
-                            </template>
-                          </dl>
-
-                          <div
-                            class="flex items-baseline justify-between gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-xs)"
-                          >
-                            <span class="text-label-sm text-(--text-default)">Total</span>
-                            <span class="text-label-code-sm tabular-nums text-(--text-default)">
-                              {{ activeBucket.total }}
-                            </span>
-                          </div>
-
-                          <p class="text-body-sm text-(--text-muted)">
-                            Click to filter to this bucket, or drag to select a span.
-                          </p>
-                        </div>
-                      </div>
-                    </Transition>
-                  </div>
-
-                  <p class="sr-only">{{ chartSummary }}</p>
-
-                  <div
-                    v-if="chartAxis.length"
-                    class="flex items-center justify-between text-label-sm tabular-nums text-(--text-muted)"
-                    aria-hidden="true"
-                  >
-                    <span
-                      v-for="(label, index) in chartAxis"
-                      :key="index"
-                      >{{ label }}</span
-                    >
-                  </div>
-                </div>
+                <Chart
+                  :range="null"
+                  :series="volumeSeries"
+                  :labels="volumeLabels"
+                  :format-label="formatEventClock"
+                  :height="80"
+                  :aria-label="chartLabel"
+                  @update:range="selectVolume"
+                >
+                  <Chart.Axis
+                    kind="x"
+                    :ticks="3"
+                  />
+                  <Chart.Brush />
+                  <Chart.Bar stacked />
+                  <Chart.Crosshair />
+                  <Chart.Tooltip />
+                </Chart>
               </section>
 
               <section class="flex min-h-0 min-w-0 flex-1 flex-col">

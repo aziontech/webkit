@@ -1,0 +1,18 @@
+{
+ "purpose": "The tier-by-tier comparison on the Support page: one column per support tier with its name, who it is for and its action button pinned in the header while the page scrolls, one band per service family with an overline and a title, and one row per service saying what each tier includes — a tick, a dash, or the allowance as text. Each band closes on its own link to the matching pricing documentation, the recommended tier carries an accent bar, and below the large breakpoint the table folds to one tier picked from a select. It is a page section — the site places it from a `{ _id: 'compare-support-tiers', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `button`, `overline` and `link`.",
+ "useWhen": [
+  "On the Support page, to show what each support tier includes service by service."
+ ],
+ "avoidWhen": [
+  "To compare platform plans → use `compare-plans`.",
+  "To compare Azion with a competitor → use `comparison-table`."
+ ],
+ "related": [
+  "compare-plans` — the same matrix for platform plans, with hints and tags on rows and one closing link."
+ ],
+ "bestPractices": [
+  "Give every tier a stable `id`; the narrow-screen picker selects by it.",
+  "Mark one tier `highlighted`; it gets the accent bar, the secondary button and opens the picker.",
+  "Give every row's `values` one entry per tier, in tier order."
+ ]
+}

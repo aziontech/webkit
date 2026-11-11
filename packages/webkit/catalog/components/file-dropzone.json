@@ -1,0 +1,31 @@
+{
+ "purpose": "A FileDropzone is the target a user drags files from the operating system onto. It owns the drag lifecycle (only drags carrying `Files` count), the `accept` / `multiple` filtering, and the idle/active look, and it hands the result back as two activation events: `drop` with the accepted files, `reject` with the files it filtered out. It holds no value and renders no file list. The list, upload progress and validation messages belong to the consumer (typically a `Field` around this component, whose `Field.Description` / `Field.Error` carry the messages). `kind` covers the two places a drop target lives: - **`inline`**: a dashed region that is always visible (icon, title, description, plus a default slot for the \"Browse files\" action the consumer composes). It switches to the active look while files are dragged over it. This is the Cloudscape FileDropzone / Cloudflare Pages \"Upload assets\" shape. - **`overlay`**: invisible at rest. When files are dragged into the window it fades in over its nearest positioned ancestor (`absolute inset-0`), and it fades out on window drag-leave, drop or `Escape`. This is the Vercel \"drag and drop a folder to deploy\" shape, and it replaces the sample app's page-level `ProjectDropZone` and the drop target in the `Templates/Platform/States/ProjectIntake` story. The drop target itself is pointer-only. It is never a keyboard control. The keyboard (and screen-reader) path to the same outcome is a real button the consumer puts in the default slot (`inline`), or elsewhere on the page (`overlay`).",
+ "useWhen": [
+  "A form or settings surface accepts one or more files and should also accept them by drag (`kind=\"inline\"` with a Browse button in the slot).",
+  "A whole page or card should accept a project, folder contents or assets dropped anywhere on it, with no permanent drop region taking up space (`kind=\"overlay\"` inside a `relative` container).",
+  "The consumer needs the accepted and rejected files separated by an `accept` filter before it uploads anything."
+ ],
+ "avoidWhen": [
+  "Picking files by keyboard or click only, with no drag affordance → a `button` that opens a native file input is enough.",
+  "Showing the chosen files, their progress or their errors → render them yourself with `progress`, `message` or `helper-text`. The dropzone renders none of these.",
+  "Dragging items inside the page (reordering rows, moving cards) → this component only reacts to OS drags that carry `Files`. In-page drag and drop is out of scope.",
+  "A static \"nothing here yet\" panel with no drop behavior → use `empty-state`."
+ ],
+ "related": [
+  "button`: the \"Browse files\" action composed into the default slot. It is the keyboard path to the same outcome as a drop.",
+  "empty-state`: a no-data panel. Compose a FileDropzone inside or beside it when the empty state's call to action is \"upload\".",
+  "progress`: the consumer renders per-file progress after `drop`. The dropzone does not track uploads.",
+  "toast`: confirms the result of a drop or reports rejected files to everyone, including users who never see the drag.",
+  "card`: a positioned container (`class=\"relative\"`) that hosts an `overlay` dropzone."
+ ],
+ "bestPractices": [
+  "Always give the user a non-drag path. In `inline`, put a `Button` in the default slot that opens a native `<input type=\"file\">`. In `overlay`, keep an upload button somewhere on the page. The drop target is pointer-only by design.",
+  "Pass the same `accept` string to the dropzone and to the native input behind your Browse button, so both paths filter the same way.",
+  "Handle `reject`. Tell the user which files were skipped and why (e.g. a `toast` naming the files and the accepted types). A silent rejection reads as a broken drop.",
+  "Announce the outcome of a drop yourself (a toast, or a live region on your file list). The dropzone does not announce drag states (see Accessibility).",
+  "Render one `overlay` dropzone per positioned container, and make the container `relative`. Without a positioned ancestor the overlay covers the nearest positioned element up the tree, which may be the whole page.",
+  "Place the `overlay` dropzone as the last child of its container, so it paints above the container's other positioned content (see Theme gaps).",
+  "When the consumer's own flow is busy (an upload in progress), set `disabled` and disable the Browse button too.",
+  "Put the accepted types and limits in `description` (\"PNG or JPG, up to 5 MB\"). The title is the instruction, the description is the constraint."
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "purpose": "A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValuePairs` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`kind=\"danger\"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.",
+ "useWhen": [
+  "One-time authorization of a consequential action proposed by an agent: a production deployment, a purge, a command.",
+  "An irreversible action (delete): add `confirmationPhrase`."
+ ],
+ "avoidWhen": [
+  "Tools already trusted for the session → record the call with `tool-call`, do not ask again.",
+  "A destructive action the reader started themselves in the UI → `confirm-dialog`.",
+  "A form → this card only approves or denies."
+ ],
+ "related": [
+  "tool-call` — the record of the call after it is approved (or `denied`).",
+  "confirm-dialog` — confirmation of the reader's own destructive action.",
+  "code-block`, `key-value-pairs` — what will run, in the body.",
+  "chat-message` — the assistant acknowledges the decision in the next message."
+ ],
+ "bestPractices": [
+  "Title is a question naming the action and target; put tool and command names in backticks (code).",
+  "Match the approve label to the title verb (`Deploy`, `Delete`) when it is not a generic tool call.",
+  "Never pre-focus or pre-select Approve for a risky action.",
+  "Do not leave a request pending forever: expire it (`state=\"expired\"`) and have the assistant say nothing ran.",
+  "After Deny, the assistant acknowledges in the conversation (\"Skipping that step.\")."
+ ]
+}

@@ -1,0 +1,31 @@
+{
+ "purpose": "An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (for example `() => import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.",
+ "useWhen": [
+  "Editing a function, a script, a SQL query, a JSON or YAML document inside the product.",
+  "Showing the change between two versions of code side by side (diff mode), for example before a deploy or a revert.",
+  "Code that the server validates: the diagnostics come back as `markers` and show on their lines and in a list.",
+  "A read-only view of code that still needs the editor's navigation (find, folding) once Monaco is loaded."
+ ],
+ "avoidWhen": [
+  "Showing a snippet to copy, with tabs and a file name → use `code-block`.",
+  "A one-line value such as a header, a regex or a path → use `input` inside a `field`.",
+  "Free prose or a description → use `textarea`.",
+  "A stream of log lines → use `log-view`.",
+  "A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both)."
+ ],
+ "related": [
+  "code-block` — read-only snippets with copy; same syntax colour tokens.",
+  "textarea` — plain multi-line text; the fallback editor is built in its spirit but keeps code typography and a gutter.",
+  "field` — wraps the editor with a label, a description and an error; the editor reads id, `aria-describedby`, invalid and disabled from it.",
+  "toggle-group` — the document switch (Code / Arguments) placed in the `toolbar` slot.",
+  "log-view` — output of a run next to the editor."
+ ],
+ "bestPractices": [
+  "Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.",
+  "Pass `loader` from the app (`() => import('monaco-editor')`) so Monaco is code-split and never part of the WebKit bundle; set up Monaco's workers in that module.",
+  "Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.",
+  "Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.",
+  "Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.",
+  "In diff mode, `original` is the left side and `v-model` the right side; keep the right side editable only when the change can still be edited."
+ ]
+}

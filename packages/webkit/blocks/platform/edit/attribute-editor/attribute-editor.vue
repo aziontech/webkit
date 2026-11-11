@@ -1,5 +1,6 @@
 <script setup>
   import Alert from '@aziontech/webkit/alert'
+  import AttributeEditor from '@aziontech/webkit/attribute-editor'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -17,9 +18,9 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import Input from '@aziontech/webkit/input'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -27,10 +28,10 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import SettingsSection from '@aziontech/webkit/settings-section'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Switch from '@aziontech/webkit/switch'
   import TableRoot from '@aziontech/webkit/table-root'
   import Textarea from '@aziontech/webkit/textarea'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
@@ -328,17 +329,6 @@
     const last = entries.value.at(-1)
     return Boolean(last?.key.trim() && last?.value.trim())
   })
-  const canRemove = computed(() => entries.value.length > 1)
-
-  const addEntry = async () => {
-    const entry = createEntry()
-    entries.value.push(entry)
-    await nextTick()
-    document.getElementById(fieldId(entry, 'key'))?.focus()
-  }
-  const removeEntry = (index) => {
-    if (canRemove.value) entries.value.splice(index, 1)
-  }
   const setKey = (entry, value) => {
     entry.key = formatKey(value)
   }
@@ -926,12 +916,17 @@
                     </div>
 
                     <template v-if="view === 'Form'">
-                      <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
-                        <div
-                          v-for="(entry, index) in entries"
-                          :key="entry.id"
-                          class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                        >
+                      <AttributeEditor
+                        v-model:items="entries"
+                        :new-item="createEntry"
+                        :min-items="1"
+                        :limit="editing ? 1 : undefined"
+                        :add-disabled="!canAdd"
+                        add-button-label="Add variable"
+                        remove-button-label="Remove variable"
+                        aria-label="Variables"
+                      >
+                        <template #row="{ item: entry, index, remove, removable, removeLabel }">
                           <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                             <InputGroupRoot
                               size="large"
@@ -961,15 +956,15 @@
                                 @paste="pasteIntoKey($event, index)"
                               />
                               <Tooltip
-                                v-if="canRemove"
+                                v-if="removable"
                                 text="Remove variable"
                               >
                                 <IconButton
                                   icon="pi pi-trash"
                                   kind="outlined"
                                   size="large"
-                                  aria-label="Remove variable"
-                                  @click="removeEntry(index)"
+                                  :aria-label="removeLabel"
+                                  @click="remove"
                                 />
                               </Tooltip>
                             </InputGroupRoot>
@@ -1036,30 +1031,21 @@
                             :label="keyError(entry).message"
                           />
                           <HelperText
+                            key="helper-text-2"
                             v-if="valueError(entry)"
                             :id="messageId(entry, 'value')"
                             :kind="valueError(entry).kind"
                             :label="valueError(entry).message"
                           />
-                        </div>
-                      </div>
-
-                      <div v-if="!editing">
-                        <Button
-                          label="Add variable"
-                          icon="pi pi-plus"
-                          kind="outlined"
-                          size="medium"
-                          :disabled="!canAdd"
-                          @click="addEntry"
-                        />
-                      </div>
-
-                      <HelperText
-                        v-if="!editing"
-                        key="paste-hint"
-                        label="Paste JSON or .env contents into an empty key field to create one row per variable."
-                      />
+                        </template>
+                        <template #limit>Edit one variable at a time.</template>
+                        <template #info>
+                          <HelperText
+                            v-if="!editing"
+                            label="Paste JSON or .env contents into an empty key field to create one row per variable."
+                          />
+                        </template>
+                      </AttributeEditor>
                     </template>
 
                     <template v-else>

@@ -1,0 +1,169 @@
+{
+ "name": "code-editor",
+ "binding": "CodeEditor",
+ "import": "@aziontech/webkit/code-editor",
+ "treeShakeableImport": "@aziontech/webkit/code-editor",
+ "category": "code",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (for example `() => import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.",
+ "setup": null,
+ "useWhen": [
+  "Editing a function, a script, a SQL query, a JSON or YAML document inside the product.",
+  "Showing the change between two versions of code side by side (diff mode), for example before a deploy or a revert.",
+  "Code that the server validates: the diagnostics come back as `markers` and show on their lines and in a list.",
+  "A read-only view of code that still needs the editor's navigation (find, folding) once Monaco is loaded."
+ ],
+ "avoidWhen": [
+  "Showing a snippet to copy, with tabs and a file name → use `code-block`.",
+  "A one-line value such as a header, a regex or a path → use `input` inside a `field`.",
+  "Free prose or a description → use `textarea`.",
+  "A stream of log lines → use `log-view`.",
+  "A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both)."
+ ],
+ "related": [
+  "code-block` — read-only snippets with copy; same syntax colour tokens.",
+  "textarea` — plain multi-line text; the fallback editor is built in its spirit but keeps code typography and a gutter.",
+  "field` — wraps the editor with a label, a description and an error; the editor reads id, `aria-describedby`, invalid and disabled from it.",
+  "toggle-group` — the document switch (Code / Arguments) placed in the `toolbar` slot.",
+  "log-view` — output of a run next to the editor."
+ ],
+ "bestPractices": [
+  "Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.",
+  "Pass `loader` from the app (`() => import('monaco-editor')`) so Monaco is code-split and never part of the WebKit bundle; set up Monaco's workers in that module.",
+  "Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.",
+  "Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.",
+  "Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.",
+  "In diff mode, `original` is the left side and `v-model` the right side; keep the right side editable only when the change can still be edited."
+ ],
+ "props": [
+  {
+   "name": "language",
+   "type": "string",
+   "default": "'plaintext'",
+   "required": "false",
+   "doc": "Monaco language id (`javascript`, `typescript`, `json`, `sql`, `lua`, `yaml`…). The fallback ignores it."
+  },
+  {
+   "name": "loader",
+   "type": "() => Promise<CodeEditorMonaco>",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Loads Monaco lazily; without it the plain editor is the editor."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "The code can be read, selected and copied but not changed."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Locks the editor; it leaves the tab order."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Paints the danger border; also set by a surrounding `Field`."
+  },
+  {
+   "name": "diff",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows `original` beside the value as a side-by-side diff."
+  },
+  {
+   "name": "original",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The left side of the diff."
+  },
+  {
+   "name": "markers",
+   "type": "CodeEditorMarker[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Diagnostics shown on their lines and in the problems list."
+  },
+  {
+   "name": "height",
+   "type": "string",
+   "default": "'16rem'",
+   "required": "false",
+   "doc": "CSS height of the editing area."
+  },
+  {
+   "name": "fill",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Fills a flex column instead of using `height`."
+  },
+  {
+   "name": "lineNumbers",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the line-number gutter."
+  },
+  {
+   "name": "path",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Model path for Monaco language services (`index.ts`, `args.json`)."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name when no `Field` label names it. Empty uses the locale catalog."
+  }
+ ],
+ "events": [
+  {
+   "name": "ready",
+   "payload": "unknown",
+   "notes": "Monaco mounted; the payload is the editor instance (for actions)."
+  },
+  {
+   "name": "load-error",
+   "payload": "unknown",
+   "notes": "The loader rejected; the plain editor stays."
+  }
+ ],
+ "slots": [
+  {
+   "name": "toolbar",
+   "scope": "—",
+   "notes": "A bar above the editing area: a document switch, the file name, a Format or Run action."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import CodeEditor from '@aziontech/webkit/code-editor'\n  import Field from '@aziontech/webkit/field'\n  import { ref } from 'vue'\n\n  const code = ref(`export default async function handler(request) {\n  const url = new URL(request.url)\n  const name = url.searchParams.get('name')\n  return new Response(\\`Hello, \\${name}\\`)\n}\n`)\n\n  const markers = [\n    { line: 3, severity: 'warning', message: 'name can be null; give it a default value.' },\n    { line: 4, severity: 'info', message: 'Set a Content-Type header on the response.' }\n  ]\n</script>\n\n<template>\n  <Field>\n    <Field.Label>Function code</Field.Label>\n    <CodeEditor\n      v-model=\"code\"\n      language=\"javascript\"\n      :markers=\"markers\"\n      height=\"14rem\"\n    />\n    <Field.Description>Runs on every request that reaches this function.</Field.Description>\n  </Field>\n</template>"
+  },
+  {
+   "name": "Diff",
+   "sfc": "<script setup>\n  import CodeEditor from '@aziontech/webkit/code-editor'\n  import { ref } from 'vue'\n\n  const original = `{\n  \"cache\": {\n    \"ttl\": 60,\n    \"bypass\": false\n  }\n}\n`\n\n  const next = ref(`{\n  \"cache\": {\n    \"ttl\": 300,\n    \"bypass\": false,\n    \"stale\": true\n  }\n}\n`)\n</script>\n\n<template>\n  <CodeEditor\n    v-model=\"next\"\n    :original=\"original\"\n    language=\"json\"\n    diff\n    height=\"12rem\"\n    aria-label=\"Cache settings\"\n  />\n</template>"
+  },
+  {
+   "name": "ReadOnly",
+   "sfc": "<script setup>\n  import CodeEditor from '@aziontech/webkit/code-editor'\n\n  const query = `SELECT country, count(*) AS requests\nFROM events\nWHERE status >= 500\nGROUP BY country\nORDER BY requests DESC\nLIMIT 10;\n`\n</script>\n\n<template>\n  <CodeEditor\n    :model-value=\"query\"\n    language=\"sql\"\n    readonly\n    height=\"10rem\"\n    aria-label=\"Saved query\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/code-editor.md"
+}

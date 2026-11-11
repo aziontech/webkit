@@ -1,0 +1,19 @@
+{
+ "purpose": "The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid`, `topic` and `button`. A lane can carry a second link to the system status page, so a reader can check for an incident before opening a ticket.",
+ "useWhen": [
+  "On the Contact page, to route a reader to the team or channel that answers them."
+ ],
+ "avoidWhen": [
+  "For a closing ask at the end of a page → use `closing-call-to-action`.",
+  "For a grid of product use cases → use `use-cases`."
+ ],
+ "related": [
+  "topic` — each self-serve channel is a linked topic.",
+  "use-cases` — the sibling band of icon-led topics."
+ ],
+ "bestPractices": [
+  "Keep two lanes so they split the frame evenly, and three channels for the three-column row.",
+  "Keep each lane's description to one sentence that states what that team handles.",
+  "Set `target: '_blank'` on a channel or status link that leaves the site."
+ ]
+}

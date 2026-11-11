@@ -1,0 +1,22 @@
+{
+ "purpose": "SeverityTag labels an item with its place on an ordered severity scale: critical, high, medium, low or info. The level reads from a four-bar glyph, where the filled bars count the level, and from the label, so two levels never depend on colour alone to differ. It differs from `tag`, whose `severity` prop is a colour tone (success, warning, danger) with no order between values.",
+ "useWhen": [
+  "Show how severe an alert, finding, detection, incident or vulnerability is, in a table cell, a list row or a detail header.",
+  "Rank items on a fixed five-step scale where critical and high must stay visibly distinct."
+ ],
+ "avoidWhen": [
+  "The value is an outcome or a status with no order (allowed, blocked, healthy) → use `tag`.",
+  "The value is a count or a one-word indicator on an icon or avatar → use `badge`.",
+  "The user can select or remove the value (a severity filter) → use `chip`."
+ ],
+ "related": [
+  "tag` — a toned status or category label; use it for outcomes and states, not for an ordered level.",
+  "badge` — a dense count or short-label indicator.",
+  "chip` — an interactive or removable token, for severity filters."
+ ],
+ "bestPractices": [
+  "Keep the default label (the level name from the locale catalog, translated under `WebkitProvider`) so the text always names the level; override `label` only when the product glossary names the level differently.",
+  "Use one SeverityTag per row, in its own column, so the glyphs line up and the scale reads down the column.",
+  "Do not pair the tag with a toned `tag` for the same level; the glyph and the ramp already carry it."
+ ]
+}

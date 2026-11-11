@@ -4,6 +4,8 @@ import State0 from '../../../../../../../packages/webkit/blocks/platform/edit/at
 import source0 from '../../../../../../../packages/webkit/blocks/platform/edit/attribute-editor/attribute-editor.vue?raw'
 import State1 from '../../../../../../../packages/webkit/blocks/platform/edit/attribute-editor/variants/create.vue'
 import source1 from '../../../../../../../packages/webkit/blocks/platform/edit/attribute-editor/variants/create.vue?raw'
+import State2 from '../../../../../../../packages/webkit/blocks/platform/edit/attribute-editor/variants/paste-env.vue'
+import source2 from '../../../../../../../packages/webkit/blocks/platform/edit/attribute-editor/variants/paste-env.vue?raw'
 
 export default {
   title: "Templates/Platform/Edit/AttributeEditor",
@@ -11,8 +13,8 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer each variable is entered as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `CopyButton`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`." } },
-    webkit: {"block":"platform/edit/attribute-editor","intents":["variables","environment variables","env vars","secrets","create variable","edit variable","variables list","version history","variáveis","variáveis de ambiente","segredos","criar variável","key value editor","attribute editor",".env upload","editor de chave e valor","delete variable","clone variable"],"skills":["webkit-lists","webkit-tables","webkit-form","webkit-create-surface"],"primary":"List"}
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `CopyButton`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`." } },
+    webkit: {"block":"platform/edit/attribute-editor","intents":["variables","environment variables","env vars","secrets","create variable","edit variable","variables list","version history","variáveis","variáveis de ambiente","segredos","criar variável","key value editor","attribute editor",".env upload","editor de chave e valor","delete variable","clone variable","paste .env","paste env file","import .env","colar .env","importar variáveis","dotenv"],"skills":["webkit-lists","webkit-tables","webkit-form","webkit-create-surface"],"primary":"List"}
   }
 }
 
@@ -23,5 +25,10 @@ export const List = {
 
 export const Create = {
   render: () => ({ components: { Block: State1 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "Closed until Create Variable opens it: one empty Key and Value pair, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Save flags the empty or malformed fields only after it is pressed." }, source: { code: source1 } } }
+  parameters: { docs: { description: { story: "Closed until Create Variable opens it: one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed." }, source: { code: source1 } } }
+}
+
+export const PasteEnv = {
+  render: () => ({ components: { Block: State2 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "Create Variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env." }, source: { code: source2 } } }
 }

@@ -1,0 +1,19 @@
+{
+ "purpose": "Modal surface above the page, built on the shared Panel shell. The consumer composes a trigger, an overlay backdrop and the panel regions (header, body, footer); the body is the only region that scrolls. Below `md` it renders as a full-width bottom sheet.",
+ "useWhen": [
+  "A focused, blocking modal task or confirmation that should sit centered over the page and trap focus.",
+  "The interaction must be completed or dismissed before returning to the page."
+ ],
+ "avoidWhen": [
+  "The content is a side panel, long form, or navigation that should slide from an edge → use `drawer`.",
+  "It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown`."
+ ],
+ "related": [
+  "drawer` — edge-anchored panel for secondary tasks / long content.",
+  "dropdown` — trigger-anchored menu for actions/options."
+ ],
+ "bestPractices": [
+  "Trap focus, restore it on close, and close on Escape and overlay click.",
+  "One clear primary action; keep the body scannable."
+ ]
+}

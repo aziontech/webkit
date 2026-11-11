@@ -1,0 +1,131 @@
+{
+ "name": "prompt-input",
+ "binding": "PromptInput",
+ "import": "@aziontech/webkit/prompt-input",
+ "treeShakeableImport": "@aziontech/webkit/prompt-input",
+ "category": "ai",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated, a toolbar row for secondary controls (attach, mode), an attachments row above the text, an optional character limit with a counter, and constraint text under it (a disclaimer or the shortcuts it accepts). Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text, receives `submit` with the trimmed prompt, and clears it. While `state` is `submitted` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop.",
+ "setup": null,
+ "useWhen": [
+  "The input of any conversation with the generative AI assistant.",
+  "A single \"Ask about this page\" box that opens a conversation."
+ ],
+ "avoidWhen": [
+  "A text field in a form → `textarea` inside `field`.",
+  "Search over a list → `input` with a search icon or `property-filter`.",
+  "A command palette → `command`."
+ ],
+ "related": [
+  "textarea` — the form control; this one has no visible label and submits on Enter.",
+  "conversation` — the log above it; only the log scrolls.",
+  "suggestion-group` — prompts the reader can send without typing.",
+  "file-dropzone`, `chip` — what attachment flows compose into the `attachments` slot."
+ ],
+ "bestPractices": [
+  "Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.",
+  "Put the disclaimer and the shortcuts in `hint`, not in the placeholder.",
+  "Set `state` from the request so Submit turns into Stop; wire `stop` to abort it.",
+  "Clear `v-model` in the `submit` handler and keep focus in the input.",
+  "Use `maxLength` only when the backend has a limit; the counter is the warning."
+ ],
+ "props": [
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`)."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`)."
+  },
+  {
+   "name": "maxLength",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit."
+  },
+  {
+   "name": "minRows",
+   "type": "number",
+   "default": "1",
+   "required": "false",
+   "doc": "Rows shown while empty."
+  },
+  {
+   "name": "maxRows",
+   "type": "number",
+   "default": "6",
+   "required": "false",
+   "doc": "Rows the text area grows to before it scrolls."
+  },
+  {
+   "name": "state",
+   "type": "'ready' | 'submitted' | 'streaming'",
+   "default": "'ready'",
+   "required": "false",
+   "doc": "Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the text area, the submit control and every control in the slots' row."
+  }
+ ],
+ "events": [
+  {
+   "name": "submit",
+   "payload": "string",
+   "notes": ""
+  },
+  {
+   "name": "stop",
+   "payload": "—",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "attachments",
+   "scope": "—",
+   "notes": "Attached files or context chips, above the text."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "Secondary controls at the inline start of the toolbar; inside a `fieldset` disabled with the input."
+  },
+  {
+   "name": "hint",
+   "scope": "—",
+   "notes": "Constraint text under the input; referenced by `aria-describedby`."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import PromptInput from '@aziontech/webkit/prompt-input'\n  import { ref } from 'vue'\n\n  const prompt = ref('')\n  const last = ref('')\n\n  function send(text) {\n    last.value = text\n    prompt.value = ''\n  }\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <PromptInput\n      v-model=\"prompt\"\n      @submit=\"send\"\n    >\n      <template #hint>The AI assistant can make mistakes. Check important information.</template>\n    </PromptInput>\n    <p\n      v-if=\"last\"\n      class=\"text-body-sm text-(--text-muted)\"\n    >\n      Submitted: {{ last }}\n    </p>\n  </div>\n</template>"
+  },
+  {
+   "name": "Streaming",
+   "sfc": "<script setup>\n  import PromptInput from '@aziontech/webkit/prompt-input'\n  import { onBeforeUnmount, ref } from 'vue'\n\n  const prompt = ref('Why did my cache hit ratio drop?')\n  const state = ref('ready')\n  let timer\n\n  function send() {\n    prompt.value = ''\n    state.value = 'submitted'\n    timer = setTimeout(() => {\n      state.value = 'streaming'\n      timer = setTimeout(() => (state.value = 'ready'), 4000)\n    }, 800)\n  }\n\n  function stop() {\n    clearTimeout(timer)\n    state.value = 'ready'\n  }\n\n  onBeforeUnmount(() => clearTimeout(timer))\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <PromptInput\n      v-model=\"prompt\"\n      :state=\"state\"\n      @submit=\"send\"\n      @stop=\"stop\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "CharacterLimit",
+   "sfc": "<script setup>\n  import PromptInput from '@aziontech/webkit/prompt-input'\n  import { ref } from 'vue'\n\n  const prompt = ref(\n    'Write a function that redirects every request from the old blog path to the new one, keeps the query string, answers with a permanent redirect and logs the original path so I can check later which links people still use. It should also skip the redirect for requests that already come from the new path, and it should run before the cache.'\n  )\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <PromptInput\n      v-model=\"prompt\"\n      :max-length=\"280\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/prompt-input.md"
+}

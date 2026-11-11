@@ -1,0 +1,111 @@
+{
+ "name": "button-group",
+ "binding": "ButtonGroup",
+ "import": "@aziontech/webkit/button-group",
+ "treeShakeableImport": "@aziontech/webkit/button-group",
+ "category": "actions",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group. Each item is an icon button that names itself in a tooltip: a plain action, an on / off toggle, or a menu of options. Items past `visibleCount` collapse into one More actions menu. The toolbar is one tab stop with roving focus, so a row of six icons costs the keyboard user one Tab, not six.",
+ "setup": null,
+ "useWhen": [
+  "A row of icon actions on one surface: Copy, Format, Wrap lines, Download above a code editor.",
+  "Compact actions in a panel header where labels would not fit, each explained by its tooltip.",
+  "A mix of actions and on / off view toggles (wrap lines, show whitespace) that sit together.",
+  "More actions than the space allows: keep the frequent ones visible and move the rest into the overflow menu with `visibleCount`."
+ ],
+ "avoidWhen": [
+  "A choice of exactly one option among several (view mode, period) → use `toggle-group`.",
+  "One primary action with related alternatives → use `split-button`.",
+  "A single icon action → use `icon-button` (with a `tooltip`).",
+  "Page or form actions with text labels (Save, Cancel, Create) → use `button`s laid out by the page.",
+  "A long list of commands or navigation → use `dropdown-menu`."
+ ],
+ "related": [
+  "icon-button` — every item renders one; ButtonGroup adds the toolbar role, roving focus and overflow.",
+  "toggle-group` — a radiogroup of mutually exclusive options; ButtonGroup toggles are independent (`aria-pressed`).",
+  "split-button` — one main action plus a menu, with a visible text label.",
+  "dropdown-menu` — the menu behind menu items and the More actions overflow.",
+  "tooltip` — the visible name of each icon.",
+  "code-editor` — the usual host of an editor toolbar (`toolbar` slot)."
+ ],
+ "bestPractices": [
+  "Give the toolbar an `aria-label` that names the surface (\"Editor actions\"), and every item a `label` that says what it does (\"Copy code\", not \"Copy\").",
+  "Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.",
+  "Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.",
+  "Set `loading` on an action while its request runs instead of disabling the whole group.",
+  "Use `kind=\"transparent\"` on a surface that already has a border (a panel header) and `outlined` on the canvas.",
+  "Do not mix text buttons into the group; a text action belongs beside it as its own `Button`."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "ButtonGroupItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Actions, toggles and menus, in reading order."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "Accessible name of the toolbar."
+  },
+  {
+   "name": "kind",
+   "type": "'transparent' | 'outlined'",
+   "default": "'transparent'",
+   "required": "false",
+   "doc": "Visual variant of every button."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token of every button."
+  },
+  {
+   "name": "visibleCount",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Items shown as buttons; the rest go into the More actions menu. Unset shows every item."
+  },
+  {
+   "name": "overflowLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the overflow button. Empty uses the locale catalog (`More actions`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "click",
+   "payload": "{ id: string }",
+   "notes": "An action or a menu option was chosen (from the bar or the overflow)."
+  },
+  {
+   "name": "toggle",
+   "payload": "{ id: string; pressed: boolean }",
+   "notes": "A toggle was activated; `pressed` is the new state to store."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ButtonGroup from '@aziontech/webkit/button-group'\n  import { computed, ref } from 'vue'\n\n  const wrap = ref(false)\n  const last = ref('')\n\n  const items = [\n    { id: 'copy', label: 'Copy code', icon: 'pi pi-copy' },\n    { id: 'format', label: 'Format document', icon: 'pi pi-align-left' },\n    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'pi pi-arrows-h' },\n    {\n      id: 'download',\n      type: 'menu',\n      label: 'Download',\n      icon: 'pi pi-download',\n      options: [\n        { id: 'download-js', label: 'Download as .js' },\n        { id: 'download-zip', label: 'Download as .zip' }\n      ]\n    }\n  ]\n\n  const resolved = computed(() =>\n    items.map((item) => (item.type === 'toggle' ? { ...item, pressed: wrap.value } : item))\n  )\n\n  const onToggle = ({ id, pressed }) => {\n    if (id === 'wrap') wrap.value = pressed\n    last.value = `${id}: ${pressed ? 'on' : 'off'}`\n  }\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-(--spacing-sm)\">\n    <ButtonGroup\n      :items=\"resolved\"\n      aria-label=\"Editor actions\"\n      @click=\"({ id }) => (last = id)\"\n      @toggle=\"onToggle\"\n    />\n    <p\n      class=\"m-0 text-body-sm text-(--text-muted)\"\n      aria-live=\"polite\"\n    >\n      Last action: {{ last || 'none' }}\n    </p>\n  </div>\n</template>"
+  },
+  {
+   "name": "WithOverflow",
+   "sfc": "<script setup>\n  import ButtonGroup from '@aziontech/webkit/button-group'\n  import { computed, ref } from 'vue'\n\n  const pinned = ref(true)\n\n  const items = computed(() => [\n    { id: 'refresh', label: 'Refresh', icon: 'pi pi-refresh' },\n    {\n      id: 'pin',\n      type: 'toggle',\n      label: 'Pin to home',\n      icon: 'pi pi-star',\n      pressedIcon: 'pi pi-star-fill',\n      pressed: pinned.value\n    },\n    { id: 'share', label: 'Share', icon: 'pi pi-share-alt' },\n    { id: 'duplicate', label: 'Duplicate', icon: 'pi pi-clone' },\n    { id: 'archive', label: 'Archive', icon: 'pi pi-inbox', disabled: true },\n    {\n      id: 'export',\n      type: 'menu',\n      label: 'Export',\n      icon: 'pi pi-file-export',\n      options: [\n        { id: 'export-csv', label: 'Export as CSV' },\n        { id: 'export-json', label: 'Export as JSON' }\n      ]\n    }\n  ])\n</script>\n\n<template>\n  <ButtonGroup\n    :items=\"items\"\n    :visible-count=\"3\"\n    kind=\"outlined\"\n    size=\"small\"\n    aria-label=\"Record actions\"\n    @toggle=\"({ pressed }) => (pinned = pressed)\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/button-group.md"
+}

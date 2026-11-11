@@ -12,6 +12,12 @@ import State4 from '../../../../../../../packages/webkit/blocks/platform/edit/ed
 import source4 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/unsaved-changes.vue?raw'
 import State5 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/saving.vue'
 import source5 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/saving.vue?raw'
+import State6 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/data-stream.vue'
+import source6 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/data-stream.vue?raw'
+import State7 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/stale-record.vue'
+import source7 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/stale-record.vue?raw'
+import State8 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/danger-zone.vue'
+import source8 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/danger-zone.vue?raw'
 
 export default {
   title: "Templates/Platform/Edit/EditResource",
@@ -19,8 +25,8 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `HelperText` and `Button`." } },
-    webkit: {"block":"platform/edit/edit-resource","intents":["settings page","resource settings","settings tab","application settings","workload settings","firewall settings","edit settings","página de configurações","configurações do recurso","aba de configurações","save bar","unsaved changes bar","sticky save bar","discard and save","commit bar","barra de salvar","alterações não salvas","salvar alterações","edit resource","editar recurso"],"skills":["webkit-form","webkit-errors","webkit-layout","webkit-ux-heuristics"],"primary":"ProjectSettings"}
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`." } },
+    webkit: {"block":"platform/edit/edit-resource","intents":["settings page","resource settings","settings tab","application settings","workload settings","firewall settings","edit settings","página de configurações","configurações do recurso","aba de configurações","save bar","unsaved changes bar","sticky save bar","discard and save","commit bar","barra de salvar","alterações não salvas","salvar alterações","edit resource","editar recurso","data stream","data stream settings","log streaming","stream destination","sampling","log template","configurações do data stream","envio de logs","streaming de logs","stale record","changed elsewhere","overwrite changes","conflict on save","danger zone","delete resource","type the name to confirm","zona de perigo","excluir recurso","alterado em outro lugar","leave page guard","unsaved changes dialog"],"skills":["webkit-form","webkit-errors","webkit-layout","webkit-ux-heuristics"],"primary":"ProjectSettings"}
   }
 }
 
@@ -46,10 +52,25 @@ export const ResourceSettings = {
 
 export const UnsavedChanges = {
   render: () => ({ components: { Block: State4 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "The policy Settings tab after Debug rules was switched on: the bar is up; Discard restores the record and the bar leaves, Save holds its loading state and then leaves." }, source: { code: source4 } } }
+  parameters: { docs: { description: { story: "The policy Settings tab after Debug rules was switched on: the bar is up and the Settings tab carries the unsaved-changes dot. Discard restores the record and the bar leaves, Save holds its loading state and then leaves. Switching tabs while dirty asks first, through `useUnsavedChanges`: Keep editing, Discard changes, or Save changes and go." }, source: { code: source4 } } }
 }
 
 export const Saving = {
   render: () => ({ components: { Block: State5 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "While the save request is in flight: Save shows its loading state and Discard is disabled." }, source: { code: source5 } } }
+}
+
+export const DataStream = {
+  render: () => ({ components: { Block: State6 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The settings page of a data stream at /data-stream/:id/settings: General, Source (data source and the workloads it collects from), Sampling with its rate and the warning that sampling turns off the account's other streams, Template (a preset shown read-only in a CodeBlock, or a custom data set edited as JSON in a CodeEditor and checked on Save) and Destination, whose fields follow the connector (HTTP POST, Kafka, S3-compatible storage, log analytics). Save sends one test record; when the endpoint does not answer (in this demo, any host under .invalid) a danger Alert opens above Destination with Send test record, the URL turns invalid with its reason and takes the focus, and every other change stays." }, source: { code: source6 } } }
+}
+
+export const StaleRecord = {
+  render: () => ({ components: { Block: State7 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The record was saved by someone else after the form opened, and the form holds edits: a warning `Alert` above the sections says it changed elsewhere, with Reload. Save asks before it overwrites (Go back / Overwrite and save); Reload replaces the edits with the saved values and the notice turns into Edits discarded with Undo." }, source: { code: source7 } } }
+}
+
+export const DangerZone = {
+  render: () => ({ components: { Block: State8 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs." }, source: { code: source8 } } }
 }

@@ -1,6 +1,6 @@
 # Webkit Provider
 
-> Sets the language and text direction of every WebKit component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. With no provider mounted every component falls back to English. The element it renders carries `lang` and `dir`.
+> Sets the language and text direction of every WebKit component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. English is built in; Portuguese (`@aziontech/webkit/locales/pt-BR`) and Spanish (`@aziontech/webkit/locales/es`) are separate entries the app imports and passes through `catalogs`, so an English-only app does not ship them. The catalogs are static imports, so the server and the client render the same strings and hydration never flips after the first render. With no provider mounted every component falls back to English. The element it renders carries `lang` and `dir`.
 
 - Import: `import WebkitProvider from '@aziontech/webkit/webkit-provider'`
 - Category: utils · Surface: product · Structure: monolithic
@@ -8,14 +8,15 @@
 
 ## When to use
 
-- Once at the root of every app, with the locale the user chose (`pt-BR`, `en`, `es`).
+- Once at the root of every app, with the locale the user chose (`pt-BR`, `en`, `es`) and the catalogs of the languages the app offers.
 - Around one region that must read in another language than the rest of the page (a preview of an email in the customer's language).
 - To rename a built-in string for the whole app (`messages`), instead of passing the same label prop to every instance.
 
 ## Do
 
 - Mount one `WebkitProvider` at the app root and pass the locale the user chose; do not nest one per page.
-- Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no built-in catalog falls back to the same language, then to English.
+- Register every language the app offers in `catalogs` (`{ 'pt-BR': ptBR, es }`), imported from `@aziontech/webkit/locales/<tag>`; a `pt-BR` or `es` locale with no registered catalog falls back to English and warns once in development.
+- Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no registered catalog falls back to the same language, then to English.
 - Override built-in strings through `messages` (partial, deep-merged), not by forking components.
 - Leave `dir` on `auto`: Arabic, Hebrew, Persian and Urdu locales turn the subtree right-to-left.
 
@@ -36,7 +37,8 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `locale` | `string` | `'en'` | false | BCP 47 locale of everything below the provider; picks the built-in catalog (`en`, `pt-BR`, `es`) and the `Intl` formats. |
+| `locale` | `string` | `'en'` | false | BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. |
+| `catalogs` | `Record<string, Messages>` | `undefined` | false | Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English. |
 | `messages` | `PartialMessages` | `undefined` | false | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`). |
 | `dir` | `'ltr' \| 'rtl' \| 'auto'` | `'auto'` | false | Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left). |
 
@@ -66,6 +68,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import Pagination from '@aziontech/webkit/pagination'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { ref } from 'vue'
@@ -77,6 +80,7 @@
 <template>
   <WebkitProvider
     locale="pt-BR"
+    :catalogs="{ 'pt-BR': ptBR }"
     class="flex flex-col gap-(--spacing-md)"
   >
     <Pagination
@@ -105,6 +109,7 @@
 
 ```vue
 <script setup>
+  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import Pagination from '@aziontech/webkit/pagination'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
@@ -116,6 +121,7 @@
 <template>
   <WebkitProvider
     locale="pt-BR"
+    :catalogs="{ 'pt-BR': ptBR }"
     :messages="messages"
   >
     <Pagination :total="48" />

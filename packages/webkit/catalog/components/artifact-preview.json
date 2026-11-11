@@ -1,0 +1,22 @@
+{
+ "purpose": "A card for something the assistant generated — a file, a code snippet, a table, a configuration (Cloudscape artifact previews, AI Elements Artifact). The header names it (title, description, metadata such as size or format, a file-type icon) and carries its actions: Copy (when `copyValue` is set), Download (when `downloadHref` is set) and Open (when `openable`, emitting `open` so the owner shows the full artifact in a side panel — Cloudscape's canvas preview). The body holds a short inline preview (Cloudscape's inline preview): the first lines of code, the first rows of a table.",
+ "useWhen": [
+  "The assistant produced an artifact the reader may copy, download or open: a rules file, a CSV export, a command, a generated function."
+ ],
+ "avoidWhen": [
+  "Short code inside the prose of a response → fenced code in `StreamingResponse` (rendered as `CodeBlock`).",
+  "A resource that already exists in the product → link to its page; this card is for generated content.",
+  "Uploads the reader attached → `file-dropzone` items or chips in `PromptInput`'s attachments."
+ ],
+ "related": [
+  "code-block` — the usual inline preview body.",
+  "drawer` — where an `open` artifact is shown in full.",
+  "chat-message` — artifacts stack under the response, not inside its bubble."
+ ],
+ "bestPractices": [
+  "Stack artifacts below the message text, one card each; do not nest them in the bubble.",
+  "Keep artifact actions in the card and message actions in `ChatMessage.Actions`.",
+  "Express sizes in KB, MB or GB in `meta`.",
+  "Long or editable content opens (canvas); the inline body stays a preview."
+ ]
+}

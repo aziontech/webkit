@@ -1,0 +1,21 @@
+{
+ "purpose": "The heading of one band inside a page: an h2 with a one-line description, a copy-link button that appears when the heading is hovered or focused (when it has an `anchor`), and the band's own actions on the right. Below `md` the actions drop under the copy.",
+ "useWhen": [
+  "A band of a page that holds a card, a table or a list: Payment information on Billing, Get started on a resource, General in a create form.",
+  "A band that someone should be able to link to (`anchor`)."
+ ],
+ "avoidWhen": [
+  "The page title → use `page-header`.",
+  "A settings band whose guidance sits in a Hint and whose body is a card of setting rows → use `settings-section`."
+ ],
+ "related": [
+  "page-header` — the page's h1.",
+  "settings-section` — the settings band with a Hint, a gutter copy-link and an optional disclosure.",
+  "copy-button` — the copy-link affordance it renders."
+ ],
+ "bestPractices": [
+  "Keep the description to one sentence; put longer guidance in the band body.",
+  "Set `anchor` on bands people link to, so the h2 takes the id and the copy-link button appears.",
+  "Keep band actions to one or two outlined medium buttons."
+ ]
+}

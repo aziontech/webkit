@@ -1,13 +1,116 @@
 import type { Messages } from '../types'
 
 export const es: Messages = {
+  actionConfirmation: {
+    approve: 'Aprobar',
+    deny: 'Denegar',
+    approved: 'Aprobado',
+    denied: 'Denegado',
+    expired: 'Solicitud vencida',
+    confirmLabel: 'Escribe {phrase} para confirmar'
+  },
+  aiLoading: {
+    generating: 'Generando una respuesta'
+  },
+  artifactPreview: {
+    open: 'Abrir',
+    openLabel: 'Abrir {title}',
+    download: 'Descargar {title}',
+    copy: 'Copiar {title}'
+  },
+  chatMessage: {
+    user: 'Tú',
+    assistant: 'Asistente de IA',
+    system: 'Sistema',
+    labelWithTime: '{author} a las {time}',
+    actions: 'Acciones del mensaje',
+    error: 'No se pudo generar la respuesta.',
+    retry: 'Intentar de nuevo',
+    helpful: 'Útil',
+    notHelpful: 'No fue útil',
+    feedback: 'Valoración de la respuesta',
+    feedbackSubmitting: 'Enviando valoración',
+    feedbackSubmitted: 'Valoración enviada'
+  },
+  citation: {
+    label: 'Fuente {index}: {title}',
+    labelUntitled: 'Fuente {index}'
+  },
+  conversation: {
+    label: 'Conversación',
+    scrollToLatest: 'Ir al último mensaje',
+    announcement: '{author}: {text}'
+  },
+  promptInput: {
+    label: 'Prompt',
+    placeholder: 'Haz una pregunta',
+    submit: 'Enviar',
+    stop: 'Detener la generación',
+    count: '{count}/{max}',
+    overLimit: '{count} caracteres por encima del límite'
+  },
+  reasoning: {
+    thinking: 'Pensando',
+    thoughtBriefly: 'Pensó durante unos segundos',
+    skip: 'Omitir razonamiento',
+    thought: {
+      one: 'Pensó durante {count} segundo',
+      other: 'Pensó durante {count} segundos'
+    }
+  },
+  sources: {
+    label: 'Fuentes',
+    count: {
+      one: '{count} fuente',
+      other: '{count} fuentes'
+    }
+  },
+  suggestionGroup: {
+    label: 'Prompts sugeridos'
+  },
+  toolCall: {
+    pending: 'En espera',
+    running: 'En ejecución',
+    success: 'Completado',
+    error: 'Falló',
+    denied: 'Denegado',
+    input: 'Entrada',
+    output: 'Salida'
+  },
   alert: {
     close: 'Cerrar mensaje'
+  },
+  appLayout: {
+    navigation: 'Navegación',
+    tools: 'Ayuda',
+    closeTools: 'Cerrar ayuda',
+    splitPanel: 'Detalles',
+    closeSplitPanel: 'Cerrar panel',
+    resizeSplitPanel: 'Redimensionar panel',
+    showAtSide: 'Mostrar junto al contenido',
+    showAtBottom: 'Mostrar debajo del contenido'
   },
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
     empty: 'No se encontraron resultados.'
+  },
+  attributeEditor: {
+    add: 'Agregar elemento',
+    remove: 'Quitar elemento',
+    rowAction: '{label} {index}',
+    addGroup: 'Agregar grupo O',
+    empty: 'Todavía no hay elementos.',
+    remaining: {
+      one: 'Puedes agregar {count} elemento más.',
+      other: 'Puedes agregar {count} elementos más.'
+    },
+    limitReached: 'Alcanzaste el límite de {limit} elementos.',
+    added: 'Elemento {index} agregado.',
+    removed: 'Elemento {index} quitado.',
+    group: 'Grupo {index}',
+    and: 'y',
+    or: 'o'
   },
   avatar: {
     fallbackLabel: 'Avatar del usuario',
@@ -15,6 +118,14 @@ export const es: Messages = {
   },
   barList: {
     emptyTitle: 'No hay datos disponibles'
+  },
+  board: {
+    label: 'Panel',
+    item: 'Elemento {position}',
+    moved: '{label} movido a la posición {position} de {total}.',
+    resized: '{label} redimensionado a {span} de {columns} columnas.',
+    resizedWithHeight:
+      '{label} redimensionado a {span} de {columns} columnas, {height} píxeles de alto.'
   },
   breadcrumb: {
     label: 'Ruta de navegación',
@@ -27,6 +138,10 @@ export const es: Messages = {
     resizeHeight: 'Cambiar el alto de la vista previa',
     widthValue: '{value} píxeles de ancho',
     heightValue: '{value} píxeles de alto'
+  },
+  buttonGroup: {
+    moreActions: 'Más acciones',
+    pressed: 'Activado'
   },
   calendar: {
     placeholder: 'Selecciona un rango de fechas',
@@ -74,7 +189,9 @@ export const es: Messages = {
     roleDescription: 'gráfico',
     summary: '{series} series en {points} puntos{range}.',
     summaryRange: ', de {from} a {to}',
-    otherSeries: 'Otros'
+    otherSeries: 'Otros',
+    rangeDraft: 'Seleccionando de {from} a {to}',
+    rangeSelected: 'Seleccionado de {from} a {to}'
   },
   chartCard: {
     resize: 'Redimensionar tarjeta',
@@ -88,6 +205,24 @@ export const es: Messages = {
   },
   codeBlock: {
     copy: 'Copiar código'
+  },
+  codeEditor: {
+    label: 'Editor de código',
+    original: 'Original',
+    modified: 'Modificado',
+    problems: 'Problemas',
+    problemCount: {
+      zero: 'Ningún problema',
+      one: '{count} problema',
+      other: '{count} problemas'
+    },
+    line: 'Línea {line}',
+    error: 'Error',
+    warning: 'Advertencia',
+    info: 'Información',
+    loading: 'Cargando el editor completo…',
+    loadFailed: 'El editor completo no se pudo cargar. Puedes seguir editando aquí.',
+    tabHint: 'Pulsa Escape y luego Tab para salir del editor.'
   },
   collectionPreferences: {
     trigger: 'Preferencias',
@@ -113,6 +248,17 @@ export const es: Messages = {
     comfortable: 'Cómoda',
     compact: 'Compacta'
   },
+  combobox: {
+    empty: 'Sin resultados',
+    loading: 'Cargando opciones',
+    useValue: 'Usar "{value}"',
+    clear: 'Borrar',
+    suggestions: 'Sugerencias',
+    count: {
+      one: '{count} opción',
+      other: '{count} opciones'
+    }
+  },
   command: {
     empty: 'No se encontraron resultados.',
     placeholder: 'Buscar en todo',
@@ -128,6 +274,61 @@ export const es: Messages = {
   copyButton: {
     copy: 'Copiar',
     copied: 'Copiado'
+  },
+  dateRangePicker: {
+    label: 'Intervalo de tiempo',
+    placeholder: 'Selecciona un intervalo de tiempo',
+    dialog: 'Elige un intervalo de tiempo',
+    rangeType: 'Tipo de intervalo',
+    relative: 'Intervalo relativo',
+    absolute: 'Intervalo absoluto',
+    quickRanges: 'Intervalos rápidos',
+    custom: 'Intervalo personalizado',
+    amount: 'Duración',
+    unit: 'Unidad',
+    second: {
+      one: 'Último segundo',
+      other: 'Últimos {count} segundos'
+    },
+    minute: {
+      one: 'Último minuto',
+      other: 'Últimos {count} minutos'
+    },
+    hour: {
+      one: 'Última hora',
+      other: 'Últimas {count} horas'
+    },
+    day: {
+      one: 'Último día',
+      other: 'Últimos {count} días'
+    },
+    week: {
+      one: 'Última semana',
+      other: 'Últimas {count} semanas'
+    },
+    month: {
+      one: 'Último mes',
+      other: 'Últimos {count} meses'
+    },
+    year: {
+      one: 'Último año',
+      other: 'Últimos {count} años'
+    },
+    unitSecond: 'Segundos',
+    unitMinute: 'Minutos',
+    unitHour: 'Horas',
+    unitDay: 'Días',
+    unitWeek: 'Semanas',
+    unitMonth: 'Meses',
+    unitYear: 'Años',
+    apply: 'Aplicar',
+    cancel: 'Cancelar',
+    previous: 'Intervalo anterior',
+    next: 'Intervalo siguiente',
+    incomplete: 'Elige un inicio y un fin.',
+    order: 'El fin debe ser posterior al inicio.',
+    outOfBounds: 'Elige un intervalo dentro de las fechas permitidas.',
+    invalidAmount: 'Introduce un número entero mayor que 0.'
   },
   dialog: {
     close: 'Cerrar'
@@ -175,8 +376,30 @@ export const es: Messages = {
     roleDescription: 'gráfico',
     otherSeries: 'Otros'
   },
+  gaugeChart: {
+    emptyTitle: 'No hay datos disponibles',
+    valueWithStatus: '{value}, {status}',
+    range: 'Rango de {min} a {max}'
+  },
+  mapChart: {
+    emptyTitle: 'No hay datos disponibles',
+    roleDescription: 'mapa',
+    name: 'Nombre',
+    value: 'Valor',
+    summary: {
+      one: '{count} lugar en el mapa, {total} en total.',
+      other: '{count} lugares en el mapa, {total} en total.'
+    },
+    legend: 'De {min} a {max}'
+  },
   drawer: {
     close: 'Cerrar'
+  },
+  errorBoundary: {
+    title: 'No se pudo cargar esta sección',
+    description:
+      'Algo salió mal al mostrar esta parte de la página. El resto de la página sigue funcionando.',
+    retry: 'Reintentar'
   },
   field: {
     required: '(Obligatorio)'
@@ -202,6 +425,13 @@ export const es: Messages = {
   heroForm: {
     search: 'Buscar',
     empty: 'No se encontraron resultados.'
+  },
+  hotspot: {
+    label: 'Paso del tutorial: {title}',
+    stepOf: 'Paso {current} de {total}',
+    previous: 'Anterior',
+    next: 'Siguiente',
+    finish: 'Finalizar'
   },
   keyValuePairs: {
     notSet: 'Sin definir'
@@ -297,6 +527,20 @@ export const es: Messages = {
   progress: {
     label: 'Progreso'
   },
+  propertyFilterQuery: {
+    label: 'Consulta',
+    placeholder: 'Escribe una consulta, por ejemplo status = Active AND requests > 10',
+    fields: 'Campos',
+    all: 'Se cumplen todas las condiciones',
+    any: 'Se cumple cualquier condición',
+    unknownField: 'No hay ningún campo llamado “{field}”.',
+    unknownOperator: '“{operator}” no se aplica a {field}.',
+    missingOperator: 'Añade un operador después de {field}, por ejemplo =.',
+    missingValue: 'Añade un valor después de {operator}.',
+    expectedConnective: 'Une las condiciones con AND u OR antes de “{word}”.',
+    danglingConnective: 'Añade una condición después de {connective}.',
+    unclosedQuote: 'Cierra las comillas abiertas en el carácter {position}.'
+  },
   propertyFilter: {
     label: 'Filtrar',
     placeholder: 'Filtrar por propiedad o texto',
@@ -330,6 +574,26 @@ export const es: Messages = {
   },
   resizable: {
     handle: 'Redimensionar panel'
+  },
+  schemaForm: {
+    required: 'Este campo es obligatorio.',
+    minLength: 'Usa al menos {min} caracteres.',
+    maxLength: 'Usa como máximo {max} caracteres.',
+    pattern: 'Este valor no sigue el formato esperado.',
+    minimum: 'Ingresa {min} o más.',
+    maximum: 'Ingresa {max} o menos.',
+    number: 'Ingresa un número.',
+    integer: 'Ingresa un número entero.',
+    enum: 'Elige una de las opciones.',
+    minItems: 'Agrega al menos {min} valores.',
+    maxItems: 'Agrega como máximo {max} valores.',
+    listItem: 'Línea {line}: {message}',
+    json: 'Ingresa un JSON válido.',
+    selectPlaceholder: 'Selecciona una opción',
+    numberPlaceholder: 'Un número',
+    numberFrom: 'Desde {min}',
+    listPlaceholder: 'Un valor por línea',
+    jsonPlaceholder: 'Un valor JSON'
   },
   sectionHeader: {
     copyLink: 'Copiar enlace a la sección {title}',
@@ -450,7 +714,31 @@ export const es: Messages = {
     unsorted: 'Ordenar columna'
   },
   tabs: {
-    close: 'Cerrar pestaña'
+    close: 'Cerrar pestaña',
+    unsaved: 'Cambios sin guardar'
+  },
+  tagEditor: {
+    label: 'Etiquetas',
+    key: 'Clave',
+    value: 'Valor',
+    keyPlaceholder: 'Ingresa la clave',
+    valuePlaceholder: 'Ingresa el valor',
+    add: 'Agregar etiqueta',
+    remove: 'Quitar etiqueta',
+    undo: 'Deshacer',
+    undoLabel: 'Deshacer la eliminación de la etiqueta {index}',
+    markedForRemoval: 'Esta etiqueta se eliminará cuando guardes.',
+    empty: 'No hay etiquetas asociadas al recurso.',
+    remaining: {
+      one: 'Puedes agregar {count} etiqueta más.',
+      other: 'Puedes agregar {count} etiquetas más.'
+    },
+    limitReached: 'Alcanzaste el límite de {limit} etiquetas.',
+    keyRequired: 'Ingresa una clave.',
+    keyDuplicate: 'Otra etiqueta ya usa esta clave.',
+    keyReserved: 'Las claves no pueden empezar con "{prefix}".',
+    keyInvalid: 'Usa solo letras, números, espacios y + - = . _ : / @.',
+    tooLong: 'Usa {max} caracteres o menos.'
   },
   themeSwitcher: {
     label: 'Tema',
@@ -464,12 +752,56 @@ export const es: Messages = {
   toggleGroup: {
     option: 'Opción {index}'
   },
+  trace: {
+    label: 'Traza',
+    search: 'Buscar spans',
+    noMatch: 'Ningún span coincide con “{query}”.',
+    clearSearch: 'Borrar búsqueda',
+    empty: 'No hay spans en esta traza.',
+    details: 'Detalles de {name}',
+    close: 'Cerrar',
+    copyName: 'Copiar nombre del span',
+    service: 'Servicio',
+    startedAt: 'Inicio',
+    duration: 'Duración',
+    share: 'Parte de la traza',
+    percent: '{value} %',
+    failed: 'Falló',
+    running: 'En ejecución',
+    attributes: 'Atributos',
+    milliseconds: '{value} ms',
+    seconds: '{value} s'
+  },
   tracker: {
     noData: 'Sin datos',
     roleDescription: 'historial de estado'
   },
   tree: {
     emptyTitle: 'No hay elementos'
+  },
+  unsavedChanges: {
+    title: 'Cambios sin guardar',
+    description: 'Esta página tiene cambios que no guardaste. Si sales ahora, se descartarán.',
+    descriptionSavable:
+      'Esta página tiene cambios que aún no se guardaron. Guárdalos antes de salir o descártalos y continúa.',
+    keepEditing: 'Seguir editando',
+    discard: 'Descartar cambios',
+    save: 'Guardar cambios'
+  },
+  tutorialPanel: {
+    title: 'Tutoriales',
+    description: 'Aprende el producto haciendo una tarea real, paso a paso.',
+    listLabel: 'Tutoriales disponibles',
+    empty: 'Aún no hay tutoriales.',
+    start: 'Iniciar tutorial',
+    restart: 'Reiniciar tutorial',
+    exit: 'Salir del tutorial',
+    back: 'Volver a los tutoriales',
+    completed: 'Completado',
+    completedTitle: 'Tutorial completado',
+    completedDescription: 'Terminaste {title}.',
+    taskCount: { one: '{count} tarea', other: '{count} tareas' },
+    stepCount: { one: '{count} paso', other: '{count} pasos' }
   },
   wizard: {
     stepOf: 'Paso {step} de {total}',

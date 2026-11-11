@@ -1,22 +1,22 @@
 # ConfigurableDashboard (`platform/dashboard/configurable-dashboard`)
 
-> A configurable dashboard: the reader arranges the cards. An Edit layout Button turns on the ChartCard drag handle and resize corner on every card of a 12-column grid; a card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. The page owns the layout, an array of id, span and height bound with v-model:span and v-model:height, and the order, which it changes on drop or on the arrow keys of a focused drag handle, then puts focus back on the moved handle and announces the move in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `ChartCard` (with its drag handle and resize corner), `Chart`, `DonutChart`, `BarList`, `Hint`, `Tag` and `Button`.
+> A configurable dashboard: the reader arranges the cards. The page binds its layout, an array of id, span and height in order, to a Board with v-model:layout; an Edit layout Button turns on the board's editing, which shows the ChartCard drag handle and resize corner on every card. A card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels; the board is twelve columns wide from a 48rem container and one column below it. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. Drop a card on another or press the arrow keys on its handle to move it; the board puts focus back on the moved handle and announces every move and resize in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `Button`, `Board`, `ChartCard` (with its drag handle and resize corner), `Hint`, `Tag`, `DonutChart`, `BarList` and `Chart`.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/configurable-dashboard/configurable-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/configurable-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Board](../../../components/board.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-layout`, `webkit-ui-states`
 
 ## Asked as
 
-configurable dashboard; custom dashboard; drag and drop dashboard; resizable cards; edit layout; dashboard builder; painel configurável; painel personalizado; reorganizar cards
+configurable dashboard; custom dashboard; drag and drop dashboard; resizable cards; edit layout; board; dashboard grid; dashboard builder; painel configurável; painel personalizado; reorganizar cards
 
 A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it
 is, and keep that layout. It serves readers who come back to the same page every day and care about
 different cards than the default puts first. The page owns the layout (an array of id, span and
-height) and the order; `ChartCard` provides the drag handle, the resize corner and their keyboard
-model.
+height, in order) and binds it to `Board`, which moves, resizes, clamps and announces; the
+`ChartCard` inside each `Board.Item` provides the drag handle and the resize corner.
 
 ## When to use
 
@@ -46,44 +46,52 @@ Title `Traffic overview` and one sentence on what the page shows, over the rest 
 the mode. `Reset layout` (transparent) appears only once the layout differs from the default. While
 editing, one line of help sits beside the buttons: how to drag, resize and use the keyboard.
 
-### C. Cards — `ChartCard` (required)
+### C. Grid — `Board` (required)
 
-Each card binds `v-model:span` and `v-model:height`, snaps to whole columns between 3 and 12 and to a
-height between 280 and 720 pixels, and turns on `draggable` and `resizable` only while editing. In edit
-mode the header shows `ChartCard.DragHandle` and the card shows `ChartCard.ResizeHandle`, each with an
-`aria-label` naming the card (`Move Requests over time`, `Resize Requests over time`). The header
-keeps only the title and its hint; no menus or toggles compete with the handles.
+`v-model:layout` binds the page's layout; `editing` follows the mode button. The bounds are set once
+on the board: whole columns between 3 and 12, a height between 280 and 720 pixels. One `Board.Item`
+per layout entry, keyed and labelled by the card title, so the board announces `Requests over time
+moved to position 2 of 6.` and `… resized to 6 of 12 columns.` and puts focus back on the moved
+handle. The board is twelve columns from a 48rem container and one column below it.
 
-### D. Card definitions — `Hint` (required)
+### D. Cards — `ChartCard` (required)
+
+Inside a `Board.Item` the card takes its span, height and bounds from the board and shows its handles
+only while the board is editing, so it carries no size props or drag events of its own. The header
+holds `ChartCard.DragHandle` and the card `ChartCard.ResizeHandle`, each with an `aria-label` naming
+the card (`Move Requests over time`, `Resize Requests over time`). The header keeps only the title and
+its hint; no menus or toggles compete with the handles.
+
+### E. Card definitions — `Hint` (required)
 
 One sentence beside each title that defines the metric.
 
-### E. Span while editing — `Tag` (required in edit mode)
+### F. Span while editing — `Tag` (required in edit mode)
 
 Shows the card's span (`6/12`) in the header controls while editing, so a resize has a visible result
 without counting grid lines.
 
-### F. Split cards — `DonutChart` (optional)
+### G. Split cards — `DonutChart` (optional)
 
 A share of a whole (for example requests by region). Renders its own loading and empty state inside
 the card.
 
-### G. Ranked cards — `BarList` (optional)
+### H. Ranked cards — `BarList` (optional)
 
 A ranked list sorted descending (top sources). Renders its own loading and empty state.
 
-### H. Time series cards — `Chart` (optional)
+### I. Time series cards — `Chart` (optional)
 
 Bars, area or line over time. All time series share one `active-index`, so hovering a moment moves the
 crosshair on every card. A legend with totals appears only when a card has more than one series.
 
 ## Do
 
-- Keep the layout as data (id, span, height, order) owned by the page, and persist it wherever the
-  product stores preferences.
-- After a keyboard move, return focus to the moved card's handle and announce the new position in the
-  polite live region (`Requests over time moved to position 2 of 6.`).
-- Announce a resize (`… resized to …`) and a reset (`Layout reset to the default.`).
+- Keep the layout as data (id, span, height, order) owned by the page, bind it to `Board`, and persist
+  it wherever the product stores preferences.
+- Give every `Board.Item` the card title as its `label`; it is what moves and resizes announce.
+- Announce a reset yourself in a polite live region (`Layout reset to the default.`); the board
+  announces only what it did.
 - Keep every card at its place and size in loading and empty states, so the reader can arrange it
   before data arrives.
 
@@ -106,9 +114,10 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 ## Accessibility
 
-- The drag handle moves a card with the arrow keys; the resize corner changes span with Left and Right and height with Up and Down.
+- The drag handle moves a card with the arrow keys; the resize corner changes span with Left and Right and height with Up and Down (`Board` handles both and mirrors them under right-to-left).
 - Focus returns to the moved card's handle after a reorder.
-- Every move, resize and reset is announced in an `aria-live="polite"` `sr-only` region.
+- `Board` announces every move and resize in its own polite live region; the page announces the reset in an `aria-live="polite"` `sr-only` region.
+- The board is a list named `Traffic overview cards`, one item per card.
 - `Edit layout` exposes its mode with `aria-pressed`.
 - Charts carry an `aria-label` equal to the card title.
 
@@ -124,7 +133,8 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 - `platform/dashboard/analytics-dashboard` — the static version of the same cards.
 - `platform/dashboard/data-dashboard` — a fixed dashboard when the order tells the story.
-- `ChartCard` — owns the drag and resize handles and their keyboard model.
+- `Board` — the grid component: layout model, bounds, reorder, resize and announcements.
+- `ChartCard` — the card inside each item, with the drag handle and resize corner.
 
 ## Variants
 
@@ -141,6 +151,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ```vue
 <script setup>
   import BarList from '@aziontech/webkit/bar-list'
+  import Board from '@aziontech/webkit/board'
   import Button from '@aziontech/webkit/button'
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
@@ -148,7 +159,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Tag from '@aziontech/webkit/tag'
-  import { computed, nextTick, ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   const loading = false
 
@@ -355,41 +366,9 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const editing = ref(false)
   const layout = ref(defaultLayout.map((card) => ({ ...card })))
   const activeIndex = ref(null)
-  const from = ref(-1)
   const announcement = ref('')
-  const grid = ref(null)
 
   const customized = computed(() => JSON.stringify(layout.value) !== JSON.stringify(defaultLayout))
-
-  const sizeLabel = (card) =>
-    card.height === undefined
-      ? `${card.span} of 12 columns`
-      : `${card.span} of 12 columns, ${card.height} px`
-
-  const reorder = (to) => {
-    const index = from.value
-    from.value = -1
-    if (index < 0 || index === to) return
-    const next = [...layout.value]
-    const [card] = next.splice(index, 1)
-    next.splice(to, 0, card)
-    layout.value = next
-    announcement.value = `${cards[card.id].title} moved to position ${to + 1} of ${next.length}.`
-  }
-
-  const move = async (index, direction) => {
-    const to = index + (direction === 'up' || direction === 'left' ? -1 : 1)
-    if (to < 0 || to >= layout.value.length) return
-    const { id } = layout.value[index]
-    from.value = index
-    reorder(to)
-    await nextTick()
-    grid.value?.querySelector(`[data-card-id="${id}"] [data-testid$="__drag-handle"]`)?.focus()
-  }
-
-  const announceSize = (card) => {
-    announcement.value = `${cards[card.id].title} resized to ${sizeLabel(card)}.`
-  }
 
   const reset = () => {
     layout.value = defaultLayout.map((card) => ({ ...card }))
@@ -432,92 +411,87 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
         </div>
       </div>
 
-      <div
-        ref="grid"
-        class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
+      <Board
+        v-model:layout="layout"
+        :editing="editing"
+        aria-label="Traffic overview cards"
+        :min-span="3"
+        :max-span="12"
+        :min-height="280"
+        :max-height="720"
       >
-        <ChartCard
-          v-for="(card, index) in layout"
+        <Board.Item
+          v-for="card in layout"
           :key="card.id"
-          v-model:span="card.span"
-          v-model:height="card.height"
-          :data-card-id="card.id"
-          :draggable="editing"
-          :resizable="editing"
-          :min-span="3"
-          :max-span="12"
-          :min-height="280"
-          :max-height="720"
-          @drag-start="from = index"
-          @dragover.prevent
-          @drop="reorder(index)"
-          @move="(event, direction) => move(index, direction)"
-          @resize-end="announceSize(card)"
+          :item-id="card.id"
+          :label="cards[card.id].title"
         >
-          <ChartCard.Header>
-            <ChartCard.DragHandle :aria-label="'Move ' + cards[card.id].title" />
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-              <ChartCard.Title>{{ cards[card.id].title }}</ChartCard.Title>
-              <Hint :text="cards[card.id].hint" />
-            </span>
-            <ChartCard.Controls v-if="editing">
-              <Tag
-                :label="card.span + '/12'"
-                severity="secondary"
-                size="small"
-                icon="pi pi-arrows-h"
+          <ChartCard>
+            <ChartCard.Header>
+              <ChartCard.DragHandle :aria-label="'Move ' + cards[card.id].title" />
+              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+                <ChartCard.Title>{{ cards[card.id].title }}</ChartCard.Title>
+                <Hint :text="cards[card.id].hint" />
+              </span>
+              <ChartCard.Controls v-if="editing">
+                <Tag
+                  :label="card.span + '/12'"
+                  severity="secondary"
+                  size="small"
+                  icon="pi pi-arrows-h"
+                />
+              </ChartCard.Controls>
+            </ChartCard.Header>
+            <ChartCard.Content>
+              <DonutChart
+                v-if="cards[card.id].kind === 'donut'"
+                :series="cards[card.id].series"
+                :format-value="formatters[cards[card.id].format]"
+                empty-title="No requests yet"
+                empty-description="Metrics appear here once a service serves requests."
+                :loading="loading"
+                :aria-label="cards[card.id].title"
               />
-            </ChartCard.Controls>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <DonutChart
-              v-if="cards[card.id].kind === 'donut'"
-              :series="cards[card.id].series"
-              :format-value="formatters[cards[card.id].format]"
-              empty-title="No requests yet"
-              empty-description="Metrics appear here once a service serves requests."
-              :loading="loading"
-              :aria-label="cards[card.id].title"
-            />
-            <BarList
-              v-else-if="cards[card.id].kind === 'bar-list'"
-              :items="cards[card.id].items"
-              sort="descending"
-              :format-value="formatters[cards[card.id].format]"
-              empty-title="No requests yet"
-              :loading="loading"
-              :aria-label="cards[card.id].title"
-            />
-            <Chart
-              v-else
-              v-model:active-index="activeIndex"
-              :series="cards[card.id].series"
-              :labels="labels"
-              :format-value="formatters[cards[card.id].format]"
-              empty-title="No requests yet"
-              empty-description="Metrics appear here once a service serves requests."
-              :loading="loading"
-            >
-              <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
-              <Chart.Bar
-                v-if="cards[card.id].kind === 'bar'"
-                stacked
+              <BarList
+                v-else-if="cards[card.id].kind === 'bar-list'"
+                :items="cards[card.id].items"
+                sort="descending"
+                :format-value="formatters[cards[card.id].format]"
+                empty-title="No requests yet"
+                :loading="loading"
+                :aria-label="cards[card.id].title"
               />
-              <Chart.Area v-else-if="cards[card.id].kind === 'area'" />
-              <Chart.Line v-else />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend
-                v-if="cards[card.id].series.length > 1"
-                totals
-              />
-            </Chart>
-          </ChartCard.Content>
-          <ChartCard.ResizeHandle :aria-label="'Resize ' + cards[card.id].title" />
-        </ChartCard>
-      </div>
+              <Chart
+                v-else
+                v-model:active-index="activeIndex"
+                :series="cards[card.id].series"
+                :labels="labels"
+                :format-value="formatters[cards[card.id].format]"
+                empty-title="No requests yet"
+                empty-description="Metrics appear here once a service serves requests."
+                :loading="loading"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Bar
+                  v-if="cards[card.id].kind === 'bar'"
+                  stacked
+                />
+                <Chart.Area v-else-if="cards[card.id].kind === 'area'" />
+                <Chart.Line v-else />
+                <Chart.Crosshair />
+                <Chart.Tooltip />
+                <Chart.Legend
+                  v-if="cards[card.id].series.length > 1"
+                  totals
+                />
+              </Chart>
+            </ChartCard.Content>
+            <ChartCard.ResizeHandle :aria-label="'Resize ' + cards[card.id].title" />
+          </ChartCard>
+        </Board.Item>
+      </Board>
 
       <p
         class="sr-only"

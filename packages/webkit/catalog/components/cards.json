@@ -1,0 +1,23 @@
+{
+ "purpose": "A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It shares Table's item and selection model — `items`, `trackBy`, `selectedKeys` — so `useCollection` binds it through `cardsProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.",
+ "useWhen": [
+  "Items people recognise by a few fields or a picture rather than compare column by column (applications, templates, environments).",
+  "The card form of a list page (`platform/view/card-view`), filtered and paged by `useCollection`."
+ ],
+ "avoidWhen": [
+  "Records compared, sorted or scanned across many fields → use `table`.",
+  "A fixed marketing grid of features or links → use `card-grid`.",
+  "A single content box → use `card`."
+ ],
+ "related": [
+  "use-collection` — filters, pages and selects; `cardsProps` is the binding.",
+  "table` — the same collection as rows; same item and selection model.",
+  "property-filter`, `collection-preferences`, `pagination` — the controls around it.",
+  "card` — one standalone card."
+ ],
+ "bestPractices": [
+  "Put the item's name, as a link to the item, in the `header` slot: it also names the selection control.",
+  "Keep each card to a handful of label and value pairs; let `collection-preferences` choose which.",
+  "Use `selectionMode=\"multi\"` only when a bulk action exists next to the list."
+ ]
+}

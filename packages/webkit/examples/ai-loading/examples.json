@@ -1,0 +1,16 @@
+{
+  "component": "ai-loading",
+  "title": "Components/Primitives/AI/AiLoading",
+  "examples": [
+    {
+      "name": "Inline",
+      "summary": "Processing: three pulsing dots beside `Generating a response`, shown only after the default one-second delay so a fast response never flickers.",
+      "file": "inline.vue"
+    },
+    {
+      "name": "Bar",
+      "summary": "Generating mixed content: an indeterminate bar under the loading text where a table is about to appear, with the text naming what is coming.",
+      "file": "bar.vue"
+    }
+  ]
+}

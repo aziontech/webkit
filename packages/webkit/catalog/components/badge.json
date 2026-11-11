@@ -1,0 +1,19 @@
+{
+ "purpose": "Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status label with severity-based color coding. Use it to draw attention to a small piece of state — an unread count, a quantity, a short status word — and it is commonly overlaid on icons, avatars, or buttons. It differs from its sibling `tag`: `tag` is a labelled status/category chip (optional leading icon, optional pill shape, masked surfaces), whereas `badge` is a denser count/short-label indicator with fully filled severity surfaces and no icon affordance.",
+ "useWhen": [
+  "Surface a numeric count or a very short status label attached to another element (a bell with unread count, a status dot with a label).",
+  "Convey severity through `kind` (neutral / success / danger / …) with a fully filled surface."
+ ],
+ "avoidWhen": [
+  "The label is user-removable or selectable → use `chip`.",
+  "It is a labelled category/status with an optional leading icon or pill shape → use `tag`."
+ ],
+ "related": [
+  "tag` — labelled status/category chip with optional icon and pill shape; use when the label is descriptive, not a count.",
+  "chip` — interactive/removable token; use when the user can select or dismiss it."
+ ],
+ "bestPractices": [
+  "Keep the content to a count or a 1–2 word label; longer text belongs in `tag`.",
+  "Drive color from `kind`, never a hardcoded color or a raw palette class."
+ ]
+}

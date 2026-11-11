@@ -104,8 +104,17 @@
       "aria-required-children",
       "nested-interactive"
     ],
+    "blocks/platform/view/split-view/variants/event-document.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
     "blocks/platform/view/split-view/variants/failed.vue": ["nested-interactive"],
     "blocks/platform/view/split-view/variants/filtered.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/split-view/variants/query.vue": ["aria-required-children"],
+    "blocks/platform/view/split-view/variants/sessions.vue": [
       "aria-required-children",
       "nested-interactive"
     ],
@@ -432,8 +441,17 @@
       "aria-required-children",
       "nested-interactive"
     ],
+    "blocks/platform/view/split-view/variants/event-document.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
     "blocks/platform/view/split-view/variants/failed.vue": ["nested-interactive"],
     "blocks/platform/view/split-view/variants/filtered.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/split-view/variants/query.vue": ["aria-required-children"],
+    "blocks/platform/view/split-view/variants/sessions.vue": [
       "aria-required-children",
       "nested-interactive"
     ],
@@ -611,8 +629,17 @@
       "aria-required-children",
       "nested-interactive"
     ],
+    "blocks/platform/view/split-view/variants/event-document.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
     "blocks/platform/view/split-view/variants/failed.vue": ["nested-interactive"],
     "blocks/platform/view/split-view/variants/filtered.vue": [
+      "aria-required-children",
+      "nested-interactive"
+    ],
+    "blocks/platform/view/split-view/variants/query.vue": ["aria-required-children"],
+    "blocks/platform/view/split-view/variants/sessions.vue": [
       "aria-required-children",
       "nested-interactive"
     ],

@@ -1,0 +1,25 @@
+{
+ "purpose": "The brick of the page column: a section whose header row is divided from its body by a hairline and which is divided from the module above it by another. Stacked inside a `section-container`, a run of modules reads as one continuous frame, because each module draws only its own top rule and hands its sides to the column. It is where a band's header and a band's content are joined, so no page has to re-draw that join.",
+ "useWhen": [
+  "For every band stacked inside a `section-container`.",
+  "Whenever a band needs a header row divided from its content by a rule.",
+  "For a body-only band, by passing no title and no header slot."
+ ],
+ "avoidWhen": [
+  "For the full-bleed band at the top of a page → use `hero`.",
+  "For the column the modules stack inside → use `section-container`.",
+  "For the header alone, with no body → use `section-title`, which this module composes.",
+  "For a hairline grid of cells → use `card-grid` inside this module's body."
+ ],
+ "related": [
+  "section-container` — the framed column this module stacks inside.",
+  "section-title` — the header row this module renders by default.",
+  "card-grid` — the edge-to-edge cell grid a module's body commonly holds.",
+  "frame-box` — the registration frame a body wraps itself in."
+ ],
+ "bestPractices": [
+  "Pass `divided` as `false` on the first module in a column: its top edge is already the hero's bottom rule, and drawing its own would put two hairlines on one pixel.",
+  "Pass `padded` as `false` when the body is an edge-to-edge `card-grid`, so the grid's rules meet the frame with no gutter.",
+  "Use `title` and `eyebrow` for the ordinary header, and reach for the `header` slot only when the row needs markup the default header cannot express."
+ ]
+}

@@ -1,0 +1,22 @@
+{
+ "purpose": "The \"what teams use it for\" band of a product page: a three-column frame whose first cell carries the band's overline, headline, lead and one call to action, followed by one cell per use case. It is a page section — the site places it from a `{ _id: 'use-cases', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `card-grid`, `frame-box`, `overline`, `topic` and `button` rather than owning any anatomy of its own.",
+ "useWhen": [
+  "On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for.",
+  "Whenever a page needs three to six short, icon-led use cases with one link out to the documentation."
+ ],
+ "avoidWhen": [
+  "For a grid of features with artwork → use `feature-tiles`.",
+  "For use cases that each link to their own page → use `use-case-links`.",
+  "Inside another band's cell → compose `topic` directly."
+ ],
+ "related": [
+  "topic` — the icon, title and description cell each use case is rendered with.",
+  "card-grid` — the frame grid this band lays its cells in."
+ ],
+ "bestPractices": [
+  "Keep `items` to four or so; the first cell spans two rows at `lg`, so four cases fill the grid exactly.",
+  "Write `title` as the heading the page's outline needs; it is the band's `h2`.",
+  "Give `primaryAction` an `href` to the documentation and set `trailing` so the chevron reads as \"go\".",
+  "Leave `eyebrow` as the product name; it is the overline the reader scans first."
+ ]
+}

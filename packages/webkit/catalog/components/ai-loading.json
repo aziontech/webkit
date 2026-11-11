@@ -1,0 +1,22 @@
+{
+ "purpose": "The loading state of a generative AI response (Cloudscape generative AI loading states and loading bar, AI Elements Loader): visible loading text — `Generating a response`, `Loading list of workloads` — paired with three pulsing dots (`inline`, for text) or an indeterminate bar (`bar`, where a table, list or code block is about to appear). It waits `delay` milliseconds before showing anything, so a response that arrives within a second never flickers a loading state.",
+ "useWhen": [
+  "Processing: the model has the prompt but has produced nothing yet (`ChatMessage` renders it for `state=\"pending\"`).",
+  "Generation of mixed content: a bar where a table or code block will appear while text streams."
+ ],
+ "avoidWhen": [
+  "Model reasoning with a trace → `reasoning`.",
+  "Loading a page or table of product data → `skeleton`, `spinner`, `progress`.",
+  "Determinate progress → `progress`."
+ ],
+ "related": [
+  "chat-message` — renders this while `pending`.",
+  "progress` — the indeterminate bar it draws.",
+  "reasoning` — thinking with a trace."
+ ],
+ "bestPractices": [
+  "Text says `[Generating|Loading] <what>` without end punctuation: `Generating a response`, `Loading list of workloads`.",
+  "Keep the default 1 s delay; set `delay` to 0 only when the owner already delayed.",
+  "Use the bar only for non-text content; stream text instead of loading it."
+ ]
+}

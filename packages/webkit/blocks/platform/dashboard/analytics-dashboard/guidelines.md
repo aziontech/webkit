@@ -90,11 +90,17 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 `Metrics appear here once a service serves requests.` for charts, and `No matching rows` /
 `Change the search.` when the table search matches nothing.
 
+### N. Product and period — `PageHeader` (optional)
+
+In the Metrics variant one page holds the dashboards of several products. A `PageTabs` strip of `Tabs.Item`s under the `PageHeader` switches the product (`Applications`, `Functions`, `Firewall`, `DNS`, `Data stream`); each product brings its own four tiles and four cards, and the header description changes with it. One `Select` in the header actions (`Last hour`, `Last 24 hours`, `Last 7 days`, `Last 30 days`), named `Period` by its `aria-label`, drives every tile, card and the comparison label of the deltas (`vs previous 7 days`). The interval of the points follows the period: 5 minutes for an hour, 2 hours for a day, a day for a week, 3 days for a month. The period stays when the product changes.
+
 ## Do
 
 - Keep the KPI row to the four numbers the reader checks first; put the rest in cards.
 - Use one card header layout for every card, so the controls are in the same place.
 - Let one period drive every region.
+- Keep the period when the product tab changes, so the reader compares products over the same window.
+- Give each product the same grammar: four tiles, then cards of two per row.
 - Distinguish "nothing recorded" from "nothing matches the search" in the empty copy.
 
 ## Don't
@@ -103,6 +109,8 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - Don't offer Line or Bar on a ranked breakdown; bars are the only form there.
 - Don't put more than one search on the page header; table search belongs to its table.
 - Don't use status colors for categorical series such as countries or hosts.
+- Don't sum a rate or a percentile in a legend total; Metrics turns totals off for those cards.
+- Don't nest product tabs inside a card; the product is a page-level choice.
 
 ## Copy
 
@@ -111,6 +119,7 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - **Tile labels:** the metric name only. `Data transferred`, never `Data transferred (GB)`; the unit belongs to the value.
 - **Hint:** one sentence ending with a period. `Requests that ended in a server error. A rise is a regression.`
 - **Menu items:** verb first. `Copy query`, `Export CSV`.
+- **Metrics:** title `Real-time metrics`; tab labels are product names; aggregation tags name the math (`Sum`, `Median`, `Percentile`).
 - **Empty state:** `No traffic yet` / `Metrics appear here once a service serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
 
@@ -120,6 +129,7 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - The `ToggleGroup` is labelled with the card it controls.
 - The search `Input` has an `aria-label` equal to its placeholder, since there is no visible label.
 - Figures use `tabular-nums`; deltas carry a sign and a word, not color alone.
+- The product strip is a tab list (`PageTabs`); the region under it is named after the product and the period (`Functions metrics, Last 24 hours`).
 - Charts expose their table twin and keyboard model through `Chart`; do not replace them with a bare SVG.
 
 ## States
@@ -127,6 +137,7 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - Default: the populated dashboard for the period.
 - Loading: every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
 - Empty: no traffic in the period; tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
+- Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
@@ -135,3 +146,5 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - `platform/dashboard/configurable-dashboard` — when the reader arranges the cards.
 - `platform/dashboard/service-monitoring-dashboard` — latency percentiles and an alert rail.
 - `ChartCard` / `StatTile` — the card and tile every dashboard shares.
+- `platform/view/split-view` — the events behind these numbers, row by row.
+- `platform/edit/edit-resource` (DataStream) — where the streams counted under Data stream are set up.

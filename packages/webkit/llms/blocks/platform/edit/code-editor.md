@@ -5,12 +5,12 @@
 - Surface: product
 - Source: `blocks/platform/edit/code-editor/code-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/code-editor")`
-- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Link](../../../components/link.md), [Menu](../../../components/menu.md), [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Menu](../../../components/menu.md), [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [Trace](../../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
 
-code editor; code editor page; function code editor; editor page; code and arguments editor; split editor; monaco editor; editor de código; página do editor; editar código; function editor; edge function; function detail; function arguments; json schema arguments; function settings; editor de função; argumentos da função; detalhe da função
+code editor; code editor page; function code editor; editor page; code and arguments editor; split editor; monaco editor; editor de código; página do editor; editar código; function editor; edge function; function detail; function arguments; json schema arguments; function settings; editor de função; argumentos da função; detalhe da função; test run; function test; run trace; span waterfall; invocation trace; testar função; execução de teste; rastreamento da execução
 
 The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together.
 
@@ -19,6 +19,7 @@ The editing page of a service whose behavior lives in source code. The user writ
 - A resource is mainly a document the user edits as text: function code, a schema, a configuration file.
 - The document comes with a structured companion (an argument form) that is easier to edit as fields than as JSON, and the user wants both views side by side.
 - The same resource also has a few settings, shown on a second tab of the same page.
+- The user tests the code before saving it and needs to read where the run spent its time and what it printed (variant TestRun).
 
 ## When not to use
 
@@ -37,35 +38,47 @@ The platform shell from `shells/console`: the `Sidebar` with `Brand`, the `Comma
 
 A full-bleed `PageTabs` with Code and Settings as `Tabs.Item`s. Each tab keeps its state when the user switches away, so unsaved code survives a visit to Settings.
 
-### C. Editor toolbar — `ToggleGroup` (required)
+### C. Editor toolbar — `ToggleGroup`, `Button` (required)
 
-A thin bar above the editor with a `ToggleGroup` labeled Editor document that switches between the Code and Arguments documents, and a muted line describing the active one, e.g. the runtime for Code.
+A thin bar above the editor with a `ToggleGroup` labeled Editor document that switches between the Code and Arguments documents, and a muted line describing the active one, e.g. the runtime for Code. In TestRun a secondary medium Run test `Button` with a play icon sits at the inline end; it shows its loading state while the run is in flight and reopens the Test run pane if the user collapsed it.
 
-### D. Code document — `Textarea`, `HelperText` (required)
+### D. Code document — `CodeEditor`, `HelperText` (required)
 
-A flush `Textarea` with `resizable="none"` fills the pane in a code font; it is where a product embeds its code editor. An empty document on Save shows an invalid `HelperText` under the editor, cleared on the next keystroke.
+A `CodeEditor` with `fill` takes the pane: line numbers, Tab indents, and Escape then Tab leaves it. Here it runs as the plain editor; a product passes `loader: () => import('monaco-editor')` to get Monaco, themed from the tokens, with the plain editor as the server and no-JavaScript fallback. An empty document on Save shows an invalid `HelperText` under the editor, cleared on the next keystroke.
 
-### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `Textarea`, `Button` (required)
+### E. Test run — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `StatusIndicator` (optional)
 
-A count of fields and the outlined Add field and Remove form `Button`s sit above a `ResizableRoot`. The left `ResizablePane` holds the schema as JSON in a flush `Textarea`; it is `collapsible` with a minimum and maximum width. The `ResizableHandle` resizes it and collapses it past its minimum. The right pane holds the fields form; both panes describe the same argument form.
+Variant TestRun only; it adds `CopyButton`, `KeyValuePairs`, `Trace`, `LogView` and `LogViewContent` to the page.
 
-### F. No fields — `EmptyState`, `Button`, `Link` (optional)
+In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is the flexible pane, and the Test run pane under it has a `basis`, a minimum and a maximum height and collapses past its minimum, so the editor can take the whole height back. The pane scrolls on its own and reads top to bottom like the invocation page of the design sample:
+
+1. The heading Test run, a `StatusIndicator` (Completed, or Running with its loading dot), the run ID in code type with a `CopyButton`.
+2. The request that triggered the run and one line on its outcome (the status code and what happened).
+3. A four-column `KeyValuePairs` of Started, Duration, Edge location and Memory, in skeletons while the run is in flight.
+4. Trace: one sentence on how to read it, then the `Trace` waterfall bound with `v-model:selected`, so the selected span's details (service, start, duration, share, attributes) open under it. While running, a status line says the trace appears when the run finishes.
+5. Logs: a `LogView` with `LogViewContent` on the same clock as the trace, `copyable`, and its loading state while running.
+
+### F. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button` (required)
+
+A count of fields and the outlined Add field and Remove form `Button`s sit above a `ResizableRoot`. The left `ResizablePane` holds the schema as JSON in a `CodeEditor` (`language="json"`); it is `collapsible` with a minimum and maximum width. The `ResizableHandle` resizes it and collapses it past its minimum. The right pane holds the fields form; both panes describe the same argument form.
+
+### G. No fields — `EmptyState`, `Button`, `Link` (optional)
 
 When the form has no fields, the right pane shows an `EmptyState` with one sentence, an Add field `Button` and a `Link` to the arguments documentation.
 
-### G. Field list — `Card`, `Item`, `Tag`, `Tooltip`, `IconButton` (required)
+### H. Field list — `Card`, `Item`, `Tag`, `Tooltip`, `IconButton` (required)
 
 A flush `Card` with one small `Item` per field: a reorder grip, the field name and type, small `Tag`s for Required and Needs a name, and `IconButton`s to duplicate, remove and expand the field, each named by a `Tooltip`. Only the expanded field shows its settings.
 
-### H. Field settings — `SettingRow`, `Input`, `Select`, `Switch`, `Textarea`, `HelperText` (required)
+### I. Field settings — `SettingRow`, `Input`, `Select`, `Switch`, `Textarea`, `HelperText` (required)
 
 Inside an expanded field, `SettingRow`s for Name, Type, Label, Description, Required and Default, then the rows that follow the type: minimum and maximum length and a pattern for text, minimum and maximum for numbers, Choices as a `Textarea` with one value per line, List of for lists. A name error shows as `HelperText` once the field was touched.
 
-### I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Field`, `RadioButton`, `Switch`, `HelperText` (required)
+### J. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Field`, `RadioButton`, `Switch`, `HelperText` (required)
 
 The form column with four `SettingsSection`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `Field` choice cards around `RadioButton`s) and Status (Active as a `Switch`). See `skills/webkit-form`.
 
-### J. Save bar — `SaveBar`, `Button` (required)
+### K. Save bar — `SaveBar`, `Button` (required)
 
 A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab.
 
@@ -76,6 +89,8 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - Keep collapsed fields as one-line summaries with their tags, and open settings only for the field being edited.
 - Lock fields that cannot change after creation, with a lock glyph and a description that says so.
 - Use one save bar for both tabs, and take the user to the tab that holds the error.
+- Show a test run under the code it ran, on the same page: the trace and the logs on one clock, the summary first.
+- Select the span the user most likely wants (the slowest or the failed one) when the run finishes.
 
 ## Don't
 
@@ -84,6 +99,9 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - Don't save from inside the Arguments pane or a field; Save lives in the bar.
 - Don't flag a new field's name before the user has touched it.
 - Don't let the schema pane squeeze the fields pane below a usable width; collapse it instead.
+- Don't open a test run in a dialog or a new page; it covers the code the user is about to fix.
+- Don't save as a side effect of Run test; a test runs the code in the editor, saved or not.
+- Don't report a test run with a toast; the result lives in the pane, where the user is looking.
 
 ## Copy
 
@@ -93,6 +111,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - **Empty state:** title states the fact, e.g. "This form has no fields"; description says what to do, e.g. "Add the first argument the service reads."
 - **Errors:** short and specific, e.g. "This field is required.", "Another field already uses this name."
 - **Save bar:** "You have unsaved changes."
+- **Test run:** status as one word ("Completed", "Running", "Failed"); the outcome as the status code and what happened, e.g. "200, served from the transform and written to cache."
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -103,12 +122,15 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - The expand button sets `aria-expanded` and `aria-controls` and names the field it opens.
 - Every icon-only control has an `aria-label` that matches its `Tooltip`; decorative icons carry `aria-hidden="true"`.
 - The save bar's motion respects reduced motion.
+- In TestRun the vertical split is labeled "Code and test run", its panes "Source code" and "Test run", and the handle "Resize the test run". The pane is a `section` named by its Test run heading, with Trace and Logs as `h3`s.
+- The trace is a `treegrid` with one tab stop (see `Trace`); the running state is announced by a `status` line.
 
 ## States
 
 - Code: the Code tab with the Code document filling the editor pane.
 - Arguments: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
 - NoArguments: the Arguments document of a service with no form, the empty schema and the no fields empty state.
+- TestRun: the Code document with a finished test run of image-optimizer under it, the origin fetch selected in the trace; Run test shows the running state.
 - Settings: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
 
 ## Related
@@ -116,6 +138,8 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - `shells/console` — the platform shell around this page.
 - `platform/edit/edit-resource` — the settings form and save bar pattern the Settings tab follows.
 - `platform/view/query-editor` — an editor page that runs queries and shows results.
+- `platform/view/split-view` — the events explorer, where the logs of every run land.
+- `Trace` — the span waterfall of the test run.
 - `platform/detail/version-detail` — reading a deployed version of the code.
 - `ResizableRoot` — the split between schema and fields; see `skills/webkit-layout`.
 
@@ -125,6 +149,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - `Arguments` — The Arguments document of image-optimizer: its form schema in the left pane and its two fields on the right, defaultFormat expanded into its settings and Choices and quality collapsed. The handle resizes the editor and collapses it past its minimum.
 - `NoArguments` — The Arguments document of auth-handler, a service with no form: the empty schema on the left and the This form has no fields empty state on the right.
 - `Settings` — The Settings tab of image-optimizer: the General, Runtime, Execution environment and Status sections in the form column, the runtime locked; editing anything raises the unsaved-changes bar.
+- `TestRun` — The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogView`. Run test again shows the running state until the run finishes.
 
 Each variant is the same screen in another state: `get_pattern("platform/edit/code-editor", { variant })`, or the file under `blocks/platform/edit/code-editor/variants/`.
 
@@ -138,6 +163,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/co
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
+  import CodeEditor from '@aziontech/webkit/code-editor'
   import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -1157,14 +1183,15 @@ export async function handleRequest(request, args = {}) {
                       >
                         <div class="flex min-h-0 w-full flex-1 flex-col">
                           <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-                            <div class="flex flex-1 font-code">
-                              <Textarea
+                            <div class="flex min-h-0 flex-1 flex-col">
+                              <CodeEditor
                                 id="service-source-code"
                                 v-model="form.code"
-                                resizable="none"
+                                language="javascript"
+                                path="index.js"
+                                fill
                                 :invalid="!!codeError"
                                 aria-label="Source code"
-                                class="w-full"
                                 @update:model-value="codeError = ''"
                               />
                             </div>
@@ -1223,12 +1250,13 @@ export async function handleRequest(request, args = {}) {
                               >
                                 <div class="flex min-h-0 w-full flex-1 flex-col">
                                   <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-                                    <div class="flex flex-1 font-code">
-                                      <Textarea
+                                    <div class="flex min-h-0 flex-1 flex-col">
+                                      <CodeEditor
                                         v-model="form.schema"
-                                        resizable="none"
+                                        language="json"
+                                        path="args.json"
+                                        fill
                                         aria-label="Argument form schema, as JSON"
-                                        class="w-full"
                                       />
                                     </div>
                                   </div>

@@ -1,0 +1,22 @@
+{
+ "purpose": "Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is done, with the trace inside. Collapsed by default in a chat, where the response is the main content. The duration comes from the server (`duration`) or is measured from `streaming` turning on to turning off, rounded to whole seconds. An optional `Skip thinking` lets the reader ask for the response now.",
+ "useWhen": [
+  "The model performs extended reasoning before answering, and the trace helps the reader trust or check the response."
+ ],
+ "avoidWhen": [
+  "Ordinary loading with no reasoning → `ai-loading`.",
+  "Agent actions with side effects (calls, commands) → `tool-call` and `action-confirmation`.",
+  "Progressive steps of a long task → a `stepper` or a list of `tool-call`s."
+ ],
+ "related": [
+  "ai-loading` — loading without a trace.",
+  "tool-call` — what the agent did, rather than what it thought.",
+  "streaming-response` — renders a Markdown trace inside the slot."
+ ],
+ "bestPractices": [
+  "Keep it collapsed in chat; open it by default only where reasoning is the point (an editor, a review).",
+  "Never show secrets, token counts or system prompts in the trace.",
+  "Do not replace the label with trace text; the label stays `Thinking` until done.",
+  "Offer `skippable` only when the model can answer meaningfully without finishing."
+ ]
+}
