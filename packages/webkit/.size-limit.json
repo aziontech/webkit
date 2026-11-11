@@ -960,17 +960,17 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "8.1 KB"
+    "limit": "8.4 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "7.5 KB"
+    "limit": "7.8 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "7.6 KB"
+    "limit": "7.9 KB"
   },
   {
     "name": "phone-input",
@@ -1157,5 +1157,15 @@
     "name": "table-cell-actions",
     "path": "src/components/data/table/table-cell-actions/table-cell-actions.vue",
     "limit": "10 KB"
+  },
+  {
+    "name": "file-token-group",
+    "path": "src/components/inputs/file-token-group/file-token-group.vue",
+    "limit": "7 KB"
+  },
+  {
+    "name": "upload-progress",
+    "path": "src/components/feedback/upload-progress/upload-progress.vue",
+    "limit": "8.25 KB"
   }
 ]

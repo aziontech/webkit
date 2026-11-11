@@ -407,6 +407,59 @@ export const ptBR: Messages = {
   fileDropzone: {
     title: 'Solte arquivos para enviar'
   },
+  fileTokenGroup: {
+    label: 'Arquivos',
+    remove: 'Remover {name}',
+    uploading: 'Enviando {name}',
+    modified: 'Modificado em {date}',
+    showMore: {
+      one: 'Mostrar mais {count} arquivo',
+      other: 'Mostrar mais {count} arquivos'
+    },
+    showFewer: 'Mostrar menos arquivos'
+  },
+  uploadProgress: {
+    label: 'Transferências de arquivos',
+    uploading: {
+      one: 'Enviando {done} de {count} arquivo',
+      other: 'Enviando {done} de {count} arquivos'
+    },
+    moving: {
+      one: 'Movendo {done} de {count} arquivo',
+      other: 'Movendo {done} de {count} arquivos'
+    },
+    deleting: {
+      one: 'Excluindo {done} de {count} arquivo',
+      other: 'Excluindo {done} de {count} arquivos'
+    },
+    uploaded: {
+      one: '{count} arquivo enviado',
+      other: '{count} arquivos enviados'
+    },
+    moved: {
+      one: '{count} arquivo movido',
+      other: '{count} arquivos movidos'
+    },
+    deleted: {
+      one: '{count} arquivo excluído',
+      other: '{count} arquivos excluídos'
+    },
+    failed: {
+      one: '{count} falhou',
+      other: '{count} falharam'
+    },
+    queued: 'Na fila',
+    done: 'Concluído',
+    canceled: 'Cancelado',
+    cancelAll: 'Cancelar tudo',
+    cancelItem: 'Cancelar {name}',
+    retryItem: 'Tentar {name} de novo',
+    retryFailed: 'Tentar os que falharam',
+    close: 'Fechar',
+    expand: 'Mostrar arquivos',
+    collapse: 'Ocultar arquivos',
+    itemProgress: 'Progresso de {name}'
+  },
   footer: {
     label: 'Rodapé'
   },

@@ -54,6 +54,28 @@ The root's `select` event hands the option and the row to the page: Open enters 
 
 The table's `#empty` slot holds a medium `EmptyState` with one sentence and a secondary Add to files `SplitButton` with the same options as the toolbar's. Inside a folder the `..` row always remains, so the user can still go back up.
 
+### J. Upload — `SplitButton` (optional)
+
+Variant Uploading only; it adds `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FileDropzone` and `FileTokenGroup` to the page.
+
+Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload closes the dialog and starts the transfer; the dialog does not wait for it.
+
+A second `FileDropzone kind="overlay"` sits inside the `section` that holds the card (made `relative`), so dragging files anywhere over the page shows `Drop files to upload them to <folder>` over the listing; a drop uploads straight into the folder in view and refuses files over the limit with a danger toast.
+
+### K. Transfer card and outcome toast — `Button` (optional)
+
+Variants Uploading and MoveObject only; they add `UploadProgress` and the `Toaster` with `toast`.
+
+Every transfer (upload, move) runs in one floating `UploadProgress` at the inline-end bottom corner, so the person can keep browsing, change folder or open another resource while it runs. The header counts finished files over one overall bar (`Uploading 2 of 5 files`), each row carries its bar, Cancel while it runs or waits, Retry when it failed with the reason under the name. Files land in the table as each finishes, not at the end. Close appears when everything finished and returns focus to Add to files (or to the toolbar, after a move). At most two files upload at a time; the rest wait.
+
+When a transfer finishes the page reports it with a toast as well as the card, because the card may be collapsed or the person may be elsewhere. Its actions fit the files, never a deploy action: after a clean upload or move, `Open folder` (goes to the destination); after a partial upload, a danger toast `1 of 5 files weren't uploaded.` that says where the rest went and offers `Retry failed`. Storage objects are not deployed, so the async-submit Edit and Redeploy pair does not apply. The `Toaster` sits at `top-right` so it never covers the transfer card.
+
+### L. Selection and Move — `TableRoot`, `DropdownMenuOption` (optional)
+
+Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
+
+`enable-row-selection` with `v-model:row-selection` adds the checkbox column; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move). Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of every folder in the storage (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves.
+
 ## Do
 
 - Keep the storage name, search, path and Add to files inside the table toolbar, on the same surface as the rows.
@@ -62,6 +84,9 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 - Use one Add to files `SplitButton` for every way of adding content.
 - Put Delete last in the row menu, in its own group, and confirm it with `platform/delete/delete-with-confirmation`.
 - Give every icon-only control a `Tooltip` and an `aria-label` with the same words.
+- Keep refused files in the upload dialog with their reason, and leave them out of the upload count.
+- Run every transfer in the one floating `UploadProgress` card and let the person keep working.
+- End every transfer with a toast whose action fits the files: Open folder or Retry failed.
 
 ## Don't
 
@@ -70,6 +95,9 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 - Don't give the `..` row a row menu, a size or an author.
 - Don't let the table scroll the page sideways; narrow widths stack the rows.
 - Don't replace the toolbar with a full-page empty state when a folder is empty; only the table area changes.
+- Don't block the page with a modal progress dialog while files upload or move.
+- Don't offer View deployments, Edit or Redeploy after a storage transfer; nothing is deployed.
+- Don't drop a refused file silently, and don't send a file the dialog marked as refused.
 
 ## Copy
 
@@ -80,6 +108,10 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 - **Delete dialog:** title and confirm `Delete file` or `Delete folder`, consequence `The selected folder will be deleted, along with all its files.`, prompt `Type <name> to confirm.`
 - **Column headers:** short fragments, e.g. "Name", "Size", "Last modified".
 - **Empty folder:** title states the fact, e.g. "This folder is empty"; description is one sentence, e.g. "Upload files or create a folder to get started."
+- **Upload dialog:** title `Upload files`, primary `Upload file` or `Upload 3 files`, refusal `Larger than 300 MB, the limit per file`.
+- **Drop overlay:** `Drop files to upload them to <folder>`, description `Up to 300 MB per file.`
+- **Move dialog:** title `Move <name>` or `Move 2 files`, field `Destination folder`, placeholder `/ (storage root)`, errors `Use letters, numbers, dots, hyphens and slashes only.`, `A destination cannot go up with "..". Type the full path.`, `The files are already in this folder. Pick another one.`
+- **Toasts:** `5 files uploaded to acme-assets.` with Open folder; `1 of 5 files weren't uploaded.` with Retry failed; `2 files moved to logs/.` with Open folder.
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -90,11 +122,17 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 - Folder rows open on click and the Open option in the row menu gives the same action to keyboard users.
 - Focus order follows reading order: search, Refresh, Download CSV, Columns, path, Add to files, the rows.
 - The `Avatar` carries the author name as `alt`, repeated by its `Tooltip`.
+- The drop overlay is `aria-hidden`: dragging is a pointer path, and Add to files with Browse files is the keyboard path to the same upload.
+- `UploadProgress` is a region named File transfers with a polite status that announces each file finishing and the outcome; percentages are not announced. The toast repeats the outcome for people who collapsed the card.
+- In the upload dialog each refused file's reason is the `aria-describedby` of its Remove button, and removing a file moves focus to the next one.
+- The Move dialog's `Field` wires the label, description and error to the `Combobox`; the error is read when focus returns to it.
 
 ## States
 
 - Default: the storage root with folders first, then files, and the full toolbar.
 - InsideAFolder: inside a build folder the crumb gains the folder, a `..` row leads back up and files show glyph, size, editor and age.
+- Uploading: a transfer is running in the floating card; one file fails once and can be retried; the upload dialog and the page drop overlay add more.
+- MoveObject: two files selected inside a build folder with the Move dialog open; moving runs in the card and ends in a toast.
 
 ## Related
 
@@ -102,4 +140,6 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 - `platform/delete/delete-with-confirmation` — the dialog behind Delete on a file or folder.
 - `platform/detail/details-page` — the storage resource's own details and settings.
 - `platform/detail/record-table` — records of a resource, not files.
+- `FileTokenGroup`, `FileDropzone` and `UploadProgress` — the upload pieces; see their component docs.
+- `platform/states/async-submit` — the rule for long actions; storage transfers follow it with item actions instead of Edit and Redeploy.
 - `TableRoot` — the data-driven table this page wraps; see `skills/webkit-tables` and `skills/webkit-lists`.

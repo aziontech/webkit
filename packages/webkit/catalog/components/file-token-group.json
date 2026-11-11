@@ -1,0 +1,24 @@
+{
+ "purpose": "The files a person picked for upload, shown as removable tokens before or while they upload: each token names the file with a glyph for its type, its size and, when asked, its last-modified date, carries a progress bar while it uploads and its own error or warning line when it cannot be sent. It pairs with `file-dropzone` (which receives the files) and with a Browse files button: the product keeps the list, the group renders it and reports which token was removed. Taken from Cloudscape's file token group; the Console Kit and the design sample list files by hand.",
+ "useWhen": [
+  "Under a `FileDropzone` or a Browse files button in a form, to show what will be uploaded and let the person drop a file before submitting.",
+  "In an upload dialog, to show each file's progress and the files that were refused (too large, wrong type) with the reason.",
+  "Read-only, in a review step, to list the attachments that will be sent."
+ ],
+ "avoidWhen": [
+  "A running transfer that should follow the person around the console → use `upload-progress`.",
+  "Files already stored in a bucket or a repository → use `table` (the file browser block).",
+  "Free-text tags or labels → use `tag-editor` or `chip`."
+ ],
+ "related": [
+  "file-dropzone` — receives dropped files; the group lists them.",
+  "upload-progress` — the floating card for transfers that keep running after the dialog closes.",
+  "chip` — a removable label without file details."
+ ],
+ "bestPractices": [
+  "Keep the refused files in the list with their error, so the person sees why and can remove them; do not drop them silently.",
+  "Write each error as the reason and the limit (`Larger than 300 MB`), not as a code.",
+  "Use `limit` when more than five files are common, so the form below stays in view.",
+  "Remove the file from your list on `dismiss`; the group moves focus to the next token for you."
+ ]
+}

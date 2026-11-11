@@ -200,9 +200,21 @@ No new entries. Six small raises, all from accessibility fixes in shared parts t
 | hotspot          | 11.25         | 11.32        | 11.4       | Built on `Popover`, whose trigger goes through `TriggerHost`.  |
 | confirm-dialog   | 23.8          | 23.99        | 24.1       | `Dialog` focus return to the element focused before it opened. |
 
+### M2.9 WP sql-storage
+
+Two new entries at measured plus about 0.2 KB, and three raises from the two new string groups (`fileTokenGroup`, `uploadProgress`) in the locale catalogs.
+
+| Entry            | Budget before | Measured now | New budget | Why                                                                 |
+| ---------------- | ------------- | ------------ | ---------- | ------------------------------------------------------------------- |
+| file-token-group | –             | 6.77         | 7          | New: `IconButton`, `Button`, `Progress` and `useLocale` formatters. |
+| upload-progress  | –             | 8.03         | 8.25       | New: adds `OutcomeMark` to the same parts.                          |
+| webkit-provider  | 7.75          | 7.83         | 8.05       | Raised: the English catalog gained the two groups.                  |
+| locales-pt-BR    | 7.15          | 7.23         | 7.45       | Raised: the same groups in Portuguese.                              |
+| locales-es       | 7.25          | 7.32         | 7.55       | Raised: the same groups in Spanish.                                 |
+
 ## M2.9 WP list-kit
 
-`OverflowCount` and the six `Table.Cell*` presets are new entries. `TableCellTime` is the heaviest preset because `Avatar` merges classes with `tailwind-merge` (about 58 KB before compression, shared with every component that uses `cn`); an app that already ships webkit pays it once. `Table` grows by the reorderable rows (grip column, pointer and keyboard moves, announcements), and the two sections built on it grow with it. The `overflowCount`, `tableCell*` and `tableReorder` groups grow the English catalog the provider ships and the two opt-in locale entries. Budgets are measured + ~0.25 KB.
+`OverflowCount` and the six `Table.Cell*` presets are new entries. `TableCellTime` is the heaviest preset because `Avatar` merges classes with `tailwind-merge` (about 58 KB before compression, shared with every component that uses `cn`); an app that already ships webkit pays it once. `Table` grows by the reorderable rows (grip column, pointer and keyboard moves, announcements), and the two sections built on it grow with it. The `overflowCount`, `tableCell*` and `tableReorder` groups grow the English catalog the provider ships and the two opt-in locale entries. Budgets are measured + ~0.25 KB; the provider and locale rows are measured after merging `feat/webkit-v6` (sql-storage strings included).
 
 | Entry              | Budget before | Measured now | New budget | Note                                                                   |
 | ------------------ | ------------- | ------------ | ---------- | ---------------------------------------------------------------------- |
@@ -216,6 +228,6 @@ No new entries. Six small raises, all from accessibility fixes in shared parts t
 | table-root         | 50            | 51.64        | 51.9       | Raised: `reorderable` rows.                                            |
 | listing-browser    | 65.1          | 66.69        | 66.95      | Raised: built on `Table`.                                              |
 | listing-table      | 56.25         | 57.77        | 58         | Raised: built on `Table`.                                              |
-| webkit-provider    | 7.75          | 7.91         | 8.1        | Raised: the list-kit groups in the English catalog.                    |
-| locales-pt-BR      | 7.15          | 7.28         | 7.5        | Raised: the same groups in Portuguese.                                 |
-| locales-es         | 7.25          | 7.36         | 7.6        | Raised: the same groups in Spanish.                                    |
+| webkit-provider    | 8.05          | 8.18         | 8.4        | Raised: the list-kit groups in the English catalog.                    |
+| locales-pt-BR      | 7.45          | 7.57         | 7.8        | Raised: the same groups in Portuguese.                                 |
+| locales-es         | 7.55          | 7.66         | 7.9        | Raised: the same groups in Spanish.                                    |
