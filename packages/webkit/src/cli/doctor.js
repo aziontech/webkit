@@ -194,7 +194,63 @@ export function planDoctor(projectDir) {
     }
   }
 
+  const vue = installedVersion(projectDir, 'vue')
+  const vueMajorMinor = vue ? vue.split('.').map(Number) : null
+  add(
+    'vue version',
+    !vue ? 'warn' : vueMajorMinor[0] === 3 && vueMajorMinor[1] >= 5 ? 'ok' : 'fail',
+    !vue
+      ? 'vue is not installed — webkit needs vue ^3.5.'
+      : vueMajorMinor[0] === 3 && vueMajorMinor[1] >= 5
+        ? `vue ${vue}`
+        : `vue ${vue} is installed — webkit needs vue ^3.5.`
+  )
+
+  const tailwind = installedVersion(projectDir, 'tailwindcss')
+  const tailwindMajor = tailwind ? Number(tailwind.split('.')[0]) : null
+  add(
+    'tailwind version',
+    !tailwind ? 'warn' : tailwindMajor === 4 ? 'ok' : 'fail',
+    !tailwind
+      ? 'tailwindcss is not installed — webkit components are styled with Tailwind v4 (it comes with @aziontech/theme).'
+      : tailwindMajor === 4
+        ? `tailwindcss ${tailwind}`
+        : `tailwindcss ${tailwind} is installed — webkit needs Tailwind v4.`
+  )
+
+  const themed = Boolean(cssEntry && /@import\b[^\n]*@aziontech\/theme/.test(cssEntry))
+  add(
+    'theme import',
+    themed ? 'ok' : 'fail',
+    themed
+      ? "src/webkit.css imports '@aziontech/theme' (tokens + Tailwind + fonts)"
+      : "src/webkit.css does not `@import '@aziontech/theme'` — no design tokens, so every component renders unstyled. Run `npx @aziontech/webkit init`."
+  )
+
+  const eslintSrc = eslintCfg ? read(join(projectDir, eslintCfg)) || '' : ''
+  const plugged = /@aziontech\/webkit\/eslint-plugin/.test(eslintSrc)
+  add(
+    'lint plugin',
+    plugged ? 'ok' : 'fail',
+    plugged
+      ? `${eslintCfg} loads @aziontech/webkit/eslint-plugin`
+      : `${eslintCfg || 'the eslint config'} does not load @aziontech/webkit/eslint-plugin — the design-system rules do not run. Merge the preset \`npx @aziontech/webkit init --dry-run\` prints.`
+  )
+
   const srcFiles = listSrcFiles(projectDir)
+  const provided = srcFiles.some((file) =>
+    /@aziontech\/webkit\/webkit-provider|<WebkitProvider[\s/>]|<webkit-provider[\s/>]/.test(
+      read(file) || ''
+    )
+  )
+  add(
+    'webkit provider',
+    provided ? 'ok' : 'warn',
+    provided
+      ? 'WebkitProvider is mounted'
+      : 'no WebkitProvider in src/ — components fall back to English and left-to-right. Wrap the app root in `<WebkitProvider :locale="locale">` from \'@aziontech/webkit/webkit-provider\'.'
+  )
+
   let usesToast = false
   let toastWired = false
   for (const file of srcFiles) {

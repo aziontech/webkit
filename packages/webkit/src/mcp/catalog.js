@@ -183,6 +183,10 @@ export function loadCatalog(cwd) {
   return value
 }
 
+export function loadCatalogFrom(path) {
+  return build(JSON.parse(readFileSync(path, 'utf-8')), dirname(path))
+}
+
 export function _resetCatalogCache() {
   cache = null
   warned = false

@@ -295,7 +295,20 @@ Exit: all suites green on the integrated branch.
 
 ## M2.1 — CLI
 
-`add <block>` (copies the block, resolves imports, suggests the route), `diff <block>` (local copy vs. canonical), `search` / `view` (MCP queries in the terminal), `check` (`doctor` + `report` as one CI gate).
+Done: `npx @aziontech/webkit add | diff | search | view | check` in `packages/webkit/src/cli/`
+(`blocks.js`, `query.js`, `check.js`, `source.js`, `text-diff.js`, wired in `cli.js`). `add <block>`
+copies the primary SFC (and `--variant`) from the packaged `blocks/` into the router's views
+directory (else `src/views` / `src/pages`, or `--dest`), checks every `@aziontech/webkit/*` import
+against the installed `exports`, writes `--with-guidelines` as a sidecar, records id, version,
+source and checksum in `webkit.blocks.json` and prints the route entry; never overwrites without
+`--force`. `diff` is a unified diff from the canonical block to the copy (exit 1 when different,
+`--json`). `search` / `view` run the MCP queries in the terminal. `check` is the CI gate: doctor
+(now also vue/Tailwind versions, theme import, lint plugin, `WebkitProvider`), v5 names through the
+migration map, unknown imports, the project's ESLint (or a built-in colour and direction scan) and
+blocks drifting from the canonical copy; `--json`, `--max-warnings`. Tests in
+`packages/webkit/test/cli/{add,diff,query,check}.test.mjs`; verified from the packed tarball in a
+Vite + Vue app. Docs: `packages/webkit/docs/toolkit/cli.md`; READMEs, `AGENTS.fragment.md`,
+`webkit-usage` and `webkit-page-layout` now start a screen with `add`.
 
 ## M2.2 — `llms.txt` and Markdown pages
 
@@ -405,6 +418,7 @@ before the branch is closed.
 | #   | From  | Leftover                                                                                                                                                                                                                                                         | How it closes                                                                                                                                                                                            |
 | --- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | M1.10 | The console is on WebKit 3.9.4 (PrimeVue wrappers): `migrate v6` rewrites 27 files and lists 1,804 `MANUAL` items in 853 files (MIGRATION-v6.md, "Field report: Azion Console"). Plugin, toast and dialog services, `field-*` and PrimeVue inputs are most of it | Migrate the console by area on its own branch (services and plugin first, then forms to `Field`, inputs, overlays, tables to `Table`), re-running `migrate v6 --dry-run` until it lists no `MANUAL` item |
+| 2   | M2.1  | The `eslint.config.mjs` that `init` writes carries line comments that `webkit/authoring-standards` flags, so `report` (which lints `.`) counts 5 errors in a fresh project; `check` lints `src/` and is not affected                                             | Drop the comments from the `init` template in `src/cli/plan.js` (or scope the comment check to `.vue` and component sources) and assert a fresh `init` project reports 0 in `test/cli/report.test.mjs`   |
 
 ## M2.11 — Close the branch and merge into `main`
 

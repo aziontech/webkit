@@ -52,7 +52,7 @@ export function resolveEslintBin(cwd) {
   return { command: process.execPath, prefix: [join(dirname(manifestPath), entry)] }
 }
 
-function runESLint(cwd, patterns) {
+export function runESLint(cwd, patterns) {
   let cmd
   try {
     cmd = resolveEslintBin(cwd)
