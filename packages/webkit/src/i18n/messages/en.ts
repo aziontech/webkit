@@ -219,6 +219,62 @@ export const copyButton = {
   copied: 'Copied'
 } as const
 
+export const dateRangePicker = {
+  label: 'Time range',
+  placeholder: 'Select a time range',
+  dialog: 'Choose a time range',
+  rangeType: 'Range type',
+  relative: 'Relative range',
+  absolute: 'Absolute range',
+  quickRanges: 'Quick ranges',
+  custom: 'Custom range',
+  amount: 'Duration',
+  unit: 'Unit',
+  second: {
+    one: 'Last second',
+    other: 'Last {count} seconds'
+  },
+  minute: {
+    one: 'Last minute',
+    other: 'Last {count} minutes'
+  },
+  hour: {
+    one: 'Last hour',
+    other: 'Last {count} hours'
+  },
+  day: {
+    one: 'Last day',
+    other: 'Last {count} days'
+  },
+  week: {
+    one: 'Last week',
+    other: 'Last {count} weeks'
+  },
+  month: {
+    one: 'Last month',
+    other: 'Last {count} months'
+  },
+  year: {
+    one: 'Last year',
+    other: 'Last {count} years'
+  },
+  unitSecond: 'Seconds',
+  unitMinute: 'Minutes',
+  unitHour: 'Hours',
+  unitDay: 'Days',
+  unitWeek: 'Weeks',
+  unitMonth: 'Months',
+  unitYear: 'Years',
+  apply: 'Apply',
+  cancel: 'Cancel',
+  previous: 'Previous range',
+  next: 'Next range',
+  incomplete: 'Choose a start and an end.',
+  order: 'The end must be after the start.',
+  outOfBounds: 'Choose a range inside the allowed dates.',
+  invalidAmount: 'Enter a whole number greater than 0.'
+} as const
+
 export const dialog = {
   close: 'Close'
 } as const
@@ -477,6 +533,21 @@ export const propertyFilter = {
   lessOrEqual: 'Less than or equal to'
 } as const
 
+export const propertyFilterQuery = {
+  label: 'Query',
+  placeholder: 'Type a query, for example status = Active AND requests > 10',
+  fields: 'Fields',
+  all: 'Every condition matches',
+  any: 'Any condition matches',
+  unknownField: 'There is no field named “{field}”.',
+  unknownOperator: '“{operator}” does not apply to {field}.',
+  missingOperator: 'Add an operator after {field}, for example =.',
+  missingValue: 'Add a value after {operator}.',
+  expectedConnective: 'Join conditions with AND or OR before “{word}”.',
+  danglingConnective: 'Add a condition after {connective}.',
+  unclosedQuote: 'Close the quote that opens at character {position}.'
+} as const
+
 export const resizable = {
   handle: 'Resize panel'
 } as const
@@ -684,6 +755,27 @@ export const toggleGroup = {
   option: 'Option {index}'
 } as const
 
+export const trace = {
+  label: 'Trace',
+  search: 'Search spans',
+  noMatch: 'No span matches “{query}”.',
+  clearSearch: 'Clear search',
+  empty: 'No spans in this trace.',
+  details: 'Details of {name}',
+  close: 'Close',
+  copyName: 'Copy span name',
+  service: 'Service',
+  startedAt: 'Started at',
+  duration: 'Duration',
+  share: 'Share of trace',
+  percent: '{value}%',
+  failed: 'Failed',
+  running: 'Running',
+  attributes: 'Attributes',
+  milliseconds: '{value} ms',
+  seconds: '{value} s'
+} as const
+
 export const tracker = {
   noData: 'No data',
   roleDescription: 'status history'
@@ -846,6 +938,7 @@ export const en = {
   confirmDialog,
   conversation,
   copyButton,
+  dateRangePicker,
   dialog,
   docFrame,
   docOnThisPage,
@@ -883,6 +976,7 @@ export const en = {
   popover,
   promptInput,
   propertyFilter,
+  propertyFilterQuery,
   reasoning,
   resizable,
   schemaForm,
@@ -913,6 +1007,7 @@ export const en = {
   themeSwitcher,
   toast,
   toggleGroup,
+  trace,
   toolCall,
   tracker,
   tree,

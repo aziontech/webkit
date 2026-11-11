@@ -8,6 +8,12 @@ import State2 from '../../../../../../../packages/webkit/blocks/platform/view/sp
 import source2 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/empty.vue?raw'
 import State3 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/failed.vue'
 import source3 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/failed.vue?raw'
+import State4 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/query.vue'
+import source4 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/query.vue?raw'
+import State5 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/sessions.vue'
+import source5 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/sessions.vue?raw'
+import State6 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/event-document.vue'
+import source6 from '../../../../../../../packages/webkit/blocks/platform/view/split-view/variants/event-document.vue?raw'
 
 export default {
   title: "Templates/Platform/View/SplitView",
@@ -16,7 +22,7 @@ export default {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
     docs: { canvas: { sourceState: 'shown' }, description: { component: "The events explorer placed in the platform shell, with its navigation entry active: the controls row (Filter popover, event search, Refresh and Download CSV) over the applied filter chips, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `TableRoot`. Clicking a row opens the event document beside the log in a resizable end `Sidebar` when the explorer is wide enough, and in a `Drawer` when it is not." } },
-    webkit: {"block":"platform/view/split-view","intents":["real-time events","events visualizer","event explorer","log explorer","logs viewer","request logs","events search","eventos em tempo real","visualizador de eventos","explorador de logs","split view","master detail","list and detail panes","visão dividida"],"skills":["webkit-data-viz","webkit-tables","webkit-ui-states"],"primary":"Default"}
+    webkit: {"block":"platform/view/split-view","intents":["real-time events","events visualizer","event explorer","log explorer","logs viewer","request logs","events search","eventos em tempo real","visualizador de eventos","explorador de logs","split view","master detail","list and detail panes","visão dividida","query language","events query","saved searches","saved queries","query history","date range","time range picker","investigation tabs","event document","consulta de eventos","buscas salvas","intervalo de datas"],"skills":["webkit-data-viz","webkit-tables","webkit-ui-states"],"primary":"Default"}
   }
 }
 
@@ -38,4 +44,19 @@ export const Empty = {
 export const Failed = {
   render: () => ({ components: { Block: State3 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "The event log request failed: the fields panel stays, and the log pane shows a danger Alert that says the events did not load and offers Retry." }, source: { code: source3 } } }
+}
+
+export const Query = {
+  render: () => ({ components: { Block: State4 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The Console Kit query bar on the sample design: a `DateRangePicker` (relative ranges, an absolute range typed in the chosen time zone, Previous and Next) drives the period, and `PropertyFilter` in query mode takes `level = Error AND host = api.example.com`, suggests fields, operators and values at the caret, explains an invalid query under the field and applies it on Enter. Saved queries (name, apply, delete) and Recent queries sit in two popovers beside the bar; the field values in the fields panel add or remove clauses of the query; the log, chart and times follow the chosen zone." }, source: { code: source4 } } }
+}
+
+export const Sessions = {
+  render: () => ({ components: { Block: State5 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "Several investigations open as tabs above the explorer, each keeping its own filters, search and period: API errors is active, with All traffic and Security blocks beside it. New investigation adds a tab (up to five, then a message says to close one); the actions menu renames (also F2 or a double click, with an inline field: Enter keeps, Escape cancels), duplicates or closes the active one (also Delete on the focused tab)." }, source: { code: source5 } } }
+}
+
+export const EventDocument = {
+  render: () => ({ components: { Block: State6 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "An error event selected with its document open beside the log. The document lists every field of the event with a Search in this event field that narrows and highlights the fields, a Filter by and an Exclude button per value that apply to the log (an exclusion shows as an is not chip), and Copy that copies the fields shown as JSON; the full JSON document follows." }, source: { code: source6 } } }
 }

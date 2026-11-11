@@ -275,6 +275,61 @@ export const es: Messages = {
     copy: 'Copiar',
     copied: 'Copiado'
   },
+  dateRangePicker: {
+    label: 'Intervalo de tiempo',
+    placeholder: 'Selecciona un intervalo de tiempo',
+    dialog: 'Elige un intervalo de tiempo',
+    rangeType: 'Tipo de intervalo',
+    relative: 'Intervalo relativo',
+    absolute: 'Intervalo absoluto',
+    quickRanges: 'Intervalos rápidos',
+    custom: 'Intervalo personalizado',
+    amount: 'Duración',
+    unit: 'Unidad',
+    second: {
+      one: 'Último segundo',
+      other: 'Últimos {count} segundos'
+    },
+    minute: {
+      one: 'Último minuto',
+      other: 'Últimos {count} minutos'
+    },
+    hour: {
+      one: 'Última hora',
+      other: 'Últimas {count} horas'
+    },
+    day: {
+      one: 'Último día',
+      other: 'Últimos {count} días'
+    },
+    week: {
+      one: 'Última semana',
+      other: 'Últimas {count} semanas'
+    },
+    month: {
+      one: 'Último mes',
+      other: 'Últimos {count} meses'
+    },
+    year: {
+      one: 'Último año',
+      other: 'Últimos {count} años'
+    },
+    unitSecond: 'Segundos',
+    unitMinute: 'Minutos',
+    unitHour: 'Horas',
+    unitDay: 'Días',
+    unitWeek: 'Semanas',
+    unitMonth: 'Meses',
+    unitYear: 'Años',
+    apply: 'Aplicar',
+    cancel: 'Cancelar',
+    previous: 'Intervalo anterior',
+    next: 'Intervalo siguiente',
+    incomplete: 'Elige un inicio y un fin.',
+    order: 'El fin debe ser posterior al inicio.',
+    outOfBounds: 'Elige un intervalo dentro de las fechas permitidas.',
+    invalidAmount: 'Introduce un número entero mayor que 0.'
+  },
   dialog: {
     close: 'Cerrar'
   },
@@ -468,6 +523,20 @@ export const es: Messages = {
   },
   popover: {
     close: 'Cerrar'
+  },
+  propertyFilterQuery: {
+    label: 'Consulta',
+    placeholder: 'Escribe una consulta, por ejemplo status = Active AND requests > 10',
+    fields: 'Campos',
+    all: 'Se cumplen todas las condiciones',
+    any: 'Se cumple cualquier condición',
+    unknownField: 'No hay ningún campo llamado “{field}”.',
+    unknownOperator: '“{operator}” no se aplica a {field}.',
+    missingOperator: 'Añade un operador después de {field}, por ejemplo =.',
+    missingValue: 'Añade un valor después de {operator}.',
+    expectedConnective: 'Une las condiciones con AND u OR antes de “{word}”.',
+    danglingConnective: 'Añade una condición después de {connective}.',
+    unclosedQuote: 'Cierra las comillas abiertas en el carácter {position}.'
   },
   propertyFilter: {
     label: 'Filtrar',
@@ -679,6 +748,26 @@ export const es: Messages = {
   },
   toggleGroup: {
     option: 'Opción {index}'
+  },
+  trace: {
+    label: 'Traza',
+    search: 'Buscar spans',
+    noMatch: 'Ningún span coincide con “{query}”.',
+    clearSearch: 'Borrar búsqueda',
+    empty: 'No hay spans en esta traza.',
+    details: 'Detalles de {name}',
+    close: 'Cerrar',
+    copyName: 'Copiar nombre del span',
+    service: 'Servicio',
+    startedAt: 'Inicio',
+    duration: 'Duración',
+    share: 'Parte de la traza',
+    percent: '{value} %',
+    failed: 'Falló',
+    running: 'En ejecución',
+    attributes: 'Atributos',
+    milliseconds: '{value} ms',
+    seconds: '{value} s'
   },
   tracker: {
     noData: 'Sin datos',

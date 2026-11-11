@@ -1,0 +1,21 @@
+{
+  "component": "trace",
+  "title": "Components/Primitives/Code/Trace",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A successful run of a function: the root span, its steps indented under it and the origin fetch with its own children, each drawn as a bar against the run's clock. Search narrows the rows, a parent row expands and collapses, and selecting a row opens its details.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithError",
+      "summary": "A failed run: the span that timed out and the parents it failed are danger bars with an error icon, and the selected span shows its Failed tag and the one-line reason.",
+      "file": "with-error.vue"
+    },
+    {
+      "name": "Selected",
+      "summary": "A selected span with its details: service, start, duration, share of the run and its attributes (method, URL, status code).",
+      "file": "selected.vue"
+    }
+  ]
+}

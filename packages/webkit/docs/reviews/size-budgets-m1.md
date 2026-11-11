@@ -161,3 +161,16 @@ The new chart parts are separate entries, so only a consumer that places them pa
 | gauge-chart     | new           | –               | 10.37        | 10.5       | New: the dial, threshold bands, sizes and the chart family state surface.                         |
 | map-chart       | new           | –               | 16.79        | 16.9       | New: the map, bubbles, keyboard walk, tooltip and table twin; country shapes load lazily.         |
 | webkit-provider | 14.4          | within budget   | 14.45        | 14.55      | Raised: the `gaugeChart` and `mapChart` groups and two `chart` keys in the catalogs.              |
+
+### M2.9 WP observability
+
+Two new entries and five raises. `DateRangePicker` composes the calendar parts (`CalendarGrid`, `CalendarFields`, `CalendarTimezone`), `Popover` placement and focus trap, `ToggleGroup`, `Select`, `Input` and `Button`, so it weighs about the `Calendar` (20.35 KB) plus the relative-range panel and the time-zone math. `PropertyFilter` gained query mode (the tokenizer and parser in `query-language.ts`, caret suggestions and the invalid-query message). The English catalog the provider ships, and the two opt-in locale entries, grew by the `dateRangePicker`, `propertyFilterQuery` and `trace` groups. Budgets are measured + ~0.2 KB.
+
+| Entry             | Budget before | Measured now | New budget | Why                                                                |
+| ----------------- | ------------- | ------------ | ---------- | ------------------------------------------------------------------ |
+| date-range-picker | new           | 33.05        | 33.25      | New: calendar parts, relative panel, time zone, step back/forward. |
+| trace             | new           | 14.57        | 14.75      | New: span waterfall, tree keyboard map, span details.              |
+| property-filter   | 28            | 28.45        | 28.75      | Raised: query mode (`mode="query"`).                               |
+| webkit-provider   | 6.7           | 7.27         | 7.5        | Raised: three new groups in the English catalog.                   |
+| locales-pt-BR     | 6.1           | 6.68         | 6.9        | Raised: the same three groups in Portuguese.                       |
+| locales-es        | 6.15          | 6.76         | 7          | Raised: the same three groups in Spanish.                          |

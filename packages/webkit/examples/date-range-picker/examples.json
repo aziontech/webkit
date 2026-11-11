@@ -1,0 +1,31 @@
+{
+  "component": "date-range-picker",
+  "title": "Components/Primitives/Inputs/DateRangePicker",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel switches between Relative range (quick ranges plus a custom duration) and Absolute range (month grid with start and end date and time, and the time zone), and commits only on Apply.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Absolute",
+      "summary": "`range-selector-mode=\"absolute-only\"` with a `max`: only the grid and the date and time fields, the trigger prints the range in the zone with its UTC offset, and Apply refuses an end before the start or past the limit with an inline message.",
+      "file": "absolute.vue"
+    },
+    {
+      "name": "RelativeOnly",
+      "summary": "`range-selector-mode=\"relative-only\"` with the product's own quick ranges, for a metrics interval that is always measured back from now.",
+      "file": "relative-only.vue"
+    },
+    {
+      "name": "WithStep",
+      "summary": "`show-step` adds Previous and Next around the trigger; each moves the range by its own length (an hour back, an hour forward) and Next stops at the present.",
+      "file": "with-step.vue"
+    },
+    {
+      "name": "TimeZone",
+      "summary": "`v-model:time-zone` with a short list of zones: the absolute range is typed and shown in the chosen zone, and the stored value stays the same ISO instants, printed under the picker.",
+      "file": "time-zone.vue"
+    }
+  ]
+}

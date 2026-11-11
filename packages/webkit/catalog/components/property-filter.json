@@ -1,9 +1,10 @@
 {
- "purpose": "One field that filters a collection by properties and free text, after Cloudscape's property filter. Typing suggests a property, then an operator, then a value, and each choice becomes a removable token (`Status = Active`); text typed without a property becomes a free-text token. Two or more tokens combine with Match all (and) or Match any (or). It edits a `PropertyFilterQuery` and never filters anything itself: `useCollection` (or the server) applies the query, and `propertyFilterProps` binds the query, the properties and the match count in one `v-bind`.",
+ "purpose": "One field that filters a collection by properties and free text, after Cloudscape's property filter. Typing suggests a property, then an operator, then a value, and each choice becomes a removable token (`Status = Active`); text typed without a property becomes a free-text token. Two or more tokens combine with Match all (and) or Match any (or). With `mode=\"query\"` the same field edits one query string instead (`level = Error AND method = GET`), after the Console Kit events query bar: suggestions follow the word at the caret (a field, an operator, a value, then AND or OR), a check explains what is wrong under the field, and Enter submits the text with its flat token list. It edits a `PropertyFilterQuery` and never filters anything itself: `useCollection` (or the server) applies the query, and `propertyFilterProps` binds the query, the properties and the match count in one `v-bind`.",
  "useWhen": [
   "A list or table that people narrow by several fields at once (status, region, owner) and by text.",
   "Any collection driven by `useCollection`, client or server mode.",
-  "Filters that must survive a reload or a shared link: the query serializes into the URL through `useCollection`."
+  "Filters that must survive a reload or a shared link: the query serializes into the URL through `useCollection`.",
+  "With `mode=\"query\"`: an explorer (events, logs) whose users type queries by hand, keep and reuse them as text, or need a grammar of the product (pass `validate` and `suggest`)."
  ],
  "avoidWhen": [
   "A single text search over a short list → use `input` bound to `filterProps`.",
@@ -20,6 +21,8 @@
   "Give every property with a closed set of values its `options`, so values are suggested and tokens print labels.",
   "Set `type: 'number'` or `type: 'date'` on ordered properties to offer `>`, `<`, `>=`, `<=`.",
   "Bind `totalCount` so people hear how many items match after each change.",
-  "Name the field after the collection (`aria-label=\"Filter resources\"`)."
+  "Name the field after the collection (`aria-label=\"Filter resources\"`).",
+  "In query mode, fields are written by `key` (no spaces); quote values that hold spaces or operator characters (`\"edge cache\"`). Apply the `query` of `submit` when it is not null; keep the `text` for saved and recent queries.",
+  "A product grammar (`like`, `between`, parentheses) passes `validate` and `suggest`; `submit` then carries `query: null` for text the built-in grammar cannot flatten, and the product parses `text` itself."
  ]
 }

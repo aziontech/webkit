@@ -4679,12 +4679,12 @@ The code of every state is in [blocks/platform/dashboard/alerts-dashboard.md](bl
 - Surface: product
 - Source: `blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/analytics-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), `ChartCard`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), `ChartCard`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
 
-metrics; metric panel; kpi tiles; sparkline; real-time metrics; analytics dashboard; painel de métricas; indicadores; analytics; traffic analytics; requests over time; period comparison; painel analítico; análise de tráfego
+metrics; metric panel; kpi tiles; sparkline; real-time metrics; analytics dashboard; painel de métricas; indicadores; analytics; traffic analytics; requests over time; period comparison; painel analítico; análise de tráfego; real-time metrics per product; product metrics; metrics by product; period filter; métricas por produto; métricas en tiempo real
 
 The page a developer or operator opens to see how much traffic their services handled and how well
 they handled it: requests, data transferred, success rate and server errors for the period, then the
@@ -4776,11 +4776,17 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 `Metrics appear here once a service serves requests.` for charts, and `No matching rows` /
 `Change the search.` when the table search matches nothing.
 
+### N. Product and period — `PageHeader` (optional)
+
+In the Metrics variant one page holds the dashboards of several products. A `PageTabs` strip of `Tabs.Item`s under the `PageHeader` switches the product (`Applications`, `Functions`, `Firewall`, `DNS`, `Data stream`); each product brings its own four tiles and four cards, and the header description changes with it. One `Select` in the header actions (`Last hour`, `Last 24 hours`, `Last 7 days`, `Last 30 days`), named `Period` by its `aria-label`, drives every tile, card and the comparison label of the deltas (`vs previous 7 days`). The interval of the points follows the period: 5 minutes for an hour, 2 hours for a day, a day for a week, 3 days for a month. The period stays when the product changes.
+
 ## Do
 
 - Keep the KPI row to the four numbers the reader checks first; put the rest in cards.
 - Use one card header layout for every card, so the controls are in the same place.
 - Let one period drive every region.
+- Keep the period when the product tab changes, so the reader compares products over the same window.
+- Give each product the same grammar: four tiles, then cards of two per row.
 - Distinguish "nothing recorded" from "nothing matches the search" in the empty copy.
 
 ## Don't
@@ -4789,6 +4795,8 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - Don't offer Line or Bar on a ranked breakdown; bars are the only form there.
 - Don't put more than one search on the page header; table search belongs to its table.
 - Don't use status colors for categorical series such as countries or hosts.
+- Don't sum a rate or a percentile in a legend total; Metrics turns totals off for those cards.
+- Don't nest product tabs inside a card; the product is a page-level choice.
 
 ## Copy
 
@@ -4797,6 +4805,7 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - **Tile labels:** the metric name only. `Data transferred`, never `Data transferred (GB)`; the unit belongs to the value.
 - **Hint:** one sentence ending with a period. `Requests that ended in a server error. A rise is a regression.`
 - **Menu items:** verb first. `Copy query`, `Export CSV`.
+- **Metrics:** title `Real-time metrics`; tab labels are product names; aggregation tags name the math (`Sum`, `Median`, `Percentile`).
 - **Empty state:** `No traffic yet` / `Metrics appear here once a service serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
 
@@ -4806,6 +4815,7 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - The `ToggleGroup` is labelled with the card it controls.
 - The search `Input` has an `aria-label` equal to its placeholder, since there is no visible label.
 - Figures use `tabular-nums`; deltas carry a sign and a word, not color alone.
+- The product strip is a tab list (`PageTabs`); the region under it is named after the product and the period (`Functions metrics, Last 24 hours`).
 - Charts expose their table twin and keyboard model through `Chart`; do not replace them with a bare SVG.
 
 ## States
@@ -4813,6 +4823,7 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - Default: the populated dashboard for the period.
 - Loading: every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
 - Empty: no traffic in the period; tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
+- Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
@@ -4821,6 +4832,8 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - `platform/dashboard/configurable-dashboard` — when the reader arranges the cards.
 - `platform/dashboard/service-monitoring-dashboard` — latency percentiles and an alert rail.
 - `ChartCard` / `StatTile` — the card and tile every dashboard shares.
+- `platform/view/split-view` — the events behind these numbers, row by row.
+- `platform/edit/edit-resource` (DataStream) — where the streams counted under Data stream are set up.
 
 ## Variants
 
@@ -4828,6 +4841,7 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 - `Loading` — While the first response loads, every tile, chart and the table hold their place with a Skeleton, so the grid does not reflow when data arrives.
 - `Empty` — No traffic in the period. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that says nothing was recorded.
 - `Failed` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Metrics` — Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair.
 
 Each variant is the same screen in another state: `get_pattern("platform/dashboard/analytics-dashboard", { variant })`, or the file under `blocks/platform/dashboard/analytics-dashboard/variants/`.
 
@@ -7687,12 +7701,12 @@ The code of every state is in [blocks/platform/edit/attribute-editor.md](blocks/
 - Surface: product
 - Source: `blocks/platform/edit/code-editor/code-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/code-editor")`
-- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Link](../../../components/link.md), [Menu](../../../components/menu.md), [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Menu](../../../components/menu.md), [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [Trace](../../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
 
-code editor; code editor page; function code editor; editor page; code and arguments editor; split editor; monaco editor; editor de código; página do editor; editar código; function editor; edge function; function detail; function arguments; json schema arguments; function settings; editor de função; argumentos da função; detalhe da função
+code editor; code editor page; function code editor; editor page; code and arguments editor; split editor; monaco editor; editor de código; página do editor; editar código; function editor; edge function; function detail; function arguments; json schema arguments; function settings; editor de função; argumentos da função; detalhe da função; test run; function test; run trace; span waterfall; invocation trace; testar função; execução de teste; rastreamento da execução
 
 The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together.
 
@@ -7701,6 +7715,7 @@ The editing page of a service whose behavior lives in source code. The user writ
 - A resource is mainly a document the user edits as text: function code, a schema, a configuration file.
 - The document comes with a structured companion (an argument form) that is easier to edit as fields than as JSON, and the user wants both views side by side.
 - The same resource also has a few settings, shown on a second tab of the same page.
+- The user tests the code before saving it and needs to read where the run spent its time and what it printed (variant TestRun).
 
 ## When not to use
 
@@ -7719,35 +7734,47 @@ The platform shell from `shells/console`: the `Sidebar` with `Brand`, the `Comma
 
 A full-bleed `PageTabs` with Code and Settings as `Tabs.Item`s. Each tab keeps its state when the user switches away, so unsaved code survives a visit to Settings.
 
-### C. Editor toolbar — `ToggleGroup` (required)
+### C. Editor toolbar — `ToggleGroup`, `Button` (required)
 
-A thin bar above the editor with a `ToggleGroup` labeled Editor document that switches between the Code and Arguments documents, and a muted line describing the active one, e.g. the runtime for Code.
+A thin bar above the editor with a `ToggleGroup` labeled Editor document that switches between the Code and Arguments documents, and a muted line describing the active one, e.g. the runtime for Code. In TestRun a secondary medium Run test `Button` with a play icon sits at the inline end; it shows its loading state while the run is in flight and reopens the Test run pane if the user collapsed it.
 
 ### D. Code document — `CodeEditor`, `HelperText` (required)
 
 A `CodeEditor` with `fill` takes the pane: line numbers, Tab indents, and Escape then Tab leaves it. Here it runs as the plain editor; a product passes `loader: () => import('monaco-editor')` to get Monaco, themed from the tokens, with the plain editor as the server and no-JavaScript fallback. An empty document on Save shows an invalid `HelperText` under the editor, cleared on the next keystroke.
 
-### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button` (required)
+### E. Test run — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `StatusIndicator` (optional)
+
+Variant TestRun only; it adds `CopyButton`, `KeyValuePairs`, `Trace`, `LogView` and `LogViewContent` to the page.
+
+In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is the flexible pane, and the Test run pane under it has a `basis`, a minimum and a maximum height and collapses past its minimum, so the editor can take the whole height back. The pane scrolls on its own and reads top to bottom like the invocation page of the design sample:
+
+1. The heading Test run, a `StatusIndicator` (Completed, or Running with its loading dot), the run ID in code type with a `CopyButton`.
+2. The request that triggered the run and one line on its outcome (the status code and what happened).
+3. A four-column `KeyValuePairs` of Started, Duration, Edge location and Memory, in skeletons while the run is in flight.
+4. Trace: one sentence on how to read it, then the `Trace` waterfall bound with `v-model:selected`, so the selected span's details (service, start, duration, share, attributes) open under it. While running, a status line says the trace appears when the run finishes.
+5. Logs: a `LogView` with `LogViewContent` on the same clock as the trace, `copyable`, and its loading state while running.
+
+### F. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button` (required)
 
 A count of fields and the outlined Add field and Remove form `Button`s sit above a `ResizableRoot`. The left `ResizablePane` holds the schema as JSON in a `CodeEditor` (`language="json"`); it is `collapsible` with a minimum and maximum width. The `ResizableHandle` resizes it and collapses it past its minimum. The right pane holds the fields form; both panes describe the same argument form.
 
-### F. No fields — `EmptyState`, `Button`, `Link` (optional)
+### G. No fields — `EmptyState`, `Button`, `Link` (optional)
 
 When the form has no fields, the right pane shows an `EmptyState` with one sentence, an Add field `Button` and a `Link` to the arguments documentation.
 
-### G. Field list — `Card`, `Item`, `Tag`, `Tooltip`, `IconButton` (required)
+### H. Field list — `Card`, `Item`, `Tag`, `Tooltip`, `IconButton` (required)
 
 A flush `Card` with one small `Item` per field: a reorder grip, the field name and type, small `Tag`s for Required and Needs a name, and `IconButton`s to duplicate, remove and expand the field, each named by a `Tooltip`. Only the expanded field shows its settings.
 
-### H. Field settings — `SettingRow`, `Input`, `Select`, `Switch`, `Textarea`, `HelperText` (required)
+### I. Field settings — `SettingRow`, `Input`, `Select`, `Switch`, `Textarea`, `HelperText` (required)
 
 Inside an expanded field, `SettingRow`s for Name, Type, Label, Description, Required and Default, then the rows that follow the type: minimum and maximum length and a pattern for text, minimum and maximum for numbers, Choices as a `Textarea` with one value per line, List of for lists. A name error shows as `HelperText` once the field was touched.
 
-### I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Field`, `RadioButton`, `Switch`, `HelperText` (required)
+### J. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Field`, `RadioButton`, `Switch`, `HelperText` (required)
 
 The form column with four `SettingsSection`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `Field` choice cards around `RadioButton`s) and Status (Active as a `Switch`). See `skills/webkit-form`.
 
-### J. Save bar — `SaveBar`, `Button` (required)
+### K. Save bar — `SaveBar`, `Button` (required)
 
 A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab.
 
@@ -7758,6 +7785,8 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - Keep collapsed fields as one-line summaries with their tags, and open settings only for the field being edited.
 - Lock fields that cannot change after creation, with a lock glyph and a description that says so.
 - Use one save bar for both tabs, and take the user to the tab that holds the error.
+- Show a test run under the code it ran, on the same page: the trace and the logs on one clock, the summary first.
+- Select the span the user most likely wants (the slowest or the failed one) when the run finishes.
 
 ## Don't
 
@@ -7766,6 +7795,9 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - Don't save from inside the Arguments pane or a field; Save lives in the bar.
 - Don't flag a new field's name before the user has touched it.
 - Don't let the schema pane squeeze the fields pane below a usable width; collapse it instead.
+- Don't open a test run in a dialog or a new page; it covers the code the user is about to fix.
+- Don't save as a side effect of Run test; a test runs the code in the editor, saved or not.
+- Don't report a test run with a toast; the result lives in the pane, where the user is looking.
 
 ## Copy
 
@@ -7775,6 +7807,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - **Empty state:** title states the fact, e.g. "This form has no fields"; description says what to do, e.g. "Add the first argument the service reads."
 - **Errors:** short and specific, e.g. "This field is required.", "Another field already uses this name."
 - **Save bar:** "You have unsaved changes."
+- **Test run:** status as one word ("Completed", "Running", "Failed"); the outcome as the status code and what happened, e.g. "200, served from the transform and written to cache."
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -7785,12 +7818,15 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - The expand button sets `aria-expanded` and `aria-controls` and names the field it opens.
 - Every icon-only control has an `aria-label` that matches its `Tooltip`; decorative icons carry `aria-hidden="true"`.
 - The save bar's motion respects reduced motion.
+- In TestRun the vertical split is labeled "Code and test run", its panes "Source code" and "Test run", and the handle "Resize the test run". The pane is a `section` named by its Test run heading, with Trace and Logs as `h3`s.
+- The trace is a `treegrid` with one tab stop (see `Trace`); the running state is announced by a `status` line.
 
 ## States
 
 - Code: the Code tab with the Code document filling the editor pane.
 - Arguments: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
 - NoArguments: the Arguments document of a service with no form, the empty schema and the no fields empty state.
+- TestRun: the Code document with a finished test run of image-optimizer under it, the origin fetch selected in the trace; Run test shows the running state.
 - Settings: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
 
 ## Related
@@ -7798,6 +7834,8 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - `shells/console` — the platform shell around this page.
 - `platform/edit/edit-resource` — the settings form and save bar pattern the Settings tab follows.
 - `platform/view/query-editor` — an editor page that runs queries and shows results.
+- `platform/view/split-view` — the events explorer, where the logs of every run land.
+- `Trace` — the span waterfall of the test run.
 - `platform/detail/version-detail` — reading a deployed version of the code.
 - `ResizableRoot` — the split between schema and fields; see `skills/webkit-layout`.
 
@@ -7807,6 +7845,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - `Arguments` — The Arguments document of image-optimizer: its form schema in the left pane and its two fields on the right, defaultFormat expanded into its settings and Choices and quality collapsed. The handle resizes the editor and collapses it past its minimum.
 - `NoArguments` — The Arguments document of auth-handler, a service with no form: the empty schema on the left and the This form has no fields empty state on the right.
 - `Settings` — The Settings tab of image-optimizer: the General, Runtime, Execution environment and Status sections in the form column, the runtime locked; editing anything raises the unsaved-changes bar.
+- `TestRun` — The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogView`. Run test again shows the running state until the run finishes.
 
 Each variant is the same screen in another state: `get_pattern("platform/edit/code-editor", { variant })`, or the file under `blocks/platform/edit/code-editor/variants/`.
 
@@ -7823,12 +7862,12 @@ The code of every state is in [blocks/platform/edit/code-editor.md](blocks/platf
 - Surface: product
 - Source: `blocks/platform/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/edit-resource")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md), `use-unsaved-changes`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [MultiSelect](../../../components/multi-select.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [PasswordInput](../../../components/password-input.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md), `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
 
-settings page; resource settings; settings tab; application settings; workload settings; firewall settings; edit settings; página de configurações; configurações do recurso; aba de configurações; save bar; unsaved changes bar; sticky save bar; discard and save; commit bar; barra de salvar; alterações não salvas; salvar alterações; edit resource; editar recurso; stale record; changed elsewhere; overwrite changes; conflict on save; danger zone; delete resource; type the name to confirm; zona de perigo; excluir recurso; alterado em outro lugar; leave page guard; unsaved changes dialog
+settings page; resource settings; settings tab; application settings; workload settings; firewall settings; edit settings; página de configurações; configurações do recurso; aba de configurações; save bar; unsaved changes bar; sticky save bar; discard and save; commit bar; barra de salvar; alterações não salvas; salvar alterações; edit resource; editar recurso; data stream; data stream settings; log streaming; stream destination; sampling; log template; configurações do data stream; envio de logs; streaming de logs; stale record; changed elsewhere; overwrite changes; conflict on save; danger zone; delete resource; type the name to confirm; zona de perigo; excluir recurso; alterado em outro lugar; leave page guard; unsaved changes dialog
 
 The settings page of one existing resource. The user comes here to change how the resource is named, what it runs with and whether it is active, review the change, and commit it or throw it away. Every field sits in a labeled section of the form column, and one save band appears only once something has changed, so the page reads as the resource's current state until the user edits it.
 
@@ -7872,15 +7911,27 @@ A setting the user cannot change here (a paid module, a module that is always on
 
 Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, the fieldset is disabled, Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record.
 
-### G. Leave guard — `Tabs`, `SaveBar` (optional)
+### G. Conditional fields — `SettingRow`, `Input`, `HelperText` (optional)
+
+When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `Field` choice cards around `RadioButton`) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. In DataStream the workload scope is `Field` choice cards around `RadioButton`; the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
+
+### H. Template editor — `SettingRow`, `HelperText` (optional)
+
+A setting whose value is a document (a JSON data set) gets a stacked row, under the `Select` that picks the template. A preset is read-only: its document shows in a `CodeBlock` with Copy, and the row says how to edit (choose Custom template). A custom document is a `CodeEditor` (`language="json"`, a fixed `height`), checked on Save (`Write the data set as a JSON object.`); a product passes its Monaco `loader` for JSON validation as you type.
+
+### I. Section warnings and server errors — `SettingsSection`, `Button` (optional)
+
+A setting with a side effect beyond this resource carries a warning `Alert` above its section's `Card` while it is on (`Saving a stream with sampling on turns off every other data stream in this account.`). A server rejection scoped to one section follows the form-error rule (`platform/states/form-error`): one danger `Alert` above that section that says what happened and that nothing else was lost, with the recovery action on it (`Send test record`); the field it concerns turns invalid with its own one-line reason and takes the focus. Never a toast, never a summary at the top of the page. Saving a settings page is not a build or deploy, so the async-submit toast with Edit and Redeploy does not apply here.
+
+### J. Leave guard — `Tabs`, `SaveBar` (optional)
 
 `useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Item` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/webkit-form`.
 
-### H. Changed elsewhere — `Button`, `SaveBar` (optional)
+### K. Changed elsewhere — `Button`, `SaveBar` (optional)
 
 When the record was saved by someone else after the form opened, a warning `Alert` sits between the heading and the first section: a bold "Changed elsewhere." lead, one sentence that says nothing was lost and what Save will do, and a secondary Reload button in its action slot. Save does not overwrite silently: it opens a `ConfirmDialog` (kind `primary`) with Go back and Overwrite and save. Reload swaps the edits for the saved values and the notice becomes an info `Alert` "Edits discarded." with Undo, which brings the edits back. The save bar's hint and Discard label follow the notice ("Saving overwrites the version saved elsewhere.", "Discard and reload"). This is the form-error rule (`platform/states/form-error`) applied to an edit: one message above the form, the recovery action on it.
 
-### I. Danger zone — `SettingsSection`, `Card`, `SettingRow`, `Button`, `Input` (optional)
+### L. Danger zone — `SettingsSection`, `Card`, `SettingRow`, `Button`, `Input` (optional)
 
 The last section, titled Danger zone with the hint "Actions that cannot be undone.", holds one compact `SettingRow` per irreversible action with a medium danger `Button` and a trash icon. The action opens a medium `ConfirmDialog`: a warning `Alert` that it cannot be reversed, one paragraph on what goes with it and a docs link, then "To confirm, type" the name in a code chip with a `CopyButton`, and an `Input` labelled by that sentence. The danger confirm button stays disabled until the typed name matches and shows its loading state while the request runs; Enter in the input confirms. See `platform/delete/delete-with-confirmation`.
 
@@ -7892,6 +7943,8 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - Keep locked settings visible, disabled, with the reason and the way to unlock them.
 - Put destructive actions in a Danger zone section at the end, never in the save bar.
 - Check every field when Save is pressed and show errors only then; see `skills/webkit-errors`.
+- Put the choice that decides other fields first, and show only the fields that choice needs.
+- Show a preset document read-only, with Copy, beside the way to make it editable.
 - Mark the tab that holds unsaved changes with `dirty`, and ask before leaving it while dirty.
 - Offer Save changes in the leave dialog when the form can be saved from there; the user keeps their work without going back.
 - Say when the record changed elsewhere as soon as it is known, and ask before Save overwrites it.
@@ -7905,6 +7958,8 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - Don't hide fields the user cannot change; lock them and say why.
 - Don't use `size="medium"` or larger for the Settings heading; the tab bar or breadcrumb already names the resource.
 - Don't add a Cancel button that leaves the page; Discard restores the record in place.
+- Don't report a rejected destination or credential in a toast; it belongs above the section it concerns.
+- Don't echo a saved secret back into its field.
 - Don't rely on the dot alone: the dirty tab also says "Unsaved changes" to screen readers.
 - Don't overwrite a record that changed elsewhere without the overwrite confirmation.
 - Don't put Delete in the save bar, the page heading or a menu of the form; it lives in the Danger zone.
@@ -7917,6 +7972,7 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - **Row descriptions:** one sentence that says what the setting does, e.g. "When disabled, the project stops serving traffic."
 - **Save bar:** state what changed and when it applies, e.g. "Project settings changed." with the hint "Saving publishes them on the next deployment."; buttons "Discard" and "Save".
 - **Locked reason:** one sentence with the way out, e.g. "Contact sales to activate this module."
+- **Server error on a section:** what happened, then what was kept, e.g. "The endpoint did not answer the test record, so the stream was not saved. Your other changes are still here."; the field reason is one line, e.g. "The endpoint did not answer within 10 seconds."
 - **Leave dialog:** "Unsaved changes", "This page has changes you haven't saved. If you leave now, they're discarded." (with Save: "Save them before you leave, or discard them and continue."); buttons "Keep editing", "Discard changes", "Save changes". These are the built-in `unsavedChanges` messages in en, pt-BR and es.
 - **Changed elsewhere:** "Changed elsewhere." + "This project was saved by someone else after you opened it. …"; button "Reload"; dialog "Overwrite changes made elsewhere?" with "Go back" and "Overwrite and save"; after a reload "Edits discarded." with "Undo".
 - **Danger zone:** section "Danger zone" with "Actions that cannot be undone."; row "Delete this project"; dialog "Delete project", "Once confirmed, this action can't be reversed.", "To confirm, type <name>"; buttons "Cancel" and "Delete project".
@@ -7929,6 +7985,9 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - A disabled `Switch` keeps its `Tooltip`, so keyboard and pointer users can still read why it is locked.
 - External links open in a new tab with `rel="noopener noreferrer"` and an icon marked `aria-hidden="true"`.
 - The save bar enters after the form in reading order and its motion respects reduced motion.
+- An invalid field points at its `HelperText` through `aria-describedby`; on Save the first invalid field takes the focus.
+- A section `Alert` is announced by `Alert` itself; its recovery `Button` is a real button inside it.
+- The `CodeEditor` and the read-only `CodeBlock` are named after their row (`Data set`, `Copy the data set as JSON`).
 - The dirty tab mark is `aria-hidden`; a visually hidden "Unsaved changes" joins the tab's accessible name, and under forced colors the dot paints in `CanvasText`.
 - The leave dialog is a `ConfirmDialog`: focus moves into it, Escape and the close button count as Keep editing, and focus returns to the control that asked to leave.
 - The changed-elsewhere notice sits in a polite live region and takes focus after Reload so the change of values is announced; both its actions are real buttons.
@@ -7942,6 +8001,7 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; Save is loading and Discard is disabled.
+- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the form-error rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
 - UnsavedChanges (leave guard): the Settings tab carries the dirty dot, and switching tabs while dirty opens the Unsaved changes dialog.
@@ -7954,6 +8014,8 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - `platform/delete/delete-with-confirmation` — the dialog behind the Danger zone action.
 - `platform/settings/settings-form` — account settings that end with the same save band.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
+- `platform/states/form-error` — the section-scoped server error DataStream follows.
+- `platform/dashboard/analytics-dashboard` (Metrics) — where the records a stream sends are counted.
 - `useUnsavedChanges` — the dirty baseline and leave guard behind the save bar, the tab mark and the leave dialog.
 - `platform/states/form-error` — the rule the changed-elsewhere notice follows.
 
@@ -7965,6 +8027,7 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - `ResourceSettings` — The settings page of a first-level resource with no tabs, drawn from the same field list as its create page: here an access list at /access-lists/:id/settings, with its name under General and the type and entries under List settings. The entries field follows the selected type, and Save checks every field before it commits.
 - `UnsavedChanges` — The policy Settings tab after Debug rules was switched on: the bar is up and the Settings tab carries the unsaved-changes dot. Discard restores the record and the bar leaves, Save holds its loading state and then leaves. Switching tabs while dirty asks first, through `useUnsavedChanges`: Keep editing, Discard changes, or Save changes and go.
 - `Saving` — While the save request is in flight: Save shows its loading state and Discard is disabled.
+- `DataStream` — The settings page of a data stream at /data-stream/:id/settings: General, Source (data source and the workloads it collects from), Sampling with its rate and the warning that sampling turns off the account's other streams, Template (a preset shown read-only in a CodeBlock, or a custom data set edited as JSON in a CodeEditor and checked on Save) and Destination, whose fields follow the connector (HTTP POST, Kafka, S3-compatible storage, log analytics). Save sends one test record; when the endpoint does not answer (in this demo, any host under .invalid) a danger Alert opens above Destination with Send test record, the URL turns invalid with its reason and takes the focus, and every other change stays.
 - `StaleRecord` — The record was saved by someone else after the form opened, and the form holds edits: a warning `Alert` above the sections says it changed elsewhere, with Reload. Save asks before it overwrites (Go back / Overwrite and save); Reload replaces the edits with the saved values and the notice turns into Edits discarded with Undo.
 - `DangerZone` — The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs.
 
@@ -9609,12 +9672,12 @@ The code of every state is in [blocks/platform/view/query-editor.md](blocks/plat
 - Surface: product
 - Source: `blocks/platform/view/split-view/split-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/split-view")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), `CalendarRoot`, [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), `PanelHeader`, [Popover](../../../components/popover.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), `CalendarRoot`, [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), `PanelHeader`, [Popover](../../../components/popover.md), [PropertyFilter](../../../components/property-filter.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
 
-real-time events; events visualizer; event explorer; log explorer; logs viewer; request logs; events search; eventos em tempo real; visualizador de eventos; explorador de logs; split view; master detail; list and detail panes; visão dividida
+real-time events; events visualizer; event explorer; log explorer; logs viewer; request logs; events search; eventos em tempo real; visualizador de eventos; explorador de logs; split view; master detail; list and detail panes; visão dividida; query language; events query; saved searches; saved queries; query history; date range; time range picker; investigation tabs; event document; consulta de eventos; buscas salvas; intervalo de datas
 
 The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.
 
@@ -9666,6 +9729,32 @@ Clicking a row opens the event in a resizable end `Sidebar` beside the log when 
 
 Below that width the same document opens in a medium right `Drawer` titled Event, with `PanelHeader`, `DrawerTitle` and `DrawerClose`. Crossing the breakpoint moves an open event between the pane and the drawer instead of closing it.
 
+The fields panel (E) is the `split-view#Fields` piece of the inventory; it lives in the primary and every variant, so it has no variant of its own.
+
+### I. Query bar — `Tooltip`, `IconButton` (optional)
+
+Variant Query only; it adds `PropertyFilter` (`mode="query"`) and `DateRangePicker` to the page, in place of the Filter popover and the search field.
+
+For people who type their questions. `DateRangePicker` replaces the Period field of the Filter popover: relative ranges (Last 15 minutes to Last 24 hours), an absolute range typed in the chosen time zone and bounded to the retained days, and Previous and Next, which move the window by its own length. The times in the log, the chart axis and the document follow that zone. `PropertyFilter` in query mode replaces both the Filter popover and the search field: one query string (`level = Error AND host = api.example.com`), suggestions for the word at the caret, the reason under the field when the query is invalid, and the match count. Enter applies it; a query that mixes AND and OR shows a message instead of guessing. A value picked in the fields panel adds or removes its `field = value` clause, so the panel and the query never disagree.
+
+### J. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Button`, `Tooltip` (optional)
+
+Variant Query only.
+
+Two outlined `IconButton`s beside the bar open a `Popover` each. Saved queries lists name and query text, applies one on click, deletes one with a small Delete button, and saves the applied query under a typed name. Recent queries lists the last eight queries run, newest first, with Clear history. Applying an entry fills the bar and runs it.
+
+### K. Investigation tabs — `IconButton`, `DropdownMenu`, `Input`, `Tooltip` (optional)
+
+Variant Sessions only; it adds `Tabs` to the page.
+
+Above the controls row, one tab per open investigation; each keeps its own filters, search and period, and switching tabs closes the open document. New investigation (a transparent `IconButton`) adds a tab, up to five; past the limit a status line says to close one. The actions `DropdownMenu` renames, duplicates or closes the active tab. Rename opens an inline `Input` over the tab (also F2 or a double click on it): Enter keeps the name, Escape restores it. Delete on a focused tab closes it; the last tab cannot be closed. A close button inside each tab waits for a `Tabs` item close control that is its own focusable element (the current `closable` nests a button inside the tab); it is listed in ROADMAP M2.10.
+
+### L. Document tools — `Input`, `IconButton`, `Tooltip`, `Chip` (optional)
+
+Variant EventDocument only; it adds `CopyButton` to the page.
+
+The document lists every field of the event. Search in this event narrows the list to fields whose name or value matches and highlights the match. Each filterable value has Filter by (keep only events with it) and Exclude (hide them) buttons that apply to the log; an exclusion shows as a `Host is not legacy.example.com` chip with the other filters. Copy copies the fields shown as JSON; the full JSON document stays below.
+
 ## Do
 
 - Drive the summary, the chart and the table from one filtered set, so every number agrees.
@@ -9673,6 +9762,9 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - Keep the row selected while its document is open, and switch between pane and drawer by the explorer's width, not the viewport's.
 - Count applied fields on the Filter `Badge` and show each one as a `Chip` in field order.
 - Pick the empty message that matches why the log is empty.
+- In query mode, keep the applied query text as the user typed it, and save and list that text.
+- Keep each investigation tab self-contained: its own filters, search and period.
+- Let the document act on the log (Filter by, Exclude), so a pivot is one click from the value.
 
 ## Don't
 
@@ -9681,6 +9773,9 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - Don't hide the controls row or the summary when the log is empty.
 - Don't encode level by colour alone; the chart has a card with level names and counts, and the table shows level as text.
 - Don't let a wide log scroll the page sideways.
+- Don't offer the query bar and the Filter popover at once; pick the one that fits the users.
+- Don't guess the meaning of a query that mixes AND and OR; say so and let the user fix it.
+- Don't let investigation tabs grow without a limit, and never close the last one.
 
 ## Copy
 
@@ -9690,6 +9785,10 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - **Empty log:** title states the fact and the description says what to do, e.g. "No events in this window" with "Widen the period or clear a filter to see more of the log."
 - **Fields panel:** controls name the panel, e.g. "Hide the fields panel", "Show the fields panel".
 - **Document:** drawer title "Event"; close button "Close the event document".
+- **Query bar:** `aria-label` "Query events"; placeholder with one real example; the range "Events time range".
+- **Saved queries:** "Name the current query", Save, "Delete <name>"; empty "No saved queries yet. Name the current query to keep it."
+- **Tabs:** "New investigation", "Actions for <name>", Rename, Duplicate, "Close investigation"; limit "Up to 5 investigations stay open. Close one to start another."
+- **Document tools:** "Search in this event", "Filter by <field> <value>", "Exclude <field> <value>", "Copy the fields shown as JSON"; no match "No field matches “<text>”."
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -9700,6 +9799,9 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - Every icon-only button has an `aria-label`; the filter `Badge` and decorative glyphs are `aria-hidden="true"`.
 - Value options in the popovers expose `aria-checked`, so applied values are announced.
 - The document drawer traps focus while open and closes on Escape; motion is turned off under `prefers-reduced-motion`.
+- Query: the bar is a `combobox` whose invalid state sets `aria-invalid` and points `aria-describedby` at the reason; the mixed AND / OR message and the saved-query confirmations are `role="status"`.
+- Sessions: the tabs follow the `Tabs` keyboard map (arrows, Home, End); F2 renames and Delete closes the focused tab, and the same actions sit in a named menu for pointer and screen-reader users; focus returns to the tab after rename or close.
+- EventDocument: Filter by and Exclude are toggle buttons (`aria-pressed`) named with the field and value; the match count of the document search is announced in a `role="status"`.
 
 ## States
 
@@ -9707,6 +9809,9 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a chip.
 - Empty: a workspace with no traffic yet; the summary reads zero, the chart is flat and the log shows No events yet.
 - Failed: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry.
+- Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
+- Sessions: three investigation tabs, API errors active.
+- EventDocument: an error event's document open, with Host is not legacy.example.com applied.
 
 ## Related
 
@@ -9722,6 +9827,9 @@ Below that width the same document opens in a medium right `Drawer` titled Event
 - `Filtered` — Errors from the Security and Access Control sources: the Filter button counts three applied fields and each shows as a chip that reopens the popover on that field or removes it.
 - `Empty` — A workspace with no traffic yet: the summary reads zero, the chart is flat and the log shows its No events yet state.
 - `Failed` — The event log request failed: the fields panel stays, and the log pane shows a danger Alert that says the events did not load and offers Retry.
+- `Query` — The Console Kit query bar on the sample design: a `DateRangePicker` (relative ranges, an absolute range typed in the chosen time zone, Previous and Next) drives the period, and `PropertyFilter` in query mode takes `level = Error AND host = api.example.com`, suggests fields, operators and values at the caret, explains an invalid query under the field and applies it on Enter. Saved queries (name, apply, delete) and Recent queries sit in two popovers beside the bar; the field values in the fields panel add or remove clauses of the query; the log, chart and times follow the chosen zone.
+- `Sessions` — Several investigations open as tabs above the explorer, each keeping its own filters, search and period: API errors is active, with All traffic and Security blocks beside it. New investigation adds a tab (up to five, then a message says to close one); the actions menu renames (also F2 or a double click, with an inline field: Enter keeps, Escape cancels), duplicates or closes the active one (also Delete on the focused tab).
+- `EventDocument` — An error event selected with its document open beside the log. The document lists every field of the event with a Search in this event field that narrows and highlights the fields, a Filter by and an Exclude button per value that apply to the log (an exclusion shows as an is not chip), and Copy that copies the fields shown as JSON; the full JSON document follows.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/split-view", { variant })`, or the file under `blocks/platform/view/split-view/variants/`.
 
@@ -14442,6 +14550,201 @@ LogView ships flat, individually importable sub-components (each from its own `@
 
 ---
 
+<!-- components/trace.md -->
+
+# Trace
+
+> A span waterfall: one row per span of a run (a function invocation, a request through several services), indented under the span it ran inside and drawn as a bar placed against the run's own clock. The rows form a tree grid that expands and collapses, a search narrows them to the spans whose name or service matches, and selecting a row opens its details (service, start, duration, share of the run, outcome message and attributes) under the waterfall. It reads a flat `spans` list with `parentId` links and never fetches anything.
+
+- Import: `import Trace from '@aziontech/webkit/trace'`
+- Category: code · Surface: product · Structure: monolithic
+- API as JSON: [trace.json](https://github.com/aziontech/webkit/blob/main/.specs/trace.json)
+
+## When to use
+
+- The test run of a function or the detail of one invocation, to show where the time went.
+- A request that crossed several services, each with its own span, where the order and the overlap matter.
+- Next to the run's logs (`log-view`), on the same clock.
+
+## Do
+
+- Pass `start` and `duration` in milliseconds from the start of the run; the axis spans the latest end.
+- Link children with `parentId`; a span whose parent is missing becomes a root, so a partial trace still renders.
+- Set `status: 'error'` and a one-line `message` on the span that failed, and on its parents if the failure bubbled up.
+- Bind `v-model:selected` when another view (a request path, a log line) selects the same span.
+- Name the waterfall after the run (`aria-label="Trace of inv_7f21"`).
+
+## Don’t
+
+- A list of log lines with levels → use `log-view`.
+- Durations to compare across many items with no parent/child relation → use `bar-list` or `chart`.
+- Status history of a service over days → use `tracker`.
+- A hierarchy without time → use `tree`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [log-view](log-view.md) — the run's log lines, shown under the trace on the same clock.
+- [tree](tree.md) — the same expand and collapse model without the time axis.
+- [bar-list](bar-list.md) — ranked durations without nesting.
+- [key-value-pairs](key-value-pairs.md) — the facts of the run above the trace.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `spans` | `TraceSpan[]` | `[]` | false | Spans of the trace, each `{ id, parentId?, name, service?, icon?, start, duration, status?, message?, attributes? }` in milliseconds. |
+| `selected` | `string` | `''` | false | Id of the span whose details show under the waterfall. Supports v-model:selected. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the waterfall. Empty uses the locale catalog. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `update:selected` | `string` | A row was selected, selected again (empty: deselected), or Close used. |
+
+## States
+
+- Visual states: `default`, `hover` (row), `focus-visible` (row), `selected` (row and details band), `collapsed` / `expanded` (parent rows), `searching` (rows narrowed, every match's ancestors shown), `empty` (no spans, or no match with Clear search).
+- Bar tones on `data-tone`: `root` (info), `ok` (success), `error` (danger), `running` (warning).
+- `data-selected` on the selected row; `aria-expanded` on parent rows.
+
+## Accessibility
+
+- Visible focus: a 2 px inset ring on the focused row.
+- Keyboard map: one row is in the tab order (roving `tabindex`); `ArrowDown`/`ArrowUp` move between visible rows; `Home`/`End` go to the first and last row; `ArrowRight` expands a collapsed parent, or moves into its first child; `ArrowLeft` collapses an expanded parent, or moves to the parent; `Enter` or `Space` selects the row (again: deselects). Close in the details returns focus to the row.
+- ARIA: the waterfall is a named `treegrid` of `row`s with `aria-level`, `aria-posinset`, `aria-setsize`, `aria-expanded` (parents only) and `aria-selected`; each row is named with its span, service, start, duration and outcome; the details band is a named `region` that describes the grid. The axis, the bars' duration labels and the expand glyph are decorative (`aria-hidden`).
+- Rows are 36 px high (44 px on `pointer: coarse`).
+- Colour is never the only signal: a failed span also carries an icon in the row and a Failed tag in the details.
+- Contrast ≥4.5:1 from the semantic text tokens; duration labels use the `-contrast` tokens of their tone.
+
+## Right-to-left
+
+- Layout: logical utilities only; bars sit at `inset-inline-start` with an inline size, so the waterfall runs from the inline start and mirrors; indentation is `padding-inline-start`.
+- Icons: the collapsed chevron is mirrored (`rtl:-scale-x-100`); span icons are not.
+- Keyboard: `ArrowRight` and `ArrowLeft` swap under `dir="rtl"` (expand is the inline-end arrow).
+- User data: span names, services and attribute values sit in `<bdi>`.
+
+## Internationalization
+
+| Key                                                  | English source                                   | Override prop |
+| ---------------------------------------------------- | ------------------------------------------------ | ------------- |
+| `trace.label`                                        | Trace                                            | `ariaLabel`   |
+| `trace.search`                                       | Search spans                                     | —             |
+| `trace.noMatch`                                      | No span matches “{query}”.                       | —             |
+| `trace.clearSearch`                                  | Clear search                                     | —             |
+| `trace.empty`                                        | No spans in this trace.                          | —             |
+| `trace.details`                                      | Details of {name}                                | —             |
+| `trace.close`                                        | Close                                            | —             |
+| `trace.copyName`                                     | Copy span name                                   | —             |
+| `trace.service` / `startedAt` / `duration` / `share` | Service / Started at / Duration / Share of trace | —             |
+| `trace.percent`                                      | {value}%                                         | —             |
+| `trace.failed` / `running`                           | Failed / Running                                 | —             |
+| `trace.attributes`                                   | Attributes                                       | —             |
+| `trace.milliseconds` / `seconds`                     | {value} ms / {value} s                           | —             |
+
+- Formatting: durations under one second print whole milliseconds, longer ones seconds with two decimals, both through `Intl.NumberFormat` of the active locale.
+
+## Responsive
+
+- Container queries: `@container/trace`; the name column grows from 9 rem to 20 rem with the container, the service column and the grid lines appear from `@xl`/`@3xl`.
+- Narrow: names truncate, the duration labels stay on the bars, the details facts take two columns.
+- Touch: rows are 44 px high on `pointer: coarse`; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Trace from '@aziontech/webkit/trace'
+  import { ref } from 'vue'
+
+  const spans = [
+    { id: 'root', name: 'image-resizer', service: 'Function', start: 0, duration: 412 },
+    {
+      id: 'parse',
+      parentId: 'root',
+      name: 'parse-request',
+      service: 'Compute',
+      start: 4,
+      duration: 12
+    },
+    {
+      id: 'origin',
+      parentId: 'root',
+      name: 'fetch-origin',
+      service: 'Network',
+      start: 16,
+      duration: 186
+    },
+    {
+      id: 'dns',
+      parentId: 'origin',
+      name: 'dns-lookup',
+      service: 'Network',
+      start: 16,
+      duration: 14
+    },
+    {
+      id: 'tls',
+      parentId: 'origin',
+      name: 'tls-handshake',
+      service: 'Security',
+      start: 30,
+      duration: 31
+    },
+    {
+      id: 'response',
+      parentId: 'origin',
+      name: 'origin-response',
+      service: 'Network',
+      start: 61,
+      duration: 141
+    },
+    {
+      id: 'decode',
+      parentId: 'root',
+      name: 'decode',
+      service: 'Compute',
+      start: 202,
+      duration: 54
+    },
+    {
+      id: 'encode',
+      parentId: 'root',
+      name: 'encode',
+      service: 'Compute',
+      start: 256,
+      duration: 92
+    },
+    {
+      id: 'cache',
+      parentId: 'root',
+      name: 'put-cache',
+      service: 'Storage',
+      start: 348,
+      duration: 38
+    }
+  ]
+
+  const selected = ref('')
+</script>
+
+<template>
+  <Trace
+    v-model:selected="selected"
+    :spans="spans"
+    aria-label="Trace of the test run"
+  />
+</template>
+```
+
+2 more example(s) in [components/trace.md](https://github.com/aziontech/webkit/blob/main/.specs/components/trace.md).
+
+---
+
 <!-- components/accordion.md -->
 
 # Accordion
@@ -17880,7 +18183,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 # Property Filter
 
-> One field that filters a collection by properties and free text, after Cloudscape's property filter. Typing suggests a property, then an operator, then a value, and each choice becomes a removable token (`Status = Active`); text typed without a property becomes a free-text token. Two or more tokens combine with Match all (and) or Match any (or). It edits a `PropertyFilterQuery` and never filters anything itself: `useCollection` (or the server) applies the query, and `propertyFilterProps` binds the query, the properties and the match count in one `v-bind`.
+> One field that filters a collection by properties and free text, after Cloudscape's property filter. Typing suggests a property, then an operator, then a value, and each choice becomes a removable token (`Status = Active`); text typed without a property becomes a free-text token. Two or more tokens combine with Match all (and) or Match any (or). With `mode="query"` the same field edits one query string instead (`level = Error AND method = GET`), after the Console Kit events query bar: suggestions follow the word at the caret (a field, an operator, a value, then AND or OR), a check explains what is wrong under the field, and Enter submits the text with its flat token list. It edits a `PropertyFilterQuery` and never filters anything itself: `useCollection` (or the server) applies the query, and `propertyFilterProps` binds the query, the properties and the match count in one `v-bind`.
 
 - Import: `import PropertyFilter from '@aziontech/webkit/property-filter'`
 - Category: data · Surface: product · Structure: monolithic
@@ -17891,6 +18194,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - A list or table that people narrow by several fields at once (status, region, owner) and by text.
 - Any collection driven by `useCollection`, client or server mode.
 - Filters that must survive a reload or a shared link: the query serializes into the URL through `useCollection`.
+- With `mode="query"`: an explorer (events, logs) whose users type queries by hand, keep and reuse them as text, or need a grammar of the product (pass `validate` and `suggest`).
 
 ## Do
 
@@ -17898,6 +18202,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - Set `type: 'number'` or `type: 'date'` on ordered properties to offer `>`, `<`, `>=`, `<=`.
 - Bind `totalCount` so people hear how many items match after each change.
 - Name the field after the collection (`aria-label="Filter resources"`).
+- In query mode, fields are written by `key` (no spaces); quote values that hold spaces or operator characters (`"edge cache"`). Apply the `query` of `submit` when it is not null; keep the `text` for saved and recent queries.
+- A product grammar (`like`, `between`, parentheses) passes `validate` and `suggest`; `submit` then carries `query: null` for text the built-in grammar cannot flatten, and the product parses `text` itself.
 
 ## Don’t
 
@@ -17924,23 +18230,32 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `ariaLabel` | `string` | `''` | false | Accessible name of the field. Empty uses the locale catalog. |
 | `freeText` | `boolean` | `true` | false | Accepts typed text with no property as a free-text token. |
 | `disabled` | `boolean` | `false` | false | Disables the field and the tokens. |
+| `mode` | `'tokens' \| 'query'` | `'tokens'` | false | tokens` turns each choice into a token; `query` edits one query string. |
+| `text` | `string` | `undefined` | false | The query string in query mode. Supports v-model:text. |
+| `validate` | `(text: string) => string` | `undefined` | false | Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check. |
+| `suggest` | `(text: string, caret: number) => PropertyFilterQuerySuggestion[]` | `undefined` | false | Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:query` | `PropertyFilterQuery` | A token was added or removed, the operation changed, or all cleared. |
+| `update:query` | `PropertyFilterQuery` | A token was added or removed, the operation changed, or all cleared. Tokens mode only. |
+| `update:text` | `string` | The query string changed (typing, a suggestion, Escape clearing). Query mode only. |
+| `submit` | `PropertyFilterSubmit` | Enter with no active suggestion and a valid query. Query mode only. |
 
 ## States
 
-- Visual states: `default`, `focus-visible`, `open` (suggestions shown), `disabled`
+- Visual states: `default`, `focus-visible`, `open` (suggestions shown), `disabled`, `invalid` (query mode: after Enter or blur on a query that fails the check, then live until it passes or is cleared)
+- `data-mode` on the field wrapper mirrors `mode`; query mode sets the typed text in the code type (`text-label-code-sm`)
 - `aria-expanded` on the field mirrors the open suggestions; `data-active` marks the active option
 - `data-disabled` mirrors the `disabled` prop
 
 ## Accessibility
 
 - Visible focus: the field's own `focus-within` ring (from `input`); tokens and buttons keep theirs.
-- Keyboard map: typing opens the suggestions; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option or commits the typed text; `Escape` closes the suggestions, then clears the text; `Backspace` in an empty field removes the last token.
+- Keyboard map (query mode): typing opens the suggestions for the word at the caret; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option (it replaces the word and moves the caret after it) or submits the query; `Escape` closes the suggestions, then clears the text; `ArrowLeft`/`ArrowRight`, `Home`/`End` and clicks move the caret and the suggestions follow it; `Backspace` only edits text.
+- In query mode an invalid query sets `aria-invalid` on the field and `aria-describedby` to the message, which sits in a polite live region under the field; the token group is not rendered.
+- Keyboard map (tokens mode): typing opens the suggestions; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option or commits the typed text; `Escape` closes the suggestions, then clears the text; `Backspace` in an empty field removes the last token.
 - ARIA: the field is a `combobox` (`aria-autocomplete="list"`, `aria-expanded`, `aria-controls`, `aria-activedescendant`); the suggestions are a named `listbox` of `option`s with `aria-selected` on the active one; the tokens sit in a named `group`; each token's remove button is named `Remove <token>`; the match count is a `status` region.
 - Option targets are 32 px high (44 px on `pointer: coarse`).
 - Contrast ≥4.5:1 from the semantic text tokens.
@@ -17951,6 +18266,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - Icons: the filter glyph is not mirrored.
 - Keyboard: `ArrowDown`/`ArrowUp` are not direction-dependent.
 - User data: suggestion labels sit in `<bdi>` so a value in another script does not reorder the line.
+- Query mode: the query string keeps `dir="auto"` from `input`, so a Latin query stays left-to-right inside a right-to-left page; the message sits at the start and the match count at the end (`ms-auto`).
 - Teleported content: the teleported suggestions listbox binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Internationalization
@@ -17970,6 +18286,11 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `propertyFilter.clear`              | Clear filters                  | —             |
 | `propertyFilter.matches`            | {count} match / {count} matches (plural) | —   |
 | `propertyFilter.equals` … `lessOrEqual` | operator names (Equals, Contains, …) | —   |
+| `propertyFilterQuery.label`         | Query                          | `ariaLabel`   |
+| `propertyFilterQuery.placeholder`   | Type a query, for example status = Active AND requests > 10 | `placeholder` |
+| `propertyFilterQuery.fields`        | Fields                         | —             |
+| `propertyFilterQuery.all` / `any`   | Every condition matches / Any condition matches (AND / OR) | — |
+| `propertyFilterQuery.unknownField` … `unclosedQuote` | the built-in check messages (`{field}`, `{operator}`, `{word}`, `{connective}`, `{position}`) | `validate` |
 
 - Formatting: the match count goes through the plural rules and number format of the active locale (`Intl.PluralRules`, `Intl.NumberFormat`).
 
@@ -18019,7 +18340,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 </template>
 ```
 
-1 more example(s) in [components/property-filter.md](https://github.com/aziontech/webkit/blob/main/.specs/components/property-filter.md).
+2 more example(s) in [components/property-filter.md](https://github.com/aziontech/webkit/blob/main/.specs/components/property-filter.md).
 
 ---
 
@@ -21395,6 +21716,143 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 ```
 
 2 more example(s) in [components/combobox.md](https://github.com/aziontech/webkit/blob/main/.specs/components/combobox.md).
+
+---
+
+<!-- components/date-range-picker.md -->
+
+# Date Range Picker
+
+> A time range for queries over time: logs, events, traces and metrics. After the Console Kit date-time range (quick ranges, absolute range with times, previous and next) and Cloudscape's date range picker. The value is either **relative** (`{ type: 'relative', amount: 15, unit: 'minute' }`, read as "the last 15 minutes" and re-resolved against the clock on every query, so a live view keeps moving) or **absolute** (`{ type: 'absolute', start, end }`, two ISO 8601 instants). The trigger prints `Last 15 minutes` or the absolute range in the selected time zone with its UTC offset. The panel switches between Relative range (the quick ranges and a custom duration) and Absolute range (the `Calendar` month grid, start and end date and time fields, and the time zone selector) and commits only on Apply; Cancel and Escape drop the draft. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so the same value reads correctly in every zone. With `showStep`, Previous and Next move the range by its own length. Date math uses `Intl` and the native `Date` only.
+
+- Import: `import DateRangePicker from '@aziontech/webkit/date-range-picker'`
+- Category: inputs · Surface: product · Structure: monolithic
+- API as JSON: [date-range-picker.json](https://github.com/aziontech/webkit/blob/main/.specs/date-range-picker.json)
+
+## When to use
+
+- Filtering events, logs, traces or metrics by time, where "the last N minutes" must stay relative.
+- Any range that needs times of day and a time zone, not only dates.
+- Investigations that page through time window by window (`show-step`).
+
+## Do
+
+- Keep relative values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`), never when the user picks them.
+- Pass `now` in tests, demos and server-rendered pages so labels and step limits are deterministic.
+- Bind `v-model:time-zone` to the user's saved preference, and show times elsewhere on the page in the same zone.
+- Set `max` (usually now) and `min` (the retention limit) instead of validating after Apply.
+- Name the picker after what it filters (`aria-label="Events time range"`).
+
+## Don’t
+
+- Picking whole days for a report or a billing period, with day presets → use `calendar`.
+- A single date or a date and time → use `calendar` with `mode="single"`.
+- A fixed list of named intervals and nothing custom → use `select` or `toggle-group`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [calendar](calendar.md) — the month grid, the date and time fields and the time zone selector come from it, so both pickers look and behave the same.
+- [property-filter](property-filter.md) — the query bar it sits next to in an events toolbar.
+- [chart](chart.md) — the histogram whose brush usually writes an absolute range back into this picker.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `relativeOptions` | `RelativeOption[]` | `5m, 15m, 1h, 6h, 24h, 7d, 30d` | false | Quick ranges listed on the Relative tab. |
+| `timeZones` | `string[]` | `[]` | false | Zones offered by the selector. Empty falls back to the zones `Intl` supports. |
+| `showTimeZone` | `boolean` | `true` | false | Shows the time zone selector in the panel. |
+| `showStep` | `boolean` | `false` | false | Shows Previous and Next buttons that move the range back or forward by its own length. |
+| `rangeSelectorMode` | `'default' \| 'relative-only' \| 'absolute-only'` | `'default'` | false | Which kinds of range the panel offers. |
+| `min` | `Date` | `undefined` | false | Earliest instant an absolute range may start at. |
+| `max` | `Date` | `undefined` | false | Latest instant an absolute range may end at. |
+| `now` | `Date` | `undefined` | false | Reference clock for relative ranges and stepping. Unset reads the real clock. |
+| `placeholder` | `string` | `''` | false | Trigger text with no range. Empty uses the locale catalog. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the trigger. Empty uses the locale catalog. |
+| `disabled` | `boolean` | `false` | false | Disables the trigger and the step buttons. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of the trigger and the panel controls. |
+
+## v-model
+
+| Model              | Type                     | Default | Emits               | Notes                                                                                                                                                                                |
+| ------------------ | ------------------------ | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model`          | `DateRangeValue \| null` | `null`  | `update:modelValue` | The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Set on Apply with a valid draft, or by Previous / Next (always an absolute range). |
+| `v-model:timeZone` | `string`                 | `''`    | `update:timeZone`   | IANA time zone the absolute range is typed and shown in; empty uses the local zone. Set on Apply after the zone changed in the panel.                                                |
+
+## States
+
+- Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`; the panel shows an inline error after an Apply that the draft cannot satisfy.
+- `data-state="open|closed"` on the root and the panel; `data-size`; `data-disabled`; `data-empty` on the trigger with no value; `data-selected` on the chosen quick range.
+- The Next button is disabled while the range is relative (it already ends now) or when the step would pass `max` (or now); Previous is disabled when the step would pass `min`.
+
+## Accessibility
+
+- Visible focus: a 2 px `--ring-color` ring inset on each trigger segment; the quick ranges ring their row when the radio inside has focus.
+- Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select); the grid keeps the `calendar` keyboard map; `Escape` closes without committing and returns focus to the trigger.
+- ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range; the panel is a named `dialog`; the quick ranges are a `fieldset` with a `legend`; the custom duration and unit have visible labels; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons.
+- Targets: options are 32 px high (44 px on `pointer: coarse`).
+- Contrast ≥4.5:1 from the semantic text tokens.
+
+## Right-to-left
+
+- Layout: logical utilities only (`border-s`, `border-e`, `ps-`/`pe-`, `end-`, `text-start`); the panel anchors to the start edge of the trigger.
+- Icons: the Previous and Next chevrons mirror (`rtl:-scale-x-100`); the clock and calendar glyphs do not.
+- Keyboard: the grid's arrow keys follow the reading direction (from `calendar`).
+- User data: the range text sits in `<bdi>`.
+- Teleported content: the panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`).
+
+## Internationalization
+
+| Key                                       | English source                                | Override prop          |
+| ----------------------------------------- | --------------------------------------------- | ---------------------- |
+| `dateRangePicker.label`                   | Time range                                    | `ariaLabel`            |
+| `dateRangePicker.placeholder`             | Select a time range                           | `placeholder`          |
+| `dateRangePicker.dialog`                  | Choose a time range                           | —                      |
+| `dateRangePicker.rangeType`               | Range type                                    | —                      |
+| `dateRangePicker.relative` / `absolute`   | Relative range / Absolute range               | —                      |
+| `dateRangePicker.quickRanges`             | Quick ranges                                  | —                      |
+| `dateRangePicker.custom`                  | Custom range                                  | —                      |
+| `dateRangePicker.amount` / `unit`         | Duration / Unit                               | —                      |
+| `dateRangePicker.second` … `year`         | Last second / Last {count} seconds … (plural) | `RelativeOption.label` |
+| `dateRangePicker.unitSecond` … `unitYear` | Seconds … Years                               | —                      |
+| `dateRangePicker.apply` / `cancel`        | Apply / Cancel                                | —                      |
+| `dateRangePicker.previous` / `next`       | Previous range / Next range                   | —                      |
+| `dateRangePicker.incomplete`              | Choose a start and an end.                    | —                      |
+| `dateRangePicker.order`                   | The end must be after the start.              | —                      |
+| `dateRangePicker.outOfBounds`             | Choose a range inside the allowed dates.      | —                      |
+| `dateRangePicker.invalidAmount`           | Enter a whole number greater than 0.          | —                      |
+
+- Formatting: the absolute range goes through `Intl.DateTimeFormat` in the active locale; the relative labels through the plural rules of the active locale; the grid, the date and time fields and the time zone selector use the `calendar` keys.
+
+## Responsive
+
+- Container queries: none; the trigger is inline and truncates its text inside the available width (`max-w-full`).
+- Narrow (≤ 640 px): the panel is at most `min(90vw, 24rem)` wide and scrolls inside itself when taller than the viewport.
+- Touch: options are 44 px high on `pointer: coarse`; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import DateRangePicker from '@aziontech/webkit/date-range-picker'
+  import { ref } from 'vue'
+
+  const range = ref({ type: 'relative', amount: 15, unit: 'minute', key: 'last-15-minutes' })
+</script>
+
+<template>
+  <DateRangePicker
+    v-model="range"
+    aria-label="Events time range"
+  />
+</template>
+```
+
+2 more example(s) in [components/date-range-picker.md](https://github.com/aziontech/webkit/blob/main/.specs/components/date-range-picker.md).
 
 ---
 

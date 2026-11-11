@@ -8,6 +8,8 @@ import State2 from '../../../../../../../packages/webkit/blocks/platform/dashboa
 import source2 from '../../../../../../../packages/webkit/blocks/platform/dashboard/analytics-dashboard/variants/empty.vue?raw'
 import State3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/analytics-dashboard/variants/failed.vue'
 import source3 from '../../../../../../../packages/webkit/blocks/platform/dashboard/analytics-dashboard/variants/failed.vue?raw'
+import State4 from '../../../../../../../packages/webkit/blocks/platform/dashboard/analytics-dashboard/variants/metrics.vue'
+import source4 from '../../../../../../../packages/webkit/blocks/platform/dashboard/analytics-dashboard/variants/metrics.vue?raw'
 
 export default {
   title: "Templates/Platform/Dashboard/AnalyticsDashboard",
@@ -16,7 +18,7 @@ export default {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
     docs: { canvas: { sourceState: 'shown' }, description: { component: "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated TableRoot of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton, and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`." } },
-    webkit: {"block":"platform/dashboard/analytics-dashboard","intents":["metrics","metric panel","kpi tiles","sparkline","real-time metrics","analytics dashboard","painel de métricas","indicadores","analytics","traffic analytics","requests over time","period comparison","painel analítico","análise de tráfego"],"skills":["webkit-data-viz","webkit-tables","webkit-ui-states"],"primary":"Default"}
+    webkit: {"block":"platform/dashboard/analytics-dashboard","intents":["metrics","metric panel","kpi tiles","sparkline","real-time metrics","analytics dashboard","painel de métricas","indicadores","analytics","traffic analytics","requests over time","period comparison","painel analítico","análise de tráfego","real-time metrics per product","product metrics","metrics by product","period filter","métricas por produto","métricas en tiempo real"],"skills":["webkit-data-viz","webkit-tables","webkit-ui-states"],"primary":"Default"}
   }
 }
 
@@ -38,4 +40,9 @@ export const Empty = {
 export const Failed = {
   render: () => ({ components: { Block: State3 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry." }, source: { code: source3 } } }
+}
+
+export const Metrics = {
+  render: () => ({ components: { Block: State4 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair." }, source: { code: source4 } } }
 }

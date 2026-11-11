@@ -27,7 +27,15 @@
     "function settings",
     "editor de função",
     "argumentos da função",
-    "detalhe da função"
+    "detalhe da função",
+    "test run",
+    "function test",
+    "run trace",
+    "span waterfall",
+    "invocation trace",
+    "testar função",
+    "execução de teste",
+    "rastreamento da execução"
   ],
   "skills": ["webkit-layout", "webkit-navigation", "webkit-form"],
   "primary": {
@@ -49,6 +57,11 @@
       "name": "Settings",
       "summary": "The Settings tab of image-optimizer: the General, Runtime, Execution environment and Status sections in the form column, the runtime locked; editing anything raises the unsaved-changes bar.",
       "file": "variants/settings.vue"
+    },
+    {
+      "name": "TestRun",
+      "summary": "The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogView`. Run test again shows the running state until the run finishes.",
+      "file": "variants/test-run.vue"
     }
   ]
 }

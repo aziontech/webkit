@@ -275,6 +275,61 @@ export const ptBR: Messages = {
     copy: 'Copiar',
     copied: 'Copiado'
   },
+  dateRangePicker: {
+    label: 'Intervalo de tempo',
+    placeholder: 'Selecione um intervalo de tempo',
+    dialog: 'Escolha um intervalo de tempo',
+    rangeType: 'Tipo de intervalo',
+    relative: 'Intervalo relativo',
+    absolute: 'Intervalo absoluto',
+    quickRanges: 'Intervalos rápidos',
+    custom: 'Intervalo personalizado',
+    amount: 'Duração',
+    unit: 'Unidade',
+    second: {
+      one: 'Último segundo',
+      other: 'Últimos {count} segundos'
+    },
+    minute: {
+      one: 'Último minuto',
+      other: 'Últimos {count} minutos'
+    },
+    hour: {
+      one: 'Última hora',
+      other: 'Últimas {count} horas'
+    },
+    day: {
+      one: 'Último dia',
+      other: 'Últimos {count} dias'
+    },
+    week: {
+      one: 'Última semana',
+      other: 'Últimas {count} semanas'
+    },
+    month: {
+      one: 'Último mês',
+      other: 'Últimos {count} meses'
+    },
+    year: {
+      one: 'Último ano',
+      other: 'Últimos {count} anos'
+    },
+    unitSecond: 'Segundos',
+    unitMinute: 'Minutos',
+    unitHour: 'Horas',
+    unitDay: 'Dias',
+    unitWeek: 'Semanas',
+    unitMonth: 'Meses',
+    unitYear: 'Anos',
+    apply: 'Aplicar',
+    cancel: 'Cancelar',
+    previous: 'Intervalo anterior',
+    next: 'Próximo intervalo',
+    incomplete: 'Escolha um início e um fim.',
+    order: 'O fim precisa ser depois do início.',
+    outOfBounds: 'Escolha um intervalo dentro das datas permitidas.',
+    invalidAmount: 'Informe um número inteiro maior que 0.'
+  },
   dialog: {
     close: 'Fechar'
   },
@@ -468,6 +523,20 @@ export const ptBR: Messages = {
   },
   popover: {
     close: 'Fechar'
+  },
+  propertyFilterQuery: {
+    label: 'Consulta',
+    placeholder: 'Digite uma consulta, por exemplo status = Active AND requests > 10',
+    fields: 'Campos',
+    all: 'Todas as condições valem',
+    any: 'Qualquer condição vale',
+    unknownField: 'Não há campo chamado “{field}”.',
+    unknownOperator: '“{operator}” não se aplica a {field}.',
+    missingOperator: 'Adicione um operador depois de {field}, por exemplo =.',
+    missingValue: 'Adicione um valor depois de {operator}.',
+    expectedConnective: 'Junte as condições com AND ou OR antes de “{word}”.',
+    danglingConnective: 'Adicione uma condição depois de {connective}.',
+    unclosedQuote: 'Feche as aspas abertas no caractere {position}.'
   },
   propertyFilter: {
     label: 'Filtrar',
@@ -679,6 +748,26 @@ export const ptBR: Messages = {
   },
   toggleGroup: {
     option: 'Opção {index}'
+  },
+  trace: {
+    label: 'Rastreamento',
+    search: 'Buscar spans',
+    noMatch: 'Nenhum span corresponde a “{query}”.',
+    clearSearch: 'Limpar busca',
+    empty: 'Nenhum span neste rastreamento.',
+    details: 'Detalhes de {name}',
+    close: 'Fechar',
+    copyName: 'Copiar nome do span',
+    service: 'Serviço',
+    startedAt: 'Início',
+    duration: 'Duração',
+    share: 'Parcela do rastreamento',
+    percent: '{value}%',
+    failed: 'Falhou',
+    running: 'Em execução',
+    attributes: 'Atributos',
+    milliseconds: '{value} ms',
+    seconds: '{value} s'
   },
   tracker: {
     noData: 'Sem dados',

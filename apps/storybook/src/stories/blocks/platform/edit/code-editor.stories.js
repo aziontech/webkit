@@ -8,6 +8,8 @@ import State2 from '../../../../../../../packages/webkit/blocks/platform/edit/co
 import source2 from '../../../../../../../packages/webkit/blocks/platform/edit/code-editor/variants/no-arguments.vue?raw'
 import State3 from '../../../../../../../packages/webkit/blocks/platform/edit/code-editor/variants/settings.vue'
 import source3 from '../../../../../../../packages/webkit/blocks/platform/edit/code-editor/variants/settings.vue?raw'
+import State4 from '../../../../../../../packages/webkit/blocks/platform/edit/code-editor/variants/test-run.vue'
+import source4 from '../../../../../../../packages/webkit/blocks/platform/edit/code-editor/variants/test-run.vue?raw'
 
 export default {
   title: "Templates/Platform/Edit/CodeEditor",
@@ -16,7 +18,7 @@ export default {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
     docs: { canvas: { sourceState: 'shown' }, description: { component: "The code editor page placed in the platform shell: the Services breadcrumb, then the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a flush `Textarea` filling its pane, the place a product would embed a code editor. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar. Its page-level parts are `PageTabs`, `SettingsSection`, `SettingRow` and `SaveBar`." } },
-    webkit: {"block":"platform/edit/code-editor","intents":["code editor","code editor page","function code editor","editor page","code and arguments editor","split editor","monaco editor","editor de código","página do editor","editar código","function editor","edge function","function detail","function arguments","json schema arguments","function settings","editor de função","argumentos da função","detalhe da função"],"skills":["webkit-layout","webkit-navigation","webkit-form"],"primary":"Code"}
+    webkit: {"block":"platform/edit/code-editor","intents":["code editor","code editor page","function code editor","editor page","code and arguments editor","split editor","monaco editor","editor de código","página do editor","editar código","function editor","edge function","function detail","function arguments","json schema arguments","function settings","editor de função","argumentos da função","detalhe da função","test run","function test","run trace","span waterfall","invocation trace","testar função","execução de teste","rastreamento da execução"],"skills":["webkit-layout","webkit-navigation","webkit-form"],"primary":"Code"}
   }
 }
 
@@ -38,4 +40,9 @@ export const NoArguments = {
 export const Settings = {
   render: () => ({ components: { Block: State3 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "The Settings tab of image-optimizer: the General, Runtime, Execution environment and Status sections in the form column, the runtime locked; editing anything raises the unsaved-changes bar." }, source: { code: source3 } } }
+}
+
+export const TestRun = {
+  render: () => ({ components: { Block: State4 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogView`. Run test again shows the running state until the run finishes." }, source: { code: source4 } } }
 }

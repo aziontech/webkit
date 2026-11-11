@@ -6678,6 +6678,47 @@
    "examplesFile": "catalog/examples/network-map.json",
    "docsFile": "catalog/components/network-map.json"
   },
+  "trace": {
+   "import": "@aziontech/webkit/trace",
+   "target": "./src/components/code/trace/trace.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/trace",
+   "category": "code",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "spans",
+     "type": "TraceSpan[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Spans of the trace, each `{ id, parentId?, name, service?, icon?, start, duration, status?, message?, attributes? }` in milliseconds."
+    },
+    {
+     "name": "selected",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Id of the span whose details show under the waterfall. Supports v-model:selected."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the waterfall. Empty uses the locale catalog."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:selected",
+     "payload": "string",
+     "notes": "A row was selected, selected again (empty: deselected), or Close used."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/trace.json",
+   "docsFile": "catalog/components/trace.json"
+  },
   "log-view": {
    "import": "@aziontech/webkit/log-view",
    "target": "./src/components/code/log-view/log-view.vue",
@@ -7754,13 +7795,51 @@
      "default": "false",
      "required": "false",
      "doc": "Disables the field and the tokens."
+    },
+    {
+     "name": "mode",
+     "type": "'tokens' | 'query'",
+     "default": "'tokens'",
+     "required": "false",
+     "doc": "tokens` turns each choice into a token; `query` edits one query string."
+    },
+    {
+     "name": "text",
+     "type": "string",
+     "default": "undefined",
+     "required": "false",
+     "doc": "The query string in query mode. Supports v-model:text."
+    },
+    {
+     "name": "validate",
+     "type": "(text: string) => string",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check."
+    },
+    {
+     "name": "suggest",
+     "type": "(text: string, caret: number) => PropertyFilterQuerySuggestion[]",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions."
     }
    ],
    "events": [
     {
      "name": "update:query",
      "payload": "PropertyFilterQuery",
-     "notes": "A token was added or removed, the operation changed, or all cleared."
+     "notes": "A token was added or removed, the operation changed, or all cleared. Tokens mode only."
+    },
+    {
+     "name": "update:text",
+     "payload": "string",
+     "notes": "The query string changed (typing, a suggestion, Escape clearing). Query mode only."
+    },
+    {
+     "name": "submit",
+     "payload": "PropertyFilterSubmit",
+     "notes": "Enter with no active suggestion and a valid query. Query mode only."
     }
    ],
    "surface": "product",
@@ -9648,6 +9727,103 @@
    "surface": "product",
    "examplesFile": "catalog/examples/progress.json",
    "docsFile": "catalog/components/progress.json"
+  },
+  "date-range-picker": {
+   "import": "@aziontech/webkit/date-range-picker",
+   "target": "./src/components/inputs/date-range-picker/date-range-picker.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/date-range-picker",
+   "category": "inputs",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "relativeOptions",
+     "type": "RelativeOption[]",
+     "default": "5m, 15m, 1h, 6h, 24h, 7d, 30d",
+     "required": "false",
+     "doc": "Quick ranges listed on the Relative tab."
+    },
+    {
+     "name": "timeZones",
+     "type": "string[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Zones offered by the selector. Empty falls back to the zones `Intl` supports."
+    },
+    {
+     "name": "showTimeZone",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Shows the time zone selector in the panel."
+    },
+    {
+     "name": "showStep",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows Previous and Next buttons that move the range back or forward by its own length."
+    },
+    {
+     "name": "rangeSelectorMode",
+     "type": "'default' | 'relative-only' | 'absolute-only'",
+     "default": "'default'",
+     "required": "false",
+     "doc": "Which kinds of range the panel offers."
+    },
+    {
+     "name": "min",
+     "type": "Date",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Earliest instant an absolute range may start at."
+    },
+    {
+     "name": "max",
+     "type": "Date",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Latest instant an absolute range may end at."
+    },
+    {
+     "name": "now",
+     "type": "Date",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Reference clock for relative ranges and stepping. Unset reads the real clock."
+    },
+    {
+     "name": "placeholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Trigger text with no range. Empty uses the locale catalog."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the trigger. Empty uses the locale catalog."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the trigger and the step buttons."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token of the trigger and the panel controls."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/date-range-picker.json",
+   "docsFile": "catalog/components/date-range-picker.json"
   },
   "calendar": {
    "import": "@aziontech/webkit/calendar",
@@ -25124,7 +25300,13 @@
     "requests over time",
     "period comparison",
     "painel analítico",
-    "análise de tráfego"
+    "análise de tráfego",
+    "real-time metrics per product",
+    "product metrics",
+    "metrics by product",
+    "period filter",
+    "métricas por produto",
+    "métricas en tiempo real"
    ],
    "skills": [
     "webkit-data-viz",
@@ -25141,8 +25323,11 @@
     "IconButton",
     "Input",
     "PageHeader",
+    "PageTabs",
+    "Select",
     "StatTile",
     "TableRoot",
+    "Tabs",
     "Tag",
     "ToggleGroup",
     "Tooltip"
@@ -25157,8 +25342,11 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/page-header",
+    "@aziontech/webkit/page-tabs",
+    "@aziontech/webkit/select",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table-root",
+    "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip"
@@ -25177,6 +25365,10 @@
     {
      "name": "Failed",
      "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
+    },
+    {
+     "name": "Metrics",
+     "summary": "Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/analytics-dashboard.json"
@@ -26896,7 +27088,15 @@
     "function settings",
     "editor de função",
     "argumentos da função",
-    "detalhe da função"
+    "detalhe da função",
+    "test run",
+    "function test",
+    "run trace",
+    "span waterfall",
+    "invocation trace",
+    "testar função",
+    "execução de teste",
+    "rastreamento da execução"
    ],
    "skills": [
     "webkit-layout",
@@ -26912,6 +27112,7 @@
     "Card",
     "CodeEditor",
     "Command",
+    "CopyButton",
     "Drawer",
     "DrawerContent",
     "DrawerOverlay",
@@ -26925,7 +27126,10 @@
     "Input",
     "Item",
     "Kbd",
+    "KeyValuePairs",
     "Link",
+    "LogView",
+    "LogViewContent",
     "Menu",
     "PageTabs",
     "RadioButton",
@@ -26944,7 +27148,8 @@
     "Textarea",
     "ThemeSwitcher",
     "ToggleGroup",
-    "Tooltip"
+    "Tooltip",
+    "Trace"
    ],
    "imports": [
     "@aziontech/webkit/avatar",
@@ -26955,6 +27160,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-editor",
     "@aziontech/webkit/command",
+    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-overlay",
@@ -26968,7 +27174,10 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/kbd",
+    "@aziontech/webkit/key-value-pairs",
     "@aziontech/webkit/link",
+    "@aziontech/webkit/log-view",
+    "@aziontech/webkit/log-view-content",
     "@aziontech/webkit/menu",
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/radio-button",
@@ -26987,7 +27196,8 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/theme-switcher",
     "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/trace"
    ],
    "primary": "Code",
    "guidelinesSummary": "The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together.",
@@ -27003,6 +27213,10 @@
     {
      "name": "Settings",
      "summary": "The Settings tab of image-optimizer: the General, Runtime, Execution environment and Status sections in the form column, the runtime locked; editing anything raises the unsaved-changes bar."
+    },
+    {
+     "name": "TestRun",
+     "summary": "The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogView`. Run test again shows the running state until the run finishes."
     }
    ],
    "file": "catalog/patterns/platform/edit/code-editor.json"
@@ -27034,6 +27248,15 @@
     "salvar alterações",
     "edit resource",
     "editar recurso",
+    "data stream",
+    "data stream settings",
+    "log streaming",
+    "stream destination",
+    "sampling",
+    "log template",
+    "configurações do data stream",
+    "envio de logs",
+    "streaming de logs",
     "stale record",
     "changed elsewhere",
     "overwrite changes",
@@ -27061,6 +27284,8 @@
     "Button",
     "ButtonHighlight",
     "Card",
+    "CodeBlock",
+    "CodeEditor",
     "Command",
     "ConfirmDialog",
     "CopyButton",
@@ -27078,8 +27303,10 @@
     "Kbd",
     "Menu",
     "MultiSelect",
+    "NumberInput",
     "PageHeader",
     "PageTabs",
+    "PasswordInput",
     "RadioButton",
     "SaveBar",
     "Select",
@@ -27104,6 +27331,8 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/code-block",
+    "@aziontech/webkit/code-editor",
     "@aziontech/webkit/command",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/copy-button",
@@ -27121,8 +27350,10 @@
     "@aziontech/webkit/kbd",
     "@aziontech/webkit/menu",
     "@aziontech/webkit/multi-select",
+    "@aziontech/webkit/number-input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
+    "@aziontech/webkit/password-input",
     "@aziontech/webkit/radio-button",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/select",
@@ -27161,6 +27392,10 @@
     {
      "name": "Saving",
      "summary": "While the save request is in flight: Save shows its loading state and Discard is disabled."
+    },
+    {
+     "name": "DataStream",
+     "summary": "The settings page of a data stream at /data-stream/:id/settings: General, Source (data source and the workloads it collects from), Sampling with its rate and the warning that sampling turns off the account's other streams, Template (a preset shown read-only in a CodeBlock, or a custom data set edited as JSON in a CodeEditor and checked on Save) and Destination, whose fields follow the connector (HTTP POST, Kafka, S3-compatible storage, log analytics). Save sends one test record; when the endpoint does not answer (in this demo, any host under .invalid) a danger Alert opens above Destination with Send test record, the URL turns invalid with its reason and takes the focus, and every other change stays."
     },
     {
      "name": "StaleRecord",
@@ -28180,7 +28415,19 @@
     "split view",
     "master detail",
     "list and detail panes",
-    "visão dividida"
+    "visão dividida",
+    "query language",
+    "events query",
+    "saved searches",
+    "saved queries",
+    "query history",
+    "date range",
+    "time range picker",
+    "investigation tabs",
+    "event document",
+    "consulta de eventos",
+    "buscas salvas",
+    "intervalo de datas"
    ],
    "skills": [
     "webkit-data-viz",
@@ -28201,6 +28448,8 @@
     "Chip",
     "CodeBlock",
     "Command",
+    "CopyButton",
+    "DateRangePicker",
     "Drawer",
     "DrawerClose",
     "DrawerContent",
@@ -28216,12 +28465,15 @@
     "Menu",
     "PanelHeader",
     "Popover",
+    "PropertyFilter",
     "Sidebar",
     "StatusIndicator",
     "TableRoot",
+    "Tabs",
     "Tag",
     "ThemeSwitcher",
-    "Tooltip"
+    "Tooltip",
+    "use-collection"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
@@ -28237,6 +28489,8 @@
     "@aziontech/webkit/chip",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/command",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/date-range-picker",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
@@ -28252,12 +28506,15 @@
     "@aziontech/webkit/menu",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/popover",
+    "@aziontech/webkit/property-filter",
     "@aziontech/webkit/sidebar",
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/table-root",
+    "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/theme-switcher",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
    ],
    "primary": "Default",
    "guidelinesSummary": "The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.",
@@ -28273,6 +28530,18 @@
     {
      "name": "Failed",
      "summary": "The event log request failed: the fields panel stays, and the log pane shows a danger Alert that says the events did not load and offers Retry."
+    },
+    {
+     "name": "Query",
+     "summary": "The Console Kit query bar on the sample design: a `DateRangePicker` (relative ranges, an absolute range typed in the chosen time zone, Previous and Next) drives the period, and `PropertyFilter` in query mode takes `level = Error AND host = api.example.com`, suggests fields, operators and values at the caret, explains an invalid query under the field and applies it on Enter. Saved queries (name, apply, delete) and Recent queries sit in two popovers beside the bar; the field values in the fields panel add or remove clauses of the query; the log, chart and times follow the chosen zone."
+    },
+    {
+     "name": "Sessions",
+     "summary": "Several investigations open as tabs above the explorer, each keeping its own filters, search and period: API errors is active, with All traffic and Security blocks beside it. New investigation adds a tab (up to five, then a message says to close one); the actions menu renames (also F2 or a double click, with an inline field: Enter keeps, Escape cancels), duplicates or closes the active one (also Delete on the focused tab)."
+    },
+    {
+     "name": "EventDocument",
+     "summary": "An error event selected with its document open beside the log. The document lists every field of the event with a Search in this event field that narrows and highlights the fields, a Filter by and an Exclude button per value that apply to the log (an exclusion shows as an is not chip), and Copy that copies the fields shown as JSON; the full JSON document follows."
     }
    ],
    "file": "catalog/patterns/platform/view/split-view.json"
