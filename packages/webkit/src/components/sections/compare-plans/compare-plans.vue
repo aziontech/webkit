@@ -204,7 +204,7 @@
                   :label="plan.action.label"
                   :kind="plan.highlighted ? 'secondary' : 'outlined'"
                   size="large"
-                  class="w-full"
+                  class="w-full max-lg:h-auto max-lg:min-h-10 max-lg:py-(--spacing-xs) max-lg:text-center max-lg:whitespace-normal"
                   :href="plan.action.href"
                 />
               </div>
