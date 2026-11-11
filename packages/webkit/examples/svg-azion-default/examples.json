@@ -1,5 +1,5 @@
 {
-  "component": "azion-logo",
+  "component": "svg/azion/default",
   "title": "Components/Primitives/Content/AzionLogo",
   "examples": [
     {

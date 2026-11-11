@@ -266,6 +266,12 @@ jobs:
       - name: Marketing and docs inventory — no marketing or docs item leaves unrecorded
         run: pnpm --filter @aziontech/webkit run marketing:check
 
+      - name: Public API changes have a codemod entry (removed or renamed export, pattern, prop or value)
+        run: pnpm --filter @aziontech/webkit run migrations:check
+
+      - name: Hook tests (spec, story, authoring and reference hooks)
+        run: pnpm --filter @aziontech/webkit run hooks:test
+
       - name: Block and site stories are generated from blocks/ and examples/ (no stale file)
         run: node apps/storybook/scripts/gen-block-stories.mjs --check
 
@@ -400,7 +406,8 @@ jobs:
   governance-check:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs: [changes, security, lint-canary, lint, types, build, storybook, toolkit, smoke, tests, visual]
+    needs:
+      [changes, security, lint-canary, lint, types, build, storybook, toolkit, smoke, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped

@@ -56,7 +56,7 @@ emit('row-click', event, row.original)
 
 ```ts
 // Leaf components: the item is whatever says which one
-emit('click', event, value) // tab-view-item — owns a value
+emit('click', event, value) // tabs-item — owns a value
 emit('click', event, label) // chip — identified by its label
 emit('click', event, { label, href }) // menu-item / breadcrumb-item — needs both
 ```

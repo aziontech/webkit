@@ -16,12 +16,26 @@ npx @aziontech/webkit doctor
 It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `dist` that imports from
 `@aziontech/webkit`:
 
-- import paths, including sub-components (`dropdown-trigger` → `dropdown-menu-trigger`);
-- component bindings, in PascalCase and in kebab-case tags;
+- import paths, including sub-components (`dropdown-trigger` → `dropdown-menu-trigger`), and the
+  same paths in any other string (`vi.mock('@aziontech/webkit/…')`, `import('…')`);
+- component bindings, in PascalCase and in kebab-case tags (comments keep their words);
 - renamed props and prop values on those components (`v-model:value` → `v-model`, `border` →
-  `bordered`, `kind="text"` → `kind="transparent"`, …).
+  `bordered`, `kind="text"` → `kind="transparent"`, …);
+- renamed exported types where you import them (`SeverityTagLevel` → `SeverityTagSeverity`,
+  `DocCardGroupMobileCols` → `DocCardGroupMobileColumns`, `SegmentedButtonOption` →
+  `ToggleGroupOption`, …; the `types` map of `src/cli/migrations/v6.json`).
 
-It prints `MANUAL` for anything it cannot rewrite safely (section 4).
+It prints `MANUAL` for anything it cannot rewrite safely (section 4), and for any import that v6
+does not export.
+
+The codemod rewrites v5 code. It reads the version your `package.json` declares (or, once you have
+bumped it, recognizes a v3 project by its v3-only imports such as `inputtext` or `plugin`); pass
+`--from 3` or `--from 5` to say it yourself. On a v3 project it moves the native components off
+their category paths (`actions/button` → `button`, `content/card-box` → `card`,
+`actions/segmented-button` → `toggle-group`, …) and lists every PrimeVue-era import (`dropdown`,
+`divider`, `inputtext`, `field-text`, `use-toast`, …) as `MANUAL` with its v6 replacement, since the
+same path now holds a component with another API. Run it once: a second run on a v3 project lists
+the paths it moved onto a name a v3 wrapper also used (`button`, `card`, `dialog`) as `MANUAL` again.
 
 ## 2. Renamed components
 
@@ -273,7 +287,62 @@ catalog, so an empty string no longer removes the label; `HelpPanel.Links` `titl
 (`1,200`, `1.200` in Portuguese). `useLocale()` from `@aziontech/webkit/use-locale` gives your own
 components the same locale, `t()` and `Intl` helpers.
 
-## 5. Unchanged
+## 5. Field report: Azion Console
+
+The codemod ran on a copy of `azion-console-kit` (November 2026). The console declares
+`@aziontech/webkit` 3.9.4, the PrimeVue-wrapper generation, so most of what it imports changed meaning
+before v6, not in it.
+
+| Measure                                       | Count |
+| --------------------------------------------- | ----: |
+| Files that reference `@aziontech/webkit`      |   877 |
+| Files rewritten                               |    27 |
+| Rewrites (path, binding or prop)              |    52 |
+| Files with at least one `MANUAL` item         |   853 |
+| `MANUAL` items (one per file and import path) | 1,804 |
+| Distinct import paths listed as `MANUAL`      |    79 |
+
+What it rewrote: the native v3 components on category paths (`actions/button` in 17 files,
+`actions/segmented-button` → `toggle-group` in 6, `content/card-box` → `card` in 4,
+`content/currency`, `content/item`, `content/card-pricing`, `feedback/message` → `alert`,
+`feedback/status-indicator`, `inputs/box-grid-selection` → `radio-cards`, `actions/icon-button`),
+their bindings and tags, `kind="text"` → `kind="transparent"` on the native button, and the matching
+`vi.mock` paths in tests.
+
+`MANUAL` items by category:
+
+| Category                                                                                    | Items | Files |
+| ------------------------------------------------------------------------------------------- | ----: | ----: |
+| PrimeVue services, plugin and directive (`plugin`, `use-toast`, `use-dialog`, `api`, …)     |   453 |   396 |
+| Form fields (`field-text`, `field-dropdown`, `field-switch-block`, `label`, … → `Field`)    |   319 |   142 |
+| Buttons (PrimeVue `button`, `button-copy`, `button-save`, …)                                |   309 |   298 |
+| PrimeVue feedback and content (`inlinemessage`, `skeleton`, `prime-tag`, …)                 |   281 |   229 |
+| PrimeVue inputs (`inputtext`, `dropdown` → `Select`, `inputnumber`, `multiselect`, …)       |   223 |   164 |
+| PrimeVue overlays, navigation and layout (`dialog`, `tabpanel`, `overlaypanel`, `divider`…) |   192 |   163 |
+| Tables (`list-data-table`, `datatable`, `column`)                                           |    25 |    20 |
+| Work-in-progress components (`azion-system-status`, `testimonials-carousel`)                |     2 |     2 |
+
+Gaps the first run showed, all fixed in the codemod:
+
+- **Wrong rewrites.** v3 `dropdown` is the PrimeVue select, and the v5 rule turned it into
+  `DropdownMenu` in 44 files; `divider` (26 files), `message` (4) and `paginator` (1) moved to v6
+  components with another API. v3 projects now get `MANUAL` with the right replacement (`Select`,
+  `Separator`, `Alert`, `Pagination`).
+- **Comments rewritten.** Identifier renames reached comments (`PrimeVue InputText/DropdownMenu
+defaults`); comments are now left alone.
+- **Silent misses.** About 80 v3 paths (`inputtext`, `plugin`, `use-toast`, `field-dropdown`, …) and
+  the category paths passed without a word; each now has a rewrite or a `MANUAL` hint, and any path
+  v6 does not export is `MANUAL`.
+- **Test mocks.** `vi.mock('@aziontech/webkit/…')` kept the old path while the import moved; every
+  string that names a WebKit path is rewritten with it.
+- **Sub-components of a rename into a shorter name.** `command-menu-item`, `resizable-panel-pane`
+  and the other parts of `command-menu` and `resizable-panel` were taken for v6 names and never
+  renamed (found by `scripts/check-migrations.mjs` against v5).
+- **`import type { … }`.** The clause was read as a default import named `type`.
+
+The console does not build after the run, as expected: the `MANUAL` list is the migration plan.
+
+## 6. Unchanged
 
 Theme tokens (apart from the sans stack above), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style
 (`@aziontech/webkit/<name>`) are the same. The AI bundle (`skills/`, `rules/`) is updated by

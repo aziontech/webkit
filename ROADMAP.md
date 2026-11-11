@@ -134,12 +134,9 @@ Exit: on a throwaway branch, delete `apps/storybook`; `catalog:build`, the packa
 
 Exit: v6 released; the codemod migrates a copy of the console with zero manual edits.
 
-**Status: done on the branch.** Still open from it: the release itself (with M2.11); running the codemod
-on a copy of the console (needs the console repository, M2.9); `.claude/docs/COMPONENT_REQUIREMENTS.md`
-still shows `kind="text"` and `field-*` examples (the file is marked do-not-edit without approval); the
-hook test suite `.claude/hooks/__tests__/run.mjs` keeps its 2 failures from `main` (M2.11); exported type
-names such as `SeverityTagLevel` keep their v5 names; the `PhoneInput` flag data (~105 KB gzipped) has no
-size budget (M1.7).
+**Status: done on the branch.** Still open from it: the release itself (with M2.11); the console is on
+WebKit 3.9.4, so the codemod run on its copy (M1.10 row 10) leaves a manual v3 → v6 migration, not zero
+edits (M2.10 row 1); the `PhoneInput` flag data (~105 KB gzipped) has no size budget (M1.7).
 
 ## M1.3 — AI-only implementation flow
 
@@ -230,12 +227,12 @@ Everything M1.1–M1.9 did not finish. Each row closes here, before the full tes
 | 7   | M1.6      | Select-all is reachable only by screen reader in a stacked table                                                                               | Visible select-all above the stacked rows (with M1.9, which owns Table)                           |
 | 8   | M1.6      | A Card, StatTile or ChartCard as a content-sized flex item collapses to zero width                                                             | Lint warning for that case                                                                        |
 | 9   | M1.6      | Reflow is tested at 320 and 1280 px only; no 200% zoom                                                                                         | Add 768, 1920, 2560 and 200% zoom                                                                 |
-| 10  | M1.2      | The codemod was never run on the console                                                                                                       | Run `migrate v6` on a copy of `azion-console-kit`; fix every gap it shows; record the MANUAL list |
-| 11  | M1.2      | `.claude/docs/COMPONENT_REQUIREMENTS.md` and the `storybook-write` skill still show `kind="text"`, `field-*` and other v5 names                | Update them (no approval needed in this project)                                                  |
-| 12  | M1.2      | The hook test suite has 2 failures inherited from `main` and does not run in CI                                                                | Fix both; add it to CI                                                                            |
-| 13  | M1.2      | Exported type names keep v5 names (`SeverityTagLevel`, `DocCardGroupMobileCols`, …)                                                            | Rename; map them in the codemod                                                                   |
-| 14  | M1.3      | Changes to existing components do not have to add a codemod entry                                                                              | Check: a changed public prop/export without a `src/cli/migrations/` entry fails                   |
-| 15  | M1.1      | Three example folders map to no export (`article-index`, `compare-competitors`, `azion-logo`)                                                  | Map them to their export or move them under the export they document                              |
+| 10  | M1.2      | The codemod was never run on the console                                                                                                       | Run `migrate v6` on a copy of `azion-console-kit`; fix every gap it shows; record the MANUAL list Done. |
+| 11  | M1.2      | `.claude/docs/COMPONENT_REQUIREMENTS.md` and the `storybook-write` skill still show `kind="text"`, `field-*` and other v5 names                | Update them (no approval needed in this project) Done. |
+| 12  | M1.2      | The hook test suite has 2 failures inherited from `main` and does not run in CI                                                                | Fix both; add it to CI Done. |
+| 13  | M1.2      | Exported type names keep v5 names (`SeverityTagLevel`, `DocCardGroupMobileCols`, …)                                                            | Rename; map them in the codemod Done. |
+| 14  | M1.3      | Changes to existing components do not have to add a codemod entry                                                                              | Check: a changed public prop/export without a `src/cli/migrations/` entry fails Done. |
+| 15  | M1.1      | Three example folders map to no export (`article-index`, `compare-competitors`, `azion-logo`)                                                  | Map them to their export or move them under the export they document Done. |
 | 16  | M1.1–M1.9 | The mandatory `ui-craft` review never ran on the components and blocks this milestone added or changed                                         | Run it on every one; fix findings                                                                 |
 | 17  | M1.7      | `PhoneInput` (~105 KB gzipped with flag data) has no size budget                                                                               | Budget it; load flag data lazily                                                                  |
 
@@ -361,6 +358,10 @@ cover every component, block and example.
 
 Everything M2.1–M2.9 does not finish lands here as a row (from, leftover, how it closes) and closes
 before the branch is closed.
+
+| #   | From  | Leftover                                                                                                                                                                                                                                                         | How it closes                                                                                                                                                                                            |
+| --- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | M1.10 | The console is on WebKit 3.9.4 (PrimeVue wrappers): `migrate v6` rewrites 27 files and lists 1,804 `MANUAL` items in 853 files (MIGRATION-v6.md, "Field report: Azion Console"). Plugin, toast and dialog services, `field-*` and PrimeVue inputs are most of it | Migrate the console by area on its own branch (services and plugin first, then forms to `Field`, inputs, overlays, tables to `Table`), re-running `migrate v6 --dry-run` until it lists no `MANUAL` item |
 
 ## M2.11 — Close the branch and merge into `main`
 

@@ -6,8 +6,9 @@
 // No external deps. Uses spawnSync to feed JSON to the hooks via stdin.
 
 import { spawnSync } from 'node:child_process'
-import { existsSync, readFileSync, mkdirSync, writeFileSync, rmSync } from 'node:fs'
-import { resolve, dirname } from 'node:path'
+import { existsSync, readFileSync, mkdirSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { resolve, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
   parseSpecFile,
@@ -57,11 +58,11 @@ function group(name, fn) {
   fn()
 }
 
-function runHook(hookRelPath, input) {
+function runHook(hookRelPath, input, cwd = ROOT) {
   const res = spawnSync(
     process.execPath,
     [resolve(ROOT, hookRelPath)],
-    { input: JSON.stringify(input), cwd: ROOT, encoding: 'utf-8' }
+    { input: JSON.stringify(input), cwd, encoding: 'utf-8' }
   )
   return { code: res.status, stderr: res.stderr ?? '', stdout: res.stdout ?? '' }
 }
@@ -288,12 +289,26 @@ group('lib: component path resolution', () => {
   })
 })
 
+// Every component has a spec since #1148, so the shipped whitelist is empty; the bypass is
+// exercised against a fixture root that lists one component.
+const LEGACY_ROOT = mkdtempSync(join(tmpdir(), 'webkit-legacy-'))
+mkdirSync(resolve(LEGACY_ROOT, '.claude/hooks/_lib'), { recursive: true })
+writeFileSync(
+  resolve(LEGACY_ROOT, '.claude/hooks/_lib/legacy-components.json'),
+  JSON.stringify([{ category: 'actions', name: 'button' }])
+)
+const MISSING_SPEC_VUE = 'packages/webkit/src/components/feedback/no-such-widget/no-such-widget.vue'
+
 group('lib: legacy whitelist', () => {
+  test('the shipped whitelist is empty', () => {
+    assertEqual(JSON.parse(readFileSync(resolve(ROOT, '.claude/hooks/_lib/legacy-components.json'), 'utf-8')), [])
+    assertTrue(!isLegacyComponent('actions', 'button', ROOT))
+  })
   test('legacy button is whitelisted', () => {
-    assertTrue(isLegacyComponent('actions', 'button', ROOT))
+    assertTrue(isLegacyComponent('actions', 'button', LEGACY_ROOT))
   })
   test('unknown component is NOT whitelisted', () => {
-    assertTrue(!isLegacyComponent('feedback', 'tooltip', ROOT))
+    assertTrue(!isLegacyComponent('feedback', 'tooltip', LEGACY_ROOT))
   })
 })
 
@@ -307,7 +322,7 @@ group('hook: enforce-spec-exists.mjs', () => {
     })
     assertEqual(r.code, 0)
   })
-  test('legacy component bypass (exit 0)', () => {
+  test('component with an approved spec passes (exit 0)', () => {
     const r = runHook('.claude/hooks/enforce-spec-exists.mjs', {
       tool_name: 'Write',
       tool_input: {
@@ -316,12 +331,24 @@ group('hook: enforce-spec-exists.mjs', () => {
     })
     assertEqual(r.code, 0)
   })
+  test('legacy component bypass (exit 0)', () => {
+    const r = runHook(
+      '.claude/hooks/enforce-spec-exists.mjs',
+      {
+        tool_name: 'Write',
+        tool_input: {
+          file_path: resolve(LEGACY_ROOT, 'packages/webkit/src/components/actions/button/button.vue')
+        }
+      },
+      LEGACY_ROOT
+    )
+    assertEqual(r.code, 0)
+  })
   test('new component without spec blocks (exit 2)', () => {
+    assertTrue(!existsSync(resolve(ROOT, '.specs/no-such-widget.md')))
     const r = runHook('.claude/hooks/enforce-spec-exists.mjs', {
       tool_name: 'Write',
-      tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/feedback/tooltip/tooltip.vue')
-      }
+      tool_input: { file_path: resolve(ROOT, MISSING_SPEC_VUE) }
     })
     assertEqual(r.code, 2)
     assertTrue(r.stderr.includes('Spec missing'), 'stderr mentions missing spec')
@@ -343,7 +370,7 @@ group('hook: validate-spec-compliance.mjs', () => {
     })
     assertEqual(r.code, 0)
   })
-  test('legacy component bypass (exit 0)', () => {
+  test('component that matches its spec passes (exit 0)', () => {
     const r = runHook('.claude/hooks/validate-spec-compliance.mjs', {
       tool_name: 'Write',
       tool_input: {
@@ -355,9 +382,7 @@ group('hook: validate-spec-compliance.mjs', () => {
   test('non-existent .vue path passes through (exit 0)', () => {
     const r = runHook('.claude/hooks/validate-spec-compliance.mjs', {
       tool_name: 'Write',
-      tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/feedback/tooltip/tooltip.vue')
-      }
+      tool_input: { file_path: resolve(ROOT, MISSING_SPEC_VUE) }
     })
     assertEqual(r.code, 0)
   })
@@ -540,4 +565,5 @@ group('hook: validate-references.mjs', () => {
 
 const failed = results.filter((r) => !r.ok)
 process.stdout.write(`\n${results.length} tests, ${results.length - failed.length} passed, ${failed.length} failed.\n`)
+rmSync(LEGACY_ROOT, { recursive: true, force: true })
 process.exit(failed.length === 0 ? 0 : 1)

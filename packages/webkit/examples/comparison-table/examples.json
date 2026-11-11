@@ -4,8 +4,33 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The Cloudflare comparison as the migration guide places it: six categories, each capability with a definition behind its info button and a support glyph per platform. The header row stays pinned while the page scrolls. Edit the props in the Controls panel — a band with no groups renders nothing at all.",
+      "summary": "The Cloudflare comparison as the migration guide places it: six categories, each capability with a definition behind its info button and a support glyph per platform. The header row stays pinned while the page scrolls. Edit the props in the Controls panel \u2014 a band with no groups renders nothing at all.",
       "file": "default.vue"
     }
+  ],
+  "site": [
+    {
+      "name": "AzionVsCloudflare",
+      "summary": "Six categories with a definition on every capability. The Cloudflare logo has two files: the reversed one for the dark theme and the color one for light.",
+      "file": "site-azion-vs-cloudflare.vue",
+      "json": "site-azion-vs-cloudflare.json"
+    },
+    {
+      "name": "AzionVsVercel",
+      "summary": "All twenty-three rows of the Vercel comparison in seven categories. The Vercel logo has two files: the reversed one for the dark theme and the mono one for light.",
+      "file": "site-azion-vs-vercel.vue",
+      "json": "site-azion-vs-vercel.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Comparison/CompareCompetitors",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": [
+    "AzionVsCloudflare",
+    "AzionVsCloudflareJson",
+    "AzionVsVercel",
+    "AzionVsVercelJson"
   ]
 }

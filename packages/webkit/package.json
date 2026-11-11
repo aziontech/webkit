@@ -39,6 +39,8 @@
     "patterns:check": "node scripts/check-patterns.mjs",
     "marketing:check": "node scripts/check-marketing-inventory.mjs",
     "naming:check": "node scripts/check-naming.mjs",
+    "migrations:check": "node scripts/check-migrations.mjs",
+    "hooks:test": "node ../../.claude/hooks/__tests__/run.mjs",
     "cited-names": "node scripts/check-cited-names.mjs",
     "smoke:consume": "node scripts/smoke-consume.mjs",
     "usage-check": "node scripts/usage-check.mjs",

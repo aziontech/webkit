@@ -1,10 +1,21 @@
 import assert from 'node:assert/strict'
+import { execFileSync } from 'node:child_process'
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
 import test from 'node:test'
+import { fileURLToPath } from 'node:url'
 
-import { loadMigration, migrateSource, planMigrate, renameSubpath } from '../../src/cli/migrate.js'
+import {
+  declaredMajor,
+  legacyMarkers,
+  loadMigration,
+  migrateSource,
+  planMigrate,
+  renameSubpath
+} from '../../src/cli/migrate.js'
+
+const PKG = join(dirname(fileURLToPath(import.meta.url)), '../..')
 
 const migration = {
   components: {
@@ -124,4 +135,195 @@ test('the shipped v6 migration covers every renamed component', () => {
   assert.ok(Object.keys(v6.components).length >= 14)
   assert.equal(v6.components.paginator.to, 'pagination')
   assert.throws(() => planMigrate(tmpdir(), { version: 99 }), /No migration to v99/)
+})
+
+function project(files) {
+  const dir = mkdtempSync(join(tmpdir(), 'migrate-'))
+  for (const [name, content] of Object.entries(files)) {
+    mkdirSync(dirname(join(dir, name)), { recursive: true })
+    writeFileSync(join(dir, name), content)
+  }
+  return dir
+}
+
+const v3Screen = [
+  '<script setup>',
+  "import Dropdown from '@aziontech/webkit/dropdown'",
+  "import Divider from '@aziontech/webkit/divider'",
+  "import SegmentedButton from '@aziontech/webkit/actions/segmented-button'",
+  "import ActionButton from '@aziontech/webkit/actions/button'",
+  '</script>',
+  '<template>',
+  '  <!-- Dropdown of regions -->',
+  '  <Dropdown :options="regions" />',
+  '  <Divider layout="vertical" />',
+  '  <SegmentedButton :options="modes" />',
+  '  <ActionButton kind="text" label="Back" />',
+  '</template>'
+].join('\n')
+
+test('a v3 project keeps PrimeVue-era imports as MANUAL and rewrites the native ones', () => {
+  const dir = project({
+    'package.json': JSON.stringify({ dependencies: { '@aziontech/webkit': '3.9.4' } }),
+    'src/Screen.vue': v3Screen,
+    'src/screen.test.js':
+      "vi.mock('@aziontech/webkit/actions/button', () => ({}))\nvi.mock('@aziontech/webkit/plugin')\n"
+  })
+  try {
+    const results = planMigrate(dir)
+    const screen = readFileSync(join(dir, 'src/Screen.vue'), 'utf8')
+    assert.match(screen, /import Dropdown from '@aziontech\/webkit\/dropdown'/)
+    assert.match(screen, /<Dropdown :options="regions" \/>/)
+    assert.match(screen, /import Divider from '@aziontech\/webkit\/divider'/)
+    assert.match(screen, /import ToggleGroup from '@aziontech\/webkit\/toggle-group'/)
+    assert.match(screen, /<ToggleGroup :options="modes" \/>/)
+    assert.match(screen, /import ActionButton from '@aziontech\/webkit\/button'/)
+    assert.match(screen, /<ActionButton kind="transparent" label="Back" \/>/)
+    assert.match(screen, /<!-- Dropdown of regions -->/)
+    const mocks = readFileSync(join(dir, 'src/screen.test.js'), 'utf8')
+    assert.match(mocks, /vi\.mock\('@aziontech\/webkit\/button'/)
+    assert.match(mocks, /vi\.mock\('@aziontech\/webkit\/plugin'\)/)
+    const warnings = results.flatMap((r) => r.warnings)
+    assert.ok(warnings.some((w) => /project is on @aziontech\/webkit v3 \(3\.9\.4\)/.test(w)))
+    assert.ok(warnings.some((w) => /webkit\/dropdown is a v3 component.*use Select/.test(w)))
+    assert.ok(warnings.some((w) => /webkit\/plugin is a v3 component/.test(w)))
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('a v3 project is detected from its imports after the dependency was bumped', () => {
+  const dir = project({
+    'package.json': JSON.stringify({ dependencies: { '@aziontech/webkit': '^6.0.0' } }),
+    'src/Screen.vue':
+      v3Screen + "\n<script>import InputText from '@aziontech/webkit/inputtext'</script>"
+  })
+  try {
+    const results = planMigrate(dir, { dryRun: true })
+    assert.match(results[0].warnings[0], /exists only in v3/)
+    const screen = results.find((r) => r.file === join('src', 'Screen.vue'))
+    assert.ok(!screen.changes.some((c) => /dropdown-menu/.test(c)))
+    const forced = planMigrate(dir, { dryRun: true, fromMajor: 5 })
+    const forcedScreen = forced.find((r) => r.file === join('src', 'Screen.vue'))
+    assert.ok(
+      forcedScreen.changes.some((c) =>
+        /webkit\/dropdown → @aziontech\/webkit\/dropdown-menu/.test(c)
+      )
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('declaredMajor reads the dependency range and ignores workspace links', () => {
+  const read = (range) => {
+    const dir = project({
+      'package.json': JSON.stringify({ devDependencies: { '@aziontech/webkit': range } })
+    })
+    try {
+      return declaredMajor(dir)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  }
+  assert.equal(read('^5.11.0').major, 5)
+  assert.equal(read('~3.9.4').major, 3)
+  assert.equal(read('workspace:*'), null)
+})
+
+test('an import that v6 does not export is MANUAL, and comments keep their words', () => {
+  const v6 = loadMigration(6)
+  const sfc = [
+    '<script setup>',
+    "import Paginator from '@aziontech/webkit/paginator'",
+    "import Ghost from '@aziontech/webkit/ghost-widget'",
+    '// Paginator below',
+    '</script>',
+    '<template><Paginator /><Ghost /></template>'
+  ].join('\n')
+  const { source, warnings } = migrateSource(sfc, v6)
+  assert.match(source, /\/\/ Paginator below/)
+  assert.match(source, /<Pagination \/>/)
+  assert.deepEqual(warnings, [
+    '@aziontech/webkit/ghost-widget is not an export of v6: find its replacement in the catalog (MIGRATION-v6.md)'
+  ])
+})
+
+test('renamed exported types are rewritten where the consumer imports them', () => {
+  const v6 = loadMigration(6)
+  const sfc = [
+    '<script setup lang="ts">',
+    "import SeverityTag, { type SeverityTagLevel } from '@aziontech/webkit/severity-tag'",
+    "import type { DocCardGroupMobileCols } from '@aziontech/webkit/doc-card-group'",
+    "import type { MessageSeverity as Tone } from '@aziontech/webkit/message'",
+    "import type { TabViewValue } from '@aziontech/webkit/tab-view'",
+    'const level: SeverityTagLevel = "high"',
+    'const cols: DocCardGroupMobileCols = 2',
+    'const tone: Tone = "info"',
+    'const tab: TabViewValue = 1',
+    '</script>'
+  ].join('\n')
+  const { source } = migrateSource(sfc, v6)
+  assert.match(source, /import SeverityTag, \{ type SeverityTagSeverity \}/)
+  assert.match(source, /const level: SeverityTagSeverity/)
+  assert.match(source, /import type \{ DocCardGroupMobileColumns \} from/)
+  assert.match(source, /const cols: DocCardGroupMobileColumns/)
+  assert.match(source, /import type \{ AlertSeverity as Tone \} from '@aziontech\/webkit\/alert'/)
+  assert.match(source, /import type \{ TabsValue \} from '@aziontech\/webkit\/tabs'/)
+  assert.match(source, /const tab: TabsValue = 1/)
+  assert.equal(migrateSource(source, v6).source, source)
+})
+
+test('every type in the shipped types map is exported under its new name and not its old one', () => {
+  const { types } = loadMigration(6)
+  assert.ok(Object.keys(types).length >= 28)
+  const exported = (name) =>
+    execFileSync('git', ['grep', '-lE', `export (type|interface) ${name}\\b`, '--', 'src'], {
+      cwd: PKG,
+      encoding: 'utf8'
+    }).trim()
+  const missing = (name) => {
+    try {
+      exported(name)
+      return false
+    } catch {
+      return true
+    }
+  }
+  for (const [from, to] of Object.entries(types)) {
+    assert.ok(!missing(to), `${to} (from ${from}) is not exported`)
+    assert.ok(missing(from), `${from} is still exported`)
+  }
+})
+
+test('every legacy path resolves to a v6 export or a removed component', () => {
+  const v6 = loadMigration(6)
+  for (const [from, base] of Object.entries(v6.legacy.paths)) {
+    const next = renameSubpath(base, v6.components)
+    assert.ok(v6.exports.has(next) || v6.removed[base], `${from} → ${next}`)
+  }
+  for (const hint of Object.values(v6.legacy.manual)) assert.ok(hint.length > 10)
+  const markers = legacyMarkers(v6)
+  assert.ok(markers.has('inputtext') && markers.has('plugin'))
+  assert.ok(!markers.has('button') && !markers.has('dropdown'))
+})
+
+test('a rename whose new name prefixes the old one still rewrites the sub-components', () => {
+  const v6 = loadMigration(6)
+  assert.equal(renameSubpath('command-menu-item', v6.components), 'command-item')
+  assert.equal(renameSubpath('resizable-panel-pane', v6.components), 'resizable-pane')
+  assert.equal(renameSubpath('command-item', v6.components), 'command-item')
+  assert.equal(renameSubpath('dropdown-menu-trigger', v6.components), 'dropdown-menu-trigger')
+  const sfc = [
+    '<script setup>',
+    "import CommandMenuItem from '@aziontech/webkit/command-menu-item'",
+    "import ResizablePanelPane from '@aziontech/webkit/resizable-panel-pane'",
+    '</script>',
+    '<template><CommandMenuItem /><ResizablePanelPane /></template>'
+  ].join('\n')
+  const { source } = migrateSource(sfc, v6)
+  assert.match(source, /import CommandItem from '@aziontech\/webkit\/command-item'/)
+  assert.match(source, /import ResizablePane from '@aziontech\/webkit\/resizable-pane'/)
+  assert.match(source, /<CommandItem \/><ResizablePane \/>/)
+  assert.equal(migrateSource(source, v6).source, source)
 })

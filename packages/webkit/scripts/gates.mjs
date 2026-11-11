@@ -17,6 +17,11 @@ export const GATES = [
   },
   { id: 'naming', label: 'Naming', steps: [['node', 'scripts/check-naming.mjs']] },
   {
+    id: 'migrations',
+    label: 'Public API changes have a codemod entry',
+    steps: [['node', 'scripts/check-migrations.mjs']]
+  },
+  {
     id: 'marketing',
     label: 'Marketing and docs inventory',
     steps: [['node', 'scripts/check-marketing-inventory.mjs']]
@@ -52,6 +57,11 @@ export const GATES = [
     id: 'block-stories',
     label: 'Block stories current',
     steps: [['node', '../../apps/storybook/scripts/gen-block-stories.mjs', '--check']]
+  },
+  {
+    id: 'hook-tests',
+    label: 'Hook tests',
+    steps: [['node', '../../.claude/hooks/__tests__/run.mjs']]
   },
   {
     id: 'toolkit-tests',

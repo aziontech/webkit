@@ -1,5 +1,5 @@
 {
-  "component": "dropdown",
+  "component": "dropdown-menu",
   "title": "Components/Primitives/Navigation/DropdownMenu",
   "examples": [
     {

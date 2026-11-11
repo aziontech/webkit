@@ -4,14 +4,14 @@
   defineOptions({ name: 'SeverityTag', inheritAttrs: false })
 
   /** Ordered severity level, from most to least severe. */
-  export type SeverityTagLevel = 'critical' | 'high' | 'medium' | 'low' | 'info'
+  export type SeverityTagSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
 
   /** Size token. */
   export type SeverityTagSize = 'small' | 'medium'
 
   interface Props {
     /** Severity level; sets how many glyph bars fill, their colour and the default label. */
-    severity?: SeverityTagLevel
+    severity?: SeverityTagSeverity
     /** Text of the tag; empty falls back to the level name in sentence case. */
     label?: string
     /** Size token; `medium` is 24px tall, `small` is 20px. */

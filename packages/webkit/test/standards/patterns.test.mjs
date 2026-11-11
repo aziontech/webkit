@@ -1,5 +1,13 @@
 import assert from 'node:assert/strict'
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync
+} from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
@@ -108,6 +116,45 @@ test('readExamples keeps the first examples under the size cap, only for real ex
       out.button.map((e) => e.name),
       ['default', 'types', 'sizes']
     )
+  } finally {
+    rmSync(pkg, { recursive: true, force: true })
+  }
+})
+
+test('every examples/<dir> documents an export, named after it', () => {
+  const root = new URL('../../examples/', import.meta.url)
+  const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf-8'))
+  const exportsSet = new Set(Object.keys(pkg.exports).map((k) => k.slice(2)))
+  const problems = []
+  for (const dir of readdirSync(root)) {
+    const manifest = new URL(`${dir}/examples.json`, root)
+    if (!existsSync(manifest)) {
+      problems.push(`${dir}: no examples.json`)
+      continue
+    }
+    const { component } = JSON.parse(readFileSync(manifest, 'utf-8'))
+    if (!exportsSet.has(component)) problems.push(`${dir}: ${component} is not an export`)
+    if (dir !== String(component).replaceAll('/', '-'))
+      problems.push(`${dir}: folder should be named ${String(component).replaceAll('/', '-')}`)
+  }
+  assert.deepEqual(problems, [])
+})
+
+test('readExamples keys a folder by its examples.json#component', () => {
+  const pkg = mkdtempSync(join(tmpdir(), 'examples-'))
+  try {
+    const dir = join(pkg, 'examples/svg-azion-default')
+    mkdirSync(dir, { recursive: true })
+    writeFileSync(join(dir, 'default.vue'), '<template>logo</template>\n')
+    writeFileSync(
+      join(dir, 'examples.json'),
+      JSON.stringify({
+        component: 'svg/azion/default',
+        examples: [{ name: 'Default', file: 'default.vue' }]
+      })
+    )
+    const out = readExamples(pkg, new Set(['svg/azion/default']))
+    assert.deepEqual(Object.keys(out), ['svg/azion/default'])
   } finally {
     rmSync(pkg, { recursive: true, force: true })
   }

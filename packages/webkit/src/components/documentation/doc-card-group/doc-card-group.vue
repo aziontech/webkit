@@ -13,13 +13,13 @@
   /** Column count at the large breakpoint. */
   export type DocCardGroupCols = 1 | 2 | 3 | 4
   /** Column count on a phone. */
-  export type DocCardGroupMobileCols = 1 | 2
+  export type DocCardGroupMobileColumns = 1 | 2
 
   interface Props {
     /** Column count at the large breakpoint. */
     cols?: DocCardGroupCols
     /** Column count on a phone. Two only pays when the cells are a mark plus a word. */
-    mobileColumns?: DocCardGroupMobileCols
+    mobileColumns?: DocCardGroupMobileColumns
   }
 
   withDefaults(defineProps<Props>(), { cols: 2, mobileColumns: 1 })
