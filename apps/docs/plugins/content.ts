@@ -23,7 +23,7 @@ let highlighterPromise: Promise<Highlighter> | null = null
 
 export function highlighter(): Promise<Highlighter> {
   highlighterPromise ??= createHighlighter({
-    themes: ['github-light', 'github-dark'],
+    themes: ['github-light-high-contrast', 'github-dark-high-contrast'],
     langs: LANGS
   })
   return highlighterPromise
@@ -33,7 +33,7 @@ export function highlight(hl: Highlighter, code: string, lang: string): string {
   const language = LANGS.includes(lang) ? lang : 'txt'
   return hl.codeToHtml(code, {
     lang: language,
-    themes: { light: 'github-light', dark: 'github-dark' },
+    themes: { light: 'github-light-high-contrast', dark: 'github-dark-high-contrast' },
     defaultColor: false
   })
 }

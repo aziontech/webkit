@@ -35,16 +35,19 @@ The data side is a Vite plugin, `plugins/docs-plugin.ts`:
 - `virtual:docs-component-loaders` / `virtual:docs-component:<name>` — one lazy chunk per component
   with the full catalog entry and the rendered spec sections.
 - `virtual:docs-tokens` — the token groups parsed from the theme.
-- `?highlight` — any file imported with it becomes `{ code, html }` (Shiki, `github-light` and
-  `github-dark` through CSS variables, so the theme switch needs no re-highlighting).
+- `?highlight` — any file imported with it becomes `{ code, html }` (Shiki,
+  `github-light-high-contrast` and `github-dark-high-contrast` through CSS variables, so the theme switch needs no re-highlighting).
 - `?markdown` — any Markdown file becomes `{ title, html }` (markdown-it + Shiki).
 
 A router guard (`src/lib/data.ts`, `preloadRoute`) loads the chunks a route needs before it
 renders, so server rendering and hydration see the same data.
 
 Images and media that examples reference by absolute path (`/media/…`, `/logos/…`, `/docs/…`) are
-served from `apps/storybook/static` in dev and copied into `dist/` at build. `packages/webkit/llms/`
-is served at `/llms/` and its `llms.txt` at `/llms.txt` when the folder exists.
+served from `apps/storybook/static` in dev and copied into `dist/` at build. The site URLs that
+marketing examples use (`/marketing-components/…`) are mapped to `@aziontech/webkit/assets/*`
+through the table in `apps/storybook/src/stories/_shared/site-assets.js` (`siteAssets()` in
+`plugins/paths.ts`). `packages/webkit/llms/` is served at `/llms/` and its `llms.txt` at
+`/llms.txt`; component, block and foundation pages link their `.md` as "View as Markdown".
 
 ## Build and deploy
 
@@ -63,8 +66,13 @@ in the browser. The output is plain static files:
 
 `pnpm docs:smoke` serves `dist/`, opens every route in Chromium (Playwright), fails on any console
 error, uncaught exception or same-origin request that answers 4xx/5xx, and runs axe (WCAG 2.1 A and
-AA) on the index pages and one route in every eight (`SMOKE_AXE_EVERY`). `SMOKE_ONLY=/blocks` limits
-it to matching routes. It needs a Playwright Chromium; in this repository's container:
+AA) on the index pages and one route in every eight (`SMOKE_AXE_EVERY`), in dark and light, with
+transitions off. A violation inside a live example or block frame whose rule
+`packages/webkit/src/test/a11y-known.json` already lists for that source file is counted as known
+WebKit debt instead of failing (the list only shrinks, so these expire as WebKit fixes them);
+the same goes for a finding of a WebKit component used anywhere
+(`COMPONENT_KNOWN` in `scripts/smoke.mjs`: `Table`, `NavigationMenu`) while `a11y-known.json` still
+lists it for that component's example. Everything else fails. `SMOKE_ONLY=/blocks` limits it to matching routes. It needs a Playwright Chromium; in this repository's container:
 
 ```bash
 docker run --rm --ipc=host -v "$PWD":/w -w /w/apps/docs mcr.microsoft.com/playwright:v1.62.0-noble node scripts/smoke.mjs

@@ -337,9 +337,11 @@ mounted live beside its Shiki-highlighted source, do / don't, accessibility and 
 foundations (color, typography, spacing, radius, shadows, motion, z-index parsed from the theme's
 `globals.css`; getting started, languages, RTL, layout and devices, accessibility from the README and
 `rules/`). "Copy for AI" on every component and block; `packages/webkit/llms/` is served at
-`/llms/` and linked as "View as Markdown" when it exists at build time. Use `pnpm docs:dev`,
+`/llms/` (plus `/llms.txt`) and every component, block and foundation page links its `.md` as
+"View as Markdown". Marketing examples' `/marketing-components/…` URLs resolve to the package's
+`assets/*` exports. Use `pnpm docs:dev`,
 `docs:build`, `docs:preview`, `docs:smoke` (Playwright over every route, console errors and axe on a
-sample in both themes); how pages are generated and how to deploy statically is in
+sample in both themes, WebKit findings already in `a11y-known.json` counted as known); how pages are generated and how to deploy statically is in
 `apps/docs/README.md`.
 
 ## M2.4 — Generative-AI components
@@ -489,10 +491,9 @@ before the branch is closed.
 | 8 | M2.4  | Benchmark parts not built: PromptInput shortcut menus and references (`/`, `@`, Cloudscape), response branches (AI Elements `Branch`), the thumbs-down reason dialog, the artifact canvas panel and a conversation-history list                                  | Build them as components in M2.9 when a console screen needs one (each is a new spec); until then the blocks compose `Drawer` for the canvas and leave history out                                          |
 | 9 | M2.4  | The AI blocks were checked with the browser suite and axe but not rendered with the theme (light and dark, 320 px, RTL), and the M1.3 usage check (`usage-check.mjs`) did not run (no `claude` CLI or key in the lane)                                           | Visual pass in M2.5 (Playwright over `examples/` and `blocks/`) and the usage check in M2.7 with the prompt "add an assistant to the workload page"                                                         |
 | 10 | M2.4 | `WebkitProvider` bundles the pt-BR and es catalogs, so every new component's strings grow it (10.49 KB after M2.4; budget raised 9.1 → 10.6 KB) | Load non-English catalogs on demand (dynamic import keyed by locale, SSR-safe), lower the budget back to ≤ 9 KB |
-| 11 | M2.3  | Media that examples and blocks load by absolute path (`/media/…`, `/logos/…`, `/docs/…`) still lives in `apps/storybook/static`; the docs site serves and copies it from there | M2.5 moves the folder to `apps/docs/public` when Storybook is removed and drops `STATIC_ASSETS` from `apps/docs/plugins/paths.ts` |
+| 11 | M2.3  | Media that examples and blocks load by absolute path (`/media/…`, `/logos/…`, `/docs/…`) still lives in `apps/storybook/static`, and the `/marketing-components/…` → `@aziontech/webkit/assets/*` table is `apps/storybook/src/stories/_shared/site-assets.js`; the docs site reads both from Storybook | M2.5 moves the folder to `apps/docs/public` and the table next to the assets in `packages/webkit` when Storybook is removed, then points `STATIC_ASSETS` and `SITE_ASSETS` in `apps/docs/plugins/paths.ts` at them |
 | 12 | M2.3  | Rubik does not load from `fonts.azion.com`: `https://fonts.azion.com/rubik/Rubik-VariableFont_wght.ttf` answers 404, so every page falls back to the system font | Publish `apps/fonts/rubik/` to fonts.azion.com (owner: whoever deploys apps/fonts), or have the theme self-host it |
-| 13 | M2.3  | White text on `--primary` (#F3652B) in the dark theme is about 3:1, under WCAG AA 4.5:1: axe flags every filled primary control (primary `Button`, selected states). The docs smoke test reports these nodes as a known gap instead of failing | Darken `--primary` for filled controls in dark (or use `--primary-contrast` black there) in `@aziontech/theme`, then drop the exception in `apps/docs/scripts/smoke.mjs` |
-| 14 | M2.3  | The docs link "View as Markdown" and "Copy for AI" to `packages/webkit/llms/components/<id>.md` and `llms/blocks/<id>.md`, guessing M2.2's layout | After M2.2 merges, rebuild the docs and check one component and one block show the link; adjust `llmsFile` in `apps/docs/plugins/content.ts` if the paths differ |
+| 13 | M2.3  | `apps/docs` has no `type-check` script: `vue-tsc` over it reports the kebab `aria-label` passed to `IconButton`'s required `ariaLabel` prop (the pattern WebKit's own examples use) and WebKit source `.js` presets without declarations (TS7016) | Make WebKit's required `ariaLabel` props accept the attribute form in types (or ship `.d.ts` for the presets), then add `type-check` to `apps/docs/package.json` and the root gates |
 
 ## M2.11 — Close the branch and merge into `main`
 

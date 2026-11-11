@@ -14,11 +14,16 @@ const KNOWN_FILE = resolve(
   '../../../packages/webkit/src/test/a11y-known.json'
 )
 const KNOWN = existsSync(KNOWN_FILE) ? JSON.parse(readFileSync(KNOWN_FILE, 'utf8')) : {}
-const CHROME_KNOWN = [
+const COMPONENT_KNOWN = [
   {
     rule: 'aria-required-children',
     selector: '[role="table"]',
     source: 'examples/table/default.vue'
+  },
+  {
+    rule: 'aria-required-children',
+    selector: '[data-testid="navigation-menu__list"]',
+    source: 'examples/navigation-menu/default.vue'
   }
 ]
 const CONCURRENCY = Number(process.env.SMOKE_CONCURRENCY ?? 6)
@@ -126,7 +131,7 @@ async function visit(route) {
           style.remove()
           return { violations: out, known: skipped }
         },
-        { known: KNOWN, chrome: CHROME_KNOWN }
+        { known: KNOWN, chrome: COMPONENT_KNOWN }
       )
       knownWebkit += result.known
       axeChecked++
