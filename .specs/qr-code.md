@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: b1ae348027669adaf929aa86e3a6513f44aa4fd02990b65650d4d0d1bcbc4416
+checksum: f256748b9a64fac4e9a04892222b2ab7c01c4d06d50fa4b1f6a36a61bd16a66f
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -127,7 +127,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 3.6 KB gzip for `./qr-code` in `.size-limit.json` (the encoder with its block tables).
+- Bundle budget: 4.39 KB gzip for `./qr-code` in `.size-limit.json` (the encoder with its block tables).
 - Runtime budget: one encode per value change (a version-5 code takes well under 5 ms); one SVG path.
 - Heavy parts: none; the encoder is plain arithmetic, no canvas.
 

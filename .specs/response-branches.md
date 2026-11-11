@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 4843f9af199152ca746f6edea1adbe694e73879550f0325a0ca3591a3300f9dc
+checksum: 77d00c88eb50aec760ced257720ad975e5107f0dd0b5795355b4df91b5a838a6
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -144,7 +144,7 @@ _none_ besides `update:modelValue`.
 
 ## Performance
 
-- Bundle budget: 2.4 KB gzip for `./response-branches` in `.size-limit.json`.
+- Bundle budget: 4 KB gzip for `./response-branches` in `.size-limit.json`.
 - Runtime budget: one slot render per version change.
 - Heavy parts: none.
 

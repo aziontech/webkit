@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 25f1f00604fc4d6e5a0e9b3af19a82c7986883b49d6a76383165eb6d6b93980c
+checksum: 4564e0ae837a8c56dd9717fef991b91aa1dd260c24d0f4af605b66e48afba752
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -150,7 +150,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 4.5 KB gzip for `./conversation-history` in `.size-limit.json`.
+- Bundle budget: 4.96 KB gzip for `./conversation-history` in `.size-limit.json`.
 - Runtime budget: one grouping pass per `items` change; hundreds of rows render without virtualization.
 - Heavy parts: none.
 

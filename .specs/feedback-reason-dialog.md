@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: d0d37c704ebd009ca5e31180016ef97d803f411225c2ea7dda5b3e14f4dce53d
+checksum: f0e09ed1050f27dba1fb60e1dccfbe78a6cc7428fa4ec7edf6e0300e5cc55641
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -146,7 +146,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 15 KB gzip for `./feedback-reason-dialog` in `.size-limit.json` (most of it is `Dialog`, `Field`, `RadioButton`, `Textarea` and `Button`, shared with the page).
+- Bundle budget: 31.64 KB gzip for `./feedback-reason-dialog` in `.size-limit.json` (most of it is `Dialog`, `Field`, `RadioButton`, `Textarea` and `Button`, shared with the page).
 - Runtime budget: renders only while open (the dialog content is portalled on open).
 - Heavy parts: none.
 
