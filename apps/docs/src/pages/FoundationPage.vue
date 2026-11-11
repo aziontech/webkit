@@ -8,7 +8,7 @@
   import FoundationDemo from '../components/FoundationDemo.vue'
   import RawHtml from '../components/RawHtml.vue'
   import TokensView from '../components/TokensView.vue'
-  import { cached, keys } from '../lib/data'
+  import { cached, index, keys } from '../lib/data'
   import { FOUNDATIONS } from '../lib/foundations'
   import { messages } from '../lib/i18n'
   import type { MarkdownDoc } from '../lib/types'
@@ -20,6 +20,21 @@
   const page = computed(() => FOUNDATIONS.find((item) => item.slug === route.params.slug))
   const doc = computed(() =>
     page.value?.markdown ? cached<MarkdownDoc>(keys.markdown(page.value.markdown)) : undefined
+  )
+
+  const llms = computed(() => (page.value ? index.foundationLlms[page.value.slug] : undefined))
+  const metaActions = computed(() =>
+    llms.value
+      ? [
+          {
+            value: 'markdown',
+            label: t.value.viewMarkdown,
+            icon: 'pi pi-file',
+            href: llms.value,
+            target: '_blank' as const
+          }
+        ]
+      : []
   )
 
   useHead({
@@ -38,6 +53,7 @@
       :title="page.title"
       :description="page.summary"
       :breadcrumb="[{ label: t.foundations, href: '/foundations' }, { label: page.title }]"
+      :meta-actions="metaActions"
     />
     <FoundationDemo
       v-if="page.demo"

@@ -3,6 +3,7 @@ import { extname, join, normalize } from 'node:path'
 
 import type { Plugin, ResolvedConfig } from 'vite'
 
+import { FOUNDATION_SLUGS } from '../src/lib/foundations.ts'
 import {
   buildComponent,
   buildIndex,
@@ -67,7 +68,7 @@ export function docsPlugin(): Plugin {
     async load(id) {
       if (id === `\0${INDEX}`) {
         this.addWatchFile(CATALOG)
-        return `export default ${JSON.stringify(buildIndex())}`
+        return `export default ${JSON.stringify(buildIndex(undefined, FOUNDATION_SLUGS))}`
       }
       if (id === `\0${TOKENS}`) {
         this.addWatchFile(join(THEME, 'dist/v4/globals.css'))

@@ -52,6 +52,7 @@ export type DocsIndex = {
   components: ComponentIndexItem[]
   blocks: BlockIndexItem[]
   llmsTxt: boolean
+  foundationLlms: Record<string, string>
   version: string
 }
 

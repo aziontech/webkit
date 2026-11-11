@@ -38,7 +38,7 @@ export function highlight(hl: Highlighter, code: string, lang: string): string {
   })
 }
 
-export async function markdown(): Promise<MarkdownIt> {
+export async function markdown(): Promise<InstanceType<typeof MarkdownIt>> {
   const hl = await highlighter()
   const md = new MarkdownIt({
     html: false,
@@ -95,6 +95,22 @@ function llmsFile(files: string[], kind: 'components' | 'blocks', id: string): s
   return hit ? `/llms/${hit}` : null
 }
 
+const FOUNDATION_LLMS: Record<string, string> = {
+  'getting-started': 'usage',
+  radius: 'tokens',
+  shadows: 'tokens',
+  'z-index': 'tokens'
+}
+
+function foundationLlms(files: string[], slugs: string[]): Record<string, string> {
+  const out: Record<string, string> = {}
+  for (const slug of slugs) {
+    const file = `foundations/${FOUNDATION_LLMS[slug] ?? slug}.md`
+    if (files.includes(file)) out[slug] = `/llms/${file}`
+  }
+  return out
+}
+
 export type ComponentIndexItem = {
   name: string
   title: string
@@ -127,7 +143,7 @@ export function firstSentence(text: string): string {
   return (match ? match[1] : plain).trim()
 }
 
-export function buildIndex(catalog: Catalog = readCatalog()) {
+export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: string[] = []) {
   const exampleDirs = readExampleDirs()
   const llms = llmsFiles()
   const byComponent = new Map(exampleDirs.map((entry) => [entry.data.component, entry]))
@@ -173,6 +189,7 @@ export function buildIndex(catalog: Catalog = readCatalog()) {
     components,
     blocks,
     llmsTxt: existsSync(join(LLMS, 'llms.txt')),
+    foundationLlms: foundationLlms(llms, foundationSlugs),
     version: (catalog.webkitVersion as string) ?? ''
   }
 }

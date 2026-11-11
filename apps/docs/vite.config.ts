@@ -2,7 +2,8 @@ import { fileURLToPath } from 'node:url'
 
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
-import { defineConfig } from 'vite'
+import { defineConfig, type UserConfig } from 'vite'
+import type { ViteSSGOptions } from 'vite-ssg'
 
 import { buildIndex } from './plugins/content.ts'
 import { docsPlugin } from './plugins/docs-plugin.ts'
@@ -21,6 +22,22 @@ function staticRoutes(): string[] {
     ...blocks.flatMap((block) => block.states.map((state) => `/frame/${state.slug}/${block.id}`)),
     '/404'
   ]
+}
+
+const ssgOptions: Partial<ViteSSGOptions> = {
+  dirStyle: 'nested',
+  formatting: 'none',
+  concurrency: 2,
+  beastiesOptions: false,
+  onPageRendered: (_route, html, appCtx) => {
+    const ssr = (appCtx.app as { ssrContext?: { teleports?: Record<string, string> } }).ssrContext
+    const body = ssr?.teleports?.body
+    return body ? html.replace(/<body([^>]*)>\s*/, (open) => `${open.trimEnd()}${body}`) : html
+  },
+  includedRoutes: () => {
+    const only = process.env.DOCS_ROUTES?.split(',').filter(Boolean)
+    return only?.length ? only : staticRoutes()
+  }
 }
 
 export default defineConfig({
@@ -49,19 +66,5 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 2000
   },
-  ssgOptions: {
-    dirStyle: 'nested',
-    formatting: 'none',
-    concurrency: 2,
-    beastiesOptions: false,
-    onPageRendered: (_route, html, appCtx) => {
-      const ssr = (appCtx.app as { ssrContext?: { teleports?: Record<string, string> } }).ssrContext
-      const body = ssr?.teleports?.body
-      return body ? html.replace(/<body([^>]*)>\s*/, (open) => `${open.trimEnd()}${body}`) : html
-    },
-    includedRoutes: () => {
-      const only = process.env.DOCS_ROUTES?.split(',').filter(Boolean)
-      return only?.length ? only : staticRoutes()
-    }
-  }
-})
+  ssgOptions
+} as UserConfig)
