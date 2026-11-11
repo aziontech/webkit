@@ -6088,6 +6088,54 @@
    "examplesFile": "catalog/examples/illustration.json",
    "docsFile": "catalog/components/illustration.json"
   },
+  "line-figure": {
+   "import": "@aziontech/webkit/line-figure",
+   "target": "./src/components/content/line-figure/line-figure.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/line-figure",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "name",
+     "type": "LineFigureName \\ | ''",
+     "default": "''",
+     "required": "false",
+     "doc": "Registered figure to draw; an unknown or empty name draws nothing."
+    },
+    {
+     "name": "intensity",
+     "type": "number",
+     "default": "0.5",
+     "required": "false",
+     "doc": "How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong)."
+    },
+    {
+     "name": "play",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name; falls back to the figure's own English description."
+    }
+   ],
+   "events": [
+    {
+     "name": "read",
+     "payload": "caption: string",
+     "notes": "The figure's current reading each time it changes (the first reading on mount)."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/line-figure.json",
+   "docsFile": "catalog/components/line-figure.json"
+  },
   "product-widget": {
    "import": "@aziontech/webkit/product-widget",
    "target": "./src/components/content/product-widget/product-widget.vue",
@@ -14820,6 +14868,33 @@
    "surface": "marketing",
    "examplesFile": "catalog/examples/banner.json",
    "docsFile": "catalog/components/banner.json"
+  },
+  "banner-art": {
+   "import": "@aziontech/webkit/banner-art",
+   "target": "./src/components/marketing/banner/banner-art/banner-art.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/banner-art",
+   "category": "marketing",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "art",
+     "type": "'globe' \\ | 'map' \\ | 'network'",
+     "default": "'map'",
+     "required": "false",
+     "doc": "Which backdrop to draw."
+    },
+    {
+     "name": "animated",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Spins the globe or pulses the PoPs; a still frame when false or under reduced motion."
+    }
+   ],
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/banner-art.json",
+   "docsFile": "catalog/components/banner-art.json"
   },
   "hero": {
    "import": "@aziontech/webkit/hero",

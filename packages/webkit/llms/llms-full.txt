@@ -17270,6 +17270,99 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ---
 
+<!-- components/line-figure.md -->
+
+# Line Figure
+
+> An isometric line-art figure that answers the pointer: one per product (cache TTL, load balancer, DNS lookup, firewall, a 404 page and 20 more), drawn by a small engine into one SVG with the illustration tokens, so it follows the theme. Each figure loads on demand. The pointer, or focus with arrow keys, moves the figure through its answer; `play` walks it through on its own until a person arrives; under reduced motion it holds a still frame. From the design sample's `shared/ui/line-figure` (engine MIT, kept with its `LICENSE`). The figures are marketing assets, listed in the marketing inventory.
+
+- Import: `import LineFigure from '@aziontech/webkit/line-figure'`
+- Category: content · Surface: product · Structure: monolithic
+- API as JSON: [line-figure.json](https://github.com/aziontech/webkit/blob/main/.specs/line-figure.json)
+
+## When to use
+
+- The art beside a product's copy on a landing or a docs home.
+- An empty state or a not-found page (`azion-404`).
+
+## Do
+
+- One figure per view; two figures answering the pointer compete.
+- Pass `aria-label` when the page says something more specific than the figure's own description.
+- Use `play` only where nothing else moves.
+
+## Don’t
+
+- For static, non-interactive art — use `Illustration`.
+- For data — use the charts.
+- Inside dense application screens.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- Illustration` — static art from the registry.
+- ProductWidget`, `ShellMockup` — product scenes.
+- EmptyState` — can carry a figure in its art slot.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `LineFigureName \ \| ''` | `''` | false | Registered figure to draw; an unknown or empty name draws nothing. |
+| `intensity` | `number` | `0.5` | false | How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong). |
+| `play` | `boolean` | `false` | false | Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion. |
+| `ariaLabel` | `string` | `''` | false | Accessible name; falls back to the figure's own English description. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `read` | `caption: string` | The figure's current reading each time it changes (the first reading on mount). |
+
+## States
+
+- `data-name` mirrors `name`; `data-play` is present while `play` is on.
+- Empty: no role and an empty SVG for an unknown name.
+
+## Accessibility
+
+- `role="img"` named by `ariaLabel` or the figure description; the SVG is `aria-hidden`.
+- The figure is not a control: it never takes focus on its own, and the page stays operable without it.
+- Readings go out through `read`; a page that shows them should put them in a polite live region (see the Play example).
+
+## Right-to-left
+
+- Layout: the figure is a picture and is not mirrored (isometric art has no reading direction).
+- Keyboard: unchanged.
+
+## Internationalization
+
+- Built-in strings: the 25 figure descriptions are English asset metadata (like an illustration's name), used only when `ariaLabel` is empty. A localized page passes `aria-label`.
+
+## Responsive
+
+- Fills its width at a 5:4 aspect; strokes stay 1px at every size (`vector-effect: non-scaling-stroke`).
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import LineFigure from '@aziontech/webkit/line-figure'
+</script>
+
+<template>
+  <div class="max-w-(--container-sm)">
+    <LineFigure name="cache-ttl" />
+  </div>
+</template>
+```
+
+2 more example(s) in [components/line-figure.md](https://github.com/aziontech/webkit/blob/main/.specs/components/line-figure.md).
+
+---
+
 <!-- components/network-map.md -->
 
 # Network Map
@@ -29169,6 +29262,103 @@ between them is the ring-offset surface below.
 ```
 
 1 more example(s) in [components/banner.md](https://github.com/aziontech/webkit/blob/main/.specs/components/banner.md).
+
+---
+
+<!-- components/banner-art.md -->
+
+# Banner Art
+
+> The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component under `marketing/banner`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
+
+- Import: `import BannerArt from '@aziontech/webkit/banner-art'`
+- Category: marketing · Surface: marketing · Structure: monolithic
+- API as JSON: [banner-art.json](https://github.com/aziontech/webkit/blob/main/.specs/banner-art.json)
+
+## When to use
+
+- Behind the opening band of a landing, the hub or the docs home.
+
+## Do
+
+- One backdrop per page.
+- Keep the copy at the inline start: every art is washed toward it.
+
+## Don’t
+
+- As content: it is `aria-hidden` and says nothing.
+- Behind dense text or a form.
+- For a plain texture — use `TextureMaterial`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- Hero` — the `background` slot it fills.
+- NetworkMap`, `SpinningGlobe` — what it draws.
+- TextureMaterial` — the dot lattice.
+- Banner` — the announcement band (unrelated surface).
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `art` | `'globe' \ \| 'map' \ \| 'network'` | `'map'` | false | Which backdrop to draw. |
+| `animated` | `boolean` | `true` | false | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. |
+
+## States
+
+- `data-art` mirrors `art`.
+
+## Accessibility
+
+- `aria-hidden="true"` and `pointer-events-none`: never announced, never in the way of a click.
+- The washes keep the copy column at canvas contrast.
+
+## Right-to-left
+
+- The globe hangs off the inline-end rule and the washes run from the inline start in both directions (`rtl:` variants).
+- Keyboard: not focusable.
+
+## Internationalization
+
+- Built-in strings: none.
+
+## Responsive
+
+- The globe is sized off the band height and capped by `150vw` and `--container-5xl`.
+- The map takes the full width below medium and the inline-end three fifths from medium.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import BannerArt from '@aziontech/webkit/banner-art'
+  import Hero from '@aziontech/webkit/hero-root'
+  import HeroTitle from '@aziontech/webkit/hero-title'
+</script>
+
+<template>
+  <Hero
+    kind="band"
+    size="large"
+    max-width="site"
+  >
+    <template #background>
+      <BannerArt art="map" />
+    </template>
+    <HeroTitle
+      eyebrow="Network"
+      eyebrow-prefix="//"
+      title="Close to every user, by default"
+      description="Requests land on the nearest location and stay there."
+    />
+  </Hero>
+</template>
+```
+
+1 more example(s) in [components/banner-art.md](https://github.com/aziontech/webkit/blob/main/.specs/components/banner-art.md).
 
 ---
 

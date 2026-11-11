@@ -247,6 +247,11 @@
     "limit": "4.25 KB"
   },
   {
+    "name": "banner-art",
+    "path": "src/components/marketing/banner/banner-art/banner-art.vue",
+    "limit": "10.1 KB"
+  },
+  {
     "name": "hero",
     "path": "src/components/marketing/hero/index.ts",
     "limit": "4.25 KB",
@@ -328,6 +333,12 @@
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2.5 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "line-figure",
+    "path": "src/components/content/line-figure/line-figure.vue",
+    "limit": "3 KB",
     "entryOnly": true
   },
   {

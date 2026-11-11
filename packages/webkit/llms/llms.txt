@@ -159,6 +159,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Item](components/item.md): Versatile flex row for title, description, media, and actions.
 - [Kbd](components/kbd.md): Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap.
 - [KeyValuePairs](components/key-value-pairs.md): A grid of labelled facts about one subject: each pair is a key (the term) and its value, which may be plain text or a composed component such as a `Link`, `Tag`, `CopyButton` or `StatusIndicator`.
+- [LineFigure](components/line-figure.md): An isometric line-art figure that answers the pointer: one per product (cache TTL, load balancer, DNS lookup, firewall, a 404 page and 20 more), drawn by a small engine into one SVG with the illustration tokens, so it…
 - [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent.
 - [OverflowCount](components/overflow-count.md): A small `+N` chip that stands for the items a slot cannot show, and opens a popover with the whole list.
 - [Overline](components/overline.md): Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow").
@@ -268,6 +269,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [BandStack](components/band-stack.md): A run of framed bands that follow one another down the page, each one drawn as two registration frames — its left half and its right half — sharing a hairline with the next.
 - [Banner](components/banner.md): A split promotional band: the announcement and its actions in the wide leading column, a short supporting note on a raised surface in the narrow trailing one.
+- [BannerArt](components/banner-art.md): The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice,…
 - [BentoGrid](components/bento-grid.md): A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface.
 - [BigNumbers](components/big-numbers.md): A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath.
 - [CallToAction](components/call-to-action.md): The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface.

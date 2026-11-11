@@ -259,3 +259,10 @@ New sections and the sample's section variants. `ConsolePanel` carries `ToggleGr
 | webkit-provider    | 8.4           | 8.27         | 8.5        | Raised: the site-sections groups in English.     |
 | locales-pt-BR      | 7.8           | 7.66         | 7.9        | Raised: the same groups in Portuguese.           |
 | locales-es         | 7.9           | 7.75         | 8          | Raised: the same groups in Spanish.              |
+
+`LineFigure` counts its entry chunk only: the engine and each of the 25 figures load on demand (27 async chunks, 3–5 KB each). `BannerArt` carries `NetworkMap` (its map data) and `SpinningGlobe`.
+
+| Entry       | Budget before | Measured now | New budget | Note                                             |
+| ----------- | ------------- | ------------ | ---------- | ------------------------------------------------ |
+| line-figure | new           | 2.48         | 3          | New: entry only; figures are async chunks.       |
+| banner-art  | new           | 9.61         | 10.1       | New: `NetworkMap`, `SpinningGlobe`, the lattice. |

@@ -1,0 +1,61 @@
+{
+ "name": "banner-art",
+ "binding": "BannerArt",
+ "import": "@aziontech/webkit/banner-art",
+ "treeShakeableImport": "@aziontech/webkit/banner-art",
+ "category": "marketing",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's \"`Banner` `art` variants\" became this sibling component under `marketing/banner`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.",
+ "setup": null,
+ "useWhen": [
+  "Behind the opening band of a landing, the hub or the docs home."
+ ],
+ "avoidWhen": [
+  "As content: it is `aria-hidden` and says nothing.",
+  "Behind dense text or a form.",
+  "For a plain texture — use `TextureMaterial`."
+ ],
+ "related": [
+  "Hero` — the `background` slot it fills.",
+  "NetworkMap`, `SpinningGlobe` — what it draws.",
+  "TextureMaterial` — the dot lattice.",
+  "Banner` — the announcement band (unrelated surface)."
+ ],
+ "bestPractices": [
+  "One backdrop per page.",
+  "Keep the copy at the inline start: every art is washed toward it."
+ ],
+ "props": [
+  {
+   "name": "art",
+   "type": "'globe' \\ | 'map' \\ | 'network'",
+   "default": "'map'",
+   "required": "false",
+   "doc": "Which backdrop to draw."
+  },
+  {
+   "name": "animated",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Spins the globe or pulses the PoPs; a still frame when false or under reduced motion."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import BannerArt from '@aziontech/webkit/banner-art'\n  import Hero from '@aziontech/webkit/hero-root'\n  import HeroTitle from '@aziontech/webkit/hero-title'\n</script>\n\n<template>\n  <Hero\n    kind=\"band\"\n    size=\"large\"\n    max-width=\"site\"\n  >\n    <template #background>\n      <BannerArt art=\"map\" />\n    </template>\n    <HeroTitle\n      eyebrow=\"Network\"\n      eyebrow-prefix=\"//\"\n      title=\"Close to every user, by default\"\n      description=\"Requests land on the nearest location and stay there.\"\n    />\n  </Hero>\n</template>"
+  },
+  {
+   "name": "Arts",
+   "sfc": "<script setup>\n  import BannerArt from '@aziontech/webkit/banner-art'\n\n  const arts = [\n    { art: 'globe', label: 'Globe' },\n    { art: 'map', label: 'Map' },\n    { art: 'network', label: 'Network' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"item in arts\"\n      :key=\"item.art\"\n      class=\"relative h-80 overflow-hidden border border-(--border-default) bg-(--bg-canvas)\"\n    >\n      <BannerArt :art=\"item.art\" />\n      <p class=\"relative z-10 m-0 p-(--spacing-lg) text-heading-md text-(--text-default)\">\n        {{ item.label }}\n      </p>\n    </div>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/banner-art.md"
+}
