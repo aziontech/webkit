@@ -14,8 +14,10 @@ import State5 from '../../../../../../../packages/webkit/blocks/platform/view/qu
 import source5 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/failed.vue?raw'
 import State6 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/table-data.vue'
 import source6 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/table-data.vue?raw'
-import State7 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/create-database.vue'
-import source7 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/create-database.vue?raw'
+import State7 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/import-csv.vue'
+import source7 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/import-csv.vue?raw'
+import State8 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/create-database.vue'
+import source8 from '../../../../../../../packages/webkit/blocks/platform/view/query-editor/variants/create-database.vue?raw'
 
 export default {
   title: "Templates/Platform/View/QueryEditor",
@@ -24,7 +26,7 @@ export default {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
     docs: { canvas: { sourceState: 'shown' }, description: { component: "The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `TableRoot`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`." } },
-    webkit: {"block":"platform/view/query-editor","intents":["query editor","sql editor","run query","query results","sql query page","query history","sql code editor","código sql","editor de consultas","editor sql","executar consulta","sql database","database tables","database detail","table schema","data grid","sql templates","banco de dados","banco de dados sql","tabelas do banco","create database","criar banco de dados","table rows","linhas da tabela"],"skills":["webkit-layout","webkit-tables","webkit-ui-states"],"primary":"Tables"}
+    webkit: {"block":"platform/view/query-editor","intents":["query editor","sql editor","run query","query results","sql query page","query history","sql code editor","código sql","editor de consultas","editor sql","executar consulta","sql database","database tables","database detail","table schema","data grid","sql templates","banco de dados","banco de dados sql","tabelas do banco","create database","criar banco de dados","table rows","linhas da tabela","import csv","import data","csv import","importar csv","importar dados"],"skills":["webkit-layout","webkit-tables","webkit-ui-states"],"primary":"Tables"}
   }
 }
 
@@ -63,7 +65,12 @@ export const TableData = {
   parameters: { docs: { description: { story: "The events table in the Data view: 137 rows in a compact `TableRoot` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo." }, source: { code: source6 } } }
 }
 
-export const CreateDatabase = {
+export const ImportCsv = {
   render: () => ({ components: { Block: State7 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, over a save bar with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table." }, source: { code: source7 } } }
+  parameters: { docs: { description: { story: "An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped." }, source: { code: source7 } } }
+}
+
+export const CreateDatabase = {
+  render: () => ({ components: { Block: State8 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, over a save bar with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table." }, source: { code: source8 } } }
 }
