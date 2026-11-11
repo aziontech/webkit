@@ -13097,8 +13097,8 @@
     },
     {
      "name": "navigation",
-     "scope": "{ drawer: boolean }",
-     "notes": "The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact."
+     "scope": "{ drawer: boolean, closeNavigation: () => void }",
+     "notes": "The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. `closeNavigation` closes the drawer, e.g. after an item is chosen."
     },
     {
      "name": "header",
@@ -25179,7 +25179,10 @@
     "summary before submit",
     "revisar",
     "etapa de revisão",
-    "revisão antes de criar"
+    "revisão antes de criar",
+    "review before create",
+    "summary step",
+    "revisar antes de criar"
    ],
    "skills": [
     "webkit-create-surface",
@@ -25207,11 +25210,13 @@
     "PageHeader",
     "RadioButton",
     "SaveBar",
+    "SectionHeader",
     "SettingRow",
     "Stepper",
     "Switch",
     "Tag",
-    "Textarea"
+    "Textarea",
+    "toast"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -25229,11 +25234,13 @@
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/radio-button",
     "@aziontech/webkit/save-bar",
+    "@aziontech/webkit/section-header",
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/stepper",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/tag",
-    "@aziontech/webkit/textarea"
+    "@aziontech/webkit/textarea",
+    "@aziontech/webkit/toast"
    ],
    "primary": "WhereItRuns",
    "guidelinesSummary": "The page a first-level resource is created on one step at a time. The user first says where the resource runs, then answers each step's fields in order, and only reaches the create action on the last step. A rail on the left shows how far they are and lets them return to any step already reached; if the host they chose lacks a module the resource needs, a step is inserted that offers to turn it on, so nothing is created that would silently never be read.",
@@ -25245,6 +25252,10 @@
     {
      "name": "ListSettings",
      "summary": "The last step of a list bound to acme-production: the Type as wide RadioButton choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Create access list in the footer. Leaving the list empty flags it and marks the step red on the rail."
+    },
+    {
+     "name": "Review",
+     "summary": "The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as, the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step, marked red on the rail."
     }
    ],
    "file": "catalog/patterns/platform/create/multipage-create.json"
@@ -27007,7 +27018,7 @@
    "title": "Templates/Platform/Detail/DetailsPage",
    "source": "blocks/platform/detail/details-page/details-page.vue",
    "surface": "product",
-   "summary": "The Overview tab of a resource detail page: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview ends its breadcrumb on the environment picker and follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page sits in the same shell without tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Select`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `Flow`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`.",
+   "summary": "The Overview tab of a resource detail page: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview ends its breadcrumb on the environment picker and follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page sits in the same shell without tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The Application variant is a whole application page on the `AppLayout` shell with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Select`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `Flow`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`.",
    "intents": [
     "overview page",
     "resource overview",
@@ -27033,7 +27044,13 @@
     "visão geral",
     "details page",
     "resource details",
-    "página de detalhes"
+    "página de detalhes",
+    "application detail",
+    "application tabs",
+    "topology tab",
+    "deployment topology",
+    "detalhe da aplicação",
+    "topologia"
    ],
    "skills": [
     "webkit-layout",
@@ -27043,6 +27060,7 @@
    "components": [
     "Accordion",
     "Alert",
+    "AppLayout",
     "Avatar",
     "Brand",
     "Breadcrumb",
@@ -27055,6 +27073,7 @@
     "Drawer",
     "DrawerClose",
     "DrawerContent",
+    "DrawerDescription",
     "DrawerOverlay",
     "DrawerPortal",
     "DrawerTitle",
@@ -27088,12 +27107,15 @@
     "Tabs",
     "Tag",
     "ThemeSwitcher",
+    "toast",
     "ToggleGroup",
-    "Tooltip"
+    "Tooltip",
+    "TopologyDiagram"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
     "@aziontech/webkit/alert",
+    "@aziontech/webkit/app-layout",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb",
@@ -27106,6 +27128,7 @@
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-overlay",
     "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-title",
@@ -27139,8 +27162,10 @@
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/topology-diagram"
    ],
    "primary": "ResourceOverview",
    "guidelinesSummary": "The second-level page of one resource. The user arrives from a list row or a deploy flow to answer three questions about it: where it lives and whether it is serving, what it is made of, and what to do next. The page names the resource in the breadcrumb, splits its concerns into tabs, and opens the Overview tab on one summary card of facts, followed by whatever the resource needs next: Get started for a resource made from the CLI, the production checklist and topology for a service.",
@@ -27176,6 +27201,10 @@
     {
      "name": "DeploymentFailed",
      "summary": "A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment logs card with the Error status, open on the failed step with the rest skipped."
+    },
+    {
+     "name": "Application",
+     "summary": "An application on the `AppLayout` console shell with working tabs: Overview (the summary card with the live address, Visit and actions, the deployment, status, active version, framework, source and creation facts, and a band that sends settings changes to the active version), Versions and Deployments (a small `SectionHeader` over a `TableRoot` each), and Topology, where `TopologyDiagram` draws domain, workload, firewall, application and function instance. Binding or removing a firewall or function is staged: the tab row counts the changes in a warning `Tag`, Deploy opens a `Drawer` listing them, and the run reports through the async-submit toast with Edit (back to Topology) and Redeploy."
     }
    ],
    "file": "catalog/patterns/platform/detail/details-page.json"
@@ -27305,7 +27334,13 @@
     "records list",
     "zona dns",
     "registros dns",
-    "tabela de registros"
+    "tabela de registros",
+    "import zone file",
+    "zone file",
+    "bind import",
+    "import dns records",
+    "importar arquivo de zona",
+    "importar registros dns"
    ],
    "skills": [
     "webkit-tables",
@@ -27313,6 +27348,7 @@
     "webkit-navigation"
    ],
    "components": [
+    "Alert",
     "Avatar",
     "Badge",
     "Button",
@@ -27320,10 +27356,18 @@
     "Card",
     "Chip",
     "CopyButton",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerDescription",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
     "DropdownMenuGroup",
     "DropdownMenuOption",
     "DropdownMenuRoot",
     "DropdownMenuTrigger",
+    "FileDropzone",
     "HelperText",
     "IconButton",
     "Input",
@@ -27331,6 +27375,9 @@
     "ItemList",
     "PageHeader",
     "PageTabs",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
     "PopoverContent",
     "PopoverRoot",
     "PopoverTrigger",
@@ -27341,9 +27388,12 @@
     "TableRoot",
     "Tabs",
     "Tag",
+    "Textarea",
+    "toast",
     "Tooltip"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/badge",
     "@aziontech/webkit/button",
@@ -27351,10 +27401,18 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/chip",
     "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-description",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-option",
     "@aziontech/webkit/dropdown-menu-root",
     "@aziontech/webkit/dropdown-menu-trigger",
+    "@aziontech/webkit/file-dropzone",
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
@@ -27362,6 +27420,9 @@
     "@aziontech/webkit/item-list",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
     "@aziontech/webkit/popover-content",
     "@aziontech/webkit/popover-root",
     "@aziontech/webkit/popover-trigger",
@@ -27372,6 +27433,8 @@
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
+    "@aziontech/webkit/textarea",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip"
    ],
    "primary": "MainSettings",
@@ -27380,6 +27443,10 @@
     {
      "name": "Records",
      "summary": "The Records tab with the zone’s one A record, the ID column hidden by default."
+    },
+    {
+     "name": "ImportZoneFile",
+     "summary": "The Records tab with Import zone file open: a large `Drawer` that takes one BIND zone file from a `FileDropzone` (or Browse files) or pasted into a `Textarea`, parses it as it changes ($ORIGIN, $TTL with units, inherited names, quoted TXT) and previews every line in a `TableRoot` with its line number, name, type, value and a Ready, Skipped or Error `Tag`, the reason under the value. A polite status line counts ready, skipped and errors; errors raise a danger `Alert` saying the ready records still import. The SOA, the apex NS and unsupported types are skipped with their reason; a bad address or a missing value is an error. Import N records adds the ready ones to the table and reports through a toast that counts what was left out."
     }
    ],
    "file": "catalog/patterns/platform/detail/record-table.json"
@@ -27403,7 +27470,11 @@
     "revert version",
     "rollback version",
     "reverter versão",
-    "revertir versión"
+    "revertir versión",
+    "environment switcher",
+    "environment crumb",
+    "switch environment",
+    "seletor de ambiente"
    ],
    "skills": [
     "webkit-layout",
@@ -27502,6 +27573,10 @@
     {
      "name": "Revert",
      "summary": "An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed."
+    },
+    {
+     "name": "EnvironmentCrumb",
+     "summary": "The same version page reached from an environment: the breadcrumb reads Resources, the resource, then two `Select` crumbs. The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`."
     }
    ],
    "file": "catalog/patterns/platform/detail/version-detail.json"
@@ -27855,7 +27930,20 @@
     "excluir recurso",
     "alterado em outro lugar",
     "leave page guard",
-    "unsaved changes dialog"
+    "unsaved changes dialog",
+    "cache settings",
+    "cache policy",
+    "browser cache",
+    "edge cache",
+    "tiered cache",
+    "configurações de cache",
+    "protocol settings",
+    "https ports",
+    "http/3",
+    "tls version",
+    "mutual authentication",
+    "mtls",
+    "autenticação mútua"
    ],
    "skills": [
     "webkit-form",
@@ -27865,6 +27953,7 @@
    ],
    "components": [
     "Alert",
+    "AppLayout",
     "Avatar",
     "Brand",
     "Breadcrumb",
@@ -27877,9 +27966,12 @@
     "ConfirmDialog",
     "CopyButton",
     "Drawer",
+    "DrawerClose",
     "DrawerContent",
+    "DrawerDescription",
     "DrawerOverlay",
     "DrawerPortal",
+    "DrawerTitle",
     "DropdownMenu",
     "Field",
     "GlobalHeader",
@@ -27893,6 +27985,9 @@
     "NumberInput",
     "PageHeader",
     "PageTabs",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
     "PasswordInput",
     "RadioButton",
     "SaveBar",
@@ -27907,11 +28002,13 @@
     "Tag",
     "Textarea",
     "ThemeSwitcher",
+    "toast",
     "Tooltip",
     "use-unsaved-changes"
    ],
    "imports": [
     "@aziontech/webkit/alert",
+    "@aziontech/webkit/app-layout",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb",
@@ -27924,9 +28021,12 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-overlay",
     "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/field",
     "@aziontech/webkit/global-header",
@@ -27940,6 +28040,9 @@
     "@aziontech/webkit/number-input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
     "@aziontech/webkit/password-input",
     "@aziontech/webkit/radio-button",
     "@aziontech/webkit/save-bar",
@@ -27954,6 +28057,7 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-unsaved-changes"
    ],
@@ -27991,6 +28095,14 @@
     {
      "name": "DangerZone",
      "summary": "The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs."
+    },
+    {
+     "name": "CacheSettings",
+     "summary": "One cache setting of an application at /applications/:id/cache-settings/:name, on the `AppLayout` console shell: General (the name rules pick it by), Browser cache and Edge cache (behavior `Select`, the maximum TTL `NumberInput` only while overriding, stale cache, large file optimization with its fragment size, tiered cache with its topology) and the collapsed Advanced cache key band (HTTP methods in a `MultiSelect`, query string and cookie behavior with their allowlist or denylist). Each dependent row is indented under its switch or behavior. An edge TTL under 60 seconds or an empty list marks the field invalid with its reason; Save deploys the application and reports through the async-submit toast with Edit and Redeploy."
+    },
+    {
+     "name": "Protocols",
+     "summary": "The protocol settings of a workload on the `AppLayout` console shell: Protocols (HTTP ports, HTTPS support with its ports, HTTP/3 support with its ports, minimum TLS version and cipher suite) and Mutual authentication (off and explained until HTTPS is on; then the Enforce or Permissive mode as `Field` choice cards, the trusted CA certificate picker, a searchable `Select` with expiry beside each certificate and Upload certificate at its foot, which opens a `Drawer` that validates the name and the PEM and picks the new certificate, and the revocation lists). HTTP/3 turns HTTPS on, turning HTTPS off turns HTTP/3 and mutual authentication off. Save checks that each protocol has a port and that mutual authentication has a CA, then deploys through the async-submit toast with Edit and Redeploy."
     }
    ],
    "file": "catalog/patterns/platform/edit/edit-resource.json"
@@ -29713,7 +29825,7 @@
    "title": "Templates/Shells/Console",
    "source": "blocks/shells/console/console.vue",
    "surface": "product",
-   "summary": "The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; below `md` the rail becomes a Drawer opened from the hamburger that leads the wordmark. First-level lists, detail pages with their tabs and Home all render inside it. Built from `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd`, `Drawer` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.",
+   "summary": "The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; every state is framed by `AppLayout`, which measures its own width: below 768px it becomes compact, the rail moves into the layout's navigation drawer opened from the hamburger that leads the wordmark, and choosing an item closes it. First-level lists, detail pages with their tabs and Home all render inside it. Built from `AppLayout`, `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.",
    "intents": [
     "platform shell",
     "console shell",
@@ -29750,10 +29862,6 @@
     "ButtonHighlight",
     "Card",
     "Command",
-    "Drawer",
-    "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "DropdownMenu",
     "EmptyState",
     "GlobalHeader",
@@ -29781,10 +29889,6 @@
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
     "@aziontech/webkit/command",
-    "@aziontech/webkit/drawer",
-    "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/global-header",
@@ -29802,11 +29906,11 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "ListPage",
-   "guidelinesSummary": "The application shell every signed-in page renders inside. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: a navigation rail on the left (wordmark, the ⌘K palette, the grouped navigation, the account menu) and a content zone on the right headed by one global header (search, Create, Agent, the avatar). Pages render only their own content in the zone; this block's page bodies are stand-ins for `platform/view/table-view` and `platform/detail/details-page`.",
+   "guidelinesSummary": "The application shell every signed-in page renders inside, built on `AppLayout`. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: a navigation rail on the left (wordmark, the ⌘K palette, the grouped navigation, the account menu) and a content zone on the right headed by one global header (search, Create, Agent, the avatar). Pages render only their own content in the zone; this block's page bodies are stand-ins for `platform/view/table-view` and `platform/detail/details-page`.",
    "variants": [
     {
      "name": "DetailPage",
-     "summary": "A resource detail page: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it."
+     "summary": "A resource detail page on `AppLayout`: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it."
     },
     {
      "name": "Notifications",

@@ -98,6 +98,7 @@ An earlier version opened from Version history keeps the page read-only and says
 - Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
 - Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
 - VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
+- EnvironmentCrumb: a resource that is deployed to several environments. The breadcrumb ends on two crumbs, environment then version, each a small `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
 
 ## Related
 

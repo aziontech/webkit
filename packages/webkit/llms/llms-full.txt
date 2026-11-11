@@ -3811,12 +3811,12 @@ The code of every state is in [blocks/platform/create/deployment-flow.md](blocks
 - Surface: product
 - Source: `blocks/platform/create/multipage-create/multipage-create.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/multipage-create")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [Stepper](../../../components/stepper.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [SettingRow](../../../components/setting-row.md), [Stepper](../../../components/stepper.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
 
-multipage create; multi-step create page; stepper create; create wizard; step by step form; criação em etapas; formulário em etapas; review step; review and create; confirm before create; wizard review; summary before submit; revisar; etapa de revisão; revisão antes de criar
+multipage create; multi-step create page; stepper create; create wizard; step by step form; criação em etapas; formulário em etapas; review step; review and create; confirm before create; wizard review; summary before submit; revisar; etapa de revisão; revisão antes de criar; review before create; summary step; revisar antes de criar
 
 The page a first-level resource is created on one step at a time. The user first says where the resource runs, then answers each step's fields in order, and only reaches the create action on the last step. A rail on the left shows how far they are and lets them return to any step already reached; if the host they chose lacks a module the resource needs, a step is inserted that offers to turn it on, so nothing is created that would silently never be read.
 
@@ -3915,7 +3915,15 @@ A stacked row with a five-row `Textarea` whose label, placeholder and guidance f
 
 - WhereItRuns: the first step; the centred chooser of policies with search, module tags and the two escape routes.
 - ModuleOff: acme-staging was chosen with IP filtering off, so the IP filtering step shows the warning, the switch card and the note.
-- ListSettings: the last step; Type as radio choice cards and the List textarea, with Back and the create action in the footer. An empty list marks the step red on the rail.
+- ListSettings: the settings step; Type as radio choice cards and the List textarea. An empty list marks the step red on the rail.
+- Review: the last step, read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error.
+
+## Review step
+
+- Add a Review step when the create has three or more steps or binds the resource to something; skip it for a one-step create.
+- Show values as they will be sent, with the property name under each, and never show secrets in clear.
+- Put Edit on each band, not on each value; after the edit, Next walks forward through the later steps, already filled, back to Review.
+- Say plainly when nothing will read the resource yet (unbound, or a module off) with a warning `Alert`, not a disabled create.
 
 ## Related
 
@@ -3937,6 +3945,7 @@ A stacked row with a five-row `Textarea` whose label, placeholder and guidance f
 - `WhereItRuns` — primary (the code below)
 - `ModuleOff` — acme-staging was chosen with IP filtering off, so an IP filtering step follows Where it runs: a warning Alert, the Switch choice card that turns the module on with the list, and a note on what leaving it off means.
 - `ListSettings` — The last step of a list bound to acme-production: the Type as wide RadioButton choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Create access list in the footer. Leaving the list empty flags it and marks the step red on the rail.
+- `Review` — The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as, the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step, marked red on the rail.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/multipage-create", { variant })`, or the file under `blocks/platform/create/multipage-create/variants/`.
 
@@ -7203,17 +7212,17 @@ The code of every state is in [blocks/platform/detail/deployment-logs.md](blocks
 
 # DetailsPage (`platform/detail/details-page`)
 
-> The Overview tab of a resource detail page: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview ends its breadcrumb on the environment picker and follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page sits in the same shell without tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Select`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `Flow`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`.
+> The Overview tab of a resource detail page: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview ends its breadcrumb on the environment picker and follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page sits in the same shell without tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The Application variant is a whole application page on the `AppLayout` shell with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Select`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `Flow`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`.
 
 - Surface: product
 - Source: `blocks/platform/detail/details-page/details-page.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/details-page")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Flow](../../../components/flow.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [AppLayout](../../../components/app-layout.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Flow](../../../components/flow.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [TopologyDiagram](../../../components/topology-diagram.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
 
-overview page; resource overview; detail page; summary page; deployment detail; application overview; deployment failed; página de visão geral; detalhe do recurso; página de resumo; details page with tabs; versions tab; build tab; detalhe com abas; resource summary; summary card; overview card; resource facts; status card; resumo do recurso; cartão de resumo; visão geral; details page; resource details; página de detalhes
+overview page; resource overview; detail page; summary page; deployment detail; application overview; deployment failed; página de visão geral; detalhe do recurso; página de resumo; details page with tabs; versions tab; build tab; detalhe com abas; resource summary; summary card; overview card; resource facts; status card; resumo do recurso; cartão de resumo; visão geral; details page; resource details; página de detalhes; application detail; application tabs; topology tab; deployment topology; detalhe da aplicação; topologia
 
 The second-level page of one resource. The user arrives from a list row or a deploy flow to answer three questions about it: where it lives and whether it is serving, what it is made of, and what to do next. The page names the resource in the breadcrumb, splits its concerns into tabs, and opens the Overview tab on one summary card of facts, followed by whatever the resource needs next: Get started for a resource made from the CLI, the production checklist and topology for a service.
 
@@ -7256,6 +7265,13 @@ The last band, on the canvas fill, says what the user can do next in one sentenc
 ### F. Get started — `SectionHeader`, `ToggleGroup`, `Card`, `CodeBlock` (optional)
 
 For a resource made from the CLI, the `platform/detail/get-started` section follows the summary: a `SectionHeader` with the CLI or GitHub Actions `ToggleGroup`, then three numbered step `Card`s with a `CodeBlock` each.
+
+## Topology tab
+
+- Use `TopologyDiagram` for the path a request takes to the resource. The ServiceOverview state still composes its topology from `Flow` by hand; new pages use the component.
+- Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
+- Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
+- Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
 
 ## Do
 
@@ -7306,6 +7322,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - ServiceOverview: a service, with the environment picker in the breadcrumb, Deploy on the tab row, the production checklist and the deployment topology.
 - DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
 - DeploymentFailed: a deployment the rules rejected, the danger banner with Redeploy, Visit disabled and the logs open on the failed step.
+- Application: a whole application page on the `AppLayout` console shell (rail in `#navigation`, header with the Applications › name breadcrumb in `#header`), with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `TableRoot`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
 
 ## Related
 
@@ -7329,6 +7346,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - `ServiceOverview` — A service: the breadcrumb ends on its environment picker, the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the breadcrumb is hidden), the production checklist expands into a drawer, and the deployment topology runs from domains to storage with Bind controls on the open Policy and Error Page slots.
 - `DeploymentDetail` — A deployment that went live: the success banner, the Deployment details card with every fact and its Deployment Settings band for Default, and the Deployment logs card with the run duration and the Phased or Complete switch over the phased steps.
 - `DeploymentFailed` — A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment logs card with the Error status, open on the failed step with the rest skipped.
+- `Application` — An application on the `AppLayout` console shell with working tabs: Overview (the summary card with the live address, Visit and actions, the deployment, status, active version, framework, source and creation facts, and a band that sends settings changes to the active version), Versions and Deployments (a small `SectionHeader` over a `TableRoot` each), and Topology, where `TopologyDiagram` draws domain, workload, firewall, application and function instance. Binding or removing a firewall or function is staged: the tab row counts the changes in a warning `Tag`, Deploy opens a `Drawer` listing them, and the run reports through the async-submit toast with Edit (back to Topology) and Redeploy.
 
 Each variant is the same screen in another state: `get_pattern("platform/detail/details-page", { variant })`, or the file under `blocks/platform/detail/details-page/variants/`.
 
@@ -7555,12 +7573,12 @@ The code of every state is in [blocks/platform/detail/production-checklist.md](b
 - Surface: product
 - Source: `blocks/platform/detail/record-table/record-table.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/record-table")`
-- Components: [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Button](../../../components/button.md), `CalendarRoot`, [Card](../../../components/card.md), [Chip](../../../components/chip.md), [CopyButton](../../../components/copy-button.md), `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Button](../../../components/button.md), `CalendarRoot`, [Card](../../../components/card.md), [Chip](../../../components/chip.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [FileDropzone](../../../components/file-dropzone.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
 
-dns zone; dns records; record table; zone detail; nameservers; dnssec; records list; zona dns; registros dns; tabela de registros
+dns zone; dns records; record table; zone detail; nameservers; dnssec; records list; zona dns; registros dns; tabela de registros; import zone file; zone file; bind import; import dns records; importar arquivo de zona; importar registros dns
 
 The detail page of a resource that owns a long list of records, here a DNS zone. The user arrives from the zones index to do one of two jobs: adjust the zone itself (name, nameservers, DNSSEC, status) and save, or find, add, edit and delete the records the zone answers with. A tab bar splits the two jobs so the settings form and the records table never share a scroll.
 
@@ -7664,6 +7682,14 @@ An outlined small ellipsis `IconButton` named Row actions opens a menu placed `b
 
 - MainSettings: the Main settings tab with General, nameservers, DNSSEC and Status; the save bar appears on the first edit.
 - Records: the Records tab with the zone's one A record, the ID column hidden by default.
+- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `HelperText` under it) or is pasted into a `Textarea`. Every line is previewed in a `TableRoot`: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
+
+## Importing a zone file
+
+- Parse on the client as the text changes and preview every line before anything is written; never import on drop.
+- Name the line number on every row, so the user can fix the file.
+- Skip with a reason what the zone manages itself (SOA, apex NS) and types it does not support; mark as errors only values that are wrong.
+- Import what is ready even when some lines fail, and say in the toast how many were left out.
 
 ## Related
 
@@ -7677,6 +7703,7 @@ An outlined small ellipsis `IconButton` named Row actions opens a menu placed `b
 
 - `MainSettings` — primary (the code below)
 - `Records` — The Records tab with the zone’s one A record, the ID column hidden by default.
+- `ImportZoneFile` — The Records tab with Import zone file open: a large `Drawer` that takes one BIND zone file from a `FileDropzone` (or Browse files) or pasted into a `Textarea`, parses it as it changes ($ORIGIN, $TTL with units, inherited names, quoted TXT) and previews every line in a `TableRoot` with its line number, name, type, value and a Ready, Skipped or Error `Tag`, the reason under the value. A polite status line counts ready, skipped and errors; errors raise a danger `Alert` saying the ready records still import. The SOA, the apex NS and unsupported types are skipped with their reason; a bad address or a missing value is an error. Import N records adds the ready ones to the table and reports through a toast that counts what was left out.
 
 Each variant is the same screen in another state: `get_pattern("platform/detail/record-table", { variant })`, or the file under `blocks/platform/detail/record-table/variants/`.
 
@@ -7698,7 +7725,7 @@ The code of every state is in [blocks/platform/detail/record-table.md](blocks/pl
 
 ## Asked as
 
-version detail; resource version; draft version; version history; version switcher; versioned settings; detalhe da versão; histórico de versões; versão rascunho; revert version; rollback version; reverter versão; revertir versión
+version detail; resource version; draft version; version history; version switcher; versioned settings; detalhe da versão; histórico de versões; versão rascunho; revert version; rollback version; reverter versão; revertir versión; environment switcher; environment crumb; switch environment; seletor de ambiente
 
 One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed.
 
@@ -7798,6 +7825,7 @@ An earlier version opened from Version history keeps the page read-only and says
 - Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
 - Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
 - VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
+- EnvironmentCrumb: a resource that is deployed to several environments. The breadcrumb ends on two crumbs, environment then version, each a small `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
 
 ## Related
 
@@ -7813,6 +7841,7 @@ An earlier version opened from Version history keeps the page read-only and says
 - `Deployed` — The deployed version, read-only: the creation date beside the Deployed Tag, the settings fieldset disabled, and the version bar reading Viewing a deployed version and Read-only with its description, Add Version and Redeploy.
 - `VersionHistory` — The draft with Version history open beside it: the current version with its description, author and the pencil that edits it in place, the empty changes entry, and the five newest earlier versions with Show older for the rest.
 - `Revert` — An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed.
+- `EnvironmentCrumb` — The same version page reached from an environment: the breadcrumb reads Resources, the resource, then two `Select` crumbs. The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`.
 
 Each variant is the same screen in another state: `get_pattern("platform/detail/version-detail", { variant })`, or the file under `blocks/platform/detail/version-detail/variants/`.
 
@@ -8155,12 +8184,12 @@ The code of every state is in [blocks/platform/edit/code-editor.md](blocks/platf
 - Surface: product
 - Source: `blocks/platform/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/edit-resource")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [MultiSelect](../../../components/multi-select.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [PasswordInput](../../../components/password-input.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md), `use-unsaved-changes`
+- Components: [Alert](../../../components/alert.md), [AppLayout](../../../components/app-layout.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [MultiSelect](../../../components/multi-select.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../../components/password-input.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
 
-settings page; resource settings; settings tab; application settings; workload settings; firewall settings; edit settings; página de configurações; configurações do recurso; aba de configurações; save bar; unsaved changes bar; sticky save bar; discard and save; commit bar; barra de salvar; alterações não salvas; salvar alterações; edit resource; editar recurso; data stream; data stream settings; log streaming; stream destination; sampling; log template; configurações do data stream; envio de logs; streaming de logs; stale record; changed elsewhere; overwrite changes; conflict on save; danger zone; delete resource; type the name to confirm; zona de perigo; excluir recurso; alterado em outro lugar; leave page guard; unsaved changes dialog
+settings page; resource settings; settings tab; application settings; workload settings; firewall settings; edit settings; página de configurações; configurações do recurso; aba de configurações; save bar; unsaved changes bar; sticky save bar; discard and save; commit bar; barra de salvar; alterações não salvas; salvar alterações; edit resource; editar recurso; data stream; data stream settings; log streaming; stream destination; sampling; log template; configurações do data stream; envio de logs; streaming de logs; stale record; changed elsewhere; overwrite changes; conflict on save; danger zone; delete resource; type the name to confirm; zona de perigo; excluir recurso; alterado em outro lugar; leave page guard; unsaved changes dialog; cache settings; cache policy; browser cache; edge cache; tiered cache; configurações de cache; protocol settings; https ports; http/3; tls version; mutual authentication; mtls; autenticação mútua
 
 The settings page of one existing resource. The user comes here to change how the resource is named, what it runs with and whether it is active, review the change, and commit it or throw it away. Every field sits in a labeled section of the form column, and one save band appears only once something has changed, so the page reads as the resource's current state until the user edits it.
 
@@ -8297,7 +8326,18 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the form-error rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
+- CacheSettings: one cache setting of an application, on the `AppLayout` console shell; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the async-submit toast with Edit and Redeploy.
+- Protocols: the protocol settings of a workload, on the `AppLayout` console shell; ports per protocol, TLS version and cipher suite, then Mutual authentication. Mutual authentication stays off, with a helper line saying why, until HTTPS is on; once on it shows the mode as `Field` choice cards, the trusted CA picker (search, expiry beside each certificate, Upload certificate in its footer opening a `Drawer`) and the revocation lists. Save checks a port per protocol and a CA, then deploys through the async-submit toast with Edit and Redeploy.
 - UnsavedChanges (leave guard): the Settings tab carries the dirty dot, and switching tabs while dirty opens the Unsaved changes dialog.
+
+## Settings that deploy
+
+Some settings only take effect once the resource is deployed (cache settings of an application, protocols of a workload). For those:
+
+- Say so in the save bar hint, e.g. "Saving deploys storefront to Production."
+- On Save, validate first (field errors per the form-error rule), then run the deploy on its own: a loading toast while it runs, then the async-submit toast with **Edit** (back to the form, focus on its first field) and **Redeploy**. Never offer View deployments.
+- Keep the form usable while it runs; the baseline moves to the saved values only when the deploy succeeds.
+- Keep switches that depend on each other consistent in both directions, e.g. HTTP/3 turns HTTPS on and HTTPS off turns HTTP/3 and mutual authentication off.
 
 ## Related
 
@@ -8323,6 +8363,8 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - `DataStream` — The settings page of a data stream at /data-stream/:id/settings: General, Source (data source and the workloads it collects from), Sampling with its rate and the warning that sampling turns off the account's other streams, Template (a preset shown read-only in a CodeBlock, or a custom data set edited as JSON in a CodeEditor and checked on Save) and Destination, whose fields follow the connector (HTTP POST, Kafka, S3-compatible storage, log analytics). Save sends one test record; when the endpoint does not answer (in this demo, any host under .invalid) a danger Alert opens above Destination with Send test record, the URL turns invalid with its reason and takes the focus, and every other change stays.
 - `StaleRecord` — The record was saved by someone else after the form opened, and the form holds edits: a warning `Alert` above the sections says it changed elsewhere, with Reload. Save asks before it overwrites (Go back / Overwrite and save); Reload replaces the edits with the saved values and the notice turns into Edits discarded with Undo.
 - `DangerZone` — The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs.
+- `CacheSettings` — One cache setting of an application at /applications/:id/cache-settings/:name, on the `AppLayout` console shell: General (the name rules pick it by), Browser cache and Edge cache (behavior `Select`, the maximum TTL `NumberInput` only while overriding, stale cache, large file optimization with its fragment size, tiered cache with its topology) and the collapsed Advanced cache key band (HTTP methods in a `MultiSelect`, query string and cookie behavior with their allowlist or denylist). Each dependent row is indented under its switch or behavior. An edge TTL under 60 seconds or an empty list marks the field invalid with its reason; Save deploys the application and reports through the async-submit toast with Edit and Redeploy.
+- `Protocols` — The protocol settings of a workload on the `AppLayout` console shell: Protocols (HTTP ports, HTTPS support with its ports, HTTP/3 support with its ports, minimum TLS version and cipher suite) and Mutual authentication (off and explained until HTTPS is on; then the Enforce or Permissive mode as `Field` choice cards, the trusted CA certificate picker, a searchable `Select` with expiry beside each certificate and Upload certificate at its foot, which opens a `Drawer` that validates the name and the PEM and picks the new certificate, and the revocation lists). HTTP/3 turns HTTPS on, turning HTTPS off turns HTTP/3 and mutual authentication off. Save checks that each protocol has a port and that mutual authentication has a CA, then deploys through the async-submit toast with Edit and Redeploy.
 
 Each variant is the same screen in another state: `get_pattern("platform/edit/edit-resource", { variant })`, or the file under `blocks/platform/edit/edit-resource/variants/`.
 
@@ -10723,19 +10765,19 @@ The code of every state is in [blocks/platform/view/waf-tuning.md](blocks/platfo
 
 # Console (`shells/console`)
 
-> The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; below `md` the rail becomes a Drawer opened from the hamburger that leads the wordmark. First-level lists, detail pages with their tabs and Home all render inside it. Built from `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd`, `Drawer` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.
+> The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; every state is framed by `AppLayout`, which measures its own width: below 768px it becomes compact, the rail moves into the layout's navigation drawer opened from the hamburger that leads the wordmark, and choosing an item closes it. First-level lists, detail pages with their tabs and Home all render inside it. Built from `AppLayout`, `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.
 
 - Surface: product
 - Source: `blocks/shells/console/console.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/console")`
-- Components: [Alert](../../components/alert.md), [AppLayout](../../components/app-layout.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [Drawer](../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [Menu](../../components/menu.md), [PageTabs](../../components/page-tabs.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AppLayout](../../components/app-layout.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [Menu](../../components/menu.md), [PageTabs](../../components/page-tabs.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
 
 platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console; notifications panel; notifications drawer; notification center; central de notificações; painel de notificações
 
-The application shell every signed-in page renders inside. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: a navigation rail on the left (wordmark, the ⌘K palette, the grouped navigation, the account menu) and a content zone on the right headed by one global header (search, Create, Agent, the avatar). Pages render only their own content in the zone; this block's page bodies are stand-ins for `platform/view/table-view` and `platform/detail/details-page`.
+The application shell every signed-in page renders inside, built on `AppLayout`. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: a navigation rail on the left (wordmark, the ⌘K palette, the grouped navigation, the account menu) and a content zone on the right headed by one global header (search, Create, Agent, the avatar). Pages render only their own content in the zone; this block's page bodies are stand-ins for `platform/view/table-view` and `platform/detail/details-page`.
 
 ## When to use
 
@@ -10751,7 +10793,7 @@ The application shell every signed-in page renders inside. The user browses and 
 
 ### A. Rail — `Sidebar` (required)
 
-Full height, `resizable` by its edge and `collapsible` from its foot, with labelled resize and collapse controls (`Resize sidebar`, `Collapse sidebar`, `Expand sidebar`). Header holds the wordmark and the palette, body the navigation, footer the account. Below `md` the same `Sidebar` renders inside the navigation drawer (block R).
+Full height, `resizable` by its edge and `collapsible` from its foot, with labelled resize and collapse controls (`Resize sidebar`, `Collapse sidebar`, `Expand sidebar`). Header holds the wordmark and the palette, body the navigation, footer the account. While compact the same `Sidebar` renders inside the `AppLayout` navigation drawer (block S).
 
 ### B. Wordmark — `Brand` (required)
 
@@ -10779,7 +10821,7 @@ Names every icon-only control: the account menu, the navigation trigger, the col
 
 ### H. Icon actions — `IconButton` (required)
 
-The account menu trigger, the navigation trigger below `md`, search below `--container-2xl` (the `@2xl:` container variant), Create and Agent below `md`, and the page toolbar (Refresh, Download CSV, Columns).
+The account menu trigger, the navigation trigger while compact, search below `--container-2xl` (the `@2xl:` container variant), Create and Agent while compact, and the page toolbar (Refresh, Download CSV, Columns).
 
 ### I. Theme — `ThemeSwitcher` (required)
 
@@ -10787,7 +10829,7 @@ Inside the account menu, labelled `Theme`.
 
 ### J. Buttons — `Button` (required)
 
-Upgrade to Pro (`secondary`) in the account menu; Create (`primary`) in the header from `md`; the page's own actions in the stand-in body.
+Upgrade to Pro (`secondary`) in the account menu; Create (`primary`) in the header while not compact; the page's own actions in the stand-in body.
 
 ### K. System status — `StatusIndicator` (required)
 
@@ -10795,7 +10837,7 @@ At the foot of the account menu: `All systems normal` with `success` severity; s
 
 ### L. Header — `GlobalHeader` (required)
 
-One header, inside the content zone (an `@container`), `aria-label="Console"`. The breadcrumb names the location on every level from `md`: one unlinked crumb on a first-level page, the module and the resource from the second level (see the DetailPage state).
+One header, inside the content zone (an `@container`), `aria-label="Console"`. The breadcrumb names the location on every level while not compact: one unlinked crumb on a first-level page, the module and the resource from the second level (see the DetailPage state).
 
 ### M. Shortcut — `Kbd` (required)
 
@@ -10803,11 +10845,11 @@ One header, inside the content zone (an `@container`), `aria-label="Console"`. T
 
 ### N. Agent — `ButtonHighlight` (required)
 
-The AI assistant entry in the header from `md`.
+The AI assistant entry in the header while not compact.
 
 ### O. Location — `Breadcrumb` (required)
 
-In the header from `md`: `Resources` alone on the ListPage, with no link; module, resource and the environment `Select` on the DetailPage. A tab is never a crumb.
+In the header while not compact: `Resources` alone on the ListPage, with no link; module, resource and the environment `Select` on the DetailPage. A tab is never a crumb.
 
 ### P. Search field — `Input` (stand-in body)
 
@@ -10817,21 +10859,13 @@ The sample list's search, with a leading icon and an `aria-label`. The ListPage 
 
 Flush (`:padded="false"`), holding the table; the card is the only border.
 
-### R. Mobile navigation — `Drawer` (required below md)
+### R. Frame — `AppLayout` (required)
 
-Opened from the header trigger, small. Selecting an item closes it.
+Every state renders inside one `AppLayout`: the rail in `#navigation`, the header in `#header`, the page in the default slot (which scrolls on its own), flash messages in `#notifications` and the notifications list in `#tools`. The layout measures its own width, not the viewport's, so the shell turns compact in a narrow host (a split view, an embedded preview) the same way it does on a phone.
 
-### S. Drawer layer — `DrawerPortal` (required below md)
+### S. Compact navigation — `AppLayout` navigation drawer (required below `compactBelow`)
 
-Mounts the drawer at the document root.
-
-### T. Drawer backdrop — `DrawerOverlay` (required below md)
-
-Dims the page behind the open drawer.
-
-### U. Drawer panel — `DrawerContent` (required below md)
-
-`aria-label="Navigation"`, holding the same rail with brand, `Menu` and account footer.
+While compact, `AppLayout` renders the same `Sidebar` inside its navigation drawer, named `Navigation`; the `#navigation` scope's `drawer` flag drops the rail-only resize and collapse controls there. The header scope's `compact` swaps the breadcrumb for the hamburger and wordmark and `openNavigation` opens the drawer. Choosing a `Menu` item calls `closeNavigation` from the `#navigation` scope, so the drawer closes on every navigation. No page composes its own `Drawer` for the rail.
 
 ## Do
 
@@ -10865,9 +10899,9 @@ Dims the page behind the open drawer.
 
 ## States
 
-- ListPage: a first-level list page in the content zone; the header carries the single unlinked `Resources` crumb and the page opens on its controls row.
-- DetailPage: a resource detail page; the breadcrumb reads module, resource, then an environment Select, and a full-bleed tab bar carries Overview, Deployments and Settings with the outlined Deploy action.
-- Notifications: the bell opens the notifications region beside the content (a drawer when narrow), with unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState once cleared; the failed deploy also shows as a flash Alert above the page. This state is built on `AppLayout` (rail in `#navigation`, header in `#header`, flash in `#notifications`, list in `#tools`), which measures its own width, so the rail and the list become drawers in a narrow host. The bell's `aria-label` carries the unread count and the `Badge` on it is hidden from assistive technology.
+- ListPage: a first-level list page in the `AppLayout` default slot; the header carries the single unlinked `Resources` crumb and the page opens on its controls row.
+- DetailPage: a resource detail page in the same `AppLayout` frame. The breadcrumb reads module, resource, then the environment as a small `Select` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The default slot holds one `main` with a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`) that stays in view while the tab content scrolls under it.
+- Notifications: the bell opens the notifications region beside the content (a drawer when narrow), with unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState once cleared; the failed deploy also shows as a flash Alert above the page. The flash sits in `#notifications` and the list in `#tools`, so both the rail and the list become drawers in a narrow host. The bell's `aria-label` carries the unread count and the `Badge` on it is hidden from assistive technology.
 
 ## Related
 
@@ -10878,7 +10912,7 @@ Dims the page behind the open drawer.
 ## Variants
 
 - `ListPage` — primary (the code below)
-- `DetailPage` — A resource detail page: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it.
+- `DetailPage` — A resource detail page on `AppLayout`: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it.
 - `Notifications` — The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up.
 
 Each variant is the same screen in another state: `get_pattern("shells/console", { variant })`, or the file under `blocks/shells/console/variants/`.
@@ -25998,7 +26032,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ## Do
 
 - One `AppLayout` per page, at the root. Do not nest them.
-- Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer.
+- Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer; call `closeNavigation` from the scope when an item is chosen in the drawer.
 - Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.
 - Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.
 - Use the split panel for the selected item of a collection. Close it when the selection clears.
@@ -26053,7 +26087,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | The page content (the consumer's `<main>`). Scrolls on its own. |
-| `navigation` | { drawer: boolean } | The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. |
+| `navigation` | { drawer: boolean, closeNavigation: () => void } | The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. `closeNavigation` closes the drawer, e.g. after an item is chosen. |
 | `header` | { compact: boolean, openNavigation: () => void, toggleNavigation: () => void, toggleTools: () => void } | The global header, above content, tools and split panel. |
 | `notifications` | — | Flash messages (`Alert`) above the breadcrumbs and the content; stays in place while content scrolls. |
 | `breadcrumbs` | — | Breadcrumbs above the content, inside the scroll area. |

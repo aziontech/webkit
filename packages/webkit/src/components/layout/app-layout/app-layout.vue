@@ -71,7 +71,7 @@
     /** The page content (the consumer's main). Scrolls on its own. */
     default(): unknown
     /** The navigation rail; rendered beside the content, or in the navigation drawer when compact. */
-    navigation?(props: { drawer: boolean }): unknown
+    navigation?(props: { drawer: boolean; closeNavigation: () => void }): unknown
     /** The global header. */
     header?(props: {
       compact: boolean
@@ -202,6 +202,9 @@
   const openNavigation = () => {
     if (compact.value) navDrawerOpen.value = true
     else navigationOpen.value = true
+  }
+  const closeNavigation = () => {
+    navDrawerOpen.value = false
   }
   const toggleNavigation = () => {
     if (compact.value) navDrawerOpen.value = !navDrawerOpen.value
@@ -351,6 +354,7 @@
       <slot
         name="navigation"
         :drawer="false"
+        :close-navigation="closeNavigation"
       />
     </div>
 
@@ -565,6 +569,7 @@
           <slot
             name="navigation"
             :drawer="true"
+            :close-navigation="closeNavigation"
           />
         </DrawerContent>
       </DrawerPortal>

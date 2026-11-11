@@ -102,6 +102,14 @@ An outlined small ellipsis `IconButton` named Row actions opens a menu placed `b
 
 - MainSettings: the Main settings tab with General, nameservers, DNSSEC and Status; the save bar appears on the first edit.
 - Records: the Records tab with the zone's one A record, the ID column hidden by default.
+- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `HelperText` under it) or is pasted into a `Textarea`. Every line is previewed in a `TableRoot`: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
+
+## Importing a zone file
+
+- Parse on the client as the text changes and preview every line before anything is written; never import on drop.
+- Name the line number on every row, so the user can fix the file.
+- Skip with a reason what the zone manages itself (SOA, apex NS) and types it does not support; mark as errors only values that are wrong.
+- Import what is ready even when some lines fail, and say in the toast how many were left out.
 
 ## Related
 

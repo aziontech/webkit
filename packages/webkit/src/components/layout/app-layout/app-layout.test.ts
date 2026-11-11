@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { h } from 'vue'
 
@@ -19,12 +19,20 @@ const layout = (props: Record<string, unknown> = {}, width = 1200, dir = 'ltr') 
         AppLayout,
         { style: { height: '800px' }, ...props },
         {
-          navigation: ({ drawer }: { drawer: boolean }) =>
+          navigation: ({
+            drawer,
+            closeNavigation
+          }: {
+            drawer: boolean
+            closeNavigation: () => void
+          }) => [
             h(
               'nav',
               { 'aria-label': 'Main navigation', 'data-drawer': String(drawer) },
               'nav links'
             ),
+            h('button', { type: 'button', onClick: closeNavigation }, 'Pick item')
+          ],
           header: (scope: Scope) =>
             h('header', [
               h('span', { 'data-testid': 'compact' }, String(scope.compact)),
@@ -137,6 +145,15 @@ describe('AppLayout', () => {
     const dialog = await findByRole('dialog', { name: 'Navigation' })
     expect(dialog.textContent).toContain('nav links')
     expect(dialog.querySelector('[data-drawer="true"]')).toBeTruthy()
+  })
+
+  it('closes the navigation drawer from the navigation scope', async () => {
+    const { getByTestId, getByText, findByRole, queryByRole } = render(layout({}, 500))
+    await waitFor(() => expect(getByTestId('compact').textContent).toBe('true'))
+    await fireEvent.click(getByText('Open navigation'))
+    const dialog = await findByRole('dialog', { name: 'Navigation' })
+    await fireEvent.click(within(dialog).getByRole('button', { name: 'Pick item' }))
+    await waitFor(() => expect(queryByRole('dialog', { name: 'Navigation' })).toBeNull())
   })
 
   it('forces the split panel to the bottom while compact', async () => {
