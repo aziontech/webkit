@@ -67,6 +67,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: the control itself is 36×20 — the consumer is responsible for placing it inside a ≥40×40 hit area (typically a horizontal `Field`, whose label extends the target). The component still exposes a clickable root.
+- Forced colors: the track border is `CanvasText` (`Highlight` when checked) and the handle opts out of forced colour adjustment (`forced-color-adjust: none`) to paint `CanvasText`, `Highlight` when checked and `GrayText` when disabled; without it the handle's background is forced to `Canvas` and disappears into the track. Tests: `src/test/forced-colors.test.ts`.
 
 ## Examples
 

@@ -93,7 +93,9 @@
   const focusInitial = () => {
     const el = root.value
     if (!el) return
-    const search = el.querySelector<HTMLElement>('input:not([disabled])')
+    const search = el.querySelector<HTMLElement>(
+      'input:not([type="checkbox"]):not([type="radio"]):not([disabled])'
+    )
     const target =
       search ??
       el.querySelector<HTMLElement>('[role="option"][aria-selected="true"]:not([data-disabled])') ??

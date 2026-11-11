@@ -163,7 +163,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/documentation/doc-page-header/doc-page-header.vue",
-    "limit": "26.5 KB"
+    "limit": "26.8 KB"
   },
   {
     "name": "doc-on-this-page",
@@ -430,7 +430,7 @@
   {
     "name": "comparison-table",
     "path": "src/components/sections/comparison-table/comparison-table.vue",
-    "limit": "22 KB"
+    "limit": "22.25 KB"
   },
   {
     "name": "compare-plans",
@@ -520,7 +520,7 @@
   {
     "name": "listing-browser",
     "path": "src/components/sections/listing-browser/listing-browser.vue",
-    "limit": "64.75 KB"
+    "limit": "65.1 KB"
   },
   {
     "name": "platform-directory",
@@ -589,7 +589,7 @@
   {
     "name": "listing-table",
     "path": "src/components/sections/listing-table/listing-table.vue",
-    "limit": "56 KB"
+    "limit": "56.25 KB"
   },
   {
     "name": "site-footer",
@@ -760,7 +760,7 @@
   {
     "name": "hotspot",
     "path": "src/components/content/hotspot/hotspot.vue",
-    "limit": "11.25 KB"
+    "limit": "11.4 KB"
   },
   {
     "name": "tutorial-panel",
@@ -955,7 +955,7 @@
   {
     "name": "confirm-dialog",
     "path": "src/components/overlay/confirm-dialog/confirm-dialog.vue",
-    "limit": "23.8 KB"
+    "limit": "24.1 KB"
   },
   {
     "name": "webkit-provider",

@@ -13,7 +13,7 @@
   {
    "name": "Invalid",
    "summary": "",
-   "sfc": "<script setup>\n  import Textarea from '@aziontech/webkit/textarea'\n  import { ref } from 'vue'\n\n  const value = ref('Text Filled')\n</script>\n\n<template>\n  <Textarea\n    v-model=\"value\"\n    invalid\n  />\n</template>"
+   "sfc": "<script setup>\n  import Textarea from '@aziontech/webkit/textarea'\n  import { ref } from 'vue'\n\n  const value = ref('Text Filled')\n</script>\n\n<template>\n  <Textarea\n    v-model=\"value\"\n    aria-label=\"Description\"\n    invalid\n  />\n</template>"
   }
  ]
 }

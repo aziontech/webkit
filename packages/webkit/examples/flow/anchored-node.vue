@@ -10,7 +10,7 @@
         class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-overlay)"
       >
         <Flow.Anchor type="end">
-          <div class="flex h-10 items-center px-(--spacing-sm) text-label-md text-(--text-muted)">
+          <div class="flex h-10 items-center px-(--spacing-sm) text-label-md text-(--text-default)">
             my-worker
           </div>
         </Flow.Anchor>

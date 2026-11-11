@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Binary selection control. Supports a single boolean (`binary: true`) and array-based multi-select (adds or removes its `value` in the `modelValue` array) (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) and sets `aria-checked=\"mixed\"` — used by parents that own a partial-selection summary (e.g. \"select all\" rows where some children are selected). Aligned with Figma frame `2027:7311`.",
+ "purpose": "Binary selection control. Supports a single boolean (`binary: true`) and array-based multi-select (adds or removes its `value` in the `modelValue` array) (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) and sets the native `indeterminate` property, which exposes the mixed state — used by parents that own a partial-selection summary (e.g. \"select all\" rows where some children are selected). Aligned with Figma frame `2027:7311`.",
  "setup": null,
  "useWhen": [
   "A bare boolean control whose label lives outside it: a table row-selection cell, an option row in a list, a settings matrix.",
@@ -30,7 +30,7 @@
  "bestPractices": [
   "Set `binary` for a plain true/false value; without it the checkbox adds or removes its `value` in an array `modelValue`.",
   "Give every checkbox an accessible name: point a `label` element's `for` at `inputId`, or pass `aria-label` (attributes land on the inner input).",
-  "indeterminate` only changes the visual and sets `aria-checked=\"mixed\"`; the parent computes it and decides what a click does.",
+  "indeterminate` only changes the visual and sets the native `indeterminate` property (exposed as mixed); the parent computes it and decides what a click does.",
   "Use `readonly` for a value that cannot change in this context and `disabled` for an option that is unavailable."
  ],
  "props": [

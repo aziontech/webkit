@@ -121,6 +121,7 @@
     <NumberInput
       v-model="small"
       size="small"
+      aria-label="Quantity, small"
       :min="0"
       :max="9"
       :step="1"
@@ -128,6 +129,7 @@
     <NumberInput
       v-model="medium"
       size="medium"
+      aria-label="Quantity, medium"
       :min="0"
       :max="99"
       :step="5"
@@ -135,6 +137,7 @@
     <NumberInput
       v-model="large"
       size="large"
+      aria-label="Quantity, large"
       :min="0"
       :max="1000"
       :step="50"
@@ -157,6 +160,7 @@
   <div class="w-[20rem]">
     <NumberInput
       v-model="value"
+      aria-label="Quantity"
       disabled
     />
   </div>

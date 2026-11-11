@@ -86,7 +86,8 @@
     close: closeDialog,
     titleId: `${uid}-title`,
     descriptionId: `${uid}-description`,
-    triggerRef
+    triggerRef,
+    returnFocusRef
   })
 </script>
 

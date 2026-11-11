@@ -200,7 +200,7 @@ describe('Tabs (composition)', () => {
         props: { value: 'a', label: 'Alpha' }
       })
 
-      await fireEvent.click(getByRole('tab'))
+      await fireEvent.click(getByRole('button'))
 
       const events = emitted().click
       expect(events).toHaveLength(1)
@@ -212,7 +212,7 @@ describe('Tabs (composition)', () => {
         props: { value: 'a', label: 'Alpha', disabled: true }
       })
 
-      await fireEvent.click(getByRole('tab'))
+      await fireEvent.click(getByRole('button'))
 
       expect(emitted().click).toBeUndefined()
     })
@@ -257,7 +257,7 @@ describe('Tabs (composition)', () => {
         props: { value: 'a', label: 'Alpha', dirty: true }
       })
 
-      const tab = getByRole('tab')
+      const tab = getByRole('button')
       expect(tab.hasAttribute('data-dirty')).toBe(true)
       expect(getByTestId('navigation-tabs-item__dirty').getAttribute('aria-hidden')).toBe('true')
       expect(tab.textContent).toContain('Unsaved changes')
