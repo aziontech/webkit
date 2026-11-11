@@ -1,0 +1,29 @@
+{
+ "purpose": "An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes. The same strip can instead print short claims, each with an optional leading icon, for the benefits line that floors a closing band.",
+ "useWhen": [
+  "Under a hero, to name the companies a product already serves (\"Trusted by mission-critical workloads\").",
+  "To state compatibility as a list of framework, cloud and tooling marks (\"Your Stack, Your Way\").",
+  "Whenever the set of marks is longer than the row that holds it and no single mark has to be read.",
+  "To run a handful of short benefits (\"Deploy to 330+ cities instantly\") along the floor of a closing band, where each claim restates what the band above already argues."
+ ],
+ "avoidWhen": [
+  "When every mark must be seen → use `logo-wall`, which wraps into a grid and never moves.",
+  "When the reader chooses how far to go through browsable content → use `carousel`, which is user-driven and never advances on its own.",
+  "For a mark a reader must act on, such as a partner directory → the strip is decorative motion, so put linked marks in a `logo-wall`.",
+  "For one mark in its own right (a header lockup, a client story card) → use `brand`."
+ ],
+ "related": [
+  "logo-wall` — the static, wrapping grid of consumer-supplied marks; reach for the strip only when the wall would be too long.",
+  "carousel` — the user-driven snap scroller; this one moves on its own and holds no essential content.",
+  "brand` — the Azion lockup, for the product's own mark rather than a third party's.",
+  "overline` — renders the `label` above the row."
+ ],
+ "bestPractices": [
+  "Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete.",
+  "Let `duration` derive itself. The component holds speed constant rather than duration (two seconds per mark, six per item, since a claim is read and a mark is not), so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.",
+  "Keep `label` to the claim the row makes, not to a heading — the strip sits under a hero, and a second heading competes with the one above it.",
+  "Use `size=\"small\"` only where the strip is the quietest thing on the page, such as the floor of a sign-in column; `medium` is the marketing band and carries its own responsive ladder.",
+  "Keep each `items` label to a short clause with no punctuation to end it, and give every item the same kind of icon; the row repeats, so a claim is read as one of a run, never on its own.",
+  "Never put a call to action, a price or anything else a reader needs inside a strip. It scrolls away, and under `prefers-reduced-motion` it becomes a wrapped grid instead."
+ ]
+}

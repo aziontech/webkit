@@ -1,0 +1,29 @@
+{
+ "purpose": "Interactive control for user actions. Lives at `packages/webkit/src/components/actions/button/`.",
+ "useWhen": [
+  "Trigger an action that needs a visible text label: in a form, dialog footer, toolbar or page header.",
+  "Mark the main action of a view with `kind=\"primary\"` and the lesser ones with `secondary`, `outlined` or `transparent`.",
+  "Submit or reset a form with `type=\"submit\"` / `type=\"reset\"`.",
+  "A call to action that navigates: set `href` (and `target`) and it renders as an anchor with the same look."
+ ],
+ "avoidWhen": [
+  "The control is icon-only → use `icon-button`.",
+  "One default action with related alternatives in an attached menu → use `split-button`.",
+  "A standalone navigation link with a trailing icon and a ghost hover → use `link`.",
+  "The single AI or highlight entry point that must stand out from every other action → use `button-highlight`."
+ ],
+ "related": [
+  "icon-button` — icon-only counterpart with the same sizes and a required `ariaLabel`; its `transparent` kind matches this one.",
+  "split-button` — joins a Button to a chevron menu of related actions.",
+  "button-highlight` — the same prop surface without `kind`, drawn with the brand gradient and a rotating glow rim.",
+  "mini-button` — compact text action with a brand-colored trailing icon for dense cards and tables.",
+  "toggle-group` — a group of mutually exclusive options, not a single action."
+ ],
+ "bestPractices": [
+  "Keep one `kind=\"primary\"` per view or region; use `danger` only for destructive actions.",
+  "Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.",
+  "Use `iconPosition=\"leading\"` for a glyph that names the action and `\"trailing\"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.",
+  "Put brand or product marks in the `prefix` slot; `icon` takes a PrimeIcons class.",
+  "label` is required and is the accessible name; never pass an empty string to get an icon-only control."
+ ]
+}

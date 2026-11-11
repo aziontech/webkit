@@ -5,8 +5,9 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import CustomField from '../../../../examples/schema-form/custom-field.vue'
 import Default from '../../../../examples/schema-form/default.vue'
 import WithValidation from '../../../../examples/schema-form/with-validation.vue'
-import { BUILT_IN_CATALOGS, provideLocale } from '../../../composables/use-locale'
+import { en, provideLocale } from '../../../composables/use-locale'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import { buildNodes, seedDefaults, validateNode } from './schema'
 import SchemaForm from './schema-form.vue'
 
@@ -207,7 +208,7 @@ describe('SchemaForm', () => {
 
   it('uses the locale catalog for built-in messages', async () => {
     const Wrapper = defineComponent(() => {
-      provideLocale({ locale: 'pt-BR', catalogs: BUILT_IN_CATALOGS })
+      provideLocale({ locale: 'pt-BR', catalogs: { en, ...LOCALES } })
       return () => h(SchemaForm, { schema, modelValue: {} })
     })
     const view = render(Wrapper)

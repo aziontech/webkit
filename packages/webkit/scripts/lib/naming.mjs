@@ -72,10 +72,14 @@ function segmentProblem(segment) {
   return null
 }
 
+const LOCALE_TAG = /^[a-z]{2,3}(-[A-Z]{2})?$/
+
 export function checkSubpaths(subpaths) {
   const errors = []
   for (const sub of subpaths) {
-    for (const segment of sub.split('/')) {
+    const segments = sub.split('/')
+    for (const [i, segment] of segments.entries()) {
+      if (i === 1 && segments[0] === 'locales' && LOCALE_TAG.test(segment)) continue
       const problem = segmentProblem(segment)
       if (problem) errors.push(`export "./${sub}": segment "${segment}" ${problem}`)
     }

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import SeverityTag from './severity-tag.vue'
 
@@ -75,7 +76,7 @@ describe('SeverityTag', () => {
       setup: () => () =>
         h(
           WebkitProvider,
-          { locale: 'pt-BR' },
+          { locale: 'pt-BR', catalogs: LOCALES },
           { default: () => h(SeverityTag, { severity: 'low' }) }
         )
     })

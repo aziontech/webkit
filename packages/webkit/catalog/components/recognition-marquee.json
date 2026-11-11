@@ -1,0 +1,18 @@
+{
+ "purpose": "The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover or focus. It is a page section — the site places it from a `{ _id: 'recognition-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `quote`.",
+ "useWhen": [
+  "To list analyst reports and awards on a page that needs third-party proof."
+ ],
+ "avoidWhen": [
+  "For office photos → use `photo-marquee`.",
+  "For customer quotes → use `client-quotes`."
+ ],
+ "related": [
+  "quote` — the signed card each recognition renders with.",
+  "photo-marquee` — the sibling strip of pictures with the same loop."
+ ],
+ "bestPractices": [
+  "Five to eight items; the loop needs enough width to read as continuous.",
+  "Leave `duration` at `0` to let the strip pace itself (twelve seconds per item)."
+ ]
+}

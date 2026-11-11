@@ -1,0 +1,26 @@
+{
+ "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `DropdownMenu` owns open/closed state, positioning, focus return, and keyboard navigation; `DropdownMenu.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `DropdownMenu.Group` groups options under an optional label; `DropdownMenu.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `DropdownMenu` in the project, in `navigation/`.",
+ "useWhen": [
+  "A menu of actions opened from a button: row actions, an account menu, an overflow (\"more\") menu.",
+  "Options grouped under section labels, optionally with keyboard-shortcut hints."
+ ],
+ "avoidWhen": [
+  "Choosing a value that a form submits → use `select` (inside a `field` for a label).",
+  "A primary action joined to a menu of alternatives → use `split-button`.",
+  "A searchable palette of commands → use `command`.",
+  "Free-form or interactive content such as forms or filters → use `popover`.",
+  "Vertical application navigation → use `menu`."
+ ],
+ "related": [
+  "split-button` — composes `DropdownMenu` for its chevron menu.",
+  "select` — form control with a field trigger and a bound value.",
+  "popover` — same trigger and anchoring model, with free-form content instead of option rows.",
+  "command` — modal ⌘K palette with search and filtering."
+ ],
+ "bestPractices": [
+  "Give every `DropdownMenu.Option` a unique `value` and handle the root `select` event as `(event, value)`. The panel closes and focus returns to the trigger on its own.",
+  "selected` is a display flag. The dropdown never sets it, so derive it from your own state.",
+  "Use the `command` prop or the `right` slot on an option, not both. A `command` shortcut is live only while the panel is open.",
+  "Add a `label` to each `DropdownMenu.Group` when there is more than one group. Put search in the root `top` slot and footer actions in `bottom`; those regions stay outside the scrolling list."
+ ]
+}

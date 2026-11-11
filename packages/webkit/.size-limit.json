@@ -103,7 +103,7 @@
   {
     "name": "doc-callout",
     "path": "src/components/documentation/doc-callout/doc-callout.vue",
-    "limit": "6.3 KB"
+    "limit": "6.7 KB"
   },
   {
     "name": "doc-card",
@@ -829,7 +829,7 @@
   {
     "name": "wizard-root",
     "path": "src/components/navigation/wizard/wizard.vue",
-    "limit": "6.3 KB"
+    "limit": "6.7 KB"
   },
   {
     "name": "wizard-step",
@@ -934,7 +934,17 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "14.4 KB"
+    "limit": "6.7 KB"
+  },
+  {
+    "name": "locales-pt-BR",
+    "path": "src/locales/pt-BR.ts",
+    "limit": "6.1 KB"
+  },
+  {
+    "name": "locales-es",
+    "path": "src/locales/es.ts",
+    "limit": "6.15 KB"
   },
   {
     "name": "phone-input",

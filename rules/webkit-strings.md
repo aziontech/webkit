@@ -11,8 +11,10 @@ default, is stuck in one language and drifts from the rest of the product.
 - Leave a component's built-in text alone. `<Pagination>` already says "Previous page" and
   "Página anterior"; `<Dialog>` already names its close button; `<Kbd key-name="escape" />` prints
   `Esc` from the catalog.
-- Set the language once, at the app root: `<WebkitProvider locale="pt-BR">`. Every component
-  below it switches, dates and numbers included (`Intl` through the same locale).
+- Set the language once, at the app root: `<WebkitProvider locale="pt-BR" :catalogs="{ 'pt-BR': ptBR }">`,
+  with `ptBR` from `@aziontech/webkit/locales/pt-BR` (`es` from `/locales/es`; English is built
+  in). Every component below it switches, dates and numbers included (`Intl` through the same
+  locale).
 - Rename a built-in string for the whole app with `messages` on `WebkitProvider`:
   `:messages="{ wizard: { submit: 'Deploy' }, kbd: { ctrl: 'Strg' } }"`. The keys are the
   catalog's (`group.key`); anything you leave out keeps the built-in text.
@@ -38,6 +40,7 @@ default, is stuck in one language and drifts from the rest of the product.
 
 ```vue
 <script setup lang="ts">
+  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import Wizard from '@aziontech/webkit/wizard'
   import { ref } from 'vue'
@@ -49,6 +52,7 @@ default, is stuck in one language and drifts from the rest of the product.
 <template>
   <WebkitProvider
     locale="pt-BR"
+    :catalogs="{ 'pt-BR': ptBR }"
     :messages="messages"
   >
     <Wizard

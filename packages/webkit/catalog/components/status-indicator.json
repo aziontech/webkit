@@ -1,0 +1,25 @@
+{
+ "purpose": "Communicates status, alerts, or progress to the user. Lives at `packages/webkit/src/components/feedback/status-indicator/`.",
+ "useWhen": [
+  "The state of a resource in a table cell, a list row or a detail header: Active, Failed, Paused.",
+  "A transitional state such as Deploying or Propagating, with `loading`."
+ ],
+ "avoidWhen": [
+  "A count or a very short label attached to another element → use `badge`.",
+  "A category or status chip with an optional icon → use `tag`.",
+  "A page or section notice with copy and actions → use `message`.",
+  "Measurable progress → use `progress`."
+ ],
+ "related": [
+  "badge` — filled count indicator, usually overlaid on an icon or avatar.",
+  "tag` — labelled chip for categories and statuses.",
+  "spinner` — replaces the dot while `loading` is true.",
+  "progress` — continuous progress instead of a discrete state."
+ ],
+ "bestPractices": [
+  "Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.",
+  "Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens, `neutral` is muted, and `alt` uses the primary color.",
+  "With `loading`, pass the bare verb (`\"Deploying\"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner.",
+  "It is a non-interactive `role=\"status\"` element with no click or keyboard behavior. Don't attach handlers to it."
+ ]
+}

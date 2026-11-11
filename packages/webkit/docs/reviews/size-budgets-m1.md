@@ -134,3 +134,17 @@ Two entries changed and seven new entries were set for M2.9 WP app-layout. `Char
 ### M2 merge (app-layout): webkit-provider → 14.4 KB
 
 Temporary, as above; closed by the opt-in locale entries (M2.10).
+
+### M2.10: webkit-provider 13.3 → 6.3 KB, two locale entries
+
+`WebkitProvider` now ships only the English catalog. Portuguese and Spanish are opt-in entries (`@aziontech/webkit/locales/pt-BR`, `/locales/es`) that the app imports and passes through the provider's `catalogs` prop, so they are static imports and SSR stays deterministic. The budgets below are measured + ~0.2 KB. Each locale entry is pure copy and grows with every component's strings; that is the expected cost and no longer lands on apps that run in English only.
+
+| Entry           | Before (KB) | Measured (KB) | Budget (KB) | Why                                         |
+| --------------- | ----------- | ------------- | ----------- | ------------------------------------------- |
+| webkit-provider | 13.16       | 6.10          | 6.3         | Lowered: pt-BR and es left the provider.    |
+| locales-pt-BR   | –           | 5.44          | 5.65        | New: the Portuguese (Brazil) catalog alone. |
+| locales-es      | –           | 5.49          | 5.7         | New: the Spanish catalog alone.             |
+
+### Locales merge with app-layout
+
+The app-layout strings (merged in parallel) grow the English catalog the provider ships and the two locale entries: webkit-provider 6.7 KB, locales-pt-BR 6.1 KB, locales-es 6.15 KB (measured + ~0.2 KB). These three entries grow with every component that adds built-in strings; that growth is expected.

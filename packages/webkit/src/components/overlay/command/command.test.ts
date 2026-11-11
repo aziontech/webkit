@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import Command from './command.vue'
 import CommandEmpty from './command-empty/command-empty.vue'
@@ -398,9 +399,9 @@ describe('Command key names follow the locale', () => {
   const localized = (locale: string) =>
     defineComponent({
       components: { WebkitProvider, Command, CommandInput, CommandList, CommandItem },
-      setup: () => ({ open: ref(true), locale }),
+      setup: () => ({ open: ref(true), locale, catalogs: LOCALES }),
       template: `
-        <WebkitProvider :locale="locale">
+        <WebkitProvider :locale="locale" :catalogs="catalogs">
           <Command v-model:open="open">
             <CommandInput placeholder="Search" />
             <CommandList>

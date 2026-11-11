@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import PromptInput from './prompt-input.vue'
 
@@ -148,7 +149,8 @@ describe('PromptInput', () => {
   it('reads its strings from the provider locale', () => {
     const { getByRole } = render(
       defineComponent({
-        setup: () => () => h(WebkitProvider, { locale: 'es' }, { default: () => h(PromptInput) })
+        setup: () => () =>
+          h(WebkitProvider, { locale: 'es', catalogs: LOCALES }, { default: () => h(PromptInput) })
       })
     )
     expect(getByRole('textbox')).toHaveAttribute('placeholder', 'Haz una pregunta')

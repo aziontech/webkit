@@ -3,10 +3,11 @@
 
   import {
     type DirectionSetting,
+    type Messages,
     type PartialMessages,
     provideLocale
   } from '../../../composables/use-locale'
-  import { BUILT_IN_CATALOGS } from '../../../i18n/catalogs'
+  import { en } from '../../../i18n/messages/en'
 
   defineOptions({
     name: 'WebkitProvider',
@@ -14,8 +15,10 @@
   })
 
   interface Props {
-    /** BCP 47 locale of everything below the provider; picks the built-in catalog (`en`, `pt-BR`, `es`) and the `Intl` formats. */
+    /** BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. */
     locale?: string
+    /** Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English. */
+    catalogs?: Record<string, Messages>
     /** Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`). */
     messages?: PartialMessages
     /** Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left). */
@@ -24,6 +27,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     locale: 'en',
+    catalogs: undefined,
     messages: undefined,
     dir: 'auto'
   })
@@ -39,7 +43,7 @@
     locale: () => props.locale,
     messages: () => props.messages,
     dir: () => props.dir,
-    catalogs: BUILT_IN_CATALOGS
+    catalogs: () => ({ en, ...props.catalogs })
   })
 
   const testId = computed(

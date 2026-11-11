@@ -7,6 +7,7 @@ import Default from '../../../../examples/calendar/default.vue'
 import Open from '../../../../examples/calendar/open.vue'
 import Single from '../../../../examples/calendar/single.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import Calendar from './calendar.vue'
 
@@ -805,7 +806,7 @@ describe('Calendar in another locale', () => {
       setup: () => () =>
         h(
           WebkitProvider,
-          { locale },
+          { locale, catalogs: LOCALES },
           {
             default: () =>
               h(Calendar, {

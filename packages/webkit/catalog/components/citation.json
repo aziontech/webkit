@@ -1,0 +1,19 @@
+{
+ "purpose": "An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL — with a tooltip naming the source and an accessible name of `Source 1: <title>`. `StreamingResponse` renders it for every `[n]`; use it directly when you build responses yourself.",
+ "useWhen": [
+  "A statement in a generated response that comes from a specific source."
+ ],
+ "avoidWhen": [
+  "A link the reader is meant to follow as part of the prose → a normal link.",
+  "Footnotes in documentation → `doc-prose` conventions."
+ ],
+ "related": [
+  "sources` — the list citations point at.",
+  "streaming-response` — renders citations from `[n]` in Markdown.",
+  "tooltip` — shows the source title."
+ ],
+ "bestPractices": [
+  "Number in order of first use: [1], [2], [3].",
+  "Give every citation a `title`; a bare number tells a screen reader nothing."
+ ]
+}

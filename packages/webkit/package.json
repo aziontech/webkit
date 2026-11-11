@@ -898,6 +898,8 @@
     "./use-heading-nav": "./src/composables/use-heading-nav/index.ts",
     "./use-placement": "./src/composables/use-placement/index.ts",
     "./use-locale": "./src/composables/use-locale/index.ts",
+    "./locales/pt-BR": "./src/locales/pt-BR.ts",
+    "./locales/es": "./src/locales/es.ts",
     "./use-collection": "./src/composables/use-collection/index.ts",
     "./vite": "./src/vite/index.js",
     "./card-grid": "./src/components/marketing/card-grid/index.ts",

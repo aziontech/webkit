@@ -1,0 +1,34 @@
+{
+ "purpose": "A grid of labelled facts about one subject: each pair is a key (the term) and its value, which may be plain text or a composed component such as a `Link`, `Tag`, `CopyButton` or `StatusIndicator`. It renders a native description list laid out in 1 to 4 responsive columns, optionally split into titled groups, and owns its loading and empty-value surfaces. It replaces the hand-rolled label/value grids the resource detail templates (`ResourceSummary`, the detail Overview tabs) draw today.",
+ "useWhen": [
+  "The facts band of a resource detail or Overview page: ID, status, region, created at, domain.",
+  "A read-only summary of settings before a confirm step (review step, deploy summary).",
+  "Any set of named attributes of a single subject where the reader scans keys to find a value.",
+  "Facts that fall into named clusters (General, Networking, Source) shown side by side as titled columns."
+ ],
+ "avoidWhen": [
+  "Rows of many subjects compared attribute by attribute → use `table`.",
+  "Editable fields → use the form field components (`field` with `input`, `select`, …); this component is read-only.",
+  "A single headline figure with a trend → use `stat-tile`.",
+  "A list of items with no key/value relation → use a plain list or `item`."
+ ],
+ "related": [
+  "table` — many subjects, one row each; KeyValuePairs describes one subject.",
+  "card` — the surface a KeyValuePairs usually sits in; KeyValuePairs brings no surface of its own.",
+  "copy-button` — the trailing copy affordance for IDs and keys inside a value.",
+  "status-indicator`, `tag` — status and category values.",
+  "link` — a value that navigates (a domain, a linked resource).",
+  "hint` — the info glyph composed into an Item's `info` slot.",
+  "skeleton` — rendered in place of each value while the root is `loading`."
+ ],
+ "bestPractices": [
+  "Keep keys short nouns in sentence case (\"Created\", \"Region\"), never sentences or trailing colons.",
+  "Order pairs by what the reader looks for first: identity, status, then the rest.",
+  "Use `columns` for width, not for grouping; use `KeyValuePairs.Group` when the facts form named clusters, one group per column.",
+  "Do not mix bare Items and Groups at the same level; pick one shape per instance.",
+  "Leave the value slot out (or render nothing in it) when a value is absent; the component shows the em dash and its accessible \"Not set\". Do not type your own \"-\", \"N/A\" or \"None\".",
+  "Put a `CopyButton` after an ID or key, never in place of the visible value.",
+  "Use the `info` slot for a short `Hint` that explains the key; long explanations belong in the page, not in a tooltip.",
+  "Drive `loading` from the data request so the labels stay in place and only the values shimmer."
+ ]
+}

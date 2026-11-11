@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import Kbd from './kbd.vue'
 
@@ -57,7 +58,12 @@ describe('Kbd', () => {
 
     const inProvider = (props: Record<string, unknown>, providerProps: Record<string, unknown>) =>
       defineComponent({
-        setup: () => () => h(WebkitProvider, providerProps, { default: () => h(Kbd, props) })
+        setup: () => () =>
+          h(
+            WebkitProvider,
+            { catalogs: LOCALES, ...providerProps },
+            { default: () => h(Kbd, props) }
+          )
       })
 
     it('prints a named key from the active catalog', () => {

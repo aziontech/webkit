@@ -1,0 +1,25 @@
+{
+ "purpose": "The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated, a toolbar row for secondary controls (attach, mode), an attachments row above the text, an optional character limit with a counter, and constraint text under it (a disclaimer or the shortcuts it accepts). Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text, receives `submit` with the trimmed prompt, and clears it. While `state` is `submitted` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop.",
+ "useWhen": [
+  "The input of any conversation with the generative AI assistant.",
+  "A single \"Ask about this page\" box that opens a conversation."
+ ],
+ "avoidWhen": [
+  "A text field in a form → `textarea` inside `field`.",
+  "Search over a list → `input` with a search icon or `property-filter`.",
+  "A command palette → `command`."
+ ],
+ "related": [
+  "textarea` — the form control; this one has no visible label and submits on Enter.",
+  "conversation` — the log above it; only the log scrolls.",
+  "suggestion-group` — prompts the reader can send without typing.",
+  "file-dropzone`, `chip` — what attachment flows compose into the `attachments` slot."
+ ],
+ "bestPractices": [
+  "Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.",
+  "Put the disclaimer and the shortcuts in `hint`, not in the placeholder.",
+  "Set `state` from the request so Submit turns into Stop; wire `stop` to abort it.",
+  "Clear `v-model` in the `submit` handler and keep focus in the input.",
+  "Use `maxLength` only when the backend has a limit; the counter is the warning."
+ ]
+}

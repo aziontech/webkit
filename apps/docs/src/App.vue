@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { es } from '@aziontech/webkit/locales/es'
+  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { getCurrentInstance, onMounted, useSSRContext } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
@@ -6,6 +8,7 @@
   import DocsShell from './layouts/DocsShell.vue'
   import { persistSettings, restoreSettings, settings } from './lib/settings'
 
+  const catalogs = { 'pt-BR': ptBR, es }
   const route = useRoute()
 
   if (import.meta.env.SSR) {
@@ -37,6 +40,7 @@
 <template>
   <WebkitProvider
     :locale="settings.locale"
+    :catalogs="catalogs"
     :dir="settings.dir"
     class="min-h-screen bg-(--bg-canvas) text-(--text-default)"
   >

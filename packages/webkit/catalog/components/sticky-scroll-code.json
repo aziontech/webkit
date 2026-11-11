@@ -1,0 +1,18 @@
+{
+ "purpose": "The developer-capabilities band of a product page: a large section title over a sticky stack whose claims scroll past a pinned media frame, the open claim showing its one-file code sample on the pixelate texture and its own button under its description. It is a page section — the site places it from a `{ _id: 'sticky-scroll-code', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `sticky-stack`, `texture-material`, `code-block` and `button`. Which claim is open is scroll-driven state owned by `sticky-stack`.",
+ "useWhen": [
+  "To walk a developer through several capabilities, each proven by a short file, while the page scrolls."
+ ],
+ "avoidWhen": [
+  "For one claim beside one sample → use `code-split`.",
+  "For a walkthrough shown by illustrations → use `feature-scroll`."
+ ],
+ "related": [
+  "sticky-stack` — the pinned, scroll-driven run of claims this section renders through.",
+  "code-block` — the one-file sample each claim shows."
+ ],
+ "bestPractices": [
+  "Keep each sample short enough to read in the pinned frame.",
+  "Give every item a `code`; the item's `action` is optional and shows only while the item is open."
+ ]
+}

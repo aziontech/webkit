@@ -8,7 +8,8 @@ const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
 const CATALOG_PATH = resolve(SCRIPT_DIR, '../catalog.json')
 const DOC_DIRS = ['skills', 'rules', 'adapters']
-const IMPORT_RE = /(node_modules\/)?@aziontech\/webkit\/([a-z0-9][a-z0-9./-]*[a-z0-9])(-\*|\/<)?/g
+const IMPORT_RE =
+  /(node_modules\/)?@aziontech\/webkit\/([a-z0-9][a-zA-Z0-9./-]*[a-zA-Z0-9])(-\*|\/<)?/g
 const NOT_A_SUBPATH = new Set(['src'])
 const NEGATION_RE =
   /\b(no|never|not|nonexistent|instead of|wrong|don't|do not|flag|mismatch(es)?)\b|❌|✗/i

@@ -1,0 +1,18 @@
+{
+ "purpose": "Every article of the blog as one ruled list, with the controls to narrow it on one row: a category picker and a search field. Each article is a row — its cover on the left, and on the right its overline, headline, a two-line deck and its writers with the byline pinned to the foot; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The category and the search combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-blog', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `input`, `avatar` and `button`; the selected category and the search term are local state.",
+ "useWhen": [
+  "For the blog's full list of posts, filtered by category and searched by text."
+ ],
+ "avoidWhen": [
+  "For a resource hub filtered by facet dropdowns, with centred rows and no byline → use `article-index-resource-hub`.",
+  "For a closing row of related articles → use `article-cards`."
+ ],
+ "related": [
+  "article-index-resource-hub` — the sibling listing with facet dropdowns.",
+  "article-highlight` — the band that opens the blog above this list."
+ ],
+ "bestPractices": [
+  "List the articles newest first; file every article under at least one of `categories`.",
+  "Keep the category list short enough to scroll on one row."
+ ]
+}

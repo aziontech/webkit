@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import AiLoading from './ai-loading.vue'
 
@@ -52,7 +53,11 @@ describe('AiLoading', () => {
     const { getByRole } = render(
       defineComponent({
         setup: () => () =>
-          h(WebkitProvider, { locale: 'pt-BR' }, { default: () => h(AiLoading, { delay: 0 }) })
+          h(
+            WebkitProvider,
+            { locale: 'pt-BR', catalogs: LOCALES },
+            { default: () => h(AiLoading, { delay: 0 }) }
+          )
       })
     )
     expect(getByRole('status')).toHaveTextContent('Gerando uma resposta')

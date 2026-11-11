@@ -1,0 +1,27 @@
+{
+ "purpose": "A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `position` decides where the tabs sit: `left` or `right` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.",
+ "useWhen": [
+  "For a run of peer claims that share one picture frame — three ways a platform is fast, four things a product does.",
+  "When each claim needs a sentence of its own, not a bullet: the copy is the content and the media illustrates it.",
+  "As a product-page band that rewards watching but does not require it."
+ ],
+ "avoidWhen": [
+  "For one claim beside one picture → use `media-split`.",
+  "For questions and answers → use `faq`.",
+  "For switching a page's content between peer views the reader navigates → use `tabs`, which is a real ARIA tab set."
+ ],
+ "related": [
+  "media-split` — one claim, one picture, no selection.",
+  "illustration` — the official scene a tab's `media` slot usually holds.",
+  "frame-box` — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.",
+  "section-title` — the heading above the band; this component carries no title of its own."
+ ],
+ "bestPractices": [
+  "Write the tabs as peers. A reader arrives mid-rotation, so no row may depend on the row above it.",
+  "Keep a tab's title to one line and its description to two. The row has a fixed height, and copy that overruns it pushes the media column taller than the design.",
+  "Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.",
+  "Use scenes of the same shape. The frame does not resize between tabs.",
+  "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step so five claims fit.",
+  "Leave `autoplay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion."
+ ]
+}

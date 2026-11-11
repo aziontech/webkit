@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import { useChatMessageContext } from './composables/use-chat-message-context'
 import ChatMessage, { ChatMessageActions, ChatMessageFeedback } from './index'
@@ -159,7 +160,7 @@ describe('ChatMessage', () => {
         setup: () => () =>
           h(
             WebkitProvider,
-            { locale: 'pt-BR' },
+            { locale: 'pt-BR', catalogs: LOCALES },
             { default: () => h(ChatMessage, { from: 'assistant' }, () => 'Oi') }
           )
       })

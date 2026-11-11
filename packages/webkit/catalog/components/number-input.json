@@ -1,0 +1,17 @@
+{
+ "purpose": "Numeric input field with optional increment/decrement spinner buttons. Use when the value is strictly numeric (counts, quantities, ports, thresholds, currency without formatting). Distinct from `input` because it enforces numeric type, supports `min`/`max`/`step`, and renders chevron-up/chevron-down controls on the trailing edge.",
+ "useWhen": [
+  "Capture a strictly numeric value (counts, quantities, ports, prices)."
+ ],
+ "avoidWhen": [
+  "The value is free text → use `input`.",
+  "The user picks from a fixed set of numbers → use `select`."
+ ],
+ "related": [
+  "input` — free-text sibling with the same field API."
+ ],
+ "bestPractices": [
+  "Set `min` / `max` / `step` to constrain input rather than validating after the fact.",
+  "Use `inputmode=\"numeric\"` semantics for mobile keyboards."
+ ]
+}

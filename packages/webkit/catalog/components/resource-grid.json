@@ -1,0 +1,18 @@
+{
+ "purpose": "A band that points readers to further reading on solution pages: an overline, a headline and a short lead with an optional button sit beside a two-column frame grid of linked resource cards, each a title and one sentence. A card whose link leaves the site opens in a new tab; past four cards the grid scrolls inside a fading scroll area so the band keeps its height. It is a page section — the site places it from a `{ _id: 'resource-grid', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split`, `card-grid`, `topic`, `scroll-area` and `button`.",
+ "useWhen": [
+  "To close a solution page with documentation, articles and stories that go deeper into it."
+ ],
+ "avoidWhen": [
+  "For related articles with covers → use `article-cards`.",
+  "For linked use cases with media → use `use-case-links`."
+ ],
+ "related": [
+  "media-split` — the copy-beside-media band that owns the heading and the named region.",
+  "topic` — the linked title-and-sentence cell each card is rendered with."
+ ],
+ "bestPractices": [
+  "Keep four cards for a full grid; more than four scroll.",
+  "Give a card a full `http` link only when it leaves the site, so only those open in a new tab."
+ ]
+}
