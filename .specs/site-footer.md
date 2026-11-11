@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-11
-checksum: 5a1d0169a1d3c983b23e8050d84b77017e1c126df60120e670e465af6c6064ba
+checksum: 1286ff8ba2f9574bf636523bde63f2fbcd25a3ec882f11799658a8e7cd9c9475
 ---
 
 # SiteFooter — Component Spec
@@ -84,6 +84,7 @@ The footer under every marketing page: the link columns, then the social row bes
 - `data-kind` mirrors the `kind` prop on the footer
 - From `lg` the Azion mark leads the social row; below `lg` it renders in the footer's signature band
 - The status indicator, the language select and the Azion mark each render only when their prop is set
+- Server render and hydration: the `lg` check runs only after mount, so the server HTML and the first client render both place the Azion mark in the signature band and match; from `lg` it moves to the social row on mount.
 
 ## Motion & Animations
 

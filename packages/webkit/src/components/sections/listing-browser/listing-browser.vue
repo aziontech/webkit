@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useMediaQuery } from '@vueuse/core'
+  import { useMediaQuery, useMounted } from '@vueuse/core'
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
@@ -151,7 +151,9 @@
     Object.fromEntries(props.facets.map((facet) => [facet.key, '']))
   )
 
-  const wide = useMediaQuery('(min-width: 64rem)')
+  const wideQuery = useMediaQuery('(min-width: 64rem)')
+  const mounted = useMounted()
+  const wide = computed(() => mounted.value && wideQuery.value)
 
   onMounted(() => {
     const params = new URLSearchParams(globalThis.location?.search ?? '')

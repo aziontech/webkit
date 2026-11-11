@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 1e4f745246c7a049145741b4a3b18c78c74636fa22dca70b300a7fc996583e79
+checksum: a623507e8b03e85e88abf9bcba9b82c5137f16497b7e2e5719fdda1e88881562
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -42,27 +42,33 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import Button from '@aziontech/webkit/button'
-import Dialog from '@aziontech/webkit/dialog'
-import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-import DialogPortal from '@aziontech/webkit/dialog-portal'
-import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-import DialogContent from '@aziontech/webkit/dialog-content'
-import DialogTitle from '@aziontech/webkit/dialog-title'
-import DialogDescription from '@aziontech/webkit/dialog-description'
-import DialogClose from '@aziontech/webkit/dialog-close'
-import PanelHeader from '@aziontech/webkit/panel-header'
-import PanelContent from '@aziontech/webkit/panel-content'
-import PanelFooter from '@aziontech/webkit/panel-footer'
+  import { ref } from 'vue'
+  import Button from '@aziontech/webkit/button'
+  import Dialog from '@aziontech/webkit/dialog'
+  import DialogTrigger from '@aziontech/webkit/dialog-trigger'
+  import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import DialogClose from '@aziontech/webkit/dialog-close'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
 
-const open = ref(false)
+  const open = ref(false)
 </script>
 
 <template>
-  <Dialog v-model:open="open" size="medium">
+  <Dialog
+    v-model:open="open"
+    size="medium"
+  >
     <DialogTrigger>
-      <Button label="Delete domain" kind="outlined" />
+      <Button
+        label="Delete domain"
+        kind="outlined"
+      />
     </DialogTrigger>
     <DialogPortal>
       <DialogOverlay />
@@ -77,8 +83,15 @@ const open = ref(false)
           </DialogDescription>
         </PanelContent>
         <PanelFooter>
-          <Button label="Cancel" kind="outlined" @click="open = false" />
-          <Button label="Delete" kind="danger" />
+          <Button
+            label="Cancel"
+            kind="outlined"
+            @click="open = false"
+          />
+          <Button
+            label="Delete"
+            kind="danger"
+          />
         </PanelFooter>
       </DialogContent>
     </DialogPortal>
@@ -128,14 +141,15 @@ const open = ref(false)
 - Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-content`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
 - The page behind the overlay is scroll-locked while the dialog is open, and the lock is released on close.
 - Phones: below `md` the panel is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
+- Server render and hydration: the phone layout reads the viewport only after mount (`use-overlay-mobile` gates the media query on `useMounted`), so a dialog rendered open on the server hydrates with the desktop layout and switches to the bottom sheet in the same tick as mount, before paint.
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| panel open / close | `translate`, `scale` and `opacity` transition, set inline per motion state (`presets/transitions.ts`) | `duration['moderate-01']` + `curve['productive-entrance']` / `curve['productive-exit']` from `@aziontech/theme/animations` | `motion-reduce:transition-none` |
-| overlay open / close | `opacity` transition, set inline per motion state | `duration['moderate-01']` + `curve['productive-entrance']` / `curve['productive-exit']` | `motion-reduce:transition-none` |
-| below `md` | the panel enters as a bottom sheet with the drawer's transition | `overlay/presets/bottom-sheet-transitions.js` | `motion-reduce:transition-none` |
+| Trigger              | Animation / Transition                                                                                | Token                                                                                                                      | Reduced-motion fallback         |
+| -------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| panel open / close   | `translate`, `scale` and `opacity` transition, set inline per motion state (`presets/transitions.ts`) | `duration['moderate-01']` + `curve['productive-entrance']` / `curve['productive-exit']` from `@aziontech/theme/animations` | `motion-reduce:transition-none` |
+| overlay open / close | `opacity` transition, set inline per motion state                                                     | `duration['moderate-01']` + `curve['productive-entrance']` / `curve['productive-exit']`                                    | `motion-reduce:transition-none` |
+| below `md`           | the panel enters as a bottom sheet with the drawer's transition                                       | `overlay/presets/bottom-sheet-transitions.js`                                                                              | `motion-reduce:transition-none` |
 
 ## Tokens
 

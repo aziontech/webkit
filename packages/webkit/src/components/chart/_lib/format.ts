@@ -42,12 +42,17 @@ export function formatSignedPercent(value: number, digits = 2, locale = DEFAULT_
   return format.format((fixed === 0 ? 0 : value) / 100)
 }
 
-export function formatLabel(label: ChartLabel, locale = DEFAULT_LOCALE): string {
+export function formatLabel(label: ChartLabel, locale = DEFAULT_LOCALE, timeZone?: string): string {
   if (label instanceof Date) {
-    const atMidnight = label.getHours() === 0 && label.getMinutes() === 0
-    return atMidnight
-      ? dateFormat(locale, { month: 'short', day: 'numeric' }).format(label)
-      : dateFormat(locale, { hour: '2-digit', minute: '2-digit', hour12: false }).format(label)
+    const clock: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+      timeZone
+    }
+    return dateFormat('en-GB', clock).format(label) === '00:00'
+      ? dateFormat(locale, { month: 'short', day: 'numeric', timeZone }).format(label)
+      : dateFormat(locale, clock).format(label)
   }
   if (typeof label === 'number') return formatCompact(label, locale)
   return label

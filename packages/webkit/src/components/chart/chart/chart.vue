@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useElementSize, usePreferredReducedMotion } from '@vueuse/core'
+  import { useElementSize, useMounted, usePreferredReducedMotion } from '@vueuse/core'
   import {
     computed,
     inject,
@@ -61,6 +61,8 @@
     formatValue?: (value: number) => string
     /** Formats category labels on the axis and in the tooltip. */
     formatLabel?: (label: ChartLabel) => string
+    /** IANA time zone the default label format prints Date labels in. Empty prints UTC on the server and in the first client render, then the runtime's zone. */
+    timeZone?: string
     /** Minimum plot height in pixels; the plot grows to fill a taller container. */
     height?: number
     /** Renders a Skeleton sized to the plot and suppresses interaction. */
@@ -89,6 +91,7 @@
     otherLabel: '',
     formatValue: formatCompact,
     formatLabel: formatCategoryLabel,
+    timeZone: '',
     height: 240,
     loading: false,
     refetching: false,
@@ -124,9 +127,13 @@
     props.formatValue === formatCompact
       ? formatCompact(value, locale.value)
       : props.formatValue(value)
+  const mounted = useMounted()
+  const labelZone = computed<string | undefined>(
+    () => props.timeZone || (mounted.value ? undefined : 'UTC')
+  )
   const labelText = (label: ChartLabel): string =>
     props.formatLabel === formatCategoryLabel
-      ? formatCategoryLabel(label, locale.value)
+      ? formatCategoryLabel(label, locale.value, labelZone.value)
       : props.formatLabel(label)
   const card = inject(ChartCardInjectionKey, null)
   const uid = useId()

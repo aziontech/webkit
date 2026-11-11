@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 8f7ff3e4afd8ccba2f1fa9060e4ed0bd62c7e5e4817f85a991095110e46dbbe7
+last_updated: 2026-11-11
+checksum: 39f23ee7536a771fedfead959decc5cf702065037fe10d6bbdc73493c78f7eb0
 ---
 
 # ListingBrowser — Component Spec
@@ -125,6 +125,7 @@ The full, browsable listing of a page such as the Careers jobs list: a headline 
 - Seeded: on mount a facet takes the value of `?<key>=` in the URL when it is one of its options
 - Absent: when `rows` is empty the band renders nothing — not the header, not the toolbar
 - The table renders from the small breakpoint up, the list below it; the toolbar stacks below the large breakpoint, where the search field shows `shortPlaceholder`
+- Server render and hydration: the large-breakpoint check runs only after mount, so the server HTML and the first client render both use `shortPlaceholder` and match; the full placeholder applies on mount.
 
 ## Motion & Animations
 

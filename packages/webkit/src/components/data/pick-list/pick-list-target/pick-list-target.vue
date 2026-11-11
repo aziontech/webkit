@@ -40,6 +40,8 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'pick-list-target'
   )
 
+  const visibleItems = computed(() => (props.loading ? [] : ctx.items(side)))
+
   const itemTransitionStyle = getItemTransitionStyle()
   const itemTransitionActive = pickListItemTransitionClasses.join(' ')
 
@@ -99,8 +101,7 @@
         <Spinner class="size-6 text-(--text-muted)" />
       </li>
       <li
-        v-for="(item, index) in ctx.items(side)"
-        v-else
+        v-for="(item, index) in visibleItems"
         :key="ctx.itemKey(item, index)"
         role="option"
         :aria-selected="ctx.isSelected(side, index)"

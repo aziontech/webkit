@@ -4,10 +4,10 @@ The right-side drawer that adds or edits something that only exists inside anoth
 
 ## When to use
 
-- The item belongs to a resource that is already open (a domain on a workload, a record in a zone, an instance on an application), per the surface rule in `skills/webkit-create-surface`.
+- The item belongs to a resource that is already open (a domain on a workload, a record in a zone, a rule or an origin on a resource), per the surface rule in `skills/webkit-create-surface`.
 - Editing that same item from its row menu; the drawer opens on its values and saves them.
 - A first-level tuple normally created in bulk, such as variables, the one exception the surface rule allows.
-- A select needs a related resource that may not exist yet: the NestedDrawer shape creates it in a second drawer and selects it back.
+- A select needs another item of the same resource that may not exist yet, such as the origin a new rule sends requests to: the NestedDrawer shape creates it in a second drawer and selects it back.
 
 ## When not to use
 
@@ -15,6 +15,7 @@ The right-side drawer that adds or edits something that only exists inside anoth
 - A blocking yes or no question, or a destructive guard: use `platform/delete/delete-with-confirmation`.
 - Deploying what exists: use `platform/create/deploy-drawer`, which commits a deployment rather than a record.
 - Binding a whole resource that may be reused or created in a create flow: use `platform/create/resource-picker`.
+- A select that needs a missing first-level resource, such as a service or a function: the stacked drawer would create on the wrong surface. Link to that resource's create page, or bind it with `platform/create/resource-picker`.
 - Editing the settings of the resource itself: use `platform/edit/edit-resource`.
 
 ## Building blocks
@@ -65,7 +66,7 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 - Lock the `fieldset` and pass `:disabled` to every control from the same flag while saving; release it on success and on failure.
 - Validate on submit only: an empty required field gets the amber required prompt after Save is pressed.
 - Close the drawer on success and show the new item in the list behind it, with a toast that names it.
-- Stack a second, medium drawer for a missing related resource and select the new one back into the parent.
+- Stack a second, medium drawer for a missing item of the same resource, such as an origin for a rule, and select the new one back into the parent.
 
 ## Don't
 
@@ -103,7 +104,7 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 - EditDomain: opened from a domain row menu on www.example.com, with the Certificate select showing the covering wildcard.
 - AddRecord: the DNS zone record form; Name and Value are flagged as required only after an empty Add Record.
 - ItemRows: Add Origin on the Origins page of the storefront resource, a large drawer whose sections are `Item` rows in flush cards, saved together by one Add Origin.
-- NestedDrawer: Add Instance with a Service select whose Create Service option opens a second, medium drawer and selects the new service back.
+- NestedDrawer: Add Rule on the storefront resource's Rules Engine, with an Origin select whose Create Origin option opens a second, medium drawer and selects the new origin back.
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.
 
 ## Related

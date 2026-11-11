@@ -1,6 +1,15 @@
 import { curve, duration as durations } from '@aziontech/theme/animations'
 import { usePreferredReducedMotion } from '@vueuse/core'
-import { type MaybeRefOrGetter, onScopeDispose, readonly, type Ref, ref, toValue, watch } from 'vue'
+import {
+  type MaybeRefOrGetter,
+  onMounted,
+  onScopeDispose,
+  readonly,
+  type Ref,
+  ref,
+  toValue,
+  watch
+} from 'vue'
 
 export interface UseCountUpOptions {
   duration?: number
@@ -38,7 +47,9 @@ export function useCountUp(
   { duration = parseMs(durations['slow-01']) }: UseCountUpOptions = {}
 ): UseCountUpReturn {
   const reducedMotion = usePreferredReducedMotion()
-  const display = ref<number | null>(null)
+  const finite = (value: number | null): value is number => value !== null && Number.isFinite(value)
+  const initial = toValue(target)
+  const display = ref<number | null>(finite(initial) ? initial : null)
   let frame = 0
 
   const stop = () => {
@@ -53,6 +64,7 @@ export function useCountUp(
       display.value = to
       return
     }
+    display.value = from
     const startedAt = globalThis.performance.now()
     const tick = (now: number) => {
       const progress = Math.min(1, (now - startedAt) / duration)
@@ -69,15 +81,19 @@ export function useCountUp(
   watch(
     () => toValue(target),
     (next) => {
-      if (next === null || !Number.isFinite(next)) {
+      if (!finite(next)) {
         stop()
         display.value = null
         return
       }
       run(next, display.value ?? 0)
-    },
-    { immediate: true }
+    }
   )
+
+  onMounted(() => {
+    const next = toValue(target)
+    if (finite(next)) run(next, 0)
+  })
 
   onScopeDispose(stop)
 

@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: c09506a8a087cb3b37c7b49f124be3d724a5a5a64498e749ecb20ba718cc6603
+checksum: b745f205ed8760a0154721e68f739919f5a6db9992800261c2b27f9eb51924d8
 created: 2026-06-25
 last_updated: 2026-11-11
 ---
@@ -167,6 +167,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 - When `presets` are supplied, the trigger is a two-part control: a left preset button (`aria-haspopup="menu"`, clock glyph, `data-testid` `…__presets-trigger`) opening the preset dropdown, and a right calendar button (`aria-haspopup="dialog"`, calendar glyph) opening the popover; the two dropdowns are mutually exclusive, and each preset menu item sets `data-selected` when it is the active preset
 - In period mode, a committed selection renders the trigger as two side-by-side segments: the relative token (e.g. `45m`, with a clock glyph) beside the resolved concrete window (e.g. `14:44 – 23:59`, with a calendar glyph), separated by a divider
 - Reflow: the root is capped at the width of its container (`max-w-full`), so the trigger, presets included, never overflows a 320 px box.
+- Server render and hydration: the time zone select lists only the chosen zone until mount (its city name, or the catalog's `Local` with no zone chosen), because the zone list, the local zone and the offsets depend on the runtime's clock and tz data. On mount it lists every zone with its offset, so the server HTML and the first client render match.
 
 ## Motion & Animations
 
