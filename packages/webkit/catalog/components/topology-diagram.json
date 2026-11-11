@@ -1,0 +1,24 @@
+{
+ "purpose": "The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyNode`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.",
+ "useWhen": [
+  "The topology tab of a project, service or workload: what serves its traffic, in order, and what is still unbound.",
+  "A review before a deploy where binding or removing a resource is staged on the diagram."
+ ],
+ "avoidWhen": [
+  "A sequence of steps or a pipeline without data cards → use `flow`.",
+  "A nested list of items with no flow between them → use `tree`.",
+  "A marketing architecture picture → use `diagram`."
+ ],
+ "related": [
+  "flow` — the connector engine and anchors this component reuses.",
+  "tree` — hierarchical data without connectors.",
+  "dropdown-menu` — the bind control's menu.",
+  "platform/detail/details-page` — the page whose topology tab holds it."
+ ],
+ "bestPractices": [
+  "Keep a column per depth and put the nodes that serve in parallel in the same column.",
+  "Mark a staged change `dashed` with a warning status and a message that says the deploy applies it.",
+  "Mark the last node of each branch `terminal` so no connector leaves it.",
+  "Give every unbound slot a message that says what happens without it."
+ ]
+}

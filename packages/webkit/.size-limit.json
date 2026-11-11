@@ -960,17 +960,17 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "7.5 KB"
+    "limit": "7.75 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "6.9 KB"
+    "limit": "7.15 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "7 KB"
+    "limit": "7.25 KB"
   },
   {
     "name": "phone-input",
@@ -1002,6 +1002,16 @@
     "name": "trace",
     "path": "src/components/code/trace/trace.vue",
     "limit": "14.75 KB"
+  },
+  {
+    "name": "outcome-mark",
+    "path": "src/components/feedback/outcome-mark/outcome-mark.vue",
+    "limit": "3 KB"
+  },
+  {
+    "name": "topology-diagram",
+    "path": "src/components/data/topology-diagram/topology-diagram.vue",
+    "limit": "32 KB"
   },
   {
     "name": "action-confirmation",

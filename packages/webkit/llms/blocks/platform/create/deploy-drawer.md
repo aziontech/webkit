@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/create/deploy-drawer/deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-drawer")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [RadioButton](../../../components/radio-button.md), [Separator](../../../components/separator.md), [SettingsSection](../../../components/settings-section.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [RadioButton](../../../components/radio-button.md), [Separator](../../../components/separator.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -68,6 +68,13 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - List every project a shared Deployment Setting reaches before the user deploys, not after.
 - When no version is pinned, open as Build and deployment with a Building row, keep the other sections faded and `inert`, and disable Deploy until the build lands.
 - On a project, warn with an `Alert` above the environments when its Deployment Settings also publish elsewhere.
+- Keep an environment that Strict Deployment Settings lock visible but disabled, with a Strict tag and one sentence naming the settings and the service they keep bound.
+- Tag an environment Also deploys (warning) when the chosen environment's shared settings reach it, and say once, in a warning `Alert`, how many environments go live at once.
+- Say in an info `Alert` when the deploy replaces another service on the chosen project, naming both.
+- When a choice changes what the deploy reaches, reload that section in place: `Skeleton` rows, `aria-busy` on the region and one `role="status"` line; never clear the whole drawer.
+- Tag a dependency other services reference as Shared, name them in a `Tooltip`, and say once that a shared dependency deploys at one version.
+- When a dependency has no ready version, disable Deploy and say why in the footer, next to the button it disables.
+- After Deploy, follow `platform/states/async-submit`: the drawer closes and one toast per run turns from Deploying… into the outcome, with Edit (reopens the drawer with the same choices) and Redeploy.
 
 ## Don't
 
@@ -76,6 +83,8 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - Don't let Change version list hundreds of versions at once; search plus Load more.
 - Don't add a second commit such as Save as draft; one Deploy.
 - Don't print the shared-settings warning on each impacted row; it belongs once, above them.
+- Don't hide a locked environment, or let it be picked and fail at deploy time.
+- Don't offer View deployments in the outcome toast; it carries Edit and Redeploy.
 
 ## Copy
 
@@ -86,6 +95,8 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - **Environment descriptions:** one sentence on how it serves, e.g. "Live traffic. One version serves the domain, and deploying replaces it."
 - **Tags:** one or two words, e.g. "Ready", "Active", "Last used", "Selected", "New".
 - **In progress:** the progressive verb with `…`, e.g. "Building…".
+- **Run toast:** "Deploying web-app…" with "<version> to <environments>. It keeps running if you leave."; the outcome "web-app is live in Production." or "web-app wasn't deployed." with what failed and that nothing changed; actions "Edit" and "Redeploy".
+- **Locks and reach:** "<settings> is Strict, so <service> stays bound to <environment>."; "Also deploys"; "<settings> is shared, so it deploys at one version."
 - Follow `skills/webkit-microcopy`: Deploy, never publish or activate; sentence case; no em dash.
 
 ## Accessibility
@@ -95,6 +106,11 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - The version menu is a `role="menu"` moved with the arrow keys, each version a `menuitem` named by its version, author and age; the current one carries `aria-current`; search inputs have an `aria-label` that matches the placeholder.
 - Each impacted environment group has an `aria-label` with its count, e.g. "Projects impacted in Production (3)".
 - Faded sections during a build are `inert`, so keyboard users cannot reach controls that do nothing yet.
+- A section that reloads carries `aria-busy="true"` with its `Skeleton` rows `aria-hidden`, and a `role="status"` line reads Loading the projects this deployment reaches, or Loading dependencies.
+- A locked environment's radio is `disabled`; its reason is the card's description, so it is read with the choice.
+- The Shared tag sits in a focusable wrapper so its `Tooltip` opens from the keyboard, and its name already says who else references it.
+- A disabled Deploy is described by the footer line that explains why (`aria-describedby`).
+- Run progress and outcome reach screen readers through the toast region, so the user hears them from any page.
 - Glyphs in rows are decorative and carry `aria-hidden="true"`; tags give the state in words.
 
 ## States
@@ -103,11 +119,14 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - Building: no pinned version; titled Build and deployment with a Building row in place of Resources, the other sections faded and inert, Deploy disabled.
 - ServiceProjectFirst: the project-first flow; Resources, the Project card with the last used project and a Change popover, then every environment.
 - Project: deploying a project; its service and storage in Resources, Production and Preview, and a warning about other projects that share its storefront settings.
+- Environment: a locked Strict environment, an Also deploys tag, the replace and multi-environment `Alert`s, Projects impacted grouped per environment and reloaded on switch; the run ends in a success toast with Edit and Redeploy.
+- Dependencies: the open Dependencies disclosure with a Shared dependency, a not-versioned integration and a dependency with no ready version that blocks Deploy; changing the service version reloads the list. The first run fails and its toast offers Edit and Redeploy; Redeploy succeeds.
 
 ## Related
 
 - `platform/create/create-in-drawer` — the drawer that creates items rather than deploying.
 - `platform/create/deployment-flow` — the run a deploy streams once it starts.
+- `platform/states/async-submit` — the toast and outcome rule every deploy started here follows.
 - `platform/detail/deployment-logs` — the logs of a deploy after it ran.
 - `platform/detail/version-detail` — what a version contains before it is deployed.
 - `platform/create/resource-picker` — the Existing or New pattern the Project section follows.
@@ -119,6 +138,8 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - `Building` — Deploy without a pinned version: the drawer opens as Build and deployment, a Building row with the new version and its elapsed seconds stands in for the Resources card, and the Project, Environment and Projects impacted sections stay faded and inert, with Deploy disabled, until the build lands.
 - `ServiceProjectFirst` — The project-first flow: the same Resources card, a Project card with the last used project, its domain and a Change popover of the projects serving the service, then every environment as a radio block.
 - `Project` — Deploy on a project: the Resources card with the service it serves and its dependencies, then its storage, which is not versioned; Production and Preview below, with a warning that shared-storefront also publishes to project-05 and project-09.
+- `Environment` — The environment decision at its edges: Staging is locked by Strict Deployment Settings (a disabled choice card with a Strict tag and the reason), Preview is tagged Also deploys because Production's shared settings reach it, an info Alert says the deploy replaces legacy-web on the chosen project and a warning Alert says it goes live in two environments at once. Projects impacted are grouped per environment with a heading and a count, and switching environment reloads them with Skeleton rows, aria-busy and a status line. Deploy closes the drawer and reports through one toast that turns from Deploying… into the outcome with Edit and Redeploy.
+- `Dependencies` — The Dependencies disclosure open: each module and integration with its own version and Change version menu, auth-gateway tagged Shared with a Tooltip naming the services that also reference it and one info Alert saying a shared dependency deploys at one version, payments-api not versioned (a note instead of the menu), and geo-redirect with no ready version, which disables Deploy with the reason in the footer. Changing the service version reloads the dependencies with Skeleton rows, aria-busy and a status line; a second resource that references nothing says so. The first run fails and its toast carries Edit and Redeploy; Redeploy succeeds.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/deploy-drawer", { variant })`, or the file under `blocks/platform/create/deploy-drawer/variants/`.
 

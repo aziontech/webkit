@@ -6,6 +6,8 @@ import State1 from '../../../../../../../packages/webkit/blocks/platform/detail/
 import source1 from '../../../../../../../packages/webkit/blocks/platform/detail/version-detail/variants/deployed.vue?raw'
 import State2 from '../../../../../../../packages/webkit/blocks/platform/detail/version-detail/variants/version-history.vue'
 import source2 from '../../../../../../../packages/webkit/blocks/platform/detail/version-detail/variants/version-history.vue?raw'
+import State3 from '../../../../../../../packages/webkit/blocks/platform/detail/version-detail/variants/revert.vue'
+import source3 from '../../../../../../../packages/webkit/blocks/platform/detail/version-detail/variants/revert.vue?raw'
 
 export default {
   title: "Templates/Platform/Detail/VersionDetail",
@@ -13,8 +15,8 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "One version of a resource, opened from its Versions tab: the platform shell whose last breadcrumb is a Select that switches between the resource versions, each with its state Tag, or creates a new one. Under it a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, the platform shell, `Breadcrumb`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`." } },
-    webkit: {"block":"platform/detail/version-detail","intents":["version detail","resource version","draft version","version history","version switcher","versioned settings","detalhe da versão","histórico de versões","versão rascunho"],"skills":["webkit-layout","webkit-navigation","webkit-ui-states"],"primary":"Draft"}
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "One version of a resource, opened from its Versions tab: the platform shell whose last breadcrumb is a Select that switches between the resource versions, each with its state Tag, or creates a new one. Under it a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `ConfirmDialog`, `Toaster`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, the platform shell, `Breadcrumb`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`." } },
+    webkit: {"block":"platform/detail/version-detail","intents":["version detail","resource version","draft version","version history","version switcher","versioned settings","detalhe da versão","histórico de versões","versão rascunho","revert version","rollback version","reverter versão","revertir versión"],"skills":["webkit-layout","webkit-navigation","webkit-ui-states"],"primary":"Draft"}
   }
 }
 
@@ -31,4 +33,9 @@ export const Deployed = {
 export const VersionHistory = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "The draft with Version history open beside it: the current version with its description, author and the pencil that edits it in place, the empty changes entry, and the five newest earlier versions with Show older for the rest." }, source: { code: source2 } } }
+}
+
+export const Revert = {
+  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed." }, source: { code: source3 } } }
 }

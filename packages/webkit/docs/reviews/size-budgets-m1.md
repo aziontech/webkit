@@ -174,3 +174,15 @@ Two new entries and five raises. `DateRangePicker` composes the calendar parts (
 | webkit-provider   | 6.7           | 7.27         | 7.5        | Raised: three new groups in the English catalog.                   |
 | locales-pt-BR     | 6.1           | 6.68         | 6.9        | Raised: the same three groups in Portuguese.                       |
 | locales-es        | 6.15          | 6.76         | 7          | Raised: the same three groups in Spanish.                          |
+
+## M2.9 WP deploy-release
+
+`TopologyDiagram` and `OutcomeMark` are new entries. The `topologyDiagram` and `outcomeMark` groups grow the English catalog the provider ships and the two opt-in locale entries; that is the expected per-component cost (see "Locales merge with app-layout"). Budgets are measured + ~0.2 KB.
+
+| Entry            | Budget before | Measured now | New budget | Note                                                                      |
+| ---------------- | ------------- | ------------ | ---------- | ------------------------------------------------------------------------- |
+| outcome-mark     | new           | 2.00         | 3          | New: four glyphs, sizes and the appear animation.                         |
+| topology-diagram | new           | 28.14        | 32         | New: node cards, bind control on `DropdownMenu`, `Flow` connector engine. |
+| webkit-provider  | 6.7           | 6.78         | 6.95       | Raised: the `topologyDiagram` and `outcomeMark` English strings.          |
+| locales-pt-BR    | 6.1           | 6.12         | 6.35       | Raised: the same groups in Portuguese.                                    |
+| locales-es       | 6.15          | 6.17         | 6.4        | Raised: the same groups in Spanish.                                       |

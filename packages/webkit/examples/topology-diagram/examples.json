@@ -1,0 +1,26 @@
+{
+  "component": "topology-diagram",
+  "title": "Components/Primitives/Data/TopologyDiagram",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A project's deployment topology from its domains to its storage: each column is a depth, connectors join every node to the next column, and a card opens to its fields. The bound policy can be changed or removed, the unbound error page offers Bind, and the domains card adds a domain through the `actions` slot.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Binding",
+      "summary": "Binding stages a change: the slot turns dashed and Staged with Deploy to apply this policy, removing a bound policy stages Deploy to remove it, and Create opens the create flow (here a status line). Nothing is applied until the next deploy.",
+      "file": "binding.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "`loading` draws placeholder cards joined by connectors, marks the diagram busy and announces it once.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "No levels: one line says nothing is connected yet; the `empty` slot replaces it with an action.",
+      "file": "empty.vue"
+    }
+  ]
+}

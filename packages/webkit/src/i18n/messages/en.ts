@@ -460,6 +460,13 @@ export const numberInput = {
   decrement: 'Decrement'
 } as const
 
+export const outcomeMark = {
+  success: 'Succeeded',
+  danger: 'Failed',
+  warning: 'Needs attention',
+  neutral: 'Not set'
+} as const
+
 export const pagination = {
   label: 'Pagination',
   info: 'Showing {start} to {end} of {total} entries',
@@ -781,6 +788,20 @@ export const tracker = {
   roleDescription: 'status history'
 } as const
 
+export const topologyDiagram = {
+  label: 'Deployment topology',
+  notBound: 'Not bound',
+  bind: 'Bind {kind}',
+  change: 'Change {kind}',
+  remove: 'Remove {kind}',
+  create: 'Create {kind}',
+  existing: 'Existing',
+  noOptions: 'No options yet.',
+  copy: 'Copy {field}',
+  empty: 'Nothing is connected yet.',
+  loading: 'Loading the topology'
+} as const
+
 export const tree = {
   emptyTitle: 'No items'
 } as const
@@ -968,6 +989,7 @@ export const en = {
   miniButton,
   navigationMenu,
   numberInput,
+  outcomeMark,
   pagination,
   passwordInput,
   passwordRequirements,
@@ -1009,6 +1031,7 @@ export const en = {
   toggleGroup,
   trace,
   toolCall,
+  topologyDiagram,
   tracker,
   tree,
   unsavedChanges,

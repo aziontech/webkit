@@ -1,0 +1,49 @@
+{
+  "id": "platform/create/release-impact",
+  "name": "ReleaseImpact",
+  "title": "Templates/Platform/Create/ReleaseImpact",
+  "surface": "product",
+  "summary": "The Review and deploy page of a release that carries several resources at once. The left column holds one card per resource: its type and icon, a Required or Read-only `Tag` or an include `Switch` named by a `Tooltip`, the resource and a version `Select` that tracks the latest Ready version or pins one (each with a Current `Tag` and its age), an invalid line and Build a version when nothing is Ready, and a Dependencies box whose `Accordion` groups modules and integrations with counts, a Shared `Tag` with the resources that also reference it and one info `Alert` saying a shared dependency deploys at one version. The right column is the sticky Impact `Card`: a `ToggleGroup` switches a Tree (Deployment Settings, their environments and the projects they publish to, with rails and counts) and a Flow (the same as left-to-right cards), and its footer sums up what the release reaches. A sticky footer holds the hint, Cancel and Deploy release, which asks in a `ConfirmDialog` and then runs as an async action: one toast turns from Deploying release… into the outcome with Edit and Redeploy, and the page shows the outcome `Alert` with the same two actions. Built from `Card`, `Tag`, `Switch`, `Tooltip`, `Field`, `Select`, `Badge`, `Accordion`, `Alert`, `ToggleGroup`, `Skeleton`, `Spinner`, `Button`, `ConfirmDialog` and `Toaster`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "release impact",
+    "review and deploy",
+    "release composer",
+    "what a deploy changes",
+    "dependency versions",
+    "deployment impact",
+    "impacto do release",
+    "revisar e implantar",
+    "impacto del despliegue"
+  ],
+  "skills": ["webkit-create-surface", "webkit-form", "webkit-ui-states", "webkit-errors"],
+  "primary": {
+    "name": "Ready",
+    "file": "release-impact.vue"
+  },
+  "variants": [
+    {
+      "name": "Loading",
+      "summary": "The impact is being computed: the Impact card shows Computing impact… with a `Spinner` and three `Skeleton` lines, is `aria-busy`, announces it through a status line, hides the view switch and the summary, and the footer says Computing impact… beside Deploy release.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Unavailable",
+      "summary": "The projects behind the Deployment Settings could not be read: a warning `Alert` says the impact is unknown and that the release can still deploy, the count of settings selected and Retry. Retry computes again and lands on a truncated list, shown with its own warning above the tree.",
+      "file": "variants/unavailable.vue"
+    },
+    {
+      "name": "MissingVersion",
+      "summary": "edge-policy has no Ready version: its version `Select` is disabled and invalid with the reason under it, Build a version links to its versions, and Deploy release stays disabled with the reason in the footer. Switching edge-policy off the release clears the blocker.",
+      "file": "variants/missing-version.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The last run failed: the error toast and the danger `Alert` at the top say edge-policy was refused and nothing changed in traffic, each with Edit (back to the resources) and Redeploy. Redeploy runs again through the same toast and succeeds.",
+      "file": "variants/failed.vue"
+    }
+  ]
+}
