@@ -33,6 +33,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [OnboardingForm (platform/account/onboarding-form)](blocks/platform/account/onboarding-form.md): The `/signup/onboarding` screen, frame included.
 - [PaymentMethodCard (platform/account/payment-method-card)](blocks/platform/account/payment-method-card.md): The Payment method card of the Upgrade to Pro drawer.
 - [Profile (platform/account/profile)](blocks/platform/account/profile.md): The profile page of a signed-in account, and the layout every account settings page follows.
+- [Tokens (platform/account/tokens)](blocks/platform/account/tokens.md): The Personal tokens page of the account settings.
 - [AiActionApproval (platform/ai/ai-action-approval)](blocks/platform/ai/ai-action-approval.md): The moment an assistant needs permission.
 - [AiChat (platform/ai/ai-chat)](blocks/platform/ai/ai-chat.md): A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question.
 - [AiChatDrawer (platform/ai/ai-chat-drawer)](blocks/platform/ai/ai-chat-drawer.md): The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page.
