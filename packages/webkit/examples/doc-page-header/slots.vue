@@ -39,7 +39,7 @@
           />
         </span>
         <div class="min-w-0 flex-1">
-          <span class="block text-overline-sm uppercase text-(--primary)">Anthropic</span>
+          <span class="block text-overline-sm uppercase text-(--text-primary)">Anthropic</span>
           <h1 class="m-0 text-heading-2xl text-(--text-default) sm:text-heading-xl">
             Claude Code + Azion
           </h1>

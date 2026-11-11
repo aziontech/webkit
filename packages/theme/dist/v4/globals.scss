@@ -902,6 +902,8 @@
   --text-link-font-size: inherit;
   --text-link-line-height: inherit;
   --text-link-color: var(--text-link);
+  --text-link-text-decoration-line: underline;
+  --text-link-text-underline-offset: 0.15em;
   --text-link-border-radius: var(--shape-elements);
   --text-link-transition: all 110ms cubic-bezier(0.39, 0.57, 0.56, 1);
 
@@ -1000,6 +1002,7 @@
   --text-default: #141414;
   --text-muted: #535353;
   --text-disabled: #999999;
+  --text-primary: #B03C02;
   --text-link: #005FCC;
   --text-link-hover: #004799;
   --text-contrast: #FAFAFA;
@@ -1132,6 +1135,7 @@
   --text-default: #FAFAFA;
   --text-muted: #999999;
   --text-disabled: #4D4D4D;
+  --text-primary: #F3652B;
   --text-link: #3392FF;
   --text-link-hover: #66ADFF;
   --text-contrast: #000000;
@@ -1599,9 +1603,11 @@
   font-size: var(--text-link-font-size);
   line-height: var(--text-link-line-height);
   color: var(--text-link-color);
+  text-decoration-line: var(--text-link-text-decoration-line);
+  text-underline-offset: var(--text-link-text-underline-offset);
   border-radius: var(--text-link-border-radius);
   transition: var(--text-link-transition);
-  &:hover { color: var(--text-link-hover); text-decoration: underline; }
+  &:hover { color: var(--text-link-hover); text-decoration-thickness: 2px; }
   &:focus-visible { outline: 2px solid var(--ring-color); outline-offset: 2px; }
 }
 
@@ -1840,5 +1846,26 @@
   [role="button"]:not([aria-disabled="true"]),
   summary {
     cursor: pointer;
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight !important;
+    outline-offset: 2px !important;
+  }
+
+  :is([role="option"][aria-selected="true"], [role="tab"][aria-selected="true"], [role="row"][aria-selected="true"], [role="gridcell"][aria-selected="true"], [role="treeitem"][aria-selected="true"], [role="menuitemradio"][aria-checked="true"], [role="menuitemcheckbox"][aria-checked="true"], [aria-current]:not([aria-current="false"]), [aria-pressed="true"]) {
+    outline: 2px solid SelectedItem;
+    outline-offset: -2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

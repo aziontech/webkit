@@ -16,6 +16,7 @@
 <template>
   <div class="flex w-[280px] flex-col items-start gap-4">
     <Select
+      aria-label="Option"
       v-model="value"
       :required="submitted && !value"
       placeholder="Select an option"

@@ -24,6 +24,10 @@ export interface MultiSelectContext {
   controlId: ComputedRef<string | undefined>
   /** Description and error ids of the enclosing Field, for the trigger's aria-describedby. */
   describedBy: ComputedRef<string | undefined>
+  /** `aria-label` set on the root, forwarded to the trigger. */
+  ariaLabel: ComputedRef<string | undefined>
+  /** `aria-labelledby` set on the root, forwarded to the trigger. */
+  ariaLabelledby: ComputedRef<string | undefined>
   placeholder: ComputedRef<string>
   /** Formats the selected values for the trigger label. */
   displayValue: ComputedRef<string>

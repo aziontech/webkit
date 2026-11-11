@@ -294,6 +294,9 @@ export const es: Messages = {
   popover: {
     close: 'Cerrar'
   },
+  progress: {
+    label: 'Progreso'
+  },
   propertyFilter: {
     label: 'Filtrar',
     placeholder: 'Filtrar por propiedad o texto',

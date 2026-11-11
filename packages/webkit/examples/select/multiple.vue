@@ -13,6 +13,7 @@
 
 <template>
   <Select
+    aria-label="Options"
     v-model="value"
     multiple
     placeholder="Select an option"

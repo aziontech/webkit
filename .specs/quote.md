@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 6659a37f98367622760050a08412ec533b774b9d226486a001a7a32c45594f1c
+checksum: 32f536d35f353164db36e50fe908b5b4db07293245c34035f18395be5e5576fa
 created: 2026-09-22
-last_updated: 2026-10-01
+last_updated: 2026-11-11
 ---
 
 # Quote — Component Spec
@@ -122,7 +122,7 @@ _none_
 | quotation text (highlighted, outside a phrase) | `var(--text-muted)` |
 | highlighted phrase | `var(--text-default)` |
 | quotation glyph | `var(--text-muted)` |
-| attribution name | `var(--primary)` |
+| attribution name | `var(--text-primary)` |
 | attribution role | `var(--text-muted)` |
 | quotation measure (`highlight`) | `var(--container-2xl)` |
 | spacing (mark to quotation, `inline`) | `var(--spacing-lg)` |

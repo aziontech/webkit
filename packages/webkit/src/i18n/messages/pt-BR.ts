@@ -294,6 +294,9 @@ export const ptBR: Messages = {
   popover: {
     close: 'Fechar'
   },
+  progress: {
+    label: 'Progresso'
+  },
   propertyFilter: {
     label: 'Filtrar',
     placeholder: 'Filtrar por propriedade ou texto',

@@ -44,7 +44,7 @@
     >
       {{ prefix }}
     </span>
-    <span class="min-w-0 text-pretty text-(--primary) font-medium uppercase text-overline-md">
+    <span class="min-w-0 text-pretty text-(--text-primary) font-medium uppercase text-overline-md">
       <slot />
     </span>
     <span

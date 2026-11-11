@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: c7a8745e424b980b0252dbbc7480097e1772f86354b6a5db48f7ca4bcda57440
+checksum: 6145cdab6f652fafeaa0d9bbbfb20753045785632c4ed8fd802340371938efee
 created: 2026-11-10
 last_updated: 2026-11-11
 ---
@@ -103,7 +103,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 | --------------------------- | ----------------------------------------------------------- |
 | typography (prefix, label)  | `.text-overline-md` with `font-medium`                      |
 | text (prefix)               | `var(--text-default)` (`text-(--text-default)`)             |
-| text (label)                | `var(--primary)` (`text-(--primary)`)                       |
+| text (label)                | `var(--text-primary)` (`text-(--text-primary)`)                     |
 | cursor surface              | `var(--accent)`                                             |
 | cursor size                 | `w-1` · `h-5`                                               |
 | gap (prefix, label, cursor) | `var(--spacing-xxs)`                                        |
@@ -120,7 +120,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 - Visible focus: not applicable — the component renders no focusable element.
 - Keyboard map: none; the component is not interactive.
 - ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is decorative and carries `aria-hidden="true"`, so only the label is announced; the cursor `span` is empty and contributes no text.
-- Contrast ≥4.5:1 (text): the label uses `var(--primary)` and the prefix `var(--text-default)` on the surface the consumer places it on.
+- Contrast ≥4.5:1 (text): the label uses `var(--text-primary)` (`primary-700` in light, 4.77:1 or more on every light surface; `primary-500` in dark) and the prefix `var(--text-default)` on the surface the consumer places it on.
 - `motion-reduce:animate-none` on the cursor's `animate-blink`.
 - Touch target: not applicable (non-interactive).
 

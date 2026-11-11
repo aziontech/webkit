@@ -86,7 +86,7 @@
         >
           <span
             v-if="item.prefix"
-            class="text-(--primary)"
+            class="text-(--text-primary)"
             >{{ item.prefix }}</span
           >
           <span class="min-w-0 wrap-anywhere text-(--text-default)">{{ item.value }}</span>

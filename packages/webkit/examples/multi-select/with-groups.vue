@@ -28,6 +28,7 @@
 <template>
   <div style="width: 280px">
     <MultiSelect
+      aria-label="Options"
       v-model="value"
       placeholder="Select options"
     >

@@ -4,9 +4,9 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 4923a972c9feff5ec6bc65e9d8623b90b50df9207dea9ed4d1c913afbbec5e64
+checksum: f1f793ce0c69f989d912b5a07cf3dd9265e9d6009acc7e76044f3e5a2d1e424e
 created: 2026-09-24
-last_updated: 2026-10-15
+last_updated: 2026-11-11
 ---
 
 # Column Navigation — Component Spec
@@ -138,7 +138,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | column surface                                    | `var(--bg-canvas)`         |
 | column heading rule                               | `var(--border-default)`    |
 | typography (column heading)                       | `.text-overline-md`        |
-| column heading ink                                | `var(--primary)`           |
+| column heading ink                                | `var(--text-primary)`      |
 | typography (row title)                            | `.text-label-md`           |
 | row title ink                                     | `var(--text-default)`      |
 | typography (row description)                      | `.text-body-sm`            |

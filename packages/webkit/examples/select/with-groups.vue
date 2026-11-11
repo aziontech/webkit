@@ -24,6 +24,7 @@
 <template>
   <div class="w-[280px]">
     <Select
+      aria-label="Option"
       v-model="value"
       placeholder="Select an option"
     >

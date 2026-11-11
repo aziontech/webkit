@@ -89,11 +89,6 @@
     return isChecked.value ? 'checked' : 'unchecked'
   })
 
-  const ariaChecked = computed<'true' | 'false' | 'mixed'>(() => {
-    if (props.indeterminate) return 'mixed'
-    return isChecked.value ? 'true' : 'false'
-  })
-
   const inputRef = ref<globalThis.HTMLInputElement | null>(null)
 
   watch(
@@ -154,7 +149,6 @@
       :disabled="isDisabled"
       :readonly="readonly"
       :tabindex="tabindex"
-      :aria-checked="ariaChecked"
       :data-testid="`${testId}__input`"
       v-bind="passthroughAttrs"
       @change="handleChange"

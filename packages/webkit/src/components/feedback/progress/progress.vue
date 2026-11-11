@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
+
   export type ProgressShape = 'rounded' | 'flat'
   export type ProgressSize = 'small' | 'medium' | 'large'
 
@@ -32,6 +35,14 @@
 
   const attrs = useAttrs()
 
+  const { t } = useTranslate({ progress: en.progress })
+
+  const accessibleName = computed(
+    () =>
+      (attrs['aria-label'] as string | undefined) ??
+      (attrs['aria-labelledby'] ? undefined : t('progress.label'))
+  )
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-progress')
 
   const percent = computed(() => Math.min(100, Math.max(0, (props.value / props.max) * 100)))
@@ -41,6 +52,7 @@
   <div
     v-bind="$attrs"
     role="progressbar"
+    :aria-label="accessibleName"
     :data-testid="testId"
     :data-shape="shape"
     :data-size="size"
@@ -54,7 +66,7 @@
     <div
       :data-indeterminate="indeterminate || null"
       :style="indeterminate ? undefined : { width: percent + '%' }"
-      class="absolute inset-y-0 start-0 rounded-[inherit] bg-(--primary) transition-[width] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none motion-reduce:animate-none data-[indeterminate]:end-0 data-[indeterminate]:bg-transparent data-[indeterminate]:before:absolute data-[indeterminate]:before:inset-y-0 data-[indeterminate]:before:rounded-[inherit] data-[indeterminate]:before:bg-(--primary) data-[indeterminate]:before:content-[''] data-[indeterminate]:before:animate-progress-indeterminate motion-reduce:before:animate-none motion-reduce:before:inset-x-0 data-[indeterminate]:after:absolute data-[indeterminate]:after:inset-y-0 data-[indeterminate]:after:rounded-[inherit] data-[indeterminate]:after:bg-(--primary) data-[indeterminate]:after:content-[''] data-[indeterminate]:after:animate-progress-indeterminate-short motion-reduce:after:animate-none motion-reduce:after:hidden"
+      class="absolute inset-y-0 start-0 rounded-[inherit] bg-(--primary) transition-[width] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none motion-reduce:animate-none data-[indeterminate]:end-0 data-[indeterminate]:bg-transparent data-[indeterminate]:before:absolute data-[indeterminate]:before:inset-y-0 data-[indeterminate]:before:rounded-[inherit] data-[indeterminate]:before:bg-(--primary) data-[indeterminate]:before:content-[''] data-[indeterminate]:before:animate-progress-indeterminate motion-reduce:data-[indeterminate]:before:animate-none motion-reduce:before:inset-x-0 data-[indeterminate]:after:absolute data-[indeterminate]:after:inset-y-0 data-[indeterminate]:after:rounded-[inherit] data-[indeterminate]:after:bg-(--primary) data-[indeterminate]:after:content-[''] data-[indeterminate]:after:animate-progress-indeterminate-short motion-reduce:data-[indeterminate]:after:animate-none motion-reduce:after:hidden"
     />
   </div>
 </template>

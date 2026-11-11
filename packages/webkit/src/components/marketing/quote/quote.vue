@@ -161,7 +161,7 @@
         >
           <span
             v-if="name"
-            class="px-(--spacing-xxs) text-(--primary)"
+            class="px-(--spacing-xxs) text-(--text-primary)"
             >{{ name }}</span
           >
           <span

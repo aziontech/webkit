@@ -10,6 +10,7 @@
 <template>
   <InputGroup>
     <Select
+      aria-label="Currency"
       v-model="currency"
       placeholder="BRL"
     >
