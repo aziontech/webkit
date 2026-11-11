@@ -5,7 +5,8 @@ import { DOCS, label, type Mode, prepare, query, settle, shot } from './lib'
 const THEMES = ['light', 'dark'] as const
 
 async function openExample(page: Page, example: string, mode: Mode) {
-  await page.goto(`${DOCS}/example/${example}${query(mode)}`)
+  await page.goto(`${DOCS}/example${query(mode)}&path=${example}`)
+  await page.locator('[data-example][data-ready]').waitFor()
   await settle(page)
   return page.locator('[data-example]')
 }
@@ -94,7 +95,10 @@ for (const theme of THEMES) {
         await page.goto(`${DOCS}/frame/${state}/${id}${query(mode)}`)
         await settle(page)
         if (state === 'account-switch') {
-          await page.getByRole('button', { name: /Switch account/ }).first().click()
+          await page
+            .getByRole('button', { name: /Switch account/ })
+            .first()
+            .click()
           await expect(page.getByRole('dialog').last()).toBeVisible()
           await settle(page)
         }

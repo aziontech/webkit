@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 88e9353f89ebecaa1d7975cc0fad08329f2c4d848884ae769fc0cd511764ed36
+checksum: a7b01827f3cadb58e78db7418bf648251549ee5916a488812dbb9cc74d00a0f6
 created: 2026-09-25
 last_updated: 2026-10-21
 ---
@@ -175,7 +175,7 @@ _none_
 - Default
 - Sizes — composite story rendering every `size` value.
 
-The band is read by scrolling, and an example preview is short, so the docs page shows the band's resting state (first claim open) rather than its full run; the example file is what a consumer pastes. No extra example demonstrates the scroll; the frame route (`/example/sticky-stack/<file>`) shows it full height.
+The band is read by scrolling, and an example preview is short, so the docs page shows the band's resting state (first claim open) rather than its full run; the example file is what a consumer pastes. No extra example demonstrates the scroll; the frame route (`/example?path=sticky-stack/<file>`) shows it full height.
 
 ## Constraints — DO NOT
 

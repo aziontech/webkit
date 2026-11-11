@@ -191,7 +191,7 @@ Tests never ship to npm — `packages/webkit/package.json#files` excludes them, 
 The unit suite above runs on an **unstyled** DOM (no Tailwind) and owns behavior/structure/ARIA.
 Pixels are owned by [`apps/visual`](./apps/visual/README.md): Playwright serves the built docs
 site and demos and screenshots them **with the real theme CSS** — the first example of every
-component (`/example/<dir>/<file>`) in light and dark at 1280 px and light at 390 px, the primary
+component (`/example?path=<dir>/<file>`) in light and dark at 1280 px and light at 390 px, the primary
 state of every block (`/frame/<state>/<id>`) in light and dark at 1280 px and dark at 390 px, every
 state of the AI blocks (light, dark, 320 px, right to left), every demo route (plus the demo flows
 end to end) and the geometry checks in `tests/geometry.spec.ts`.

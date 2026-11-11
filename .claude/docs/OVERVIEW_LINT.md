@@ -7,11 +7,11 @@
 
 Code quality is enforced in **four layers of defense**, from the moment code is written to the moment a PR merges. The same tools run at every layer — what changes is _when_ they fire and _how much_ they check:
 
-| Layer                    | When                                   | What runs                                                                            |
-| ------------------------ | -------------------------------------- | ------------------------------------------------------------------------------------ |
-| **0 — Write time**       | as files are written (AI-assisted dev) | 6 Claude Code guardrail hooks (tokens, imports, specs, test existence)  |
-| **1 — Scripts / editor** | on demand                              | ESLint (zero warnings) · Stylelint · Prettier · `vue-tsc` · type-coverage ≥95%       |
-| **2 — Git hooks**        | `git commit`                           | husky → lint-staged (auto-fix staged files) + commitlint (message contract)          |
+| Layer                    | When                                   | What runs                                                                                                   |
+| ------------------------ | -------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **0 — Write time**       | as files are written (AI-assisted dev) | 6 Claude Code guardrail hooks (tokens, imports, specs, test existence)                                      |
+| **1 — Scripts / editor** | on demand                              | ESLint (zero warnings) · Stylelint · Prettier · `vue-tsc` · type-coverage ≥95%                              |
+| **2 — Git hooks**        | `git commit`                           | husky → lint-staged (auto-fix staged files) + commitlint (message contract)                                 |
 | **3 — CI**               | PR / push to `main`, `dev`             | `governance.yml`: lint + types + security + build + docs/demos build + styled visual tests, behind one gate |
 
 Philosophy: **ESLint owns correctness, Prettier owns formatting, Stylelint owns CSS, vue-tsc owns types, commitlint owns release semantics** — no tool overlaps another's job, and warnings don't exist (`--max-warnings 0`: an issue is either an error or not a rule).
@@ -262,14 +262,14 @@ flowchart TB
 
 What each job contributes:
 
-| Job                  | Checks                                                                                  | Why it's here                                                         |
-| -------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| **lint**             | ESLint (0 warnings) · Stylelint · `prettier --check`                                    | re-runs Layer 1/2 from a clean checkout — local bypasses can't merge  |
-| **types**            | `vue-tsc` · type-coverage ≥95%                                                          | the type gates of §5, enforced on every PR                            |
-| **security**         | `pnpm audit` (high+) · TruffleHog verified-secret scan · `depcheck` (continue-on-error) | vulnerable deps and committed secrets block; unused deps are advisory |
-| **build**            | `pack:dry` + `pack:check`                                                               | publish safety — the npm tarball is valid and ships zero test files   |
+| Job                  | Checks                                                                                  | Why it's here                                                                                  |
+| -------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **lint**             | ESLint (0 warnings) · Stylelint · `prettier --check`                                    | re-runs Layer 1/2 from a clean checkout — local bypasses can't merge                           |
+| **types**            | `vue-tsc` · type-coverage ≥95%                                                          | the type gates of §5, enforced on every PR                                                     |
+| **security**         | `pnpm audit` (high+) · TruffleHog verified-secret scan · `depcheck` (continue-on-error) | vulnerable deps and committed secrets block; unused deps are advisory                          |
+| **build**            | `pack:dry` + `pack:check`                                                               | publish safety — the npm tarball is valid and ships zero test files                            |
 | **site**             | `docs:build` + `demos:build`                                                            | the docs site prerendering every route is a smoke test over every example, block and component |
-| **governance-check** | aggregates all of the above                                                             | the **single required status** for branch protection                  |
+| **governance-check** | aggregates all of the above                                                             | the **single required status** for branch protection                                           |
 
 The functional and visual test workflows (the `tests` and `visual` jobs of `governance.yml`, and `visual-baselines.yml`) run alongside the static gates — see [`OVERVIEW_TESTS.md`](./OVERVIEW_TESTS.md).
 

@@ -81,7 +81,7 @@ same on the issue (`gh issue comment`), and do nothing else.
    states of the spec.
 4. Budget: an entry in `packages/webkit/.size-limit.json` with the spec's `## Performance` budget.
 5. Regenerate: `pnpm --filter @aziontech/webkit catalog:build`. The docs page
-   (`/components/<name>`, `/example/<name>/<file>`) and the visual test of the first example follow
+   (`/components/<name>`, `/example?path=<name>/<file>`) and the visual test of the first example follow
    from the files; its baseline comes from the `Visual baselines` workflow (`/regen-baselines`).
 6. Exit condition: `/component-create` finished with `status: implemented` and the echo verdict
    is `parity`.

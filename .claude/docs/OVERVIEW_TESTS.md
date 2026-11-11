@@ -7,9 +7,9 @@
 
 Webkit ships **two complementary test layers**, both running in **real Chromium** (never jsdom):
 
-| Layer                    | Tooling                                     | DOM                                          | Owns                                                                                           | CI workflow                                                                                 |
-| ------------------------ | ------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| **1. Functional / unit** | Vitest 4 browser mode + Playwright          | Unstyled (tokens load, no Tailwind pipeline) | Behavior, structure, events, v-model, ARIA, structural a11y                                    | `package-webkit-test.yml` (4 shards)                                                        |
+| Layer                    | Tooling                                                                          | DOM                                          | Owns                                                                                   | CI workflow                                                                                    |
+| ------------------------ | -------------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **1. Functional / unit** | Vitest 4 browser mode + Playwright                                               | Unstyled (tokens load, no Tailwind pipeline) | Behavior, structure, events, v-model, ARIA, structural a11y                            | `package-webkit-test.yml` (4 shards)                                                           |
 | **2. Visual regression** | Playwright `toHaveScreenshot` (`apps/visual`) over the built docs site and demos | Fully styled (theme + Tailwind)              | Pixels, layout, color, typography — light/dark at 1280 and 390 px (sampled matrix, §3) | `governance.yml` → `visual` (4 shards, Playwright image); baselines via `visual-baselines.yml` |
 
 Current numbers: **67 component test suites · 1362 tests passing · 1 skipped · ~97% of in-scope component roots covered** — over a library of ~150 components (roots + sub-components).
@@ -82,7 +82,7 @@ Consequence: **no mocks for layout, positioning, focus, or `<Teleport>` — ever
 | Runner config | `packages/webkit/vitest.config.ts`  | Vitest **4.1.9** browser mode: `provider: playwright()` (v4 factory), `headless: true`, single `chromium` instance, `retry: 2` in CI (0 local), includes `src/**/*.test.{ts,js}` |
 | Global setup  | `packages/webkit/src/test/setup.ts` | `cleanup()` after each test + **anchor-navigation guard** (prevents `<a href>` clicks from tearing down the test iframe, while `@click` handlers still fire)                     |
 | A11y helper   | `packages/webkit/src/test/axe.ts`   | `expectNoA11yViolations(container)` — runs **axe-core 4.10** and asserts zero violations                                                                                         |
-| Coverage      | `vitest.config.ts` → `coverage`     | V8 provider, `text` + `lcov`, **reporting-only** (no gate yet); measures `src/components/**`, excludes tests, `.figma.ts`, barrels, presets                             |
+| Coverage      | `vitest.config.ts` → `coverage`     | V8 provider, `text` + `lcov`, **reporting-only** (no gate yet); measures `src/components/**`, excludes tests, `.figma.ts`, barrels, presets                                      |
 
 ### 2.3 Anatomy of a component test
 
@@ -163,12 +163,12 @@ The unit environment **does not run the Tailwind pipeline** — components mount
 Playwright serves the built docs site (`apps/docs/dist`) and demos (`apps/demos/dist`) and takes
 screenshots with the real theme CSS. Specs and matrix:
 
-| Spec | Pages | Modes |
-| ---- | ----- | ----- |
-| `examples.spec.ts` | `/example/<dir>/<file>`, the first example of every component | light 1280, dark 1280, light 390 |
-| `blocks.spec.ts` | `/frame/<state>/<id>`, the primary state of every block; every state of `platform/ai/*` | light 1280, dark 1280, dark 390; AI blocks light/dark at 320 and 1280 plus right to left |
-| `demos.spec.ts` | every demo route, plus the flows end to end | light 1280, dark 1280, dark 390; resource routes also right to left in pt-BR |
-| `geometry.spec.ts` | styled geometry the unit layer cannot see (table presets, reorder mid-drag beside frozen columns, `OverflowCount` open, `OtpInput` at 320, account pieces) | per test |
+| Spec               | Pages                                                                                                                                                      | Modes                                                                                    |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `examples.spec.ts` | `/example?path=<dir>/<file>`, the first example of every component                                                                                  | light 1280, dark 1280, light 390                                                         |
+| `blocks.spec.ts`   | `/frame/<state>/<id>`, the primary state of every block; every state of `platform/ai/*`                                                                    | light 1280, dark 1280, dark 390; AI blocks light/dark at 320 and 1280 plus right to left |
+| `demos.spec.ts`    | every demo route, plus the flows end to end                                                                                                                | light 1280, dark 1280, dark 390; resource routes also right to left in pt-BR             |
+| `geometry.spec.ts` | styled geometry the unit layer cannot see (table presets, reorder mid-drag beside frozen columns, `OverflowCount` open, `OtpInput` at 320, account pieces) | per test                                                                                 |
 
 Determinism: a fixed clock (2026-11-10 12:00 UTC), `timezoneId: 'UTC'`, `locale: 'en-US'`,
 `reducedMotion: 'reduce'`, `animations: 'disabled'`, fonts awaited, and every request that is not
@@ -241,35 +241,35 @@ Two mechanisms, verified in CI (`governance.yml` → build job):
 | [`.claude/rules/testing.md`](../.claude/rules/testing.md) | Rule (source of truth)       | Fixes the browser-mode requirement, the 10-surface floor, and the hard prohibitions                                          |
 | `enforce-test-exists.mjs`                                 | Claude Code PostToolUse hook | Warns when a root `.vue` is written without a co-located `<name>.test.ts`                                                    |
 | `component-scaffold` skill                                | Generator                    | Every new component is born with a starter test (render + testid override + axe) that the author expands to the full surface |
-| `validate-references.mjs`                                 | Claude Code PreToolUse hook  | Blocks test files whose imports don't resolve (e.g. a vite alias instead of a relative path)                  |
+| `validate-references.mjs`                                 | Claude Code PreToolUse hook  | Blocks test files whose imports don't resolve (e.g. a vite alias instead of a relative path)                                 |
 | `package-webkit-test.yml` gate                            | CI                           | No PR merges with a red shard                                                                                                |
 
 ---
 
 ## 7. Command cheat sheet
 
-| Command (repo root)                 | What it runs                                    |
-| ----------------------------------- | ----------------------------------------------- |
-| `pnpm webkit:test`                  | full browser-mode suite, headless               |
-| `pnpm webkit:test:watch`            | watch mode                                      |
-| `pnpm webkit:test:ui`               | Vitest UI with a **headed** browser (debugging) |
-| `pnpm webkit:test:coverage`         | suite + V8 coverage report (`text` + `lcov`)    |
-| `pnpm visual:test`                  | styled screenshots vs baselines (after `docs:build` + `demos:build`) |
-| `pnpm visual:update:baseline`       | dispatch the baseline workflow for this branch  |
-| `pnpm --filter webkit pack:check`   | assert no test file leaks into the npm tarball  |
+| Command (repo root)               | What it runs                                                         |
+| --------------------------------- | -------------------------------------------------------------------- |
+| `pnpm webkit:test`                | full browser-mode suite, headless                                    |
+| `pnpm webkit:test:watch`          | watch mode                                                           |
+| `pnpm webkit:test:ui`             | Vitest UI with a **headed** browser (debugging)                      |
+| `pnpm webkit:test:coverage`       | suite + V8 coverage report (`text` + `lcov`)                         |
+| `pnpm visual:test`                | styled screenshots vs baselines (after `docs:build` + `demos:build`) |
+| `pnpm visual:update:baseline`     | dispatch the baseline workflow for this branch                       |
+| `pnpm --filter webkit pack:check` | assert no test file leaks into the npm tarball                       |
 
 ---
 
 ## 8. Design decisions — the "why" in one table
 
-| Decision                                                              | Alternative rejected                                           | Rationale                                                                                                                                                                                                                                      |
-| --------------------------------------------------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Vitest **browser mode** (real Chromium)                               | jsdom                                                          | jsdom no-ops focus/layout/Teleport — false positives on exactly the behaviors that break in production                                                                                                                                         |
-| **Example as fixture** (`examples/<name>/*.vue`)                       | separate hand-written fixtures                                 | docs and tests exercise the same files; drift becomes impossible                                                                                                                                                                               |
-| **Unstyled** unit DOM                                                 | wiring the Tailwind pipeline into Vitest                       | no unit assertion needs pixels; cost (postcss + theme config duplication) buys nothing — pixels are Layer 2's job                                                                                                                              |
-| axe **structural-only** in units                                      | full axe rule set                                              | contrast/target-size without real CSS would mislead; structural rules caught every real defect so far                                                                                                                                          |
-| **Snapshots of the built docs site and demos**, one container image   | visual SaaS (Chromatic etc.) / per-OS baselines                | self-hosted, zero external service; one image for local and CI removes font-rasterization noise |
-| **Sampled matrix** (first example per component, primary block state, all AI-block states, demo routes) | every example × every mode | ~900 screenshots keep the run CI-sized; the geometry spec adds targeted shots where layout is fragile |
-| **4-shard CI matrix** + retry 2                                       | single job                                                     | ~150-component suite parallelizes; retries absorb browser-launch flakes without hiding real failures                                                                                                                                           |
-| Coverage **reporting-only**                                           | coverage gate                                                  | signal first, ratchet later — the functional floor (10 surfaces) is the real gate                                                                                                                                                              |
-| Tests co-located, published-excluded                                  | separate `__tests__/` tree                                     | test lives with the component it proves; `files` negation + `pack:check` keep npm clean                                                                                                                                                        |
+| Decision                                                                                                | Alternative rejected                            | Rationale                                                                                                         |
+| ------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Vitest **browser mode** (real Chromium)                                                                 | jsdom                                           | jsdom no-ops focus/layout/Teleport — false positives on exactly the behaviors that break in production            |
+| **Example as fixture** (`examples/<name>/*.vue`)                                                        | separate hand-written fixtures                  | docs and tests exercise the same files; drift becomes impossible                                                  |
+| **Unstyled** unit DOM                                                                                   | wiring the Tailwind pipeline into Vitest        | no unit assertion needs pixels; cost (postcss + theme config duplication) buys nothing — pixels are Layer 2's job |
+| axe **structural-only** in units                                                                        | full axe rule set                               | contrast/target-size without real CSS would mislead; structural rules caught every real defect so far             |
+| **Snapshots of the built docs site and demos**, one container image                                     | visual SaaS (Chromatic etc.) / per-OS baselines | self-hosted, zero external service; one image for local and CI removes font-rasterization noise                   |
+| **Sampled matrix** (first example per component, primary block state, all AI-block states, demo routes) | every example × every mode                      | ~900 screenshots keep the run CI-sized; the geometry spec adds targeted shots where layout is fragile             |
+| **4-shard CI matrix** + retry 2                                                                         | single job                                      | ~150-component suite parallelizes; retries absorb browser-launch flakes without hiding real failures              |
+| Coverage **reporting-only**                                                                             | coverage gate                                   | signal first, ratchet later — the functional floor (10 surfaces) is the real gate                                 |
+| Tests co-located, published-excluded                                                                    | separate `__tests__/` tree                      | test lives with the component it proves; `files` negation + `pack:check` keep npm clean                           |

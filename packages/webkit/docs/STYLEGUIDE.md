@@ -617,7 +617,7 @@ Internal to the webkit repo — how its own components come to exist.
 - Example set: Default + one composite example per multi-option axis + one example per
   mutually-exclusive state — never one-example-per-variant.
 - No Figma links in examples — the example documents API and behavior.
-- Adding an example is enough: the docs page (`/components/<name>`, `/example/<name>/<file>`)
+- Adding an example is enough: the docs page (`/components/<name>`, `/example?path=<name>/<file>`)
   and the styled visual test of the first example follow from the files.
 
 **Enforced by:** the catalog drift gate (`examples.json` against the exports) · the copyable,

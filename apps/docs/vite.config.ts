@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import { defineConfig, type UserConfig } from 'vite'
 import type { ViteSSGOptions } from 'vite-ssg'
 
-import { buildIndex, readExampleDirs } from './plugins/content.ts'
+import { buildIndex } from './plugins/content.ts'
 import { docsPlugin } from './plugins/docs-plugin.ts'
 import { FOUNDATION_SLUGS } from './src/lib/foundations.ts'
 
@@ -20,9 +20,7 @@ function staticRoutes(): string[] {
     ...components.map((item) => `/components/${item.name}`),
     ...blocks.map((block) => `/blocks/${block.id}`),
     ...blocks.flatMap((block) => block.states.map((state) => `/frame/${state.slug}/${block.id}`)),
-    ...readExampleDirs().flatMap(({ dir, data }) =>
-      data.examples.map((example) => `/example/${dir}/${example.file.replace(/\.vue$/, '')}`)
-    ),
+    '/example',
     '/404'
   ]
 }

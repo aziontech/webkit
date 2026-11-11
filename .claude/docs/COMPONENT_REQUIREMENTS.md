@@ -892,7 +892,7 @@ Every component documents itself through copyable SFCs in `packages/webkit/examp
 - `examples.json`: `{ "component": "<name>", "title": "Components/<Category>/<PascalName>", "examples": [{ "name", "summary", "file" }] }`. The first example is the default view and is the one the styled visual suite screenshots.
 - One `.vue` per example: `<script setup>` with the real `@aziontech/webkit/<subpath>` imports (binding = `PascalCase` of the subpath), a `<template>` with PascalCase tags and concrete props. It stands alone: copy the file and it runs.
 - Set: `default.vue` + one composite example per multi-option axis (`types.vue` for `kind`, `sizes.vue` for `size`) + one example per mutually-exclusive state the component declares (`loading.vue`, `disabled.vue`). Nothing else unless the spec's `## Examples` section lists and justifies it.
-- The docs site renders each example on `/components/<name>` beside its source and alone at `/example/<name>/<file>`; the catalog (`catalog.json`), the MCP (`get_component`) and the harnesses (copyable, hydration, server render, a11y) read the same files.
+- The docs site renders each example on `/components/<name>` beside its source and alone at `/example?path=<name>/<file>`; the catalog (`catalog.json`), the MCP (`get_component`) and the harnesses (copyable, hydration, server render, a11y) read the same files.
 
 ### 13.w Styling discipline (mandatory for new components)
 

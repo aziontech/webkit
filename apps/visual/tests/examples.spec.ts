@@ -14,7 +14,8 @@ for (const group of exampleGroups()) {
   for (const mode of MODES) {
     test(`example ${group.dir}/${stem(first.file)} ${label(mode)}`, async ({ page }) => {
       await prepare(page, mode)
-      await page.goto(`${DOCS}/example/${group.dir}/${stem(first.file)}${query(mode)}`)
+      await page.goto(`${DOCS}/example${query(mode)}&path=${group.dir}/${stem(first.file)}`)
+      await page.locator('[data-example][data-ready]').waitFor()
       await settle(page)
       await expect(page).toHaveScreenshot(
         shot(`examples/${group.dir}/${stem(first.file)}--${label(mode)}.png`)

@@ -44,7 +44,7 @@ Hooks that fire on every Write:
 If any hook blocks, surface the stderr and abort. **Do not retry with workarounds.**
 
 ### Step 5 — Examples (writes)
-Write `packages/webkit/examples/<name>/`: `examples.json` (`component`, `title`, `examples[]` with `name`, `summary`, `file`) and one copyable `.vue` per example the spec's `## Examples` section lists (Default + per kind + per size + Disabled by default — nothing else unless the spec is explicit). Each example imports only `@aziontech/webkit/*` subpaths and stands alone. The docs site renders every example on the component page and at `/example/<name>/<file>`, and the styled visual suite (`apps/visual`) screenshots the first one; nothing else to register.
+Write `packages/webkit/examples/<name>/`: `examples.json` (`component`, `title`, `examples[]` with `name`, `summary`, `file`) and one copyable `.vue` per example the spec's `## Examples` section lists (Default + per kind + per size + Disabled by default — nothing else unless the spec is explicit). Each example imports only `@aziontech/webkit/*` subpaths and stands alone. The docs site renders every example on the component page and at `/example?path=<name>/<file>`, and the styled visual suite (`apps/visual`) screenshots the first one; nothing else to register.
 
 ### Step 6 — Code Connect (writes or skip)
 Spawn the `code-connect-writer` sub-agent. Skips itself if `@figma/code-connect` is not installed; that becomes a Pending Item in the final report.

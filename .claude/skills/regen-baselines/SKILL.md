@@ -14,7 +14,7 @@ enforced_by: [git-workflow, release-types, review]
 Refresh the baselines that the `governance.yml` `visual` job compares every PR against. The
 suite lives in `apps/visual` (Playwright, `pnpm visual:test`): it serves the built docs site
 (`apps/docs/dist`) and demos (`apps/demos/dist`) and screenshots, with the real theme CSS, the
-first example of every component (`/example/<dir>/<file>`), the primary state of every block
+first example of every component (`/example?path=<dir>/<file>`), the primary state of every block
 (`/frame/<state>/<id>`), every state of the AI blocks, every demo route, and the geometry checks
 in `tests/geometry.spec.ts`. Baselines live in `apps/visual/baselines/` and are valid only when
 rendered in `mcr.microsoft.com/playwright:v1.62.0-noble` (the CI job runs in that image), so a run

@@ -279,7 +279,7 @@ Comprehensive CI/CD pipeline with path-filtered gating, parallel execution, and 
 | **toolkit**          | Catalog drift, toolkit unit tests, authoring **ratchet**, test-existence gate, doc-standards ratchet | `toolkit` changes, parallel           |
 | **smoke**            | Consumer smoke test — `init` + build a bare consumer app                                             | `visual`-scope changes                |
 | **tests**            | **Vitest browser mode** (Playwright Chromium), 4 shards                                              | after lint + types                    |
-| **visual**           | Styled Playwright screenshots (`apps/visual`) in the Playwright image, 4 shards, report on failure    | after all build/test jobs             |
+| **visual**           | Styled Playwright screenshots (`apps/visual`) in the Playwright image, 4 shards, report on failure   | after all build/test jobs             |
 | **governance-check** | Summary gate ensuring all jobs passed (or cleanly skipped)                                           | `always()`, last                      |
 
 #### Security Job Details
@@ -327,19 +327,19 @@ The `lint-canaries/` fixtures each violate exactly one lint rule on purpose. The
 
 #### Visual Job Details
 
-| Aspect                        | Reason                                                                                                                             |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| **Runs after everything**     | Visual regression is the most expensive signal; it only runs once security/lint/types/build/site/tests are green.             |
-| **4 shards**                  | Same wall-clock strategy as the tests job.                                                                                         |
-| **Report on failure**         | The Playwright report and `test-results/` (expected / actual / diff) upload as artifacts (7-day retention), reviewable without re-running. |
+| Aspect                    | Reason                                                                                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Runs after everything** | Visual regression is the most expensive signal; it only runs once security/lint/types/build/site/tests are green.                          |
+| **4 shards**              | Same wall-clock strategy as the tests job.                                                                                                 |
+| **Report on failure**     | The Playwright report and `test-results/` (expected / actual / diff) upload as artifacts (7-day retention), reviewable without re-running. |
 
 #### Site Job Details
 
-| Step                          | Reason                                                                                                   |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------- |
-| **Build the docs site**       | `docs:build` prerenders every route (components, examples, blocks, frames); a broken example fails it. |
-| **Build the demos**           | `demos:build` proves the blocks copied with `webkit add` still build together.                         |
-| **Upload for visual**         | The four visual shards download the built sites instead of rebuilding them.                              |
+| Step                    | Reason                                                                                                 |
+| ----------------------- | ------------------------------------------------------------------------------------------------------ |
+| **Build the docs site** | `docs:build` prerenders every route (components, examples, blocks, frames); a broken example fails it. |
+| **Build the demos**     | `demos:build` proves the blocks copied with `webkit add` still build together.                         |
+| **Upload for visual**   | The four visual shards download the built sites instead of rebuilding them.                            |
 
 #### Governance Gate Job
 

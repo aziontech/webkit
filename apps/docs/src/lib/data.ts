@@ -127,7 +127,6 @@ export async function preloadRoute(route: RouteLocationNormalized) {
   if (route.name === 'component') await preloadComponent(param('name'))
   else if (route.name === 'block') await preloadBlock(param('id'))
   else if (route.name === 'frame') await preloadBlock(param('id'), false)
-  else if (route.name === 'example-frame') await preloadExample(param('dir'), param('example'))
   else if (route.name === 'foundation') {
     const { FOUNDATIONS } = await import('./foundations')
     const page = FOUNDATIONS.find((item) => item.slug === param('slug'))

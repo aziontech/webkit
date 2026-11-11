@@ -9,25 +9,28 @@ A page is a list of sections:
 ```json
 {
   "sections": [
-    { "_id": "hero-band", "props": { "kind": "title-band", "title": "Deliver content fast, worldwide", "…": "…" } },
-    { "_id": "use-cases", "props": { "eyebrow": "SQL Database", "items": [ "…" ] } }
+    {
+      "_id": "hero-band",
+      "props": { "kind": "title-band", "title": "Deliver content fast, worldwide", "…": "…" }
+    },
+    { "_id": "use-cases", "props": { "eyebrow": "SQL Database", "items": ["…"] } }
   ]
 }
 ```
 
 Two names are the **same string**, on purpose:
 
-| Surface | Value |
-|---|---|
-| `_id` in the site JSON | `use-cases` |
-| component name, folder, spec (`.specs/use-cases.md`), testid `sections-use-cases` | `use-cases` |
-| public path `@aziontech/webkit/use-cases`, import binding | `use-cases` → `UseCases` |
+| Surface                                                                           | Value                    |
+| --------------------------------------------------------------------------------- | ------------------------ |
+| `_id` in the site JSON                                                            | `use-cases`              |
+| component name, folder, spec (`.specs/use-cases.md`), testid `sections-use-cases` | `use-cases`              |
+| public path `@aziontech/webkit/use-cases`, import binding                         | `use-cases` → `UseCases` |
 
 The site imports the blocks it uses and binds each entry's `props` onto its block. Mapping `_id` to component is the site's own concern; the package ships no registry and no dispatcher.
 
 ```vue
 <script setup>
-import UseCases from '@aziontech/webkit/use-cases'
+  import UseCases from '@aziontech/webkit/use-cases'
 </script>
 
 <template>
@@ -70,7 +73,7 @@ One export per block in `packages/webkit/package.json`, and one `.size-limit.jso
 - When the data carries the site's image URLs (`/marketing-components/…`), the docs site and the
   demos map them to the package assets through `packages/webkit/src/assets/site-assets.json`
   (`siteAssets()` in `apps/docs/plugins/paths.ts`); the example and the JSON keep the site URLs.
-- The docs page (`/components/<name>`), the bare frame (`/example/<name>/<file>`) and the styled
+- The docs page (`/components/<name>`), the bare frame (`/example?path=<name>/<file>`) and the styled
   visual test of the first example follow from these files.
 
 ## Authoring a section through the pipeline
