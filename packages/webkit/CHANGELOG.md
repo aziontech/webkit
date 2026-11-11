@@ -4,6 +4,13 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.11.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.11.0...@aziontech/webkit@5.11.1) (2026-11-11)
+
+
+### Bug Fixes
+
+* **webkit:** size the network section floor columns from its entries ([#1172](https://github.com/aziontech/webkit/issues/1172)) ([cc470e4](https://github.com/aziontech/webkit/commit/cc470e474804ca5a51297bca604f37329fcd6c66))
+
 ## [5.11.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.10.0...@aziontech/webkit@5.11.0) (2026-11-10)
 
 
