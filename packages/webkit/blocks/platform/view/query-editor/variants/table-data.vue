@@ -31,10 +31,10 @@
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { toast, Toaster } from '@aziontech/webkit/toast'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, onBeforeUnmount, ref, watch } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   const navGroups = [
     {
@@ -474,6 +474,9 @@
 
   const leftWidth = ref(288)
   const leftCollapsed = ref(false)
+  onMounted(() => {
+    if (globalThis.matchMedia?.('(width < 48rem)').matches) leftCollapsed.value = true
+  })
 
   const tableView = ref('data')
   const tableViewOptions = [

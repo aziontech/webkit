@@ -60,7 +60,7 @@
           :data-hidden="entry.hidden || null"
           :data-dimmed="entry.dimmed || null"
           :style="{ '--chart-legend-key': entry.color }"
-          class="size-2.5 shrink-0 rounded-(--shape-elements) bg-(--chart-legend-key) transition-opacity duration-moderate-01 motion-reduce:transition-none data-[dimmed]:opacity-30 data-[hidden]:opacity-30"
+          class="size-2.5 shrink-0 rounded-(--shape-elements) bg-(--chart-legend-key) forced-color-adjust-none transition-opacity duration-moderate-01 motion-reduce:transition-none data-[dimmed]:opacity-30 data-[hidden]:opacity-30"
         />
         <span>{{ entry.name }}</span>
         <span

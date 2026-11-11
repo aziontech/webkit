@@ -28,7 +28,7 @@ The platform shell: the resizable, collapsible `Sidebar` with `Brand`, `Menu` an
 
 ### C. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
 
-A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row opens it in the pane and has a Table actions `DropdownMenu` with Delete table.
+A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Below `md` it starts collapsed (set on mount, so the server render matches), so the pane keeps the width of the phone; the same holds for the Editor tab's query history. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row opens it in the pane and has a Table actions `DropdownMenu` with Delete table.
 
 ### D. Empty database — `Card`, `EmptyState`, `Button` (required)
 
