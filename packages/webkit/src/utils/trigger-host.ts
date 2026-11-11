@@ -29,19 +29,13 @@ function flatten(nodes: VNodeArrayChildren, out: VNode[] = []): VNode[] {
   return out
 }
 
-type Slots = Record<string, unknown>
+type Slot = (...args: unknown[]) => VNodeArrayChildren
 
-const CONTROLS = new Set(['Button', 'IconButton'])
-const WRAPPERS = new Set(['Tooltip'])
-const LEAVES = new Set(['Avatar', 'Badge', 'Tag', 'SeverityTag'])
-
-function componentName({ type }: VNode): string {
-  return typeof type === 'string' ? '' : ((type as { name?: string }).name ?? '')
-}
+const nameOf = ({ type }: VNode): string => (type as { name?: string }).name ?? ''
 
 function isControl(vnode: VNode): boolean {
   const { type, props } = vnode
-  if (typeof type !== 'string') return CONTROLS.has(componentName(vnode))
+  if (typeof type !== 'string') return /^(Icon)?Button$/.test(nameOf(vnode))
   const p = props ?? {}
   return (
     /^(button|input|select|textarea)$/.test(type) ||
@@ -59,42 +53,32 @@ function isInert(nodes: VNodeArrayChildren): boolean {
       (typeof vnode.type === 'string' &&
         !isControl(vnode) &&
         (!Array.isArray(vnode.children) || isInert(vnode.children))) ||
-      (LEAVES.has(componentName(vnode)) && vnode.children == null)
+      (/^(Avatar|Badge|Tag|SeverityTag)$/.test(nameOf(vnode)) && !vnode.children)
   )
 }
 
-function firstIndex(nodes: VNode[]): number {
-  return nodes.findIndex(
+function merge(nodes: VNode[], aria: () => TriggerAria): boolean {
+  const index = nodes.findIndex(
     (vnode) => vnode.type !== Comment && !(vnode.type === Text && !String(vnode.children).trim())
   )
-}
-
-function mergeFirst(nodes: VNode[], attrs: () => TriggerAria): boolean {
-  const index = firstIndex(nodes)
   const first = nodes[index]
   if (!first) return false
   if (isControl(first)) {
-    const own = attrs()
-    if (first.props?.['id'] != null) delete own['id']
+    const own = aria()
+    own['id'] = first.props?.['id'] ?? own['id']
     nodes[index] = cloneVNode(first, own, true)
     return true
   }
-  const slots = first.children as Slots | null
-  const inner = slots && !Array.isArray(slots) && typeof slots === 'object' && slots['default']
-  if (!WRAPPERS.has(componentName(first)) || typeof inner !== 'function') return false
-  const copy = cloneVNode(first, null, true)
-  const rest: Slots = { ...slots }
-  delete rest['_']
-  copy.children = {
-    ...rest,
+  const inner = (first.children as Record<string, Slot> | null)?.['default']
+  if (nameOf(first) !== 'Tooltip' || typeof inner !== 'function') return false
+  nodes[index] = cloneVNode(first, null, true)
+  nodes[index].children = {
     default: (...args: unknown[]) => {
-      const value = (inner as (...a: unknown[]) => unknown)(...args)
-      const out = flatten((Array.isArray(value) ? value : [value]) as VNodeArrayChildren)
-      mergeFirst(out, attrs)
+      const out = flatten([inner(...args)])
+      merge(out, aria)
       return out
     }
   } as unknown as VNode['children']
-  nodes[index] = copy
   return true
 }
 
@@ -150,7 +134,7 @@ export const TriggerHost = defineComponent({
 
     return () => {
       const nodes = flatten(slots['default']?.() ?? [])
-      if (mergeFirst(nodes, () => ({ ...props.aria, id: props.controlId })))
+      if (merge(nodes, () => ({ ...props.aria, id: props.controlId })))
         return h('span', { ref: hostRef }, nodes)
       return h('span', { ref: hostRef, ...(isInert(nodes) && hostAttrs()) }, nodes)
     }

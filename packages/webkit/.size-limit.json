@@ -153,7 +153,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/documentation/doc-page-header/doc-page-header.vue",
-    "limit": "26.3 KB"
+    "limit": "26.5 KB"
   },
   {
     "name": "doc-on-this-page",
@@ -894,7 +894,7 @@
   {
     "name": "confirm-dialog",
     "path": "src/components/overlay/confirm-dialog/confirm-dialog.vue",
-    "limit": "23.6 KB"
+    "limit": "23.8 KB"
   },
   {
     "name": "webkit-provider",

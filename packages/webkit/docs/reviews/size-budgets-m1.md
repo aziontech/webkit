@@ -59,3 +59,10 @@ Five entries changed for M1.10 rows 46 and 48. `Popover.Trigger`, `Dialog.Trigge
 | section-header  | 7.9           | 7.87            | 8.05         | 8.15       | Raised: same tooltip change, through `CopyButton`.                                        |
 | doc-page-header | 25.75         | 25.56           | 26.21        | 26.3       | Raised: its overflow menu's trigger carries `TriggerHost`, and its tooltips forward ARIA. |
 | confirm-dialog  | 23            | 22.59           | 23.48        | 23.6       | Raised: it ships `Dialog.Trigger`, now an as-child trigger on `TriggerHost`.              |
+
+Two entries changed for M1.10 row 51. `TriggerHost` now looks through a `Tooltip` at render, so a trigger whose slot is a `Tooltip` around an `IconButton` (the row-actions and account menus) carries its ARIA in the server HTML, and it treats `Avatar`, `Badge`, `Tag` and `SeverityTag` leaves as inert, so an `Avatar` trigger renders its wrapper as the button on the server. The code was compacted once (about 0.07 KB back); what is left is the Tooltip slot rewrite and the leaf check, an accessibility fix for server-rendered pages, so the bytes stay.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                                                 |
+| --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------------------------------ |
+| doc-page-header | 26.3          | 26.21           | 26.40        | 26.5       | Raised: its overflow menu's `DropdownMenu.Trigger` carries the larger `TriggerHost`. |
+| confirm-dialog  | 23.6          | 23.48           | 23.71        | 23.8       | Raised: it ships `Dialog.Trigger`, which carries the larger `TriggerHost`.           |
