@@ -1,0 +1,16 @@
+{
+  "component": "doc-accordion-group",
+  "title": "Components/Documentation/DocAccordionGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Three questions in one card, the first open. The group reads each item's title for the trigger and renders its body in the panel.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Multiple",
+      "summary": "`type=\"multiple\"` lets the reader keep several answers open to compare them.",
+      "file": "multiple.vue"
+    }
+  ]
+}

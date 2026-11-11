@@ -231,3 +231,17 @@ Two new entries at measured plus about 0.2 KB, and three raises from the two new
 | webkit-provider    | 8.05          | 8.18         | 8.4        | Raised: the list-kit groups in the English catalog.                    |
 | locales-pt-BR      | 7.45          | 7.57         | 7.8        | Raised: the same groups in Portuguese.                                 |
 | locales-es         | 7.55          | 7.66         | 7.9        | Raised: the same groups in Spanish.                                    |
+
+## M2.9 WP site-sections
+
+New documentation parts. Each wrapper carries the design-system component it renders on, so its budget is that component plus a few hundred bytes. Budgets are measured + ~0.5 KB.
+
+| Entry               | Budget before | Measured now | New budget | Note                                          |
+| ------------------- | ------------- | ------------ | ---------- | --------------------------------------------- |
+| doc-accordion-group | new           | 13.66        | 14.2       | New: `Accordion` at `size="large"` in a card. |
+| doc-accordion-item  | new           | 0.32         | 1          | New: a `display: contents` carrier.           |
+| doc-code-group      | new           | 26.45        | 27         | New: `CodeBlock` with its tab strip.          |
+| doc-cta             | new           | 11.45        | 12         | New: `FrameBox`, `Brand`, two `Button`s.      |
+| doc-heading         | new           | 0.95         | 1.5        | New: anchor heading on `useHeadingNav`.       |
+| doc-tab             | new           | 0.28         | 1          | New: a `display: contents` carrier.           |
+| doc-tabs            | new           | 16.56        | 17         | New: `Tabs` root, list, items and panels.     |

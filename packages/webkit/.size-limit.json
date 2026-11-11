@@ -146,6 +146,41 @@
     "limit": "3 KB"
   },
   {
+    "name": "doc-accordion-group",
+    "path": "src/components/documentation/doc-accordion-group/doc-accordion-group.vue",
+    "limit": "14.2 KB"
+  },
+  {
+    "name": "doc-accordion-item",
+    "path": "src/components/documentation/doc-accordion-item/doc-accordion-item.vue",
+    "limit": "1 KB"
+  },
+  {
+    "name": "doc-code-group",
+    "path": "src/components/documentation/doc-code-group/doc-code-group.vue",
+    "limit": "27 KB"
+  },
+  {
+    "name": "doc-cta",
+    "path": "src/components/documentation/doc-cta/doc-cta.vue",
+    "limit": "12 KB"
+  },
+  {
+    "name": "doc-heading",
+    "path": "src/components/documentation/doc-heading/doc-heading.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "doc-tab",
+    "path": "src/components/documentation/doc-tab/doc-tab.vue",
+    "limit": "1 KB"
+  },
+  {
+    "name": "doc-tabs",
+    "path": "src/components/documentation/doc-tabs/doc-tabs.vue",
+    "limit": "17 KB"
+  },
+  {
     "name": "doc-prompt",
     "path": "src/components/documentation/doc-prompt/doc-prompt.vue",
     "limit": "9.85 KB"

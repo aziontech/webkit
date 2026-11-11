@@ -1603,6 +1603,14 @@
       "surface": "marketing"
     },
     {
+      "id": "doc-accordion-group",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-accordion-item",
+      "surface": "docs"
+    },
+    {
       "id": "doc-callout",
       "surface": "docs"
     },
@@ -1615,7 +1623,19 @@
       "surface": "docs"
     },
     {
+      "id": "doc-code-group",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-cta",
+      "surface": "docs"
+    },
+    {
       "id": "doc-frame",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-heading",
       "surface": "docs"
     },
     {
@@ -1648,6 +1668,14 @@
     },
     {
       "id": "doc-steps",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-tab",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-tabs",
       "surface": "docs"
     },
     {

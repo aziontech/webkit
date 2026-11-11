@@ -1,0 +1,16 @@
+{
+  "component": "doc-heading",
+  "title": "Components/Documentation/DocHeading",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A section heading that links to itself. Hover or focus it to see the underline and the link glyph; neither takes layout.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Levels",
+      "summary": "Levels one to four, each a real heading tag with its own anchor.",
+      "file": "levels.vue"
+    }
+  ]
+}

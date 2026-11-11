@@ -1,0 +1,61 @@
+{
+ "name": "doc-accordion-group",
+ "binding": "DocAccordionGroup",
+ "import": "@aziontech/webkit/doc-accordion-group",
+ "treeShakeableImport": "@aziontech/webkit/doc-accordion-group",
+ "category": "documentation",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The FAQ and \"expand for detail\" block of a documentation page. It reads the `title` of each `DocAccordionItem` child to build the triggers and renders the child body in the panel, so an author writes only titles and prose. It always ships as a card (surface, outer rule, radius) so a run of rows reads as one closed group in an open prose column. Built on `Accordion` at `size=\"large\"`.",
+ "setup": null,
+ "useWhen": [
+  "A list of questions with answers at the end of a guide.",
+  "Optional detail that would interrupt the main path of a page (edge cases, troubleshooting)."
+ ],
+ "avoidWhen": [
+  "For steps the reader must follow in order — use `DocSteps`.",
+  "For alternative paths through the same instruction — use `DocTabs`.",
+  "Inside an application screen — use `Accordion` directly."
+ ],
+ "related": [
+  "DocAccordionItem` — the entry it reads.",
+  "Accordion` — the design-system surface it renders on.",
+  "Faq` — the marketing FAQ band."
+ ],
+ "bestPractices": [
+  "Write each title as the full question the reader would ask.",
+  "Keep answers short; link out for anything longer than a few paragraphs.",
+  "Open at most one entry by default."
+ ],
+ "props": [
+  {
+   "name": "type",
+   "type": "'single' \\ | 'multiple'",
+   "default": "'single'",
+   "required": "false",
+   "doc": "Whether one or several entries can be open at once."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The `DocAccordionItem` children, in order. Each child's `title` and `defaultOpen` are read; its body is rendered inside the panel."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'\n  import DocAccordionItem from '@aziontech/webkit/doc-accordion-item'\n</script>\n\n<template>\n  <DocAccordionGroup>\n    <DocAccordionItem\n      title=\"Why does my first request miss the cache?\"\n      default-open\n    >\n      <p>Each location warms up on its own first request. Warm-up is per location, not global.</p>\n    </DocAccordionItem>\n    <DocAccordionItem title=\"Can I purge a single path?\">\n      <p>Yes. Purge by URL for one object, or by wildcard for a folder.</p>\n    </DocAccordionItem>\n    <DocAccordionItem title=\"How long does a purge take to reach every location?\">\n      <p>Usually a few seconds. The purge request returns once every location has confirmed it.</p>\n    </DocAccordionItem>\n  </DocAccordionGroup>\n</template>"
+  },
+  {
+   "name": "Multiple",
+   "sfc": "<script setup>\n  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'\n  import DocAccordionItem from '@aziontech/webkit/doc-accordion-item'\n</script>\n\n<template>\n  <DocAccordionGroup type=\"multiple\">\n    <DocAccordionItem\n      title=\"Which runtimes are supported?\"\n      default-open\n    >\n      <p>JavaScript and TypeScript, plus WebAssembly modules compiled from other languages.</p>\n    </DocAccordionItem>\n    <DocAccordionItem\n      title=\"Is there a cold start?\"\n      default-open\n    >\n      <p>Isolates start in under a millisecond, so there is no warm-up to plan for.</p>\n    </DocAccordionItem>\n  </DocAccordionGroup>\n</template>"
+  }
+ ],
+ "docs": "components/doc-accordion-group.md"
+}

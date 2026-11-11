@@ -9418,6 +9418,242 @@
    "examplesFile": "catalog/examples/doc-update.json",
    "docsFile": "catalog/components/doc-update.json"
   },
+  "doc-accordion-group": {
+   "import": "@aziontech/webkit/doc-accordion-group",
+   "target": "./src/components/documentation/doc-accordion-group/doc-accordion-group.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/doc-accordion-group",
+   "category": "documentation",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "type",
+     "type": "'single' \\ | 'multiple'",
+     "default": "'single'",
+     "required": "false",
+     "doc": "Whether one or several entries can be open at once."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The `DocAccordionItem` children, in order. Each child's `title` and `defaultOpen` are read; its body is rendered inside the panel."
+    }
+   ],
+   "surface": "docs",
+   "examplesFile": "catalog/examples/doc-accordion-group.json",
+   "docsFile": "catalog/components/doc-accordion-group.json"
+  },
+  "doc-accordion-item": {
+   "import": "@aziontech/webkit/doc-accordion-item",
+   "target": "./src/components/documentation/doc-accordion-item/doc-accordion-item.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/doc-accordion-item",
+   "category": "documentation",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The question the trigger shows; `DocAccordionGroup` reads it to build the row."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Opens this entry on first render."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The answer shown when the entry is open."
+    }
+   ],
+   "surface": "docs",
+   "examplesFile": "catalog/examples/doc-accordion-item.json",
+   "docsFile": "catalog/components/doc-accordion-item.json"
+  },
+  "doc-code-group": {
+   "import": "@aziontech/webkit/doc-code-group",
+   "target": "./src/components/documentation/doc-code-group/doc-code-group.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/doc-code-group",
+   "category": "documentation",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "samples",
+     "type": "DocCodeSample[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The samples, in tab order: `{ label?, language?, fileName?, code }`. One renders a plain block, several render a joined tab strip; none renders nothing."
+    },
+    {
+     "name": "showLineNumbers",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the line-number gutter."
+    }
+   ],
+   "surface": "docs",
+   "examplesFile": "catalog/examples/doc-code-group.json",
+   "docsFile": "catalog/components/doc-code-group.json"
+  },
+  "doc-cta": {
+   "import": "@aziontech/webkit/doc-cta",
+   "target": "./src/components/documentation/doc-cta/doc-cta.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/doc-cta",
+   "category": "documentation",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The offer's headline; names the complementary landmark."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Fallback copy when the default slot is empty."
+    },
+    {
+     "name": "primaryLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The primary action's label; empty renders no primary action."
+    },
+    {
+     "name": "primaryHref",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Where the primary action goes."
+    },
+    {
+     "name": "secondaryLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The secondary action's label; empty renders no secondary action."
+    },
+    {
+     "name": "secondaryHref",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Where the secondary action goes."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The offer's copy, set as the headline's subtitle."
+    }
+   ],
+   "surface": "docs",
+   "examplesFile": "catalog/examples/doc-cta.json",
+   "docsFile": "catalog/components/doc-cta.json"
+  },
+  "doc-heading": {
+   "import": "@aziontech/webkit/doc-heading",
+   "target": "./src/components/documentation/doc-heading/doc-heading.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/doc-heading",
+   "category": "documentation",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "level",
+     "type": "1 \\ | 2 \\ | 3 \\ | 4",
+     "default": "2",
+     "required": "false",
+     "doc": "Heading level; drives the tag and the prose type scale."
+    },
+    {
+     "name": "id",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Anchor id: what the page rail entry and the copied URL point at. Empty renders the heading without a link."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Fallback text when the default slot is empty."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The heading text."
+    }
+   ],
+   "surface": "docs",
+   "examplesFile": "catalog/examples/doc-heading.json",
+   "docsFile": "catalog/components/doc-heading.json"
+  },
+  "doc-tab": {
+   "import": "@aziontech/webkit/doc-tab",
+   "target": "./src/components/documentation/doc-tab/doc-tab.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/doc-tab",
+   "category": "documentation",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The tab label; `DocTabs` reads it to build the strip."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The panel body."
+    }
+   ],
+   "surface": "docs",
+   "examplesFile": "catalog/examples/doc-tab.json",
+   "docsFile": "catalog/components/doc-tab.json"
+  },
+  "doc-tabs": {
+   "import": "@aziontech/webkit/doc-tabs",
+   "target": "./src/components/documentation/doc-tabs/doc-tabs.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/doc-tabs",
+   "category": "documentation",
+   "structure": "monolithic",
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The `DocTab` children, in strip order. A child without a `title` is labelled by its position."
+    }
+   ],
+   "surface": "docs",
+   "examplesFile": "catalog/examples/doc-tabs.json",
+   "docsFile": "catalog/components/doc-tabs.json"
+  },
   "alert": {
    "import": "@aziontech/webkit/alert",
    "target": "./src/components/feedback/alert/alert.vue",

@@ -1,0 +1,19 @@
+{
+ "purpose": "One or more code samples of the same thing in different languages or package managers, rendered on `CodeBlock` so the docs inherit its header, copy control and syntax surface. One sample renders a plain block; several render the joined tab strip.",
+ "useWhen": [
+  "The same install command for npm, pnpm and yarn.",
+  "The same request in cURL, JavaScript and Python."
+ ],
+ "avoidWhen": [
+  "For unrelated snippets — use one `CodeBlock` each.",
+  "For prose that differs per platform — use `DocTabs`."
+ ],
+ "related": [
+  "CodeBlock` — the surface it renders on.",
+  "DocTabs` — alternatives that are prose, not code."
+ ],
+ "bestPractices": [
+  "Label each sample with what differs (the language or the tool), not with \"Example\".",
+  "Keep the same order across a page."
+ ]
+}

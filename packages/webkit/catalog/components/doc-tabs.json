@@ -1,0 +1,19 @@
+{
+ "purpose": "Alternative paths through the same instruction (\"macOS / Linux / Windows\", \"Console / CLI\"). It reads the `title` of each `DocTab` child to build the strip and renders each child body in its panel, on `Tabs`, so the strip, the indicator and the keyboard model are the design system's.",
+ "useWhen": [
+  "The same procedure that differs per platform or per tool."
+ ],
+ "avoidWhen": [
+  "For code-only alternatives — use `DocCodeGroup`.",
+  "For page navigation — use links or `DocCardGroup`."
+ ],
+ "related": [
+  "DocTab` — the panel it reads.",
+  "Tabs` — the surface it renders on.",
+  "DocCodeGroup`."
+ ],
+ "bestPractices": [
+  "Two to five tabs; put the most common path first.",
+  "Keep the panels parallel so switching compares like with like."
+ ]
+}

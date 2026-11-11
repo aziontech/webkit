@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "One entry inside its group, open on first render with `default-open`. It has no appearance of its own outside a DocAccordionGroup.",
+   "sfc": "<script setup>\n  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'\n  import DocAccordionItem from '@aziontech/webkit/doc-accordion-item'\n</script>\n\n<template>\n  <DocAccordionGroup>\n    <DocAccordionItem\n      title=\"Can I keep a stale object while the origin is down?\"\n      default-open\n    >\n      <p>\n        Yes. Turn on stale cache and the last good copy is served until the origin answers again.\n      </p>\n    </DocAccordionItem>\n  </DocAccordionGroup>\n</template>"
+  }
+ ]
+}

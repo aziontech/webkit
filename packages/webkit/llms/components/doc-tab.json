@@ -1,0 +1,50 @@
+{
+ "name": "doc-tab",
+ "binding": "DocTab",
+ "import": "@aziontech/webkit/doc-tab",
+ "treeShakeableImport": "@aziontech/webkit/doc-tab",
+ "category": "documentation",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One panel inside `DocTabs`. It carries its title and its body only; `DocTabs` reads the title to build the strip. Rendered on its own it is a `display: contents` wrapper around its body.",
+ "setup": null,
+ "useWhen": [
+  "As a direct child of `DocTabs`."
+ ],
+ "avoidWhen": [
+  "Outside `DocTabs` — it renders no tab of its own."
+ ],
+ "related": [
+  "DocTabs`."
+ ],
+ "bestPractices": [
+  "A short title: the platform or tool name."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The tab label; `DocTabs` reads it to build the strip."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The panel body."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import DocTab from '@aziontech/webkit/doc-tab'\n  import DocTabs from '@aziontech/webkit/doc-tabs'\n</script>\n\n<template>\n  <DocTabs>\n    <DocTab title=\"Console\">\n      <p>Open the application, then Settings, then Domains.</p>\n    </DocTab>\n    <DocTab title=\"CLI\">\n      <p>Run the link command from the project folder.</p>\n    </DocTab>\n  </DocTabs>\n</template>"
+  }
+ ],
+ "docs": "components/doc-tab.md"
+}

@@ -1,0 +1,16 @@
+{
+  "component": "doc-code-group",
+  "title": "Components/Documentation/DocCodeGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One sample renders a plain code block with its copy control.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Group",
+      "summary": "The same install command for three package managers, joined in one tab strip labelled by what differs.",
+      "file": "group.vue"
+    }
+  ]
+}

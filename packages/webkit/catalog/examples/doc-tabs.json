@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "One instruction, three platforms. The strip, the indicator and the arrow-key model come from Tabs.",
+   "sfc": "<script setup>\n  import DocTab from '@aziontech/webkit/doc-tab'\n  import DocTabs from '@aziontech/webkit/doc-tabs'\n</script>\n\n<template>\n  <DocTabs>\n    <DocTab title=\"macOS\">\n      <p>Install the CLI with Homebrew, then run it once to sign in.</p>\n    </DocTab>\n    <DocTab title=\"Linux\">\n      <p>Download the binary for your architecture and put it on your path.</p>\n    </DocTab>\n    <DocTab title=\"Windows\">\n      <p>Run the installer, then open a new terminal so the path is picked up.</p>\n    </DocTab>\n  </DocTabs>\n</template>"
+  }
+ ]
+}
