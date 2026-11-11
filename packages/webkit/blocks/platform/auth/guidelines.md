@@ -99,6 +99,9 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Carry the email between steps (sign in to reset, reset back to sign in) so the user never types it twice.
 - Release the in-flight lock on every outcome so Retry can run again.
 
+- On a code screen, put the code in one `OtpInput` (autofill reads `autocomplete="one-time-code"`), submit on `complete`, and keep a Verify button.
+- Give every QR code a typed alternative: the setup key with a copy button.
+
 ## Don't
 
 - Don't toast. Not for errors, not for success, not for the session-expired notice.
@@ -107,6 +110,9 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Don't put client-side validation in the `Alert`; it belongs on the field.
 - Don't call a timeout a failure (`danger`) or say the account was not created; the request may have landed.
 - Don't stack notices: a new outcome replaces the one in the slot.
+
+- Don't split a one-time code into separate inputs or move focus between them by hand; `OtpInput` is one field.
+- Don't toast a rejected code; it is the field's reason, and the field is cleared and focused.
 
 ## Copy
 
@@ -134,6 +140,8 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Every transition sets `motion-reduce:transition-none` and `motion-reduce:transform-none`.
 - Social buttons are `type="button"` so Enter in the email field submits the email, not a provider.
 
+- MFA: the code field is named by its label (`Authentication code`, `Recovery code`) and described by the reason when rejected; the QR code is an image named after the account, and the setup key is real text.
+
 ## States
 
 - Login: the sign-in flow on the email step, with Google and GitHub over the `or` divider; the same file walks through password, reset, sent and new-password.
@@ -145,6 +153,8 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - ServerError: 500 on the request; a danger notice with Retry in the card instead of a toast.
 - Timeout: no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
 - EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
+- MfaSetup: turning on multi-factor authentication: three numbered steps, the QR code the API returns (a framed placeholder in the demo) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
+- MfaCode: the sign-in challenge after the password: an autofocused 6-digit `OtpInput` that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 
 ## Related
 

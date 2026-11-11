@@ -5,12 +5,12 @@
 - Surface: product
 - Source: `blocks/platform/auth/auth.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/auth")`
-- Components: [Alert](../../components/alert.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Label](../../components/label.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [Separator](../../components/separator.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Label](../../components/label.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [Separator](../../components/separator.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
 
-login; log in; sign in; signin; login page; authentication; auth; forgot password; reset password; new password; entrar; tela de login; acessar conta; esqueci a senha; redefinir senha; signup; sign up; register; registration; create account; new account; free account; cadastro; cadastrar; criar conta; tela de cadastro; registrar; check inbox; check your email; verify email; email verification; confirm email; verification sent; resend email; verificar e-mail; confirmar e-mail; confira seu e-mail; session expired; auth errors; sessão expirada; erro de login
+login; log in; sign in; signin; login page; authentication; auth; forgot password; reset password; new password; entrar; tela de login; acessar conta; esqueci a senha; redefinir senha; signup; sign up; register; registration; create account; new account; free account; cadastro; cadastrar; criar conta; tela de cadastro; registrar; check inbox; check your email; verify email; email verification; confirm email; verification sent; resend email; verificar e-mail; confirmar e-mail; confira seu e-mail; session expired; auth errors; sessão expirada; erro de login; mfa; multi-factor authentication; two-factor authentication; 2fa; authenticator app; one-time code; verification code; totp; recovery code; autenticação em dois fatores; autenticação multifator; código de verificação; código de autenticação
 
 The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts.
 
@@ -111,6 +111,9 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Carry the email between steps (sign in to reset, reset back to sign in) so the user never types it twice.
 - Release the in-flight lock on every outcome so Retry can run again.
 
+- On a code screen, put the code in one `OtpInput` (autofill reads `autocomplete="one-time-code"`), submit on `complete`, and keep a Verify button.
+- Give every QR code a typed alternative: the setup key with a copy button.
+
 ## Don't
 
 - Don't toast. Not for errors, not for success, not for the session-expired notice.
@@ -119,6 +122,9 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Don't put client-side validation in the `Alert`; it belongs on the field.
 - Don't call a timeout a failure (`danger`) or say the account was not created; the request may have landed.
 - Don't stack notices: a new outcome replaces the one in the slot.
+
+- Don't split a one-time code into separate inputs or move focus between them by hand; `OtpInput` is one field.
+- Don't toast a rejected code; it is the field's reason, and the field is cleared and focused.
 
 ## Copy
 
@@ -146,6 +152,8 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Every transition sets `motion-reduce:transition-none` and `motion-reduce:transform-none`.
 - Social buttons are `type="button"` so Enter in the email field submits the email, not a provider.
 
+- MFA: the code field is named by its label (`Authentication code`, `Recovery code`) and described by the reason when rejected; the QR code is an image named after the account, and the setup key is real text.
+
 ## States
 
 - Login: the sign-in flow on the email step, with Google and GitHub over the `or` divider; the same file walks through password, reset, sent and new-password.
@@ -157,6 +165,8 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - ServerError: 500 on the request; a danger notice with Retry in the card instead of a toast.
 - Timeout: no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
 - EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
+- MfaSetup: turning on multi-factor authentication: three numbered steps, the QR code the API returns (a framed placeholder in the demo) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
+- MfaCode: the sign-in challenge after the password: an autofocused 6-digit `OtpInput` that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 
 ## Related
 
@@ -185,6 +195,8 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - `ServerError` — 500 on the POST: tied to no field, so where the console would toast, the card keeps a danger message with Retry.
 - `Timeout` — No response: the same message as the 500 but warning, because the request may still have gone through, with Retry.
 - `EmailAlreadyRegistered` — 409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field.
+- `MfaSetup` — Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry.
+- `MfaCode` — The sign-in MFA challenge: an autofocused 6-digit OtpInput that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account.
 
 Each variant is the same screen in another state: `get_pattern("platform/auth", { variant })`, or the file under `blocks/platform/auth/variants/`.
 

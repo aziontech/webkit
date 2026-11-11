@@ -49,7 +49,20 @@
     "session expired",
     "auth errors",
     "sessão expirada",
-    "erro de login"
+    "erro de login",
+    "mfa",
+    "multi-factor authentication",
+    "two-factor authentication",
+    "2fa",
+    "authenticator app",
+    "one-time code",
+    "verification code",
+    "totp",
+    "recovery code",
+    "autenticação em dois fatores",
+    "autenticação multifator",
+    "código de verificação",
+    "código de autenticação"
   ],
   "skills": ["webkit-form", "webkit-errors", "webkit-microcopy"],
   "steps": ["email", "password", "reset", "sent", "new-password"],
@@ -97,6 +110,16 @@
       "name": "EmailAlreadyRegistered",
       "summary": "409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field.",
       "file": "variants/email-already-registered.vue"
+    },
+    {
+      "name": "MfaSetup",
+      "summary": "Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry.",
+      "file": "variants/mfa-setup.vue"
+    },
+    {
+      "name": "MfaCode",
+      "summary": "The sign-in MFA challenge: an autofocused 6-digit OtpInput that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account.",
+      "file": "variants/mfa-code.vue"
     }
   ]
 }

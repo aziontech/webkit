@@ -18,6 +18,10 @@ import State7 from '../../../../../../packages/webkit/blocks/platform/auth/varia
 import source7 from '../../../../../../packages/webkit/blocks/platform/auth/variants/timeout.vue?raw'
 import State8 from '../../../../../../packages/webkit/blocks/platform/auth/variants/email-already-registered.vue'
 import source8 from '../../../../../../packages/webkit/blocks/platform/auth/variants/email-already-registered.vue?raw'
+import State9 from '../../../../../../packages/webkit/blocks/platform/auth/variants/mfa-setup.vue'
+import source9 from '../../../../../../packages/webkit/blocks/platform/auth/variants/mfa-setup.vue?raw'
+import State10 from '../../../../../../packages/webkit/blocks/platform/auth/variants/mfa-code.vue'
+import source10 from '../../../../../../packages/webkit/blocks/platform/auth/variants/mfa-code.vue?raw'
 
 export default {
   title: "Templates/Platform/Auth",
@@ -26,7 +30,7 @@ export default {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
     docs: { canvas: { sourceState: 'shown' }, description: { component: "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. Each field is a required `Label` over `Input` or a `Field` with `PasswordInput` and `PasswordRequirements`; a `HelperText` appears only after the primary action, saying whether the field is empty or malformed. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and a `Alert`. Errors follow one rule: auth never toasts. Each error story is one endpoint response, and every outcome lands in the same small `Alert` at the top of the card, above the fields. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Label`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`." } },
-    webkit: {"block":"platform/auth","intents":["login","log in","sign in","signin","login page","authentication","auth","forgot password","reset password","new password","entrar","tela de login","acessar conta","esqueci a senha","redefinir senha","signup","sign up","register","registration","create account","new account","free account","cadastro","cadastrar","criar conta","tela de cadastro","registrar","check inbox","check your email","verify email","email verification","confirm email","verification sent","resend email","verificar e-mail","confirmar e-mail","confira seu e-mail","session expired","auth errors","sessão expirada","erro de login"],"skills":["webkit-form","webkit-errors","webkit-microcopy"],"steps":["email","password","reset","sent","new-password"],"primary":"Login"}
+    webkit: {"block":"platform/auth","intents":["login","log in","sign in","signin","login page","authentication","auth","forgot password","reset password","new password","entrar","tela de login","acessar conta","esqueci a senha","redefinir senha","signup","sign up","register","registration","create account","new account","free account","cadastro","cadastrar","criar conta","tela de cadastro","registrar","check inbox","check your email","verify email","email verification","confirm email","verification sent","resend email","verificar e-mail","confirmar e-mail","confira seu e-mail","session expired","auth errors","sessão expirada","erro de login","mfa","multi-factor authentication","two-factor authentication","2fa","authenticator app","one-time code","verification code","totp","recovery code","autenticação em dois fatores","autenticação multifator","código de verificação","código de autenticação"],"skills":["webkit-form","webkit-errors","webkit-microcopy"],"steps":["email","password","reset","sent","new-password"],"primary":"Login"}
   }
 }
 
@@ -73,4 +77,14 @@ export const Timeout = {
 export const EmailAlreadyRegistered = {
   render: () => ({ components: { Block: State8 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field." }, source: { code: source8 } } }
+}
+
+export const MfaSetup = {
+  render: () => ({ components: { Block: State9 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry." }, source: { code: source9 } } }
+}
+
+export const MfaCode = {
+  render: () => ({ components: { Block: State10 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The sign-in MFA challenge: an autofocused 6-digit OtpInput that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account." }, source: { code: source10 } } }
 }

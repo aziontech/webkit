@@ -24535,7 +24535,20 @@
     "session expired",
     "auth errors",
     "sessão expirada",
-    "erro de login"
+    "erro de login",
+    "mfa",
+    "multi-factor authentication",
+    "two-factor authentication",
+    "2fa",
+    "authenticator app",
+    "one-time code",
+    "verification code",
+    "totp",
+    "recovery code",
+    "autenticação em dois fatores",
+    "autenticação multifator",
+    "código de verificação",
+    "código de autenticação"
    ],
    "skills": [
     "webkit-form",
@@ -24554,12 +24567,14 @@
     "Brand",
     "Button",
     "Card",
+    "CopyButton",
     "Field",
     "GlobalHeader",
     "HelperText",
     "IconButton",
     "Input",
     "Label",
+    "OtpInput",
     "PageHeader",
     "PasswordInput",
     "PasswordRequirements",
@@ -24572,12 +24587,14 @@
     "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/field",
     "@aziontech/webkit/global-header",
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/label",
+    "@aziontech/webkit/otp-input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/password-input",
     "@aziontech/webkit/password-requirements",
@@ -24619,6 +24636,14 @@
     {
      "name": "EmailAlreadyRegistered",
      "summary": "409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field."
+    },
+    {
+     "name": "MfaSetup",
+     "summary": "Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry."
+    },
+    {
+     "name": "MfaCode",
+     "summary": "The sign-in MFA challenge: an autofocused 6-digit OtpInput that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account."
     }
    ],
    "file": "catalog/patterns/platform/auth.json"
