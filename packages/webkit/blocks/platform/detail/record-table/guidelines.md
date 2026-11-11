@@ -53,13 +53,13 @@ A medium search `Input` bound to `v-model:globalFilter`, then outlined `IconButt
 
 One wrapping row of filled medium `Chip`s, one per applied field, in field order. Each chip reopens its field and can be removed.
 
-### J. Records table — `Card`, `TableRoot`, `CopyButton`, `Tag` (required)
+### J. Records table — `Card`, `TableRoot`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Tag` (required)
 
-`Card :padded="false"` around `TableRoot :bordered="false"` with `row-key="id"`, sorting, `paginated` at 8 rows and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID and Value end with an outlined `CopyButton` that stays pinned at the cell end while the text truncates. Weight and Description show a dash glyph when empty.
+`Card :padded="false"` around `TableRoot :bordered="false"` with `row-key="id"`, sorting, `paginated` at 8 rows and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `Table.CellId` ("Copy record ID") and Value is `Table.CellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `Table.CellActions` named after the record. Weight and Description show a dash glyph when empty.
 
-### K. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `Tooltip`, `IconButton` (required)
+### K. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
-An outlined small ellipsis `IconButton` named Row actions opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
+`Table.CellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
 
 ## Do
 

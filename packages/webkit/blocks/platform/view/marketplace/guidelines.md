@@ -69,6 +69,18 @@ An "Install" `h3` ("Install on another application" once installed somewhere) ov
 
 One `Toaster` at `bottom-right`, raised through `toast` with one id for the install, so progress turns into the outcome in place. Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running if you close this panel."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it.
 
+### N. Solution page — `Tabs`, `Card`, `Select`, `Field`, `KeyValuePairs`, `DocProse` (optional)
+
+The drawer's content as a page, for the integration's own URL (the variant adds `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `Table.CellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValuePairs`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
+
+### O. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
+
+The settings of one installed integration on one application (the variant adds `SettingsSection`, `Item`, `SettingRow`, `Switch`, `Input` and `SaveBar`). `SettingsSection`s group them; an on/off setting is a compact `SettingRow` in an `Item.List`, the rest are `Field`s. Errors follow `platform/states/form-error`: nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
+
+### P. Template page — `Field`, `Button`, `KeyValuePairs` (optional)
+
+A template as a page, for the template's own URL (the variant adds `SettingsSection`, `Input` and `Link`): the description, a deploy form (application name, repository) beside the facts. Deploy is a build and deploy, so it follows `platform/states/async-submit`: loading on the button, a progress toast, and a success toast with Edit and Redeploy.
+
 ## Do
 
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`; derive the Status property from where each integration is installed.
@@ -122,6 +134,10 @@ One `Toaster` at `bottom-right`, raised through `toast` with one id for the inst
 - InstallFailed: the install on checkout failed; the danger Alert with the reason and Reinstall, and the permanent toast with Edit and Reinstall.
 - NoMatch: the search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
 - Loading: the filter is disabled and six `Skeleton` tiles (logo, name, two lines, badge, action) hold the grid in a band that is `aria-busy`.
+
+- SolutionPage: Waiting Room as a page, storefront on 1.3.0 (Update available) and checkout on 1.4.0.
+- Configure: Waiting Room settings on storefront, with the SaveBar after a change.
+- TemplatePage: Nuxt Storefront as a page with its deploy form.
 
 ## Related
 

@@ -1,0 +1,75 @@
+{
+ "name": "qr-code",
+ "binding": "QrCode",
+ "import": "@aziontech/webkit/qr-code",
+ "treeShakeableImport": "@aziontech/webkit/qr-code",
+ "category": "content",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws them as one path. It is for setup flows that hand a URI to a phone, first the `otpauth://` URI of an authenticator app in `auth#MfaSetup`, where it replaces the image the API returned and the framed placeholder of the demo. The code is always dark on a light plate (the plate pins the light theme), because several authenticator scanners do not read an inverted code.",
+ "setup": null,
+ "useWhen": [
+  "A phone has to pick up a value the screen shows: an authenticator `otpauth://` URI, a pairing link, a short download URL.",
+  "Next to a typed alternative: the same value (or its secret) as text with a `CopyButton`, for people who cannot scan."
+ ],
+ "avoidWhen": [
+  "The value is only for reading or copying on the same device → show it as text with `CopyButton`.",
+  "A brand or partner logo → use `Brand` or the partner's asset.",
+  "A long payload (over a few hundred characters) → link to it; a dense code is hard to scan from a screen."
+ ],
+ "related": [
+  "copy-button` — the typed alternative beside the code.",
+  "otp-input` — the 6-digit code the app shows after the scan."
+ ],
+ "bestPractices": [
+  "Always give the code a typed alternative next to it: the setup key or the link as text.",
+  "Name the code after what it does (`QR code to add ana@example.com to an authenticator app`), not `QR code`.",
+  "Keep the default `M` error correction; raise it only when the code is printed or shown small."
+ ],
+ "props": [
+  {
+   "name": "value",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "The text the code carries (a URI, a key), encoded as UTF-8 bytes."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does."
+  },
+  {
+   "name": "errorCorrection",
+   "type": "'L' | 'M' | 'Q' | 'H'",
+   "default": "'M'",
+   "required": "false",
+   "doc": "Error-correction level: `L` 7 %, `M` 15 %, `Q` 25 %, `H` 30 % of the code can be lost and still read. Higher levels make denser codes."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Rendered width: `small` 128 px, `medium` 160 px, `large` 224 px, quiet zone included."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n  import QrCode from '@aziontech/webkit/qr-code'\n\n  const account = 'ana.silva@example.com'\n  const secret = 'JBSWY3DPEHPK3PXP'\n  const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-(--spacing-md)\">\n    <QrCode\n      :value=\"uri\"\n      :label=\"`QR code to add ${account} to an authenticator app`\"\n    />\n    <div class=\"flex flex-col gap-(--spacing-xxs)\">\n      <p class=\"text-label-sm text-(--text-default)\">Can't scan the code?</p>\n      <div class=\"flex items-center gap-(--spacing-xs)\">\n        <code\n          class=\"text-label-code text-(--text-default)\"\n          dir=\"ltr\"\n          >{{ secret.match(/.{1,4}/g).join(' ') }}</code\n        >\n        <CopyButton\n          :value=\"secret\"\n          aria-label=\"Copy setup key\"\n          copied-label=\"Setup key copied\"\n        />\n      </div>\n    </div>\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import QrCode from '@aziontech/webkit/qr-code'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-end gap-(--spacing-lg)\">\n    <QrCode\n      v-for=\"size in ['small', 'medium', 'large']\"\n      :key=\"size\"\n      value=\"https://www.azion.com/en/documentation/\"\n      :size=\"size\"\n      :label=\"`QR code, ${size}, to the Azion documentation`\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/qr-code.md"
+}

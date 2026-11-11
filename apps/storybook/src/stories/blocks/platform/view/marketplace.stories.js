@@ -16,6 +16,12 @@ import State6 from '../../../../../../../packages/webkit/blocks/platform/view/ma
 import source6 from '../../../../../../../packages/webkit/blocks/platform/view/marketplace/variants/no-match.vue?raw'
 import State7 from '../../../../../../../packages/webkit/blocks/platform/view/marketplace/variants/loading.vue'
 import source7 from '../../../../../../../packages/webkit/blocks/platform/view/marketplace/variants/loading.vue?raw'
+import State8 from '../../../../../../../packages/webkit/blocks/platform/view/marketplace/variants/solution-page.vue'
+import source8 from '../../../../../../../packages/webkit/blocks/platform/view/marketplace/variants/solution-page.vue?raw'
+import State9 from '../../../../../../../packages/webkit/blocks/platform/view/marketplace/variants/configure.vue'
+import source9 from '../../../../../../../packages/webkit/blocks/platform/view/marketplace/variants/configure.vue?raw'
+import State10 from '../../../../../../../packages/webkit/blocks/platform/view/marketplace/variants/template-page.vue'
+import source10 from '../../../../../../../packages/webkit/blocks/platform/view/marketplace/variants/template-page.vue?raw'
 
 export default {
   title: "Templates/Platform/View/Marketplace",
@@ -66,4 +72,19 @@ export const NoMatch = {
 export const Loading = {
   render: () => ({ components: { Block: State7 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "The catalog is loading: the filter is disabled and skeleton tiles hold the grid." }, source: { code: source7 } } }
+}
+
+export const SolutionPage = {
+  render: () => ({ components: { Block: State8 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The integration as a full page (Waiting Room): a Back to Marketplace `Link`, the `PageHeader`, `Tabs` for Overview, Usage, Changelog (version history, Latest marked) and Applications (a `Table` of the applications running it, `Table.CellStatus` Up to date or Update available and an Update to <version> action), beside an install card whose Application `Select` tags each application Installed or Update available. Install and Update are async runs that end in a toast with Configure and Open application." }, source: { code: source8 } } }
+}
+
+export const Configure = {
+  render: () => ({ components: { Block: State9 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The screen behind Configure: the integration's settings on one application (Queue visitors `Switch`, Capacity and Queue page title fields, Session length `Select`) in `SettingsSection`s, errors after Save with a summary `Alert`, and a `SaveBar` with Discard and Save; saving is not a deploy, so its toast has no Redeploy." }, source: { code: source9 } } }
+}
+
+export const TemplatePage = {
+  render: () => ({ components: { Block: State10 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "A template as a full page (Nuxt Storefront): a Back to Templates `Link`, the description, the deploy form (application name and repository, errors after Deploy) beside the template facts; Deploy is an async run that ends in the async-submit toast with Edit and Redeploy." }, source: { code: source10 } } }
 }

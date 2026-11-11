@@ -115,6 +115,29 @@ describe('Table reorderable rows', () => {
     expect(hint?.textContent).toBe('Clear the sort to reorder rows.')
   })
 
+  it('keeps rows that rowReorderable rejects in place', async () => {
+    const { data } = mountTable({ rowReorderable: (row: Row) => row.id !== 'a' })
+    expect(handles()[0].hasAttribute('disabled')).toBe(true)
+    expect(handles()[1].hasAttribute('disabled')).toBe(false)
+    await fireEvent.keyDown(handles()[1], { key: 'ArrowUp' })
+    expect(data.value.map((row) => row.id)).toEqual(['a', 'b', 'c', 'd'])
+    await fireEvent.keyDown(handles()[3], { key: 'Home' })
+    expect(data.value.map((row) => row.id)).toEqual(['a', 'd', 'b', 'c'])
+    await fireEvent.keyDown(handles()[0], { key: 'End' })
+    expect(data.value.map((row) => row.id)).toEqual(['a', 'd', 'b', 'c'])
+    const locked = document.body.querySelector<HTMLElement>('[data-reorder-row="a"]')!
+    const box = locked.getBoundingClientRect()
+    await fireEvent.pointerDown(handles()[2], { button: 0, pointerId: 1 })
+    await fireEvent.pointerMove(handles()[2], {
+      pointerId: 1,
+      clientX: box.left + 4,
+      clientY: box.top + box.height / 2
+    })
+    expect(locked.hasAttribute('data-drop')).toBe(false)
+    await fireEvent.pointerUp(handles()[2], { pointerId: 1 })
+    expect(data.value.map((row) => row.id)).toEqual(['a', 'd', 'b', 'c'])
+  })
+
   it('does not render grips unless reorderable', () => {
     mountTable({ reorderable: false })
     expect(handles()).toHaveLength(0)

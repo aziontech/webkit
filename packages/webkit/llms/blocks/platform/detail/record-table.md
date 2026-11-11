@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/detail/record-table/record-table.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/record-table")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Button](../../../components/button.md), `CalendarRoot`, [Card](../../../components/card.md), [Chip](../../../components/chip.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [FileDropzone](../../../components/file-dropzone.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Button](../../../components/button.md), `CalendarRoot`, [Card](../../../components/card.md), [Chip](../../../components/chip.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, [FileDropzone](../../../components/file-dropzone.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -65,13 +65,13 @@ A medium search `Input` bound to `v-model:globalFilter`, then outlined `IconButt
 
 One wrapping row of filled medium `Chip`s, one per applied field, in field order. Each chip reopens its field and can be removed.
 
-### J. Records table — `Card`, `TableRoot`, `CopyButton`, `Tag` (required)
+### J. Records table — `Card`, `TableRoot`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Tag` (required)
 
-`Card :padded="false"` around `TableRoot :bordered="false"` with `row-key="id"`, sorting, `paginated` at 8 rows and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID and Value end with an outlined `CopyButton` that stays pinned at the cell end while the text truncates. Weight and Description show a dash glyph when empty.
+`Card :padded="false"` around `TableRoot :bordered="false"` with `row-key="id"`, sorting, `paginated` at 8 rows and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `Table.CellId` ("Copy record ID") and Value is `Table.CellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `Table.CellActions` named after the record. Weight and Description show a dash glyph when empty.
 
-### K. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `Tooltip`, `IconButton` (required)
+### K. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
-An outlined small ellipsis `IconButton` named Row actions opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
+`Table.CellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
 
 ## Do
 
@@ -152,12 +152,10 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Input from '@aziontech/webkit/input'
+  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import ItemList from '@aziontech/webkit/item-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
@@ -168,8 +166,9 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import Tabs from '@aziontech/webkit/tabs'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
+  import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
@@ -1161,15 +1160,10 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                       <span class="min-w-0 truncate">{{ value }}</span>
                     </template>
                     <template #cell-id="{ value }">
-                      <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                        <span class="min-w-0 flex-1 truncate tabular-nums">{{ value }}</span>
-                        <CopyButton
-                          v-if="value"
-                          kind="outlined"
-                          :value="value"
-                          aria-label="Copy record ID"
-                        />
-                      </div>
+                      <Table.CellId
+                        :value="value"
+                        resource="record"
+                      />
                     </template>
                     <template #cell-type="{ value }">
                       <Tag
@@ -1179,17 +1173,11 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                       />
                     </template>
                     <template #cell-value="{ value }">
-                      <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                        <span class="min-w-0 truncate">{{ value }}</span>
-                        <div class="shrink-0 ms-auto">
-                          <CopyButton
-                            kind="outlined"
-                            :value="value"
-                            aria-label="Copy record value"
-                            @click.stop
-                          />
-                        </div>
-                      </div>
+                      <Table.CellLink
+                        :label="value"
+                        copyable
+                        @click.stop
+                      />
                     </template>
                     <template #cell-policy="{ value }">
                       <span class="min-w-0 truncate">{{ policyLabel(value) }}</span>
@@ -1200,18 +1188,8 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                     <template #cell-description="{ value }">
                       <span class="min-w-0 truncate">{{ value || '—' }}</span>
                     </template>
-                    <template #cell-actions>
-                      <DropdownMenuRoot placement="bottom-end">
-                        <DropdownMenuTrigger>
-                          <Tooltip text="Row actions">
-                            <IconButton
-                              icon="pi pi-ellipsis-h"
-                              kind="outlined"
-                              size="small"
-                              aria-label="Row actions"
-                            />
-                          </Tooltip>
-                        </DropdownMenuTrigger>
+                    <template #cell-actions="{ row }">
+                      <Table.CellActions :name="row.name">
                         <DropdownMenuGroup>
                           <DropdownMenuOption
                             value="edit"
@@ -1236,7 +1214,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                             /></template>
                           </DropdownMenuOption>
                         </DropdownMenuGroup>
-                      </DropdownMenuRoot>
+                      </Table.CellActions>
                     </template>
                   </TableRoot>
                 </template>

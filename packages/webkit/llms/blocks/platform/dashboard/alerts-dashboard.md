@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/alerts-dashboard/alerts-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/alerts-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -96,10 +96,10 @@ Highest risk pairs each entity with its risk score and the `SeverityTag` of its 
 Open alerts leads every row with its `SeverityTag` and sorts from critical to info by default.
 Figures use tabular numbers.
 
-### M. Alert status — `Tag` (required)
+### M. Alert status — `Table`, `Tag` (required)
 
 The status of an alert in the Open alerts table (`Open`, `Investigating`). It is a state,
-so it is a `Tag`, separate from severity.
+so it is a `Table.CellStatus` (one semantic `Tag`), separate from severity. The alert type beside it stays a plain secondary `Tag`: it is a category, not a state.
 
 ## Do
 
@@ -169,6 +169,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import SeverityTag from '@aziontech/webkit/severity-tag'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
@@ -865,10 +866,9 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 />
               </template>
               <template #cell-status="{ row }">
-                <Tag
+                <Table.CellStatus
                   :label="row.status"
                   :severity="statusSeverity[row.status]"
-                  size="small"
                 />
               </template>
             </TableRoot>

@@ -1,11 +1,11 @@
 # AttachedResources (`platform/detail/attached-resources`)
 
-> An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `TableRoot`, `Tag`, `DropdownMenuRoot`, `IconButton`, `Tooltip` and `Button`.
+> An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `TableRoot`, `Tag`, `Table.CellActions` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/detail/attached-resources/attached-resources.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/attached-resources")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [IconButton](../../../components/icon-button.md), `TableRoot`, [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), `DropdownMenuGroup`, `DropdownMenuOption`, [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
 - Skills: `webkit-tables`
 
 ## Asked as
@@ -41,9 +41,9 @@ A data-driven `TableRoot :bordered="false"` given `:data`, `:columns` and `row-k
 
 One chip per row, following `skills/webkit-tables`: Environment is a `Tag` with `severity="secondary"`, `size="medium"`, `rounded` and the layers glyph. Policy is plain text and Certificate is the verified glyph beside plain text, so the row keeps one chip. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
 
-### D. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `Tooltip`, `IconButton`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
+### D. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
-An outlined small ellipsis `IconButton`, named by a `Tooltip` and an `aria-label` that includes the record, opens a menu placed `bottom-end`: Edit in the first group, Delete alone in the last. A record the platform generated (the default domain) has no menu, because it cannot be edited or deleted.
+`Table.CellActions`, named after the record ("Actions for shop.example.com"), opens a menu placed `bottom-end`: Edit in the first group, Delete alone in the last. A record the platform generated (the default domain) has no menu, because it cannot be edited or deleted.
 
 ### E. Footer — `Button` (required)
 
@@ -106,14 +106,11 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
   import { computed } from 'vue'
 
   const domains = [
@@ -189,20 +186,10 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
             </span>
           </template>
           <template #cell-actions="{ row }">
-            <DropdownMenuRoot
+            <Table.CellActions
               v-if="!row.generated"
-              placement="bottom-end"
+              :name="row.domain"
             >
-              <DropdownMenuTrigger>
-                <Tooltip text="Row actions">
-                  <IconButton
-                    icon="pi pi-ellipsis-h"
-                    kind="outlined"
-                    size="small"
-                    :aria-label="`Actions for ${row.domain}`"
-                  />
-                </Tooltip>
-              </DropdownMenuTrigger>
               <DropdownMenuGroup>
                 <DropdownMenuOption
                   value="edit"
@@ -227,7 +214,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   /></template>
                 </DropdownMenuOption>
               </DropdownMenuGroup>
-            </DropdownMenuRoot>
+            </Table.CellActions>
           </template>
         </TableRoot>
 

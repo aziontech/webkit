@@ -55,6 +55,7 @@
 - Root `data-alignment`: `vertical` | `horizontal`; `data-readonly` when read-only.
 - Token `data-status`: `idle` | `loading` | `warning` | `error` (error wins over warning, both over loading).
 - Show more toggle: `aria-expanded` `true` | `false`.
+- A file with a `webkitRelativePath` (picked with a folder picker or dropped as a folder on `FileDropzone directories`) is named by that path (`site/css/main.css`) in the token, its title, the remove button and the progress bar; otherwise by `name`.
 
 ## Accessibility
 

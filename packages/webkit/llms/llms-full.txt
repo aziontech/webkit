@@ -2103,6 +2103,112 @@ The code of every state is in [blocks/platform/account/change-plan-drawer.md](bl
 
 ---
 
+<!-- blocks/platform/account/mfa-management.md -->
+
+# MfaManagement (`platform/account/mfa-management`)
+
+> Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`.
+
+- Surface: product
+- Source: `blocks/platform/account/mfa-management/mfa-management.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/account/mfa-management")`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [SettingRow](../../../components/setting-row.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Toast](../../../components/toast.md), `use-collection`
+- Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
+
+## Asked as
+
+mfa management; multi-factor authentication; two-factor authentication; 2fa; require mfa; reset mfa; security settings; gerenciar mfa; autenticação multifator; exigir mfa; redefinir mfa
+
+Multi-factor authentication for a whole account. An admin sees who signs in with a second factor and who uses a password only, requires MFA for everyone, reminds the people who have not set it up, and resets the factor of someone who lost their device. Setting up a factor and the sign-in challenge are `platform/auth` (`MfaSetup`, `MfaChallenge`); this page manages them for other people.
+
+## When to use
+
+- An account or organisation page where admins enforce or audit multi-factor authentication.
+- Helping a person who lost the device that holds their factor.
+
+## When not to use
+
+- A person setting up their own factor: use `platform/auth#MfaSetup`.
+- The code prompt at sign-in: use `platform/auth#MfaChallenge`.
+- Inviting or removing people: use `platform/account/users`.
+
+## Building blocks
+
+### A. Page heading — `PageHeader`, `Button` (required)
+
+Title `Multi-factor authentication` and one sentence on what the page holds. Action: Documentation.
+
+### B. Require MFA — `Card`, `Item`, `SettingRow`, `Switch`, `ConfirmDialog` (required)
+
+One compact `SettingRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`kind="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once with a toast. While data loads or failed, the switch is disabled.
+
+### C. Password-only warning — `Alert` (conditional)
+
+While MFA is optional and someone has no factor, a warning `Alert` counts them (`2 of 5 people sign in with a password only.`) and points at the two remedies.
+
+### D. People table — `Input`, `Table`, `Avatar`, `useCollection` (required)
+
+A search `Input` with `v-bind="filterProps"`, then a `Table` with `v-bind="tableProps"` in a flush `Card`: Name (square `Avatar`, name, email under it), MFA as `Table.CellStatus` (Enabled success, Not set up warning), Method, and Set up as `Table.CellTime` or a dash.
+
+### E. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
+
+`Table.CellActions` named after the person: Reset MFA for an enabled factor, behind a `ConfirmDialog` that says what the person loses and when to use it; Send setup reminder for a person without one.
+
+### F. Load failure and outcomes — `Alert`, `Toaster` (required)
+
+When the list fails to load, a danger `Alert` with Retry takes the table's place. Require, optional, reset and reminder end in a success toast; they are not deploys, so no toast carries Edit or Redeploy.
+
+## Do
+
+- Name who is affected before requiring MFA.
+- Keep people without a factor visible and marked, with a way to remind them.
+- Say what a reset does (password only until they set it up again) before confirming it.
+
+## Don't
+
+- Don't show or copy anyone's secret or recovery codes here; only the owner of the factor sees them.
+- Don't reset without a confirmation; it weakens one person's sign-in.
+- Don't make the warning color the only signal; the Alert and the status say it in words.
+
+## Copy
+
+- **Title:** `Multi-factor authentication`. **Setting:** `Require MFA`.
+- **Statuses:** `Enabled`, `Not set up`. **Actions:** `Reset MFA`, `Send setup reminder`.
+- **Toasts:** `MFA is now required.`, `MFA is optional again.`, `MFA reset for Jordan Reyes.`, `Reminder sent to priya.nair@example.com.`
+- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- The Switch is named Require MFA and the setting description explains the effect.
+- The row menu is named `Actions for <person>`; status is text, not color.
+- Both confirmations are dialogs that return focus to their trigger.
+
+## States
+
+- Default: five people, three with a factor, MFA optional, the warning shown.
+- Required: MFA required for the account.
+- Loading: the first load.
+- Failed: the list did not load; a danger Alert with Retry.
+
+## Related
+
+- `platform/auth` — `MfaSetup` and `MfaChallenge`, the person's own side.
+- `platform/account/users` — the people in the account.
+- `platform/account/activity-history` — where MFA changes are audited.
+
+## Variants
+
+- `Default` — primary (the code below)
+- `Required` — MFA required for the account: the Switch on, no password-only warning; people without MFA still listed as Not set up until their next sign-in.
+- `Loading` — The first load: the Switch disabled and the table's loading rows.
+- `Failed` — The MFA status did not load: a danger Alert with Retry replaces the table and the Switch is disabled.
+
+Each variant is the same screen in another state: `get_pattern("platform/account/mfa-management", { variant })`, or the file under `blocks/platform/account/mfa-management/variants/`.
+
+The code of every state is in [blocks/platform/account/mfa-management.md](blocks/platform/account/mfa-management.md) and `blocks/platform/account/mfa-management/mfa-management.vue`.
+
+---
+
 <!-- blocks/platform/account/onboarding-form.md -->
 
 # OnboardingForm (`platform/account/onboarding-form`)
@@ -2724,6 +2830,127 @@ The code of every state is in [blocks/platform/account/tokens.md](blocks/platfor
 
 ---
 
+<!-- blocks/platform/account/users.md -->
+
+# Users (`platform/account/users`)
+
+> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over a search `Input` and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email, Owner marked, the email under it), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `Input`, `Card`, `Table`, `Avatar`, `MultiSelect`, `Tooltip`, `DropdownMenu`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `EmptyState`, `Alert` and `Toaster`.
+
+- Surface: product
+- Source: `blocks/platform/account/users/users.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/account/users")`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Table](../../../components/table.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
+
+## Asked as
+
+users; users management; invite user; invite teammates; members; account members; assign teams; resend invitation; remove user; usuários; gerenciar usuários; convidar usuário; membros da conta; atribuir times
+
+Who can sign in to the account, and through which teams. An admin invites a teammate by email, chooses their teams, sees who has not accepted yet, resends or cancels an invitation, moves a person between teams and removes people who left. Permissions come only from teams (`platform/account/team-permissions`), so this page assigns teams; it never grants a permission to a person.
+
+## When to use
+
+- Inviting people to an account or organisation and assigning them to teams or roles.
+- Following pending invitations: resend or cancel.
+- Removing a person's access.
+
+## When not to use
+
+- Defining what a team can do: use `platform/account/team-permissions`.
+- Credentials that act as a person: use `platform/account/tokens`.
+- Who turned on multi-factor authentication: use `platform/account/mfa-management`.
+
+## Building blocks
+
+### A. Page heading — `PageHeader`, `Button` (required)
+
+Title `Users` and one sentence that says access comes from teams. Actions: Documentation and the primary `Invite User` at `size="large"`, which opens the invite drawer.
+
+### B. Search — `Input` (required)
+
+A search `Input` bound with `v-bind="filterProps"` over name, email and status. Hidden while the list failed to load.
+
+### C. Users table — `Card`, `Table`, `Avatar`, `useCollection` (required)
+
+`Table` with `v-bind="tableProps"` in a flush `Card`, sortable by name. Name: a square `Avatar` with the initials, the name (or the email while the invitation is pending), `Owner` in muted text after the owner's name, and the email under it. Status is `Table.CellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `Table.CellTime`, or `Not signed in yet` for an invitation.
+
+### D. Teams per person — `MultiSelect`, `Tooltip` (required)
+
+The Teams cell is a small `MultiSelect` named `Teams of <person>` whose value reads the team names. A change applies at once and raises a toast that names the new teams with Undo; clearing every team keeps the seat but removes all access, and the toast says so. The owner's teams are locked, with a `Tooltip` saying why; an inactive person's teams are disabled.
+
+### E. Row actions — `Table`, `DropdownMenu`, `ConfirmDialog` (required)
+
+`Table.CellActions` named after the person, disabled for the owner. An invited person gets `Resend invitation` (toast: the earlier link stops working) and `Cancel invitation`; everyone else gets `Remove from account`. Both removals ask in a `ConfirmDialog` that says what the person loses and what stays.
+
+### F. Invite drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerDescription`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
+
+A medium right `Drawer` around a `form`: a description of what the invitation does, a required Email `Field` and a required Teams `Field` with Developers preselected and a description saying permissions add up. Footer: Cancel and the primary `Send invitation`, which shows its loading state; the drawer cannot be dismissed while it sends. Errors follow `platform/states/form-error`: nothing is red before the first Send; after it each field shows its own `Field.Error` and focus moves to the first invalid one.
+
+### G. Only the owner, no match and load failure — `EmptyState`, `Alert` (conditional)
+
+With only the owner, a small `EmptyState` under the table invites the first teammate. `No matching users` with Clear search sits in the table's `#empty` slot. When the list fails to load, a danger `Alert` with Retry takes the table's place.
+
+### H. Outcomes — `Toaster` (required)
+
+Invitations, team changes, resends and removals end in a success toast. They are not deploys, so no toast carries Edit or Redeploy.
+
+## Do
+
+- Show pending invitations in the same list, marked Invited, with Resend and Cancel.
+- Name the teams in the invitation toast and in every team change, and offer Undo for a team change.
+- Say what stays when a person is removed (their teams and the resources they created).
+- Keep the owner's row visible, with its controls locked and the reason on the tooltip.
+
+## Don't
+
+- Don't grant a permission to one person here; teams are the only way.
+- Don't apply an invitation without a team silently; a person with no team gets no access, so the form asks for one.
+- Don't hide the email of an invited person; it is the only name they have until they accept.
+
+## Copy
+
+- **Title:** `Users`. **Action:** `Invite User`; the drawer title `Invite User`, the submit `Send invitation`.
+- **Statuses:** `Active`, `Invited`, `Inactive`; **Last active** for an invitation: `Not signed in yet`.
+- **Errors:** `Enter the email address to invite.`, `Enter an email address like name@example.com.`, `This person is already in the account.`, `Choose at least one team, or they get no access.`
+- **Toasts:** `Invitation sent to sam.okafor@example.com.`, `Teams updated for Priya Nair.`, `Invitation sent again to sam.okafor@example.com.`, `Jordan Reyes removed from the account.`
+- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- Each Teams control is named `Teams of <person>`; the row menu is named `Actions for <person>`.
+- The invite form is a `form` named Invite User; each `Field` ties its label, description and error to the control, and `Field.Error` is announced when it appears.
+- After a failed Send, focus moves to the first invalid control.
+- The owner's locked controls are disabled and the reason is on the tooltip, not only in color.
+
+## States
+
+- Default: six people (the owner, four active or inactive, one invited) with search, inline team changes, resend, cancel and remove wired.
+- Invite: the invite drawer open.
+- OnlyOwner: the owner alone and the invite empty state.
+- Loading: the first load.
+- Failed: the list did not load; a danger Alert with Retry.
+
+## Related
+
+- `platform/account/team-permissions` — what each team can do.
+- `platform/account/mfa-management` — who has multi-factor authentication on.
+- `platform/account/activity-history` — where invitations and removals are audited.
+- `platform/states/form-error` — the error pattern the invite form follows.
+
+## Variants
+
+- `Default` — primary (the code below)
+- `Invite` — The Invite User drawer open over the list: Email and Teams (Developers preselected), Cancel and Send invitation; Send with an empty, malformed or existing email or no team shows the error on that field and focuses it.
+- `OnlyOwner` — An account with only its owner: the owner's row, then a small EmptyState that invites the first teammate.
+- `Loading` — The first load: the search row and the table's loading rows.
+- `Failed` — The users did not load: a danger Alert with Retry replaces the table; Retry loads them.
+
+Each variant is the same screen in another state: `get_pattern("platform/account/users", { variant })`, or the file under `blocks/platform/account/users/variants/`.
+
+The code of every state is in [blocks/platform/account/users.md](blocks/platform/account/users.md) and `blocks/platform/account/users/users.vue`.
+
+---
+
 <!-- blocks/platform/ai/ai-action-approval.md -->
 
 # AiActionApproval (`platform/ai/ai-action-approval`)
@@ -3118,7 +3345,7 @@ The code of every state is in [blocks/platform/ai/ai-chat-drawer.md](blocks/plat
 - Surface: product
 - Source: `blocks/platform/auth/auth.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/auth")`
-- Components: [Alert](../../components/alert.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Label](../../components/label.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [Separator](../../components/separator.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Label](../../components/label.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -3278,7 +3505,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - ServerError: 500 on the request; a danger notice with Retry in the card instead of a toast.
 - Timeout: no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
 - EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
-- MfaSetup: turning on multi-factor authentication: three numbered steps, the QR code the API returns (a framed placeholder in the demo) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
+- MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
 - MfaCode: the sign-in challenge after the password: an autofocused 6-digit `OtpInput` that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 
 ## Related
@@ -5006,7 +5233,7 @@ The code of every state is in [blocks/platform/create/source-wizard.md](blocks/p
 - Surface: product
 - Source: `blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/activity-outcomes-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -5091,9 +5318,9 @@ tokens are for. The legend toggles a series and shows its total for the range.
 Three ranked lists (by actor, by category, by destination), each with an `aria-label` naming what it
 ranks. Rank by count, largest first.
 
-### K. Outcome in the log — `Tag` (required)
+### K. Outcome in the log — `Table`, `Tag` (required)
 
-Each log row states its outcome as a `Tag` in the same status hue as its series in the chart, so the
+Each log row states its outcome as a `Table.CellStatus` in the same status hue as its series in the chart, so the
 chart and the log read the same scale. The card header's count (`<n> requests`) is also a `Tag`.
 
 ### L. Request log — `TableRoot` (required)
@@ -5181,7 +5408,7 @@ The code of every state is in [blocks/platform/dashboard/activity-outcomes-dashb
 - Surface: product
 - Source: `blocks/platform/dashboard/alerts-dashboard/alerts-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/alerts-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -5272,10 +5499,10 @@ Highest risk pairs each entity with its risk score and the `SeverityTag` of its 
 Open alerts leads every row with its `SeverityTag` and sorts from critical to info by default.
 Figures use tabular numbers.
 
-### M. Alert status — `Tag` (required)
+### M. Alert status — `Table`, `Tag` (required)
 
 The status of an alert in the Open alerts table (`Open`, `Investigating`). It is a state,
-so it is a `Tag`, separate from severity.
+so it is a `Table.CellStatus` (one semantic `Tag`), separate from severity. The alert type beside it stays a plain secondary `Tag`: it is a category, not a state.
 
 ## Do
 
@@ -6791,12 +7018,12 @@ The code of every state is in [blocks/platform/dashboard/project-status-dashboar
 
 # ScanResultsDashboard (`platform/dashboard/scan-results-dashboard`)
 
-> A scan results dashboard: items sent for analysis, the verdict each one received and what is still waiting. A page heading with a Refresh IconButton sits over a row of six StatTiles (submitted, in analysis, last 24 hours, flagged, held for a verdict and open alerts), each with a Hint that defines it. Below, three cards share a row: a DonutChart of the verdicts (Clean, Suspicious, Flagged and Pending, in their status hues) with the item count in its center, a BarList of the sources the items came from, and a Card that sums up the deliveries held for a verdict and the items delivered before they were flagged, each with a Link to its list. A Submissions card across the full width holds the filter row (an Input search and Selects for status, verdict and source) over a paginated TableRoot: name, the verdict Tag, category, score, type, size, source, first submitter and last seen. Built from `PageHeader`, `StatTile`, `DonutChart`, `BarList`, `ChartCard`, `Card`, `TableRoot`, `Tag`, `Link`, `Input`, `Select`, `Hint`, `IconButton`, `Skeleton` and `EmptyState`.
+> A scan results dashboard: items sent for analysis, the verdict each one received and what is still waiting. A page heading with a Refresh IconButton sits over a row of six StatTiles (submitted, in analysis, last 24 hours, flagged, held for a verdict and open alerts), each with a Hint that defines it. Below, three cards share a row: a DonutChart of the verdicts (Clean, Suspicious, Flagged and Pending, in their status hues) with the item count in its center, a BarList of the sources the items came from, and a Card that sums up the deliveries held for a verdict and the items delivered before they were flagged, each with a Link to its list. A Submissions card across the full width holds the filter row (an Input search and Selects for status, verdict and source) over a paginated TableRoot: name, the verdict Tag, category, score, type, size, source, first submitter and last seen. Built from `PageHeader`, `StatTile`, `DonutChart`, `BarList`, `ChartCard`, `Card`, `TableRoot`, `Table.CellStatus`, `Link`, `Input`, `Select`, `Hint`, `IconButton`, `Skeleton` and `EmptyState`.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/scan-results-dashboard/scan-results-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/scan-results-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -6888,7 +7115,7 @@ size and dates in tabular figures.
 `No verdict yet` / `Verdicts appear once the first item finishes its analysis.` in the donut,
 `No items yet` in sources, and `No matching items` / `Change the search or the filters.` in the table.
 
-### O. Verdict — `Tag` (required)
+### O. Verdict — `Table.CellStatus` (required)
 
 The verdict of each row, in the same hue as its donut slice.
 
@@ -7371,12 +7598,12 @@ The code of every state is in [blocks/platform/delete/delete-with-confirmation.m
 
 # AttachedResources (`platform/detail/attached-resources`)
 
-> An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `TableRoot`, `Tag`, `DropdownMenuRoot`, `IconButton`, `Tooltip` and `Button`.
+> An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `TableRoot`, `Tag`, `Table.CellActions` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/detail/attached-resources/attached-resources.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/attached-resources")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [IconButton](../../../components/icon-button.md), `TableRoot`, [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), `DropdownMenuGroup`, `DropdownMenuOption`, [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
 - Skills: `webkit-tables`
 
 ## Asked as
@@ -7412,9 +7639,9 @@ A data-driven `TableRoot :bordered="false"` given `:data`, `:columns` and `row-k
 
 One chip per row, following `skills/webkit-tables`: Environment is a `Tag` with `severity="secondary"`, `size="medium"`, `rounded` and the layers glyph. Policy is plain text and Certificate is the verified glyph beside plain text, so the row keeps one chip. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
 
-### D. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `Tooltip`, `IconButton`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
+### D. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
-An outlined small ellipsis `IconButton`, named by a `Tooltip` and an `aria-label` that includes the record, opens a menu placed `bottom-end`: Edit in the first group, Delete alone in the last. A record the platform generated (the default domain) has no menu, because it cannot be edited or deleted.
+`Table.CellActions`, named after the record ("Actions for shop.example.com"), opens a menu placed `bottom-end`: Edit in the first group, Delete alone in the last. A record the platform generated (the default domain) has no menu, because it cannot be edited or deleted.
 
 ### E. Footer — `Button` (required)
 
@@ -7594,12 +7821,12 @@ The code of every state is in [blocks/platform/detail/deployment-logs.md](blocks
 
 # DetailsPage (`platform/detail/details-page`)
 
-> The Overview tab of a resource detail page: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview ends its breadcrumb on the environment picker and follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page sits in the same shell without tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The Application variant is a whole application page on the `AppLayout` shell with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Select`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `Flow`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`.
+> The Overview tab of a resource detail page: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview ends its breadcrumb on the environment picker and follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page sits in the same shell without tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The Application variant is a whole application page on the `AppLayout` shell with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Select`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `TopologyDiagram`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`.
 
 - Surface: product
 - Source: `blocks/platform/detail/details-page/details-page.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/details-page")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [AppLayout](../../../components/app-layout.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Flow](../../../components/flow.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [TopologyDiagram](../../../components/topology-diagram.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [AppLayout](../../../components/app-layout.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [TopologyDiagram](../../../components/topology-diagram.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7650,7 +7877,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 
 ## Topology tab
 
-- Use `TopologyDiagram` for the path a request takes to the resource. The ServiceOverview state still composes its topology from `Flow` by hand; new pages use the component.
+- Use `TopologyDiagram` for the path a request takes to the resource (Application and ServiceOverview both do). Binds, changes and removals are staged on the node, counted beside Deploy and listed in the deploy `Drawer`; the run ends in the async-submit toast with Edit and Redeploy. A production-checklist step that binds a slot (Bind Policy, Bind Error Page) scrolls to the topology and expands that node instead of opening a separate form.
 - Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
 - Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
 - Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
@@ -7701,7 +7928,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - Policy: the policy summary with the resource it protects, a Rules shortcut, its status, environment, rule count and modules.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.
-- ServiceOverview: a service, with the environment picker in the breadcrumb, Deploy on the tab row, the production checklist and the deployment topology.
+- ServiceOverview: a service, with the environment picker in the breadcrumb, Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
 - DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
 - DeploymentFailed: a deployment the rules rejected, the danger banner with Redeploy, Visit disabled and the logs open on the failed step.
 - Application: a whole application page on the `AppLayout` console shell (rail in `#navigation`, header with the Applications › name breadcrumb in `#header`), with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `TableRoot`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
@@ -7725,7 +7952,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - `Policy` — The policy summary: the resource it protects, a Rules shortcut and actions, then status, environment, rule count, last edit and the enabled modules, and what the policy inspects.
 - `ResourceVersions` — The Versions tab of the same resource: the small Versions heading with Add Version, the controls row (Filter, search, Refresh, Download CSV, Columns) and the paginated versions table, each row with its code-set name and Latest mark, the comment, the state Tag, who built it and when, and the Open configuration or Deploy actions.
 - `ResourceBuild` — The Build tab of a resource made from the CLI: the small Build heading with an outlined Deploy, the Git repository band holding the Connect your repository card, the Build configuration band with the read-only framework preset and the build and deploy commands, and the Deployment band with the API token. Editing a command raises the save bar.
-- `ServiceOverview` — A service: the breadcrumb ends on its environment picker, the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the breadcrumb is hidden), the production checklist expands into a drawer, and the deployment topology runs from domains to storage with Bind controls on the open Policy and Error Page slots.
+- `ServiceOverview` — A service: the breadcrumb ends on its environment picker, the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the breadcrumb is hidden), the production checklist expands into a drawer, and the deployment topology is a `TopologyDiagram` from domains to storage: Policy, Error Page and Origin are bindable slots whose changes are staged, counted beside Deploy and listed in the deploy drawer, ending in the toast with Edit and Redeploy.
 - `DeploymentDetail` — A deployment that went live: the success banner, the Deployment details card with every fact and its Deployment Settings band for Default, and the Deployment logs card with the run duration and the Phased or Complete switch over the phased steps.
 - `DeploymentFailed` — A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment logs card with the Error status, open on the failed step with the rest skipped.
 - `Application` — An application on the `AppLayout` console shell with working tabs: Overview (the summary card with the live address, Visit and actions, the deployment, status, active version, framework, source and creation facts, and a band that sends settings changes to the active version), Versions and Deployments (a small `SectionHeader` over a `TableRoot` each), and Topology, where `TopologyDiagram` draws domain, workload, firewall, application and function instance. Binding or removing a firewall or function is staged: the tab row counts the changes in a warning `Tag`, Deploy opens a `Drawer` listing them, and the run reports through the async-submit toast with Edit (back to Topology) and Redeploy.
@@ -7955,7 +8182,7 @@ The code of every state is in [blocks/platform/detail/production-checklist.md](b
 - Surface: product
 - Source: `blocks/platform/detail/record-table/record-table.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/record-table")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Button](../../../components/button.md), `CalendarRoot`, [Card](../../../components/card.md), [Chip](../../../components/chip.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [FileDropzone](../../../components/file-dropzone.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Button](../../../components/button.md), `CalendarRoot`, [Card](../../../components/card.md), [Chip](../../../components/chip.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, [FileDropzone](../../../components/file-dropzone.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -8015,13 +8242,13 @@ A medium search `Input` bound to `v-model:globalFilter`, then outlined `IconButt
 
 One wrapping row of filled medium `Chip`s, one per applied field, in field order. Each chip reopens its field and can be removed.
 
-### J. Records table — `Card`, `TableRoot`, `CopyButton`, `Tag` (required)
+### J. Records table — `Card`, `TableRoot`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Tag` (required)
 
-`Card :padded="false"` around `TableRoot :bordered="false"` with `row-key="id"`, sorting, `paginated` at 8 rows and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID and Value end with an outlined `CopyButton` that stays pinned at the cell end while the text truncates. Weight and Description show a dash glyph when empty.
+`Card :padded="false"` around `TableRoot :bordered="false"` with `row-key="id"`, sorting, `paginated` at 8 rows and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `Table.CellId` ("Copy record ID") and Value is `Table.CellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `Table.CellActions` named after the record. Weight and Description show a dash glyph when empty.
 
-### K. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `Tooltip`, `IconButton` (required)
+### K. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
-An outlined small ellipsis `IconButton` named Row actions opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
+`Table.CellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
 
 ## Do
 
@@ -8134,6 +8361,8 @@ The persistent console shell from `skills/webkit-navigation`: the collapsible `S
 
 The breadcrumb reads module, resource, then the version as a `Select` with `aria-label="Switch version"`. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
 
+Below md the header has no room for the breadcrumb, so a row under it (`md:hidden`, its own `nav` named Breadcrumb) carries a Back `IconButton` to the resource's Versions tab and the same `Select` crumbs, full width: the version, and in EnvironmentCrumb the environment before it. A phone keeps every switch the desktop breadcrumb offers.
+
 ### C. Workspace — `Resizable` (required)
 
 A horizontal `Resizable` named "Version workspace": the version settings pane, a handle named "Resize the version history", and the collapsible Version history pane. History is closed by default.
@@ -8235,12 +8464,12 @@ The code of every state is in [blocks/platform/detail/version-detail.md](blocks/
 
 # AttributeEditor (`platform/edit/attribute-editor`)
 
-> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `CopyButton`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.
+> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.
 
 - Surface: product
 - Source: `blocks/platform/edit/attribute-editor/attribute-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/attribute-editor")`
-- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -8272,13 +8501,13 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 The same controls row as `platform/view/table-view`, all bound to one client-mode `useCollection` call: a `PropertyFilter` labeled "Filter variables" (free text over key, ID, author and type, plus Key, Author and Type properties), outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` last. The filter, sort and page live in the URL; page size and columns are saved. See `skills/webkit-lists`.
 
-### C. Variables table — `Card`, `TableRoot`, `CopyButton`, `Avatar`, `Tooltip` (required)
+### C. Variables table — `Card`, `TableRoot`, `Table.CellId`, `Table.CellLink`, `Avatar`, `Tooltip` (required)
 
-`Card :padded="false"` around a borderless data-driven `TableRoot` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID and Value end with a `CopyButton`; a secret value shows its mask and loses its copy control. Last modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time. See `skills/webkit-tables`.
+`Card :padded="false"` around a borderless data-driven `TableRoot` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID is `Table.CellId` ("Copy variable ID") and Value is `Table.CellLink` with `copyable`; a secret value shows its mask and loses its copy control (`:copyable="!row.secret"`). Last modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time. See `skills/webkit-tables`.
 
-### D. Row actions — `DropdownMenu`, `Tooltip`, `IconButton` (required)
+### D. Row actions — `Table`, `DropdownMenu` (required)
 
-An ellipsis `IconButton` named Row actions opens a `DropdownMenu` placed `bottom-end`: Edit and Clone in the first group, Delete alone in the last. Edit opens the drawer on that variable; Clone inserts a copy right below it with `_COPY` appended to the key; Delete opens the confirmation dialog.
+`Table.CellActions`, named after the variable ("Actions for API_URL"), opens its menu of `DropdownMenu.Group`s placed `bottom-end`: Edit and Clone in the first group, Delete alone in the last. Edit opens the drawer on that variable; Clone inserts a copy right below it with `_COPY` appended to the key; Delete opens the confirmation dialog.
 
 ### E. Create and edit drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent` (required)
 
@@ -8855,6 +9084,7 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 
 - Default: Add Rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
 - Composed: Edit Rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
+- In a list: `platform/view/rules-list#EditRule` drives this drawer without its trigger (`v-model:open` from a rule's name and from Add Rule) and writes the saved rule back to its row.
 
 ## Related
 
@@ -8880,12 +9110,12 @@ The code of every state is in [blocks/platform/edit/rule-builder.md](blocks/plat
 
 # SchemaEditor (`platform/edit/schema-editor`)
 
-> The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an ordered list of column rows (grip that reorders with the arrow keys, name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`, remove), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action.
+> The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an ordered list of column rows (grip that reorders with the arrow keys, name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`, remove), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also reorders column rows by pointer drag, imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys (column, referenced table and column, On delete).
 
 - Surface: product
 - Source: `blocks/platform/edit/schema-editor/schema-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/schema-editor")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CodeEditor](../../../components/code-editor.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CodeEditor](../../../components/code-editor.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -8909,9 +9139,9 @@ The table schema of a SQL database: the definition of one table and the drawers 
 
 ## Building blocks
 
-### A. Definition surface — `Card`, `TableRoot`, `Tag`, `Button`, `DropdownMenu`, `Tooltip`, `IconButton` (required)
+### A. Definition surface — `Card`, `TableRoot`, `Table`, `Tag`, `Button`, `DropdownMenu`, `Tooltip`, `IconButton` (required)
 
-One `Card :padded="false"` around a `TableRoot :bordered="false"` named `Columns of <table>`. The toolbar slot holds the table glyph and name, a small secondary `Tag` with the row count, an outlined Add column `Button`, the primary Insert row `Button` and a Table actions `IconButton` (with its `Tooltip`) that opens a `DropdownMenu`: Create Table in the first group, Truncate table alone in the last. The rows are the columns: the name in the code font, the type as a secondary `Tag`, the constraints in muted text (`PRIMARY KEY, NOT NULL, DEFAULT now()`, or `None`), and a per-column `DropdownMenu` with Change type.
+One `Card :padded="false"` around a `TableRoot :bordered="false"` named `Columns of <table>`. The toolbar slot holds the table glyph and name, a small secondary `Tag` with the row count, an outlined Add column `Button`, the primary Insert row `Button` and a Table actions `IconButton` (with its `Tooltip`) that opens a `DropdownMenu`: Create Table in the first group, Truncate table alone in the last. The rows are the columns: the name in the code font, the type as a secondary `Tag`, the constraints in muted text (`PRIMARY KEY, NOT NULL, DEFAULT now()`, or `None`), and a per-column `Table.CellActions` ("Actions for <column>") with Change type.
 
 ### B. Create Table drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `SettingsSection`, `Alert`, `Field`, `Input` (required)
 
@@ -8919,25 +9149,29 @@ A large right `Drawer` whose content is a `form` named Create Table. The `PanelH
 
 ### C. Column rows — `Select`, `Checkbox`, `HelperText` (required)
 
-The Columns section is a list named Columns, one bordered row per column: a grip `button` that moves the row with ArrowUp and ArrowDown and keeps focus on it, the name `Input`, a type `Select` whose trigger shows the type's glyph (`#`, `T`, `{}`, `@`, `B`) and whose content has a Search types `Input` over the Data types group (value in the code font and a muted description), a default value `Input` (`NULL` placeholder), a Primary `Checkbox` with its visible label, and a Remove column `IconButton` (disabled on the last row). A duplicate name puts an invalid `HelperText` under its row; no named column puts one under the list. A full-width outlined Add column `Button` appends a row and focuses its name. About data types links out. New tables start with `id int8` as the primary key and `created_at timestamptz DEFAULT now()`.
+The Columns section is a list named Columns, one bordered row per column: a grip `button` that drags the row with the pointer (the dragged row fades with a dashed accent outline, the target shows a 2 px accent line on the side it lands, Escape cancels) or moves it with ArrowUp and ArrowDown, keeps focus on it and announces each move in a polite status line (`Moved email to position 2 of 4.`), the name `Input`, a type `Select` whose trigger shows the type's glyph (`#`, `T`, `{}`, `@`, `B`) and whose content has a Search types `Input` over the Data types group (value in the code font and a muted description), a default value `Input` (`NULL` placeholder), a Primary `Checkbox` with its visible label, and a Remove column `IconButton` (disabled on the last row). A duplicate name puts an invalid `HelperText` under its row; no named column puts one under the list. A full-width outlined Add column `Button` appends a row and focuses its name. About data types links out. New tables start with `id int8` as the primary key and `created_at timestamptz DEFAULT now()`.
 
-### D. Add column drawer — `Switch` (required)
+### D. CSV import and foreign keys — `FileDropzone`, `FileTokenGroup` (optional)
+
+Two optional sections in the Create Table drawer. Import data from CSV: a `FileDropzone` (one .csv) with a Browse files button over a hidden file input; once read, the file is a `FileTokenGroup` token (Remove clears it), the columns are rebuilt from the header with types guessed from the values (`int8`, `numeric`, `bool`, `timestamptz`, else `text`; `id` becomes the primary key) and stay editable, an empty name takes the file's, and a bordered `TableRoot` previews the first five rows under a line that counts columns and rows. A header with an empty name or a non-CSV file is an error on the token and blocks Create. Foreign keys: one bordered row per key, Column (the named columns), `references`, Table and its Column (enabled once a table is picked), and On delete (No action, Cascade, Set null), with Remove; Add foreign key appends one. After Create, an incomplete row shows `Choose the column, the table and the column it references.` The success toast counts the imported rows and the keys. The drawer imports into a new table; an existing empty table imports from its own page (M2.10 row).
+
+### E. Add column drawer — `Switch` (required)
 
 A medium drawer with the same header and footer recipe. Column has Name (invalid when empty or when the table already has it), Type (the same `Select`) and Default value (empty for NULL, or an expression such as `now()`). Constraints has Primary key and Not null as horizontal `Field`s with a `Switch`; Primary key turns Not null on and locks it.
 
-### E. Insert row drawer — `PanelFooter` (required)
+### F. Insert row drawer — `PanelFooter` (required)
 
 A medium drawer with one `Field` per column in table order: the label is the column name in the code font with its type at the end, the description says what an empty value does (`Generated by the database.`, `Empty uses the default, now().`, `Required.`, `Empty stores NULL.`). An integer primary key is disabled and generated. After Insert row is pressed, a NOT NULL column with no value and no default is invalid with `<column> cannot be NULL. Enter a value.` Every drawer's `PanelFooter` holds Cancel and the submit button (`:loading` while it runs).
 
-### F. Change type dialog — `ConfirmDialog`, `CodeEditor` (required)
+### G. Change type dialog — `ConfirmDialog`, `CodeEditor` (required)
 
 A large `ConfirmDialog` titled `Change the type of <column>`: a warning `Alert` (the table is rebuilt, every row is copied, it can't be undone, values that don't fit make it fail), the New type `Select` with the current type in its description, and the statements that will run (`BEGIN; CREATE TABLE …_new …; INSERT INTO …; DROP TABLE …; ALTER TABLE … RENAME TO …; COMMIT;`) in a read-only `CodeEditor` with `language="sql"`. The primary Change type is disabled until the type differs.
 
-### G. Truncate table dialog — `ConfirmDialog`, `CodeEditor`, `Input` (required)
+### H. Truncate table dialog — `ConfirmDialog`, `CodeEditor`, `Input` (required)
 
 A medium `ConfirmDialog` titled `Truncate <table>`, following `platform/delete/delete-with-confirmation`: a warning `Alert`, one sentence with what goes (every row, with the count) and what stays (columns, types, constraints), the `TRUNCATE TABLE <table>;` statement in a read-only `CodeEditor` without line numbers, and a `Field` whose label asks to type the table name. The danger Truncate table button enables only when it matches.
 
-### H. Outcome toasts — `Toaster` (required)
+### I. Outcome toasts — `Toaster` (required)
 
 One `Toaster` at `bottom-right`, raised through `toast` with one id, so each change replaces the last toast. Schema changes are not deploys: each success names what changed and offers the next thing to do with the table, never Edit and Redeploy or View deployments. Create Table: `Table events created.` with Insert row and Add column. Add column: `Column phone added to customers.` with Change type. Insert row: `Row inserted into customers.` with Insert another. Change type: `email is now text.` with Change again. Truncate: `customers truncated. 3 rows removed.` with Insert row. A request that never reached the database is a danger toast with Retry that keeps the form.
 
@@ -8947,7 +9181,7 @@ One `Toaster` at `bottom-right`, raised through `toast` with one id, so each cha
 - Keep the drawer open and its values intact when the server refuses; say so in the section `Alert`.
 - Show the SQL a destructive or rebuilding change will run before it runs.
 - Ask for the table name before truncating it.
-- Let the grip reorder columns from the keyboard, and keep focus on the moved row.
+- Let the grip reorder columns by drag and from the keyboard, announce each move, and keep focus on the moved row.
 - End every change with a toast whose action continues the work on the same table.
 
 ## Don't
@@ -8971,7 +9205,7 @@ One `Toaster` at `bottom-right`, raised through `toast` with one id, so each cha
 
 - Each drawer's content is a `form` named by its title; the `fieldset` carries a visually hidden `legend` and is disabled while the request runs.
 - `Field` wires every label, description and error to its control; column row controls without a visible label are named `Name of column 2`, `Type of column 2`, `Default value of column 2`.
-- The grip is a real `button` named `Reorder <column>. Use the up and down arrow keys.` with `aria-keyshortcuts`; reordering keeps focus on the moved grip.
+- The grip is a real `button` named `Reorder <column>, position <n> of <total>. Drag, or use the up and down arrow keys.` with `aria-keyshortcuts`; dragging is never the only way (WCAG 2.5.7), moves are announced in a polite status line, and reordering keeps focus on the moved grip.
 - Every icon-only button has an `aria-label` that matches its `Tooltip`; the per-column menu trigger names its column.
 - The read-only `CodeEditor`s are named (`Statements that will run`) and can be selected and copied.
 - Drawers and dialogs trap focus, close on Escape and return focus to the button that opened them.
@@ -8983,6 +9217,7 @@ One `Toaster` at `bottom-right`, raised through `toast` with one id, so each cha
 - InsertRow: the Insert row drawer after a submit with email empty, showing the NOT NULL error.
 - ChangeType: the Change type dialog for email with the statements that will run.
 - TruncateTable: the Truncate customers dialog waiting for the typed name.
+- ImportCsv: Create Table with subscribers.csv read (six columns, six rows, a quoted comma) and one foreign key, customer_id to customers.id on delete cascade.
 - Failed: Create Table refused by the server because customers already exists; Alert in General and the Name field invalid.
 
 ## Related
@@ -9001,6 +9236,7 @@ One `Toaster` at `bottom-right`, raised through `toast` with one id, so each cha
 - `InsertRow` — The Insert row drawer for customers after Insert was pressed with email empty: one field per column in table order, id generated and disabled, created_at falling back to now(), and email invalid because it is NOT NULL.
 - `ChangeType` — The Change type dialog for email: a warning that the table is rebuilt, the New type select, and the BEGIN … COMMIT statements that will run in a read-only CodeEditor; Change type is disabled until the type differs.
 - `TruncateTable` — The Truncate customers dialog: a warning, the row count that goes, the TRUNCATE TABLE statement and a field that must match the table name before the danger button enables.
+- `ImportCsv` — Create Table started from a CSV: subscribers.csv as a `FileTokenGroup` token, the columns rebuilt from its header with guessed types, a five-row `TableRoot` preview, and a foreign key from customer_id to customers.id with On delete Cascade.
 - `Failed` — Create Table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were.
 
 Each variant is the same screen in another state: `get_pattern("platform/edit/schema-editor", { variant })`, or the file under `blocks/platform/edit/schema-editor/variants/`.
@@ -10245,12 +10481,12 @@ The code of every state is in [blocks/platform/view/card-view.md](blocks/platfor
 
 # FileBrowser (`platform/view/file-browser`)
 
-> The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last modified pairs the editor `Avatar` (named in a `Tooltip`) with the relative time; folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `PopoverRoot`, `Switch`, `Breadcrumb`, `SplitButton`, `Avatar`, `DropdownMenuRoot` and `EmptyState`.
+> The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last modified is `Table.CellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `PopoverRoot`, `Switch`, `Breadcrumb`, `SplitButton`, `Table.CellTime`, `Table.CellActions` and `EmptyState`.
 
 - Surface: product
 - Source: `blocks/platform/view/file-browser/file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/file-browser")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SplitButton](../../../components/split-button.md), [Switch](../../../components/switch.md), `TableRoot`, `TableSearch`, [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), [UploadProgress](../../../components/upload-progress.md)
+- Components: [Alert](../../../components/alert.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SplitButton](../../../components/split-button.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, `TableSearch`, [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), [UploadProgress](../../../components/upload-progress.md)
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -10295,13 +10531,13 @@ A Columns `IconButton` opens a popover placed `bottom-end` with one `Switch` per
 
 A `Breadcrumb` of the folder path starts at the storage name; each crumb jumps back to that depth. Beside it the primary medium Add to files `SplitButton` offers Upload file and Add folder. It is the page's only primary action.
 
-### F. Cell recipes — `Avatar`, `Tooltip` (optional)
+### F. Cell recipes — `Table.CellTime` (optional)
 
-Folders sort first with a link-coloured folder glyph and open on row click; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified pairs the editor's small square `Avatar`, named in a `Tooltip`, with the relative time.
+Folders sort first with a link-coloured folder glyph and open on row click; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified is `Table.CellTime`: the editor's avatar and a relative time that updates every minute, with the absolute time in its tooltip.
 
-### G. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `IconButton`, `Tooltip` (required)
+### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
-A small ellipsis `IconButton` named File actions opens a menu placed `bottom-end`: Open for a folder or Download for a file in the first group, Delete alone in the last group. The `..` row has no menu.
+`Table.CellActions`, named after the file ("Actions for logo.svg"), opens a menu placed `bottom-end`: Open for a folder or Download for a file in the first group, Delete alone in the last group. The `..` row has no menu.
 
 ### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
@@ -10315,7 +10551,7 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 
 Variant Uploading only; it adds `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FileDropzone` and `FileTokenGroup` to the page.
 
-Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload closes the dialog and starts the transfer; the dialog does not wait for it.
+Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload closes the dialog and starts the transfer; the dialog does not wait for it. In the Uploading variant Add to files also offers Upload folder: the same dialog titled Upload folder, a `FileDropzone` with `directories` (a dropped folder is walked) and a Browse folder `Button` wired to a hidden `<input type="file" webkitdirectory>`; the tokens and the transfer rows name each file by its path inside the folder (`site/css/main.css`), and as files finish their folders appear in the table under the folder in view.
 
 A second `FileDropzone kind="overlay"` sits inside the `section` that holds the card (made `relative`), so dragging files anywhere over the page shows `Drop files to upload them to <folder>` over the listing; a drop uploads straight into the folder in view and refuses files over the limit with a danger toast.
 
@@ -10361,7 +10597,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - **Storage name:** the resource name as created, e.g. "acme-assets"; never prefixed with the type.
 - **Search:** placeholder names the scope, e.g. "Search in folder".
 - **Add action:** "Add to files", with options "Upload file" and "Add folder".
-- **Row menu:** one verb per option, e.g. "Open", "Download", "Delete"; the trigger is named "File actions".
+- **Row menu:** one verb per option, e.g. "Open", "Download", "Delete"; the trigger is named "Actions for <file>".
 - **Delete dialog:** title and confirm `Delete file` or `Delete folder`, consequence `The selected folder will be deleted, along with all its files.`, prompt `Type <name> to confirm.`
 - **Column headers:** short fragments, e.g. "Name", "Size", "Last modified".
 - **Empty folder:** title states the fact, e.g. "This folder is empty"; description is one sentence, e.g. "Upload files or create a folder to get started."
@@ -10378,7 +10614,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - The `Breadcrumb` crumbs are links the keyboard reaches in order; the last crumb is the current folder.
 - Folder rows open on click and the Open option in the row menu gives the same action to keyboard users.
 - Focus order follows reading order: search, Refresh, Download CSV, Columns, path, Add to files, the rows.
-- The `Avatar` carries the author name as `alt`, repeated by its `Tooltip`.
+- `Table.CellTime` names the author and reads the absolute time to screen readers.
 - The drop overlay is `aria-hidden`: dragging is a pointer path, and Add to files with Browse files is the keyboard path to the same upload.
 - `UploadProgress` is a region named File transfers with a polite status that announces each file finishing and the outcome; percentages are not announced. The toast repeats the outcome for people who collapsed the card.
 - In the upload dialog each refused file's reason is the `aria-describedby` of its Remove button, and removing a file moves focus to the next one.
@@ -10405,7 +10641,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
 - `Default` — primary (the code below)
 - `InsideAFolder` — Inside a build folder: the crumb gains the folder, a .. row leads back up, and the files carry their glyph, size, editor and age.
-- `Uploading` — An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one.
+- `Uploading` — An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. Upload folder opens the same dialog for a folder (`FileDropzone directories` and a Browse folder picker); each file keeps its path and its folders appear in the table as files land. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one.
 - `MoveObject` — Two files of a build folder are selected and the Move dialog is open: it names the files, their total size and the folder they leave, and the Destination folder `Combobox` offers every folder in the storage and accepts a new path. A path with characters outside printable ASCII, with `..`, or equal to the current folder is refused under the field. Move runs in the floating `UploadProgress` card (`operation="move"`) and ends in a toast with Open folder. Selecting rows shows a selection bar with Move, and every file's row menu has Move.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/file-browser", { variant })`, or the file under `blocks/platform/view/file-browser/variants/`.
@@ -10423,7 +10659,7 @@ The code of every state is in [blocks/platform/view/file-browser.md](blocks/plat
 - Surface: product
 - Source: `blocks/platform/view/marketplace/marketplace.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/marketplace")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [DocProse](../../../components/doc-prose.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [Tabs](../../../components/tabs.md), [Toast](../../../components/toast.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [DocProse](../../../components/doc-prose.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -10499,6 +10735,18 @@ An "Install" `h3` ("Install on another application" once installed somewhere) ov
 
 One `Toaster` at `bottom-right`, raised through `toast` with one id for the install, so progress turns into the outcome in place. Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running if you close this panel."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it.
 
+### N. Solution page — `Tabs`, `Card`, `Select`, `Field`, `KeyValuePairs`, `DocProse` (optional)
+
+The drawer's content as a page, for the integration's own URL (the variant adds `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `Table.CellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValuePairs`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
+
+### O. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
+
+The settings of one installed integration on one application (the variant adds `SettingsSection`, `Item`, `SettingRow`, `Switch`, `Input` and `SaveBar`). `SettingsSection`s group them; an on/off setting is a compact `SettingRow` in an `Item.List`, the rest are `Field`s. Errors follow `platform/states/form-error`: nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
+
+### P. Template page — `Field`, `Button`, `KeyValuePairs` (optional)
+
+A template as a page, for the template's own URL (the variant adds `SettingsSection`, `Input` and `Link`): the description, a deploy form (application name, repository) beside the facts. Deploy is a build and deploy, so it follows `platform/states/async-submit`: loading on the button, a progress toast, and a success toast with Edit and Redeploy.
+
 ## Do
 
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`; derive the Status property from where each integration is installed.
@@ -10553,6 +10801,10 @@ One `Toaster` at `bottom-right`, raised through `toast` with one id for the inst
 - NoMatch: the search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
 - Loading: the filter is disabled and six `Skeleton` tiles (logo, name, two lines, badge, action) hold the grid in a band that is `aria-busy`.
 
+- SolutionPage: Waiting Room as a page, storefront on 1.3.0 (Update available) and checkout on 1.4.0.
+- Configure: Waiting Room settings on storefront, with the SaveBar after a change.
+- TemplatePage: Nuxt Storefront as a page with its deploy form.
+
 ## Related
 
 - `platform/view/template-browser` — the full template catalog the Templates tab leads to.
@@ -10571,6 +10823,9 @@ One `Toaster` at `bottom-right`, raised through `toast` with one id for the inst
 - `InstallFailed` — The install failed on checkout: the danger Alert with the reason and Reinstall, and the permanent failure toast with Edit and Reinstall.
 - `NoMatch` — A search that matches no integration: the Featured row hides, the token stays and a medium EmptyState offers Clear filters.
 - `Loading` — The catalog is loading: the filter is disabled and skeleton tiles hold the grid.
+- `SolutionPage` — The integration as a full page (Waiting Room): a Back to Marketplace `Link`, the `PageHeader`, `Tabs` for Overview, Usage, Changelog (version history, Latest marked) and Applications (a `Table` of the applications running it, `Table.CellStatus` Up to date or Update available and an Update to <version> action), beside an install card whose Application `Select` tags each application Installed or Update available. Install and Update are async runs that end in a toast with Configure and Open application.
+- `Configure` — The screen behind Configure: the integration's settings on one application (Queue visitors `Switch`, Capacity and Queue page title fields, Session length `Select`) in `SettingsSection`s, errors after Save with a summary `Alert`, and a `SaveBar` with Discard and Save; saving is not a deploy, so its toast has no Redeploy.
+- `TemplatePage` — A template as a full page (Nuxt Storefront): a Back to Templates `Link`, the description, the deploy form (application name and repository, errors after Deploy) beside the template facts; Deploy is an async run that ends in the async-submit toast with Edit and Redeploy.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/marketplace", { variant })`, or the file under `blocks/platform/view/marketplace/variants/`.
 
@@ -10744,19 +10999,19 @@ The code of every state is in [blocks/platform/view/query-editor.md](blocks/plat
 
 # RulesList (`platform/view/rules-list`)
 
-> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (stacking to cards when narrow) with Order, Name, Description, Status and Last modified. The Order cell carries a position `Input` (type a number and press Enter), a grip `IconButton` that drags the row or moves it with the up and down arrow keys, and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`.
+> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (stacking to cards when narrow) with the grip, Move, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Move cell adds Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`.
 
 - Surface: product
 - Source: `blocks/platform/view/rules-list/rules-list.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/rules-list")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [Switch](../../../components/switch.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
 
 rules list; rules engine list; reorder rules; rule order; drag and drop reorder; firewall rules; request and response phases; review changes; enable disable rule; lista de regras; ordem das regras; reordenar regras; regras do firewall; fases de requisição e resposta; lista de reglas; reordenar reglas
 
-An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys or a typed position move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves.
+An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys or Move up and Move down move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves.
 
 ## When to use
 
@@ -10786,11 +11041,11 @@ A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, th
 
 ### D. Rules table — `TableRoot`, `Tag`, `Switch` (required)
 
-A data-driven `TableRoot` per phase (`row-key="id"`, no sorting: order is the data's), so rows stack as cards in a narrow container: Order (200 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). Each cell slot wraps its content in one element carrying the rule id and the drag state, so the panel around the table handles drag over and drop for the whole phase and every cell of the target row draws the drop line.
+A data-driven `TableRoot` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`), so rows stack as cards in a narrow container: the table's own grip column (Order), Move (96 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
 
 ### E. Order controls — `Input`, `IconButton`, `Tooltip` (required)
 
-In the Order cell, in this order: a small position `Input` (numeric, centered; Enter or blur moves the rule there, Escape cancels), a grip `IconButton` (`pi pi-bars`) that is the drag handle and moves the rule one place with the up and down arrow keys, and Move up and Move down `IconButton`s. Each control is named after its rule and phase, and its `Tooltip` repeats the action or, when it is disabled, the reason. Leading locked rules are pinned: their controls are disabled and nothing can move above them. After a move, focus returns to the same control on the moved rule (the grip when that control is now disabled), and a polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
+The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow Up, Arrow Down, Home or End. `row-reorderable` returns false for a locked rule, while a search narrows the list and while saving, so those grips are disabled and no row can be dropped on or moved past a pinned rule. The Move cell holds Move up and Move down `IconButton`s, the single-pointer way to reorder (WCAG 2.5.7); each is named after its rule and, when disabled, carries the reason ("Move Default rule down. The default rule runs first and stays first."), which its `Tooltip` repeats. After a move with them, focus returns to the same button on the moved rule (the other one, or the grip, when that one is now disabled) and the block's polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
 
 ### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Toaster` (required)
 
@@ -10803,7 +11058,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 ## Do
 
 - Keep phases separate: a rule moves only within its phase, and drag ignores drops on another phase.
-- Offer every way to move: drag for a pointer, arrow keys on the grip, Move up and Move down for touch and switch access, and a typed position for long lists.
+- Offer every way to move: drag for a pointer, arrow keys, Home and End on the grip, and Move up and Move down for touch and switch access.
 - Say why a control is disabled, in its accessible name and its tooltip.
 - Collect changes and apply them only after Review changes and Save; the review lists every rule whose position changes, not only the one the user dragged.
 - Let a rule be turned off in place; an inactive rule keeps its position and is skipped at runtime.
@@ -10820,7 +11075,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 ## Copy
 
 - **Phase triggers:** "Request phase", "Response phase", with "5 rules" or "2 of 5" beside.
-- **Order control names:** "Reorder Docs rewrite, position 5 of 5 in the Request phase. Use the up and down arrow keys to move it.", "Move Docs rewrite up".
+- **Order control names:** "Reorder Docs rewrite, position 5 of 5" (the table's grip, described by its drag-or-arrow hint), "Move Docs rewrite up", and when disabled "Move Default rule down. The default rule runs first and stays first."
 - **Disabled reasons:** "The default rule runs first and stays first.", "Clear the search to change the order rules run in.", "There is no other rule in this phase to move it past."
 - **Announcements:** "Docs rewrite moved to position 3 of 5 in the Request phase.", "Changes discarded. The rules are back in their saved order."
 - **Save bar:** "3 changes to the rules, not saved yet." with Discard and Review changes.
@@ -10833,7 +11088,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 
 - Each phase is a disclosure: the trigger is a button inside an `h2` with `aria-expanded`, and the panel is a region named by it.
 - Every Order control has a name that includes the rule and the phase; disabled controls include the reason.
-- Keyboard: Tab reaches the position field, grip, Move up, Move down, the rule link and its switch, in that order; the grip moves the rule with Up and Down; Enter in the position field commits and Escape cancels. Focus follows the moved rule.
+- Keyboard: Tab reaches the grip, Move up, Move down, the rule link and its switch, in that order; the grip moves the rule with Up, Down, Home and End and Escape cancels a drag. Focus follows the moved rule.
 - Moves and discards are announced once in a polite `role="status"` region that exists from the first render.
 - The `Switch` is named "Run <rule>"; its visible Active or Inactive text is hidden from the accessibility tree so the state is read once, from `aria-checked`.
 - The review dialog traps focus, returns it to Review changes on close, and is not dismissible while saving; the failure `Alert` is read when it appears.
@@ -10848,6 +11103,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 - Searching: "cache" typed, reordering off with its `Alert`, phases reading "n of total".
 - Empty: a firewall with no rules, the Request phase showing its `EmptyState`.
 - Loading: skeleton rows in each phase.
+- EditRule: the list composed with `platform/edit/rule-builder`. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
 
@@ -10865,6 +11121,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 - `Searching` — A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip.
 - `Empty` — A firewall with no rules: the Request phase panel shows a small EmptyState with Add Rule instead of the table.
 - `Loading` — While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns.
+- `EditRule` — The list composed with `platform/edit/rule-builder`: a rule's name opens the large rule-builder `Drawer` as Edit Rule, seeded with that rule's criteria and behaviors and its phase locked; Add Rule in the header (or in an empty phase) opens it as Add Rule in that phase. Saving an edit updates the row in place and confirms it in a toast; a new rule lands last in its phase, the phase opens, and the toast offers Edit. Neither changes the run order, so the SaveBar only counts moves and status switches.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/rules-list", { variant })`, or the file under `blocks/platform/view/rules-list/variants/`.
 
@@ -10881,7 +11138,7 @@ The code of every state is in [blocks/platform/view/rules-list.md](blocks/platfo
 - Surface: product
 - Source: `blocks/platform/view/split-view/split-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/split-view")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), `CalendarRoot`, [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), `PanelHeader`, [Popover](../../../components/popover.md), [PropertyFilter](../../../components/property-filter.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), `CalendarRoot`, [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), `PanelHeader`, [Popover](../../../components/popover.md), [PropertyFilter](../../../components/property-filter.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Table](../../../components/table.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10926,9 +11183,9 @@ One medium `Chip` per applied field under the controls row. A chip summarizes it
 
 A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values that applies a value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
-### F. Log — `Chart`, `TableRoot`, `Tag`, `EmptyState` (required)
+### F. Log — `Chart`, `TableRoot`, `Table`, `Tag`, `EmptyState` (required)
 
-Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar stacked` with `Chart.Brush`, bound to `v-model:range`). Clicking a bucket filters the period to it and dragging selects a span; the arrow keys step through buckets and Enter applies one. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a `Tag`, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
+Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar stacked` with `Chart.Brush`, bound to `v-model:range`). Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a `Table.CellStatus`, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
 
 ### G. Event document — `Sidebar`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
@@ -10990,7 +11247,7 @@ The document lists every field of the event. Search in this event narrows the li
 
 - **Search:** placeholder names what is searched, e.g. "Search events, hosts, paths or addresses"; `aria-label` "Search events".
 - **Summary labels:** short nouns, e.g. "Events", "Errors", "Avg request time".
-- **Chart hint:** one instruction, e.g. "Click to filter to this bucket, or drag to select a span."
+- **Chart hint:** one instruction, e.g. "Drag across the chart, or hold Shift with the arrow keys and press Enter, to filter the log to a span."
 - **Empty log:** title states the fact and the description says what to do, e.g. "No events in this window" with "Widen the period or clear a filter to see more of the log."
 - **Fields panel:** controls name the panel, e.g. "Hide the fields panel", "Show the fields panel".
 - **Document:** drawer title "Event"; close button "Close the event document".
@@ -11003,7 +11260,7 @@ The document lists every field of the event. Search in this event narrows the li
 ## Accessibility
 
 - One `main` landmark holds the explorer; each `Sidebar` is named (Fields, Event document) with its own collapse, expand and resize labels.
-- The chart is one focusable control with an `aria-label`; arrow keys move between buckets, Enter or Space applies one, the hover card is a `role="status"`, and a visually hidden summary describes the whole chart.
+- The chart is `Chart`'s one tab stop with an `aria-label` that carries the summary (busiest bucket) and the instruction; arrow keys move between buckets, Shift extends a span, Enter commits it, and the tooltip follows keyboard focus as it follows the pointer.
 - The Errors value carries an `aria-label` with its share of all events.
 - Every icon-only button has an `aria-label`; the filter `Badge` and decorative glyphs are `aria-hidden="true"`.
 - Value options in the popovers expose `aria-checked`, so applied values are announced.
@@ -11055,7 +11312,7 @@ The code of every state is in [blocks/platform/view/split-view.md](blocks/platfo
 - Surface: product
 - Source: `blocks/platform/view/table-view/table-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/table-view")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [PropertyFilter](../../../components/property-filter.md), [Skeleton](../../../components/skeleton.md), `TableRoot`, [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md), `use-collection`, `utils/csv`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [Table](../../../components/table.md), `TableRoot`, [Tooltip](../../../components/tooltip.md), `use-collection`, `utils/csv`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -11102,13 +11359,13 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 `Card :padded="false"` around `TableRoot :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `enable-sorting` makes Name, Status and Last Modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. Below the container width the rows stack into label and value cards instead of scrolling sideways.
 
-### F. Cell recipes — `CopyButton`, `Tag`, `Tooltip`, `Avatar`, `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Input`, `Skeleton`, `Button` (optional)
+### F. Cell presets — `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime` (optional)
 
-The name cell pairs the resource glyph with a truncated, underline-on-hover name. ID and domain cells end with a `CopyButton`. The domain is a link that opens in a new tab, named by a `Tooltip`; a resource with more domains adds a `+N` `Tag` that opens a popover with its own count, a search `Input` past ten domains, a `Skeleton` per row while more load and a Load more `Button`. Status is a `Tag`. Last Modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time in one column.
+Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `Table.CellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `Table.CellId` (copy button named after the resource). The domain is `Table.CellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `Table.CellStatus`. Last Modified is `Table.CellTime`: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
 
-### G. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `IconButton`, `Tooltip` (required)
+### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
-An ellipsis `IconButton` named Row actions opens a menu placed `bottom-end`: the everyday actions (Deploy, View details, Clone) in one group, Delete alone in the last group. The root's `select` event hands the option value and the row to the page; Delete opens the confirmation below.
+`Table.CellActions` (an ellipsis button named after the row, e.g. "Actions for resource-01") opens a menu: the everyday actions (Deploy, View details, Clone) in one group, Delete alone in the last group. The root's `select` event hands the option value and the row to the page; Delete opens the confirmation below.
 
 ### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
@@ -11165,7 +11422,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 - The delete dialog traps focus, is named by its title and labels its input by the prompt.
 - The preferences dialog traps focus, is named by its title and returns focus to its trigger when it closes.
 - Sorting is announced by the table header; the row menu is reachable by keyboard and closes back to its trigger.
-- Links that open a new tab add "(opens in a new tab)" in visually hidden text; the domain popover announces its count and its loading in a `status` region.
+- Links that open a new tab add "(opens in a new tab)" in visually hidden text; the `+N` popover names its count and the copy buttons name what they copy.
 
 ## States
 
@@ -11942,6 +12199,7 @@ The code of every state is in [blocks/shells/website.md](blocks/shells/website.m
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Forced colors: the filled kinds (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
 
 ## Right-to-left
 
@@ -13600,6 +13858,301 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 
 ---
 
+<!-- components/conversation-history.md -->
+
+# Conversation History
+
+> The list of past conversations with an assistant, in a side panel or drawer: titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, and an optional Delete per row. Choosing a row sets `v-model` to its id; the owner loads that conversation into `Conversation`.
+
+- Import: `import ConversationHistory from '@aziontech/webkit/conversation-history'`
+- Category: ai · Surface: product · Structure: monolithic
+- API as JSON: [conversation-history.json](https://github.com/aziontech/webkit/blob/main/.specs/conversation-history.json)
+
+## When to use
+
+- An assistant keeps past conversations and the person returns to one.
+- The left rail or a drawer of a chat page.
+
+## Do
+
+- Title each conversation from its first prompt, short; the full title shows on hover through `title`.
+- Pass `now` from the server render (or a fixed reference) so the groups match on the server and the client.
+- Confirm deletes of anything older than today with a `ConfirmDialog` in the `remove` handler.
+
+## Don’t
+
+- Messages of the open conversation → `Conversation`.
+- Navigation between product areas → `SidebarNav` or `NavigationMenu`.
+- A searchable table of records → `TableRoot`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [conversation](conversation.md) — shows the conversation the history selects.
+- [drawer](drawer.md) — holds the history on narrow screens.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `{ id: string; title: string; updatedAt: string \ \| number \ \| Date }[]` | `[]` | false | Conversations, any order; they are sorted newest first inside their group. |
+| `now` | `string \ \| number \ \| Date` | `undefined` | false | Reference time for the groups. Empty uses the current time; pass a fixed value when the list is rendered on the server. |
+| `removable` | `boolean` | `false` | false | Shows a Delete button on each row that emits `remove`. |
+| `loading` | `boolean` | `false` | false | Shows placeholder rows while the history loads. |
+| `label` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation history`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `remove` | `string` |  |
+
+## v-model
+
+| Model     | Type       | Default | Emits  | Notes               |
+| --------- | ---------- | ------- | ------ | ------------------- |
+| `v-model` | `string \\ | null`   | `null` | `update:modelValue` | Id of the open conversation; its row is `aria-current="page"`. |
+
+## States
+
+- Groups render only when they have items; inside a group, newest first.
+- Active row: `data-active` and `aria-current="page"`, the selected surface.
+- Empty: one muted line, `No conversations yet.`
+- Loading: `aria-busy="true"` and five skeleton rows; no group headings.
+
+## Accessibility
+
+- The root is a `nav` named by `label`; each group is a `ul` labelled by its visible heading (`aria-labelledby`).
+- Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
+- Delete is an `IconButton` named `Delete <title>`, shown on every row (not hover-only), so it is reachable by keyboard and touch.
+- Keyboard: `Tab` moves through rows and their Delete; `Enter`/`Space` open a conversation.
+- Loading sets `aria-busy` on the list.
+
+## Right-to-left
+
+- Layout: logical spacing; Delete sits at the inline end of the row.
+- Icons: the trash glyph is not mirrored.
+- Keyboard: none beyond `Tab`.
+- User data: titles render in `<bdi>` with `dir="auto"`.
+
+## Internationalization
+
+| Key                              | English source          | Override prop |
+| -------------------------------- | ----------------------- | ------------- |
+| `conversationHistory.label`      | `Conversation history`  | `label`       |
+| `conversationHistory.today`      | `Today`                 | —             |
+| `conversationHistory.yesterday`  | `Yesterday`             | —             |
+| `conversationHistory.previous7`  | `Previous 7 days`       | —             |
+| `conversationHistory.previous30` | `Previous 30 days`      | —             |
+| `conversationHistory.older`      | `Older`                 | —             |
+| `conversationHistory.empty`      | `No conversations yet.` | —             |
+| `conversationHistory.remove`     | `Delete {title}`        | —             |
+
+- Groups use calendar days in the browser's time zone, not 24-hour windows.
+
+## Responsive
+
+- Container queries: none; it fills the width it is given.
+- Narrow: titles truncate on one line with the full title in `title`.
+- Touch: rows are 32 px tall with the Delete button's 40 px touch target.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ConversationHistory from '@aziontech/webkit/conversation-history'
+  import { ref } from 'vue'
+
+  const now = '2026-11-11T15:00:00'
+  const items = ref([
+    { id: 'c1', title: 'Purge the cache after a deploy', updatedAt: '2026-11-11T14:20:00' },
+    { id: 'c2', title: 'Why is my function returning 502?', updatedAt: '2026-11-11T09:05:00' },
+    { id: 'c3', title: 'Set up a WAF rule for login attempts', updatedAt: '2026-11-10T18:40:00' },
+    { id: 'c4', title: 'Image optimization query parameters', updatedAt: '2026-11-07T11:00:00' },
+    {
+      id: 'c5',
+      title: 'Migrate DNS records from another provider',
+      updatedAt: '2026-10-28T16:30:00'
+    },
+    { id: 'c6', title: 'Edge storage pricing', updatedAt: '2026-08-02T10:00:00' }
+  ])
+  const active = ref('c2')
+
+  const remove = (id) => {
+    items.value = items.value.filter((item) => item.id !== id)
+    if (active.value === id) active.value = null
+  }
+</script>
+
+<template>
+  <div class="w-full max-w-(--container-3xs)">
+    <ConversationHistory
+      v-model="active"
+      :items="items"
+      :now="now"
+      removable
+      @remove="remove"
+    />
+  </div>
+</template>
+```
+
+1 more example(s) in [components/conversation-history.md](https://github.com/aziontech/webkit/blob/main/.specs/components/conversation-history.md).
+
+---
+
+<!-- components/feedback-reason-dialog.md -->
+
+# Feedback Reason Dialog
+
+> Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
+
+- Import: `import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'`
+- Category: ai · Surface: product · Structure: monolithic
+- API as JSON: [feedback-reason-dialog.json](https://github.com/aziontech/webkit/blob/main/.specs/feedback-reason-dialog.json)
+
+## When to use
+
+- After a thumbs-down on an AI response, to collect the reason.
+- Any rating of generated content that needs a short, categorised reason.
+
+## Do
+
+- Open it only after a thumbs-down; a thumbs-up needs no reason.
+- Keep the reasons short and mutually exclusive; the last is `Other`, and details stay optional.
+- Close it from the `submit` handler once the request succeeds; keep it open with `loading` while it is sent.
+
+## Don’t
+
+- General product feedback with several fields → a page or `Drawer` form.
+- A confirmation with no input → `ConfirmDialog`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [chat-message](chat-message.md) — `ChatMessage.Feedback` holds the thumbs that open it.
+- [confirm-dialog](confirm-dialog.md) — the same dialog anatomy for a yes/no decision.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `reasons` | `{ value: string; label: string }[]` | `[]` | false | Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other. |
+| `loading` | `boolean` | `false` | false | The feedback is being sent: Send feedback shows a spinner and the form is locked. |
+| `title` | `string` | `''` | false | Dialog title. Empty uses the locale catalog (`What went wrong?`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `submit` | `{ reason: string; details: string }` |  |
+
+## v-model
+
+| Model          | Type      | Default | Emits         | Notes                                                              |
+| -------------- | --------- | ------- | ------------- | ------------------------------------------------------------------ |
+| `v-model:open` | `boolean` | `false` | `update:open` | Opens the dialog; the reason and details reset each time it opens. |
+
+## States
+
+- Idle (open): no reason chosen, Send feedback enabled.
+- Invalid: submitted without a reason; the fieldset is invalid and its error is announced.
+- Loading: Send feedback spinner, radios, details and Cancel disabled.
+- `data-state` on the dialog mirrors `open` / `closed` (from `Dialog`).
+
+## Accessibility
+
+- A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the thumbs-down on close.
+- The reasons are a `fieldset` with a `legend` (`Reason`), one `RadioButton` per reason with its label; the details `Textarea` is labelled `Details (optional)`.
+- Submitting without a reason marks the fieldset invalid, shows the error text and focuses the first radio; nothing is sent.
+- Keyboard: `Tab` through radios (arrows within the group), details, Cancel, Send feedback; `Enter` in a radio submits; `Escape` closes.
+
+## Right-to-left
+
+- Layout: logical spacing only; the footer actions sit at the inline end.
+- Icons: none.
+- Keyboard: radio arrows follow the page direction (native).
+- User data: details render with `dir="auto"` through `Textarea`.
+
+## Internationalization
+
+| Key                                                                            | English source                                                                                    | Override prop |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ------------- |
+| `feedbackReason.title`                                                         | `What went wrong?`                                                                                | `title`       |
+| `feedbackReason.description`                                                   | `Your answer helps improve future responses.`                                                     | —             |
+| `feedbackReason.reason`                                                        | `Reason`                                                                                          | —             |
+| `feedbackReason.details`                                                       | `Details (optional)`                                                                              | —             |
+| `feedbackReason.detailsPlaceholder`                                            | `What did you expect instead?`                                                                    | —             |
+| `feedbackReason.required`                                                      | `Choose a reason.`                                                                                | —             |
+| `feedbackReason.cancel`                                                        | `Cancel`                                                                                          | —             |
+| `feedbackReason.send`                                                          | `Send feedback`                                                                                   | —             |
+| `feedbackReason.inaccurate`, `notHelpful`, `ignoredRequest`, `unsafe`, `other` | `Inaccurate or made up`, `Not helpful`, `Did not follow my request`, `Unsafe or harmful`, `Other` | `reasons`     |
+
+## Responsive
+
+- Container queries: the dialog body is the `@container/panel` from `PanelContent`.
+- Narrow: the dialog is the `small` size and becomes full width under `sm`; the footer buttons stretch (from `PanelFooter`).
+- Touch: radios and buttons keep their 40 px targets.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ChatMessage from '@aziontech/webkit/chat-message'
+  import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'
+  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import { ref } from 'vue'
+
+  const answer =
+    'Turn on **Image Optimization** in the application settings, then add `?ims=300x` to the image URL.'
+  const feedback = ref(null)
+  const reasonOpen = ref(false)
+  const sending = ref(false)
+
+  const onFeedback = (value) => {
+    feedback.value = value
+    if (value === 'down') reasonOpen.value = true
+  }
+
+  const sendReason = () => {
+    sending.value = true
+    setTimeout(() => {
+      sending.value = false
+      reasonOpen.value = false
+    }, 600)
+  }
+</script>
+
+<template>
+  <div class="w-full max-w-(--container-3xl)">
+    <ChatMessage timestamp="10:44">
+      <StreamingResponse :content="answer" />
+      <template #actions>
+        <ChatMessage.Actions>
+          <ChatMessage.Feedback
+            :model-value="feedback"
+            @update:model-value="onFeedback"
+          />
+        </ChatMessage.Actions>
+      </template>
+    </ChatMessage>
+    <FeedbackReasonDialog
+      v-model:open="reasonOpen"
+      :loading="sending"
+      @submit="sendReason"
+    />
+  </div>
+</template>
+```
+
+---
+
 <!-- components/prompt-input.md -->
 
 # Prompt Input
@@ -13648,12 +14201,13 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 | `maxRows` | `number` | `6` | false | Rows the text area grows to before it scrolls. |
 | `state` | `'ready' \| 'submitted' \| 'streaming'` | `'ready'` | false | Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. |
 | `disabled` | `boolean` | `false` | false | Disables the text area, the submit control and every control in the slots' row. |
+| `menus` | `PromptInputMenu[]` | `[]` | false | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `submit` | `string` |  |
+| `submit` | `(value: string, references: PromptInputReference[])` |  |
 | `stop` | `—` |  |
 
 ## Slots
@@ -13672,9 +14226,10 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                  |
-| --------- | -------- | ------- | ------------------- | -------------------------------------------------------------------------------------- |
-| `v-model` | `string` | `''`    | `update:modelValue` | The prompt being written, via `defineModel`. The owner clears it in its `submit` handler. |
+| Model                | Type                     | Default | Emits               | Notes                                                                                                                                                 |
+| -------------------- | ------------------------ | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`            | `string`                 | `''`    | `update:modelValue` | The prompt being written, via `defineModel`. The owner clears it in its `submit` handler.                                                             |
+| `v-model:references` | `PromptInputReference[]` | `[]`    | `update:references` | What the prompt references, added by the menus and shown as removable chips above the text; removing a chip also removes its `<trigger><label>` text. |
 
 ## States
 
@@ -13687,6 +14242,7 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 - Visible focus: the container shows `focus-within:ring-2 focus-within:ring-(--ring-color)`.
 - Keyboard map: `Enter` submits; `Shift+Enter` new line; `Tab` moves to the slot controls, then Submit / Stop. IME composition (`isComposing`) never submits.
+- Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"`); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
 - ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter and the hint, `aria-invalid` over the limit; Submit and Stop are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers).
@@ -13695,19 +14251,22 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 - Layout: logical utilities; actions at the inline start, Submit at the inline end.
 - Icons: the arrow-up and stop glyphs are not mirrored.
-- Keyboard: no arrow-key behavior of its own.
+- Keyboard: arrows move in the shortcut menu only while it is open; vertical, so not mirrored.
 - User data: the text area follows the document direction; mixed prompts render with the browser's bidi.
 
 ## Internationalization
 
-| Key                      | English source                     | Override prop |
-| ------------------------ | ---------------------------------- | ------------- |
-| `promptInput.label`      | `Prompt`                           | `ariaLabel`   |
-| `promptInput.placeholder`| `Ask a question`                   | `placeholder` |
-| `promptInput.submit`     | `Submit`                           | —             |
-| `promptInput.stop`       | `Stop generating`                  | —             |
-| `promptInput.count`      | `{count}/{max}`                    | —             |
-| `promptInput.overLimit`  | `{count} characters over the limit`| —             |
+| Key                          | English source                      | Override prop |
+| ---------------------------- | ----------------------------------- | ------------- |
+| `promptInput.label`          | `Prompt`                            | `ariaLabel`   |
+| `promptInput.placeholder`    | `Ask a question`                    | `placeholder` |
+| `promptInput.submit`         | `Submit`                            | —             |
+| `promptInput.stop`           | `Stop generating`                   | —             |
+| `promptInput.count`          | `{count}/{max}`                     | —             |
+| `promptInput.overLimit`      | `{count} characters over the limit` | —             |
+| `promptInputMenu.results`    | `{count} suggestion(s)` (plural)    | —             |
+| `promptInputMenu.noMatches`  | `No matches`                        | —             |
+| `promptInputMenu.references` | `References`                        | —             |
 
 - Formatting: counts go through `Intl.NumberFormat` (the `t()` number formatting).
 
@@ -13880,6 +14439,164 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 ```
 
 1 more example(s) in [components/reasoning.md](https://github.com/aziontech/webkit/blob/main/.specs/components/reasoning.md).
+
+---
+
+<!-- components/response-branches.md -->
+
+# Response Branches
+
+> Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.
+
+- Import: `import ResponseBranches from '@aziontech/webkit/response-branches'`
+- Category: ai · Surface: product · Structure: monolithic
+- API as JSON: [response-branches.json](https://github.com/aziontech/webkit/blob/main/.specs/response-branches.json)
+
+## When to use
+
+- A response was regenerated and the earlier versions stay available to compare.
+- A model returned several candidates and the person picks the one to keep reading.
+
+## Do
+
+- Move to the new version when Regenerate finishes (set `v-model` to the last index) so the person sees what they asked for.
+- Keep the versions in the order they were made; the newest is last.
+- Do not render the pager inside the slot; it belongs to the component so its position and labels stay the same across versions.
+
+## Don’t
+
+- Pages of one long list → use `Pagination`.
+- Steps of a flow → use `Stepper`.
+- Different documents side by side → use `Tabs`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [chat-message](chat-message.md) — the message whose body the branches wrap; its actions hold Regenerate.
+- [streaming-response](streaming-response.md) — a new version streams in the slot while the pager already counts it.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `count` | `number` | `—` | true | How many versions exist. With one or none the pager is not drawn. |
+| `label` | `string` | `''` | false | Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). |
+| `disabled` | `boolean` | `false` | false | Locks the pager, for example while a new version streams. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | { index: number } | The active version. Rendered once; the owner switches its content by `index`. |
+
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                              |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------ |
+| `v-model` | `number` | `0`     | `update:modelValue` | Zero-based index of the version shown, clamped to `0 … count - 1`. |
+
+## States
+
+- `data-count` on the root; `data-index` mirrors the clamped index.
+- First version: Previous is disabled; last version: Next is disabled.
+- `disabled`: both buttons are disabled and the counter is muted.
+- `count` ≤ 1: only the slot renders.
+
+## Accessibility
+
+- The pager is `role="group"` named by `label` (`Response versions`); Previous and Next are `IconButton`s named `Previous version` / `Next version`.
+- The counter (`2 of 3`) is a polite live region, so moving announces the new position once; the slot is not live.
+- Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order.
+
+## Right-to-left
+
+- Layout: logical spacing only; the pager sits at the inline start.
+- Icons: the chevrons mirror under `dir="rtl"` through `IconButton`'s directional icons, so Previous always points to the inline start.
+- Keyboard: none beyond the buttons.
+- User data: the slot follows the page direction.
+
+## Internationalization
+
+| Key                         | English source         | Override prop |
+| --------------------------- | ---------------------- | ------------- |
+| `responseBranches.label`    | `Response versions`    | `label`       |
+| `responseBranches.previous` | `Previous version`     | —             |
+| `responseBranches.next`     | `Next version`         | —             |
+| `responseBranches.position` | `{current} of {total}` | —             |
+
+- Numbers in the counter use the locale's digits through the catalog template.
+
+## Responsive
+
+- Container queries: none.
+- Narrow: the pager stays one row (two 28 px buttons and a short counter).
+- Touch: buttons are `IconButton` small, with the 40 px touch target from `IconButton`.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ChatMessage from '@aziontech/webkit/chat-message'
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import ResponseBranches from '@aziontech/webkit/response-branches'
+  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import { ref } from 'vue'
+
+  const versions = ref([
+    'Purge the cache from **Edge Cache › Purge**: choose *URL*, paste the paths and confirm.',
+    'Use a **wildcard purge** (`/assets/*`) when many files changed at once; it clears every match in one request.',
+    'If the files change on every deploy, add a **version to the file name** instead of purging: the new name is a new cache entry.'
+  ])
+  const active = ref(2)
+  const regenerating = ref(false)
+
+  const regenerate = () => {
+    if (regenerating.value) return
+    regenerating.value = true
+    setTimeout(() => {
+      versions.value = [
+        ...versions.value,
+        'Purge by **cache key** from the API (`POST /purge/cachekey`) to automate it in your pipeline.'
+      ]
+      active.value = versions.value.length - 1
+      regenerating.value = false
+    }, 800)
+  }
+</script>
+
+<template>
+  <div class="w-full max-w-(--container-3xl)">
+    <ChatMessage timestamp="10:44">
+      <ResponseBranches
+        v-model="active"
+        :count="versions.length"
+        :disabled="regenerating"
+      >
+        <template #default="{ index }">
+          <StreamingResponse :content="versions[index]" />
+        </template>
+      </ResponseBranches>
+      <template #actions>
+        <ChatMessage.Actions>
+          <CopyButton :value="versions[active]" />
+          <IconButton
+            icon="pi pi-refresh"
+            aria-label="Regenerate response"
+            kind="transparent"
+            size="small"
+            :loading="regenerating"
+            @click="regenerate"
+          />
+        </ChatMessage.Actions>
+      </template>
+    </ChatMessage>
+  </div>
+</template>
+```
 
 ---
 
@@ -14483,6 +15200,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 - `aria-busy` on the root while `loading`.
 - Name and value text clear 4.5:1 on the tinted fill and on the bare surface in both themes.
 - Interactive rows are 32px tall and full width.
+- Forced colors: the bar fill keeps its colour (`forced-color-adjust: none`); forced to `Canvas` it vanished and left only the labels (`src/test/forced-colors-charts.test.ts`).
 
 ## Examples
 
@@ -14697,6 +15415,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the plot and every legend button.
 - Series colors clear 3:1 on the chart surfaces and on the tooltip in both themes (pinned by `packages/theme/test/chart-role.test.mjs`).
 - `motion-reduce:transition-none` on every transition.
+- Forced colors: SVG marks keep their series colours (Chromium does not force `fill`/`stroke`); the legend key keeps its colour too (`forced-color-adjust: none`), so the legend still maps names to series (`src/test/forced-colors-charts.test.ts`).
 
 ## Right-to-left
 
@@ -15474,6 +16193,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - Severity never rests on color alone: the label names the state.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on the strip (the offset takes the surface color, so it never shows as a white gap in the dark theme).
 - Status colors clear 3:1 against the chart surfaces in both themes.
+- Forced colors: the blocks keep their status colour (`forced-color-adjust: none`), because a background-painted block would be forced to `Canvas` and the whole tracker would vanish (`src/test/forced-colors-charts.test.ts`).
 
 ## Right-to-left
 
@@ -15757,9 +16477,9 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-| --- | --- | --- | --- | --- |
-| `v-model` | `string` | `''` | `update:modelValue` | The code via `defineModel`. Updated on every edit, from the plain editor or from Monaco. |
+| Model     | Type     | Default | Emits               | Notes                                                                                    |
+| --------- | -------- | ------- | ------------------- | ---------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The code via `defineModel`. Updated on every edit, from the plain editor or from Monaco. |
 
 ## States
 
@@ -18143,6 +18863,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 | `offsetX` | `number` | `0` | false | Horizontal shift as a fraction of the map width; negative moves it left, positive right, past the box edge if large enough. |
 | `offsetY` | `number` | `0` | false | Vertical shift as a fraction of the map height; negative moves it up, positive down, past the box edge if large enough. |
 | `fade` | `'none' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'edges' \| 'vignette'` | `'none'` | false | Fades the map out along an axis so it meets content without a hard edge. |
+| `traffic` | `boolean` | `false` | false | Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion. |
 
 ## States
 
@@ -18602,6 +19323,125 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ```
 
 2 more example(s) in [components/product-widget.md](https://github.com/aziontech/webkit/blob/main/.specs/components/product-widget.md).
+
+---
+
+<!-- components/qr-code.md -->
+
+# Qr Code
+
+> A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws them as one path. It is for setup flows that hand a URI to a phone, first the `otpauth://` URI of an authenticator app in `auth#MfaSetup`, where it replaces the image the API returned and the framed placeholder of the demo. The code is always dark on a light plate (the plate pins the light theme), because several authenticator scanners do not read an inverted code.
+
+- Import: `import QrCode from '@aziontech/webkit/qr-code'`
+- Category: content · Surface: product · Structure: monolithic
+- API as JSON: [qr-code.json](https://github.com/aziontech/webkit/blob/main/.specs/qr-code.json)
+
+## When to use
+
+- A phone has to pick up a value the screen shows: an authenticator `otpauth://` URI, a pairing link, a short download URL.
+- Next to a typed alternative: the same value (or its secret) as text with a `CopyButton`, for people who cannot scan.
+
+## Do
+
+- Always give the code a typed alternative next to it: the setup key or the link as text.
+- Name the code after what it does (`QR code to add ana@example.com to an authenticator app`), not `QR code`.
+- Keep the default `M` error correction; raise it only when the code is printed or shown small.
+
+## Don’t
+
+- The value is only for reading or copying on the same device → show it as text with `CopyButton`.
+- A brand or partner logo → use `Brand` or the partner's asset.
+- A long payload (over a few hundred characters) → link to it; a dense code is hard to scan from a screen.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [copy-button](copy-button.md) — the typed alternative beside the code.
+- [otp-input](otp-input.md) — the 6-digit code the app shows after the scan.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `string` | `—` | true | The text the code carries (a URI, a key), encoded as UTF-8 bytes. |
+| `label` | `string` | `undefined` | false | Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does. |
+| `errorCorrection` | `'L' \| 'M' \| 'Q' \| 'H'` | `'M'` | false | Error-correction level: `L` 7 %, `M` 15 %, `Q` 25 %, `H` 30 % of the code can be lost and still read. Higher levels make denser codes. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Rendered width: `small` 128 px, `medium` 160 px, `large` 224 px, quiet zone included. |
+
+## States
+
+- `data-size`: `small` | `medium` | `large`.
+- `data-version` on the root: the QR version the encoder picked (1–40); `data-modules`: the module count per side.
+- An empty value draws no code: the plate keeps its size and `data-version` is absent. A value too long for version 40 at the chosen level draws no code either and logs one warning.
+
+## Accessibility
+
+- The root is `role="img"` named by `label` (catalog `QR code` when empty); the SVG inside is `aria-hidden` and not focusable; the code takes no focus.
+- The code is never the only way: the page puts the value or its secret beside it as text.
+- Contrast: dark modules on a light plate in both themes (the plate sets `data-theme="light"`); `forced-color-adjust: none` keeps the code dark on light in forced colors, so a scanner still reads it.
+
+## Right-to-left
+
+- Layout: the code is never mirrored (`dir="ltr"` on the SVG); the plate is symmetric.
+- Icons: none.
+- Keyboard: none.
+- User data: the value is not shown as text by the component.
+
+## Internationalization
+
+| Key            | English source | Override prop |
+| -------------- | -------------- | ------------- |
+| `qrCode.label` | `QR code`      | `label`       |
+
+- The value is encoded as UTF-8 bytes, so non-Latin text works; most authenticator URIs are ASCII.
+
+## Responsive
+
+- Container queries: none.
+- Narrow: fixed size; `shrink-0`; `max-w-full` so it never overflows a 320 px column.
+- Touch: not interactive.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import QrCode from '@aziontech/webkit/qr-code'
+
+  const account = 'ana.silva@example.com'
+  const secret = 'JBSWY3DPEHPK3PXP'
+  const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-(--spacing-md)">
+    <QrCode
+      :value="uri"
+      :label="`QR code to add ${account} to an authenticator app`"
+    />
+    <div class="flex flex-col gap-(--spacing-xxs)">
+      <p class="text-label-sm text-(--text-default)">Can't scan the code?</p>
+      <div class="flex items-center gap-(--spacing-xs)">
+        <code
+          class="text-label-code text-(--text-default)"
+          dir="ltr"
+          >{{ secret.match(/.{1,4}/g).join(' ') }}</code
+        >
+        <CopyButton
+          :value="secret"
+          aria-label="Copy setup key"
+          copied-label="Setup key copied"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+```
+
+1 more example(s) in [components/qr-code.md](https://github.com/aziontech/webkit/blob/main/.specs/components/qr-code.md).
 
 ---
 
@@ -20159,7 +20999,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 # Table
 
-> Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Pagination`](pagination.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, sized from a height index: each rendered row is measured with a `ResizeObserver`, rows not yet rendered take the average of the first rows measured, and when a row above the rows in view changes height the scroll position moves by the same amount so the rows in view stay still). Without `virtual`, a list of more than 200 rows renders its first 50 rows and mounts the rest as a spacer below them nears the viewport (an `IntersectionObserver`), so a long page costs what is on screen. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives the data-driven mode in both client and server modes: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `pagination`, `rowCount`, `rowsPerPageOptions`, `enableRowSelection`, `rowSelection`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, and `exportRows`, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages, so `exportRows` hands `Table.Export` and `exportCsv()` every match rather than the page: in client mode the matching items (or every item for the `all` scope), in server mode what the collection's `exportAll` callback loads (the loaded page when there is none). **Cell presets and reordering.** Six presets render the cells every list repeats, each inside a `#cell-<id>` slot: `Table.CellLink` (a name that leaves the screen: a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `Table.CellId` (an identifier with its copy button), `Table.CellStatus` (one semantic `Tag`), `Table.CellTags` (as many tags as fit, the rest behind `+N`), `Table.CellTime` (avatar of the author plus a relative time that updates every minute, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied.
+> Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Pagination`](pagination.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, sized from a height index: each rendered row is measured with a `ResizeObserver`, rows not yet rendered take the average of the first rows measured, and when a row above the rows in view changes height the scroll position moves by the same amount so the rows in view stay still). Without `virtual`, a list of more than 200 rows renders its first 50 rows and mounts the rest as a spacer below them nears the viewport (an `IntersectionObserver`), so a long page costs what is on screen. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives the data-driven mode in both client and server modes: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `pagination`, `rowCount`, `rowsPerPageOptions`, `enableRowSelection`, `rowSelection`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, and `exportRows`, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages, so `exportRows` hands `Table.Export` and `exportCsv()` every match rather than the page: in client mode the matching items (or every item for the `all` scope), in server mode what the collection's `exportAll` callback loads (the loaded page when there is none). **Cell presets and reordering.** Six presets render the cells every list repeats, each inside a `#cell-<id>` slot: `Table.CellLink` (a name that leaves the screen: a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `Table.CellId` (an identifier with its copy button), `Table.CellStatus` (one semantic `Tag`), `Table.CellTags` (as many tags as fit, the rest behind `+N`), `Table.CellTime` (avatar of the author plus a relative time that updates every minute, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied; `rowReorderable` keeps chosen rows (a pinned default) in place.
 
 - Import: `import TableRoot from '@aziontech/webkit/table-root'`
 - Compound import (dot notation, not tree-shakeable): `import Table from '@aziontech/webkit/table'`
@@ -20235,6 +21075,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `virtual` | `boolean` | `false` | false | Data-driven mode: render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout. |
 | `estimateRowHeight` | `number` | `48` | false | Row height (px) assumed in `virtual` mode until a row is measured. |
 | `reorderable` | `boolean` | `false` | false | Data-driven mode: a leading grip column lets people drag rows, or move the focused grip's row with Arrow Up, Arrow Down, Home and End, into a new order. Emits `update:data` (bind `v-model:data`) and `reorder`; locked while a sort is applied. |
+| `rowReorderable` | `(row: Record<string, unknown>) => boolean` | `undefined` | false | With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys. |
 
 ## Events
 
@@ -25141,6 +25982,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 | `description` | `string` | `''` | false | Secondary line under the title, typically the accepted types and limits. Not rendered when empty. |
 | `accept` | `string` | `''` | false | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file. |
 | `multiple` | `boolean` | `true` | false | When false, only the first accepted file of a drop is accepted and the rest are rejected. |
+| `directories` | `boolean` | `false` | false | Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk. |
 | `disabled` | `boolean` | `false` | false | Ignores drags and drops: no active state, no events. |
 | `invalid` | `boolean` | `false` | false | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work. |
 | `icon` | `string` | `'pi pi-cloud-upload'` | false | PrimeIcons class for the glyph above the title. |
@@ -25285,6 +26127,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 - Root `data-alignment`: `vertical` | `horizontal`; `data-readonly` when read-only.
 - Token `data-status`: `idle` | `loading` | `warning` | `error` (error wins over warning, both over loading).
 - Show more toggle: `aria-expanded` `true` | `false`.
+- A file with a `webkitRelativePath` (picked with a folder picker or dropped as a folder on `FileDropzone directories`) is named by that path (`site/css/main.css`) in the token, its title, the remove button and the progress bar; otherwise by `name`.
 
 ## Accessibility
 
@@ -25963,7 +26806,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ## Sub-components
 
-- `multi-select-trigger/multi-select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label (comma-joined labels or count, see `displayValue`), and chevron-down. Mirrors `Input` size/state visuals.
+- `multi-select-trigger/multi-select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label (comma-joined option labels, or `displayValue`). Each option records its label text with the root when it mounts; on mount `MultiSelectContent` renders its options once inside a `hidden` container so the labels are known before the panel first opens, then drops it, and chevron-down. Mirrors `Input` size/state visuals.
 - `multi-select-content/multi-select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
 - `multi-select-group/multi-select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
 - `multi-select-option/multi-select-option.vue` — Selectable option row with a checkbox indicator (the `Checkbox` webkit component), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
@@ -30231,7 +31074,7 @@ between them is the ring-offset surface below.
 
 # Banner Art
 
-> The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component under `marketing/banner`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
+> The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component under `marketing/banner`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
 
 - Import: `import BannerArt from '@aziontech/webkit/banner-art'`
 - Category: marketing · Surface: marketing · Structure: monolithic
@@ -35325,7 +36168,7 @@ packages/webkit/src/components/overlay/command/
   - Props: `placeholder: string` default `''` — input placeholder text; empty uses the locale catalog (`Search everything` in English). `ariaLabel: string` default `''` — accessible name for the search field; when empty it falls back to `placeholder`, so the field keeps its name after the placeholder disappears on the first keystroke.
   - Events: _none_ (the query lives in the injected context).
   - Slots: _none_.
-- `command-list/command-list.vue` — the scrollable results region. `role="listbox"`; wraps the groups/items and renders the `Empty` part when the filter yields no visible items.
+- `command-list/command-list.vue` — the scrollable results region. `role="listbox"` while at least one item is visible; with no visible item it drops the role (an empty listbox fails `aria-required-children`) and shows the `Empty` part.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — one or more `<Command.Group>` / `<Command.Item>` / `<Command.Separator>`, plus an optional `<Command.Empty>`.
@@ -35364,7 +36207,7 @@ packages/webkit/src/components/overlay/command/
 - Keyboard map:
   - Global: the `shortcut` combo (⌘K / Ctrl+K) toggles the palette open from anywhere.
   - Inside the palette: `ArrowDown` / `ArrowUp` move the active item (skipping disabled, wrap-around); `Home` / `End` jump to first/last enabled item; `Enter` activates the active item; `Esc` closes (via `Dialog`); `Tab` is trapped within the panel (via `Dialog`).
-- ARIA: the panel is `role="dialog"` (from `Dialog`) with an accessible name via a visually-hidden title; the input is `role="combobox"` with `aria-expanded` and `aria-controls` pointing at the list, and carries its own accessible name via `aria-label` (`ariaLabel`, falling back to `placeholder`) so the name survives the first keystroke; the list is `role="listbox"`; each group is `role="group"` with `aria-labelledby` referencing its heading id; each item is `role="option"` with `aria-selected` mirroring the active state and `aria-disabled` mirroring `disabled`.
+- ARIA: the panel is `role="dialog"` (from `Dialog`) with an accessible name via a visually-hidden title; the input is `role="combobox"` with `aria-expanded` and `aria-controls` pointing at the list, and carries its own accessible name via `aria-label` (`ariaLabel`, falling back to `placeholder`) so the name survives the first keystroke; the list is `role="listbox"` (no role while nothing matches); each group is `role="group"` with `aria-labelledby` referencing its heading id; each item is `role="option"` with `aria-selected` mirroring the active state and `aria-disabled` mirroring `disabled`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled`).
 - `motion-reduce:animate-none` on the inherited `animate-popup-scale-*`; `motion-reduce:transition-none` on item `transition-colors`.
 - Focus management: opening moves focus to the input; closing returns focus to the element focused before the palette opened. Focus trap and scroll-lock are inherited from `Dialog`.
@@ -35970,6 +36813,7 @@ packages/webkit/src/components/overlay/command/
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Scroll region: when `PanelContent` (outside a drawer's `ScrollArea`) overflows and holds nothing focusable, it takes `tabindex="0"` with an inset focus ring, so a keyboard user can scroll it (WCAG 2.1.1, axe `scrollable-region-focusable`); it is measured on resize and on content changes.
 
 ## Usage
 
@@ -36136,6 +36980,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/focus states.
 - Touch target ≥40×40 px on the trigger (consumer's element — flagged in docs); the close `IconButton` follows `IconButton`'s own target sizing.
 - Teleported content: the teleported `role="dialog"` panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- `PopoverHeader` keeps its `header` tag with `role="none"`, so an open popover does not expose a `banner` landmark (pinned by `src/test/screen-reader.test.ts`).
 
 ## Examples
 

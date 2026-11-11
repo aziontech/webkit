@@ -1,0 +1,21 @@
+{
+ "purpose": "Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.",
+ "useWhen": [
+  "A response was regenerated and the earlier versions stay available to compare.",
+  "A model returned several candidates and the person picks the one to keep reading."
+ ],
+ "avoidWhen": [
+  "Pages of one long list → use `Pagination`.",
+  "Steps of a flow → use `Stepper`.",
+  "Different documents side by side → use `Tabs`."
+ ],
+ "related": [
+  "chat-message` — the message whose body the branches wrap; its actions hold Regenerate.",
+  "streaming-response` — a new version streams in the slot while the pager already counts it."
+ ],
+ "bestPractices": [
+  "Move to the new version when Regenerate finishes (set `v-model` to the last index) so the person sees what they asked for.",
+  "Keep the versions in the order they were made; the newest is last.",
+  "Do not render the pager inside the slot; it belongs to the component so its position and labels stay the same across versions."
+ ]
+}

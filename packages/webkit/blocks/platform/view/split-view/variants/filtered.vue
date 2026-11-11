@@ -28,6 +28,7 @@
   import Popover from '@aziontech/webkit/popover'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
@@ -2440,10 +2441,9 @@
                     </template>
 
                     <template #cell-level="{ value }">
-                      <Tag
+                      <Table.CellStatus
                         :label="value"
                         :severity="eventLevelSeverity(value)"
-                        size="medium"
                       />
                     </template>
 

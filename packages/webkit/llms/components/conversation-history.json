@@ -1,0 +1,88 @@
+{
+ "name": "conversation-history",
+ "binding": "ConversationHistory",
+ "import": "@aziontech/webkit/conversation-history",
+ "treeShakeableImport": "@aziontech/webkit/conversation-history",
+ "category": "ai",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The list of past conversations with an assistant, in a side panel or drawer: titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, and an optional Delete per row. Choosing a row sets `v-model` to its id; the owner loads that conversation into `Conversation`.",
+ "setup": null,
+ "useWhen": [
+  "An assistant keeps past conversations and the person returns to one.",
+  "The left rail or a drawer of a chat page."
+ ],
+ "avoidWhen": [
+  "Messages of the open conversation → `Conversation`.",
+  "Navigation between product areas → `SidebarNav` or `NavigationMenu`.",
+  "A searchable table of records → `TableRoot`."
+ ],
+ "related": [
+  "conversation` — shows the conversation the history selects.",
+  "drawer` — holds the history on narrow screens."
+ ],
+ "bestPractices": [
+  "Title each conversation from its first prompt, short; the full title shows on hover through `title`.",
+  "Pass `now` from the server render (or a fixed reference) so the groups match on the server and the client.",
+  "Confirm deletes of anything older than today with a `ConfirmDialog` in the `remove` handler."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "{ id: string; title: string; updatedAt: string \\ | number \\ | Date }[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Conversations, any order; they are sorted newest first inside their group."
+  },
+  {
+   "name": "now",
+   "type": "string \\ | number \\ | Date",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Reference time for the groups. Empty uses the current time; pass a fixed value when the list is rendered on the server."
+  },
+  {
+   "name": "removable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a Delete button on each row that emits `remove`."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows placeholder rows while the history loads."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation history`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "remove",
+   "payload": "string",
+   "notes": ""
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ConversationHistory from '@aziontech/webkit/conversation-history'\n  import { ref } from 'vue'\n\n  const now = '2026-11-11T15:00:00'\n  const items = ref([\n    { id: 'c1', title: 'Purge the cache after a deploy', updatedAt: '2026-11-11T14:20:00' },\n    { id: 'c2', title: 'Why is my function returning 502?', updatedAt: '2026-11-11T09:05:00' },\n    { id: 'c3', title: 'Set up a WAF rule for login attempts', updatedAt: '2026-11-10T18:40:00' },\n    { id: 'c4', title: 'Image optimization query parameters', updatedAt: '2026-11-07T11:00:00' },\n    {\n      id: 'c5',\n      title: 'Migrate DNS records from another provider',\n      updatedAt: '2026-10-28T16:30:00'\n    },\n    { id: 'c6', title: 'Edge storage pricing', updatedAt: '2026-08-02T10:00:00' }\n  ])\n  const active = ref('c2')\n\n  const remove = (id) => {\n    items.value = items.value.filter((item) => item.id !== id)\n    if (active.value === id) active.value = null\n  }\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xs)\">\n    <ConversationHistory\n      v-model=\"active\"\n      :items=\"items\"\n      :now=\"now\"\n      removable\n      @remove=\"remove\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "States",
+   "sfc": "<script setup>\n  import ConversationHistory from '@aziontech/webkit/conversation-history'\n</script>\n\n<template>\n  <div class=\"grid w-full gap-(--spacing-xl) sm:grid-cols-2\">\n    <ConversationHistory\n      loading\n      label=\"Conversation history, loading\"\n    />\n    <ConversationHistory\n      :items=\"[]\"\n      label=\"Conversation history, empty\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/conversation-history.md"
+}

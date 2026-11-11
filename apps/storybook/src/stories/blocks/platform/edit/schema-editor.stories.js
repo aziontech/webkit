@@ -10,8 +10,10 @@ import State3 from '../../../../../../../packages/webkit/blocks/platform/edit/sc
 import source3 from '../../../../../../../packages/webkit/blocks/platform/edit/schema-editor/variants/change-type.vue?raw'
 import State4 from '../../../../../../../packages/webkit/blocks/platform/edit/schema-editor/variants/truncate-table.vue'
 import source4 from '../../../../../../../packages/webkit/blocks/platform/edit/schema-editor/variants/truncate-table.vue?raw'
-import State5 from '../../../../../../../packages/webkit/blocks/platform/edit/schema-editor/variants/failed.vue'
-import source5 from '../../../../../../../packages/webkit/blocks/platform/edit/schema-editor/variants/failed.vue?raw'
+import State5 from '../../../../../../../packages/webkit/blocks/platform/edit/schema-editor/variants/import-csv.vue'
+import source5 from '../../../../../../../packages/webkit/blocks/platform/edit/schema-editor/variants/import-csv.vue?raw'
+import State6 from '../../../../../../../packages/webkit/blocks/platform/edit/schema-editor/variants/failed.vue'
+import source6 from '../../../../../../../packages/webkit/blocks/platform/edit/schema-editor/variants/failed.vue?raw'
 
 export default {
   title: "Templates/Platform/Edit/SchemaEditor",
@@ -19,7 +21,7 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an ordered list of column rows (grip that reorders with the arrow keys, name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`, remove), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an ordered list of column rows (grip that reorders with the arrow keys, name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`, remove), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also reorders column rows by pointer drag, imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys (column, referenced table and column, On delete)." } },
     webkit: {"block":"platform/edit/schema-editor","intents":["schema editor","create table","add column","insert row","alter column","change column type","truncate table","table schema","database schema","column types","criar tabela","adicionar coluna","inserir linha","alterar coluna","esvaziar tabela","esquema do banco"],"skills":["webkit-form","webkit-create-surface","webkit-tables","webkit-errors","webkit-ui-states"],"primary":"CreateTable"}
   }
 }
@@ -49,7 +51,12 @@ export const TruncateTable = {
   parameters: { docs: { description: { story: "The Truncate customers dialog: a warning, the row count that goes, the TRUNCATE TABLE statement and a field that must match the table name before the danger button enables." }, source: { code: source4 } } }
 }
 
-export const Failed = {
+export const ImportCsv = {
   render: () => ({ components: { Block: State5 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "Create Table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were." }, source: { code: source5 } } }
+  parameters: { docs: { description: { story: "Create Table started from a CSV: subscribers.csv as a `FileTokenGroup` token, the columns rebuilt from its header with guessed types, a five-row `TableRoot` preview, and a foreign key from customer_id to customers.id with On delete Cascade." }, source: { code: source5 } } }
+}
+
+export const Failed = {
+  render: () => ({ components: { Block: State6 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "Create Table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were." }, source: { code: source6 } } }
 }

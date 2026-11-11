@@ -37,6 +37,8 @@ The persistent console shell from `skills/webkit-navigation`: the collapsible `S
 
 The breadcrumb reads module, resource, then the version as a `Select` with `aria-label="Switch version"`. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
 
+Below md the header has no room for the breadcrumb, so a row under it (`md:hidden`, its own `nav` named Breadcrumb) carries a Back `IconButton` to the resource's Versions tab and the same `Select` crumbs, full width: the version, and in EnvironmentCrumb the environment before it. A phone keeps every switch the desktop breadcrumb offers.
+
 ### C. Workspace — `Resizable` (required)
 
 A horizontal `Resizable` named "Version workspace": the version settings pane, a handle named "Resize the version history", and the collapsible Version history pane. History is closed by default.
@@ -1176,6 +1178,91 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
             </button>
           </GlobalHeader.Right>
         </GlobalHeader>
+        <nav
+          aria-label="Breadcrumb"
+          class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"
+        >
+          <Tooltip text="Back to web-app versions">
+            <IconButton
+              icon="pi pi-arrow-left"
+              kind="transparent"
+              size="medium"
+              href="/resources/1784552864?tab=versions"
+              aria-label="Back to web-app versions"
+            />
+          </Tooltip>
+          <div class="min-w-0 flex-1">
+            <Select
+              :model-value="versionId"
+              :display-value="
+                (id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')
+              "
+              class="w-full"
+              @update:open="
+                (open) => {
+                  if (!open) query = ''
+                }
+              "
+            >
+              <Select.Trigger aria-label="Switch version" />
+              <Select.Content>
+                <template #search>
+                  <Input
+                    v-model="query"
+                    size="small"
+                    placeholder="Search versions"
+                    aria-label="Search versions"
+                    @keydown.stop
+                  >
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-search"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Input>
+                </template>
+                <Select.Group label="Versions">
+                  <Select.Option
+                    v-for="entry in matches"
+                    :key="entry.id"
+                    :value="entry.id"
+                  >
+                    {{ entry.name }}
+                    <template #tag>
+                      <Tag
+                        :label="entry.tag.label"
+                        :severity="entry.tag.severity"
+                        :icon="entry.tag.icon"
+                        size="small"
+                      />
+                    </template>
+                  </Select.Option>
+                  <p
+                    v-if="!matches.length"
+                    class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                  >
+                    No versions match "{{ query }}".
+                  </p>
+                </Select.Group>
+                <template #footer>
+                  <Select.Option
+                    value="__create-version__"
+                    class="w-full"
+                  >
+                    <span class="flex items-center gap-(--spacing-xs)">
+                      <i
+                        class="pi pi-plus-circle"
+                        aria-hidden="true"
+                      />
+                      Add Version
+                    </span>
+                  </Select.Option>
+                </template>
+              </Select.Content>
+            </Select>
+          </div>
+        </nav>
       </div>
 
       <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">

@@ -44,12 +44,13 @@
 | `maxRows` | `number` | `6` | false | Rows the text area grows to before it scrolls. |
 | `state` | `'ready' \| 'submitted' \| 'streaming'` | `'ready'` | false | Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. |
 | `disabled` | `boolean` | `false` | false | Disables the text area, the submit control and every control in the slots' row. |
+| `menus` | `PromptInputMenu[]` | `[]` | false | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `submit` | `string` |  |
+| `submit` | `(value: string, references: PromptInputReference[])` |  |
 | `stop` | `—` |  |
 
 ## Slots
@@ -68,9 +69,10 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                  |
-| --------- | -------- | ------- | ------------------- | -------------------------------------------------------------------------------------- |
-| `v-model` | `string` | `''`    | `update:modelValue` | The prompt being written, via `defineModel`. The owner clears it in its `submit` handler. |
+| Model                | Type                     | Default | Emits               | Notes                                                                                                                                                 |
+| -------------------- | ------------------------ | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`            | `string`                 | `''`    | `update:modelValue` | The prompt being written, via `defineModel`. The owner clears it in its `submit` handler.                                                             |
+| `v-model:references` | `PromptInputReference[]` | `[]`    | `update:references` | What the prompt references, added by the menus and shown as removable chips above the text; removing a chip also removes its `<trigger><label>` text. |
 
 ## States
 
@@ -83,6 +85,7 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 - Visible focus: the container shows `focus-within:ring-2 focus-within:ring-(--ring-color)`.
 - Keyboard map: `Enter` submits; `Shift+Enter` new line; `Tab` moves to the slot controls, then Submit / Stop. IME composition (`isComposing`) never submits.
+- Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"`); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
 - ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter and the hint, `aria-invalid` over the limit; Submit and Stop are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers).
@@ -91,19 +94,22 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 - Layout: logical utilities; actions at the inline start, Submit at the inline end.
 - Icons: the arrow-up and stop glyphs are not mirrored.
-- Keyboard: no arrow-key behavior of its own.
+- Keyboard: arrows move in the shortcut menu only while it is open; vertical, so not mirrored.
 - User data: the text area follows the document direction; mixed prompts render with the browser's bidi.
 
 ## Internationalization
 
-| Key                      | English source                     | Override prop |
-| ------------------------ | ---------------------------------- | ------------- |
-| `promptInput.label`      | `Prompt`                           | `ariaLabel`   |
-| `promptInput.placeholder`| `Ask a question`                   | `placeholder` |
-| `promptInput.submit`     | `Submit`                           | —             |
-| `promptInput.stop`       | `Stop generating`                  | —             |
-| `promptInput.count`      | `{count}/{max}`                    | —             |
-| `promptInput.overLimit`  | `{count} characters over the limit`| —             |
+| Key                          | English source                      | Override prop |
+| ---------------------------- | ----------------------------------- | ------------- |
+| `promptInput.label`          | `Prompt`                            | `ariaLabel`   |
+| `promptInput.placeholder`    | `Ask a question`                    | `placeholder` |
+| `promptInput.submit`         | `Submit`                            | —             |
+| `promptInput.stop`           | `Stop generating`                   | —             |
+| `promptInput.count`          | `{count}/{max}`                     | —             |
+| `promptInput.overLimit`      | `{count} characters over the limit` | —             |
+| `promptInputMenu.results`    | `{count} suggestion(s)` (plural)    | —             |
+| `promptInputMenu.noMatches`  | `No matches`                        | —             |
+| `promptInputMenu.references` | `References`                        | —             |
 
 - Formatting: counts go through `Intl.NumberFormat` (the `t()` number formatting).
 

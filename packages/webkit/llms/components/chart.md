@@ -178,6 +178,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the plot and every legend button.
 - Series colors clear 3:1 on the chart surfaces and on the tooltip in both themes (pinned by `packages/theme/test/chart-role.test.mjs`).
 - `motion-reduce:transition-none` on every transition.
+- Forced colors: SVG marks keep their series colours (Chromium does not force `fill`/`stroke`); the legend key keeps its colour too (`forced-color-adjust: none`), so the legend still maps names to series (`src/test/forced-colors-charts.test.ts`).
 
 ## Right-to-left
 

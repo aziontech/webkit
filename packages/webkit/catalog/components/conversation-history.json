@@ -1,0 +1,21 @@
+{
+ "purpose": "The list of past conversations with an assistant, in a side panel or drawer: titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, and an optional Delete per row. Choosing a row sets `v-model` to its id; the owner loads that conversation into `Conversation`.",
+ "useWhen": [
+  "An assistant keeps past conversations and the person returns to one.",
+  "The left rail or a drawer of a chat page."
+ ],
+ "avoidWhen": [
+  "Messages of the open conversation → `Conversation`.",
+  "Navigation between product areas → `SidebarNav` or `NavigationMenu`.",
+  "A searchable table of records → `TableRoot`."
+ ],
+ "related": [
+  "conversation` — shows the conversation the history selects.",
+  "drawer` — holds the history on narrow screens."
+ ],
+ "bestPractices": [
+  "Title each conversation from its first prompt, short; the full title shows on hover through `title`.",
+  "Pass `now` from the server render (or a fixed reference) so the groups match on the server and the client.",
+  "Confirm deletes of anything older than today with a `ConfirmDialog` in the `remove` handler."
+ ]
+}

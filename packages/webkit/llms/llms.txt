@@ -31,11 +31,13 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [ActivityHistory (platform/account/activity-history)](blocks/platform/account/activity-history.md): The account's audit log.
 - [ChangePlanDrawer (platform/account/change-plan-drawer)](blocks/platform/account/change-plan-drawer.md): The drawer the Billing page opens from its Subscription Plan card.
+- [MfaManagement (platform/account/mfa-management)](blocks/platform/account/mfa-management.md): Multi-factor authentication for a whole account.
 - [OnboardingForm (platform/account/onboarding-form)](blocks/platform/account/onboarding-form.md): The `/signup/onboarding` screen, frame included.
 - [PaymentMethodCard (platform/account/payment-method-card)](blocks/platform/account/payment-method-card.md): The Payment method card of the Upgrade to Pro drawer.
 - [Profile (platform/account/profile)](blocks/platform/account/profile.md): The profile page of a signed-in account, and the layout every account settings page follows.
 - [TeamPermissions (platform/account/team-permissions)](blocks/platform/account/team-permissions.md): Who can do what in the account.
 - [Tokens (platform/account/tokens)](blocks/platform/account/tokens.md): The Personal tokens page of the account settings.
+- [Users (platform/account/users)](blocks/platform/account/users.md): Who can sign in to the account, and through which teams.
 - [AiActionApproval (platform/ai/ai-action-approval)](blocks/platform/ai/ai-action-approval.md): The moment an assistant needs permission.
 - [AiChat (platform/ai/ai-chat)](blocks/platform/ai/ai-chat.md): A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question.
 - [AiChatDrawer (platform/ai/ai-chat-drawer)](blocks/platform/ai/ai-chat-drawer.md): The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page.
@@ -123,8 +125,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [ChatMessage](components/chat-message.md): One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes…
 - [Citation](components/citation.md): An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL…
 - [Conversation](components/conversation.md): The scrolling message log of a generative AI chat.
+- [ConversationHistory](components/conversation-history.md): The list of past conversations with an assistant, in a side panel or drawer: titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, and…
+- [FeedbackReasonDialog](components/feedback-reason-dialog.md): Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback.
 - [PromptInput](components/prompt-input.md): The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated,…
 - [Reasoning](components/reasoning.md): Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is…
+- [ResponseBranches](components/response-branches.md): Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it.
 - [Sources](components/sources.md): The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line descript…
 - [StreamingResponse](components/streaming-response.md): Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely.
 - [SuggestionGroup](components/suggestion-group.md): A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clar…
@@ -170,6 +175,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Overline](components/overline.md): Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow").
 - [PaymentBrand](components/payment-brand.md): The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme…
 - [ProductWidget](components/product-widget.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside a `shell-mockup` frame, that marketing bands use to show the product.
+- [QrCode](components/qr-code.md): A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws the…
 - [SeverityTag](components/severity-tag.md): SeverityTag labels an item with its place on an ordered severity scale: critical, high, medium, low or info.
 - [ShellMockup](components/shell-mockup.md): A scaled, inert picture of an Azion Console screen, for marketing bands that show the product.
 - [Tag](components/tag.md): Compact status or category label with severity-based color coding.

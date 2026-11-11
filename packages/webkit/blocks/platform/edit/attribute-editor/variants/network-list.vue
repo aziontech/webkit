@@ -16,6 +16,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SettingsSection from '@aziontech/webkit/settings-section'
+  import Table from '@aziontech/webkit/table'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -412,18 +413,12 @@
                       :remove-button-label="`Remove ${copy.noun}`"
                       :aria-label="`${copy.column} entries`"
                     >
-                      <template #cell-value="{ value, update, invalid }">
-                        <div class="contents font-code">
-                          <Input
-                            :model-value="value"
-                            size="large"
-                            :placeholder="copy.placeholder"
-                            autocomplete="off"
-                            :spellcheck="false"
-                            :invalid="invalid"
-                            @update:model-value="update"
-                          />
-                        </div>
+                      <template #cell-value="{ row }">
+                        <Table.CellLink
+                          :label="displayValue(row)"
+                          :copyable="!row.secret"
+                          :copy-value="row.value"
+                        />
                       </template>
                     </AttributeEditor>
                   </template>
