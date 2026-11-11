@@ -66,3 +66,11 @@ Two entries changed for M1.10 row 51. `TriggerHost` now looks through a `Tooltip
 | --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------------------------------ |
 | doc-page-header | 26.3          | 26.21           | 26.40        | 26.5       | Raised: its overflow menu's `DropdownMenu.Trigger` carries the larger `TriggerHost`. |
 | confirm-dialog  | 23.6          | 23.48           | 23.71        | 23.8       | Raised: it ships `Dialog.Trigger`, which carries the larger `TriggerHost`.           |
+
+Three entries changed in M1.11, where the full browser run turned four skipped axe tests back on. `Table` put `role="table"` on its frame, so the focusable scroll viewport, the toolbar, the empty state and the footer controls were children of the table (`aria-required-children`, critical). `role="table"` now sits on the element that holds only the row groups; the consumer's ARIA attributes move to it, and `TableCaption` names it through `aria-labelledby` (axe does not accept `role="caption"` as an owned child). The attribute split was compacted once (about 0.04 KB back); the rest is the accessibility fix, so the bytes stay.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                     |
+| --------------- | ------------- | --------------- | ------------ | ---------- | -------------------------------------------------------- |
+| table-root      | 50            | 49.94           | 50.14        | 50.25      | Raised: the table role moves off the frame.              |
+| listing-browser | 64.65         | 64.58           | 64.76        | 64.85      | Raised: it ships `Table`, same change.                   |
+| listing-table   | 55.85         | 55.82           | 56.03        | 56.15      | Raised: it ships `Table` and `TableFooter`, same change. |

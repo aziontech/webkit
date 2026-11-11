@@ -255,23 +255,23 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'data-table'
   )
 
-  const isAriaAttr = (name: string): boolean => name.startsWith('aria-')
-  const frameAttrs = computed<Record<string, unknown>>(() =>
-    Object.fromEntries(Object.entries(attrs).filter(([name]) => !isAriaAttr(name)))
-  )
   const captionId = `${useId()}-caption`
   const captions = ref<number>(0)
   const registerCaption = (): (() => void) => {
-    captions.value += 1
-    return () => {
-      captions.value -= 1
-    }
+    captions.value++
+    return () => captions.value--
   }
-  const tableAttrs = computed<Record<string, unknown>>(() => {
-    const own = Object.fromEntries(Object.entries(attrs).filter(([name]) => isAriaAttr(name)))
-    const named = own['aria-label'] !== undefined || own['aria-labelledby'] !== undefined
-    const captioned = captions.value > 0 || (dataDriven.value && hasSlot('caption'))
-    return captioned && !named ? { ...own, 'aria-labelledby': captionId } : own
+  const splitAttrs = computed<Record<string, unknown>[]>(() => {
+    const frame: Record<string, unknown> = {}
+    const own: Record<string, unknown> = {}
+    for (const name in attrs) (name.startsWith('aria-') ? own : frame)[name] = attrs[name]
+    if (
+      (captions.value || (dataDriven.value && slots.caption)) &&
+      !own['aria-label'] &&
+      !own['aria-labelledby']
+    )
+      own['aria-labelledby'] = captionId
+    return [frame, own]
   })
 
   const viewportHeight = computed<string>(() => props.maxHeight || (props.virtual ? '40rem' : ''))
@@ -1205,7 +1205,7 @@
 <template>
   <div
     ref="rootEl"
-    v-bind="frameAttrs"
+    v-bind="splitAttrs[0]"
     :data-testid="testId"
     :data-border="bordered || null"
     :data-stacked="stacked || null"
@@ -1268,7 +1268,7 @@
       @scroll.passive="onViewportScroll"
     >
       <div
-        v-bind="tableAttrs"
+        v-bind="splitAttrs[1]"
         role="table"
         :data-testid="`${testId}__table`"
         :aria-busy="loading || undefined"

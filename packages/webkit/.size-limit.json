@@ -33,7 +33,7 @@
   {
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
-    "limit": "50 KB"
+    "limit": "50.25 KB"
   },
   {
     "name": "property-filter",
@@ -510,7 +510,7 @@
   {
     "name": "listing-browser",
     "path": "src/components/sections/listing-browser/listing-browser.vue",
-    "limit": "64.65 KB"
+    "limit": "64.85 KB"
   },
   {
     "name": "platform-directory",
@@ -579,7 +579,7 @@
   {
     "name": "listing-table",
     "path": "src/components/sections/listing-table/listing-table.vue",
-    "limit": "55.85 KB"
+    "limit": "56.15 KB"
   },
   {
     "name": "site-footer",
