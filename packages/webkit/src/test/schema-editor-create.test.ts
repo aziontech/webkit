@@ -36,8 +36,9 @@ describe('platform/edit/schema-editor Create Table', () => {
     await waitFor(() => expect(drawer()).not.toBeNull())
     const grips = Array.from(drawer().querySelectorAll<HTMLElement>('[data-grip]'))
     const target = drawer().querySelectorAll<HTMLElement>('[data-column-key]')[1]
-    const box = target.getBoundingClientRect()
+    target.scrollIntoView({ block: 'center' })
     await fireEvent.pointerDown(grips[0], { button: 0, pointerId: 1 })
+    const box = target.getBoundingClientRect()
     await fireEvent.pointerMove(grips[0], {
       pointerId: 1,
       clientX: box.left + 4,

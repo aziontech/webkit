@@ -354,15 +354,17 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     if (event.button !== 0 || createSubmitting.value) return
     if (event.isTrusted) event.currentTarget.setPointerCapture?.(event.pointerId)
     event.preventDefault()
-    event.currentTarget.focus()
+    event.currentTarget.focus({ preventScroll: true })
     dragKey.value = key
     overKey.value = key
   }
   const onGripMove = (event) => {
     if (!dragKey.value) return
-    const hit = globalThis.document
-      ?.elementFromPoint(event.clientX, event.clientY)
-      ?.closest('[data-column-key]')
+    const rows = Array.from(globalThis.document?.querySelectorAll('[data-column-key]') ?? [])
+    const hit = rows.find((row) => {
+      const box = row.getBoundingClientRect()
+      return event.clientY >= box.top && event.clientY <= box.bottom
+    })
     if (hit) overKey.value = hit.getAttribute('data-column-key')
   }
   const onGripUp = () => {
