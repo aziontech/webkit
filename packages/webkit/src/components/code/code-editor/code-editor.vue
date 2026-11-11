@@ -15,6 +15,7 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import {
+    applyThemeOnce,
     CODE_EDITOR_THEME,
     type CodeEditorDisposable,
     type CodeEditorMonaco,
@@ -362,8 +363,7 @@
 
   const applyTheme = () => {
     if (!api || !rootRef.value) return
-    api.editor.defineTheme(CODE_EDITOR_THEME, themeFromTokens(rootRef.value))
-    api.editor.setTheme(CODE_EDITOR_THEME)
+    applyThemeOnce(api, CODE_EDITOR_THEME, themeFromTokens(rootRef.value))
   }
 
   const severityOf = (severity: CodeEditorMarkerSeverity) => {

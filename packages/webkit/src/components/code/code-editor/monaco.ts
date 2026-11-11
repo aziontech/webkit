@@ -196,6 +196,26 @@ export function themeFromTokens(element: Element): CodeEditorMonacoTheme {
   }
 }
 
+const appliedThemes = new WeakMap<object, string>()
+
+export function applyThemeOnce(
+  api: {
+    editor: {
+      defineTheme(name: string, theme: CodeEditorMonacoTheme): void
+      setTheme(name: string): void
+    }
+  },
+  name: string,
+  theme: CodeEditorMonacoTheme
+): boolean {
+  const key = `${name}:${JSON.stringify(theme)}`
+  if (appliedThemes.get(api) === key) return false
+  appliedThemes.set(api, key)
+  api.editor.defineTheme(name, theme)
+  api.editor.setTheme(name)
+  return true
+}
+
 export function fontFromTokens(element: Element) {
   const style = getComputedStyle(element)
   const root = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16

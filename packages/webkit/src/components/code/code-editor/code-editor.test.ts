@@ -247,6 +247,37 @@ describe('CodeEditor', () => {
     expect(fake.calls.disposed).toBeGreaterThan(0)
   })
 
+  it('settles when two editors share the page and setTheme touches the body class', async () => {
+    const removeTokens = withTokens()
+    const fake = fakeMonaco()
+    fake.api.editor.setTheme = (name: string) => {
+      document.body.classList.toggle('monaco-theme-probe')
+      void name
+    }
+    const loader = () => Promise.resolve(fake.api)
+    const view = render(
+      defineComponent({
+        setup: () => () => [
+          h(CodeEditor, { loader, ariaLabel: 'One' }),
+          h(CodeEditor, { loader, ariaLabel: 'Two' })
+        ]
+      })
+    )
+    await waitFor(() =>
+      expect(view.getAllByTestId('code-code-editor').map((el) => el.dataset['mode'])).toEqual([
+        'monaco',
+        'monaco'
+      ])
+    )
+    for (let i = 0; i < 20; i += 1) await new Promise((resolve) => requestAnimationFrame(resolve))
+    const settled = fake.calls.themes.length
+    for (let i = 0; i < 20; i += 1) await new Promise((resolve) => requestAnimationFrame(resolve))
+    expect(fake.calls.themes.length).toBe(settled)
+    expect(settled).toBeLessThanOrEqual(2)
+    document.body.classList.remove('monaco-theme-probe')
+    removeTokens()
+  })
+
   it('re-applies the theme when the document theme changes', async () => {
     const removeTokens = withTokens()
     const fake = fakeMonaco()
