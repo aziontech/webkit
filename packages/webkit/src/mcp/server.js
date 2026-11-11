@@ -214,7 +214,8 @@ async function main() {
         'Find the reviewed screen pattern for an intent ("login", "sign up", "account settings", ' +
         '"delete dialog", "tela de login"). Patterns are whole screens generated from the webkit ' +
         'stories: start every screen from one. Returns ranked ids with their intents, components, ' +
-        'skills and steps. An empty query lists every pattern.',
+        'skills, steps and `guidelinesSummary` (the job the screen serves). An empty query lists ' +
+        'every pattern.',
       inputSchema: {
         query: z.string().describe('The screen you need, in plain words, e.g. "login page".')
       }
@@ -228,8 +229,9 @@ async function main() {
       title: 'Get a webkit screen pattern',
       description:
         'The whole pattern: a runnable SFC (script setup + template) with the webkit imports, the ' +
-        'components it uses, the skills to follow, its steps and the other variants (states) of ' +
-        'the same screen. Copy the SFC and change only the content. A pre-v6 id (e.g. ' +
+        'components it uses, the skills to follow, its steps, the other variants (states) of ' +
+        "the same screen and its `guidelines` (when to use, building blocks, do and don't, copy, " +
+        'accessibility). Read the guidelines, copy the SFC and change only the content. A pre-v6 id (e.g. ' +
         '"platform/lists/table-view") resolves to its new block and carries a `note`.',
       inputSchema: {
         id: z

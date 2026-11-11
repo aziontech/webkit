@@ -5,11 +5,13 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import { readBlocks } from './lib/blocks.mjs'
+import { checkGuidelines } from './lib/guidelines.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
 const CATALOG_PATH = resolve(SCRIPT_DIR, '../catalog.json')
 const BASELINE_PATH = resolve(SCRIPT_DIR, 'patterns-lint-baseline.json')
+const PENDING_PATH = resolve(SCRIPT_DIR, 'guidelines-pending.json')
 const SKILL_DIRS = [resolve(REPO_ROOT, 'skills')]
 
 export function skillExists(name, dirs = SKILL_DIRS) {
@@ -32,6 +34,37 @@ export function checkPatternMetadata(patterns, blockIds) {
     }
   }
   return { errors, warnings }
+}
+
+export function checkPatternGuidelines(patterns, { pending = [], only = [] } = {}) {
+  const errors = []
+  const notes = []
+  const waiting = new Set(pending)
+  for (const id of pending) {
+    if (!patterns[id]) errors.push(`scripts/guidelines-pending.json: "${id}" is not a block`)
+  }
+  for (const [id, p] of Object.entries(patterns)) {
+    if (only.length && !only.some((prefix) => id.startsWith(prefix))) continue
+    if (waiting.has(id)) {
+      if (p.guidelines)
+        notes.push(`${id} has guidelines.md: remove it from scripts/guidelines-pending.json`)
+      else continue
+    }
+    errors.push(...checkGuidelines(id, p))
+  }
+  return { errors, notes }
+}
+
+export function parseCheckArgs(argv) {
+  const opts = { update: false, warnIntents: false, only: [] }
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i]
+    if (arg === '--update') opts.update = true
+    else if (arg === '--warn-intents') opts.warnIntents = true
+    else if (arg === '--only') opts.only.push(...(argv[++i] ?? '').split(',').filter(Boolean))
+    else if (arg.startsWith('--only=')) opts.only.push(...arg.slice(7).split(',').filter(Boolean))
+  }
+  return opts
 }
 
 async function consumerLinter() {
@@ -88,15 +121,20 @@ export function compareToBaseline(counts, baseline) {
 }
 
 async function main() {
-  const update = process.argv.includes('--update')
-  const warnIntents = process.argv.includes('--warn-intents')
+  const { update, warnIntents, only } = parseCheckArgs(process.argv.slice(2))
   const catalog = JSON.parse(readFileSync(CATALOG_PATH, 'utf-8'))
   const patterns = catalog.patterns || {}
   const metadata = checkPatternMetadata(
     patterns,
     Object.keys(readBlocks(resolve(SCRIPT_DIR, '..')))
   )
-  const errors = warnIntents ? metadata.errors : [...metadata.errors, ...metadata.warnings]
+  const pending = existsSync(PENDING_PATH) ? JSON.parse(readFileSync(PENDING_PATH, 'utf-8')) : []
+  const guidelines = checkPatternGuidelines(patterns, { pending, only })
+  for (const n of guidelines.notes) process.stdout.write(`ℹ ${n}\n`)
+  const errors = [
+    ...(warnIntents ? metadata.errors : [...metadata.errors, ...metadata.warnings]),
+    ...guidelines.errors
+  ]
   if (warnIntents) {
     for (const w of metadata.warnings) process.stdout.write(`⚠ ${w}\n`)
   }
@@ -130,12 +168,12 @@ async function main() {
   }
   if (errors.length || regressions.length) {
     process.stderr.write(
-      '\nEvery block in packages/webkit/blocks is a pattern the AI copies: it needs intents in block.json, real skills, and SFCs that pass the consumer lint.\n'
+      '\nEvery block in packages/webkit/blocks is a pattern the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, and SFCs that pass the consumer lint.\n'
     )
     process.exit(1)
   }
   process.stdout.write(
-    `✓ ${Object.keys(patterns).length} patterns: intents, skills and consumer lint (baseline for ${Object.keys(baseline).length} legacy patterns)\n`
+    `✓ ${Object.keys(patterns).length} patterns: intents, skills, guidelines (${pending.length} pending) and consumer lint (baseline for ${Object.keys(baseline).length} legacy patterns)\n`
   )
 }
 

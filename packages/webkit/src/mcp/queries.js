@@ -654,6 +654,7 @@ function patternCard(id, p, score) {
     id,
     name: p.name,
     summary: p.summary,
+    ...(p.guidelinesSummary ? { guidelinesSummary: p.guidelinesSummary } : {}),
     intents: p.intents || [],
     components: p.components || [],
     skills: p.skills || [],
@@ -721,7 +722,7 @@ export function searchPatterns(catalog, query) {
     count: matches.length,
     matches,
     hint: matches.length
-      ? 'Call get_pattern with the best id, copy its SFC and change only the content (copy, data, handlers). Keep the components, their order and the classes.'
+      ? 'Call get_pattern with the best id, read its guidelines, copy its SFC and change only the content (copy, data, handlers). Keep the components, their order and the classes.'
       : 'No pattern matches. Build from components: suggest_component, then get_component.'
   }
 }
@@ -807,8 +808,10 @@ export function getPattern(catalog, id, { variant } = {}) {
       { name: p.primary, summary: 'primary' },
       ...(p.variants || []).map((v) => ({ name: v.name, summary: v.summary }))
     ],
-    howToUse:
-      'Copy this SFC as the starting point of the screen and change only the content (copy, data, handlers, routes). Keep the components, their order, the props and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow the listed skills.'
+    ...(p.guidelines ? { guidelines: p.guidelines } : {}),
+    howToUse: p.guidelines
+      ? "Read `guidelines` first: when to use this screen and when not, what each building block is for, do and don't, the copy rules and the accessibility rules. Then copy this SFC as the starting point of the screen and change only the content (copy, data, handlers, routes), following the guidelines. Keep the components, their order, the props and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow the listed skills."
+      : 'Copy this SFC as the starting point of the screen and change only the content (copy, data, handlers, routes). Keep the components, their order, the props and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow the listed skills.'
   }
 }
 

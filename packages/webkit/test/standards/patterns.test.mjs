@@ -4,11 +4,71 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
 
-import { checkPatternMetadata, compareToBaseline } from '../../scripts/check-patterns.mjs'
+import {
+  checkPatternGuidelines,
+  checkPatternMetadata,
+  compareToBaseline,
+  parseCheckArgs
+} from '../../scripts/check-patterns.mjs'
 import { readBlocks, readExamples } from '../../scripts/lib/blocks.mjs'
+import {
+  checkGuidelines,
+  GUIDELINE_SECTIONS,
+  parseGuidelines,
+  primaryComponents
+} from '../../scripts/lib/guidelines.mjs'
 import { importsOf, kebab, patternIdFromTitle } from '../../scripts/lib/patterns.mjs'
 
 const catalog = JSON.parse(readFileSync(new URL('../../catalog.json', import.meta.url), 'utf-8'))
+const pending = JSON.parse(
+  readFileSync(new URL('../../scripts/guidelines-pending.json', import.meta.url), 'utf-8')
+)
+
+const SFC = [
+  '<script setup>',
+  "import PageHeader from '@aziontech/webkit/page-header'",
+  "import Button from '@aziontech/webkit/button'",
+  "import { toast } from '@aziontech/webkit/toast'",
+  "import useLocale from '@aziontech/webkit/use-locale'",
+  '</script>',
+  '<template>',
+  '  <PageHeader title="Workloads" />',
+  '  <Button label="Create" />',
+  '</template>'
+].join('\n')
+
+function guide({ blocks, states, drop, empty } = {}) {
+  const body = {
+    'When to use': '- A list of resources.',
+    'When not to use': '- One record: use `platform/detail/details-page`.',
+    'Building blocks':
+      blocks ??
+      [
+        '### A. Page heading — `PageHeader` (required)',
+        'Names the resource.',
+        '### B. Primary action — `Button` (required)',
+        'Creates one.'
+      ].join('\n'),
+    Do: '- Keep one primary action.',
+    "Don't": '- Add a second primary action.',
+    Copy: '- **Title:** the plural resource name, e.g. "Workloads".',
+    Accessibility: '- The heading is the page h1.',
+    States: states ?? '- Default: rows exist.\n- Empty: no rows.',
+    Related: '- `platform/create/single-page-create` — where Create leads.'
+  }
+  const sections = GUIDELINE_SECTIONS.filter((name) => name !== drop).map(
+    (name) => `## ${name}\n${name === empty ? '' : body[name]}\n`
+  )
+  return ['# Table view', 'Find a resource and act on it.', '', ...sections].join('\n')
+}
+
+const pattern = (guidelines) => ({
+  source: 'blocks/platform/x/x.vue',
+  sfc: SFC,
+  primary: 'Default',
+  variants: [{ name: 'Empty' }],
+  guidelines
+})
 
 test('pattern ids come from the story title, kebab-cased, without "Templates/"', () => {
   assert.equal(patternIdFromTitle('Templates/Platform/Auth/SignIn'), 'platform/auth/sign-in')
@@ -57,7 +117,14 @@ test('readBlocks builds a pattern from block.json, the primary SFC and every var
         variants: [{ name: 'Password', summary: '', file: 'variants/password.vue' }]
       })
     )
+    assert.equal('guidelines' in readBlocks(pkg)['platform/auth/sign-in'], false)
+    writeFileSync(
+      join(dir, 'guidelines.md'),
+      '# Sign in\nGet back into the account.\n\n## Do\n- x\n'
+    )
     const entry = readBlocks(pkg)['platform/auth/sign-in']
+    assert.match(entry.guidelines, /^# Sign in/)
+    assert.equal(entry.guidelinesSummary, 'Get back into the account.')
     assert.equal(entry.source, 'blocks/platform/auth/sign-in/sign-in.vue')
     assert.equal(entry.surface, 'product')
     assert.deepEqual(entry.intents, ['login'])
@@ -140,5 +207,117 @@ test('the catalog carries one pattern per block in headers, shells and platform'
     assert.ok(p.sfc.includes('<template>'))
     assert.match(p.source, /^blocks\//)
     assert.equal('status' in p, false)
+  }
+})
+
+test('parseGuidelines reads the purpose, sections, lettered building blocks and states', () => {
+  const g = parseGuidelines(guide())
+  assert.equal(g.title, 'Table view')
+  assert.equal(g.purpose, 'Find a resource and act on it.')
+  assert.deepEqual(Object.keys(g.sections), GUIDELINE_SECTIONS)
+  assert.deepEqual(
+    g.buildingBlocks.map((b) => [b.letter, b.title, b.components]),
+    [
+      ['A', 'Page heading', ['PageHeader']],
+      ['B', 'Primary action', ['Button']]
+    ]
+  )
+  assert.deepEqual(g.states, ['Default', 'Empty'])
+  const multi = parseGuidelines(guide({ blocks: '### A. Row menu — `DropdownMenu.Root`, `Tag`' }))
+  assert.deepEqual(multi.buildingBlocks[0].components, ['DropdownMenu', 'Tag'])
+})
+
+test('primaryComponents keeps the component bindings the SFC imports from webkit', () => {
+  assert.deepEqual(primaryComponents(SFC), ['PageHeader', 'Button'])
+})
+
+test('checkGuidelines accepts a complete guide that matches the SFC and the variants', () => {
+  assert.deepEqual(checkGuidelines('platform/x', pattern(guide())), [])
+})
+
+test('checkGuidelines fails without guidelines.md and on a missing or empty section', () => {
+  assert.deepEqual(checkGuidelines('platform/x', pattern(undefined)), [
+    'platform/x: no blocks/platform/x/guidelines.md'
+  ])
+  assert.match(
+    checkGuidelines('platform/x', pattern(guide({ drop: "Don't" })))[0],
+    /"## Don't" is missing/
+  )
+  assert.match(
+    checkGuidelines('platform/x', pattern(guide({ empty: 'Copy' })))[0],
+    /"## Copy" is empty/
+  )
+  const noPurpose = guide().replace('Find a resource and act on it.', '')
+  assert.match(checkGuidelines('platform/x', pattern(noPurpose))[0], /purpose paragraph/)
+})
+
+test('checkGuidelines fails on a component the SFC does not import, or one it imports and no block names', () => {
+  const invented = guide({
+    blocks: [
+      '### A. Page heading — `PageHeader`',
+      'x',
+      '### B. Primary action — `Button`',
+      'x',
+      '### C. Filters — `PropertyFilter`',
+      'x'
+    ].join('\n')
+  })
+  const [error] = checkGuidelines('platform/x', pattern(invented))
+  assert.match(error, /names `PropertyFilter`, which blocks\/platform\/x\/x.vue does not import/)
+  const uncovered = guide({ blocks: '### A. Page heading — `PageHeader`\nx' })
+  assert.match(
+    checkGuidelines('platform/x', pattern(uncovered))[0],
+    /no building block names `Button`/
+  )
+  const bare = guide({ blocks: 'Just prose.' })
+  assert.match(checkGuidelines('platform/x', pattern(bare))[0], /no "### A\. <Element>/)
+})
+
+test('checkGuidelines fails on letters out of order and on a variant with no States line', () => {
+  const skipped = guide({
+    blocks: '### A. Page heading — `PageHeader`\nx\n### C. Primary action — `Button`\nx'
+  })
+  assert.match(checkGuidelines('platform/x', pattern(skipped))[0], /should be lettered B/)
+  const noEmpty = guide({ states: '- Default: rows exist.' })
+  assert.deepEqual(checkGuidelines('platform/x', pattern(noEmpty)), [
+    'blocks/platform/x/guidelines.md: "## States" has no line for variant "Empty"'
+  ])
+})
+
+test('checkPatternGuidelines skips pending blocks, flags stale and unknown pending ids, honours --only', () => {
+  const patterns = {
+    'platform/view/a': pattern(undefined),
+    'platform/view/b': pattern(guide()),
+    'headers/c': pattern(undefined),
+    'headers/d': pattern(guide())
+  }
+  const all = checkPatternGuidelines(patterns, { pending: ['headers/c', 'headers/d', 'nope'] })
+  assert.deepEqual(all.errors, [
+    'scripts/guidelines-pending.json: "nope" is not a block',
+    'platform/view/a: no blocks/platform/view/a/guidelines.md'
+  ])
+  assert.deepEqual(all.notes, [
+    'headers/d has guidelines.md: remove it from scripts/guidelines-pending.json'
+  ])
+  assert.deepEqual(checkPatternGuidelines(patterns, { only: ['headers/'] }).errors, [
+    'headers/c: no blocks/headers/c/guidelines.md'
+  ])
+})
+
+test('parseCheckArgs reads --update, --warn-intents and repeated --only prefixes', () => {
+  assert.deepEqual(parseCheckArgs(['--only', 'platform/view,platform/edit', '--only=headers/']), {
+    update: false,
+    warnIntents: false,
+    only: ['platform/view', 'platform/edit', 'headers/']
+  })
+  assert.equal(parseCheckArgs(['--update']).update, true)
+})
+
+test('every block outside guidelines-pending.json has guidelines that match its SFC and variants', () => {
+  const { errors } = checkPatternGuidelines(catalog.patterns, { pending })
+  assert.deepEqual(errors, [])
+  for (const [id, p] of Object.entries(catalog.patterns)) {
+    if (pending.includes(id)) continue
+    assert.ok(p.guidelinesSummary, id)
   }
 })

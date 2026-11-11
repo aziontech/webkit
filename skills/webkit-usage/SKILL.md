@@ -17,8 +17,11 @@ enforced_by: [webkit-imports, webkit-tokens, webkit-prefer-over-custom, webkit-p
 
 Before composing anything, ask the `webkit` MCP whether the screen already exists: `search_patterns`
 with the screen in plain words ("login", "account settings", "delete confirmation"), then
-`get_pattern` with the best id. Copy that SFC and change only the content. Only when no pattern fits,
-compose from components (below). A marketing band is a page section, not a pattern (rule
+`get_pattern` with the best id. Before adapting it, read the `guidelines` field `get_pattern`
+returns: when to use the screen and when another block fits better, what each building block (A,
+B, C…) is for, do and don't, the copy rules and the accessibility rules. If "When not to use"
+matches your case, switch to the block it names. Then copy that SFC and change only the content,
+keeping to the guidelines. Only when no pattern fits, compose from components (below). A marketing band is a page section, not a pattern (rule
 `webkit-sections`).
 
 ## Which skill for which task

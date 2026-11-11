@@ -327,6 +327,38 @@ test('getPattern returns the SFC, components, skills and steps; variants by name
   assert.equal(getPattern(catalog, 'nope-nope').found, false)
 })
 
+test('getPattern returns the guidelines and tells the agent to read them first', () => {
+  const p = getPattern(catalog, 'platform/view/table-view')
+  assert.match(p.guidelines, /^# Table view/)
+  for (const section of ['## When to use', '## Building blocks', '## Copy', '## Accessibility'])
+    assert.ok(p.guidelines.includes(section), section)
+  assert.match(p.howToUse, /^Read `guidelines` first/)
+  const v = getPattern(catalog, 'platform/view/table-view', { variant: 'Empty' })
+  assert.equal(v.guidelines, p.guidelines)
+})
+
+test('searchPatterns cards carry the guidelines purpose as guidelinesSummary', () => {
+  const card = searchPatterns(catalog, 'resource list').matches.find(
+    (m) => m.id === 'platform/view/table-view'
+  )
+  assert.ok(card.guidelinesSummary.length > 40)
+  assert.equal(card.guidelinesSummary.includes('##'), false)
+})
+
+test('a pattern without guidelines keeps the plain howToUse and no guidelines fields', () => {
+  const bare = {
+    available: true,
+    patternAliases: {},
+    patterns: {
+      'platform/x': { name: 'X', primary: 'Default', sfc: '<template />', variants: [] }
+    }
+  }
+  const p = getPattern(bare, 'platform/x')
+  assert.equal('guidelines' in p, false)
+  assert.match(p.howToUse, /^Copy this SFC/)
+  assert.equal('guidelinesSummary' in searchPatterns(bare, '').matches[0], false)
+})
+
 test('getPattern resolves a v6 block id through catalog.patternAliases with a note', () => {
   const moved = getPattern(catalog, 'platform/lists/table-view')
   assert.equal(moved.found, true)

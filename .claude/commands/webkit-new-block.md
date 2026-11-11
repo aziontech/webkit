@@ -26,11 +26,15 @@ A screen built only from `@aziontech/webkit` components, which agents copy throu
 ├── block.json          id (= folder path under blocks/), name, title, surface, summary, preview,
 │                       intents (en + pt-BR), skills, primary { name, file }, variants[], steps?
 ├── <name>.vue          the primary state, a copyable SFC
+├── guidelines.md       when to use / not, building blocks A, B, C… (each naming the components
+│                       the primary SFC imports), do / don't, copy, accessibility, one States line
+│                       per variant, related blocks
 └── variants/
     └── <state>.vue     one copyable SFC per state (empty, loading, error, ...)
 ```
 
-The catalog (`catalog:build`), the MCP, `patterns:check` (consumer lint on every SFC), the
+The catalog (`catalog:build`), the MCP (`get_pattern` returns `guidelines.md` with the SFC),
+`patterns:check` (consumer lint on every SFC, and `guidelines.md` against the SFC), the
 generated Storybook stories (`apps/storybook/scripts/gen-block-stories.mjs`) and the browser test
 that mounts every SFC (`src/test/copyable-sfcs.test.ts`) all read these files.
 
@@ -53,8 +57,12 @@ present. Create the branch with `/create-branch new block <name> #<n>`.
 ## Step 3 — Block brief (draft)
 
 Write the brief to the run log: the draft `block.json` (no files in `blocks/` yet), one line per
-region naming the components that render it, the variant list from the issue's states, and the
-sample content. Every component named exists in `packages/webkit/package.json#exports` (check it
+region naming the components that render it, the variant list from the issue's states, the sample
+content, and the draft `guidelines.md` in the shared format (see any
+`packages/webkit/blocks/platform/view/table-view/guidelines.md`: `# <Block name>`, the purpose
+paragraph, `## When to use`, `## When not to use`, `## Building blocks` with
+``### A. <Element> — `Component` ``, `## Do`, `## Don't`, `## Copy`, `## Accessibility`,
+`## States`, `## Related`), written against the consumer skills the block lists. Every component named exists in `packages/webkit/package.json#exports` (check it
 with the MCP `get_component`, never from memory).
 
 ## Step 4 — Brief review by a second agent
@@ -65,14 +73,18 @@ fresh reviewer, three returns stop the run. Exit condition: `approve`.
 
 ## Step 5 — Build
 
-1. Write `block.json`, `<name>.vue` and `variants/<state>.vue` in the folder above. Each SFC
+1. Write `block.json`, `<name>.vue`, `variants/<state>.vue` and `guidelines.md` in the folder
+   above; update `guidelines.md` to the built SFC (letters follow the SFC order, every imported
+   component appears in one building block, one States line per variant). Each SFC
    imports only `@aziontech/webkit/*` subpaths and `@aziontech/icons`, follows
    `.claude/skills/ui-craft` "Start here", and stands alone (copy one file and it runs).
 2. `pnpm --filter @aziontech/webkit catalog:build` and
    `node apps/storybook/scripts/gen-block-stories.mjs` (commit `catalog.json` and the generated
    stories).
 3. Exit condition: `node packages/webkit/scripts/check-naming.mjs` and
-   `node packages/webkit/scripts/check-patterns.mjs` pass.
+   `node packages/webkit/scripts/check-patterns.mjs` pass (the latter fails when `guidelines.md`
+   is missing, a section is missing or empty, a building block names a component the primary SFC
+   does not import or leaves one out, or a variant has no States line).
 
 ## Step 6 — Machine gates
 

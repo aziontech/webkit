@@ -74,8 +74,9 @@ acceptance criteria of the issue are each traceable to a spec section.
 ## Block mode
 
 For `/webkit-new-block` you review a **block brief** (the draft `block.json` plus the section plan:
-which WebKit components render each region, the variants, the sample content) instead of a spec.
-Run the same ten items, read as:
+which WebKit components render each region, the variants, the sample content, and the draft
+`guidelines.md`) instead of a spec. A brief without `guidelines.md` is returned before the
+checklist. Run the same ten items, read as:
 
 - naming → the block id is `<category>/<name>` in kebab-case English, named by the job, and
   `scripts/check-naming.mjs` accepts it; the id is not in `catalog.json#patternAliases`;
@@ -89,6 +90,21 @@ Run the same ten items, read as:
 - right-to-left, responsive, accessibility, tokens, performance → as for a component, at screen
   level (page landmarks and heading order, reflow at 320 px, the layout container system of
   `webkit-layout`, no oversized data in the sample).
+
+Read `guidelines.md` against the section plan in the same pass, and fail the item it belongs to:
+
+- reuse → `## When not to use` points to the block or component to use instead, by id, and
+  `## Related` names only ids that exist (`search_patterns`);
+- naming → every ``### X. <Element> — `Component` `` names a component the plan imports, the letters
+  follow the plan's order, and every component of the plan appears in one building block;
+- states → `## States` has one line per variant of the draft `block.json`, saying when it shows;
+- internationalization → `## Copy` gives a rule and an example string for every element that
+  carries text, following `skills/webkit-microcopy`;
+- accessibility → `## Accessibility` names the heading order, the landmarks, the focus order and
+  the announcements the screen makes.
+
+The guidelines must agree with the skills the block lists (`webkit-form`, `webkit-lists`,
+`webkit-tables`, …): a rule that contradicts a skill fails the item it belongs to.
 
 ## Verdict
 

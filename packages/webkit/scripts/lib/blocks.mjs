@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
+import { GUIDELINE_FILE, guidelinesSummary } from './guidelines.mjs'
 import { EXAMPLE_MAX_CHARS, EXAMPLES_PER_COMPONENT, importsOf } from './patterns.mjs'
 
 const PKG_PREFIX = '@aziontech/webkit/'
@@ -58,6 +59,11 @@ export function readBlocks(pkgRoot) {
     entry.primary = block.primary.name
     entry.sfc = primarySfc
     entry.variants = variants
+    const guidelinesPath = join(dir, GUIDELINE_FILE)
+    if (existsSync(guidelinesPath)) {
+      entry.guidelines = readText(guidelinesPath)
+      entry.guidelinesSummary = guidelinesSummary(entry.guidelines)
+    }
     patterns[block.id] = entry
   }
   if (errors.length) throw new Error(`Could not read blocks:\n  ${errors.join('\n  ')}`)
