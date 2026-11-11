@@ -3063,12 +3063,12 @@ The code of every state is in [blocks/platform/create/create-hub.md](blocks/plat
 - Surface: product
 - Source: `blocks/platform/create/create-in-drawer/create-in-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/create-in-drawer")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [InputGroup](../../../components/input-group.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Label](../../../components/label.md), [Link](../../../components/link.md), [Menu](../../../components/menu.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioButton](../../../components/radio-button.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [InputGroup](../../../components/input-group.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Label](../../../components/label.md), [Link](../../../components/link.md), [Menu](../../../components/menu.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioButton](../../../components/radio-button.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
 
-create domain; add domain; create domain form; add domain drawer; edit domain; new domain; create drawer; custom domain; criar domínio; adicionar domínio; novo domínio; create in drawer; add record; add environment; criar em gaveta; form drawer; side drawer form; add item drawer; edit drawer; dns record form; nested resource form; gaveta de formulário; adicionar registro; formulário lateral; add origin drawer; form in drawer; formulário em gaveta; nested drawer; stacked drawers; drawer on drawer; create related item; create option in select; child form; gaveta aninhada; gavetas empilhadas; criar item relacionado; add rule; create origin in drawer; build and deployment; build deployment settings; deployment settings; deployment defaults; deploy configuration; workload deployment defaults; build settings; configurações de build; configurações de deploy; implantação; create deployment settings; deployment settings drawer; criar configuração de deploy
+create domain; add domain; create domain form; add domain drawer; edit domain; new domain; create drawer; custom domain; criar domínio; adicionar domínio; novo domínio; create in drawer; add record; add environment; criar em gaveta; form drawer; side drawer form; add item drawer; edit drawer; dns record form; nested resource form; gaveta de formulário; adicionar registro; formulário lateral; add origin drawer; form in drawer; formulário em gaveta; nested drawer; stacked drawers; drawer on drawer; create related item; create option in select; child form; gaveta aninhada; gavetas empilhadas; criar item relacionado; add rule; create origin in drawer; build and deployment; build deployment settings; deployment settings; deployment defaults; deploy configuration; workload deployment defaults; build settings; configurações de build; configurações de deploy; implantação; create deployment settings; deployment settings drawer; criar configuração de deploy; certificate; upload certificate; tls certificate; pem; certificate expiry; certificado; importar certificado; certificado tls
 
 The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule. The user is working on the resource behind it and must keep it in view, so the form slides over the page instead of replacing it. They fill a few sections, press the one commit button and land back where they were, with the new item in the list.
 
@@ -3130,6 +3130,10 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 
 `PanelFooter` with one primary medium `Button`, alone on the right, labeled like the trigger, with `:loading` while the save is in flight.
 
+### K. Certificate import — `SettingsSection`, `Field`, `Button`, `PanelFooter` (optional)
+
+In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` picks Server certificate (certificate and private key) or Trusted CA (certificate only), and the section hint follows it. The certificate is a required `Field` with a code-font `Textarea` for the PEM text and an outlined Upload file `Button` beside its label that reads a .pem, .crt or .cer file into the same field and announces the file it loaded. As soon as the text holds a certificate, a details panel reads it in the browser: Issued to, Issued by, Valid from and Expires in a two-column `KeyValuePairs`, the expiry carrying a `StatusIndicator` (success with the days left, warning within 30 days with a line saying to renew it, danger once expired), and a note when intermediate certificates follow. Text that is not a PEM certificate, an expired certificate and a missing or malformed private key are errors under their fields, shown only after Save, with focus on the first. The private key's description says it is stored encrypted and never shown again. Save closes the drawer and raises a success toast with the expiry date.
+
 ## Do
 
 - Open on a blank form every time, or on the edited item's values, and clear every error on open.
@@ -3176,6 +3180,7 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 - ItemRows: Add Origin on the Origins page of the storefront resource, a large drawer whose sections are `Item` rows in flush cards, saved together by one Add Origin.
 - NestedDrawer: Add Rule on the storefront resource's Rules Engine, with an Origin select whose Create Origin option opens a second, medium drawer and selects the new origin back.
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.
+- Certificate: Create Certificate opened with shop.example.com pasted as a server certificate: the details panel reads Issued to shop.example.com, Issued by Example Test CA and the expiry with the days left; the private key is empty, so Save flags it.
 
 ## Related
 
@@ -3195,6 +3200,7 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 - `ItemRows` — An in-context add whose body is the settings layout: an Origins page inside the storefront resource whose heading action opens a large right-side drawer, and inside it section-titled groups of `Item` rows, each a small heading over a flush `Card`, saved together by the one Add Origin in the footer. An origin lives inside its resource, so it adds in a drawer; a first-level resource such as a service creates on a page instead. General, Connection and Options are the sections. The drawer clears its fields and errors each time it opens, so its content stays in place while it closes. Name and Protocol flag only after Add Origin is pressed. Built from `PageHeader`, `SettingRow`, the platform shell, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Input`, `Select`, `Switch` and `HelperText`.
 - `NestedDrawer` — A create drawer whose select needs another item of the same resource that may not exist yet: the Rules Engine page of the storefront resource opens a large Add Rule drawer, and the Create Origin option pinned to the foot of its Origin select opens a second, medium drawer stacked above it on raised layers. Rule and origin both live inside the resource, so both create in drawers; a first-level resource such as a service is never created this way, it creates on a page. Saving the child adds the new origin and selects it back into the rule. Each drawer is its own scoped save, and each clears its fields and errors when it opens, so its content stays in place while it closes. Built from `PageHeader`, `SettingRow`, the platform shell, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Input`, `Select` and `HelperText`.
 - `DeploymentSettings` — The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of a Build and deployment settings panel. A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across services switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `SettingsSection`, `Drawer`, the `Panel` parts, `Field` with `Input`, `Textarea`, `RadioButton` and `Switch` choice cards, `Label`, `HelperText`, `Hint` and `Button`.
+- `Certificate` — Create Certificate: a Server certificate or Trusted CA `ToggleGroup`, a PEM `Textarea` with Upload file, a details panel read from the pasted certificate (issued to, issued by, valid from, and the expiry with a `StatusIndicator` that warns within 30 days and blocks an expired one) and, for a server certificate, the private key; opened with a sample certificate pasted and the key empty.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/create-in-drawer", { variant })`, or the file under `blocks/platform/create/create-in-drawer/variants/`.
 
@@ -7823,12 +7829,12 @@ The code of every state is in [blocks/platform/detail/version-detail.md](blocks/
 - Surface: product
 - Source: `blocks/platform/edit/attribute-editor/attribute-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/attribute-editor")`
-- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Textarea](../../../components/textarea.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
 
-variables; environment variables; env vars; secrets; create variable; edit variable; variables list; version history; variáveis; variáveis de ambiente; segredos; criar variável; key value editor; attribute editor; .env upload; editor de chave e valor; delete variable; clone variable; paste .env; paste env file; import .env; colar .env; importar variáveis; dotenv
+variables; environment variables; env vars; secrets; create variable; edit variable; variables list; version history; variáveis; variáveis de ambiente; segredos; criar variável; key value editor; attribute editor; .env upload; editor de chave e valor; delete variable; clone variable; paste .env; paste env file; import .env; colar .env; importar variáveis; dotenv; network list; ip list; asn list; country list; bulk paste; lista de rede; lista de ips; lista de red
 
 A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step.
 
@@ -7899,6 +7905,10 @@ With no variables at all, the card holds a first-use `EmptyState` (`No variables
 
 The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable: a warning `Alert`, one sentence on the consequence, and an `Input` where the user types the key. The danger Delete variable `Button` stays disabled until the trimmed value equals the key; Cancel closes the dialog.
 
+### N. Network list drawer — `Drawer`, `SettingsSection`, `ToggleGroup`, `Button`, `Textarea`, `HelperText`, `AttributeEditor`, `MultiSelect` (optional)
+
+In the NetworkList state the same drawer recipe creates a network list for firewall rules: a General section with a required Name, then an Entries section whose `ToggleGroup` picks the type (IP/CIDR, ASN, Countries). IP/CIDR and ASN entries are an `AttributeEditor` in list mode, large, with an Address (or ASN) column in the code font through `cell-value` and an optional Comment, at most 200 rows. Paste list opens the panel of H for a whole list, one entry per line with `#` comments: its report counts the entries found, names the lines that are not valid ("Line 4 is not an IPv4 or IPv6 address, or a CIDR range") and the lines already in the list that will be skipped. Add N entries appends every new line as a row, valid or not, and each invalid row shows its own error under the field right away, so the user fixes the list line by line instead of retyping it; typed rows are checked only after Save, and empty rows are ignored once one row is filled. Countries is a required `MultiSelect`. Save validates, moves focus to the first field in error, then closes the drawer and raises a success toast with the entry count.
+
 ## Do
 
 - Validate only after Save is pressed; then flag each empty, malformed or duplicated key under its own pair and move focus to the first field in error.
@@ -7927,6 +7937,7 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 - **Field placeholders:** show the format, e.g. "MY_VARIABLE" for the key, "my-variable-value" for the value.
 - **Errors:** short and specific, e.g. "Key is required.", "Use only uppercase letters, numbers, and underscores.", "Select at least one resource for this scope."
 - **Secret control:** "Mark as secret" and "Unmark as secret"; the hint states the rule, e.g. "Secret values are hidden and write-only after saving."
+- **Network list:** title "Create Network List"; types "IP/CIDR", "ASN", "Countries"; panel label "Paste one address per line"; report "7 entries found. Text after # is kept as the comment.", "Lines 4 and 8 are not an IPv4 or IPv6 address, or a CIDR range; they are added with an error to fix.", "Line 7 is already in the list and will be skipped."; row error "198.51.100.300 is not an IPv4 or IPv6 address, or a CIDR range."; toast "Office and partners created."
 - **Paste panel:** label "Paste .env contents"; report "3 variables found. Lines starting with # are ignored.", "Line 5 is not KEY=value with an uppercase key and will be skipped.", "CACHE_TTL is already in the list; its value will be replaced."; buttons "Paste .env", "Add 3 variables", "Cancel".
 - **Buttons:** verb first, three words or fewer, e.g. "Upload", "Add variable", "Save".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
@@ -7950,6 +7961,7 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 - Delete: a row's Delete opens the typed confirmation; confirming removes the row.
 - Create: the drawer open with one empty pair, the Form view and Global on; errors appear only after Save.
 - PasteEnv: Create Variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
+- NetworkList: Create Network List opens the drawer named Office and partners, type IP/CIDR, with the Paste list panel holding nine lines: a comment line, two lines that are not valid addresses and one already pasted above; Add 7 entries appends them as rows, the two invalid ones showing their errors.
 
 ## Related
 
@@ -7965,6 +7977,7 @@ The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable
 - `List` — primary (the code below)
 - `Create` — Closed until Create Variable opens it: one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed.
 - `PasteEnv` — Create Variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env.
+- `NetworkList` — Create Network List opens a drawer with a Name, a type `ToggleGroup` (IP/CIDR, ASN, Countries) and the entries as an `AttributeEditor` of address and comment rows; Paste list holds a pasted list of nine lines whose report counts 7 entries, names the 2 lines that are not valid addresses and the line already in the list, and Add 7 entries appends them as rows where each invalid line shows its own error. Countries is a `MultiSelect`; Save checks every row and raises a success toast.
 
 Each variant is the same screen in another state: `get_pattern("platform/edit/attribute-editor", { variant })`, or the file under `blocks/platform/edit/attribute-editor/variants/`.
 
@@ -8321,24 +8334,24 @@ The code of every state is in [blocks/platform/edit/edit-resource.md](blocks/pla
 
 # RuleBuilder (`platform/edit/rule-builder`)
 
-> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are groups of variable, operator and argument rows, the variable picked from a suggestion list, added with And or Or and read as If / Or across groups; behaviors are a Then list whose argument field follows the behavior picked, from a searchable list filtered by phase. Groups, conditions and behaviors reorder by dragging the grip or with the arrow buttons. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule; a resource that only acts on requests opens the same drawer with a single Request phase (so no Phase section) and its own behaviors. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `ScrollArea`, `RadioButton` choice cards, `Card`, `Separator`, `Item`, `Switch`, `IconButton`, `Tooltip` and `Button`.
+> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor; behaviors are a Then list whose argument field follows the behavior picked, from a searchable list filtered by phase. Behaviors reorder by dragging the grip or with the arrow buttons. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule; a resource that only acts on requests opens the same drawer with a single Request phase (so no Phase section) and its own behaviors. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioButton` choice cards, `Card`, `Item`, `Switch`, `IconButton`, `Tooltip` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/edit/rule-builder/rule-builder.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/rule-builder")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioButton](../../../components/radio-button.md), [ScrollArea](../../../components/scroll-area.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Tooltip](../../../components/tooltip.md)
+- Components: [AttributeEditor](../../../components/attribute-editor.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioButton](../../../components/radio-button.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-create-surface`
 
 ## Asked as
 
 rules engine; rule form; add rule; criteria and behaviors; if then rules; conditional rules; rule builder; motor de regras; criar regra; regras condicionais
 
-A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match. The user composes If and Or groups of variable, operator and argument rows, picks behaviors that fit the phase, puts everything in order and saves, without leaving the resource's Rules tab.
+A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match. The user composes groups of variable, operator and argument rows (every row in a group must match, any group is enough), picks behaviors that fit the phase, puts everything in order and saves, without leaving the resource's Rules tab.
 
 ## When to use
 
 - A resource runs an ordered list of rules, each made of conditions and actions (request and response rules, firewall rules, routing).
-- Conditions combine with And inside a group and Or across groups, and the order of groups, conditions and behaviors matters.
+- Conditions combine with And inside a group and Or across groups, and the order of behaviors matters.
 - The rule is edited from a list inside the resource, so the drawer opens as `Add Rule` or `Edit Rule` and keeps the list in view behind it.
 
 ## When not to use
@@ -8362,9 +8375,9 @@ A `SettingsSection` with a hint, holding two `Field`s with large `Input`s: Name,
 
 Request and Response as choice cards: a flush `Card` of `Field`s, each a `RadioButton` with a title and a one-line description. When editing, the phase is locked and a `HelperText` explains why. A resource that only acts on requests has a single phase and omits this section.
 
-### D. Criteria — `SettingsSection`, `Card`, `Tooltip`, `IconButton`, `Input`, `ScrollArea`, `Select`, `Button`, `Separator` (required)
+### D. Criteria — `SettingsSection`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
 
-Groups read If, then Or. Each group holds condition rows of three large controls: a variable `Input` with a suggestion list in a `ScrollArea` filtered by phase, an operator `Select`, and an argument `Input` or `Select` that follows the operator. Rows after the first read And or Or. Under each group, outlined And and Or `Button`s add a row; a `Separator` and Add criteria start a new group. Each group and row has a drag grip, Move up and Move down `IconButton`s and, for rows, Remove condition, each named by a `Tooltip`.
+An `AttributeEditor` in grouped mode (`v-model:groups`), large, named "Criteria": each group is an AND group of condition rows, groups are joined by an "or" `Separator`, and the editor draws the labels, Add condition under each group, Add OR group at the end, Remove condition per row, the limits (10 conditions per group, 5 groups), focus after add and remove, and the polite "Item n added" and "Item n removed" announcements. Its cells are replaced through `cell-<key>` slots: the variable is a `Combobox` of the variables of the chosen phase that also takes a typed one, the operator a `Select`, and the argument an `Input` that turns into a disabled "No argument" field for exists and does not exist. `min-items="1"` keeps one condition. A missing variable shows "Enter the variable to compare." under it, only after Save, through the editor's `errors`. Conditions do not reorder: And and Or do not depend on order.
 
 ### E. Behaviors — `SettingsSection`, `Card`, `Select`, `Input`, `HelperText`, `Tooltip`, `IconButton`, `Button` (required)
 
@@ -8381,9 +8394,9 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 ## Do
 
 - Show the Name error only after a failed Save, never on first render, and move focus to the first field in error.
-- Read the logic aloud in the layout: If, And, Or, Then, in that order.
+- Read the logic aloud in the layout: and inside a group, or between groups, then the behaviors in order.
 - Make every argument field follow what was picked before it, so the user never types a value the operator or behavior cannot take.
-- Offer both drag and buttons to reorder; the buttons are the keyboard path.
+- Offer both drag and buttons to reorder behaviors; the buttons are the keyboard path.
 - Filter variables and behaviors by phase, and lock the phase on an existing rule.
 - Follow `skills/webkit-form` for fields and `skills/webkit-errors` for error timing.
 
@@ -8391,6 +8404,7 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 
 - Don't put a Cancel button beside Save; `DrawerClose` and the overlay close the drawer.
 - Don't nest groups inside groups; one level of Or over And is the whole model.
+- Don't draw criteria rows by hand; `AttributeEditor` grouped mode owns their labels, errors, limits and announcements.
 - Don't let the user switch an existing rule's phase; tell them to create a rule in the other phase.
 - Don't open the drawer in a medium size; condition rows need three columns side by side.
 - Don't clear the form while the drawer is closing.
@@ -8399,17 +8413,17 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 
 - **Drawer title and trigger:** `Add Rule` for a new rule, `Edit Rule` for an existing one.
 - **Section hints:** one sentence saying what the section decides, e.g. "The conditions that decide whether the rule runs."
-- **Logic labels:** single words, e.g. "If", "And", "Or", "Then".
-- **Add buttons:** verb first, e.g. "Add criteria", "Add behavior".
-- **Error:** "Name is required."
+- **Logic labels:** single words, e.g. "and", "or", "Then".
+- **Add buttons:** verb first, e.g. "Add condition", "Add OR group", "Add behavior".
+- **Errors:** "Name is required.", "Enter the variable to compare."
 - **Reorder controls:** name the item, e.g. "Move condition up", "Remove behavior".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
-- Every `Input` and `Select` trigger has a label: a `Field.Label` tied by `for`, or an `aria-label` such as "Variable", "Operator", "Argument", "Behavior".
-- The variable suggestions are a `listbox` of `option`s with `aria-selected`; picking one does not steal focus from the field.
-- Drag grips are labeled, e.g. "Drag to reorder condition, or use arrow keys", and the Move up and Move down buttons give the same result without a pointer.
+- Every `Input` and `Select` trigger has a label: a `Field.Label` tied by `for`, or an `aria-label` such as "Behavior"; the criteria cells are `Field`s of the `AttributeEditor`, labelled Variable, Operator and Argument, and groups are `group`s named "Group n".
+- The variable `Combobox` is a `combobox` with a `listbox` of `option`s; picking one keeps focus in the field.
+- Behavior drag grips are labeled, e.g. "Drag to reorder behavior, or use arrow keys", and the Move up and Move down buttons give the same result without a pointer.
 - Icon-only controls carry an `aria-label` that matches their `Tooltip`; decorative icons carry `aria-hidden="true"`.
 - The drawer traps focus while open and returns it to the trigger on close; motion respects reduced motion.
 
@@ -8421,7 +8435,8 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 ## Related
 
 - `platform/create/create-in-drawer` — the simpler drawer create this one extends.
-- `platform/edit/attribute-editor` — a drawer for free key and value pairs.
+- `platform/edit/attribute-editor` — a drawer for free key and value pairs; `AttributeEditor` is the component the criteria are built on.
+- `platform/view/rules-list` — the list of rules by phase this drawer opens from.
 - `platform/states/form-validation` — when errors appear after Save.
 - `platform/edit/edit-resource` — the resource settings that sit beside the Rules tab.
 - `Drawer` — the side panel; see `skills/webkit-create-surface`.
@@ -10137,6 +10152,138 @@ The code of every state is in [blocks/platform/view/query-editor.md](blocks/plat
 
 ---
 
+<!-- blocks/platform/view/rules-list.md -->
+
+# RulesList (`platform/view/rules-list`)
+
+> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (stacking to cards when narrow) with Order, Name, Description, Status and Last modified. The Order cell carries a position `Input` (type a number and press Enter), a grip `IconButton` that drags the row or moves it with the up and down arrow keys, and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`.
+
+- Surface: product
+- Source: `blocks/platform/view/rules-list/rules-list.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/view/rules-list")`
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [Switch](../../../components/switch.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
+
+## Asked as
+
+rules list; rules engine list; reorder rules; rule order; drag and drop reorder; firewall rules; request and response phases; review changes; enable disable rule; lista de regras; ordem das regras; reordenar regras; regras do firewall; fases de requisição e resposta; lista de reglas; reordenar reglas
+
+An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys or a typed position move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves.
+
+## When to use
+
+- A resource runs an ordered program of rules and the user needs to see it, reorder it and turn rules on or off: application rules engine, firewall rules, routing rules.
+- Rules split into phases that never interleave (request and response), each with its own order.
+- Changes to the order must be reviewed before they apply to live traffic.
+
+## When not to use
+
+- Records whose order does not matter: use `platform/view/table-view`.
+- Writing or editing one rule's criteria and behaviors: use `platform/edit/rule-builder`, which this list opens from Add Rule and from a rule's name.
+- Fewer than two rules that can move: show the list without the Order controls.
+
+## Building blocks
+
+### A. Header — `PageHeader`, `Button` (required)
+
+`PageHeader` at `size="small"` titled Rules, with a one-sentence description that says order is behavior and that an inactive rule keeps its place. Actions: outlined Documentation, then outlined Add Rule on the outer edge.
+
+### B. Search — `Input`, `Alert` (required)
+
+A medium `Input` with a search icon, named "Search rules", matching name, description and author. While it holds text, an info `Alert` says reordering is off and how to turn it back on; phases with matches open, and each trigger reads "n of total".
+
+### C. Phases — `Card`, `Accordion` (required)
+
+A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, the arrow on the start side, one item per phase, all open by default. Each trigger is an `h2` reading "Request phase" with the rule count in muted tabular figures. A resource with a single phase keeps the same anatomy with one item.
+
+### D. Rules table — `TableRoot`, `Tag`, `Switch` (required)
+
+A data-driven `TableRoot` per phase (`row-key="id"`, no sorting: order is the data's), so rows stack as cards in a narrow container: Order (200 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). Each cell slot wraps its content in one element carrying the rule id and the drag state, so the panel around the table handles drag over and drop for the whole phase and every cell of the target row draws the drop line.
+
+### E. Order controls — `Input`, `IconButton`, `Tooltip` (required)
+
+In the Order cell, in this order: a small position `Input` (numeric, centered; Enter or blur moves the rule there, Escape cancels), a grip `IconButton` (`pi pi-bars`) that is the drag handle and moves the rule one place with the up and down arrow keys, and Move up and Move down `IconButton`s. Each control is named after its rule and phase, and its `Tooltip` repeats the action or, when it is disabled, the reason. Leading locked rules are pinned: their controls are disabled and nothing can move above them. After a move, focus returns to the same control on the moved rule (the grip when that control is now disabled), and a polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
+
+### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Toaster` (required)
+
+Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save shows its loading state and the dialog cannot be dismissed while saving. On success the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again.
+
+### G. States — `EmptyState` (required)
+
+Loading: triggers read Loading, the search is disabled and each `TableRoot` shows its skeleton rows (`loading`). Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: one muted line in the table's `empty` slot, "No request rule matches “cache”."
+
+## Do
+
+- Keep phases separate: a rule moves only within its phase, and drag ignores drops on another phase.
+- Offer every way to move: drag for a pointer, arrow keys on the grip, Move up and Move down for touch and switch access, and a typed position for long lists.
+- Say why a control is disabled, in its accessible name and its tooltip.
+- Collect changes and apply them only after Review changes and Save; the review lists every rule whose position changes, not only the one the user dragged.
+- Let a rule be turned off in place; an inactive rule keeps its position and is skipped at runtime.
+- Follow `skills/webkit-tables` for the table, `skills/webkit-form` for the save bar and `skills/webkit-errors` for the failed save.
+
+## Don't
+
+- Don't save on every drop; one wrong drag would reorder live traffic.
+- Don't allow reordering while a search hides rows; positions would be ambiguous.
+- Don't let anything move above a locked default rule, or turn it off.
+- Don't put the review in a toast or a popover; it is a decision with a list to read.
+- Don't offer drag as the only way to reorder.
+
+## Copy
+
+- **Phase triggers:** "Request phase", "Response phase", with "5 rules" or "2 of 5" beside.
+- **Order control names:** "Reorder Docs rewrite, position 5 of 5 in the Request phase. Use the up and down arrow keys to move it.", "Move Docs rewrite up".
+- **Disabled reasons:** "The default rule runs first and stays first.", "Clear the search to change the order rules run in.", "There is no other rule in this phase to move it past."
+- **Announcements:** "Docs rewrite moved to position 3 of 5 in the Request phase.", "Changes discarded. The rules are back in their saved order."
+- **Save bar:** "3 changes to the rules, not saved yet." with Discard and Review changes.
+- **Review lines:** "<Rule> moves from position 5 to 3.", "<Rule> is turned on."
+- **Failure:** "The new order wasn't saved. The rules still run in the saved order; save again to apply it."
+- **Success toast:** "Rule order saved." with "The application runs its rules in the new order."
+- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+
+## Accessibility
+
+- Each phase is a disclosure: the trigger is a button inside an `h2` with `aria-expanded`, and the panel is a region named by it.
+- Every Order control has a name that includes the rule and the phase; disabled controls include the reason.
+- Keyboard: Tab reaches the position field, grip, Move up, Move down, the rule link and its switch, in that order; the grip moves the rule with Up and Down; Enter in the position field commits and Escape cancels. Focus follows the moved rule.
+- Moves and discards are announced once in a polite `role="status"` region that exists from the first render.
+- The `Switch` is named "Run <rule>"; its visible Active or Inactive text is hidden from the accessibility tree so the state is read once, from `aria-checked`.
+- The review dialog traps focus, returns it to Review changes on close, and is not dismissible while saving; the failure `Alert` is read when it appears.
+- Drop targets show a 2 px accent line and the dragged row fades; transitions respect reduced motion.
+
+## States
+
+- Application: Request and Response phases, a locked Default rule first in Request, one inactive rule per phase.
+- Firewall: one Request phase, every rule movable.
+- ReviewChanges: two moves and one status change, the save bar and the review dialog open.
+- SaveFailed: the review dialog open with the failure `Alert` and Save again.
+- Searching: "cache" typed, reordering off with its `Alert`, phases reading "n of total".
+- Empty: a firewall with no rules, the Request phase showing its `EmptyState`.
+- Loading: skeleton rows in each phase.
+
+## Related
+
+- `platform/edit/rule-builder` — the drawer that adds or edits one rule.
+- `platform/view/table-view` — lists whose order does not matter.
+- `platform/states/form-error` — the failed-save `Alert` pattern the review dialog follows.
+- `platform/view/waf-tuning` — the WAF tuning list a firewall's WAF rule links to.
+
+## Variants
+
+- `Application` — primary (the code below)
+- `Firewall` — A firewall's rules: one Request phase, five rules and no locked rule, so every rule moves; the page says rules run until one refuses the request.
+- `ReviewChanges` — After two moves and one rule turned on: the SaveBar counts the changes and the Review changes dialog is open, listing Docs rewrite moving from 5 to 3 (and the rules it pushed down), Maintenance page turned on, and Security headers moving to the top of the Response phase.
+- `SaveFailed` — The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; the next attempt saves and closes the dialog with the success toast.
+- `Searching` — A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip.
+- `Empty` — A firewall with no rules: the Request phase panel shows a small EmptyState with Add Rule instead of the table.
+- `Loading` — While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns.
+
+Each variant is the same screen in another state: `get_pattern("platform/view/rules-list", { variant })`, or the file under `blocks/platform/view/rules-list/variants/`.
+
+The code of every state is in [blocks/platform/view/rules-list.md](blocks/platform/view/rules-list.md) and `blocks/platform/view/rules-list/rules-list.vue`.
+
+---
+
 <!-- blocks/platform/view/split-view.md -->
 
 # SplitView (`platform/view/split-view`)
@@ -10455,6 +10602,120 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 Each variant is the same screen in another state: `get_pattern("platform/view/table-view", { variant })`, or the file under `blocks/platform/view/table-view/variants/`.
 
 The code of every state is in [blocks/platform/view/table-view.md](blocks/platform/view/table-view.md) and `blocks/platform/view/table-view/table-view.vue`.
+
+---
+
+<!-- blocks/platform/view/waf-tuning.md -->
+
+# WafTuning (`platform/view/waf-tuning`)
+
+> The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `TableRoot` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, two shown and a `Tag` counting the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `TableRoot`, `Tag`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Textarea` and `Toaster`.
+
+- Surface: product
+- Source: `blocks/platform/view/waf-tuning/waf-tuning.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/view/waf-tuning")`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), `TableRoot`, [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
+
+## Asked as
+
+waf tuning; web application firewall; allow rules; false positives; attacks table; matched requests; waf allowed rules; threshold; ajuste do waf; falsos positivos; permitir regras; ajuste de waf; falsos positivos waf
+
+The Tuning tab of a WAF rule set. It shows the requests the rule set matched, grouped by the rule that matched them, with enough context (hits, top addresses, countries and paths) for the user to tell an attack from a false positive, and turns the legitimate ones into allowed rules with a recorded reason.
+
+## When to use
+
+- A security rule set blocks or flags traffic, and users need to review what it caught and allow what is legitimate.
+- Each finding is a rule that matched many requests, summarized by its sources and targets.
+- Allowing changes what the rule set lets through, so it needs a reason that stays with the change.
+
+## When not to use
+
+- A plain list of records to browse and act on one at a time: use `platform/view/table-view`.
+- Charts of attack volume over time: use `platform/dashboard/security-dashboard`.
+- Editing the allowed rules once created: an `edit-resource` form on the Allowed Rules tab.
+
+## Building blocks
+
+### A. Header — `PageHeader`, `Button` (required)
+
+`PageHeader` at `size="small"` titled Tuning, with a description that says what the list is and what to do with it. Actions: outlined Export to CSV (disabled while loading or empty) and the allow action, which reads Add Allowed Rule and is disabled until rows are checked, then reads "Allow 2 selected".
+
+### B. Threshold settings — `Field`, `Select`, `Input`, `IconButton`, `Tooltip` (required)
+
+A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `Input` (numeric; "Use a whole number." under it when it is not one), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. Hidden when the rule set has no match at all.
+
+### C. Matches table — `Card`, `TableRoot`, `Tag`, `EmptyState` (required)
+
+A flush `Card` with a data-driven `TableRoot`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells show two values and a small `Tag` with "+n". The `empty` slot is a small `EmptyState` naming the minimum and the range and saying how to widen them.
+
+### D. Allow dialog — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
+
+A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says requests these rules matched on their paths will no longer be blocked and how many allowed rules will be created (one per rule and path); a list of the selected rules with their threat and path count; and a required Reason `Textarea` with a description saying it is kept with the allowed rules. "Enter why these requests are legitimate." shows under it only after Allow rules is pressed with it empty, and focus moves to it. Footer: Cancel and primary Allow rules, which shows its loading state; the dialog cannot be dismissed while it runs.
+
+### E. Outcome — `Toaster`, `Alert` (required)
+
+Success closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `platform/states/form-error`).
+
+## Do
+
+- Sort by hits so the noisiest rules come first, and keep the sort when settings change.
+- Show sources and targets as samples with a count of the rest, not as full lists.
+- Say how many allowed rules the action creates before the user confirms it.
+- Require a reason, and validate it only after the user tries to allow.
+- Keep the selection when settings change, so the user can narrow the list and still act on what they checked.
+
+## Don't
+
+- Don't allow from a single click on a row; allowing changes what the rule set blocks.
+- Don't hide the threshold settings in a menu; they decide what the list shows.
+- Don't put a free-text reason in a toast or a confirm without a field.
+- Don't use real or customer addresses in examples; use documentation ranges (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24).
+
+## Copy
+
+- **Header action:** "Add Allowed Rule", then "Allow 2 selected".
+- **Settings labels:** "Time range", "Minimum hits".
+- **Empty after threshold:** "No rule reaches the minimum", "No rule matched 100 times or more in the last 24 hours. Lower the minimum hits or widen the time range."
+- **First use:** "No matches yet", "This rule set has not matched any request. Matches appear here as traffic arrives."
+- **Dialog:** title "Allow 2 rules", submit "Allow rules", reason error "Enter why these requests are legitimate."
+- **Outcome:** "6 allowed rules created." and "The allowed rules weren't created. Nothing changed in the rule set; try again."
+- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+
+## Accessibility
+
+- Time range and Minimum hits have visible labels; the search and Refresh have accessible names.
+- The selection checkboxes and sort buttons come from `TableRoot` and are named per row and column.
+- The dialog is a labelled `form`: its title names it, the reason is a required `Field` whose error is tied by `aria-describedby`, and Enter in a text field does not submit by accident because the reason is a `Textarea`.
+- The failure `Alert` is read when it appears; focus stays in the dialog and returns to the allow action on close.
+- Code-font values (rule ids, addresses, paths) are plain text; nothing depends on color.
+
+## States
+
+- Default: five rules matched in the last 24 hours, minimum 100 hits.
+- Allow: two rules checked and the dialog open.
+- AllowFailed: the dialog with the failure `Alert` and Try again.
+- Empty: no match yet, no settings.
+- Loading: settings disabled, skeleton rows.
+
+## Related
+
+- `platform/view/rules-list` — the firewall's rules, where a WAF rule set is applied.
+- `platform/view/table-view` — the list recipe this table follows.
+- `platform/states/form-error` — the failure pattern in the dialog.
+- `platform/dashboard/security-dashboard` — attack volume over time.
+
+## Variants
+
+- `Default` — primary (the code below)
+- `Allow` — Two rules checked and the Allow 2 rules dialog open: rule 1005 (SQL injection on 3 paths) and 1201 (Cross-site scripting on 3 paths), 6 allowed rules in all, and an empty Reason.
+- `AllowFailed` — The same dialog after the allowed rules could not be created: a danger Alert says nothing changed in the rule set, and the submit button reads Try again.
+- `Empty` — A rule set that has not matched any request: no threshold settings, and an EmptyState saying matches appear as traffic arrives.
+- `Loading` — While the matches load: the settings and actions are disabled and the table shows skeleton rows.
+
+Each variant is the same screen in another state: `get_pattern("platform/view/waf-tuning", { variant })`, or the file under `blocks/platform/view/waf-tuning/variants/`.
+
+The code of every state is in [blocks/platform/view/waf-tuning.md](blocks/platform/view/waf-tuning.md) and `blocks/platform/view/waf-tuning/waf-tuning.vue`.
 
 ---
 
@@ -22134,7 +22395,7 @@ The imperative API is backed by a small reactive store composable, declared here
 - [input](input.md) — the default control of a cell; any control can replace it through `cell-<key>`.
 - [button](button.md), `icon-button` — Add and Remove.
 - [separator](separator.md) — the "or" between groups in grouped mode.
-- platform/edit/rule-builder` (block) — its criteria editor is the grouped mode (AND rows inside a group, OR between groups); the block keeps its own markup until it moves onto this component.
+- platform/edit/rule-builder` (block) — its criteria are this component in grouped mode (AND rows inside a group, OR between groups), with a `Combobox` variable cell.
 
 ## Props
 

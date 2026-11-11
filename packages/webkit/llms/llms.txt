@@ -88,8 +88,10 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CardView (platform/view/card-view)](blocks/platform/view/card-view.md): The first-level index of one resource type, in cards.
 - [FileBrowser (platform/view/file-browser)](blocks/platform/view/file-browser.md): The contents of one storage resource.
 - [QueryEditor (platform/view/query-editor)](blocks/platform/view/query-editor.md): The workspace of one SQL database.
+- [RulesList (platform/view/rules-list)](blocks/platform/view/rules-list.md): An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only).
 - [SplitView (platform/view/split-view)](blocks/platform/view/split-view.md): The events explorer.
 - [TableView (platform/view/table-view)](blocks/platform/view/table-view.md): The first-level index of one resource type, in rows.
+- [WafTuning (platform/view/waf-tuning)](blocks/platform/view/waf-tuning.md): The Tuning tab of a WAF rule set.
 
 ## Blocks: Shells
 
