@@ -43,10 +43,10 @@ A router guard (`src/lib/data.ts`, `preloadRoute`) loads the chunks a route need
 renders, so server rendering and hydration see the same data.
 
 Images and media that examples reference by absolute path (`/media/…`, `/logos/…`, `/docs/…`) are
-served from `apps/storybook/static` in dev and copied into `dist/` at build. The site URLs that
-marketing examples use (`/marketing-components/…`) are mapped to `@aziontech/webkit/assets/*`
-through the table in `apps/storybook/src/stories/_shared/site-assets.js` (`siteAssets()` in
-`plugins/paths.ts`). `packages/webkit/llms/` is served at `/llms/` and its `llms.txt` at
+Vite's public folder, `apps/docs/public`, served in dev and copied into `dist/` at build (the demos
+app serves the same folder). The site URLs that marketing examples use (`/marketing-components/…`)
+are mapped to `@aziontech/webkit/assets/*` through the table in
+`packages/webkit/src/assets/site-assets.json` (`siteAssets()` in `plugins/paths.ts`). `packages/webkit/llms/` is served at `/llms/` and its `llms.txt` at
 `/llms.txt`; component, block and foundation pages link their `.md` as "View as Markdown".
 
 ## Build and deploy

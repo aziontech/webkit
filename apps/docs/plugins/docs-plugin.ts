@@ -12,7 +12,7 @@ import {
   highlighter,
   renderMarkdownFile
 } from './content.ts'
-import { CATALOG, LLMS, readCatalog, siteAssets, STATIC_ASSETS, THEME } from './paths.ts'
+import { CATALOG, LLMS, readCatalog, siteAssets, THEME } from './paths.ts'
 
 const INDEX = 'virtual:docs-index'
 const TOKENS = 'virtual:docs-tokens'
@@ -21,10 +21,7 @@ const COMPONENT = 'virtual:docs-component:'
 const HIGHLIGHT = '\0docs-highlight:'
 const MARKDOWN = '\0docs-markdown:'
 
-const STATIC_DIRS: { prefix: string; dir: string }[] = [
-  { prefix: '/llms/', dir: LLMS },
-  { prefix: '/', dir: STATIC_ASSETS }
-]
+const STATIC_DIRS: { prefix: string; dir: string }[] = [{ prefix: '/llms/', dir: LLMS }]
 
 const MIME: Record<string, string> = {
   '.md': 'text/markdown; charset=utf-8',
@@ -125,7 +122,6 @@ export function docsPlugin(): Plugin {
     writeBundle() {
       if (config.build.ssr) return
       const out = config.build.outDir
-      if (existsSync(STATIC_ASSETS)) cpSync(STATIC_ASSETS, out, { recursive: true })
       for (const [url, file] of Object.entries(siteAssets())) cpSync(file, join(out, url))
       if (existsSync(LLMS)) {
         cpSync(LLMS, join(out, 'llms'), { recursive: true })
