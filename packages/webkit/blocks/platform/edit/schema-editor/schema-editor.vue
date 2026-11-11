@@ -13,6 +13,8 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
+  import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import FileTokenGroup from '@aziontech/webkit/file-token-group'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -133,9 +135,14 @@
   })
   const blankTable = () => ({
     name: '',
-    columns: [newColumn('id', 'int8', true), newColumn('created_at', 'timestamptz', false, 'now()')]
+    columns: [
+      newColumn('id', 'int8', true),
+      newColumn('created_at', 'timestamptz', false, 'now()')
+    ],
+    relations: []
   })
 
+  const CSV_ON_START = null
   const createOpen = ref(true)
   const createForm = reactive(blankTable())
   const createSubmitted = ref(false)
@@ -175,6 +182,7 @@
     Object.assign(createForm, blankTable())
     createSubmitted.value = false
     createServerError.value = ''
+    clearCsv()
   })
 
   const addColumnRow = async () => {
@@ -187,20 +195,190 @@
   const removeColumnRow = (index) => {
     if (createForm.columns.length > 1) createForm.columns.splice(index, 1)
   }
-  const moveColumnRow = async (index, step) => {
-    const target = index + step
-    if (target < 0 || target >= createForm.columns.length) return
-    const [moved] = createForm.columns.splice(index, 1)
+  const columnMove = ref('')
+  const columnLabel = (column, index) => column.name.trim() || `column ${index + 1}`
+  const placeColumn = async (from, target, verb) => {
+    if (target < 0 || target >= createForm.columns.length || target === from) return
+    const [moved] = createForm.columns.splice(from, 1)
     createForm.columns.splice(target, 0, moved)
+    columnMove.value = `${verb} ${columnLabel(moved, target)} to position ${target + 1} of ${createForm.columns.length}.`
     await nextTick()
     globalThis.document?.querySelector(`[data-column-key="${moved.key}"] [data-grip]`)?.focus()
   }
+  const moveColumnRow = (index, step) => placeColumn(index, index + step, 'Moved')
+
+  const dragKey = ref(null)
+  const overKey = ref(null)
+  const indexOfKey = (key) => createForm.columns.findIndex((column) => column.key === key)
+  const dropSide = (key) => {
+    if (!dragKey.value || overKey.value !== key || dragKey.value === key) return null
+    return indexOfKey(dragKey.value) < indexOfKey(key) ? 'after' : 'before'
+  }
+  const onGripDown = (event, key) => {
+    if (event.button !== 0 || createSubmitting.value) return
+    if (event.isTrusted) event.currentTarget.setPointerCapture?.(event.pointerId)
+    event.preventDefault()
+    event.currentTarget.focus()
+    dragKey.value = key
+    overKey.value = key
+  }
+  const onGripMove = (event) => {
+    if (!dragKey.value) return
+    const hit = globalThis.document
+      ?.elementFromPoint(event.clientX, event.clientY)
+      ?.closest('[data-column-key]')
+    if (hit) overKey.value = hit.getAttribute('data-column-key')
+  }
+  const onGripUp = () => {
+    const from = indexOfKey(dragKey.value)
+    const target = indexOfKey(overKey.value)
+    dragKey.value = null
+    overKey.value = null
+    if (from >= 0 && target >= 0) placeColumn(from, target, 'Dropped')
+  }
+  const onGripCancel = () => {
+    if (!dragKey.value) return
+    dragKey.value = null
+    overKey.value = null
+    columnMove.value = 'Reorder cancelled.'
+  }
+
+  const csvInput = ref(null)
+  const csvFile = ref(null)
+  const csvHeaders = ref([])
+  const csvRows = ref([])
+  const csvError = ref('')
+  const splitCsvLine = (line) => {
+    const cells = []
+    let cell = ''
+    let quoted = false
+    for (let i = 0; i < line.length; i += 1) {
+      const char = line[i]
+      if (quoted && char === '"' && line[i + 1] === '"') {
+        cell += '"'
+        i += 1
+      } else if (char === '"') quoted = !quoted
+      else if (char === ',' && !quoted) {
+        cells.push(cell.trim())
+        cell = ''
+      } else cell += char
+    }
+    cells.push(cell.trim())
+    return cells
+  }
+  const inferType = (values) => {
+    const filled = values.filter((value) => value !== '')
+    if (!filled.length) return 'text'
+    if (filled.every((value) => /^-?\d+$/.test(value))) return 'int8'
+    if (filled.every((value) => /^-?\d+(\.\d+)?$/.test(value))) return 'numeric'
+    if (filled.every((value) => /^(true|false)$/i.test(value))) return 'bool'
+    if (filled.every((value) => /^\d{4}-\d{2}-\d{2}([ T]\d{2}:\d{2}(:\d{2})?.*)?$/.test(value)))
+      return 'timestamptz'
+    return 'text'
+  }
+  const clearCsv = () => {
+    csvFile.value = null
+    csvHeaders.value = []
+    csvRows.value = []
+    csvError.value = ''
+  }
+  const applyCsv = (file, text) => {
+    clearCsv()
+    const lines = text.split(/\r?\n/).filter((line) => line.trim())
+    const headers = lines.length ? splitCsvLine(lines[0]) : []
+    if (!headers.length || headers.some((header) => !header)) {
+      csvFile.value = file
+      csvError.value = 'The first line must name every column.'
+      return
+    }
+    const rows = lines
+      .slice(1)
+      .map((line) =>
+        Object.fromEntries(splitCsvLine(line).map((value, index) => [headers[index], value]))
+      )
+    csvFile.value = file
+    csvHeaders.value = headers
+    csvRows.value = rows
+    createForm.columns = headers.map((header) =>
+      newColumn(
+        header,
+        inferType(rows.map((row) => row[header] ?? '')),
+        header.toLowerCase() === 'id'
+      )
+    )
+    if (!createForm.name.trim()) createForm.name = file.name.replace(/\.csv$/i, '')
+  }
+  const onCsvFiles = async (files) => {
+    const file = Array.from(files ?? [])[0]
+    if (!file) return
+    if (!/\.csv$/i.test(file.name)) {
+      clearCsv()
+      csvFile.value = { name: file.name, size: file.size, type: file.type }
+      csvError.value = 'Choose a .csv file.'
+      return
+    }
+    applyCsv({ name: file.name, size: file.size, type: 'text/csv' }, await file.text())
+  }
+  const onCsvPick = (event) => {
+    onCsvFiles(event.target.files)
+    event.target.value = ''
+  }
+  const csvTokens = computed(() =>
+    csvFile.value
+      ? [
+          {
+            file: csvFile.value,
+            error: csvError.value || undefined
+          }
+        ]
+      : []
+  )
+  const csvPreviewColumns = computed(() =>
+    csvHeaders.value.map((header) => ({ accessorKey: header, header, minWidth: 120 }))
+  )
+  const csvPreview = computed(() =>
+    csvRows.value.slice(0, 5).map((row, index) => ({ __row: `r${index}`, ...row }))
+  )
+  if (CSV_ON_START) applyCsv(CSV_ON_START.file, CSV_ON_START.text)
+
+  const ON_DELETE = [
+    { value: 'NO ACTION', label: 'No action' },
+    { value: 'CASCADE', label: 'Cascade' },
+    { value: 'SET NULL', label: 'Set null' }
+  ]
+  const newRelation = () => ({
+    key: `fk-${(uid += 1)}`,
+    column: '',
+    table: '',
+    references: '',
+    onDelete: 'NO ACTION'
+  })
+  const referenceColumns = (relation) =>
+    tables.value.find((item) => item.name === relation.table)?.columns ?? []
+  const addRelation = () => createForm.relations.push(newRelation())
+  const removeRelation = (index) => createForm.relations.splice(index, 1)
+  const relationError = (relation) =>
+    createSubmitted.value && (!relation.column || !relation.table || !relation.references)
+      ? 'Choose the column, the table and the column it references.'
+      : ''
+  const relationsInvalid = computed(() =>
+    createForm.relations.some(
+      (relation) => !relation.column || !relation.table || !relation.references
+    )
+  )
 
   const submitCreate = () => {
     createSubmitted.value = true
     createServerError.value = ''
     if (createSubmitting.value) return
-    if (tableNameError.value || columnsError.value || duplicateNames.value.size) return
+    if (
+      tableNameError.value ||
+      columnsError.value ||
+      duplicateNames.value.size ||
+      relationsInvalid.value ||
+      csvError.value
+    )
+      return
     const name = createForm.name.trim()
     createSubmitting.value = true
     toast.dismiss(SCHEMA_TOAST)
@@ -222,7 +400,7 @@
         ...tables.value,
         {
           name,
-          rowCount: 0,
+          rowCount: csvRows.value.length,
           columns: namedColumns.value.map((column) => ({
             name: column.name.trim(),
             type: column.type,
@@ -232,10 +410,19 @@
           }))
         }
       ]
+      const imported = csvRows.value.length
+      const relations = createForm.relations.length
       tableName.value = name
       createOpen.value = false
       toast.success(`Table ${name} created.`, {
         id: SCHEMA_TOAST,
+        description:
+          [
+            imported ? `${imported} ${imported === 1 ? 'row' : 'rows'} imported from CSV.` : '',
+            relations ? `${relations} foreign ${relations === 1 ? 'key' : 'keys'} added.` : ''
+          ]
+            .filter(Boolean)
+            .join(' ') || undefined,
         actions: [
           { label: 'Insert row', onClick: () => openRow() },
           { label: 'Add column', onClick: () => openColumn() }
@@ -562,8 +749,8 @@
               <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                 <DrawerTitle>Create Table</DrawerTitle>
                 <p class="text-body-sm text-(--text-muted)">
-                  Define the table name and its columns in {{ DATABASE }}. Use the grip and the
-                  arrow keys to reorder columns.
+                  Define the table name and its columns in {{ DATABASE }}, or start from a CSV file.
+                  Drag a column's grip, or focus it and use the arrow keys, to reorder.
                 </p>
               </div>
               <DrawerClose />
@@ -605,6 +792,56 @@
                 </SettingsSection>
 
                 <SettingsSection
+                  title="Import data from CSV"
+                  hint="Optional. The first line names the columns; the types are guessed from the values and can be changed below. Every row is inserted after the table is created."
+                >
+                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                    <FileDropzone
+                      v-if="!csvFile"
+                      accept=".csv,text/csv"
+                      description="One .csv file, comma-separated, up to 10 MB."
+                      @drop="(event, files) => onCsvFiles(files)"
+                    >
+                      <Button
+                        type="button"
+                        label="Browse files"
+                        kind="secondary"
+                        size="medium"
+                        @click="csvInput?.click()"
+                      />
+                    </FileDropzone>
+                    <input
+                      ref="csvInput"
+                      type="file"
+                      accept=".csv,text/csv"
+                      class="hidden"
+                      aria-hidden="true"
+                      tabindex="-1"
+                      @change="onCsvPick"
+                    />
+                    <FileTokenGroup
+                      v-if="csvFile"
+                      :items="csvTokens"
+                      @dismiss="clearCsv"
+                    />
+                    <template v-if="csvRows.length">
+                      <p class="m-0 text-body-sm text-(--text-muted)">
+                        {{ csvHeaders.length }} columns and {{ csvRows.length }}
+                        {{ csvRows.length === 1 ? 'row' : 'rows' }} read. The first
+                        {{ csvPreview.length }} below; the columns were filled from the header.
+                      </p>
+                      <TableRoot
+                        :data="csvPreview"
+                        :columns="csvPreviewColumns"
+                        row-key="__row"
+                        :bordered="true"
+                        aria-label="CSV preview"
+                      />
+                    </template>
+                  </div>
+                </SettingsSection>
+
+                <SettingsSection
                   title="Columns"
                   hint="The table's schema, created in this order. A primary key is NOT NULL."
                 >
@@ -628,17 +865,24 @@
                         v-for="(column, index) in createForm.columns"
                         :key="column.key"
                         :data-column-key="column.key"
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-xs)"
+                        :data-dragging="dragKey === column.key || null"
+                        :data-drop="dropSide(column.key) || null"
+                        class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance data-dragging:opacity-60 data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) data-[drop=after]:shadow-[0_2px_0_var(--accent)] data-[drop=before]:shadow-[0_-2px_0_var(--accent)] motion-reduce:transition-none"
                       >
                         <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                           <button
                             type="button"
                             data-grip
-                            :aria-label="`Reorder ${column.name || 'column ' + (index + 1)}. Use the up and down arrow keys.`"
+                            :aria-label="`Reorder ${column.name || 'column ' + (index + 1)}, position ${index + 1} of ${createForm.columns.length}. Drag, or use the up and down arrow keys.`"
                             aria-keyshortcuts="ArrowUp ArrowDown"
-                            class="inline-flex size-8 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                            class="inline-flex size-8 shrink-0 cursor-grab touch-none active:cursor-grabbing items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                             @keydown.up.prevent="moveColumnRow(index, -1)"
                             @keydown.down.prevent="moveColumnRow(index, 1)"
+                            @keydown.esc="onGripCancel"
+                            @pointerdown="onGripDown($event, column.key)"
+                            @pointermove="onGripMove"
+                            @pointerup="onGripUp"
+                            @pointercancel="onGripCancel"
                           >
                             <i
                               class="pi pi-bars"
@@ -752,7 +996,142 @@
                     />
                   </div>
                 </SettingsSection>
+
+                <SettingsSection
+                  title="Foreign keys"
+                  hint="Optional. Tie a column to a row in another table, so a value that does not exist there is refused."
+                >
+                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                    <ul
+                      v-if="createForm.relations.length"
+                      aria-label="Foreign keys"
+                      class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
+                    >
+                      <li
+                        v-for="(relation, index) in createForm.relations"
+                        :key="relation.key"
+                        class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-xs)"
+                      >
+                        <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+                          <div class="min-w-0 flex-[1_1_8rem]">
+                            <Select
+                              v-model="relation.column"
+                              size="large"
+                              class="w-full"
+                              placeholder="Column"
+                            >
+                              <Select.Trigger :aria-label="`Column of foreign key ${index + 1}`" />
+                              <Select.Content>
+                                <Select.Option
+                                  v-for="column in namedColumns"
+                                  :key="column.key"
+                                  :value="column.name.trim()"
+                                  >{{ column.name.trim() }}</Select.Option
+                                >
+                              </Select.Content>
+                            </Select>
+                          </div>
+                          <span
+                            class="shrink-0 text-body-sm text-(--text-muted)"
+                            aria-hidden="true"
+                            >references</span
+                          >
+                          <div class="min-w-0 flex-[1_1_8rem]">
+                            <Select
+                              v-model="relation.table"
+                              size="large"
+                              class="w-full"
+                              placeholder="Table"
+                              @update:model-value="relation.references = ''"
+                            >
+                              <Select.Trigger
+                                :aria-label="`Referenced table of foreign key ${index + 1}`"
+                              />
+                              <Select.Content>
+                                <Select.Option
+                                  v-for="item in tables"
+                                  :key="item.name"
+                                  :value="item.name"
+                                  >{{ item.name }}</Select.Option
+                                >
+                              </Select.Content>
+                            </Select>
+                          </div>
+                          <div class="min-w-0 flex-[1_1_8rem]">
+                            <Select
+                              v-model="relation.references"
+                              size="large"
+                              class="w-full"
+                              placeholder="Column"
+                              :disabled="!relation.table"
+                            >
+                              <Select.Trigger
+                                :aria-label="`Referenced column of foreign key ${index + 1}`"
+                              />
+                              <Select.Content>
+                                <Select.Option
+                                  v-for="column in referenceColumns(relation)"
+                                  :key="column.name"
+                                  :value="column.name"
+                                  >{{ column.name }}</Select.Option
+                                >
+                              </Select.Content>
+                            </Select>
+                          </div>
+                          <div class="min-w-0 flex-[1_1_7rem]">
+                            <Select
+                              v-model="relation.onDelete"
+                              size="large"
+                              class="w-full"
+                            >
+                              <Select.Trigger :aria-label="`On delete, foreign key ${index + 1}`" />
+                              <Select.Content>
+                                <Select.Group label="On delete">
+                                  <Select.Option
+                                    v-for="option in ON_DELETE"
+                                    :key="option.value"
+                                    :value="option.value"
+                                    >{{ option.label }}</Select.Option
+                                  >
+                                </Select.Group>
+                              </Select.Content>
+                            </Select>
+                          </div>
+                          <Tooltip text="Remove foreign key">
+                            <IconButton
+                              icon="pi pi-times"
+                              kind="outlined"
+                              size="large"
+                              :aria-label="`Remove foreign key ${index + 1}`"
+                              @click="removeRelation(index)"
+                            />
+                          </Tooltip>
+                        </div>
+                        <HelperText
+                          v-if="relationError(relation)"
+                          kind="invalid"
+                          :label="relationError(relation)"
+                        />
+                      </li>
+                    </ul>
+                    <Button
+                      type="button"
+                      label="Add foreign key"
+                      kind="outlined"
+                      size="medium"
+                      icon="pi pi-plus"
+                      class="w-full"
+                      @click="addRelation"
+                    />
+                  </div>
+                </SettingsSection>
               </fieldset>
+              <p
+                role="status"
+                class="sr-only"
+              >
+                {{ columnMove }}
+              </p>
             </PanelContent>
 
             <PanelFooter>

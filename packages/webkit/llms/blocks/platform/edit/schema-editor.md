@@ -1,11 +1,11 @@
 # SchemaEditor (`platform/edit/schema-editor`)
 
-> The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an ordered list of column rows (grip that reorders with the arrow keys, name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`, remove), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action.
+> The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an ordered list of column rows (grip that reorders with the arrow keys, name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`, remove), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also reorders column rows by pointer drag, imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys (column, referenced table and column, On delete).
 
 - Surface: product
 - Source: `blocks/platform/edit/schema-editor/schema-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/schema-editor")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CodeEditor](../../../components/code-editor.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CodeEditor](../../../components/code-editor.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -39,25 +39,29 @@ A large right `Drawer` whose content is a `form` named Create Table. The `PanelH
 
 ### C. Column rows — `Select`, `Checkbox`, `HelperText` (required)
 
-The Columns section is a list named Columns, one bordered row per column: a grip `button` that moves the row with ArrowUp and ArrowDown and keeps focus on it, the name `Input`, a type `Select` whose trigger shows the type's glyph (`#`, `T`, `{}`, `@`, `B`) and whose content has a Search types `Input` over the Data types group (value in the code font and a muted description), a default value `Input` (`NULL` placeholder), a Primary `Checkbox` with its visible label, and a Remove column `IconButton` (disabled on the last row). A duplicate name puts an invalid `HelperText` under its row; no named column puts one under the list. A full-width outlined Add column `Button` appends a row and focuses its name. About data types links out. New tables start with `id int8` as the primary key and `created_at timestamptz DEFAULT now()`.
+The Columns section is a list named Columns, one bordered row per column: a grip `button` that drags the row with the pointer (the dragged row fades with a dashed accent outline, the target shows a 2 px accent line on the side it lands, Escape cancels) or moves it with ArrowUp and ArrowDown, keeps focus on it and announces each move in a polite status line (`Moved email to position 2 of 4.`), the name `Input`, a type `Select` whose trigger shows the type's glyph (`#`, `T`, `{}`, `@`, `B`) and whose content has a Search types `Input` over the Data types group (value in the code font and a muted description), a default value `Input` (`NULL` placeholder), a Primary `Checkbox` with its visible label, and a Remove column `IconButton` (disabled on the last row). A duplicate name puts an invalid `HelperText` under its row; no named column puts one under the list. A full-width outlined Add column `Button` appends a row and focuses its name. About data types links out. New tables start with `id int8` as the primary key and `created_at timestamptz DEFAULT now()`.
 
-### D. Add column drawer — `Switch` (required)
+### D. CSV import and foreign keys — `FileDropzone`, `FileTokenGroup` (optional)
+
+Two optional sections in the Create Table drawer. Import data from CSV: a `FileDropzone` (one .csv) with a Browse files button over a hidden file input; once read, the file is a `FileTokenGroup` token (Remove clears it), the columns are rebuilt from the header with types guessed from the values (`int8`, `numeric`, `bool`, `timestamptz`, else `text`; `id` becomes the primary key) and stay editable, an empty name takes the file's, and a bordered `TableRoot` previews the first five rows under a line that counts columns and rows. A header with an empty name or a non-CSV file is an error on the token and blocks Create. Foreign keys: one bordered row per key, Column (the named columns), `references`, Table and its Column (enabled once a table is picked), and On delete (No action, Cascade, Set null), with Remove; Add foreign key appends one. After Create, an incomplete row shows `Choose the column, the table and the column it references.` The success toast counts the imported rows and the keys. The drawer imports into a new table; an existing empty table imports from its own page (M2.10 row).
+
+### E. Add column drawer — `Switch` (required)
 
 A medium drawer with the same header and footer recipe. Column has Name (invalid when empty or when the table already has it), Type (the same `Select`) and Default value (empty for NULL, or an expression such as `now()`). Constraints has Primary key and Not null as horizontal `Field`s with a `Switch`; Primary key turns Not null on and locks it.
 
-### E. Insert row drawer — `PanelFooter` (required)
+### F. Insert row drawer — `PanelFooter` (required)
 
 A medium drawer with one `Field` per column in table order: the label is the column name in the code font with its type at the end, the description says what an empty value does (`Generated by the database.`, `Empty uses the default, now().`, `Required.`, `Empty stores NULL.`). An integer primary key is disabled and generated. After Insert row is pressed, a NOT NULL column with no value and no default is invalid with `<column> cannot be NULL. Enter a value.` Every drawer's `PanelFooter` holds Cancel and the submit button (`:loading` while it runs).
 
-### F. Change type dialog — `ConfirmDialog`, `CodeEditor` (required)
+### G. Change type dialog — `ConfirmDialog`, `CodeEditor` (required)
 
 A large `ConfirmDialog` titled `Change the type of <column>`: a warning `Alert` (the table is rebuilt, every row is copied, it can't be undone, values that don't fit make it fail), the New type `Select` with the current type in its description, and the statements that will run (`BEGIN; CREATE TABLE …_new …; INSERT INTO …; DROP TABLE …; ALTER TABLE … RENAME TO …; COMMIT;`) in a read-only `CodeEditor` with `language="sql"`. The primary Change type is disabled until the type differs.
 
-### G. Truncate table dialog — `ConfirmDialog`, `CodeEditor`, `Input` (required)
+### H. Truncate table dialog — `ConfirmDialog`, `CodeEditor`, `Input` (required)
 
 A medium `ConfirmDialog` titled `Truncate <table>`, following `platform/delete/delete-with-confirmation`: a warning `Alert`, one sentence with what goes (every row, with the count) and what stays (columns, types, constraints), the `TRUNCATE TABLE <table>;` statement in a read-only `CodeEditor` without line numbers, and a `Field` whose label asks to type the table name. The danger Truncate table button enables only when it matches.
 
-### H. Outcome toasts — `Toaster` (required)
+### I. Outcome toasts — `Toaster` (required)
 
 One `Toaster` at `bottom-right`, raised through `toast` with one id, so each change replaces the last toast. Schema changes are not deploys: each success names what changed and offers the next thing to do with the table, never Edit and Redeploy or View deployments. Create Table: `Table events created.` with Insert row and Add column. Add column: `Column phone added to customers.` with Change type. Insert row: `Row inserted into customers.` with Insert another. Change type: `email is now text.` with Change again. Truncate: `customers truncated. 3 rows removed.` with Insert row. A request that never reached the database is a danger toast with Retry that keeps the form.
 
@@ -67,7 +71,7 @@ One `Toaster` at `bottom-right`, raised through `toast` with one id, so each cha
 - Keep the drawer open and its values intact when the server refuses; say so in the section `Alert`.
 - Show the SQL a destructive or rebuilding change will run before it runs.
 - Ask for the table name before truncating it.
-- Let the grip reorder columns from the keyboard, and keep focus on the moved row.
+- Let the grip reorder columns by drag and from the keyboard, announce each move, and keep focus on the moved row.
 - End every change with a toast whose action continues the work on the same table.
 
 ## Don't
@@ -91,7 +95,7 @@ One `Toaster` at `bottom-right`, raised through `toast` with one id, so each cha
 
 - Each drawer's content is a `form` named by its title; the `fieldset` carries a visually hidden `legend` and is disabled while the request runs.
 - `Field` wires every label, description and error to its control; column row controls without a visible label are named `Name of column 2`, `Type of column 2`, `Default value of column 2`.
-- The grip is a real `button` named `Reorder <column>. Use the up and down arrow keys.` with `aria-keyshortcuts`; reordering keeps focus on the moved grip.
+- The grip is a real `button` named `Reorder <column>, position <n> of <total>. Drag, or use the up and down arrow keys.` with `aria-keyshortcuts`; dragging is never the only way (WCAG 2.5.7), moves are announced in a polite status line, and reordering keeps focus on the moved grip.
 - Every icon-only button has an `aria-label` that matches its `Tooltip`; the per-column menu trigger names its column.
 - The read-only `CodeEditor`s are named (`Statements that will run`) and can be selected and copied.
 - Drawers and dialogs trap focus, close on Escape and return focus to the button that opened them.
@@ -103,6 +107,7 @@ One `Toaster` at `bottom-right`, raised through `toast` with one id, so each cha
 - InsertRow: the Insert row drawer after a submit with email empty, showing the NOT NULL error.
 - ChangeType: the Change type dialog for email with the statements that will run.
 - TruncateTable: the Truncate customers dialog waiting for the typed name.
+- ImportCsv: Create Table with subscribers.csv read (six columns, six rows, a quoted comma) and one foreign key, customer_id to customers.id on delete cascade.
 - Failed: Create Table refused by the server because customers already exists; Alert in General and the Name field invalid.
 
 ## Related
@@ -121,6 +126,7 @@ One `Toaster` at `bottom-right`, raised through `toast` with one id, so each cha
 - `InsertRow` — The Insert row drawer for customers after Insert was pressed with email empty: one field per column in table order, id generated and disabled, created_at falling back to now(), and email invalid because it is NOT NULL.
 - `ChangeType` — The Change type dialog for email: a warning that the table is rebuilt, the New type select, and the BEGIN … COMMIT statements that will run in a read-only CodeEditor; Change type is disabled until the type differs.
 - `TruncateTable` — The Truncate customers dialog: a warning, the row count that goes, the TRUNCATE TABLE statement and a field that must match the table name before the danger button enables.
+- `ImportCsv` — Create Table started from a CSV: subscribers.csv as a `FileTokenGroup` token, the columns rebuilt from its header with guessed types, a five-row `TableRoot` preview, and a foreign key from customer_id to customers.id with On delete Cascade.
 - `Failed` — Create Table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were.
 
 Each variant is the same screen in another state: `get_pattern("platform/edit/schema-editor", { variant })`, or the file under `blocks/platform/edit/schema-editor/variants/`.
@@ -143,6 +149,8 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
+  import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import FileTokenGroup from '@aziontech/webkit/file-token-group'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -263,9 +271,14 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
   })
   const blankTable = () => ({
     name: '',
-    columns: [newColumn('id', 'int8', true), newColumn('created_at', 'timestamptz', false, 'now()')]
+    columns: [
+      newColumn('id', 'int8', true),
+      newColumn('created_at', 'timestamptz', false, 'now()')
+    ],
+    relations: []
   })
 
+  const CSV_ON_START = null
   const createOpen = ref(true)
   const createForm = reactive(blankTable())
   const createSubmitted = ref(false)
@@ -305,6 +318,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     Object.assign(createForm, blankTable())
     createSubmitted.value = false
     createServerError.value = ''
+    clearCsv()
   })
 
   const addColumnRow = async () => {
@@ -317,20 +331,190 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
   const removeColumnRow = (index) => {
     if (createForm.columns.length > 1) createForm.columns.splice(index, 1)
   }
-  const moveColumnRow = async (index, step) => {
-    const target = index + step
-    if (target < 0 || target >= createForm.columns.length) return
-    const [moved] = createForm.columns.splice(index, 1)
+  const columnMove = ref('')
+  const columnLabel = (column, index) => column.name.trim() || `column ${index + 1}`
+  const placeColumn = async (from, target, verb) => {
+    if (target < 0 || target >= createForm.columns.length || target === from) return
+    const [moved] = createForm.columns.splice(from, 1)
     createForm.columns.splice(target, 0, moved)
+    columnMove.value = `${verb} ${columnLabel(moved, target)} to position ${target + 1} of ${createForm.columns.length}.`
     await nextTick()
     globalThis.document?.querySelector(`[data-column-key="${moved.key}"] [data-grip]`)?.focus()
   }
+  const moveColumnRow = (index, step) => placeColumn(index, index + step, 'Moved')
+
+  const dragKey = ref(null)
+  const overKey = ref(null)
+  const indexOfKey = (key) => createForm.columns.findIndex((column) => column.key === key)
+  const dropSide = (key) => {
+    if (!dragKey.value || overKey.value !== key || dragKey.value === key) return null
+    return indexOfKey(dragKey.value) < indexOfKey(key) ? 'after' : 'before'
+  }
+  const onGripDown = (event, key) => {
+    if (event.button !== 0 || createSubmitting.value) return
+    if (event.isTrusted) event.currentTarget.setPointerCapture?.(event.pointerId)
+    event.preventDefault()
+    event.currentTarget.focus()
+    dragKey.value = key
+    overKey.value = key
+  }
+  const onGripMove = (event) => {
+    if (!dragKey.value) return
+    const hit = globalThis.document
+      ?.elementFromPoint(event.clientX, event.clientY)
+      ?.closest('[data-column-key]')
+    if (hit) overKey.value = hit.getAttribute('data-column-key')
+  }
+  const onGripUp = () => {
+    const from = indexOfKey(dragKey.value)
+    const target = indexOfKey(overKey.value)
+    dragKey.value = null
+    overKey.value = null
+    if (from >= 0 && target >= 0) placeColumn(from, target, 'Dropped')
+  }
+  const onGripCancel = () => {
+    if (!dragKey.value) return
+    dragKey.value = null
+    overKey.value = null
+    columnMove.value = 'Reorder cancelled.'
+  }
+
+  const csvInput = ref(null)
+  const csvFile = ref(null)
+  const csvHeaders = ref([])
+  const csvRows = ref([])
+  const csvError = ref('')
+  const splitCsvLine = (line) => {
+    const cells = []
+    let cell = ''
+    let quoted = false
+    for (let i = 0; i < line.length; i += 1) {
+      const char = line[i]
+      if (quoted && char === '"' && line[i + 1] === '"') {
+        cell += '"'
+        i += 1
+      } else if (char === '"') quoted = !quoted
+      else if (char === ',' && !quoted) {
+        cells.push(cell.trim())
+        cell = ''
+      } else cell += char
+    }
+    cells.push(cell.trim())
+    return cells
+  }
+  const inferType = (values) => {
+    const filled = values.filter((value) => value !== '')
+    if (!filled.length) return 'text'
+    if (filled.every((value) => /^-?\d+$/.test(value))) return 'int8'
+    if (filled.every((value) => /^-?\d+(\.\d+)?$/.test(value))) return 'numeric'
+    if (filled.every((value) => /^(true|false)$/i.test(value))) return 'bool'
+    if (filled.every((value) => /^\d{4}-\d{2}-\d{2}([ T]\d{2}:\d{2}(:\d{2})?.*)?$/.test(value)))
+      return 'timestamptz'
+    return 'text'
+  }
+  const clearCsv = () => {
+    csvFile.value = null
+    csvHeaders.value = []
+    csvRows.value = []
+    csvError.value = ''
+  }
+  const applyCsv = (file, text) => {
+    clearCsv()
+    const lines = text.split(/\r?\n/).filter((line) => line.trim())
+    const headers = lines.length ? splitCsvLine(lines[0]) : []
+    if (!headers.length || headers.some((header) => !header)) {
+      csvFile.value = file
+      csvError.value = 'The first line must name every column.'
+      return
+    }
+    const rows = lines
+      .slice(1)
+      .map((line) =>
+        Object.fromEntries(splitCsvLine(line).map((value, index) => [headers[index], value]))
+      )
+    csvFile.value = file
+    csvHeaders.value = headers
+    csvRows.value = rows
+    createForm.columns = headers.map((header) =>
+      newColumn(
+        header,
+        inferType(rows.map((row) => row[header] ?? '')),
+        header.toLowerCase() === 'id'
+      )
+    )
+    if (!createForm.name.trim()) createForm.name = file.name.replace(/\.csv$/i, '')
+  }
+  const onCsvFiles = async (files) => {
+    const file = Array.from(files ?? [])[0]
+    if (!file) return
+    if (!/\.csv$/i.test(file.name)) {
+      clearCsv()
+      csvFile.value = { name: file.name, size: file.size, type: file.type }
+      csvError.value = 'Choose a .csv file.'
+      return
+    }
+    applyCsv({ name: file.name, size: file.size, type: 'text/csv' }, await file.text())
+  }
+  const onCsvPick = (event) => {
+    onCsvFiles(event.target.files)
+    event.target.value = ''
+  }
+  const csvTokens = computed(() =>
+    csvFile.value
+      ? [
+          {
+            file: csvFile.value,
+            error: csvError.value || undefined
+          }
+        ]
+      : []
+  )
+  const csvPreviewColumns = computed(() =>
+    csvHeaders.value.map((header) => ({ accessorKey: header, header, minWidth: 120 }))
+  )
+  const csvPreview = computed(() =>
+    csvRows.value.slice(0, 5).map((row, index) => ({ __row: `r${index}`, ...row }))
+  )
+  if (CSV_ON_START) applyCsv(CSV_ON_START.file, CSV_ON_START.text)
+
+  const ON_DELETE = [
+    { value: 'NO ACTION', label: 'No action' },
+    { value: 'CASCADE', label: 'Cascade' },
+    { value: 'SET NULL', label: 'Set null' }
+  ]
+  const newRelation = () => ({
+    key: `fk-${(uid += 1)}`,
+    column: '',
+    table: '',
+    references: '',
+    onDelete: 'NO ACTION'
+  })
+  const referenceColumns = (relation) =>
+    tables.value.find((item) => item.name === relation.table)?.columns ?? []
+  const addRelation = () => createForm.relations.push(newRelation())
+  const removeRelation = (index) => createForm.relations.splice(index, 1)
+  const relationError = (relation) =>
+    createSubmitted.value && (!relation.column || !relation.table || !relation.references)
+      ? 'Choose the column, the table and the column it references.'
+      : ''
+  const relationsInvalid = computed(() =>
+    createForm.relations.some(
+      (relation) => !relation.column || !relation.table || !relation.references
+    )
+  )
 
   const submitCreate = () => {
     createSubmitted.value = true
     createServerError.value = ''
     if (createSubmitting.value) return
-    if (tableNameError.value || columnsError.value || duplicateNames.value.size) return
+    if (
+      tableNameError.value ||
+      columnsError.value ||
+      duplicateNames.value.size ||
+      relationsInvalid.value ||
+      csvError.value
+    )
+      return
     const name = createForm.name.trim()
     createSubmitting.value = true
     toast.dismiss(SCHEMA_TOAST)
@@ -352,7 +536,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
         ...tables.value,
         {
           name,
-          rowCount: 0,
+          rowCount: csvRows.value.length,
           columns: namedColumns.value.map((column) => ({
             name: column.name.trim(),
             type: column.type,
@@ -362,10 +546,19 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
           }))
         }
       ]
+      const imported = csvRows.value.length
+      const relations = createForm.relations.length
       tableName.value = name
       createOpen.value = false
       toast.success(`Table ${name} created.`, {
         id: SCHEMA_TOAST,
+        description:
+          [
+            imported ? `${imported} ${imported === 1 ? 'row' : 'rows'} imported from CSV.` : '',
+            relations ? `${relations} foreign ${relations === 1 ? 'key' : 'keys'} added.` : ''
+          ]
+            .filter(Boolean)
+            .join(' ') || undefined,
         actions: [
           { label: 'Insert row', onClick: () => openRow() },
           { label: 'Add column', onClick: () => openColumn() }
@@ -692,8 +885,8 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
               <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                 <DrawerTitle>Create Table</DrawerTitle>
                 <p class="text-body-sm text-(--text-muted)">
-                  Define the table name and its columns in {{ DATABASE }}. Use the grip and the
-                  arrow keys to reorder columns.
+                  Define the table name and its columns in {{ DATABASE }}, or start from a CSV file.
+                  Drag a column's grip, or focus it and use the arrow keys, to reorder.
                 </p>
               </div>
               <DrawerClose />
@@ -735,6 +928,56 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                 </SettingsSection>
 
                 <SettingsSection
+                  title="Import data from CSV"
+                  hint="Optional. The first line names the columns; the types are guessed from the values and can be changed below. Every row is inserted after the table is created."
+                >
+                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                    <FileDropzone
+                      v-if="!csvFile"
+                      accept=".csv,text/csv"
+                      description="One .csv file, comma-separated, up to 10 MB."
+                      @drop="(event, files) => onCsvFiles(files)"
+                    >
+                      <Button
+                        type="button"
+                        label="Browse files"
+                        kind="secondary"
+                        size="medium"
+                        @click="csvInput?.click()"
+                      />
+                    </FileDropzone>
+                    <input
+                      ref="csvInput"
+                      type="file"
+                      accept=".csv,text/csv"
+                      class="hidden"
+                      aria-hidden="true"
+                      tabindex="-1"
+                      @change="onCsvPick"
+                    />
+                    <FileTokenGroup
+                      v-if="csvFile"
+                      :items="csvTokens"
+                      @dismiss="clearCsv"
+                    />
+                    <template v-if="csvRows.length">
+                      <p class="m-0 text-body-sm text-(--text-muted)">
+                        {{ csvHeaders.length }} columns and {{ csvRows.length }}
+                        {{ csvRows.length === 1 ? 'row' : 'rows' }} read. The first
+                        {{ csvPreview.length }} below; the columns were filled from the header.
+                      </p>
+                      <TableRoot
+                        :data="csvPreview"
+                        :columns="csvPreviewColumns"
+                        row-key="__row"
+                        :bordered="true"
+                        aria-label="CSV preview"
+                      />
+                    </template>
+                  </div>
+                </SettingsSection>
+
+                <SettingsSection
                   title="Columns"
                   hint="The table's schema, created in this order. A primary key is NOT NULL."
                 >
@@ -758,17 +1001,24 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                         v-for="(column, index) in createForm.columns"
                         :key="column.key"
                         :data-column-key="column.key"
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-xs)"
+                        :data-dragging="dragKey === column.key || null"
+                        :data-drop="dropSide(column.key) || null"
+                        class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance data-dragging:opacity-60 data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) data-[drop=after]:shadow-[0_2px_0_var(--accent)] data-[drop=before]:shadow-[0_-2px_0_var(--accent)] motion-reduce:transition-none"
                       >
                         <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                           <button
                             type="button"
                             data-grip
-                            :aria-label="`Reorder ${column.name || 'column ' + (index + 1)}. Use the up and down arrow keys.`"
+                            :aria-label="`Reorder ${column.name || 'column ' + (index + 1)}, position ${index + 1} of ${createForm.columns.length}. Drag, or use the up and down arrow keys.`"
                             aria-keyshortcuts="ArrowUp ArrowDown"
-                            class="inline-flex size-8 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                            class="inline-flex size-8 shrink-0 cursor-grab touch-none active:cursor-grabbing items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                             @keydown.up.prevent="moveColumnRow(index, -1)"
                             @keydown.down.prevent="moveColumnRow(index, 1)"
+                            @keydown.esc="onGripCancel"
+                            @pointerdown="onGripDown($event, column.key)"
+                            @pointermove="onGripMove"
+                            @pointerup="onGripUp"
+                            @pointercancel="onGripCancel"
                           >
                             <i
                               class="pi pi-bars"
@@ -882,7 +1132,142 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                     />
                   </div>
                 </SettingsSection>
+
+                <SettingsSection
+                  title="Foreign keys"
+                  hint="Optional. Tie a column to a row in another table, so a value that does not exist there is refused."
+                >
+                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                    <ul
+                      v-if="createForm.relations.length"
+                      aria-label="Foreign keys"
+                      class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
+                    >
+                      <li
+                        v-for="(relation, index) in createForm.relations"
+                        :key="relation.key"
+                        class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-xs)"
+                      >
+                        <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+                          <div class="min-w-0 flex-[1_1_8rem]">
+                            <Select
+                              v-model="relation.column"
+                              size="large"
+                              class="w-full"
+                              placeholder="Column"
+                            >
+                              <Select.Trigger :aria-label="`Column of foreign key ${index + 1}`" />
+                              <Select.Content>
+                                <Select.Option
+                                  v-for="column in namedColumns"
+                                  :key="column.key"
+                                  :value="column.name.trim()"
+                                  >{{ column.name.trim() }}</Select.Option
+                                >
+                              </Select.Content>
+                            </Select>
+                          </div>
+                          <span
+                            class="shrink-0 text-body-sm text-(--text-muted)"
+                            aria-hidden="true"
+                            >references</span
+                          >
+                          <div class="min-w-0 flex-[1_1_8rem]">
+                            <Select
+                              v-model="relation.table"
+                              size="large"
+                              class="w-full"
+                              placeholder="Table"
+                              @update:model-value="relation.references = ''"
+                            >
+                              <Select.Trigger
+                                :aria-label="`Referenced table of foreign key ${index + 1}`"
+                              />
+                              <Select.Content>
+                                <Select.Option
+                                  v-for="item in tables"
+                                  :key="item.name"
+                                  :value="item.name"
+                                  >{{ item.name }}</Select.Option
+                                >
+                              </Select.Content>
+                            </Select>
+                          </div>
+                          <div class="min-w-0 flex-[1_1_8rem]">
+                            <Select
+                              v-model="relation.references"
+                              size="large"
+                              class="w-full"
+                              placeholder="Column"
+                              :disabled="!relation.table"
+                            >
+                              <Select.Trigger
+                                :aria-label="`Referenced column of foreign key ${index + 1}`"
+                              />
+                              <Select.Content>
+                                <Select.Option
+                                  v-for="column in referenceColumns(relation)"
+                                  :key="column.name"
+                                  :value="column.name"
+                                  >{{ column.name }}</Select.Option
+                                >
+                              </Select.Content>
+                            </Select>
+                          </div>
+                          <div class="min-w-0 flex-[1_1_7rem]">
+                            <Select
+                              v-model="relation.onDelete"
+                              size="large"
+                              class="w-full"
+                            >
+                              <Select.Trigger :aria-label="`On delete, foreign key ${index + 1}`" />
+                              <Select.Content>
+                                <Select.Group label="On delete">
+                                  <Select.Option
+                                    v-for="option in ON_DELETE"
+                                    :key="option.value"
+                                    :value="option.value"
+                                    >{{ option.label }}</Select.Option
+                                  >
+                                </Select.Group>
+                              </Select.Content>
+                            </Select>
+                          </div>
+                          <Tooltip text="Remove foreign key">
+                            <IconButton
+                              icon="pi pi-times"
+                              kind="outlined"
+                              size="large"
+                              :aria-label="`Remove foreign key ${index + 1}`"
+                              @click="removeRelation(index)"
+                            />
+                          </Tooltip>
+                        </div>
+                        <HelperText
+                          v-if="relationError(relation)"
+                          kind="invalid"
+                          :label="relationError(relation)"
+                        />
+                      </li>
+                    </ul>
+                    <Button
+                      type="button"
+                      label="Add foreign key"
+                      kind="outlined"
+                      size="medium"
+                      icon="pi pi-plus"
+                      class="w-full"
+                      @click="addRelation"
+                    />
+                  </div>
+                </SettingsSection>
               </fieldset>
+              <p
+                role="status"
+                class="sr-only"
+              >
+                {{ columnMove }}
+              </p>
             </PanelContent>
 
             <PanelFooter>
