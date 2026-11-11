@@ -248,7 +248,8 @@
   const succeed = (item, application) => {
     item.installedOn = [...item.installedOn, application]
     form.application = ''
-    run.state = 'succeeded'
+    showErrors.value = false
+    Object.assign(run, { state: 'succeeded', application, reason: '' })
     toast.success(`${item.name} is installed on ${application}.`, {
       id: INSTALL_TOAST,
       description: 'It runs from the next request to the application.',
