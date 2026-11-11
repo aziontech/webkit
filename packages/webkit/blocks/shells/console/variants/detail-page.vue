@@ -877,9 +877,7 @@
 
         <section class="min-h-0 flex-1 overflow-auto">
           <div class="layout-column layout-boundary flex min-w-0 flex-col">
-            <section
-              class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
-            >
+            <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
               <Card :padded="false">
                 <template #content>
                   <div

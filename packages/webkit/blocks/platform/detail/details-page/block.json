@@ -41,11 +41,7 @@
     "detalhe da aplicação",
     "topologia"
   ],
-  "skills": [
-    "webkit-layout",
-    "webkit-navigation",
-    "webkit-ui-states"
-  ],
+  "skills": ["webkit-layout", "webkit-navigation", "webkit-ui-states"],
   "primary": {
     "name": "ResourceOverview",
     "file": "details-page.vue"

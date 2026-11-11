@@ -25,15 +25,14 @@ const layout = (props: Record<string, unknown> = {}, width = 1200, dir = 'ltr') 
           }: {
             drawer: boolean
             closeNavigation: () => void
-          }) =>
-            [
-              h(
-                'nav',
-                { 'aria-label': 'Main navigation', 'data-drawer': String(drawer) },
-                'nav links'
-              ),
-              h('button', { type: 'button', onClick: closeNavigation }, 'Pick item')
-            ],
+          }) => [
+            h(
+              'nav',
+              { 'aria-label': 'Main navigation', 'data-drawer': String(drawer) },
+              'nav links'
+            ),
+            h('button', { type: 'button', onClick: closeNavigation }, 'Pick item')
+          ],
           header: (scope: Scope) =>
             h('header', [
               h('span', { 'data-testid': 'compact' }, String(scope.compact)),

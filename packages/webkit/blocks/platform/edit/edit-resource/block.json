@@ -64,12 +64,7 @@
     "mtls",
     "autenticação mútua"
   ],
-  "skills": [
-    "webkit-form",
-    "webkit-errors",
-    "webkit-layout",
-    "webkit-ux-heuristics"
-  ],
+  "skills": ["webkit-form", "webkit-errors", "webkit-layout", "webkit-ux-heuristics"],
   "primary": {
     "name": "ProjectSettings",
     "file": "edit-resource.vue"

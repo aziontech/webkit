@@ -28,16 +28,8 @@
     "summary step",
     "revisar antes de criar"
   ],
-  "skills": [
-    "webkit-create-surface",
-    "webkit-form",
-    "webkit-errors"
-  ],
-  "steps": [
-    "where-it-runs",
-    "module",
-    "settings"
-  ],
+  "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
+  "steps": ["where-it-runs", "module", "settings"],
   "primary": {
     "name": "WhereItRuns",
     "file": "multipage-create.vue"

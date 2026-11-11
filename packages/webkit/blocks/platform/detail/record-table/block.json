@@ -26,11 +26,7 @@
     "importar arquivo de zona",
     "importar registros dns"
   ],
-  "skills": [
-    "webkit-tables",
-    "webkit-form",
-    "webkit-navigation"
-  ],
+  "skills": ["webkit-tables", "webkit-form", "webkit-navigation"],
   "primary": {
     "name": "MainSettings",
     "file": "record-table.vue"
