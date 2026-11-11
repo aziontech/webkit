@@ -1,20 +1,15 @@
 <script setup lang="ts">
-  import CardGridCell from '@aziontech/webkit/card-grid-cell'
-  import CardGrid from '@aziontech/webkit/card-grid-root'
-  import type { CardGridColumns } from '@aziontech/webkit/card-grid-root'
   import FrameBox from '@aziontech/webkit/frame-box'
-  import Overline from '@aziontech/webkit/overline'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import type {
     SectionTitleDescriptionWidth,
     SectionTitleKind
   } from '@aziontech/webkit/section-title'
-  import { computed } from 'vue'
 
-  defineOptions({ name: 'ProcessSteps' })
+  defineOptions({ name: 'StepsList' })
 
-  export interface ProcessStep {
+  export interface StepsListItem {
     /** The stage's name. */
     title: string
     /** What happens during the stage. */
@@ -26,7 +21,7 @@
     anchor?: string
     /** Overline above the title. */
     eyebrow?: string
-    /** Alignment of the section title over the card grid. */
+    /** Alignment of the section title over the list. */
     titleKind?: SectionTitleKind
     /** The band's headline. */
     title: string
@@ -34,13 +29,13 @@
     description?: string
     /** Column span of the paragraph: `wide` runs it across the middle column too. */
     descriptionWidth?: SectionTitleDescriptionWidth
-    /** The stages, in order; each gets its own card, all in one row at the large breakpoint. */
-    steps: ProcessStep[]
-    /** Accessible name of the card grid. */
+    /** The stages, in order; each is one numbered row of the list. */
+    steps: StepsListItem[]
+    /** Accessible name of the list. */
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<Props>(), {
     anchor: '',
     eyebrow: '',
     titleKind: 'centered',
@@ -48,10 +43,6 @@
     descriptionWidth: 'narrow',
     ariaLabel: ''
   })
-
-  const columns = computed(
-    () => Math.min(5, Math.max(2, props.steps.length)) as CardGridColumns
-  )
 
   const stepNumber = (index: number) => String(index + 1).padStart(2, '0')
 </script>
@@ -77,41 +68,33 @@
       borders="y"
       marks="bottom"
     >
-      <CardGrid
-        flush
-        kind="frame"
-        :columns="columns"
-        role="list"
-        :aria-label="ariaLabel || undefined"
-      >
-        <CardGridCell
-          v-for="(step, index) in steps"
-          :key="step.title"
-          kind="canvas"
-          :padded="false"
-          role="listitem"
+      <div class="bg-(--bg-canvas)">
+        <ol
+          :aria-label="ariaLabel || undefined"
+          class="m-0 grid w-full list-none grid-cols-[auto_1fr] gap-x-(--spacing-xl) p-0 divide-y divide-(--border-default)"
         >
-          <div
-            :data-columns="columns"
-            class="flex h-full flex-col items-start gap-(--spacing-md) p-(--spacing-xl) lg:p-(--spacing-lg)"
+          <li
+            v-for="(step, index) in steps"
+            :key="step.title"
+            class="col-span-2 grid grid-cols-subgrid p-(--spacing-xl) lg:px-(--spacing-lg) lg:py-(--spacing-lg)"
           >
-            <Overline
-              prefix="//"
+            <span
               aria-hidden="true"
+              class="text-heading-xs tabular-nums text-(--primary) lg:text-heading-sm"
             >
               {{ stepNumber(index) }}
-            </Overline>
+            </span>
             <div class="flex flex-col gap-(--spacing-sm)">
-              <h3 class="m-0 text-balance text-heading-sm text-(--text-default) in-data-[columns=5]:lg:max-[90rem]:min-h-[2lh]">
+              <h3 class="m-0 text-balance text-heading-xs text-(--text-default) lg:text-heading-sm">
                 {{ step.title }}
               </h3>
               <p class="m-0 text-pretty text-body-md text-(--text-muted)">
                 {{ step.description }}
               </p>
             </div>
-          </div>
-        </CardGridCell>
-      </CardGrid>
+          </li>
+        </ol>
+      </div>
     </FrameBox>
   </SectionModule>
 </template>

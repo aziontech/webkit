@@ -412,7 +412,7 @@ export const WEBSITE_BUNDLE_PAGE = [
 
   HOME_SOLUTIONS_BAND,
   pick(CAREERS_HOME_PAGE, 'PhotoMarquee'),
-  pick(CAREERS_HOME_PAGE, 'ProcessSteps'),
+  pick(CAREERS_HOME_PAGE, 'StepsList'),
   pick(HOME_PAGE, 'FeatureTiles'),
   {
     section: 'FeatureScroll',

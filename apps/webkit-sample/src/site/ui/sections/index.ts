@@ -34,11 +34,11 @@ import NetworkSection from './NetworkSection.vue'
 import PhotoMarquee from './PhotoMarquee.vue'
 import PlatformDirectory from './PlatformDirectory.vue'
 import PricingPlans from './PricingPlans.vue'
-import ProcessSteps from './ProcessSteps.vue'
 import QuoteBand from './QuoteBand.vue'
 import RecognitionMarquee from './RecognitionMarquee.vue'
 import ResourceGrid from './ResourceGrid.vue'
 import StatsBand from './StatsBand.vue'
+import StepsList from './StepsList.vue'
 import StickyCarousel from './StickyCarousel.vue'
 import StickyScrollCode from './StickyScrollCode.vue'
 import StoryLibrary from './StoryLibrary.vue'
@@ -81,11 +81,11 @@ export const SECTIONS: Record<string, Component> = {
   PhotoMarquee,
   PlatformDirectory,
   PricingPlans,
-  ProcessSteps,
   QuoteBand,
   RecognitionMarquee,
   ResourceGrid,
   StatsBand,
+  StepsList,
   StickyCarousel,
   StickyScrollCode,
   StoryLibrary,

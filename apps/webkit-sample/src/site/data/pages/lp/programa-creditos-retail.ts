@@ -97,7 +97,7 @@ export default campaignPage({
       ]
     },
     {
-      section: 'ProcessSteps',
+      section: 'StepsList',
       eyebrow: 'Passo a passo',
       title: 'Como Funciona?',
       ariaLabel: 'Etapas do programa',

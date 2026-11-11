@@ -54,7 +54,7 @@ export const CAREERS_HOME_PAGE = [
     scene: { component: markRaw(BrandGlobeScene) }
   },
   {
-    section: 'ProcessSteps',
+    section: 'StepsList',
     eyebrow: CAREERS_PROCESS.eyebrow,
     title: CAREERS_PROCESS.title,
     description: CAREERS_PROCESS.description,
