@@ -5,7 +5,7 @@ tooling that keeps every project using them on-pattern: an ESLint plugin (every 
 `error`), a Stylelint config, an MCP server that guides AI coding tools, and a CLI that
 wires it all in one command.
 
-- **Playground:** every component ships interactive stories in the Storybook, with controls for every prop.
+- **Docs site:** every component with its examples live beside their source, every block in every state, and the foundations (`apps/docs`, `pnpm docs:dev`). Full flows built from blocks run in `apps/demos` (`pnpm demos:dev`).
 - **Styleguide:** [`docs/STYLEGUIDE.md`](./docs/STYLEGUIDE.md) — every code standard in full, with the gate that blocks each one.
 - **Guidelines:** [`docs/GUIDELINES.md`](./docs/GUIDELINES.md) — the one-page digest (build & use on-pattern).
 
@@ -31,14 +31,15 @@ Pick the path by what you are about to do.
    lint, blocks drifting from the canonical copy) and the `webkit-ui-verify` skill.
 
 Rules for this path: [`skills/`](https://github.com/aziontech/webkit/tree/main/skills) and [`rules/`](https://github.com/aziontech/webkit/tree/main/rules). Do not use `.claude/`,
-`.specs/` or `apps/storybook/` to build screens; they belong to the people who maintain WebKit.
+`.specs/` or `apps/` to build screens; they belong to the people who maintain WebKit.
 
 ### I am creating or changing WebKit (contribute)
 
 1. Read [`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md).
 2. Every component starts from a spec in `.specs/`, through `/component-create`.
-3. Every story in `apps/storybook/src/stories/templates/` (except `marketing/`) is the source of a
-   pattern. Changed a story? Run `pnpm --filter @aziontech/webkit catalog:build`.
+3. Every block in `blocks/` is a pattern and every folder in `examples/` documents a component.
+   Changed one? Run `pnpm --filter @aziontech/webkit catalog:build`; the docs page and the styled
+   visual test follow from the files.
 4. Before the PR: "What to update when WebKit changes", in [CONTRIBUTING.md](https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md).
 
 ## Building with WebKit (consume)
@@ -114,16 +115,17 @@ tree-shakeable root (`@aziontech/webkit/table-root`) when you only need the root
 
 ### 4 · Try it in the playground
 
-The Storybook is the live playground: every component ships its stories — the **Default**
-story is interactive, with controls for every prop — plus copy-paste-ready "Show code"
-snippets that run as-is when pasted into your app.
+The docs site is the playground: every component page renders its examples live beside the
+exact source file, which runs as-is when pasted into your app, and every block page shows each
+state in a resizable frame. The demos assemble blocks into routed flows on mock data.
 
 ```bash
 # in this repo
-pnpm storybook:dev
+pnpm docs:dev     # components, blocks, foundations
+pnpm demos:dev    # list → create → detail → edit → delete, settings, onboarding, deploy, AI assistant
 ```
 
-The published Storybook is at <https://webkit.azion.app/>. Local setup for contributors (prerequisites, running and building the Storybook) is in the [repository README](../../README.md#run-the-storybook).
+Local setup for contributors is in the [repository README](../../README.md#run-the-docs-site).
 
 ### 5 · Stay on-pattern (the lint does the remembering)
 

@@ -90,6 +90,11 @@ export async function preloadComponent(name: string) {
   )
 }
 
+export async function preloadExample(dir: string, example: string) {
+  const file = `${example}.vue`
+  await remember(keys.example(dir, file), exampleComponents[`${EXAMPLES}${dir}/${file}`])
+}
+
 export async function preloadBlock(id: string, withCode = true) {
   const block = findBlock(id)
   if (!block) return
@@ -122,6 +127,7 @@ export async function preloadRoute(route: RouteLocationNormalized) {
   if (route.name === 'component') await preloadComponent(param('name'))
   else if (route.name === 'block') await preloadBlock(param('id'))
   else if (route.name === 'frame') await preloadBlock(param('id'), false)
+  else if (route.name === 'example-frame') await preloadExample(param('dir'), param('example'))
   else if (route.name === 'foundation') {
     const { FOUNDATIONS } = await import('./foundations')
     const page = FOUNDATIONS.find((item) => item.slug === param('slug'))

@@ -36,7 +36,7 @@ Two shapes are allowed for the second argument, never mixed within one event:
 
 ## Ordering is deliberate — and breaking
 
-`event` goes first so the signature is uniform across the system and reads like a native listener (`(event, …extra)`). There is **no non-breaking way** to move the event to the front of an event that previously emitted `(item)` or `(item, event)` — the argument at position 0 changes. Reshaping an existing event's payload is therefore a **breaking change** (major bump). Do it deliberately, mark the commit `BREAKING CHANGE:`, and update the component's spec Events table, its Storybook `argTypes`, and the "Show code" snippet in the same change.
+`event` goes first so the signature is uniform across the system and reads like a native listener (`(event, …extra)`). There is **no non-breaking way** to move the event to the front of an event that previously emitted `(item)` or `(item, event)` — the argument at position 0 changes. Reshaping an existing event's payload is therefore a **breaking change** (major bump). Do it deliberately, mark the commit `BREAKING CHANGE:`, and update the component's spec Events table, its examples, and the "Show code" snippet in the same change.
 
 ## What this means in practice
 
@@ -79,7 +79,7 @@ Each activation event's row in the spec's **## Events** table states the full pa
 | `item-click` | `(event: MouseEvent, item: SplitButtonItem)` | Fired when a menu action is selected; `item` is the matched `model` entry. |
 ```
 
-The Storybook `argTypes` entry mirrors it (`type: { summary: '(event: MouseEvent, item: SplitButtonItem)' }`), and the story's `@event` handler and "Show code" snippet use the `(event, item)` signature so the panel is copy-paste-correct (see [`storybook-source.md`](./storybook-source.md)).
+The examples' `@event` handlers use the `(event, item)` signature, so the code shown on the docs site is copy-paste-correct.
 
 ## Hard prohibitions
 

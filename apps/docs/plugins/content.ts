@@ -63,7 +63,7 @@ export async function renderMarkdownFile(file: string): Promise<{ html: string; 
 type ExampleMeta = { name: string; summary?: string; file: string }
 type ExamplesFile = { component: string; title?: string; examples: ExampleMeta[] }
 
-function readExampleDirs(): { dir: string; data: ExamplesFile }[] {
+export function readExampleDirs(): { dir: string; data: ExamplesFile }[] {
   return walk(join(WEBKIT, 'examples'), (name) => name === 'examples.json').map((file) => ({
     dir: relative(join(WEBKIT, 'examples'), dirname(file)),
     data: JSON.parse(readFileSync(file, 'utf8')) as ExamplesFile

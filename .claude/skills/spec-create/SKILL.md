@@ -41,14 +41,14 @@ Confirm the mode with the user before drafting. If it's ambiguous which one they
 - **Figma discovery.** Delegate to `figma-discover` via the `figma-extractor` sub-agent. Use the returned JSON to pre-populate the Tokens section.
 - **Token mapping.** Run `token-map` against the Figma output and DESIGN.md. Populate the Tokens table; flag Theme gaps.
 - **Confirm, don't assume.** Show the extracted props/regions/states/tokens and ask the user to confirm/correct.
-- **Ask only where the frame is silent:** behavior, keyboard map, focus/scroll-lock, event payloads, the story list.
+- **Ask only where the frame is silent:** behavior, keyboard map, focus/scroll-lock, event payloads, the example list.
 - A genuinely un-expressible section may stay `TBD` + `status: draft` (documented as a Figma gap).
 
 ## Mode B — Name + Category (no Figma, blocking)
 
 There is no ground truth, so **ask for everything and infer nothing.**
 
-- **Always ask, one at a time,** in this order — never skip, never pre-fill: Purpose (1–3 sentences) → Props → Events → Slots → Sub-components (only if `structure: composition`) → States → Motion & Animations → Accessibility (focus trap? keyboard map? aria?) → Internationalization → Right-to-left → Responsive → Performance → Storybook stories. Under `/webkit-new` there is no human to ask: the request issue and the step-2 research notes are the answers, and a question they cannot answer is `BLOCKED:`.
+- **Always ask, one at a time,** in this order — never skip, never pre-fill: Purpose (1–3 sentences) → Props → Events → Slots → Sub-components (only if `structure: composition`) → States → Motion & Animations → Accessibility (focus trap? keyboard map? aria?) → Internationalization → Right-to-left → Responsive → Performance → Examples. Under `/webkit-new` there is no human to ask: the request issue and the step-2 research notes are the answers, and a question they cannot answer is `BLOCKED:`.
   - **Props:** name, type literal/primitive, default, required, JSDoc one-liner. Repeat until the user says done. Default rule: an optional renderable string defaults to `''`, not `undefined`; reserve unquoted `undefined` for props where absence ≠ empty (`open`, `modelValue`, `src`); never record the quoted string `'undefined'`. See the Props rules comment in `.specs/_template.md`.
 - **Tokens are mapped, never invented.** For every visual choice, map to a DESIGN.md token and **confirm it with the user**. A value with no token is a Theme gap the user must acknowledge — do not substitute a raw value.
 - **No silent `TBD`.** If the user leaves a mandatory section unanswered, emit `BLOCKED: <section> unanswered` and write nothing. The manual path never produces a half-spec.
@@ -56,7 +56,7 @@ There is no ground truth, so **ask for everything and infer nothing.**
 ## Outputs
 
 - `.specs/<name>.md` with `status: draft`.
-- No component code, no exports entry, no story file.
+- No component code, no exports entry, no example files.
 
 ## Rules
 

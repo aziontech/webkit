@@ -256,7 +256,7 @@ This keeps gradients, `clipPath`, and multiple fills as inspectable nodes — wh
 | `./catalog`          | `catalog.json`         | mono list (name + class, no SVG)        |
 | `./color-catalog`    | `color-catalog.json`   | colored list (name + inline SVG)        |
 
-**Consumers**: `apps/icons-gallery` (`ColoredIcon.vue`, `App.vue`) and `apps/storybook` (`ColoredIconPreview.vue`, `IconGrid.vue`, `Icons.stories.js`) read the catalogs; any app importing `@aziontech/icons/azionicons-color` gets the `<i class="ai-*-cor">` classes.
+**Consumers**: `apps/icons-gallery` (`ColoredIcon.vue`, `App.vue`) read the catalogs; any app importing `@aziontech/icons/azionicons-color` gets the `<i class="ai-*-cor">` classes.
 
 ---
 

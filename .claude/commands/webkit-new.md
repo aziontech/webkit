@@ -71,7 +71,7 @@ same on the issue (`gh issue comment`), and do nothing else.
 
 ## Step 5 — Build
 
-1. `/component-create <name>`: scaffold (`component-scaffold`), story (`storybook-write`), Code
+1. `/component-create <name>`: scaffold (`component-scaffold`), examples, Code
    Connect when a frame exists, echo cross-check, `validate-component`. Its hooks run on every
    write.
 2. Co-located test `<name>.test.ts` (Vitest browser; `.claude/rules/testing.md`): every state,
@@ -80,8 +80,9 @@ same on the issue (`gh issue comment`), and do nothing else.
    `examples[]` with `name`, `summary`, `file`) and one copyable `.vue` per example, covering the
    states of the spec.
 4. Budget: an entry in `packages/webkit/.size-limit.json` with the spec's `## Performance` budget.
-5. Regenerate: `pnpm --filter @aziontech/webkit catalog:build` and
-   `node apps/storybook/scripts/gen-block-stories.mjs`.
+5. Regenerate: `pnpm --filter @aziontech/webkit catalog:build`. The docs page
+   (`/components/<name>`, `/example/<name>/<file>`) and the visual test of the first example follow
+   from the files; its baseline comes from the `Visual baselines` workflow (`/regen-baselines`).
 6. Exit condition: `/component-create` finished with `status: implemented` and the echo verdict
    is `parity`.
 
@@ -92,7 +93,7 @@ Run, from the repository root, and keep the output for the PR:
 ```bash
 pnpm --filter @aziontech/webkit run gates          # catalog, naming, marketing, patterns, cited names,
                                                     # spec status, spec template, authoring, doc standards,
-                                                    # test gate, block stories, toolkit tests → table
+                                                    # test gate, hook tests, toolkit tests → table
 pnpm --filter @aziontech/webkit lint
 pnpm --filter @aziontech/webkit lint:style
 pnpm --filter @aziontech/webkit type-check

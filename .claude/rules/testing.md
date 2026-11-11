@@ -22,7 +22,7 @@ jsdom returns no-ops for `focus`, `document.activeElement`, layout/`getBoundingC
 **This env runs no Tailwind, and [`setup.ts`](../../packages/webkit/src/test/setup.ts) deliberately loads no theme CSS.** The DOM is real but _unstyled_: a component's utility classes emit nothing here, so every computed style is the UA default. That is a boundary, not a gap to fix — and it decides what a test may assert:
 
 - **Never assert a computed style, a color, or a utility-derived dimension.** `getComputedStyle(el).backgroundColor` reads `rgba(0, 0, 0, 0)` whether the class is correct, misspelled, or missing entirely, so such an assertion passes in the broken _and_ fixed states — the exact false positive browser mode exists to kill. Same for a height that comes from `h-8`.
-- **`expectNoA11yViolations` therefore checks semantics, not pixels** — role, name, ARIA relationships, focus order. It does **not** validate color contrast here, because there are no colors. Contrast is real only where the stylesheet is: Storybook + the visual-regression gate.
+- **`expectNoA11yViolations` therefore checks semantics, not pixels** — role, name, ARIA relationships, focus order. It does **not** validate color contrast here, because there are no colors. Contrast is real only where the stylesheet is: the docs site and the styled visual suite (`apps/visual`).
 - **Pixels, contrast and token correctness belong to visual regression.** A dead utility class (a token that emits no CSS) is invisible to this suite by construction; it is caught by [`styling.md`](./styling.md)'s token checks at write time and by the visual gate at review time.
 
 Do not re-add `@aziontech/theme/globals.css` to `setup.ts` without also wiring the Tailwind pipeline — the tokens alone would load and nothing would read them, which buys a slower suite and no new signal.
@@ -32,14 +32,14 @@ Do not re-add `@aziontech/theme/globals.css` to `setup.ts` without also wiring t
 - `packages/webkit/vitest.config.ts` — `@vitejs/plugin-vue`, `browser: { provider: playwright(), instances: [{ browser: 'chromium' }], headless: true }`, `define: { 'process.env.NODE_ENV': ... }` (so `@testing-library/vue`'s `fireEvent` runs in the browser), `retry: process.env.CI ? 2 : 0`. Story imports of `@aziontech/webkit/*` resolve through the workspace package itself (no alias needed).
 - `packages/webkit/src/test/setup.ts` — `cleanup()` + an anchor-navigation guard (a real click on an `<a href>` would navigate and tear down the test iframe). It loads **no** CSS, on purpose — see the CSS boundary above.
 - `packages/webkit/src/test/axe.ts` — `expectNoA11yViolations(container)`; semantics only, no contrast (unstyled DOM).
-- `.github/workflows/governance.yml` — the `tests` job runs Vitest browser mode sharded (×4) + retry, only when webkit/storybook changes; the `toolkit` job runs `test:gate` (existence).
+- `.github/workflows/governance.yml` — the `tests` job runs Vitest browser mode sharded (×4) + retry, only when `packages/webkit` changes; the `toolkit` job runs `test:gate` (existence).
 - Publish-safety: `packages/webkit/package.json#files` negates `*.test.ts` and `src/test/**` (verified with `pnpm --filter webkit pack:dry`). Test files never ship to npm.
 
 ## Conventions
 
 - **Location:** `packages/webkit/src/components/<category>/<name>/<name>.test.ts` (sibling of the `.vue` / `index.ts`).
-- **Imports:** `describe`/`it`/`expect` from `vitest` (explicit — no `globals`); `render`/`fireEvent`/`screen` from `@testing-library/vue`; `userEvent` from `@storybook/test` for realistic keyboard/pointer; the example SFCs by relative import from `packages/webkit/examples/<name>/` (never from `apps/storybook`); `expectNoA11yViolations` from the relative `test/axe`; the component via relative `./...`.
-- **Story import is a RELATIVE path**, never a `@stories` alias — `validate-references.mjs` cannot resolve a vite alias and will block the write. If a component has no story, test it directly with `render(Component, { props })`.
+- **Imports:** `describe`/`it`/`expect` from `vitest` (explicit — no `globals`); `render`/`fireEvent`/`screen` from `@testing-library/vue`; `userEvent` from `@testing-library/user-event` (or `vitest/browser`) for realistic keyboard/pointer; the example SFCs by relative import from `packages/webkit/examples/<name>/` (never from `apps/`); `expectNoA11yViolations` from the relative `test/axe`; the component via relative `./...`.
+- **Example import is a RELATIVE path**, never a vite alias — `validate-references.mjs` cannot resolve an alias and will block the write. If a component has no example that fits, test it directly with `render(Component, { props })`.
 - **Local runs** (when node_modules is symlinked into a worktree) set `PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false CI=` so pnpm's deps check doesn't abort against symlinks.
 
 ## What every `<name>.test.ts` must cover
@@ -75,7 +75,7 @@ A tiny `it.each` smoke over enum variants ("mounts without throwing") is a **flo
 ## Hard prohibitions
 
 - No jsdom; no mocking layout/positioning/focus/`<Teleport>`.
-- No `@stories` alias in a test import — use a relative path (the reference hook blocks the alias).
+- No vite alias in a test import — use a relative path (the reference hook blocks the alias).
 - No class-string / pixel / animation-timing / internal-state assertions.
 - No test file outside the co-located `<name>.test.ts` convention; sub-components do not get their own test unless the root cannot reach the behavior.
 - Do not edit a `.vue` to make a test pass — fix the test, or `it.skip` + document.
@@ -87,7 +87,7 @@ Existence is blocking — no advisory path:
 - **Write-time — existence, on create AND update.** `.claude/hooks/enforce-test-exists.mjs` (PostToolUse on `Write`/`Edit`/`MultiEdit`) blocks (exit 2) when a ROOT component `.vue` is written or edited and its co-located `<name>.test.ts` is missing. Composition sub-components are exempt (tested through their root); `wip/` and the legacy whitelist (`.claude/hooks/_lib/legacy-components.json`) are exempt.
 - **CI — existence (mandatory).** `packages/webkit/scripts/check-tests.mjs` (`pnpm --filter @aziontech/webkit run test:gate`, run in the `toolkit` job of `governance.yml`) fails the PR when **any** ROOT component has no co-located `<name>.test.ts`. **Never grandfathered** — a component without a test always fails the build. This is what makes "no untested component" true at merge, not just at save. There is deliberately **no** diff-freshness gate (changed `.vue` ⇒ changed test): it cannot tell a behavior change from a style-only one, so it taxed CSS/token PRs with no-op test edits; keeping the test honest on behavior changes is the reviewer's job (below).
 - **CI — the suite runs.** The sharded Vitest browser job (`vitest`, Playwright Chromium) runs `pnpm webkit:test` on every PR/push touching webkit; a failing assertion fails the PR.
-- **Write-time — test integrity.** `validate-references.mjs` blocks a test whose imports don't resolve (including a mistaken `@stories` alias).
+- **Write-time — test integrity.** `validate-references.mjs` blocks a test whose imports don't resolve (including a mistaken alias).
 - **Publish safety.** `pnpm --filter webkit pack:dry` must list **no** `*.test.ts` — the `files` negation keeps tests out of the published package.
 - **Review.** Reviewers confirm the behavioral surface is actually covered (the machine proves the test exists and moves with the component; the human confirms it asserts the right things).
 
@@ -95,4 +95,4 @@ The registry pairs this rule with those gates in `.claude/hooks/_lib/standards.m
 
 ## Why this rule exists
 
-A prop can be declared and never read; an event typed and never emitted; a focus ring rendered and never reached by `Tab`; an overlay that never closes on `Escape`. Lint, types and the Storybook build catch none of these. A real-browser functional suite, reusing the story as its fixture, catches all of them at one file per component — and refuses to pass on the jsdom no-ops that would otherwise give false confidence.
+A prop can be declared and never read; an event typed and never emitted; a focus ring rendered and never reached by `Tab`; an overlay that never closes on `Escape`. Lint, types and the docs build catch none of these. A real-browser functional suite, reusing the examples as fixtures, catches all of them at one file per component — and refuses to pass on the jsdom no-ops that would otherwise give false confidence.

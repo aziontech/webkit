@@ -35,7 +35,7 @@ standard's canonical rule file lives in `.claude/rules/` (shipped to consumer pr
 17. [Compound API (composition components)](#17-compound-api-composition-components)
 18. [Dependencies](#18-dependencies)
 19. [Design-system authoring (spec-first)](#19-design-system-authoring-spec-first)
-20. [Storybook & documentation](#20-storybook--documentation)
+20. [Examples & documentation](#20-examples--documentation)
 21. [Releases & git](#21-releases--git)
 22. [Enforcement map](#22-enforcement-map)
 
@@ -101,7 +101,7 @@ their files are arranged.**
 ```
 
 - Categories (`actions`, `inputs`, `data`, `overlay`, …) organize the **folder** and the
-  Storybook tree — never the public import path.
+  docs navigation — never the public import path.
 - **Co-locate** what only this component uses; promote to a shared `composables/` folder
   only when a second component needs it.
 - The `<script setup>` **section order is fixed**:
@@ -152,7 +152,7 @@ defineProps({ kind: { type: String }, isDisabled: Boolean })   // runtime form, 
 - **Never declare `class` (or `style`) in `defineProps`** — consumer classes flow through
   `useAttrs()` (§11).
 - JSDoc is one plain sentence — no angle brackets in script comments (breaks the SFC
-  compiler on Storybook's second parse).
+  compiler in builds that run the Vue plugin twice).
 - A two-way value is **not** a prop — it is `defineModel` (§6).
 
 **Enforced by:** `webkit/authoring-standards` (runtime `defineProps({})` → error, commit +
@@ -607,19 +607,22 @@ Internal to the webkit repo — how its own components come to exist.
 
 ---
 
-## 20. Storybook & documentation
+## 20. Examples & documentation
 
-- **"Show code" is a runnable SFC:** every story sets an explicit
-  `parameters.docs.source.code` built with `toSfc` — one `<script setup>` with the real
-  imports, one `<template>` with PascalCase tags. No dynamic source, no `v-bind="args"`
-  in snippets, no lowercase tags, nothing the consumer can't paste and run.
-- `parameters.docs` is a plain object literal; composite stories render the same const
-  they show (zero drift).
-- Story set: Default + one composite story per multi-option axis + one story per
-  mutually-exclusive state — never one-story-per-variant.
-- No Figma links in stories — the story documents API and behavior.
+- **The example is the code shown:** every component's examples live in
+  `packages/webkit/examples/<name>/` — `examples.json` (`component`, `title`, `examples[]`
+  with `name`, `summary`, `file`) and one copyable `.vue` per example with the real
+  `@aziontech/webkit/*` imports and PascalCase tags. The docs site renders the file and shows
+  the same file as source, so there is nothing to drift.
+- Example set: Default + one composite example per multi-option axis + one example per
+  mutually-exclusive state — never one-example-per-variant.
+- No Figma links in examples — the example documents API and behavior.
+- Adding an example is enough: the docs page (`/components/<name>`, `/example/<name>/<file>`)
+  and the styled visual test of the first example follow from the files.
 
-**Enforced by:** `validate-story-source` (write-time + the CI ratchet) · Storybook build (CI).
+**Enforced by:** the catalog drift gate (`examples.json` against the exports) · the copyable,
+hydration, server-render and a11y harnesses (every example) · the docs build and the styled
+visual suite (`apps/visual`, CI).
 
 ---
 
@@ -633,7 +636,7 @@ Internal to the webkit repo — how its own components come to exist.
 - Branch from **`main`**, PR to `main`; branches named `<type>/<ISSUE>-<slug>`; shared
   docs/rules in a separate PR from component code.
 - Reshaping any public contract (prop/event/model/payload) is a **major**, updating spec,
-  argTypes, and "Show code" together.
+  examples and docs together.
 
 **Enforced by:** commitlint (commit) · branch protection + required checks + 2 approvals
 (technical + design) on the PR.
@@ -649,9 +652,9 @@ standard loses its gate.
 
 | Gate                                              | Where it runs                                                     | Blocks                                                                                                                                                               |
 | ------------------------------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Write-time hooks                                  | the DS authoring pipeline (`exit 2` on save)                      | off-spec code, raw values, phantom imports, off-vocabulary props, non-runnable stories, authoring anti-patterns                                                      |
+| Write-time hooks                                  | the DS authoring pipeline (`exit 2` on save)                      | off-spec code, raw values, phantom imports, off-vocabulary props, authoring anti-patterns                                                      |
 | `webkit/authoring-standards` + the 10 usage lints | the consumer's pre-commit (husky) + their CI — every rule `error` | manual v-model, runtime props/emits, undeclared slots, composable anti-patterns, bare `@deprecated`, wrong imports, style overrides, raw colors                      |
-| DS CI (`governance.yml`)                          | every PR                                                          | the authoring ratchet (no new violations), lint zero-warnings, `vue-tsc` + 95% type coverage, toolkit tests + catalog drift, security, Storybook build, summary gate |
+| DS CI (`governance.yml`)                          | every PR                                                          | the authoring ratchet (no new violations), lint zero-warnings, `vue-tsc` + 95% type coverage, toolkit tests + catalog drift, security, docs and demos build, styled visual tests, summary gate |
 | Mandatory review                                  | every PR (2 approvals: technical + design)                        | everything a regex cannot verify — script order, `defineExpose` minimality, state-matrix completeness, behavioural a11y                                              |
 
 Nothing is advisory: every standard on this page blocks a merge through at least one of
