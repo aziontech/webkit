@@ -185,3 +185,38 @@ Scope: new `TopologyDiagram` (on `Flow`'s connector engine and anchors, no node-
 
 - Environment: a locked Strict environment, an Also deploys tag, the replace and multi-environment `Alert`s, and Projects impacted grouped per environment and reloaded on switch; the toast names the targets. Dependencies: the open disclosure shows a shared dependency, a not-versioned integration and one with no ready version that blocks Deploy; the first run fails and its toast offers Edit and Redeploy. Revert: an earlier version is read-only with a Viewing `Tag` and `aria-current` in history; the primary action opens a `ConfirmDialog` with the diff in words. No defect.
 - Finding: guidelines for `version-detail` section H named `ConfirmDialog` and `Toaster`, which only the variant imports. Fixed: the heading names `Button` and `Tag`, the prose keeps the dialog and toast.
+
+## WP list-kit
+
+Scope: new `OverflowCount` (`content/overflow-count`); six cell presets on the `Table` compound (`Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTags`, `Table.CellTime`, `Table.CellActions`); `Table` `reorderable` rows; `Table.RefreshButton` `loading` and a `Tooltip` on it and on `Table.Export`; the refresh pattern and the presets in `skills/webkit-tables`; examples `overflow-count/default`, `overflow-count/long-list`, `table/cell-presets`, `table/reorderable-rows`, `table/refresh`. Already on the branch and not rebuilt: `Table.Export` / `exportCsv` (CSV of the visible, ordered columns) and `virtual` rows (sticky header, resizable columns, measured heights). A mechanical pass over every new SFC and example found no raw colours, palette classes, physical direction utilities or raw pixel sizes, and every transition carries a `motion-reduce` escape.
+
+### OverflowCount
+
+- One shape for every "+N": a small secondary `Tag` in a `Popover` trigger named `Show all <n> <noun>` (the visible `+3` alone does not say what it counts). The popover follows the overflow rule of `webkit-ux-heuristics`: summary (`3 domains`, `10 of 33 tags`), search past 7 items, Load more in batches of 10, a no-match line quoting the query, a polite status region, reset on close. Entries that open a new tab say so in hidden text; every entry is `dir="auto"`. No defect.
+- Decision: the search threshold is 7 (our heuristics rule, Cloudscape) rather than the design sample's 10; Load more is synchronous (the sample's 420 ms fake latency is demo data, not design).
+- Finding: axe `aria-dialog-name` on the open popover (a `role="dialog"` with no name). Fixed: the summary is the `PopoverTitle`, so the dialog is named by it.
+- Note: the chip is 20 px tall (the small `Tag`); it passes WCAG 2.5.8 through the spacing exception in a cell (8 px gap to its neighbours), not through its own size.
+
+### Table cell presets
+
+- Rule 10 of ui-craft ("one shape per recurring element, built once") is now code: the cross-resource link, the domain cell, the ID, the status chip, the tag list, the last-modified cell and the row menu are components, so a list cannot drift from the others. The skill's recipes now point at them.
+- `CellLink` keeps the three link rules (destination tooltip, fixed 12 px mark, no mark without a destination), underlines on hover only, stops the click before a clickable row, and uses the app's registered `RouterLink` for `to` (plain `href` without a router). `CellId` keeps IDs `dir="ltr"`. Copy buttons pin to the end edge with `ms-auto`, so they align down the column. No defect.
+- `CellTime` folds author and time into one column (avatar with the name on its tooltip, relative time with the absolute one on its tooltip and in hidden text) and shares one minute clock across all mounted cells.
+- Finding: the relative time read `46 seconds ago` and could differ between server and client render. Fixed: under an hour it reads in whole minutes (`just now` under 45 s), and the clock takes the current time when its first cell sets up.
+- Finding: `CellTags` re-measured inside its `ResizeObserver` callback (a "loop completed with undelivered notifications" error). Fixed: measuring is deferred to the next animation frame.
+- Finding: the presets example's actions column had an empty header (axe `empty-table-header`). Fixed: `#header-actions` renders a visually hidden `Actions`, and the skill says so.
+- Empty values render a muted dash, as in the design sample.
+
+### Reorderable rows
+
+- A leading 40 px grip column (an outlined `pi-bars` `IconButton`, as in the design sample's rules engine) frozen at the start when other columns are. Pointer drag (pointer events, so touch works) shows the dragged row with a dashed accent outline and the drop edge as a 2 px accent line; the viewport scrolls near its edges. Keyboard: Arrow Up, Arrow Down, Home, End on a focused grip; focus stays on the moved row's grip; `Esc` cancels a drag. Each grip is named `Reorder <name>, position <n> of <total>` and described by the hint, and a polite status announces every move (WCAG 2.5.7: dragging is never the only way).
+- Decision: plain arrows on the grip (the design sample) rather than Alt+Arrow (the inventory's guess); the grip is a button, so arrows do not collide with anything.
+- Decision: the grips lock while a sort is applied, with the reason in their description; a sorted order cannot be reordered meaningfully.
+- No defect after tests (10 behaviour, keyboard, pointer, locale, RTL and axe cases).
+
+### Refresh pattern
+
+- `Table.RefreshButton :loading` spins and blocks a second press while the rows stay on screen; the table's own `loading` stays for a first load. The pattern (skill `webkit-tables`): an `Updated` time beside the button (`Table.CellTime`), auto-refresh off by default on lists and on by default only on live views, 30 s / 10 s intervals, skip while hidden or while the reader is acting, never move focus or reset scroll, page, sort or selection, refresh once after the reader's own change, and a failed refresh keeps stale rows with an `Alert` and Retry.
+- Finding: the example's dates were computed per render, so server and client disagreed (hydration attribute mismatch). Fixed: example dates are anchored to the current minute.
+
+Not verified: a styled render in both themes. The browser tests run without CSS, so geometry (the tag fit, the frozen grip offset, the drop line) is unasserted; it is an M2.10 row.
