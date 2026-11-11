@@ -92,6 +92,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 - Searching: "cache" typed, reordering off with its `Alert`, phases reading "n of total".
 - Empty: a firewall with no rules, the Request phase showing its `EmptyState`.
 - Loading: skeleton rows in each phase.
+- EditRule: the list composed with `platform/edit/rule-builder`. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
 

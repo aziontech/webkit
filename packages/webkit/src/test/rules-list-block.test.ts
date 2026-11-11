@@ -2,6 +2,7 @@ import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import RulesList from '../../blocks/platform/view/rules-list/rules-list.vue'
+import EditRule from '../../blocks/platform/view/rules-list/variants/edit-rule.vue'
 import ReviewChanges from '../../blocks/platform/view/rules-list/variants/review-changes.vue'
 import Searching from '../../blocks/platform/view/rules-list/variants/searching.vue'
 
@@ -125,5 +126,31 @@ describe('platform/view/rules-list block', () => {
     expect(grips.length).toBeGreaterThan(0)
     expect(grips.every((grip) => grip.hasAttribute('disabled'))).toBe(true)
     expect(view.getByTestId('rules-list__count-response').textContent?.trim()).toBe('1 of 3')
+  })
+
+  it('opens the rule builder as Edit Rule from a name and as Add Rule from the header (EditRule)', async () => {
+    const view = render(EditRule)
+    await fireEvent.click(view.getByRole('button', { name: 'Edit Docs rewrite' }))
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
+    const drawer = document.querySelector('[role="dialog"]') as HTMLElement
+    expect(drawer.textContent).toContain('Edit Rule')
+    const name = drawer.querySelector<HTMLInputElement>('#rule-name')!
+    expect(name.value).toBe('Docs rewrite')
+    await fireEvent.update(name, 'Docs rewrite v2')
+    const save = Array.from(drawer.querySelectorAll('button')).find(
+      (button) => button.textContent?.trim() === 'Save'
+    ) as HTMLButtonElement
+    await fireEvent.click(save)
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), {
+      timeout: 3000
+    })
+    expect(view.getByRole('button', { name: 'Edit Docs rewrite v2' })).toBeTruthy()
+    expect(view.queryByRole('button', { name: 'Review changes' })).toBeNull()
+
+    await fireEvent.click(view.getAllByRole('button', { name: 'Add Rule' })[0])
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
+    const adding = document.querySelector('[role="dialog"]') as HTMLElement
+    expect(adding.textContent).toContain('Add Rule')
+    expect(adding.querySelector<HTMLInputElement>('#rule-name')!.value).toBe('')
   })
 })

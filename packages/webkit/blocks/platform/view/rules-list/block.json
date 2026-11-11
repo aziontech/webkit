@@ -61,6 +61,11 @@
       "name": "Loading",
       "summary": "While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns.",
       "file": "variants/loading.vue"
+    },
+    {
+      "name": "EditRule",
+      "summary": "The list composed with `platform/edit/rule-builder`: a rule's name opens the large rule-builder `Drawer` as Edit Rule, seeded with that rule's criteria and behaviors and its phase locked; Add Rule in the header (or in an empty phase) opens it as Add Rule in that phase. Saving an edit updates the row in place and confirms it in a toast; a new rule lands last in its phase, the phase opens, and the toast offers Edit. Neither changes the run order, so the SaveBar only counts moves and status switches.",
+      "file": "variants/edit-rule.vue"
     }
   ]
 }
