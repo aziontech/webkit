@@ -1,7 +1,8 @@
 import { userEvent } from '@storybook/test'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, ref } from 'vue'
+import { userEvent as keys } from 'vitest/browser'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import ShortcutMenus from '../../../../examples/prompt-input/shortcut-menus.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -165,13 +166,22 @@ describe('PromptInput', () => {
 
   describe('shortcut menus', () => {
     const textbox = () => document.querySelector<HTMLTextAreaElement>('textarea')!
+    const settle = async () => {
+      await nextTick()
+      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
+    }
+    const typeInto = async (input: HTMLTextAreaElement, text: string) => {
+      input.focus()
+      await keys.keyboard(text)
+      await settle()
+    }
     const listbox = () => document.querySelector<HTMLElement>('[role="listbox"]')
 
     it('opens on a trigger at a word start, filters, and is driven from the text area', async () => {
       render(ShortcutMenus)
       const input = textbox()
       expect(input).toHaveAttribute('aria-keyshortcuts', '/ @')
-      await userEvent.type(input, 'Check @im')
+      await typeInto(input, 'Check @im')
       expect(listbox()).toHaveAccessibleName('Resources')
       const options = [...listbox()!.querySelectorAll('[role="option"]')]
       expect(options.map((option) => option.textContent?.trim())).toEqual(['image-resizeFunction'])
@@ -184,37 +194,43 @@ describe('PromptInput', () => {
     it('inserts the choice, adds a reference chip and submits it with the text', async () => {
       const view = render(ShortcutMenus)
       const input = textbox()
-      await userEvent.type(input, 'Why does @')
-      await userEvent.keyboard('{ArrowDown}{Enter}')
+      await typeInto(input, 'Why does @')
+      await keys.keyboard('{ArrowDown}{Enter}')
+      await settle()
       expect(input.value).toBe('Why does @image-resize ')
       expect(listbox()).toBeNull()
       const refs = view.getByRole('list', { name: 'References' })
       expect(refs.textContent).toContain('@image-resize')
-      await userEvent.type(input, 'fail')
-      await userEvent.keyboard('{Enter}')
+      await typeInto(input, 'fail')
+      await keys.keyboard('{Enter}')
+      await settle()
       expect(view.getByText(/Sent “Why does @image-resize fail” with @image-resize/)).toBeTruthy()
     })
 
     it('does not open mid-word, closes on Escape, and Enter submits once closed', async () => {
       const view = render(ShortcutMenus)
       const input = textbox()
-      await userEvent.type(input, 'a/b')
+      await typeInto(input, 'a/b')
       expect(listbox()).toBeNull()
-      await userEvent.type(input, ' /ex')
+      await typeInto(input, ' /ex')
       expect(listbox()).toHaveAccessibleName('Commands')
-      await userEvent.keyboard('{Escape}')
+      await keys.keyboard('{Escape}')
+      await settle()
       expect(listbox()).toBeNull()
-      await userEvent.keyboard('{Enter}')
+      await keys.keyboard('{Enter}')
+      await settle()
       expect(view.getByText(/Sent “a\/b \/ex” with no references/)).toBeTruthy()
     })
 
     it('removing a reference chip removes its text', async () => {
       const view = render(ShortcutMenus)
       const input = textbox()
-      await userEvent.type(input, '/sum')
-      await userEvent.keyboard('{Tab}')
+      await typeInto(input, '/sum')
+      await keys.keyboard('{Tab}')
+      await settle()
       expect(input.value).toBe('/summarize ')
-      await userEvent.click(view.getByRole('button', { name: /Remove/ }))
+      await keys.click(view.getByRole('button', { name: /Remove/ }))
+      await settle()
       expect(input.value).toBe('')
       expect(view.queryByRole('list', { name: 'References' })).toBeNull()
     })

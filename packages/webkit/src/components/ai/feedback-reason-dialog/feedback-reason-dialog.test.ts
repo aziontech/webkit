@@ -88,7 +88,9 @@ describe('FeedbackReasonDialog', () => {
     const view = render(Harness, { props: { loading: true } })
     await waitFor(() => expect(dialog()).toBeTruthy())
     expect(view.getByRole('button', { name: 'Cancel' })).toBeDisabled()
-    expect(dialog()!.querySelector('fieldset')).toBeDisabled()
+    for (const radio of dialog()!.querySelectorAll('input[type="radio"]'))
+      expect(radio).toBeDisabled()
+    expect(dialog()!.querySelector('textarea')).toBeDisabled()
   })
 
   it('reads its strings from the locale catalog', async () => {

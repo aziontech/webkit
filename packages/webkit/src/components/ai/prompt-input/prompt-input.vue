@@ -153,8 +153,9 @@
       query.value = null
       return
     }
-    const caret = el.selectionStart ?? model.value.length
-    const before = model.value.slice(0, caret)
+    const text = el.value
+    const caret = el.selectionStart ?? text.length
+    const before = text.slice(0, caret)
     const word = /(^|\s)(\S*)$/.exec(before)
     const token = word?.[2] ?? ''
     const menu = props.menus.find((candidate) => token.startsWith(candidate.trigger))
@@ -171,9 +172,12 @@
     const current = query.value
     const el = textarea.value
     if (!current || !el) return
-    const caret = el.selectionStart ?? model.value.length
+    const text = el.value
+    const caret = el.selectionStart ?? text.length
     const inserted = `${current.menu.trigger}${option.label} `
-    model.value = model.value.slice(0, current.start) + inserted + model.value.slice(caret)
+    const next = text.slice(0, current.start) + inserted + text.slice(caret)
+    el.value = next
+    model.value = next
     if (
       !references.value.some(
         (reference) =>
