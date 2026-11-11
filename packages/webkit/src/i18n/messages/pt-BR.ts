@@ -939,5 +939,18 @@ export const ptBR: Messages = {
   },
   otpInput: {
     label: 'Código de uso único'
+  },
+  consolePanel: {
+    views: 'Visões do console'
+  },
+  customerSpotlight: {
+    list: 'Histórias de clientes',
+    story: 'Ler a história'
+  },
+  sectionCommand: {
+    command: 'Comando',
+    prompt: 'Prompt',
+    copyCommand: 'Copiar comando',
+    copyPrompt: 'Copiar prompt'
   }
 }

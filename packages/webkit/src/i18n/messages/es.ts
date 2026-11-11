@@ -938,5 +938,18 @@ export const es: Messages = {
   },
   otpInput: {
     label: 'Código de un solo uso'
+  },
+  consolePanel: {
+    views: 'Vistas de la consola'
+  },
+  customerSpotlight: {
+    list: 'Historias de clientes',
+    story: 'Leer la historia'
+  },
+  sectionCommand: {
+    command: 'Comando',
+    prompt: 'Prompt',
+    copyCommand: 'Copiar comando',
+    copyPrompt: 'Copiar prompt'
   }
 }

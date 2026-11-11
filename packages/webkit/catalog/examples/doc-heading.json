@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A section heading that links to itself. Hover or focus it to see the underline and the link glyph; neither takes layout.",
+   "sfc": "<script setup>\n  import DocHeading from '@aziontech/webkit/doc-heading'\n</script>\n\n<template>\n  <DocHeading\n    id=\"purge-by-url\"\n    :level=\"2\"\n  >\n    Purge by URL\n  </DocHeading>\n</template>"
+  },
+  {
+   "name": "Levels",
+   "summary": "Levels one to four, each a real heading tag with its own anchor.",
+   "sfc": "<script setup>\n  import DocHeading from '@aziontech/webkit/doc-heading'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <DocHeading\n      id=\"cache\"\n      :level=\"1\"\n      label=\"Cache\"\n    />\n    <DocHeading\n      id=\"cache-rules\"\n      :level=\"2\"\n      label=\"Cache rules\"\n    />\n    <DocHeading\n      id=\"cache-keys\"\n      :level=\"3\"\n      label=\"Cache keys\"\n    />\n    <DocHeading\n      id=\"query-strings\"\n      :level=\"4\"\n      label=\"Query strings\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

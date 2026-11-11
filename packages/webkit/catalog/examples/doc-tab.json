@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Each DocTab gives DocTabs its title and its panel body; it has no appearance of its own.",
+   "sfc": "<script setup>\n  import DocTab from '@aziontech/webkit/doc-tab'\n  import DocTabs from '@aziontech/webkit/doc-tabs'\n</script>\n\n<template>\n  <DocTabs>\n    <DocTab title=\"Console\">\n      <p>Open the application, then Settings, then Domains.</p>\n    </DocTab>\n    <DocTab title=\"CLI\">\n      <p>Run the link command from the project folder.</p>\n    </DocTab>\n  </DocTabs>\n</template>"
+  }
+ ]
+}

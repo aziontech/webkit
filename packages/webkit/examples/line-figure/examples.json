@@ -1,0 +1,21 @@
+{
+  "component": "line-figure",
+  "title": "Components/Content/LineFigure",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The cache figure at rest. Move the pointer over it, or focus the page and use the arrow keys over it, to see it answer; its accessible name is the figure's own description unless `aria-label` is set.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Play",
+      "summary": "`play` walks the figure through its answer on its own until a pointer or focus arrives, and `read` reports each reading so the page can show it. Under reduced motion the figure holds a still frame.",
+      "file": "play.vue"
+    },
+    {
+      "name": "Gallery",
+      "summary": "All 25 registered figures, one per product. Each loads on demand, so a page pays only for the figures it draws.",
+      "file": "gallery.vue"
+    }
+  ]
+}

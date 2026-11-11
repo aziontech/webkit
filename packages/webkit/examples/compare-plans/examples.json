@@ -6,6 +6,11 @@
       "name": "Default",
       "summary": "Hobby, Pro and Enterprise across the four Pricing product bands, closing on the link to the on-demand rates. Narrow the canvas below 1024px to see the plan picker, which opens on Pro.",
       "file": "default.vue"
+    },
+    {
+      "name": "Band links",
+      "summary": "A plan `description` under each name says who the plan is for, and a band `link` closes a product band with its own rates page.",
+      "file": "band-links.vue"
     }
   ],
   "site": [

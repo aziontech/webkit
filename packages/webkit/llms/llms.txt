@@ -164,6 +164,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Item](components/item.md): Versatile flex row for title, description, media, and actions.
 - [Kbd](components/kbd.md): Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap.
 - [KeyValuePairs](components/key-value-pairs.md): A grid of labelled facts about one subject: each pair is a key (the term) and its value, which may be plain text or a composed component such as a `Link`, `Tag`, `CopyButton` or `StatusIndicator`.
+- [LineFigure](components/line-figure.md): An isometric line-art figure that answers the pointer: one per product (cache TTL, load balancer, DNS lookup, firewall, a 404 page and 20 more), drawn by a small engine into one SVG with the illustration tokens, so it…
 - [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent.
 - [OverflowCount](components/overflow-count.md): A small `+N` chip that stands for the items a slot cannot show, and opens a popover with the whole list.
 - [Overline](components/overline.md): Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow").
@@ -188,10 +189,15 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Components: Documentation
 
+- [DocAccordionGroup](components/doc-accordion-group.md): The FAQ and "expand for detail" block of a documentation page.
+- [DocAccordionItem](components/doc-accordion-item.md): One collapsible entry inside a `DocAccordionGroup`.
 - [DocCallout](components/doc-callout.md): The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the severity colour, the border, the icon and the radius come from the…
 - [DocCard](components/doc-card.md): One cell of the grid a documentation page scans across: a leading glyph, an optional eyebrow, the title, the copy, and an optional call-to-action row at the foot.
 - [DocCardGroup](components/doc-card-group.md): The framed, responsive grid a `DocCard` set sits in.
+- [DocCodeGroup](components/doc-code-group.md): One or more code samples of the same thing in different languages or package managers, rendered on `CodeBlock` so the docs inherit its header, copy control and syntax surface.
+- [DocCta](components/doc-cta.md): The closing offer of a documentation page, parked at the foot of the "On this page" rail after the outline.
 - [DocFrame](components/doc-frame.md): The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset.
+- [DocHeading](components/doc-heading.md): A documentation section heading that is also the link to itself.
 - [DocItem](components/doc-item.md): One row of the documentation's related-content list: a leading glyph in a framed 32px tile, the row's name, and the sentence that says what the thing is.
 - [DocOnThisPage](components/doc-on-this-page.md): The "On this page" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community).
 - [DocPageHeader](components/doc-page-header.md): The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slo…
@@ -200,6 +206,8 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DocProse](components/doc-prose.md): The typography contract every documentation page inherits.
 - [DocStep](components/doc-step.md): One numbered step of a `DocSteps` walkthrough: the circled index, the rail that continues to the next step, the step heading, and any content the author nests underneath.
 - [DocSteps](components/doc-steps.md): The ordered walkthrough from the docs frame: a column of `DocStep` children joined by a rail.
+- [DocTab](components/doc-tab.md): One panel inside `DocTabs`.
+- [DocTabs](components/doc-tabs.md): Alternative paths through the same instruction ("macOS / Linux / Windows", "Console / CLI").
 - [DocTooltip](components/doc-tooltip.md): The inline gloss: a term in running prose that carries its own definition, shown when the reader hovers or focuses it.
 - [DocUpdate](components/doc-update.md): One entry in a changelog: what shipped, when, and under which version.
 
@@ -268,6 +276,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [BandStack](components/band-stack.md): A run of framed bands that follow one another down the page, each one drawn as two registration frames — its left half and its right half — sharing a hairline with the next.
 - [Banner](components/banner.md): A split promotional band: the announcement and its actions in the wide leading column, a short supporting note on a raised surface in the narrow trailing one.
+- [BannerArt](components/banner-art.md): The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice,…
 - [BentoGrid](components/bento-grid.md): A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface.
 - [BigNumbers](components/big-numbers.md): A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath.
 - [CallToAction](components/call-to-action.md): The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface.
@@ -325,6 +334,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [ArticleHighlight](components/article-highlight.md): The band that opens a blog under its hero.
 - [ArticleIndexBlog](components/article-index-blog.md): Every article of the blog as one ruled list, with the controls to narrow it on one row: a category picker and a search field.
 - [ArticleIndexResourceHub](components/article-index-resource-hub.md): Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet (content type, category, industry) on one row that wraps when it runs out of room.
+- [CapabilityGrid](components/capability-grid.md): A framed grid of product capabilities under an optional section title: each cell is a `Topic` (glyph, heading, sentence) with optional bullet points, three or four to a row.
 - [CliTerminal](components/cli-terminal.md): The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal session on the pixelate texture that runs off the frame's bottom rule, its lines entering one after another.
 - [ClientMosaic](components/client-mosaic.md): The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a "read the case study" link, and a mark cell carries only the client's l…
 - [ClientMosaicColumns](components/client-mosaic-columns.md): Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case.
@@ -337,7 +347,9 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CompareSupportTiers](components/compare-support-tiers.md): The tier-by-tier comparison on the Support page: one column per support tier with its name, who it is for and its action button pinned in the header while the page scrolls, one band per service family with an overline…
 - [ComparisonTable](components/comparison-table.md): The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor lo…
 - [ComplianceBadges](components/compliance-badges.md): The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a "see more" cell.
+- [ConsolePanel](components/console-panel.md): A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene.
 - [ContactHub](components/contact-hub.md): The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels.
+- [CustomerSpotlight](components/customer-spotlight.md): A row of client cards, each painted in the client's own colours with its reversed logo; the hovered or focused card opens to reveal its story line and a "Read story" cue, and the whole card links to the success story.
 - [FaqSection](components/faq-section.md): The frequently asked questions band near the end of a landing page: the heading in the left column and the questions on the right, each answer closed until the reader opens it, one at a time.
 - [FeatureScroll](components/feature-scroll.md): The walkthrough band of a product page: a large section title over one screen per feature.
 - [FeatureTabs](components/feature-tabs.md): The feature walkthrough band of a product page: a left-aligned section title over up to three tabs on one side and the active tab's illustration on the other, closed by a small link under the frame.
@@ -357,11 +369,14 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [PhotoMarquee](components/photo-marquee.md): The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover or focus.
 - [PlatformDirectory](components/platform-directory.md): A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product.
 - [PricingPlans](components/pricing-plans.md): The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button.
+- [ProcessScroll](components/process-scroll.md): The stages of a process as a row of numbered dark cards on a pixel texture, under a section title.
 - [RecognitionMarquee](components/recognition-marquee.md): The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover or focus.
 - [ResourceGrid](components/resource-grid.md): A band that points readers to further reading on solution pages: an overline, a headline and a short lead with an optional button sit beside a two-column frame grid of linked resource cards, each a title and one sente…
+- [SectionCommand](components/section-command.md): A one-line command or agent prompt with a copy button, set in a large `InputGroup` under hero or section copy ("npm create azion", "Ask your agent to …").
 - [SiteFooter](components/site-footer.md): The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select.
 - [SiteNav](components/site-nav.md): The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`.
 - [StatsBand](components/stats-band.md): The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit.
+- [StickyCarousel](components/sticky-carousel.md): A row of numbered dark cards that pins under the site header while the page scrolls and slides the row sideways until its last card is in view, then lets the page continue.
 - [StickyScrollCode](components/sticky-scroll-code.md): The developer-capabilities band of a product page: a large section title over a sticky stack whose claims scroll past a pinned media frame, the open claim showing its one-file code sample on the pixelate texture and i…
 - [StoryLibrary](components/story-library.md): Every success story of a company as one filterable library.
 - [SubjectLibrary](components/subject-library.md): A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells s…

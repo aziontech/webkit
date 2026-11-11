@@ -1,0 +1,96 @@
+{
+ "name": "process-scroll",
+ "binding": "ProcessScroll",
+ "import": "@aziontech/webkit/process-scroll",
+ "treeShakeableImport": "@aziontech/webkit/process-scroll",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width. From the design sample's site `ProcessScroll`.",
+ "setup": null,
+ "useWhen": [
+  "How something works in three to five ordered stages (build, deploy, observe)."
+ ],
+ "avoidWhen": [
+  "For more than five stages or stages with art — use `FeatureScroll`.",
+  "For a row that pins while the page scrolls — use `StickyCarousel`."
+ ],
+ "related": [
+  "StickyCarousel` — the same cards, pinned while the row travels.",
+  "TextureMaterial`, `FrameBox`, `SectionTitle`."
+ ],
+ "bestPractices": [
+  "Name each stage with a verb.",
+  "Keep descriptions to two lines."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the title."
+  },
+  {
+   "name": "titleKind",
+   "type": "SectionTitleKind",
+   "default": "'horizontal'",
+   "required": "false",
+   "doc": "Alignment of the section title over the card row."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered as its `h2`; the band renders nothing when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Paragraph beside the headline."
+  },
+  {
+   "name": "descriptionWidth",
+   "type": "SectionTitleDescriptionWidth",
+   "default": "'narrow'",
+   "required": "false",
+   "doc": "Column span of the paragraph: `wide` runs it across the middle column too."
+  },
+  {
+   "name": "steps",
+   "type": "ProcessScrollStep[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The stages, in order; each is `{ title, description }` and gets its own numbered card."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the scrollable card row; defaults to the title."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ProcessScroll from '@aziontech/webkit/process-scroll'\n\n  const steps = [\n    { title: 'Push', description: 'Every push to the main branch builds a new version.' },\n    { title: 'Build', description: 'The build runs in an isolated worker with your settings.' },\n    {\n      title: 'Deploy',\n      description: 'The version goes live everywhere at once, with no regions to pick.'\n    },\n    { title: 'Observe', description: 'Metrics and logs for the new version arrive in seconds.' }\n  ]\n</script>\n\n<template>\n  <ProcessScroll\n    eyebrow=\"How it works\"\n    title=\"From commit to production\"\n    description=\"Four stages, all automatic once the repository is connected.\"\n    :steps=\"steps\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/process-scroll.md"
+}

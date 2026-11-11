@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The map backdrop in a hero's `background` slot: the world map inset beside the copy, washed toward the copy and into the canvas below.",
+   "sfc": "<script setup>\n  import BannerArt from '@aziontech/webkit/banner-art'\n  import Hero from '@aziontech/webkit/hero-root'\n  import HeroTitle from '@aziontech/webkit/hero-title'\n</script>\n\n<template>\n  <Hero\n    kind=\"band\"\n    size=\"large\"\n    max-width=\"site\"\n  >\n    <template #background>\n      <BannerArt art=\"map\" />\n    </template>\n    <HeroTitle\n      eyebrow=\"Network\"\n      eyebrow-prefix=\"//\"\n      title=\"Close to every user, by default\"\n      description=\"Requests land on the nearest location and stay there.\"\n    />\n  </Hero>\n</template>"
+  },
+  {
+   "name": "Arts",
+   "summary": "The three backdrops from the design sample's banners: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the map, `network` lays it full bleed with its PoPs lit and a scrim over the copy column. All are decorative and hold a still frame under reduced motion.",
+   "sfc": "<script setup>\n  import BannerArt from '@aziontech/webkit/banner-art'\n\n  const arts = [\n    { art: 'globe', label: 'Globe' },\n    { art: 'map', label: 'Map' },\n    { art: 'network', label: 'Network' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"item in arts\"\n      :key=\"item.art\"\n      class=\"relative h-80 overflow-hidden border border-(--border-default) bg-(--bg-canvas)\"\n    >\n      <BannerArt :art=\"item.art\" />\n      <p class=\"relative z-10 m-0 p-(--spacing-lg) text-heading-md text-(--text-default)\">\n        {{ item.label }}\n      </p>\n    </div>\n  </div>\n</template>"
+  }
+ ]
+}

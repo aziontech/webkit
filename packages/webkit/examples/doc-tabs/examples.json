@@ -1,0 +1,11 @@
+{
+  "component": "doc-tabs",
+  "title": "Components/Documentation/DocTabs",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One instruction, three platforms. The strip, the indicator and the arrow-key model come from Tabs.",
+      "file": "default.vue"
+    }
+  ]
+}

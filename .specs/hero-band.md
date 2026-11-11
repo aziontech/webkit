@@ -3,11 +3,12 @@ name: hero-band
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: d501820b40f8ec2c933701c2e24f39110aeb5c6d005633d2068f41c9fe159f07
+last_updated: 2026-11-11
+checksum: b4b854c643c03b64df6849fcaefda4da2c4e4e62a8d9895e566ade7a7538dd28
 ---
+
 # HeroBand — Component Spec
 
 ## Purpose
@@ -39,7 +40,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 
 ```vue
 <script setup>
-import HeroBand from '@aziontech/webkit/hero-band'
+  import HeroBand from '@aziontech/webkit/hero-band'
 </script>
 
 <template>
@@ -57,21 +58,23 @@ import HeroBand from '@aziontech/webkit/hero-band'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `HeroBandKind` | `'title-band'` | false | Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy. |
-| `size` | `HeroBandSize` | `'medium'` | false | Vertical rhythm of the band; `large` is the opening a product page leads with. |
-| `eyebrow` | `string` | `''` | false | Short overline above the headline. |
-| `highlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
-| `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. |
-| `description` | `string` | `''` | false | Sentence under the headline. |
-| `primaryAction` | `HeroBandAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `secondaryAction` | `HeroBandAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `carouselLabel` | `string` | `''` | false | Overline above the client strip. |
-| `carouselMarks` | `string[]` | `[]` | false | Registry names of the client marks on the band floor, in order; the strip renders only when it has marks. |
-| `illustration` | `string` | `''` | false | Registry name of the illustration set beside the copy in the `copy-beside-art` layout. |
-| `illustrationAriaLabel` | `string` | `''` | false | Accessible description of the illustration. |
-| `headerOffset` | `string` | `''` | false | Height of the site header above the band, taken out of a band that fills a screen; any CSS length. |
+| Prop                    | Type                  | Default        | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                   |
+| ----------------------- | --------------------- | -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`                  | `HeroBandKind`        | `'title-band'` | false    | Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `centered-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy. |
+| `size`                  | `HeroBandSize`        | `'medium'`     | false    | Vertical rhythm of the band; `large` is the opening a product page leads with.                                                                                                                                                                                                                                                                          |
+| `eyebrow`               | `string`              | `''`           | false    | Short overline above the headline.                                                                                                                                                                                                                                                                                                                      |
+| `highlight`             | `string`              | `''`           | false    | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`.                                                                                                                                                                                                                                                         |
+| `title`                 | `string`              | `''`           | false    | Page headline, rendered as the page `h1`; the band renders nothing when empty.                                                                                                                                                                                                                                                                          |
+| `description`           | `string`              | `''`           | false    | Sentence under the headline.                                                                                                                                                                                                                                                                                                                            |
+| `primaryAction`         | `HeroBandAction`      | `undefined`    | false    | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                                                                                                                                                             |
+| `secondaryAction`       | `HeroBandAction`      | `undefined`    | false    | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                                                                                                                                                    |
+| `carouselLabel`         | `string`              | `''`           | false    | Overline above the client strip.                                                                                                                                                                                                                                                                                                                        |
+| `carouselMarks`         | `string[]`            | `[]`           | false    | Registry names of the client marks on the band floor, in order; the strip renders only when it has marks.                                                                                                                                                                                                                                               |
+| `illustration`          | `string`              | `''`           | false    | Registry name of the illustration set beside the copy in the `copy-beside-art` layout.                                                                                                                                                                                                                                                                  |
+| `illustrationAriaLabel` | `string`              | `''`           | false    | Accessible description of the illustration.                                                                                                                                                                                                                                                                                                             |
+| `headerOffset`          | `string`              | `''`           | false    | Height of the site header above the band, taken out of a band that fills a screen; any CSS length.                                                                                                                                                                                                                                                      |
+| `titleLength`           | `HeroBandTitleLength` | `'short'`      | false    | Length of the headline; `long` widens its column so it breaks into two lines instead of three.                                                                                                                                                                                                                                                          |
+| `plain`                 | `boolean`             | `false`        | false    | Drops the dot texture of the `centered` layout.                                                                                                                                                                                                                                                                                                         |
 
 ## Events
 
@@ -79,7 +82,10 @@ import HeroBand from '@aziontech/webkit/hero-band'
 
 ## Slots
 
-| _none_ | — | — |
+| Slot     | Scope | Notes                                                                                                                                                                  |
+| -------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `top`    | —     | A scene in the window above the copy (`ShellMockup`, `ProductWidget`, a diagram). The design sample's hero scenes render here.                                         |
+| `bottom` | —     | A scene in the window under the copy; it enters after the copy (`animate-content-enter`, off under reduced motion) and fades at the inline edges on narrow containers. |
 
 ## States
 
@@ -90,19 +96,19 @@ import HeroBand from '@aziontech/webkit/hero-band'
 
 ## Motion & Animations
 
-_none_
+- `animate-content-enter` with `[--content-enter-delay:120ms]` on the `bottom` scene window, so the scene settles in after the copy; `motion-reduce:animate-none` on the same class string.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region           | Token (DESIGN.md)   |
+| ---------------- | ------------------- |
 | pixel floor fill | `var(--bg-surface)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

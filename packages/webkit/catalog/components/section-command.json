@@ -1,0 +1,19 @@
+{
+ "purpose": "A one-line command or agent prompt with a copy button, set in a large `InputGroup` under hero or section copy (\"npm create azion\", \"Ask your agent to …\"). With `shell` a `$` prompt leads the line. From the design sample's site `SectionCommand`.",
+ "useWhen": [
+  "The one command that starts a product, beside or instead of a call to action.",
+  "A prompt to paste into an AI agent (`shell` off)."
+ ],
+ "avoidWhen": [
+  "For several lines or output — use `CodeBlock` or `CliTerminal`.",
+  "For an editable field — use `InputText`."
+ ],
+ "related": [
+  "CopyButton`, `InputGroup` — the parts.",
+  "CliTerminal` — a full terminal session."
+ ],
+ "bestPractices": [
+  "One line that works when pasted as is.",
+  "Place it in a hero or section-title actions slot."
+ ]
+}

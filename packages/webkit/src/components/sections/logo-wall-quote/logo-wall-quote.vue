@@ -30,6 +30,12 @@
     href?: string
   }
 
+  /** Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band. */
+  export type LogoWallQuoteKind = 'wall' | 'quote'
+
+  /** Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence. */
+  export type LogoWallQuoteQuoteKind = 'highlight' | 'signed'
+
   /** The signed quote set in the wall's aside. */
   export type LogoWallQuoteQuote = {
     /** The quotation text. */
@@ -57,6 +63,12 @@
   }
 
   interface Props {
+    /** Layout of the band; `quote` renders the quote alone and needs no logos. */
+    kind?: LogoWallQuoteKind
+    /** Register of the quote in the `quote` layout. */
+    quoteKind?: LogoWallQuoteQuoteKind
+    /** In-page id set on the band so a hash link can target it. */
+    anchor?: string
     /** Overline above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. */
@@ -72,6 +84,9 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    kind: 'wall',
+    quoteKind: 'signed',
+    anchor: '',
     eyebrow: '',
     title: '',
     ariaLabel: '',
@@ -88,6 +103,10 @@
 
   const hasLogos = computed(() => props.logos.length > 0)
 
+  const isQuoteBand = computed(() => props.kind === 'quote' && Boolean(props.quote?.text))
+
+  const renders = computed(() => props.kind !== 'quote' || isQuoteBand.value)
+
   const wallItems = computed(() =>
     props.logos.map((logo) => ({
       src: logo.logo,
@@ -99,12 +118,59 @@
 
 <template>
   <section
+    v-if="renders"
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
+    :data-kind="kind"
     :aria-label="title || undefined"
   >
     <SectionModule
-      v-if="hasLogos"
+      v-if="isQuoteBand && quote"
+      key="quote"
+      :divided="false"
+      :padded="false"
+    >
+      <FrameBox
+        flush
+        borders="y"
+        marks="bottom"
+      >
+        <div
+          :data-kind="quoteKind"
+          class="p-(--spacing-xl) lg:data-[kind=signed]:max-w-(--container-5xl)"
+        >
+          <Quote
+            :kind="quoteKind"
+            :text="quote.text"
+            :name="quote.name"
+            :job-title="quote.jobTitle"
+            :logo="quote.logo"
+            :logo-alt="quote.logoAlt"
+          >
+            <template
+              v-if="primaryAction"
+              #actions
+            >
+              <Button
+                :label="primaryAction.label"
+                :href="primaryAction.href"
+                kind="secondary"
+                size="large"
+                :target="primaryAction.target"
+                :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                icon-position="trailing"
+                :animated="Boolean(primaryAction.trailing)"
+              />
+            </template>
+          </Quote>
+        </div>
+      </FrameBox>
+    </SectionModule>
+
+    <SectionModule
+      v-else-if="hasLogos"
+      key="wall"
       :divided="false"
       :padded="false"
     >

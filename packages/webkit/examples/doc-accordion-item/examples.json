@@ -1,0 +1,11 @@
+{
+  "component": "doc-accordion-item",
+  "title": "Components/Documentation/DocAccordionItem",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One entry inside its group, open on first render with `default-open`. It has no appearance of its own outside a DocAccordionGroup.",
+      "file": "default.vue"
+    }
+  ]
+}

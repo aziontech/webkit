@@ -1,0 +1,59 @@
+{
+ "name": "section-command",
+ "binding": "SectionCommand",
+ "import": "@aziontech/webkit/section-command",
+ "treeShakeableImport": "@aziontech/webkit/section-command",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A one-line command or agent prompt with a copy button, set in a large `InputGroup` under hero or section copy (\"npm create azion\", \"Ask your agent to …\"). With `shell` a `$` prompt leads the line. From the design sample's site `SectionCommand`.",
+ "setup": null,
+ "useWhen": [
+  "The one command that starts a product, beside or instead of a call to action.",
+  "A prompt to paste into an AI agent (`shell` off)."
+ ],
+ "avoidWhen": [
+  "For several lines or output — use `CodeBlock` or `CliTerminal`.",
+  "For an editable field — use `InputText`."
+ ],
+ "related": [
+  "CopyButton`, `InputGroup` — the parts.",
+  "CliTerminal` — a full terminal session."
+ ],
+ "bestPractices": [
+  "One line that works when pasted as is.",
+  "Place it in a hero or section-title actions slot."
+ ],
+ "props": [
+  {
+   "name": "value",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "Text on the line, copied as written."
+  },
+  {
+   "name": "shell",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Draws the shell prompt before the text; turn off for a prompt meant for an agent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import SectionCommand from '@aziontech/webkit/section-command'\n</script>\n\n<template>\n  <SectionCommand value=\"npm create azion@latest\" />\n</template>"
+  },
+  {
+   "name": "Prompt",
+   "sfc": "<script setup>\n  import SectionCommand from '@aziontech/webkit/section-command'\n</script>\n\n<template>\n  <SectionCommand\n    :shell=\"false\"\n    value=\"Deploy this repository to Azion and give me the URL\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/section-command.md"
+}

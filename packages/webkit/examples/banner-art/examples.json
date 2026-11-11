@@ -1,0 +1,16 @@
+{
+  "component": "banner-art",
+  "title": "Components/Marketing/BannerArt",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The map backdrop in a hero's `background` slot: the world map inset beside the copy, washed toward the copy and into the canvas below.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Arts",
+      "summary": "The three backdrops from the design sample's banners: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the map, `network` lays it full bleed with its PoPs lit and a scrim over the copy column. All are decorative and hold a still frame under reduced motion.",
+      "file": "arts.vue"
+    }
+  ]
+}

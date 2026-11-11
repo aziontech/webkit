@@ -286,3 +286,38 @@ The integrated values win for every entry both sides raised (`table-root` 51.9, 
 | webkit-provider | 8.4           | 8.25         | 8.4        | Unchanged: two one-string groups.                                 |
 | locales-pt-BR   | 7.8           | 7.64         | 7.8        | Unchanged.                                                        |
 | locales-es      | 7.9           | 7.73         | 7.9        | Unchanged.                                                        |
+
+## M2.9 WP site-sections
+
+New documentation parts. Each wrapper carries the design-system component it renders on, so its budget is that component plus a few hundred bytes. Budgets are measured + ~0.5 KB.
+
+| Entry               | Budget before | Measured now | New budget | Note                                          |
+| ------------------- | ------------- | ------------ | ---------- | --------------------------------------------- |
+| doc-accordion-group | new           | 13.66        | 14.2       | New: `Accordion` at `size="large"` in a card. |
+| doc-accordion-item  | new           | 0.32         | 1          | New: a `display: contents` carrier.           |
+| doc-code-group      | new           | 26.45        | 27         | New: `CodeBlock` with its tab strip.          |
+| doc-cta             | new           | 11.45        | 12         | New: `FrameBox`, `Brand`, two `Button`s.      |
+| doc-heading         | new           | 0.95         | 1.5        | New: anchor heading on `useHeadingNav`.       |
+| doc-tab             | new           | 0.28         | 1          | New: a `display: contents` carrier.           |
+| doc-tabs            | new           | 16.56        | 17         | New: `Tabs` root, list, items and panels.     |
+
+New sections and the sample's section variants. `ConsolePanel` carries `ToggleGroup` for its tabs and `SectionCommand` carries `InputGroup` and `CopyButton`; the others are layout over `SectionModule`, `SectionTitle`, `FrameBox` and `TextureMaterial`. `HeroBand`, `LogoWallQuote` and `ComparePlans` grow by their new variants and stay inside their budgets. The `consolePanel`, `customerSpotlight` and `sectionCommand` groups grow the English catalog the provider ships and the two opt-in locale entries (measured + ~0.2 KB).
+
+| Entry              | Budget before | Measured now | New budget | Note                                             |
+| ------------------ | ------------- | ------------ | ---------- | ------------------------------------------------ |
+| capability-grid    | new           | 6.24         | 6.75       | New: `CardGrid` of `Topic`s.                     |
+| console-panel      | new           | 20.72        | 21.25      | New: `ToggleGroup` tabs, scene slot.             |
+| customer-spotlight | new           | 4.93         | 5.5        | New: expanding client cards.                     |
+| process-scroll     | new           | 4.99         | 5.5        | New: numbered card row.                          |
+| section-command    | new           | 8.53         | 9          | New: `InputGroup` with `CopyButton`.             |
+| sticky-carousel    | new           | 5.60         | 6.1        | New: pinned row, one rAF-batched scroll handler. |
+| webkit-provider    | 8.4           | 8.27         | 8.5        | Raised: the site-sections groups in English.     |
+| locales-pt-BR      | 7.8           | 7.66         | 7.9        | Raised: the same groups in Portuguese.           |
+| locales-es         | 7.9           | 7.75         | 8          | Raised: the same groups in Spanish.              |
+
+`LineFigure` counts its entry chunk only: the engine and each of the 25 figures load on demand (27 async chunks, 3–5 KB each). `BannerArt` carries `NetworkMap` (its map data) and `SpinningGlobe`.
+
+| Entry       | Budget before | Measured now | New budget | Note                                             |
+| ----------- | ------------- | ------------ | ---------- | ------------------------------------------------ |
+| line-figure | new           | 2.48         | 3          | New: entry only; figures are async chunks.       |
+| banner-art  | new           | 9.61         | 10.1       | New: `NetworkMap`, `SpinningGlobe`, the lattice. |

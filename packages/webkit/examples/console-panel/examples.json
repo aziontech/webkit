@@ -1,0 +1,16 @@
+{
+  "component": "console-panel",
+  "title": "Components/Marketing/Sections/ConsolePanel",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A console mock in the framed panel with three tabs; the scene slot receives the selected tab. The bottom fifth is cropped and faded from the medium breakpoint up.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Diagram",
+      "summary": "`kind=\"diagram\"` lets the scene keep its own height, centered on the texture, with an action under the title instead of tabs.",
+      "file": "diagram.vue"
+    }
+  ]
+}

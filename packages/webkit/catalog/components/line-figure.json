@@ -1,0 +1,22 @@
+{
+ "purpose": "An isometric line-art figure that answers the pointer: one per product (cache TTL, load balancer, DNS lookup, firewall, a 404 page and 20 more), drawn by a small engine into one SVG with the illustration tokens, so it follows the theme. Each figure loads on demand. The pointer, or focus with arrow keys, moves the figure through its answer; `play` walks it through on its own until a person arrives; under reduced motion it holds a still frame. From the design sample's `shared/ui/line-figure` (engine MIT, kept with its `LICENSE`). The figures are marketing assets, listed in the marketing inventory.",
+ "useWhen": [
+  "The art beside a product's copy on a landing or a docs home.",
+  "An empty state or a not-found page (`azion-404`)."
+ ],
+ "avoidWhen": [
+  "For static, non-interactive art — use `Illustration`.",
+  "For data — use the charts.",
+  "Inside dense application screens."
+ ],
+ "related": [
+  "Illustration` — static art from the registry.",
+  "ProductWidget`, `ShellMockup` — product scenes.",
+  "EmptyState` — can carry a figure in its art slot."
+ ],
+ "bestPractices": [
+  "One figure per view; two figures answering the pointer compete.",
+  "Pass `aria-label` when the page says something more specific than the figure's own description.",
+  "Use `play` only where nothing else moves."
+ ]
+}

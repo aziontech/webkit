@@ -171,3 +171,29 @@ describe('HeroBand', () => {
     }
   )
 })
+
+describe('HeroBand — sample opening bands', () => {
+  it.each(['centered-band', 'compact-band'] as const)(
+    'renders %s as a band, not a screen',
+    (kind) => {
+      const { getByTestId } = render(HeroBand, { props: { kind, title: TITLE } })
+      expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
+      expect(getByTestId(HERO_TESTID)).toHaveAttribute('data-kind', 'band')
+    }
+  )
+
+  it('renders the top and bottom scene slots', () => {
+    const { getByText } = render(HeroBand, {
+      props: { kind: 'centered', title: TITLE },
+      slots: { top: '<p>Top scene</p>', bottom: '<p>Bottom scene</p>' }
+    })
+    expect(getByText('Top scene')).toBeInTheDocument()
+    expect(getByText('Bottom scene')).toBeInTheDocument()
+  })
+
+  it('has no axe violations in the sample bands example', async () => {
+    const { default: Bands } = await import('../../../../examples/hero-band/bands.vue')
+    const { container } = render(Bands)
+    await expectNoA11yViolations(container)
+  })
+})

@@ -33,6 +33,8 @@
     name: string
     /** Marks the recommended plan: accent bar, secondary button, picked first. */
     highlighted?: boolean
+    /** One line under the name saying who the plan is for. */
+    description?: string
     /** The button under the plan name. */
     action: ComparePlansAction
   }
@@ -64,6 +66,8 @@
     description?: string
     /** The feature rows, in order. */
     rows: ComparePlansRow[]
+    /** Link closing the band, opened in a new tab; `{ label, href }`. */
+    link?: ComparePlansAction
   }
 
   interface Props {
@@ -79,9 +83,9 @@
     includedLabel?: string
     /** Screen-reader text of a dashed cell. */
     excludedLabel?: string
-    /** The plan columns, in order; each is `{ id, name, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. */
+    /** The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. */
     plans?: ComparePlansPlan[]
-    /** The product bands, in order; each is `{ eyebrow, title, description, rows }` and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick ticks, a dash dashes, other text shows as written, empty is blank. */
+    /** The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick ticks, a dash dashes, other text shows as written, empty is blank. */
     sections?: ComparePlansSection[]
     /** Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. */
     primaryAction?: ComparePlansAction
@@ -196,9 +200,14 @@
                 aria-hidden="true"
               />
               <div class="flex h-full flex-col items-start gap-(--spacing-sm)">
-                <span class="text-heading-md text-(--text-default) max-lg:sr-only">{{
-                  plan.name
-                }}</span>
+                <span class="flex flex-col gap-(--spacing-sm) max-lg:sr-only">
+                  <span class="text-heading-md text-(--text-default)">{{ plan.name }}</span>
+                  <span
+                    v-if="plan.description"
+                    class="text-body-sm text-(--text-muted)"
+                    >{{ plan.description }}</span
+                  >
+                </span>
                 <Button
                   v-if="plan.action"
                   :label="plan.action.label"
@@ -291,6 +300,20 @@
                 <span class="sr-only">{{ excludedLabel }}</span>
               </template>
               <span v-else-if="row.values[index]">{{ row.values[index] }}</span>
+            </td>
+          </tr>
+          <tr v-if="section.link">
+            <td
+              :colspan="columns.length + 1"
+              class="border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
+            >
+              <Link
+                :label="section.link.label"
+                :href="section.link.href"
+                target="_blank"
+                icon="pi pi-arrow-right"
+                size="medium"
+              />
             </td>
           </tr>
         </tbody>

@@ -26,6 +26,27 @@
  ],
  "props": [
   {
+   "name": "kind",
+   "type": "LogoWallQuoteKind",
+   "default": "'wall'",
+   "required": "false",
+   "doc": "Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band (the design sample's QuoteBand) and needs no logos."
+  },
+  {
+   "name": "quoteKind",
+   "type": "LogoWallQuoteQuoteKind",
+   "default": "'signed'",
+   "required": "false",
+   "doc": "Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
    "name": "eyebrow",
    "type": "string",
    "default": "''",
@@ -75,6 +96,10 @@
   {
    "name": "Default",
    "sfc": "<script setup>\n  import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'\n</script>\n\n<template>\n  <LogoWallQuote\n    eyebrow=\"Customers\"\n    title=\"Trusted by the world's largest banks and e-commerce companies\"\n    aria-label=\"Banks and e-commerce companies running on Azion\"\n    :logos=\"[\n      {\n        name: 'Magalu',\n        logo: '/marketing-components/logos/magalu-extended-color.svg',\n        href: 'https://www.azion.com/en/success-case/magalu/'\n      },\n      {\n        name: 'Banco de la Nación',\n        logo: '/marketing-components/logos/banco-de-la-nacion-extended-mono.svg',\n        logoTreatment: 'monochrome',\n        href: 'https://www.azion.com/en/success-case/banco-de-la-nacion-achieves-speed-and-reduces-costs/'\n      },\n      {\n        name: 'Netshoes',\n        logo: '/marketing-components/logos/netshoes-extended-color.svg',\n        href: 'https://www.azion.com/en/success-case/netshoes/'\n      },\n      {\n        name: 'Agibank',\n        logo: '/marketing-components/logos/agibank-extended-reversed.svg',\n        logoLight: '/marketing-components/logos/agibank-extended-color.svg',\n        href: 'https://www.azion.com/en/success-case/agibank/'\n      },\n      {\n        name: 'Zoop',\n        logo: '/marketing-components/logos/zoop-extended-color.svg',\n        href: 'https://www.azion.com/en/success-case/zoop-case-performance-at-scale/'\n      },\n      {\n        name: 'Crefisa',\n        logo: '/marketing-components/logos/crefisa-extended-reversed.svg',\n        logoTreatment: 'invert-light',\n        href: 'https://www.azion.com/en/success-case/crefisa/'\n      },\n      {\n        name: 'Renner',\n        logo: '/marketing-components/logos/renner-extended-color.svg',\n        href: 'https://www.azion.com/en/success-case/renner/'\n      },\n      {\n        name: 'Fourbank',\n        logo: '/marketing-components/logos/fourbank-extended-reversed.svg',\n        logoTreatment: 'invert-light',\n        href: 'https://www.azion.com/en/success-case/fourbank/'\n      },\n      {\n        name: 'Marisa',\n        logo: '/marketing-components/logos/marisa-extended-color.svg',\n        href: 'https://www.azion.com/en/success-case/marisa/'\n      }\n    ]\"\n    :quote=\"{\n      text: '&quot;Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.&quot;',\n      name: 'Ismael Aguilar',\n      jobTitle: 'Information Security Manager at Zoop',\n      logo: '/marketing-components/logos/zoop-extended-color.svg',\n      logoAlt: 'Zoop'\n    }\"\n    :primary-action=\"{\n      label: 'Read the case study',\n      href: 'https://www.azion.com/en/success-case/zoop-case-performance-at-scale/',\n      trailing: true,\n      target: '_blank'\n    }\"\n  />\n</template>"
+  },
+  {
+   "name": "Quote band",
+   "sfc": "<script setup>\n  import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'\n</script>\n\n<template>\n  <div class=\"flex flex-col\">\n    <LogoWallQuote\n      kind=\"quote\"\n      :quote=\"{\n        text: 'We stopped planning capacity for campaigns. Traffic peaks just work now.',\n        name: 'Ana Souza',\n        jobTitle: 'Head of Platform, Agibank',\n        logo: '/marketing-components/logos/agibank-extended-color.svg',\n        logoAlt: 'Agibank'\n      }\"\n      :primary-action=\"{ label: 'Read the story', href: '/customers/agibank', trailing: true }\"\n    />\n    <LogoWallQuote\n      kind=\"quote\"\n      quote-kind=\"highlight\"\n      :quote=\"{\n        text: 'Our checkout got faster in every country on the first deploy.',\n        name: 'Rafael Lima',\n        jobTitle: 'CTO, Netshoes',\n        logo: '/marketing-components/logos/netshoes-extended-color.svg',\n        logoAlt: 'Netshoes'\n      }\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/logo-wall-quote.md"

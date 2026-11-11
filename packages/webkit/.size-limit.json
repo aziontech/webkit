@@ -151,6 +151,41 @@
     "limit": "3 KB"
   },
   {
+    "name": "doc-accordion-group",
+    "path": "src/components/documentation/doc-accordion-group/doc-accordion-group.vue",
+    "limit": "14.2 KB"
+  },
+  {
+    "name": "doc-accordion-item",
+    "path": "src/components/documentation/doc-accordion-item/doc-accordion-item.vue",
+    "limit": "1 KB"
+  },
+  {
+    "name": "doc-code-group",
+    "path": "src/components/documentation/doc-code-group/doc-code-group.vue",
+    "limit": "27 KB"
+  },
+  {
+    "name": "doc-cta",
+    "path": "src/components/documentation/doc-cta/doc-cta.vue",
+    "limit": "12 KB"
+  },
+  {
+    "name": "doc-heading",
+    "path": "src/components/documentation/doc-heading/doc-heading.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "doc-tab",
+    "path": "src/components/documentation/doc-tab/doc-tab.vue",
+    "limit": "1 KB"
+  },
+  {
+    "name": "doc-tabs",
+    "path": "src/components/documentation/doc-tabs/doc-tabs.vue",
+    "limit": "17 KB"
+  },
+  {
     "name": "doc-prompt",
     "path": "src/components/documentation/doc-prompt/doc-prompt.vue",
     "limit": "9.85 KB"
@@ -215,6 +250,11 @@
     "name": "banner",
     "path": "src/components/marketing/banner/banner.vue",
     "limit": "4.25 KB"
+  },
+  {
+    "name": "banner-art",
+    "path": "src/components/marketing/banner/banner-art/banner-art.vue",
+    "limit": "10.1 KB"
   },
   {
     "name": "hero",
@@ -298,6 +338,12 @@
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2.5 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "line-figure",
+    "path": "src/components/content/line-figure/line-figure.vue",
+    "limit": "3 KB",
     "entryOnly": true
   },
   {
@@ -402,6 +448,36 @@
     "path": "src/components/sections/hero-band/hero-band.vue",
     "limit": "9.5 KB",
     "entryOnly": true
+  },
+  {
+    "name": "capability-grid",
+    "path": "src/components/sections/capability-grid/capability-grid.vue",
+    "limit": "6.75 KB"
+  },
+  {
+    "name": "console-panel",
+    "path": "src/components/sections/console-panel/console-panel.vue",
+    "limit": "21.25 KB"
+  },
+  {
+    "name": "customer-spotlight",
+    "path": "src/components/sections/customer-spotlight/customer-spotlight.vue",
+    "limit": "5.5 KB"
+  },
+  {
+    "name": "process-scroll",
+    "path": "src/components/sections/process-scroll/process-scroll.vue",
+    "limit": "5.5 KB"
+  },
+  {
+    "name": "section-command",
+    "path": "src/components/sections/section-command/section-command.vue",
+    "limit": "9 KB"
+  },
+  {
+    "name": "sticky-carousel",
+    "path": "src/components/sections/sticky-carousel/sticky-carousel.vue",
+    "limit": "6.1 KB"
   },
   {
     "name": "hero-copy-on-top-art",
@@ -965,17 +1041,17 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "8.4 KB"
+    "limit": "8.5 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "7.8 KB"
+    "limit": "7.9 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "7.9 KB"
+    "limit": "8 KB"
   },
   {
     "name": "phone-input",

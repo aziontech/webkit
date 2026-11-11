@@ -1,0 +1,57 @@
+{
+ "name": "doc-accordion-item",
+ "binding": "DocAccordionItem",
+ "import": "@aziontech/webkit/doc-accordion-item",
+ "treeShakeableImport": "@aziontech/webkit/doc-accordion-item",
+ "category": "documentation",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One collapsible entry inside a `DocAccordionGroup`. It carries its title and its body only; the group owns the open-state model, the trigger and the panel. Rendered on its own it is a `display: contents` wrapper around its body.",
+ "setup": null,
+ "useWhen": [
+  "As a direct child of `DocAccordionGroup`."
+ ],
+ "avoidWhen": [
+  "Outside a `DocAccordionGroup` — it renders no trigger of its own."
+ ],
+ "related": [
+  "DocAccordionGroup` — the group that reads it."
+ ],
+ "bestPractices": [
+  "Keep the title a question; keep the body prose."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The question the trigger shows; `DocAccordionGroup` reads it to build the row."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Opens this entry on first render."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The answer shown when the entry is open."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'\n  import DocAccordionItem from '@aziontech/webkit/doc-accordion-item'\n</script>\n\n<template>\n  <DocAccordionGroup>\n    <DocAccordionItem\n      title=\"Can I keep a stale object while the origin is down?\"\n      default-open\n    >\n      <p>\n        Yes. Turn on stale cache and the last good copy is served until the origin answers again.\n      </p>\n    </DocAccordionItem>\n  </DocAccordionGroup>\n</template>"
+  }
+ ],
+ "docs": "components/doc-accordion-item.md"
+}

@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Band links",
+   "summary": "A plan `description` under each name says who the plan is for, and a band `link` closes a product band with its own rates page.",
+   "sfc": "<script setup>\n  import ComparePlans from '@aziontech/webkit/compare-plans'\n\n  const plans = [\n    {\n      id: 'hobby',\n      name: 'Hobby',\n      description: 'For side projects.',\n      action: { label: 'Start for free', href: '/signup' }\n    },\n    {\n      id: 'pro',\n      name: 'Pro',\n      description: 'For teams in production.',\n      highlighted: true,\n      action: { label: 'Start trial', href: '/signup?plan=pro' }\n    }\n  ]\n\n  const sections = [\n    {\n      eyebrow: 'Compute',\n      title: 'Functions',\n      description: 'Run code close to users.',\n      rows: [\n        { label: 'Requests per month', values: ['1M', '10M'] },\n        { label: 'Custom domains', values: [true, true] },\n        { label: 'Usage alerts', values: ['—', true] }\n      ],\n      link: { label: 'See compute rates', href: '/pricing/compute' }\n    },\n    {\n      eyebrow: 'Storage',\n      title: 'Object Storage',\n      rows: [\n        { label: 'Storage included', values: ['5 GB', '100 GB'] },\n        { label: 'Versioning', values: ['—', true] }\n      ],\n      link: { label: 'See storage rates', href: '/pricing/storage' }\n    }\n  ]\n</script>\n\n<template>\n  <ComparePlans\n    caption=\"Hobby and Pro compared feature by feature\"\n    column-label=\"Features\"\n    picker-aria-label=\"Plan being compared\"\n    included-label=\"Included\"\n    excluded-label=\"Not included\"\n    :plans=\"plans\"\n    :sections=\"sections\"\n  />\n</template>"
+  }
+ ]
+}

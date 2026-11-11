@@ -1053,6 +1053,22 @@ export const otpInput = {
   label: 'One-time code'
 } as const
 
+export const consolePanel = {
+  views: 'Console views'
+} as const
+
+export const customerSpotlight = {
+  list: 'Customer stories',
+  story: 'Read story'
+} as const
+
+export const sectionCommand = {
+  command: 'Command',
+  prompt: 'Prompt',
+  copyCommand: 'Copy command',
+  copyPrompt: 'Copy prompt'
+} as const
+
 export const en = {
   actionConfirmation,
   aiLoading,
@@ -1174,5 +1190,8 @@ export const en = {
   tutorialPanel,
   wizard,
   paymentBrand,
-  otpInput
+  otpInput,
+  consolePanel,
+  customerSpotlight,
+  sectionCommand
 }
