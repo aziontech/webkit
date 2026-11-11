@@ -1,8 +1,9 @@
-import SectionContainer from '@aziontech/webkit/section-container'
-import SectionGap from '@aziontech/webkit/section-gap'
 import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
 import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'
 import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
+import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-action-templates'
+import SectionContainer from '@aziontech/webkit/section-container'
+import SectionGap from '@aziontech/webkit/section-gap'
 
 import { COLUMN_IMPORTS, indent } from '../../_shared/markup'
 import { sectionMarkup, SUBMIT_STATE_BINDINGS, submitWiring } from '../../_shared/section-source'
@@ -11,11 +12,15 @@ import { toSfc } from '../../_shared/story-source'
 import { PANEL_SECTION, PRIMARY_SECTION, SPLIT_SECTION } from './_sections/closing-call-to-action'
 import { SITE_SECTION as AGENTS_SECTION } from './_sections/closing-call-to-action-agents'
 import { SITE_SECTION as NEWSLETTER_SECTION } from './_sections/closing-call-to-action-newsletter'
+import { SITE_SECTION as TEMPLATES_SECTION } from './_sections/closing-call-to-action-templates'
 
 const IMPORT = "import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'"
 
 const AGENTS_IMPORT =
   "import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'"
+
+const TEMPLATES_IMPORT =
+  "import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-action-templates'"
 
 const NEWSLETTER_IMPORTS = [
   "import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'",
@@ -195,4 +200,33 @@ export const Agents = {
 export const AgentsJson = {
   tags: ['!dev'],
   ...siteJsonStory(AGENTS_SECTION)
+}
+
+const TemplatesTemplate = (args) => ({
+  components: { SectionContainer, SectionGap, ClosingCallToActionTemplates },
+  setup() {
+    return { args }
+  },
+  template: closingColumn('<ClosingCallToActionTemplates v-bind="args" />')
+})
+
+export const Templates = {
+  render: TemplatesTemplate,
+  args: TEMPLATES_SECTION.props,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The close that starts from a template: the ask on the left over the waving `primary` texture, a scrolling grid of templates to deploy on the right, then the tall closing frame.'
+      },
+      source: {
+        code: source('ClosingCallToActionTemplates', TEMPLATES_SECTION, [TEMPLATES_IMPORT])
+      }
+    }
+  }
+}
+
+export const TemplatesJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(TEMPLATES_SECTION)
 }

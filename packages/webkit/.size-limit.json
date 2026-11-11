@@ -580,5 +580,10 @@
     "name": "closing-call-to-action-newsletter",
     "path": "src/components/sections/closing-call-to-action-newsletter/closing-call-to-action-newsletter.vue",
     "limit": "15 KB"
+  },
+  {
+    "name": "closing-call-to-action-templates",
+    "path": "src/components/sections/closing-call-to-action-templates/closing-call-to-action-templates.vue",
+    "limit": "21 KB"
   }
 ]
