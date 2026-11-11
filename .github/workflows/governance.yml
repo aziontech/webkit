@@ -164,6 +164,9 @@ jobs:
       - name: TypeScript check
         run: pnpm run webkit:type-check
 
+      - name: Docs site TypeScript check
+        run: pnpm run docs:type-check
+
       - name: Type coverage (enforce 95% threshold)
         run: pnpm run webkit:type-coverage
 

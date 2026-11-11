@@ -17,6 +17,11 @@ export const GATES = [
     label: 'llms.txt and Markdown pages in sync',
     steps: [['node', 'scripts/build-llms.mjs', '--check']]
   },
+  {
+    id: 'js-dts',
+    label: 'Declarations for runtime .js modules in sync',
+    steps: [['node', 'scripts/build-js-dts.mjs', '--check']]
+  },
   { id: 'naming', label: 'Naming', steps: [['node', 'scripts/check-naming.mjs']] },
   {
     id: 'migrations',
