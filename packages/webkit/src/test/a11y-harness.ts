@@ -12,8 +12,8 @@ import { render } from '@testing-library/vue'
 import axe from 'axe-core'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { commands } from 'vitest/browser'
-import type { Component } from 'vue'
-import { nextTick } from 'vue'
+import type { Component, ComponentInternalInstance, VNode } from 'vue'
+import { defineComponent, getCurrentInstance, h, nextTick } from 'vue'
 
 import KNOWN from './a11y-known.json'
 
@@ -132,6 +132,149 @@ export function runA11ySuite(scope: A11yScope, pass: A11yPass): void {
       expect(describeViolations(fresh), 'new axe violations').toBe('')
       expect(freshAnimations, 'infinite animations still running under reduced motion').toEqual([])
       expect(stale, `fixed: remove these rules from a11y-known.json ${pass} › ${file}`).toEqual([])
+    })
+  })
+}
+
+type OverlayContext = { open: () => void; close: () => void; isOpen: { value: boolean } }
+
+const OVERLAYS = new Set(['Dialog', 'Drawer'])
+
+function collectOverlays(node: VNode | null | undefined, out: ComponentInternalInstance[]): void {
+  if (!node) return
+  if (node.component) {
+    if (OVERLAYS.has(node.component.type.name ?? '')) out.push(node.component)
+    collectOverlays(node.component.subTree, out)
+    return
+  }
+  if (Array.isArray(node.children)) {
+    for (const child of node.children) {
+      if (child && typeof child === 'object') collectOverlays(child as VNode, out)
+    }
+  }
+}
+
+function overlayContext(instance: ComponentInternalInstance): OverlayContext | undefined {
+  const provides = (instance as unknown as { provides: Record<symbol, unknown> }).provides
+  for (const key of Reflect.ownKeys(provides)) {
+    const value = provides[key as symbol] as Partial<OverlayContext> | undefined
+    if (value && typeof value.open === 'function' && value.isOpen) return value as OverlayContext
+  }
+  return undefined
+}
+
+function overlayLabel(instance: ComponentInternalInstance, index: number): string {
+  const testId = (instance.vnode.props?.['data-testid'] as string | undefined) ?? ''
+  return `${instance.type.name} #${index + 1}${testId ? ` (${testId})` : ''}`
+}
+
+async function closeOverlay(
+  instance: ComponentInternalInstance,
+  ctx: OverlayContext
+): Promise<void> {
+  ctx.close()
+  await nextTick()
+  if (ctx.isOpen.value) instance.emit('update:open', false)
+  await nextTick()
+  await settle()
+}
+
+/**
+ * Opens every Dialog and Drawer a copyable SFC mounts but renders closed, one at a time, and runs
+ * axe on the page with it open: the overlay's own markup, the landmarks it adds next to the page's
+ * (a second banner or contentinfo), and what it hides from the rest. Opening goes through the
+ * overlay's own context, so it works for a `v-model:open` driven by the page and for an
+ * uncontrolled overlay with a trigger part alike; an overlay the page keeps closed (its
+ * `update:open` handler ignores `true`, like a reveal shown only after a create) is skipped and is
+ * covered by its block's own test. No known-findings list: the pass stays clean.
+ */
+export function runA11yOpenSuite(scope: A11yScope, theme: 'light' | 'dark'): void {
+  const files = Object.keys(modules[scope]).sort()
+
+  describe(`a11y · ${scope} · open overlays · ${theme}`, () => {
+    let ran = 0
+    let opened = 0
+
+    beforeAll(async () => {
+      await commands.emulateMedia({
+        colorScheme: theme,
+        forcedColors: 'none',
+        reducedMotion: 'no-preference'
+      })
+      document.documentElement.dataset['theme'] = theme
+      document.body.style.background = 'var(--bg-canvas)'
+      document.body.style.color = 'var(--text-default)'
+      const style = document.createElement('style')
+      style.dataset['a11yHarness'] = ''
+      style.textContent = SETTLED_MOTION
+      document.head.appendChild(style)
+    })
+
+    afterAll(async () => {
+      await commands.emulateMedia({ colorScheme: null, forcedColors: null, reducedMotion: null })
+      delete document.documentElement.dataset['theme']
+      document.body.removeAttribute('style')
+      document.head.querySelectorAll('style[data-a11y-harness]').forEach((style) => style.remove())
+      if (ran > 10) expect(opened, 'the pass opened no overlay at all').toBeGreaterThan(0)
+    })
+
+    afterEach(() => {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+    })
+
+    it.each(files.map((file) => [file.replace('../../', '')]))('%s', async (file) => {
+      ran += 1
+      const mod = await modules[scope][`../../${file}`]!()
+      let host: ComponentInternalInstance | null = null
+      render(
+        defineComponent({
+          setup() {
+            host = getCurrentInstance()
+            return () => h(mod.default)
+          }
+        })
+      )
+      await nextTick()
+      await settle()
+
+      const overlays: ComponentInternalInstance[] = []
+      collectOverlays((host as ComponentInternalInstance | null)?.subTree, overlays)
+      const failures: string[] = []
+
+      for (const [index, instance] of overlays.entries()) {
+        const ctx = overlayContext(instance)
+        if (!ctx || ctx.isOpen.value) continue
+        ctx.open()
+        await nextTick()
+        await settle()
+        const label = overlayLabel(instance, index)
+        if (!ctx.isOpen.value) continue
+        opened += 1
+        const results = await axe.run(document.body, axeOptions(theme))
+        if (RECORD && results.violations.length) {
+          console.warn(
+            `A11Y_OPEN ${JSON.stringify({ theme, file, overlay: label, rules: results.violations.map((v) => v.id) })}`
+          )
+        }
+        if (results.violations.length)
+          failures.push(
+            `${label}\n${results.violations
+              .map(
+                (violation) =>
+                  `${violation.id}: ${violation.nodes
+                    .slice(0, 3)
+                    .map((node) => `${node.target.join(' ')} ${node.html.slice(0, 160)}`)
+                    .join(' | ')}`
+              )
+              .join('\n')}`
+          )
+        await closeOverlay(instance, ctx)
+        if (ctx.isOpen.value) break
+      }
+
+      if (RECORD) return
+      expect(failures.join('\n\n'), 'axe violations with an overlay open').toBe('')
     })
   })
 }

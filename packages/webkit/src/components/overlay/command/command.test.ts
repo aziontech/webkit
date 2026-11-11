@@ -226,6 +226,11 @@ describe('Command (overlay: wraps Dialog, composition + provide/inject)', () => 
       await fireEvent.update(input, 'zzzzzzz')
       await settle()
       expect(empty.style.display).not.toBe('none')
+      expect(byTestId('overlay-command__list')).not.toHaveAttribute('role')
+
+      await fireEvent.update(input, '')
+      await settle()
+      expect(byTestId('overlay-command__list')).toHaveAttribute('role', 'listbox')
     })
   })
 

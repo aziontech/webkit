@@ -8,6 +8,11 @@
       "file": "default.vue"
     },
     {
+      "name": "Folders",
+      "summary": "With `directories`, a dropped folder is walked and every file inside arrives in `drop` with its `webkitRelativePath`; Browse folder opens the folder picker (`<input webkitdirectory>`). `FileTokenGroup` names each file by its path.",
+      "file": "folders.vue"
+    },
+    {
       "name": "Overlay",
       "summary": "Hidden at rest. Drag a file over the window and the overlay fades in over its nearest positioned ancestor, here the wrapper around the card.",
       "file": "overlay.vue"

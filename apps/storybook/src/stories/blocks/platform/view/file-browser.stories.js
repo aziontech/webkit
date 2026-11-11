@@ -32,7 +32,7 @@ export const InsideAFolder = {
 
 export const Uploading = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one." }, source: { code: source2 } } }
+  parameters: { docs: { description: { story: "An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. Upload folder opens the same dialog for a folder (`FileDropzone directories` and a Browse folder picker); each file keeps its path and its folders appear in the table as files land. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one." }, source: { code: source2 } } }
 }
 
 export const MoveObject = {

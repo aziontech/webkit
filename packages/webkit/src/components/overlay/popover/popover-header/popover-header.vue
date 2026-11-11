@@ -23,6 +23,7 @@
 <template>
   <header
     v-bind="attrs"
+    role="none"
     :data-testid="testId"
     class="relative border-b border-(--border-default) py-(--spacing-sm) px-(--spacing-md)"
   >

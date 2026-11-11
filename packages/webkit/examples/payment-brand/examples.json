@@ -9,7 +9,7 @@
     },
     {
       "name": "Brands",
-      "summary": "Every drawn mark (Visa, Mastercard, American Express, Diners Club, JCB) and the generic card glyph for a brand without a mark (Elo), at `medium` and `small`. Names as the payment API returns them are normalized.",
+      "summary": "Every drawn mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) and the generic card glyph for a brand without a mark (Maestro), at `medium` and `small`. Names as the payment API returns them are normalized.",
       "file": "brands.vue"
     }
   ]

@@ -190,6 +190,7 @@
     return list
   })
 
+  const isFile = (row) => row.kind === 'file'
   const rowSelection = ref({ 'index.html': true, '404.html': true })
   const enterFolder = (name) => {
     folderPath.value = [...folderPath.value, name]
@@ -403,6 +404,7 @@
               v-model:columnVisibility="columnVisibility"
               v-model:row-selection="rowSelection"
               enable-row-selection
+              :row-selectable="isFile"
               :data="rows"
               :columns="columns"
               row-key="id"

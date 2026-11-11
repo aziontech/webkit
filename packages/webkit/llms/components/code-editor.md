@@ -76,9 +76,9 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-| --- | --- | --- | --- | --- |
-| `v-model` | `string` | `''` | `update:modelValue` | The code via `defineModel`. Updated on every edit, from the plain editor or from Monaco. |
+| Model     | Type     | Default | Emits               | Notes                                                                                    |
+| --------- | -------- | ------- | ------------------- | ---------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The code via `defineModel`. Updated on every edit, from the plain editor or from Monaco. |
 
 ## States
 

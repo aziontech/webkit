@@ -389,141 +389,137 @@
                                   {{ row.name }} references no other resources.
                                 </p>
                                 <Item.Group v-else>
-                                  <div class="flex flex-col gap-(--spacing-sm)">
-                                    <Item
-                                      v-for="dependency in row.dependencies"
-                                      :key="dependency.key"
-                                      kind="inline"
-                                      size="small"
-                                    >
-                                      <Item.Media>
-                                        <span class="flex size-5 items-center justify-center">
-                                          <i
-                                            :class="dependency.icon"
-                                            class="text-body-xs text-(--text-muted)"
-                                            aria-hidden="true"
-                                          />
+                                  <Item
+                                    v-for="dependency in row.dependencies"
+                                    :key="dependency.key"
+                                    kind="inline"
+                                    size="small"
+                                  >
+                                    <Item.Media>
+                                      <span class="flex size-5 items-center justify-center">
+                                        <i
+                                          :class="dependency.icon"
+                                          class="text-body-xs text-(--text-muted)"
+                                          aria-hidden="true"
+                                        />
+                                      </span>
+                                    </Item.Media>
+                                    <Item.Content>
+                                      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                                        <span class="shrink-0 text-body-sm text-(--text-muted)">
+                                          {{ dependency.label }}
                                         </span>
-                                      </Item.Media>
-                                      <Item.Content>
-                                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                          <span class="shrink-0 text-body-sm text-(--text-muted)">
-                                            {{ dependency.label }}
-                                          </span>
-                                          <Item.Title>{{ dependency.name }}</Item.Title>
-                                          <Tag
-                                            v-if="!dependency.note"
-                                            :label="
-                                              dependency.versions.length
-                                                ? 'Ready'
-                                                : 'No ready version'
-                                            "
-                                            :severity="
-                                              dependency.versions.length ? 'success' : 'warning'
-                                            "
-                                            size="small"
-                                            class="shrink-0"
-                                          />
-                                        </span>
-                                        <Item.Description>
-                                          {{ dependency.note || versionOf(dependency).name }}
-                                        </Item.Description>
-                                      </Item.Content>
-                                      <Item.Actions v-if="!dependency.note">
-                                        <DropdownMenu
-                                          v-model:open="versionOpen[dependency.key]"
-                                          placement="bottom-end"
-                                          @select="
-                                            (event, id) => pickVersion(dependency, String(id))
+                                        <Item.Title>{{ dependency.name }}</Item.Title>
+                                        <Tag
+                                          v-if="!dependency.note"
+                                          :label="
+                                            dependency.versions.length
+                                              ? 'Ready'
+                                              : 'No ready version'
                                           "
-                                        >
-                                          <DropdownMenu.Trigger>
-                                            <Button
-                                              label="Change version"
-                                              kind="outlined"
-                                              size="small"
-                                              icon="pi pi-chevron-down"
-                                              icon-position="trailing"
-                                              :disabled="!dependency.versions.length"
-                                            />
-                                          </DropdownMenu.Trigger>
-                                          <template #top>
-                                            <div
-                                              class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
-                                            >
-                                              <p class="text-label-sm text-(--text-muted)">
-                                                {{ versionSummary(dependency) }}
-                                              </p>
-                                              <Input
-                                                v-if="dependency.total > dependency.versions.length"
-                                                size="medium"
-                                                placeholder="Search versions"
-                                                aria-label="Search versions"
-                                              >
-                                                <template #iconLeft>
-                                                  <i
-                                                    class="pi pi-search"
-                                                    aria-hidden="true"
-                                                  />
-                                                </template>
-                                              </Input>
-                                            </div>
-                                          </template>
-                                          <DropdownMenu.Group>
-                                            <DropdownMenu.Option
-                                              v-for="entry in dependency.versions"
-                                              :key="entry.id"
-                                              :value="entry.id"
-                                              :label="entry.name"
-                                              :selected="entry.id === versionOf(dependency).id"
-                                              :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
-                                            >
-                                              <template #left>
-                                                <Avatar
-                                                  :alt="entry.author"
-                                                  :label="entry.author"
-                                                  size="small"
-                                                  kind="square"
-                                                />
-                                              </template>
-                                              <span
-                                                class="inline-flex min-w-0 items-center gap-(--spacing-xs)"
-                                              >
-                                                <span class="truncate">{{ entry.name }}</span>
-                                                <Tag
-                                                  v-if="entry.active"
-                                                  label="Active"
-                                                  severity="success"
-                                                  size="small"
-                                                  class="shrink-0"
-                                                />
-                                              </span>
-                                              <template #right>
-                                                <span class="text-body-xs text-(--text-muted)">{{
-                                                  entry.createdAgo
-                                                }}</span>
-                                              </template>
-                                            </DropdownMenu.Option>
-                                          </DropdownMenu.Group>
-                                          <template
-                                            v-if="dependency.total > dependency.versions.length"
-                                            #bottom
+                                          :severity="
+                                            dependency.versions.length ? 'success' : 'warning'
+                                          "
+                                          size="small"
+                                          class="shrink-0"
+                                        />
+                                      </span>
+                                      <Item.Description>
+                                        {{ dependency.note || versionOf(dependency).name }}
+                                      </Item.Description>
+                                    </Item.Content>
+                                    <Item.Actions v-if="!dependency.note">
+                                      <DropdownMenu
+                                        v-model:open="versionOpen[dependency.key]"
+                                        placement="bottom-end"
+                                        @select="(event, id) => pickVersion(dependency, String(id))"
+                                      >
+                                        <DropdownMenu.Trigger>
+                                          <Button
+                                            label="Change version"
+                                            kind="outlined"
+                                            size="small"
+                                            icon="pi pi-chevron-down"
+                                            icon-position="trailing"
+                                            :disabled="!dependency.versions.length"
+                                          />
+                                        </DropdownMenu.Trigger>
+                                        <template #top>
+                                          <div
+                                            class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
                                           >
-                                            <div
-                                              class="border-t border-(--border-default) px-(--spacing-xxs) pt-(--spacing-xxs)"
+                                            <p class="text-label-sm text-(--text-muted)">
+                                              {{ versionSummary(dependency) }}
+                                            </p>
+                                            <Input
+                                              v-if="dependency.total > dependency.versions.length"
+                                              size="medium"
+                                              placeholder="Search versions"
+                                              aria-label="Search versions"
                                             >
-                                              <Button
-                                                :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
-                                                kind="transparent"
+                                              <template #iconLeft>
+                                                <i
+                                                  class="pi pi-search"
+                                                  aria-hidden="true"
+                                                />
+                                              </template>
+                                            </Input>
+                                          </div>
+                                        </template>
+                                        <DropdownMenu.Group>
+                                          <DropdownMenu.Option
+                                            v-for="entry in dependency.versions"
+                                            :key="entry.id"
+                                            :value="entry.id"
+                                            :label="entry.name"
+                                            :selected="entry.id === versionOf(dependency).id"
+                                            :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
+                                          >
+                                            <template #left>
+                                              <Avatar
+                                                :alt="entry.author"
+                                                :label="entry.author"
                                                 size="small"
-                                                class="w-full"
+                                                kind="square"
                                               />
-                                            </div>
-                                          </template>
-                                        </DropdownMenu>
-                                      </Item.Actions>
-                                    </Item>
-                                  </div>
+                                            </template>
+                                            <span
+                                              class="inline-flex min-w-0 items-center gap-(--spacing-xs)"
+                                            >
+                                              <span class="truncate">{{ entry.name }}</span>
+                                              <Tag
+                                                v-if="entry.active"
+                                                label="Active"
+                                                severity="success"
+                                                size="small"
+                                                class="shrink-0"
+                                              />
+                                            </span>
+                                            <template #right>
+                                              <span class="text-body-xs text-(--text-muted)">{{
+                                                entry.createdAgo
+                                              }}</span>
+                                            </template>
+                                          </DropdownMenu.Option>
+                                        </DropdownMenu.Group>
+                                        <template
+                                          v-if="dependency.total > dependency.versions.length"
+                                          #bottom
+                                        >
+                                          <div
+                                            class="border-t border-(--border-default) px-(--spacing-xxs) pt-(--spacing-xxs)"
+                                          >
+                                            <Button
+                                              :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
+                                              kind="transparent"
+                                              size="small"
+                                              class="w-full"
+                                            />
+                                          </div>
+                                        </template>
+                                      </DropdownMenu>
+                                    </Item.Actions>
+                                  </Item>
                                 </Item.Group>
                                 <span
                                   class="sr-only"

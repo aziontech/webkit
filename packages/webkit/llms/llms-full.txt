@@ -3345,7 +3345,7 @@ The code of every state is in [blocks/platform/ai/ai-chat-drawer.md](blocks/plat
 - Surface: product
 - Source: `blocks/platform/auth/auth.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/auth")`
-- Components: [Alert](../../components/alert.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Label](../../components/label.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [Separator](../../components/separator.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Label](../../components/label.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -3505,7 +3505,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - ServerError: 500 on the request; a danger notice with Retry in the card instead of a toast.
 - Timeout: no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
 - EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
-- MfaSetup: turning on multi-factor authentication: three numbered steps, the QR code the API returns (a framed placeholder in the demo) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
+- MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
 - MfaCode: the sign-in challenge after the password: an autofocused 6-digit `OtpInput` that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 
 ## Related
@@ -10551,7 +10551,7 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 
 Variant Uploading only; it adds `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FileDropzone` and `FileTokenGroup` to the page.
 
-Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload closes the dialog and starts the transfer; the dialog does not wait for it.
+Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload closes the dialog and starts the transfer; the dialog does not wait for it. In the Uploading variant Add to files also offers Upload folder: the same dialog titled Upload folder, a `FileDropzone` with `directories` (a dropped folder is walked) and a Browse folder `Button` wired to a hidden `<input type="file" webkitdirectory>`; the tokens and the transfer rows name each file by its path inside the folder (`site/css/main.css`), and as files finish their folders appear in the table under the folder in view.
 
 A second `FileDropzone kind="overlay"` sits inside the `section` that holds the card (made `relative`), so dragging files anywhere over the page shows `Drop files to upload them to <folder>` over the listing; a drop uploads straight into the folder in view and refuses files over the limit with a danger toast.
 
@@ -10567,7 +10567,7 @@ When a transfer finishes the page reports it with a toast as well as the card, b
 
 Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
-`enable-row-selection` with `v-model:row-selection` adds the checkbox column; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move). Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of every folder in the storage (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves.
+`enable-row-selection` with `v-model:row-selection` adds the checkbox column, and `:row-selectable="(row) => row.kind === 'file'"` keeps it to files: folders and the `..` row draw no checkbox and Select all skips them; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move). Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of every folder in the storage (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves.
 
 ## Do
 
@@ -10641,7 +10641,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
 - `Default` — primary (the code below)
 - `InsideAFolder` — Inside a build folder: the crumb gains the folder, a .. row leads back up, and the files carry their glyph, size, editor and age.
-- `Uploading` — An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one.
+- `Uploading` — An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. Upload folder opens the same dialog for a folder (`FileDropzone directories` and a Browse folder picker); each file keeps its path and its folders appear in the table as files land. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one.
 - `MoveObject` — Two files of a build folder are selected and the Move dialog is open: it names the files, their total size and the folder they leave, and the Destination folder `Combobox` offers every folder in the storage and accepts a new path. A path with characters outside printable ASCII, with `..`, or equal to the current folder is refused under the field. Move runs in the floating `UploadProgress` card (`operation="move"`) and ends in a toast with Open folder. Selecting rows shows a selection bar with Move, and every file's row menu has Move.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/file-browser", { variant })`, or the file under `blocks/platform/view/file-browser/variants/`.
@@ -12199,6 +12199,7 @@ The code of every state is in [blocks/shells/website.md](blocks/shells/website.m
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Forced colors: the filled kinds (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
 
 ## Right-to-left
 
@@ -12549,12 +12550,14 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - `data-state` mirrors `default` or `copied`
 - `data-disabled` mirrors the `disabled` prop
 - The composed `Tooltip` carries its own `data-state` (`open` | `closed`) and is disabled with the button
+- Fallback: when `navigator.clipboard.writeText` rejects (permission denied, insecure context, unfocused document), the button loads a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from the `copyFallback` catalog group.
 
 ## Accessibility
 
 - Visible focus: inherited from `IconButton` (`focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`)
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates copy.
 - ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied.
+- Fallback popover: `role="dialog"` named by its title and described by the key hint; focus moves into the selected read-only field and returns to the button on close.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
@@ -13855,6 +13858,301 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 
 ---
 
+<!-- components/conversation-history.md -->
+
+# Conversation History
+
+> The list of past conversations with an assistant, in a side panel or drawer: titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, and an optional Delete per row. Choosing a row sets `v-model` to its id; the owner loads that conversation into `Conversation`.
+
+- Import: `import ConversationHistory from '@aziontech/webkit/conversation-history'`
+- Category: ai · Surface: product · Structure: monolithic
+- API as JSON: [conversation-history.json](https://github.com/aziontech/webkit/blob/main/.specs/conversation-history.json)
+
+## When to use
+
+- An assistant keeps past conversations and the person returns to one.
+- The left rail or a drawer of a chat page.
+
+## Do
+
+- Title each conversation from its first prompt, short; the full title shows on hover through `title`.
+- Pass `now` from the server render (or a fixed reference) so the groups match on the server and the client.
+- Confirm deletes of anything older than today with a `ConfirmDialog` in the `remove` handler.
+
+## Don’t
+
+- Messages of the open conversation → `Conversation`.
+- Navigation between product areas → `SidebarNav` or `NavigationMenu`.
+- A searchable table of records → `TableRoot`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [conversation](conversation.md) — shows the conversation the history selects.
+- [drawer](drawer.md) — holds the history on narrow screens.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `{ id: string; title: string; updatedAt: string \ \| number \ \| Date }[]` | `[]` | false | Conversations, any order; they are sorted newest first inside their group. |
+| `now` | `string \ \| number \ \| Date` | `undefined` | false | Reference time for the groups. Empty uses the current time; pass a fixed value when the list is rendered on the server. |
+| `removable` | `boolean` | `false` | false | Shows a Delete button on each row that emits `remove`. |
+| `loading` | `boolean` | `false` | false | Shows placeholder rows while the history loads. |
+| `label` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation history`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `remove` | `string` |  |
+
+## v-model
+
+| Model     | Type       | Default | Emits  | Notes               |
+| --------- | ---------- | ------- | ------ | ------------------- |
+| `v-model` | `string \\ | null`   | `null` | `update:modelValue` | Id of the open conversation; its row is `aria-current="page"`. |
+
+## States
+
+- Groups render only when they have items; inside a group, newest first.
+- Active row: `data-active` and `aria-current="page"`, the selected surface.
+- Empty: one muted line, `No conversations yet.`
+- Loading: `aria-busy="true"` and five skeleton rows; no group headings.
+
+## Accessibility
+
+- The root is a `nav` named by `label`; each group is a `ul` labelled by its visible heading (`aria-labelledby`).
+- Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
+- Delete is an `IconButton` named `Delete <title>`, shown on every row (not hover-only), so it is reachable by keyboard and touch.
+- Keyboard: `Tab` moves through rows and their Delete; `Enter`/`Space` open a conversation.
+- Loading sets `aria-busy` on the list.
+
+## Right-to-left
+
+- Layout: logical spacing; Delete sits at the inline end of the row.
+- Icons: the trash glyph is not mirrored.
+- Keyboard: none beyond `Tab`.
+- User data: titles render in `<bdi>` with `dir="auto"`.
+
+## Internationalization
+
+| Key                              | English source          | Override prop |
+| -------------------------------- | ----------------------- | ------------- |
+| `conversationHistory.label`      | `Conversation history`  | `label`       |
+| `conversationHistory.today`      | `Today`                 | —             |
+| `conversationHistory.yesterday`  | `Yesterday`             | —             |
+| `conversationHistory.previous7`  | `Previous 7 days`       | —             |
+| `conversationHistory.previous30` | `Previous 30 days`      | —             |
+| `conversationHistory.older`      | `Older`                 | —             |
+| `conversationHistory.empty`      | `No conversations yet.` | —             |
+| `conversationHistory.remove`     | `Delete {title}`        | —             |
+
+- Groups use calendar days in the browser's time zone, not 24-hour windows.
+
+## Responsive
+
+- Container queries: none; it fills the width it is given.
+- Narrow: titles truncate on one line with the full title in `title`.
+- Touch: rows are 32 px tall with the Delete button's 40 px touch target.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ConversationHistory from '@aziontech/webkit/conversation-history'
+  import { ref } from 'vue'
+
+  const now = '2026-11-11T15:00:00'
+  const items = ref([
+    { id: 'c1', title: 'Purge the cache after a deploy', updatedAt: '2026-11-11T14:20:00' },
+    { id: 'c2', title: 'Why is my function returning 502?', updatedAt: '2026-11-11T09:05:00' },
+    { id: 'c3', title: 'Set up a WAF rule for login attempts', updatedAt: '2026-11-10T18:40:00' },
+    { id: 'c4', title: 'Image optimization query parameters', updatedAt: '2026-11-07T11:00:00' },
+    {
+      id: 'c5',
+      title: 'Migrate DNS records from another provider',
+      updatedAt: '2026-10-28T16:30:00'
+    },
+    { id: 'c6', title: 'Edge storage pricing', updatedAt: '2026-08-02T10:00:00' }
+  ])
+  const active = ref('c2')
+
+  const remove = (id) => {
+    items.value = items.value.filter((item) => item.id !== id)
+    if (active.value === id) active.value = null
+  }
+</script>
+
+<template>
+  <div class="w-full max-w-(--container-3xs)">
+    <ConversationHistory
+      v-model="active"
+      :items="items"
+      :now="now"
+      removable
+      @remove="remove"
+    />
+  </div>
+</template>
+```
+
+1 more example(s) in [components/conversation-history.md](https://github.com/aziontech/webkit/blob/main/.specs/components/conversation-history.md).
+
+---
+
+<!-- components/feedback-reason-dialog.md -->
+
+# Feedback Reason Dialog
+
+> Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
+
+- Import: `import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'`
+- Category: ai · Surface: product · Structure: monolithic
+- API as JSON: [feedback-reason-dialog.json](https://github.com/aziontech/webkit/blob/main/.specs/feedback-reason-dialog.json)
+
+## When to use
+
+- After a thumbs-down on an AI response, to collect the reason.
+- Any rating of generated content that needs a short, categorised reason.
+
+## Do
+
+- Open it only after a thumbs-down; a thumbs-up needs no reason.
+- Keep the reasons short and mutually exclusive; the last is `Other`, and details stay optional.
+- Close it from the `submit` handler once the request succeeds; keep it open with `loading` while it is sent.
+
+## Don’t
+
+- General product feedback with several fields → a page or `Drawer` form.
+- A confirmation with no input → `ConfirmDialog`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [chat-message](chat-message.md) — `ChatMessage.Feedback` holds the thumbs that open it.
+- [confirm-dialog](confirm-dialog.md) — the same dialog anatomy for a yes/no decision.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `reasons` | `{ value: string; label: string }[]` | `[]` | false | Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other. |
+| `loading` | `boolean` | `false` | false | The feedback is being sent: Send feedback shows a spinner and the form is locked. |
+| `title` | `string` | `''` | false | Dialog title. Empty uses the locale catalog (`What went wrong?`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `submit` | `{ reason: string; details: string }` |  |
+
+## v-model
+
+| Model          | Type      | Default | Emits         | Notes                                                              |
+| -------------- | --------- | ------- | ------------- | ------------------------------------------------------------------ |
+| `v-model:open` | `boolean` | `false` | `update:open` | Opens the dialog; the reason and details reset each time it opens. |
+
+## States
+
+- Idle (open): no reason chosen, Send feedback enabled.
+- Invalid: submitted without a reason; the fieldset is invalid and its error is announced.
+- Loading: Send feedback spinner, radios, details and Cancel disabled.
+- `data-state` on the dialog mirrors `open` / `closed` (from `Dialog`).
+
+## Accessibility
+
+- A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the thumbs-down on close.
+- The reasons are a `fieldset` with a `legend` (`Reason`), one `RadioButton` per reason with its label; the details `Textarea` is labelled `Details (optional)`.
+- Submitting without a reason marks the fieldset invalid, shows the error text and focuses the first radio; nothing is sent.
+- Keyboard: `Tab` through radios (arrows within the group), details, Cancel, Send feedback; `Enter` in a radio submits; `Escape` closes.
+
+## Right-to-left
+
+- Layout: logical spacing only; the footer actions sit at the inline end.
+- Icons: none.
+- Keyboard: radio arrows follow the page direction (native).
+- User data: details render with `dir="auto"` through `Textarea`.
+
+## Internationalization
+
+| Key                                                                            | English source                                                                                    | Override prop |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ------------- |
+| `feedbackReason.title`                                                         | `What went wrong?`                                                                                | `title`       |
+| `feedbackReason.description`                                                   | `Your answer helps improve future responses.`                                                     | —             |
+| `feedbackReason.reason`                                                        | `Reason`                                                                                          | —             |
+| `feedbackReason.details`                                                       | `Details (optional)`                                                                              | —             |
+| `feedbackReason.detailsPlaceholder`                                            | `What did you expect instead?`                                                                    | —             |
+| `feedbackReason.required`                                                      | `Choose a reason.`                                                                                | —             |
+| `feedbackReason.cancel`                                                        | `Cancel`                                                                                          | —             |
+| `feedbackReason.send`                                                          | `Send feedback`                                                                                   | —             |
+| `feedbackReason.inaccurate`, `notHelpful`, `ignoredRequest`, `unsafe`, `other` | `Inaccurate or made up`, `Not helpful`, `Did not follow my request`, `Unsafe or harmful`, `Other` | `reasons`     |
+
+## Responsive
+
+- Container queries: the dialog body is the `@container/panel` from `PanelContent`.
+- Narrow: the dialog is the `small` size and becomes full width under `sm`; the footer buttons stretch (from `PanelFooter`).
+- Touch: radios and buttons keep their 40 px targets.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ChatMessage from '@aziontech/webkit/chat-message'
+  import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'
+  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import { ref } from 'vue'
+
+  const answer =
+    'Turn on **Image Optimization** in the application settings, then add `?ims=300x` to the image URL.'
+  const feedback = ref(null)
+  const reasonOpen = ref(false)
+  const sending = ref(false)
+
+  const onFeedback = (value) => {
+    feedback.value = value
+    if (value === 'down') reasonOpen.value = true
+  }
+
+  const sendReason = () => {
+    sending.value = true
+    setTimeout(() => {
+      sending.value = false
+      reasonOpen.value = false
+    }, 600)
+  }
+</script>
+
+<template>
+  <div class="w-full max-w-(--container-3xl)">
+    <ChatMessage timestamp="10:44">
+      <StreamingResponse :content="answer" />
+      <template #actions>
+        <ChatMessage.Actions>
+          <ChatMessage.Feedback
+            :model-value="feedback"
+            @update:model-value="onFeedback"
+          />
+        </ChatMessage.Actions>
+      </template>
+    </ChatMessage>
+    <FeedbackReasonDialog
+      v-model:open="reasonOpen"
+      :loading="sending"
+      @submit="sendReason"
+    />
+  </div>
+</template>
+```
+
+---
+
 <!-- components/prompt-input.md -->
 
 # Prompt Input
@@ -13903,12 +14201,13 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 | `maxRows` | `number` | `6` | false | Rows the text area grows to before it scrolls. |
 | `state` | `'ready' \| 'submitted' \| 'streaming'` | `'ready'` | false | Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. |
 | `disabled` | `boolean` | `false` | false | Disables the text area, the submit control and every control in the slots' row. |
+| `menus` | `PromptInputMenu[]` | `[]` | false | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `submit` | `string` |  |
+| `submit` | `(value: string, references: PromptInputReference[])` |  |
 | `stop` | `—` |  |
 
 ## Slots
@@ -13927,9 +14226,10 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                  |
-| --------- | -------- | ------- | ------------------- | -------------------------------------------------------------------------------------- |
-| `v-model` | `string` | `''`    | `update:modelValue` | The prompt being written, via `defineModel`. The owner clears it in its `submit` handler. |
+| Model                | Type                     | Default | Emits               | Notes                                                                                                                                                 |
+| -------------------- | ------------------------ | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`            | `string`                 | `''`    | `update:modelValue` | The prompt being written, via `defineModel`. The owner clears it in its `submit` handler.                                                             |
+| `v-model:references` | `PromptInputReference[]` | `[]`    | `update:references` | What the prompt references, added by the menus and shown as removable chips above the text; removing a chip also removes its `<trigger><label>` text. |
 
 ## States
 
@@ -13942,6 +14242,7 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 - Visible focus: the container shows `focus-within:ring-2 focus-within:ring-(--ring-color)`.
 - Keyboard map: `Enter` submits; `Shift+Enter` new line; `Tab` moves to the slot controls, then Submit / Stop. IME composition (`isComposing`) never submits.
+- Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"`); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
 - ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter and the hint, `aria-invalid` over the limit; Submit and Stop are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers).
@@ -13950,19 +14251,22 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 - Layout: logical utilities; actions at the inline start, Submit at the inline end.
 - Icons: the arrow-up and stop glyphs are not mirrored.
-- Keyboard: no arrow-key behavior of its own.
+- Keyboard: arrows move in the shortcut menu only while it is open; vertical, so not mirrored.
 - User data: the text area follows the document direction; mixed prompts render with the browser's bidi.
 
 ## Internationalization
 
-| Key                      | English source                     | Override prop |
-| ------------------------ | ---------------------------------- | ------------- |
-| `promptInput.label`      | `Prompt`                           | `ariaLabel`   |
-| `promptInput.placeholder`| `Ask a question`                   | `placeholder` |
-| `promptInput.submit`     | `Submit`                           | —             |
-| `promptInput.stop`       | `Stop generating`                  | —             |
-| `promptInput.count`      | `{count}/{max}`                    | —             |
-| `promptInput.overLimit`  | `{count} characters over the limit`| —             |
+| Key                          | English source                      | Override prop |
+| ---------------------------- | ----------------------------------- | ------------- |
+| `promptInput.label`          | `Prompt`                            | `ariaLabel`   |
+| `promptInput.placeholder`    | `Ask a question`                    | `placeholder` |
+| `promptInput.submit`         | `Submit`                            | —             |
+| `promptInput.stop`           | `Stop generating`                   | —             |
+| `promptInput.count`          | `{count}/{max}`                     | —             |
+| `promptInput.overLimit`      | `{count} characters over the limit` | —             |
+| `promptInputMenu.results`    | `{count} suggestion(s)` (plural)    | —             |
+| `promptInputMenu.noMatches`  | `No matches`                        | —             |
+| `promptInputMenu.references` | `References`                        | —             |
 
 - Formatting: counts go through `Intl.NumberFormat` (the `t()` number formatting).
 
@@ -14135,6 +14439,164 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 ```
 
 1 more example(s) in [components/reasoning.md](https://github.com/aziontech/webkit/blob/main/.specs/components/reasoning.md).
+
+---
+
+<!-- components/response-branches.md -->
+
+# Response Branches
+
+> Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.
+
+- Import: `import ResponseBranches from '@aziontech/webkit/response-branches'`
+- Category: ai · Surface: product · Structure: monolithic
+- API as JSON: [response-branches.json](https://github.com/aziontech/webkit/blob/main/.specs/response-branches.json)
+
+## When to use
+
+- A response was regenerated and the earlier versions stay available to compare.
+- A model returned several candidates and the person picks the one to keep reading.
+
+## Do
+
+- Move to the new version when Regenerate finishes (set `v-model` to the last index) so the person sees what they asked for.
+- Keep the versions in the order they were made; the newest is last.
+- Do not render the pager inside the slot; it belongs to the component so its position and labels stay the same across versions.
+
+## Don’t
+
+- Pages of one long list → use `Pagination`.
+- Steps of a flow → use `Stepper`.
+- Different documents side by side → use `Tabs`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [chat-message](chat-message.md) — the message whose body the branches wrap; its actions hold Regenerate.
+- [streaming-response](streaming-response.md) — a new version streams in the slot while the pager already counts it.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `count` | `number` | `—` | true | How many versions exist. With one or none the pager is not drawn. |
+| `label` | `string` | `''` | false | Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). |
+| `disabled` | `boolean` | `false` | false | Locks the pager, for example while a new version streams. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | { index: number } | The active version. Rendered once; the owner switches its content by `index`. |
+
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                              |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------ |
+| `v-model` | `number` | `0`     | `update:modelValue` | Zero-based index of the version shown, clamped to `0 … count - 1`. |
+
+## States
+
+- `data-count` on the root; `data-index` mirrors the clamped index.
+- First version: Previous is disabled; last version: Next is disabled.
+- `disabled`: both buttons are disabled and the counter is muted.
+- `count` ≤ 1: only the slot renders.
+
+## Accessibility
+
+- The pager is `role="group"` named by `label` (`Response versions`); Previous and Next are `IconButton`s named `Previous version` / `Next version`.
+- The counter (`2 of 3`) is a polite live region, so moving announces the new position once; the slot is not live.
+- Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order.
+
+## Right-to-left
+
+- Layout: logical spacing only; the pager sits at the inline start.
+- Icons: the chevrons mirror under `dir="rtl"` through `IconButton`'s directional icons, so Previous always points to the inline start.
+- Keyboard: none beyond the buttons.
+- User data: the slot follows the page direction.
+
+## Internationalization
+
+| Key                         | English source         | Override prop |
+| --------------------------- | ---------------------- | ------------- |
+| `responseBranches.label`    | `Response versions`    | `label`       |
+| `responseBranches.previous` | `Previous version`     | —             |
+| `responseBranches.next`     | `Next version`         | —             |
+| `responseBranches.position` | `{current} of {total}` | —             |
+
+- Numbers in the counter use the locale's digits through the catalog template.
+
+## Responsive
+
+- Container queries: none.
+- Narrow: the pager stays one row (two 28 px buttons and a short counter).
+- Touch: buttons are `IconButton` small, with the 40 px touch target from `IconButton`.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ChatMessage from '@aziontech/webkit/chat-message'
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import ResponseBranches from '@aziontech/webkit/response-branches'
+  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import { ref } from 'vue'
+
+  const versions = ref([
+    'Purge the cache from **Edge Cache › Purge**: choose *URL*, paste the paths and confirm.',
+    'Use a **wildcard purge** (`/assets/*`) when many files changed at once; it clears every match in one request.',
+    'If the files change on every deploy, add a **version to the file name** instead of purging: the new name is a new cache entry.'
+  ])
+  const active = ref(2)
+  const regenerating = ref(false)
+
+  const regenerate = () => {
+    if (regenerating.value) return
+    regenerating.value = true
+    setTimeout(() => {
+      versions.value = [
+        ...versions.value,
+        'Purge by **cache key** from the API (`POST /purge/cachekey`) to automate it in your pipeline.'
+      ]
+      active.value = versions.value.length - 1
+      regenerating.value = false
+    }, 800)
+  }
+</script>
+
+<template>
+  <div class="w-full max-w-(--container-3xl)">
+    <ChatMessage timestamp="10:44">
+      <ResponseBranches
+        v-model="active"
+        :count="versions.length"
+        :disabled="regenerating"
+      >
+        <template #default="{ index }">
+          <StreamingResponse :content="versions[index]" />
+        </template>
+      </ResponseBranches>
+      <template #actions>
+        <ChatMessage.Actions>
+          <CopyButton :value="versions[active]" />
+          <IconButton
+            icon="pi pi-refresh"
+            aria-label="Regenerate response"
+            kind="transparent"
+            size="small"
+            :loading="regenerating"
+            @click="regenerate"
+          />
+        </ChatMessage.Actions>
+      </template>
+    </ChatMessage>
+  </div>
+</template>
+```
 
 ---
 
@@ -14738,6 +15200,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 - `aria-busy` on the root while `loading`.
 - Name and value text clear 4.5:1 on the tinted fill and on the bare surface in both themes.
 - Interactive rows are 32px tall and full width.
+- Forced colors: the bar fill keeps its colour (`forced-color-adjust: none`); forced to `Canvas` it vanished and left only the labels (`src/test/forced-colors-charts.test.ts`).
 
 ## Examples
 
@@ -14952,6 +15415,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the plot and every legend button.
 - Series colors clear 3:1 on the chart surfaces and on the tooltip in both themes (pinned by `packages/theme/test/chart-role.test.mjs`).
 - `motion-reduce:transition-none` on every transition.
+- Forced colors: SVG marks keep their series colours (Chromium does not force `fill`/`stroke`); the legend key keeps its colour too (`forced-color-adjust: none`), so the legend still maps names to series (`src/test/forced-colors-charts.test.ts`).
 
 ## Right-to-left
 
@@ -15729,6 +16193,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - Severity never rests on color alone: the label names the state.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on the strip (the offset takes the surface color, so it never shows as a white gap in the dark theme).
 - Status colors clear 3:1 against the chart surfaces in both themes.
+- Forced colors: the blocks keep their status colour (`forced-color-adjust: none`), because a background-painted block would be forced to `Canvas` and the whole tracker would vanish (`src/test/forced-colors-charts.test.ts`).
 
 ## Right-to-left
 
@@ -16012,9 +16477,9 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-| --- | --- | --- | --- | --- |
-| `v-model` | `string` | `''` | `update:modelValue` | The code via `defineModel`. Updated on every edit, from the plain editor or from Monaco. |
+| Model     | Type     | Default | Emits               | Notes                                                                                    |
+| --------- | -------- | ------- | ------------------- | ---------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The code via `defineModel`. Updated on every edit, from the plain editor or from Monaco. |
 
 ## States
 
@@ -18668,7 +19133,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 # Payment Brand
 
-> The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB) drawn in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Discover, Elo, Hipercard, UnionPay, or an unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
+> The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Maestro, Hiper, or any unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
 
 - Import: `import PaymentBrand from '@aziontech/webkit/payment-brand'`
 - Category: content · Surface: product · Structure: monolithic
@@ -18701,7 +19166,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `brand` | `string` | `''` | false | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`…). Unknown values draw the generic card glyph. |
+| `brand` | `string` | `''` | false | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms. |
 | `label` | `string` | `undefined` | false | Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand. |
 | `decorative` | `boolean` | `false` | false | Hide the plate from assistive technology when the text next to it already names the brand. |
@@ -18858,6 +19323,125 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ```
 
 2 more example(s) in [components/product-widget.md](https://github.com/aziontech/webkit/blob/main/.specs/components/product-widget.md).
+
+---
+
+<!-- components/qr-code.md -->
+
+# Qr Code
+
+> A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws them as one path. It is for setup flows that hand a URI to a phone, first the `otpauth://` URI of an authenticator app in `auth#MfaSetup`, where it replaces the image the API returned and the framed placeholder of the demo. The code is always dark on a light plate (the plate pins the light theme), because several authenticator scanners do not read an inverted code.
+
+- Import: `import QrCode from '@aziontech/webkit/qr-code'`
+- Category: content · Surface: product · Structure: monolithic
+- API as JSON: [qr-code.json](https://github.com/aziontech/webkit/blob/main/.specs/qr-code.json)
+
+## When to use
+
+- A phone has to pick up a value the screen shows: an authenticator `otpauth://` URI, a pairing link, a short download URL.
+- Next to a typed alternative: the same value (or its secret) as text with a `CopyButton`, for people who cannot scan.
+
+## Do
+
+- Always give the code a typed alternative next to it: the setup key or the link as text.
+- Name the code after what it does (`QR code to add ana@example.com to an authenticator app`), not `QR code`.
+- Keep the default `M` error correction; raise it only when the code is printed or shown small.
+
+## Don’t
+
+- The value is only for reading or copying on the same device → show it as text with `CopyButton`.
+- A brand or partner logo → use `Brand` or the partner's asset.
+- A long payload (over a few hundred characters) → link to it; a dense code is hard to scan from a screen.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [copy-button](copy-button.md) — the typed alternative beside the code.
+- [otp-input](otp-input.md) — the 6-digit code the app shows after the scan.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `string` | `—` | true | The text the code carries (a URI, a key), encoded as UTF-8 bytes. |
+| `label` | `string` | `undefined` | false | Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does. |
+| `errorCorrection` | `'L' \| 'M' \| 'Q' \| 'H'` | `'M'` | false | Error-correction level: `L` 7 %, `M` 15 %, `Q` 25 %, `H` 30 % of the code can be lost and still read. Higher levels make denser codes. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Rendered width: `small` 128 px, `medium` 160 px, `large` 224 px, quiet zone included. |
+
+## States
+
+- `data-size`: `small` | `medium` | `large`.
+- `data-version` on the root: the QR version the encoder picked (1–40); `data-modules`: the module count per side.
+- An empty value draws no code: the plate keeps its size and `data-version` is absent. A value too long for version 40 at the chosen level draws no code either and logs one warning.
+
+## Accessibility
+
+- The root is `role="img"` named by `label` (catalog `QR code` when empty); the SVG inside is `aria-hidden` and not focusable; the code takes no focus.
+- The code is never the only way: the page puts the value or its secret beside it as text.
+- Contrast: dark modules on a light plate in both themes (the plate sets `data-theme="light"`); `forced-color-adjust: none` keeps the code dark on light in forced colors, so a scanner still reads it.
+
+## Right-to-left
+
+- Layout: the code is never mirrored (`dir="ltr"` on the SVG); the plate is symmetric.
+- Icons: none.
+- Keyboard: none.
+- User data: the value is not shown as text by the component.
+
+## Internationalization
+
+| Key            | English source | Override prop |
+| -------------- | -------------- | ------------- |
+| `qrCode.label` | `QR code`      | `label`       |
+
+- The value is encoded as UTF-8 bytes, so non-Latin text works; most authenticator URIs are ASCII.
+
+## Responsive
+
+- Container queries: none.
+- Narrow: fixed size; `shrink-0`; `max-w-full` so it never overflows a 320 px column.
+- Touch: not interactive.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import QrCode from '@aziontech/webkit/qr-code'
+
+  const account = 'ana.silva@example.com'
+  const secret = 'JBSWY3DPEHPK3PXP'
+  const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-(--spacing-md)">
+    <QrCode
+      :value="uri"
+      :label="`QR code to add ${account} to an authenticator app`"
+    />
+    <div class="flex flex-col gap-(--spacing-xxs)">
+      <p class="text-label-sm text-(--text-default)">Can't scan the code?</p>
+      <div class="flex items-center gap-(--spacing-xs)">
+        <code
+          class="text-label-code text-(--text-default)"
+          dir="ltr"
+          >{{ secret.match(/.{1,4}/g).join(' ') }}</code
+        >
+        <CopyButton
+          :value="secret"
+          aria-label="Copy setup key"
+          copied-label="Setup key copied"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+```
+
+1 more example(s) in [components/qr-code.md](https://github.com/aziontech/webkit/blob/main/.specs/components/qr-code.md).
 
 ---
 
@@ -20462,6 +21046,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `rowKey` | `string` | `'id'` | false | Field used as the stable row id (for selection). |
 | `enableSorting` | `boolean` | `false` | false | Enable sorting globally; per-column `enableSorting` overrides. |
 | `enableRowSelection` | `boolean` | `false` | false | Add a leading selection-checkbox column. |
+| `rowSelectable` | `(row: RowRecord) => boolean` | `undefined` | false | Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all. |
 | `selectOnRowClick` | `boolean` | `false` | false | Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click. |
 | `headerKind` | `'default' \| 'compact'` | `'default'` | false | Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `kind`. |
 | `paginated` | `boolean` | `false` | false | Render a Pagination in the footer. |
@@ -20585,6 +21170,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - `data-clickable` on TableCell mirrors the `clickable` prop.
 - Stacked rows (data-driven, `stackable`): the table measures its own box; below `--container-lg` (552 px) it sets `data-stacked` and each body row becomes a bordered card. The checkbox, the principal column and the action column share the first line; every other column takes its own line as a label (the column `label` or `header`, `aria-hidden`) and its value. The header row stays in the DOM visually hidden, so screen readers keep the column headers; frozen offsets and fades are dropped. `stackable: false` keeps the scrolling grid. A hand-composed table never stacks.
 - Stacked select-all (data-driven, `enableRowSelection`): in the stacked layout the header checkbox is not rendered; a visible, labelled **Select all rows** checkbox sits above the stacked rows (`__stacked-select-all`) and toggles the page, with the same indeterminate state.
+- Per-row selectability (data-driven, `rowSelectable`): a row the function rejects renders an empty selection cell, ignores `selectOnRowClick` and is skipped by Select all; the header checkbox reads `all` when every selectable row is selected.
 - Density and wrapping: `data-density="compact"` on the root shrinks body cells (`min-h-9`, `--spacing-xxs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. `striped` shades odd body rows with `var(--bg-surface-raised)` (selected and hover still win).
 - Virtual rows (`virtual`): only the rows in view plus 8 above and below render; the slice starts on an even row so stripes stay put; rows of different heights (`wrapLines` with long text) are measured as they render and the rows in view do not shift while scrolling; the root sets `aria-rowcount` and each row `aria-rowindex`. Skeleton and stacked layouts render every row.
 - Long lists (more than 200 rows, not `virtual`): the first 50 rows render, a spacer (`__lazy-rows`, `aria-hidden`) stands in for the rest and more rows mount as it nears the viewport, until every row is in the DOM; while rows are still missing the root sets `aria-rowcount` and each row `aria-rowindex`.
@@ -25396,6 +25982,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 | `description` | `string` | `''` | false | Secondary line under the title, typically the accepted types and limits. Not rendered when empty. |
 | `accept` | `string` | `''` | false | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file. |
 | `multiple` | `boolean` | `true` | false | When false, only the first accepted file of a drop is accepted and the rest are rejected. |
+| `directories` | `boolean` | `false` | false | Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk. |
 | `disabled` | `boolean` | `false` | false | Ignores drags and drops: no active state, no events. |
 | `invalid` | `boolean` | `false` | false | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work. |
 | `icon` | `string` | `'pi pi-cloud-upload'` | false | PrimeIcons class for the glyph above the title. |
@@ -25540,6 +26127,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 - Root `data-alignment`: `vertical` | `horizontal`; `data-readonly` when read-only.
 - Token `data-status`: `idle` | `loading` | `warning` | `error` (error wins over warning, both over loading).
 - Show more toggle: `aria-expanded` `true` | `false`.
+- A file with a `webkitRelativePath` (picked with a folder picker or dropped as a folder on `FileDropzone directories`) is named by that path (`site/css/main.css`) in the token, its title, the remove button and the progress bar; otherwise by `name`.
 
 ## Accessibility
 
@@ -26218,7 +26806,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ## Sub-components
 
-- `multi-select-trigger/multi-select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label (comma-joined labels or count, see `displayValue`), and chevron-down. Mirrors `Input` size/state visuals.
+- `multi-select-trigger/multi-select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label (comma-joined option labels, or `displayValue`). Each option records its label text with the root when it mounts; on mount `MultiSelectContent` renders its options once inside a `hidden` container so the labels are known before the panel first opens, then drops it, and chevron-down. Mirrors `Input` size/state visuals.
 - `multi-select-content/multi-select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
 - `multi-select-group/multi-select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
 - `multi-select-option/multi-select-option.vue` — Selectable option row with a checkbox indicator (the `Checkbox` webkit component), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
@@ -35580,7 +36168,7 @@ packages/webkit/src/components/overlay/command/
   - Props: `placeholder: string` default `''` — input placeholder text; empty uses the locale catalog (`Search everything` in English). `ariaLabel: string` default `''` — accessible name for the search field; when empty it falls back to `placeholder`, so the field keeps its name after the placeholder disappears on the first keystroke.
   - Events: _none_ (the query lives in the injected context).
   - Slots: _none_.
-- `command-list/command-list.vue` — the scrollable results region. `role="listbox"`; wraps the groups/items and renders the `Empty` part when the filter yields no visible items.
+- `command-list/command-list.vue` — the scrollable results region. `role="listbox"` while at least one item is visible; with no visible item it drops the role (an empty listbox fails `aria-required-children`) and shows the `Empty` part.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — one or more `<Command.Group>` / `<Command.Item>` / `<Command.Separator>`, plus an optional `<Command.Empty>`.
@@ -35619,7 +36207,7 @@ packages/webkit/src/components/overlay/command/
 - Keyboard map:
   - Global: the `shortcut` combo (⌘K / Ctrl+K) toggles the palette open from anywhere.
   - Inside the palette: `ArrowDown` / `ArrowUp` move the active item (skipping disabled, wrap-around); `Home` / `End` jump to first/last enabled item; `Enter` activates the active item; `Esc` closes (via `Dialog`); `Tab` is trapped within the panel (via `Dialog`).
-- ARIA: the panel is `role="dialog"` (from `Dialog`) with an accessible name via a visually-hidden title; the input is `role="combobox"` with `aria-expanded` and `aria-controls` pointing at the list, and carries its own accessible name via `aria-label` (`ariaLabel`, falling back to `placeholder`) so the name survives the first keystroke; the list is `role="listbox"`; each group is `role="group"` with `aria-labelledby` referencing its heading id; each item is `role="option"` with `aria-selected` mirroring the active state and `aria-disabled` mirroring `disabled`.
+- ARIA: the panel is `role="dialog"` (from `Dialog`) with an accessible name via a visually-hidden title; the input is `role="combobox"` with `aria-expanded` and `aria-controls` pointing at the list, and carries its own accessible name via `aria-label` (`ariaLabel`, falling back to `placeholder`) so the name survives the first keystroke; the list is `role="listbox"` (no role while nothing matches); each group is `role="group"` with `aria-labelledby` referencing its heading id; each item is `role="option"` with `aria-selected` mirroring the active state and `aria-disabled` mirroring `disabled`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled`).
 - `motion-reduce:animate-none` on the inherited `animate-popup-scale-*`; `motion-reduce:transition-none` on item `transition-colors`.
 - Focus management: opening moves focus to the input; closing returns focus to the element focused before the palette opened. Focus trap and scroll-lock are inherited from `Dialog`.
@@ -36225,6 +36813,7 @@ packages/webkit/src/components/overlay/command/
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Scroll region: when `PanelContent` (outside a drawer's `ScrollArea`) overflows and holds nothing focusable, it takes `tabindex="0"` with an inset focus ring, so a keyboard user can scroll it (WCAG 2.1.1, axe `scrollable-region-focusable`); it is measured on resize and on content changes.
 
 ## Usage
 
@@ -36391,6 +36980,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/focus states.
 - Touch target ≥40×40 px on the trigger (consumer's element — flagged in docs); the close `IconButton` follows `IconButton`'s own target sizing.
 - Teleported content: the teleported `role="dialog"` panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- `PopoverHeader` keeps its `header` tag with `role="none"`, so an open popover does not expose a `banner` landmark (pinned by `src/test/screen-reader.test.ts`).
 
 ## Examples
 

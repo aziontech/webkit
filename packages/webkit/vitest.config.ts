@@ -6,6 +6,7 @@ import vue from '@vitejs/plugin-vue'
 import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
 
+import { ariaSnapshot } from './src/test/aria-snapshot'
 import { emulateMedia } from './src/test/emulate-media'
 import { renderOnServer } from './src/test/server-render'
 
@@ -31,6 +32,9 @@ export default defineConfig({
   define: {
     'process.env.NODE_ENV': JSON.stringify('test')
   },
+  optimizeDeps: {
+    include: ['monaco-editor']
+  },
   test: {
     include: ['src/**/*.test.{ts,js}'],
     setupFiles: ['./src/test/setup.ts'],
@@ -40,7 +44,7 @@ export default defineConfig({
       provider: playwright(),
       headless: true,
       instances: [{ browser: 'chromium' }],
-      commands: { emulateMedia, renderOnServer }
+      commands: { ariaSnapshot, emulateMedia, renderOnServer }
     },
     coverage: {
       provider: 'v8',

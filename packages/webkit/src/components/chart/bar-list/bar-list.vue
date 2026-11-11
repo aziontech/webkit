@@ -181,7 +181,7 @@
               aria-hidden="true"
               :data-testid="`${testId}__bar`"
               :style="{ width: row.width }"
-              class="absolute inset-y-0 start-0 rounded-(--shape-elements) bg-[color-mix(in_srgb,var(--bar-list-fill)_24%,transparent)] transition-[width] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+              class="absolute inset-y-0 start-0 rounded-(--shape-elements) bg-[color-mix(in_srgb,var(--bar-list-fill)_24%,transparent)] forced-color-adjust-none transition-[width] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
             />
             <span class="relative min-w-0 truncate px-(--spacing-xs) text-label-md">
               {{ row.item.name }}

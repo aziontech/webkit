@@ -30,6 +30,10 @@ describe('PaymentBrand', () => {
     ['diners_club', 'diners', 'Diners Club'],
     ['Master Card', 'mastercard', 'Mastercard'],
     ['JCB', 'jcb', 'JCB'],
+    ['Discover', 'discover', 'Discover'],
+    ['elo', 'elo', 'Elo'],
+    ['Hipercard', 'hipercard', 'Hipercard'],
+    ['union_pay', 'unionpay', 'UnionPay'],
     ['constructor', 'unknown', 'Card']
   ])('normalizes %s to %s', (brand, id, name) => {
     const view = render(PaymentBrand, { props: { brand } })
@@ -37,9 +41,16 @@ describe('PaymentBrand', () => {
   })
 
   it('draws the generic glyph for a brand without a mark and keeps its name', () => {
-    const view = render(PaymentBrand, { props: { brand: 'elo' } })
-    const img = view.getByRole('img', { name: 'Elo' })
+    const view = render(PaymentBrand, { props: { brand: 'maestro' } })
+    const img = view.getByRole('img', { name: 'Card' })
     expect(img).toHaveAttribute('data-glyph', 'generic')
+  })
+
+  it.each(['discover', 'elo', 'hipercard', 'unionpay'])('draws the %s mark in tokens', (brand) => {
+    render(PaymentBrand, { props: { brand } })
+    expect(root()).toHaveAttribute('data-glyph', 'mark')
+    const fills = [...root().querySelectorAll('[fill]')].map((n) => n.getAttribute('fill'))
+    expect(fills.every((f) => f === 'currentColor' || f === 'none')).toBe(true)
   })
 
   it('takes a label and a size', () => {

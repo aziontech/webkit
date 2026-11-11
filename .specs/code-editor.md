@@ -3,9 +3,9 @@ name: code-editor
 category: code
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: f41f149904eef8c08b35e747d17e7ef83380a0e096b6327dc1b7ddf5a50c57be
+checksum: b56dd47cbf71fe0155b5cabea076f6ee86e2516a20a456f29b5c76c1e10a60a4
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -103,16 +103,16 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-| --- | --- | --- | --- | --- |
-| `v-model` | `string` | `''` | `update:modelValue` | The code via `defineModel`. Updated on every edit, from the plain editor or from Monaco. |
+| Model     | Type     | Default | Emits               | Notes                                                                                    |
+| --------- | -------- | ------- | ------------------- | ---------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The code via `defineModel`. Updated on every edit, from the plain editor or from Monaco. |
 
 ## Events
 
-| Event               | Payload   | Notes                                                             |
-| ------------------- | --------- | ----------------------------------------------------------------- |
-| `ready`             | `unknown` | Monaco mounted; the payload is the editor instance (for actions). |
-| `load-error`        | `unknown` | The loader rejected; the plain editor stays.                      |
+| Event        | Payload   | Notes                                                             |
+| ------------ | --------- | ----------------------------------------------------------------- |
+| `ready`      | `unknown` | Monaco mounted; the payload is the editor instance (for actions). |
+| `load-error` | `unknown` | The loader rejected; the plain editor stays.                      |
 
 ## Slots
 
@@ -210,7 +210,9 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 ## Decisions and open questions
 
-- **No Monaco dependency.** `monaco-editor` is the app's dependency, passed as `loader`; WebKit ships only the structural types and the token theme. Open: ship an optional `@aziontech/webkit/code-editor-monaco` entry that sets up workers.
+- **No Monaco dependency.** `monaco-editor` is the app's dependency, passed as `loader`; WebKit ships only the structural types and the token theme. Decided (M2.10): no `@aziontech/webkit/code-editor-monaco` entry. Worker wiring depends on the bundler (Vite `?worker`, webpack 5 `new URL(..., import.meta.url)`), so an entry would tie consumers to one; the copyable example `code-editor#Monaco` is the loader. `monaco-editor` is an optional peer (`>=0.50`) and a dev dependency for that example and its browser test.
+- **Theme is global in Monaco.** Every editor shares the `webkit` theme, so it is defined and set only when its content changes (`applyThemeOnce`, per Monaco instance): several editors on a page no longer each re-define it on every `class`/`data-theme` change of the document, and a `setTheme` that touched those classes could not make two editors ping-pong (`code-editor.test.ts`).
+- **Diff names.** Both sides of the diff are named after the editor (`<name>, Original` and `<name>, Modified`), since Monaco leaves them empty.
 - **Plain editor is the default.** Not a skeleton: it is fully usable, so the SSR markup is an editor and slow networks never block typing.
 - **Theme.** Colours are read from the host element's computed tokens (hex values) at mount and when `class`/`data-theme` changes on `<html>` or `<body>` or the colour scheme changes; Monaco's theme is global, so the last editor to apply it wins, which is fine because all read the same tokens.
 - **Tab handling.** Two-space indentation in the plain editor; Monaco keeps its own setting.

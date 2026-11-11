@@ -1,6 +1,6 @@
 # Payment Brand
 
-> The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB) drawn in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Discover, Elo, Hipercard, UnionPay, or an unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
+> The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Maestro, Hiper, or any unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
 
 - Import: `import PaymentBrand from '@aziontech/webkit/payment-brand'`
 - Category: content · Surface: product · Structure: monolithic
@@ -33,7 +33,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `brand` | `string` | `''` | false | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`…). Unknown values draw the generic card glyph. |
+| `brand` | `string` | `''` | false | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms. |
 | `label` | `string` | `undefined` | false | Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand. |
 | `decorative` | `boolean` | `false` | false | Hide the plate from assistive technology when the text next to it already names the brand. |
@@ -95,7 +95,18 @@
 <script setup>
   import PaymentBrand from '@aziontech/webkit/payment-brand'
 
-  const brands = ['Visa', 'Mastercard', 'American Express', 'Diners Club', 'JCB', 'Elo']
+  const brands = [
+    'Visa',
+    'Mastercard',
+    'American Express',
+    'Diners Club',
+    'JCB',
+    'Discover',
+    'Elo',
+    'Hipercard',
+    'UnionPay',
+    'Maestro'
+  ]
 </script>
 
 <template>

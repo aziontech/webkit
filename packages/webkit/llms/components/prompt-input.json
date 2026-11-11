@@ -81,12 +81,19 @@
    "default": "false",
    "required": "false",
    "doc": "Disables the text area, the submit control and every control in the slots' row."
+  },
+  {
+   "name": "menus",
+   "type": "PromptInputMenu[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`."
   }
  ],
  "events": [
   {
    "name": "submit",
-   "payload": "string",
+   "payload": "(value: string, references: PromptInputReference[])",
    "notes": ""
   },
   {

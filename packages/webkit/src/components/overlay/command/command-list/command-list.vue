@@ -24,7 +24,7 @@
   <div
     v-bind="attrs"
     :id="ctx.listId"
-    role="listbox"
+    :role="ctx.hasVisibleItems.value ? 'listbox' : undefined"
     :data-testid="testId"
     class="max-h-[24rem] overflow-y-auto px-(--spacing-xxs) py-(--spacing-xs)"
   >

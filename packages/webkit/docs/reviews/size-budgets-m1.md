@@ -331,3 +331,14 @@ M2.10 leftovers (blocks lane): `Table` gains `rowReorderable` (a pinned row keep
 | listing-table   | 58            | 58.07        | 58.3       | Raised: carries `Table`.                |
 | network-map     | 6.5           | 7.30         | 7.5        | Raised: `traffic` mesh and packets.     |
 | banner-art      | 10.1          | 10.87        | 11.1       | Raised: carries `NetworkMap` `traffic`. |
+
+## M2.10 component leftovers
+
+Measured with `scripts/check-size.mjs` on the merged branch (gzip, `vue` external).
+
+- **CopyButton fallback is lazy.** `CopyButtonFallback` (Popover, Input) is a `defineAsyncComponent` chunk (~5 KB) that downloads only when `navigator.clipboard.writeText` rejects. Entries that contain `CopyButton` now measure their initial chunk (`entryOnly`; the report prints `2 async chunk(s) excluded`, the fallback's chunks): `browser-frame`, `doc-code-group`, `doc-prompt`, `section-command`, `section-header`, `code-split`, `sticky-scroll-code`, `cli-terminal`, `closing-call-to-action-agents`, `code-block`, `log-view-content`, `trace`, `artifact-preview`, `streaming-response`, `table-cell-link`, `table-cell-id`. Their initial chunks are all under the old budgets, which stay.
+- **Button forced-colors edge** (`forced-colors:border forced-colors:border-[ButtonBorder]`, a few dozen bytes): `shell-mockup` 30.45 → 30.62 KB, `hotspot` 11.4 → 11.57 KB, `wizard` 6.9 → 7.06 KB. `donut-chart` 11.7 → 11.85 KB also carries the legend key's `forced-color-adjust: none`.
+- **PanelContent scroll focus** (`useResizeObserver` and `useMutationObserver` to make an overflowing, non-focusable body reachable by keyboard): `confirm-dialog` 24.1 → 24.67 KB, `topology-diagram` 32 → 34.03 KB.
+- **New catalog groups** (`copyFallback`, `qrCode`, `responseBranches`, `feedbackReason`, `conversationHistory`, `promptInputMenu`), measured + 0.2 KB as the brief asks: `webkit-provider` 8.5 → 8.93 KB, `locales-pt-BR` 7.9 → 8.32 KB, `locales-es` 8 → 8.41 KB.
+- **MultiSelect labels** (options register their label, the content renders them once hidden): `multi-select` 20.75 → 21.07 KB.
+- **New and extended components** (first budgets were estimates): `prompt-input` 5.5 → 11.45 KB (menus, references; most of it is `Chip` for the reference chips: follow-up row to load the chips lazily), `feedback-reason-dialog` 15 → 31.64 KB (`Dialog`, `Field`, `RadioButton`, `Textarea`, `Button`, shared with the page in practice), `conversation-history` 4.5 → 4.96 KB, `response-branches` 2.4 → 4 KB, `payment-brand` 4.05 → 4.84 KB (four more marks), `qr-code` 3.6 → 4.39 KB (encoder with the 40-version tables).

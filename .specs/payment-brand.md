@@ -3,9 +3,9 @@ name: payment-brand
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 4a3dce5b8171f095075a7db987a8076e50a1d02646d8156a5d1102cc752a694d
+checksum: 7037579cfaab6a3c5e0e7f69ebc45776a714c8db43a9667a335bc88050f89fc9
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-11
 
 ## Purpose
 
-The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB) drawn in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Discover, Elo, Hipercard, UnionPay, or an unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
+The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Maestro, Hiper, or any unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
 
 ## When to use
 
@@ -55,12 +55,12 @@ The card-brand plate shown beside a payment card: a small bordered plate with th
 
 ## Props
 
-| Prop         | Type                  | Default     | Required | JSDoc                                                                                                                                                          |
-| ------------ | --------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `brand`      | `string`              | `''`        | false    | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`…). Unknown values draw the generic card glyph. |
-| `size`       | `'small' \| 'medium'` | `'medium'`  | false    | Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms.                                                                       |
-| `label`      | `string`              | `undefined` | false    | Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand.                                                           |
-| `decorative` | `boolean`             | `false`     | false    | Hide the plate from assistive technology when the text next to it already names the brand.                                                                     |
+| Prop         | Type                  | Default     | Required | JSDoc                                                                                                                                                                                                      |
+| ------------ | --------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `brand`      | `string`              | `''`        | false    | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. |
+| `size`       | `'small' \| 'medium'` | `'medium'`  | false    | Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms.                                                                                                                   |
+| `label`      | `string`              | `undefined` | false    | Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand.                                                                                                       |
+| `decorative` | `boolean`             | `false`     | false    | Hide the plate from assistive technology when the text next to it already names the brand.                                                                                                                 |
 
 ## Events
 
@@ -128,7 +128,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 4.05 KB gzip for `./payment-brand` in `.size-limit.json` (the five marks are inline paths; the catalog lookup brings `useTranslate`).
+- Bundle budget: 4.84 KB gzip for `./payment-brand` in `.size-limit.json` (the five marks are inline paths; the catalog lookup brings `useTranslate`).
 - Runtime budget: one SVG per plate.
 - Heavy parts: none.
 

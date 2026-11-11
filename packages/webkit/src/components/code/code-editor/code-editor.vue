@@ -15,6 +15,7 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import {
+    applyThemeOnce,
     CODE_EDITOR_THEME,
     type CodeEditorDisposable,
     type CodeEditorMonaco,
@@ -349,10 +350,20 @@
     ariaLabel: accessibleName()
   })
 
+  const labelDiffSides = () => {
+    if (!diffEditor) return
+    const name = accessibleName()
+    diffEditor
+      .getOriginalEditor?.()
+      .updateOptions({ ariaLabel: `${name}, ${t('codeEditor.original')}` })
+    diffEditor
+      .getModifiedEditor()
+      .updateOptions({ ariaLabel: `${name}, ${t('codeEditor.modified')}` })
+  }
+
   const applyTheme = () => {
     if (!api || !rootRef.value) return
-    api.editor.defineTheme(CODE_EDITOR_THEME, themeFromTokens(rootRef.value))
-    api.editor.setTheme(CODE_EDITOR_THEME)
+    applyThemeOnce(api, CODE_EDITOR_THEME, themeFromTokens(rootRef.value))
   }
 
   const severityOf = (severity: CodeEditorMarkerSeverity) => {
@@ -438,6 +449,7 @@
         })
         diffEditor.setModel({ original: originalModel, modified: mainModel })
         editor = diffEditor.getModifiedEditor()
+        labelDiffSides()
       } else {
         editor = api.editor.create(host, { ...options, model: mainModel })
       }
@@ -493,6 +505,7 @@
 
   watch([isReadonly, () => props.lineNumbers, () => props.ariaLabel], () => {
     ;(diffEditor ?? editor)?.updateOptions(editorOptions())
+    labelDiffSides()
   })
 
   watch(() => props.markers, applyMarkers, { deep: true })

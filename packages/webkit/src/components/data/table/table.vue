@@ -118,6 +118,8 @@
       enableSorting?: boolean
       /** Add a leading selection-checkbox column. */
       enableRowSelection?: boolean
+      /** Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all. */
+      rowSelectable?: (row: RowRecord) => boolean
       /** Data-driven mode: clicking a row toggles its selection (requires enableRowSelection). */
       selectOnRowClick?: boolean
       /** Header density: `compact` shrinks the column-header row's height and padding. */
@@ -185,6 +187,7 @@
       rowKey: 'id',
       enableSorting: false,
       enableRowSelection: false,
+      rowSelectable: undefined,
       selectOnRowClick: false,
       headerKind: 'default',
       paginated: false,
@@ -424,6 +427,7 @@
     () => props.manualSorting && props.manualFiltering && props.manualPagination
   )
   const rowKeyOf = (row: RowRecord): string => String(row[props.rowKey] ?? '')
+  const isSelectable = (row: RowRecord): boolean => props.rowSelectable?.(row) ?? true
   const leanSource: { slice?: { readonly value: RowRecord[] } } = {}
 
   const table = useVueTable({
@@ -457,7 +461,7 @@
       }
     },
     getRowId: (row) => rowKeyOf(row as RowRecord),
-    enableRowSelection: () => props.enableRowSelection,
+    enableRowSelection: (row) => props.enableRowSelection && isSelectable(row.original),
     manualSorting: props.manualSorting,
     manualPagination: props.manualPagination,
     manualFiltering: props.manualFiltering,
@@ -503,6 +507,11 @@
   const visibleColumnKey = computed<string>(() => headers.value.map((h) => h.id).join('|'))
   const rows = computed(() => table.getRowModel().rows)
   const sourceIds = computed<string[]>(() => (leanRows.value ? props.data.map(rowKeyOf) : []))
+  const selectableIds = computed<string[]>(() =>
+    leanRows.value && props.rowSelectable
+      ? props.data.filter(isSelectable).map(rowKeyOf)
+      : sourceIds.value
+  )
   const rowTotal = computed<number>(() => (leanRows.value ? props.data.length : rows.value.length))
   const rowIdAt = (index: number): string =>
     leanRows.value ? (sourceIds.value[index] ?? '') : (rows.value[index]?.id ?? '')
@@ -520,7 +529,7 @@
   const selectedCount = computed<number>(() => selectedRows.value.length)
   const pageSelection = computed<'all' | 'some' | 'none'>(() => {
     const all = leanRows.value
-      ? selectedCount.value === props.data.length
+      ? selectedCount.value === selectableIds.value.length
       : table.getIsAllPageRowsSelected()
     const some = leanRows.value ? selectedCount.value > 0 : table.getIsSomePageRowsSelected()
     return all && (some || !leanRows.value) ? 'all' : some ? 'some' : 'none'
@@ -529,7 +538,7 @@
     if (!leanRows.value) return table.toggleAllPageRowsSelected(value)
     table.setRowSelection((current) => {
       const next = { ...current }
-      for (const id of sourceIds.value) value ? (next[id] = true) : delete next[id]
+      for (const id of selectableIds.value) value ? (next[id] = true) : delete next[id]
       return next
     })
   }
@@ -720,7 +729,7 @@
   }
 
   const onRowClick = (event: MouseEvent, row: Row<RowRecord>) => {
-    if (props.selectOnRowClick && props.enableRowSelection) {
+    if (props.selectOnRowClick && props.enableRowSelection && row.getCanSelect()) {
       row.toggleSelected()
     }
     emit('row-click', event, row.original)
@@ -1658,6 +1667,7 @@
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                   >
                     <Checkbox
+                      v-if="row.getCanSelect()"
                       binary
                       :model-value="row.getIsSelected()"
                       :aria-label="t('table.selectRow')"

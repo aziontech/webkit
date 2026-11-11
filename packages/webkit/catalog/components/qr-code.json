@@ -1,0 +1,21 @@
+{
+ "purpose": "A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws them as one path. It is for setup flows that hand a URI to a phone, first the `otpauth://` URI of an authenticator app in `auth#MfaSetup`, where it replaces the image the API returned and the framed placeholder of the demo. The code is always dark on a light plate (the plate pins the light theme), because several authenticator scanners do not read an inverted code.",
+ "useWhen": [
+  "A phone has to pick up a value the screen shows: an authenticator `otpauth://` URI, a pairing link, a short download URL.",
+  "Next to a typed alternative: the same value (or its secret) as text with a `CopyButton`, for people who cannot scan."
+ ],
+ "avoidWhen": [
+  "The value is only for reading or copying on the same device → show it as text with `CopyButton`.",
+  "A brand or partner logo → use `Brand` or the partner's asset.",
+  "A long payload (over a few hundred characters) → link to it; a dense code is hard to scan from a screen."
+ ],
+ "related": [
+  "copy-button` — the typed alternative beside the code.",
+  "otp-input` — the 6-digit code the app shows after the scan."
+ ],
+ "bestPractices": [
+  "Always give the code a typed alternative next to it: the setup key or the link as text.",
+  "Name the code after what it does (`QR code to add ana@example.com to an authenticator app`), not `QR code`.",
+  "Keep the default `M` error correction; raise it only when the code is printed or shown small."
+ ]
+}

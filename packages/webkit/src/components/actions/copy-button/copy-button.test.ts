@@ -1,7 +1,10 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
+import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import CopyButton from './copy-button.vue'
 
 // The real Clipboard API rejects in headless Chromium ("Document is not
@@ -127,6 +130,55 @@ describe('CopyButton', () => {
 
       expect(writeText).not.toHaveBeenCalled()
       expect(emitted().copy).toBeUndefined()
+    })
+  })
+
+  describe('clipboard blocked', () => {
+    it('opens the manual-copy popover with the value selected and does not emit copy', async () => {
+      vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new DOMException('denied'))
+      const { getByRole, emitted, unmount } = render(CopyButton, {
+        props: { value: 'azion-token-123' }
+      })
+      const button = getByRole('button', { name: 'Copy' })
+      await fireEvent.click(button)
+
+      const dialog = await waitFor(() => {
+        const node = document.body.querySelector<HTMLElement>('[role="dialog"]')
+        expect(node).toBeTruthy()
+        return node!
+      })
+      expect(dialog).toHaveAccessibleName('Copy manually')
+      expect(dialog).toHaveAccessibleDescription(/Press (Ctrl\+C|⌘C) to copy\./)
+      const field = document.body.querySelector<HTMLInputElement>(
+        'input[data-testid="actions-copy-button__fallback-input"]'
+      )!
+      expect(field).toHaveAccessibleName('Value to copy')
+      expect(field.value).toBe('azion-token-123')
+      expect(field.readOnly).toBe(true)
+      await waitFor(() => expect(document.activeElement).toBe(field))
+      expect([field.selectionStart, field.selectionEnd]).toEqual([0, 'azion-token-123'.length])
+      expect(emitted().copy).toBeUndefined()
+      await expectNoA11yViolations(dialog)
+
+      await fireEvent.keyDown(document, { key: 'Escape' })
+      await waitFor(() => expect(document.body.querySelector('[role="dialog"]')).toBeNull())
+      expect(document.activeElement).toBe(button)
+      unmount()
+    })
+
+    it('reads the fallback strings from the locale catalog', async () => {
+      vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new DOMException('denied'))
+      const view = render(WebkitProvider, {
+        props: { locale: 'pt-BR', catalogs: LOCALES },
+        slots: { default: () => h(CopyButton, { value: 'x' }) }
+      })
+      await fireEvent.click(view.getByRole('button', { name: 'Copiar' }))
+      await waitFor(() =>
+        expect(document.body.querySelector('[role="dialog"]')).toHaveAccessibleName(
+          'Copie manualmente'
+        )
+      )
+      view.unmount()
     })
   })
 

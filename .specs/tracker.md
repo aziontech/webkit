@@ -3,10 +3,10 @@ name: tracker
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-11
-checksum: 7c9821a30bc727a4a72ba1e50874d6c4d1930c49e39fadfb0ae4934e89f522b3
+checksum: 6d40872246b7a1cdaefb479b4300a958250c503a57601a0fe435e40ab5cfcb2b
 ---
 
 # Tracker — Component Spec
@@ -118,6 +118,7 @@ _No slots._
 - Severity never rests on color alone: the label names the state.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on the strip (the offset takes the surface color, so it never shows as a white gap in the dark theme).
 - Status colors clear 3:1 against the chart surfaces in both themes.
+- Forced colors: the blocks keep their status colour (`forced-color-adjust: none`), because a background-painted block would be forced to `Canvas` and the whole tracker would vanish (`src/test/forced-colors-charts.test.ts`).
 
 ## Right-to-left
 

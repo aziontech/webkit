@@ -3,11 +3,11 @@ name: popover
 category: overlay
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 893aafcbf81d6b6c57e93526530c13942cb5716fc94e06bfe60fa165dceb6788
+checksum: 1e36637d118d46a36f73ec0b344c11e250542c7e6d0c8ba6b5d9d7fcc45e3f82
 created: 2026-06-30
 last_updated: 2026-11-11
 ---
@@ -243,6 +243,7 @@ export default Object.assign(Popover, {
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/focus states.
 - Touch target ≥40×40 px on the trigger (consumer's element — flagged in docs); the close `IconButton` follows `IconButton`'s own target sizing.
 - Teleported content: the teleported `role="dialog"` panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- `PopoverHeader` keeps its `header` tag with `role="none"`, so an open popover does not expose a `banner` landmark (pinned by `src/test/screen-reader.test.ts`).
 
 ## Stories (Storybook)
 

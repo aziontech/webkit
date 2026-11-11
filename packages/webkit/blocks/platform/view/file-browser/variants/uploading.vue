@@ -107,6 +107,7 @@
 
   const addToFilesActions = [
     { label: 'Upload file', value: 'upload', icon: 'pi pi-upload' },
+    { label: 'Upload folder', value: 'upload-folder', icon: 'pi pi-folder-open' },
     { label: 'Add folder', value: 'folder', icon: 'pi pi-folder-plus' }
   ]
 
@@ -262,6 +263,8 @@
   const uploadOpen = ref(false)
   const picked = ref([])
   const pickerInput = ref(null)
+  const folderInput = ref(null)
+  const uploadMode = ref('files')
   const addHost = ref(null)
 
   const toPicked = (file) => ({
@@ -280,13 +283,15 @@
   const removePicked = (index) => {
     picked.value = picked.value.filter((_, position) => position !== index)
   }
-  const openUpload = () => {
+  const openUpload = (mode = 'files') => {
     picked.value = []
+    uploadMode.value = mode
     uploadOpen.value = true
   }
   const onAddClick = () => openUpload()
   const onAddItem = (event, item) => {
     if (item.value === 'upload') openUpload()
+    if (item.value === 'upload-folder') openUpload('folder')
   }
 
   const transfer = ref([
@@ -304,18 +309,23 @@
   const settle = (item) => {
     const failsOnce = item.name.endsWith('.mp4') && !retried.has(item.id)
     if (failsOnce) return { ...item, status: 'error', error: 'Connection lost at 82%' }
-    const bucket = added.value[item.target] ?? {}
-    added.value = {
-      ...added.value,
-      [item.target]: {
-        ...bucket,
-        [item.name]: {
-          size: formatSize(item.size),
-          ext: extensionOf(item.name),
-          lastModified: new Date(referenceTime).toISOString()
-        }
+    const folders = item.name.split('/')
+    const fileName = folders.pop()
+    const next = { ...added.value }
+    let key = item.target
+    for (const folder of folders) {
+      next[key] = { [`${folder}/`]: { children: {} }, ...next[key] }
+      key += `${folder}/`
+    }
+    next[key] = {
+      ...next[key],
+      [fileName]: {
+        size: formatSize(item.size),
+        ext: extensionOf(fileName),
+        lastModified: new Date(referenceTime).toISOString()
       }
     }
+    added.value = next
     return { ...item, status: 'done', progress: 100 }
   }
 
@@ -375,7 +385,7 @@
     const target = folderKey.value
     const next = Array.from(files).map((file) => ({
       id: `u-${(seq += 1)}`,
-      name: file.name,
+      name: file.webkitRelativePath || file.name,
       size: file.size,
       status: 'queued',
       target
@@ -767,20 +777,34 @@
         <DialogContent>
           <PanelHeader class="w-full">
             <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>Upload files</DialogTitle>
+              <DialogTitle>{{
+                uploadMode === 'folder' ? 'Upload folder' : 'Upload files'
+              }}</DialogTitle>
               <DialogDescription>
-                Files go to {{ folderPath.length ? folderPath.join('') : rootName }}. A file with
-                the same name is replaced.
+                {{ uploadMode === 'folder' ? 'The folder and its subfolders go' : 'Files go' }} to
+                {{ folderPath.length ? folderPath.join('') : rootName }}. A file with the same path
+                is replaced.
               </DialogDescription>
             </div>
           </PanelHeader>
           <PanelContent>
             <div class="flex flex-col gap-(--spacing-md)">
               <FileDropzone
+                :directories="uploadMode === 'folder'"
+                :title="uploadMode === 'folder' ? 'Drop a folder to upload' : undefined"
                 description="Up to 300 MB per file."
                 @drop="(event, files) => addPicked(files)"
               >
                 <Button
+                  v-if="uploadMode === 'folder'"
+                  label="Browse folder"
+                  kind="secondary"
+                  size="medium"
+                  icon="pi pi-folder-open"
+                  @click="folderInput?.click()"
+                />
+                <Button
+                  v-else
                   label="Browse files"
                   kind="secondary"
                   size="medium"
@@ -791,6 +815,15 @@
                 ref="pickerInput"
                 type="file"
                 multiple
+                class="hidden"
+                aria-hidden="true"
+                tabindex="-1"
+                @change="onPick"
+              />
+              <input
+                ref="folderInput"
+                type="file"
+                webkitdirectory
                 class="hidden"
                 aria-hidden="true"
                 tabindex="-1"

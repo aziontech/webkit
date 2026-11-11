@@ -2603,6 +2603,47 @@
    "examplesFile": "catalog/examples/citation.json",
    "docsFile": "catalog/components/citation.json"
   },
+  "feedback-reason-dialog": {
+   "import": "@aziontech/webkit/feedback-reason-dialog",
+   "target": "./src/components/ai/feedback-reason-dialog/feedback-reason-dialog.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/feedback-reason-dialog",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "reasons",
+     "type": "{ value: string; label: string }[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "The feedback is being sent: Send feedback shows a spinner and the form is locked."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Dialog title. Empty uses the locale catalog (`What went wrong?`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "submit",
+     "payload": "{ reason: string; details: string }",
+     "notes": ""
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/feedback-reason-dialog.json",
+   "docsFile": "catalog/components/feedback-reason-dialog.json"
+  },
   "conversation": {
    "import": "@aziontech/webkit/conversation",
    "target": "./src/components/ai/conversation/conversation.vue",
@@ -2636,6 +2677,61 @@
    "surface": "product",
    "examplesFile": "catalog/examples/conversation.json",
    "docsFile": "catalog/components/conversation.json"
+  },
+  "conversation-history": {
+   "import": "@aziontech/webkit/conversation-history",
+   "target": "./src/components/ai/conversation-history/conversation-history.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/conversation-history",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "{ id: string; title: string; updatedAt: string \\ | number \\ | Date }[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Conversations, any order; they are sorted newest first inside their group."
+    },
+    {
+     "name": "now",
+     "type": "string \\ | number \\ | Date",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Reference time for the groups. Empty uses the current time; pass a fixed value when the list is rendered on the server."
+    },
+    {
+     "name": "removable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a Delete button on each row that emits `remove`."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows placeholder rows while the history loads."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation history`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "remove",
+     "payload": "string",
+     "notes": ""
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/conversation-history.json",
+   "docsFile": "catalog/components/conversation-history.json"
   },
   "prompt-input": {
    "import": "@aziontech/webkit/prompt-input",
@@ -2693,12 +2789,19 @@
      "default": "false",
      "required": "false",
      "doc": "Disables the text area, the submit control and every control in the slots' row."
+    },
+    {
+     "name": "menus",
+     "type": "PromptInputMenu[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`."
     }
    ],
    "events": [
     {
      "name": "submit",
-     "payload": "string",
+     "payload": "(value: string, references: PromptInputReference[])",
      "notes": ""
     },
     {
@@ -2794,6 +2897,47 @@
    "surface": "product",
    "examplesFile": "catalog/examples/reasoning.json",
    "docsFile": "catalog/components/reasoning.json"
+  },
+  "response-branches": {
+   "import": "@aziontech/webkit/response-branches",
+   "target": "./src/components/ai/response-branches/response-branches.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/response-branches",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "count",
+     "type": "number",
+     "default": "—",
+     "required": "true",
+     "doc": "How many versions exist. With one or none the pager is not drawn."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the pager group. Empty uses the locale catalog (`Response versions`)."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Locks the pager, for example while a new version streams."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "{ index: number }",
+     "notes": "The active version. Rendered once; the owner switches its content by `index`."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/response-branches.json",
+   "docsFile": "catalog/components/response-branches.json"
   },
   "sources": {
    "import": "@aziontech/webkit/sources",
@@ -6712,7 +6856,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`…). Unknown values draw the generic card glyph."
+     "doc": "The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph."
     },
     {
      "name": "size",
@@ -6739,6 +6883,47 @@
    "surface": "product",
    "examplesFile": "catalog/examples/payment-brand.json",
    "docsFile": "catalog/components/payment-brand.json"
+  },
+  "qr-code": {
+   "import": "@aziontech/webkit/qr-code",
+   "target": "./src/components/content/qr-code/qr-code.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/qr-code",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "value",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "The text the code carries (a URI, a key), encoded as UTF-8 bytes."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does."
+    },
+    {
+     "name": "errorCorrection",
+     "type": "'L' | 'M' | 'Q' | 'H'",
+     "default": "'M'",
+     "required": "false",
+     "doc": "Error-correction level: `L` 7 %, `M` 15 %, `Q` 25 %, `H` 30 % of the code can be lost and still read. Higher levels make denser codes."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Rendered width: `small` 128 px, `medium` 160 px, `large` 224 px, quiet zone included."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/qr-code.json",
+   "docsFile": "catalog/components/qr-code.json"
   },
   "key-value-pairs-root": {
    "import": "@aziontech/webkit/key-value-pairs-root",
@@ -7185,6 +7370,13 @@
      "doc": "Add a leading selection-checkbox column."
     },
     {
+     "name": "rowSelectable",
+     "type": "(row: RowRecord) => boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all."
+    },
+    {
      "name": "selectOnRowClick",
      "type": "boolean",
      "default": "false",
@@ -7558,6 +7750,13 @@
      "default": "false",
      "required": "false",
      "doc": "Add a leading selection-checkbox column."
+    },
+    {
+     "name": "rowSelectable",
+     "type": "(row: RowRecord) => boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all."
     },
     {
      "name": "selectOnRowClick",
@@ -11860,6 +12059,13 @@
      "default": "true",
      "required": "false",
      "doc": "When false, only the first accepted file of a drop is accepted and the rest are rejected."
+    },
+    {
+     "name": "directories",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk."
     },
     {
      "name": "disabled",
@@ -25875,6 +26081,7 @@
     "PageHeader",
     "PasswordInput",
     "PasswordRequirements",
+    "QrCode",
     "Separator",
     "Tag",
     "Tooltip"
@@ -25895,6 +26102,7 @@
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/password-input",
     "@aziontech/webkit/password-requirements",
+    "@aziontech/webkit/qr-code",
     "@aziontech/webkit/separator",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/tooltip"
@@ -30561,7 +30769,7 @@
     },
     {
      "name": "Uploading",
-     "summary": "An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one."
+     "summary": "An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. Upload folder opens the same dialog for a folder (`FileDropzone directories` and a Browse folder picker); each file keeps its path and its folders appear in the table as files land. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one."
     },
     {
      "name": "MoveObject",

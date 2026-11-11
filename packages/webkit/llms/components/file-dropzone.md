@@ -48,6 +48,7 @@
 | `description` | `string` | `''` | false | Secondary line under the title, typically the accepted types and limits. Not rendered when empty. |
 | `accept` | `string` | `''` | false | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file. |
 | `multiple` | `boolean` | `true` | false | When false, only the first accepted file of a drop is accepted and the rest are rejected. |
+| `directories` | `boolean` | `false` | false | Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk. |
 | `disabled` | `boolean` | `false` | false | Ignores drags and drops: no active state, no events. |
 | `invalid` | `boolean` | `false` | false | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work. |
 | `icon` | `string` | `'pi pi-cloud-upload'` | false | PrimeIcons class for the glyph above the title. |
@@ -129,6 +130,85 @@
 </template>
 ```
 
+### Folders
+
+```vue
+<script setup>
+  import { ref } from 'vue'
+
+  import Button from '@aziontech/webkit/button'
+  import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import FileTokenGroup from '@aziontech/webkit/file-token-group'
+
+  const filesInput = ref(null)
+  const folderInput = ref(null)
+  const items = ref([])
+
+  const add = (files) => {
+    items.value = [...items.value, ...Array.from(files, (file) => ({ file }))]
+  }
+  const onPick = (event) => {
+    add(event.target.files ?? [])
+    event.target.value = ''
+  }
+  const remove = (index) => {
+    items.value = items.value.filter((_, position) => position !== index)
+  }
+</script>
+
+<template>
+  <div class="flex w-full max-w-(--container-md) flex-col gap-(--spacing-md)">
+    <FileDropzone
+      directories
+      title="Drop files or folders to upload"
+      description="Folders keep their structure: each file goes up with its path."
+      @drop="(event, files) => add(files)"
+    >
+      <div class="flex flex-wrap justify-center gap-(--spacing-xs)">
+        <Button
+          label="Browse files"
+          kind="secondary"
+          size="medium"
+          @click="filesInput?.click()"
+        />
+        <Button
+          label="Browse folder"
+          kind="secondary"
+          size="medium"
+          icon="pi pi-folder-open"
+          @click="folderInput?.click()"
+        />
+      </div>
+    </FileDropzone>
+    <input
+      ref="filesInput"
+      type="file"
+      multiple
+      class="hidden"
+      aria-hidden="true"
+      tabindex="-1"
+      @change="onPick"
+    />
+    <input
+      ref="folderInput"
+      type="file"
+      webkitdirectory
+      class="hidden"
+      aria-hidden="true"
+      tabindex="-1"
+      @change="onPick"
+    />
+    <FileTokenGroup
+      v-if="items.length"
+      :items="items"
+      :limit="6"
+      aria-label="Files to upload"
+      @dismiss="remove"
+    />
+  </div>
+</template>
+```
+
 ### Overlay
 
 ```vue
@@ -150,44 +230,6 @@
       </template>
     </Card>
     <FileDropzone kind="overlay" />
-  </div>
-</template>
-```
-
-### Accept
-
-```vue
-<script setup>
-  import { ref } from 'vue'
-
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-
-  const accepted = ref([])
-  const rejected = ref([])
-  const onDrop = (event, files) => {
-    accepted.value = [...accepted.value, ...files.map((file) => file.name)]
-  }
-  const onReject = (event, files) => {
-    rejected.value = [...rejected.value, ...files.map((file) => file.name)]
-  }
-</script>
-
-<template>
-  <div class="flex w-full max-w-(--container-md) flex-col gap-(--spacing-md)">
-    <FileDropzone
-      accept="image/*"
-      description="Images only. Other file types are rejected."
-      @drop="onDrop"
-      @reject="onReject"
-    />
-    <div class="flex flex-col gap-(--spacing-xxs) text-body-sm">
-      <p class="text-(--text-default)">
-        Accepted: {{ accepted.length ? accepted.join(', ') : 'none yet' }}
-      </p>
-      <p class="text-(--text-muted)">
-        Rejected: {{ rejected.length ? rejected.join(', ') : 'none yet' }}
-      </p>
-    </div>
   </div>
 </template>
 ```

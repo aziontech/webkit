@@ -4,8 +4,28 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
+  import Chip from '../../inputs/chip/chip.vue'
 
   export type PromptInputState = 'ready' | 'submitted' | 'streaming'
+
+  export interface PromptInputMenuOption {
+    value: string
+    label: string
+    description?: string
+    icon?: string
+  }
+
+  export interface PromptInputMenu {
+    trigger: string
+    label: string
+    options: PromptInputMenuOption[]
+  }
+
+  export interface PromptInputReference {
+    trigger: string
+    value: string
+    label: string
+  }
 
   defineOptions({
     name: 'PromptInput',
@@ -27,6 +47,8 @@
     state?: PromptInputState
     /** Disables the text area, the submit control and every control in the slots' row. */
     disabled?: boolean
+    /** Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. */
+    menus?: PromptInputMenu[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -36,14 +58,16 @@
     minRows: 1,
     maxRows: 6,
     state: 'ready',
-    disabled: false
+    disabled: false,
+    menus: () => []
   })
 
   const model = defineModel<string>({ default: '' })
+  const references = defineModel<PromptInputReference[]>('references', { default: () => [] })
 
   const emit = defineEmits<{
-    /** The reader submitted a prompt (Enter or the Submit control); the payload is the trimmed text. */
-    submit: [value: string]
+    /** The reader submitted a prompt (Enter or the Submit control); the payload is the trimmed text and the references it carries. */
+    submit: [value: string, references: PromptInputReference[]]
     /** The reader asked to stop the response being generated. */
     stop: []
   }>()
@@ -58,10 +82,11 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ promptInput: en.promptInput })
+  const { t } = useTranslate({ promptInput: en.promptInput, promptInputMenu: en.promptInputMenu })
   const uid = useId()
   const counterId = `${uid}-counter`
   const hintId = `${uid}-hint`
+  const listId = `${uid}-menu`
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-prompt-input'
@@ -97,16 +122,127 @@
     el.style.overflowY = el.scrollHeight > max ? 'auto' : 'hidden'
   }
 
+  const MAX_OPTIONS = 8
+  const query = ref<{ menu: PromptInputMenu; start: number; text: string } | null>(null)
+  const activeIndex = ref<number>(0)
+
+  const matches = computed<PromptInputMenuOption[]>(() => {
+    const current = query.value
+    if (!current) return []
+    const needle = current.text.toLocaleLowerCase()
+    return current.menu.options
+      .filter(
+        (option) =>
+          option.label.toLocaleLowerCase().includes(needle) ||
+          option.value.toLocaleLowerCase().includes(needle)
+      )
+      .slice(0, MAX_OPTIONS)
+  })
+  const menuOpen = computed<boolean>(() => !!query.value && matches.value.length > 0)
+  const optionId = (index: number): string => `${listId}-${index}`
+  const announcement = computed<string>(() => {
+    if (!query.value) return ''
+    return matches.value.length
+      ? t('promptInputMenu.results', { count: matches.value.length })
+      : t('promptInputMenu.noMatches')
+  })
+
+  function readQuery(): void {
+    const el = textarea.value
+    if (!el || !props.menus.length) {
+      query.value = null
+      return
+    }
+    const text = el.value
+    const caret = el.selectionStart ?? text.length
+    const before = text.slice(0, caret)
+    const word = /(^|\s)(\S*)$/.exec(before)
+    const token = word?.[2] ?? ''
+    const menu = props.menus.find((candidate) => token.startsWith(candidate.trigger))
+    if (!menu || el.selectionStart !== el.selectionEnd) {
+      query.value = null
+      return
+    }
+    const next = { menu, start: caret - token.length, text: token.slice(menu.trigger.length) }
+    if (query.value?.menu !== next.menu || query.value.text !== next.text) activeIndex.value = 0
+    query.value = next
+  }
+
+  function choose(option: PromptInputMenuOption): void {
+    const current = query.value
+    const el = textarea.value
+    if (!current || !el) return
+    const text = el.value
+    const caret = el.selectionStart ?? text.length
+    const inserted = `${current.menu.trigger}${option.label} `
+    const next = text.slice(0, current.start) + inserted + text.slice(caret)
+    el.value = next
+    model.value = next
+    if (
+      !references.value.some(
+        (reference) =>
+          reference.trigger === current.menu.trigger && reference.value === option.value
+      )
+    ) {
+      references.value = [
+        ...references.value,
+        { trigger: current.menu.trigger, value: option.value, label: option.label }
+      ]
+    }
+    query.value = null
+    const position = current.start + inserted.length
+    void nextTick(() => {
+      el.focus()
+      el.setSelectionRange(position, position)
+    })
+  }
+
+  function removeReference(reference: PromptInputReference): void {
+    references.value = references.value.filter((item) => item !== reference)
+    const token = `${reference.trigger}${reference.label}`
+    const at = model.value.indexOf(token)
+    if (at === -1) return
+    const end = model.value[at + token.length] === ' ' ? at + token.length + 1 : at + token.length
+    model.value = model.value.slice(0, at) + model.value.slice(end)
+  }
+
   function onInput(event: Event): void {
     model.value = (event.target as HTMLTextAreaElement).value
+    readQuery()
   }
 
   function submit(): void {
     if (!canSubmit.value) return
-    emit('submit', model.value.trim())
+    const text = model.value.trim()
+    emit(
+      'submit',
+      text,
+      references.value.filter((reference) =>
+        text.includes(`${reference.trigger}${reference.label}`)
+      )
+    )
   }
 
   function onKeydown(event: KeyboardEvent): void {
+    if (menuOpen.value) {
+      const count = matches.value.length
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault()
+        activeIndex.value =
+          (activeIndex.value + (event.key === 'ArrowDown' ? 1 : count - 1)) % count
+        return
+      }
+      if ((event.key === 'Enter' || event.key === 'Tab') && !event.isComposing) {
+        event.preventDefault()
+        choose(matches.value[Math.min(activeIndex.value, count - 1)]!)
+        return
+      }
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        query.value = null
+        return
+      }
+    }
     if (event.key !== 'Enter' || event.shiftKey || event.isComposing || composing.value) return
     event.preventDefault()
     submit()
@@ -137,15 +273,70 @@
     <div
       :data-invalid="overBy > 0 || null"
       :data-disabled="disabled || null"
-      class="flex w-full flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--ring-color) data-[invalid]:border-(--danger-border) data-[disabled]:bg-(--bg-disabled)"
+      class="relative flex w-full flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--ring-color) data-[invalid]:border-(--danger-border) data-[disabled]:bg-(--bg-disabled)"
     >
       <div
-        v-if="slots.attachments"
+        v-if="slots.attachments || references.length"
         :data-testid="`${testId}__attachments`"
         class="flex flex-wrap gap-(--spacing-xs) px-(--spacing-xs) pt-(--spacing-xxs)"
       >
         <slot name="attachments" />
+        <ul
+          v-if="references.length"
+          :aria-label="t('promptInputMenu.references')"
+          :data-testid="`${testId}__references`"
+          class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0"
+        >
+          <li
+            v-for="reference in references"
+            :key="`${reference.trigger}${reference.value}`"
+          >
+            <Chip
+              :label="`${reference.trigger}${reference.label}`"
+              size="small"
+              removable
+              :disabled="disabled"
+              @remove="removeReference(reference)"
+            />
+          </li>
+        </ul>
       </div>
+      <ul
+        v-if="menuOpen"
+        :id="listId"
+        role="listbox"
+        :aria-label="query?.menu.label"
+        :data-testid="`${testId}__menu`"
+        :data-trigger="query?.menu.trigger"
+        class="absolute inset-x-0 bottom-full z-(--z-input-overlay) m-0 mb-(--spacing-xxs) flex max-h-72 list-none flex-col overflow-y-auto rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xxs) shadow-(--shadow-xs)"
+      >
+        <li
+          v-for="(option, index) in matches"
+          :id="optionId(index)"
+          :key="option.value"
+          role="option"
+          :aria-selected="index === activeIndex"
+          :data-active="index === activeIndex || null"
+          class="flex cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-default) hover:bg-(--bg-hover) data-[active]:bg-(--bg-selected)"
+          @mousedown.prevent
+          @click="choose(option)"
+          @keydown.enter.prevent="choose(option)"
+          @mousemove="activeIndex = index"
+        >
+          <i
+            v-if="option.icon"
+            :class="option.icon"
+            class="shrink-0 text-(--text-muted)"
+            aria-hidden="true"
+          />
+          <span class="min-w-0 truncate">{{ option.label }}</span>
+          <span
+            v-if="option.description"
+            class="min-w-0 truncate text-body-xs text-(--text-muted)"
+            >{{ option.description }}</span
+          >
+        </li>
+      </ul>
       <textarea
         ref="textarea"
         :value="model"
@@ -154,12 +345,17 @@
         :aria-label="ariaLabel || t('promptInput.label')"
         :aria-describedby="describedBy"
         :aria-invalid="overBy > 0 || undefined"
+        :aria-controls="menuOpen ? listId : undefined"
+        :aria-activedescendant="menuOpen ? optionId(activeIndex) : undefined"
+        :aria-keyshortcuts="menus.length ? menus.map((menu) => menu.trigger).join(' ') : undefined"
         :disabled="disabled"
         :data-testid="`${testId}__textarea`"
         enterkeyhint="send"
         class="w-full resize-none bg-transparent px-(--spacing-xs) py-(--spacing-xxs) text-body-md text-(--text-default) placeholder:text-(--text-muted) outline-none disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @input="onInput"
         @keydown="onKeydown"
+        @click="readQuery"
+        @blur="query = null"
         @compositionstart="composing = true"
         @compositionend="composing = false"
       />
@@ -219,6 +415,14 @@
       :data-testid="`${testId}__limit`"
     >
       {{ overBy > 0 ? t('promptInput.overLimit', { count: overBy }) : '' }}
+    </div>
+    <div
+      v-if="menus.length"
+      aria-live="polite"
+      class="sr-only"
+      :data-testid="`${testId}__menu-status`"
+    >
+      {{ announcement }}
     </div>
   </div>
 </template>

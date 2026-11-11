@@ -5,6 +5,7 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { matchesAccept } from '../../../utils/file-accept'
+  import { dropEntries, filesFromEntries } from '../../../utils/file-entries'
 
   defineOptions({ name: 'FileDropzone', inheritAttrs: false })
 
@@ -22,6 +23,8 @@
     accept?: string
     /** When false, only the first accepted file of a drop is accepted and the rest are rejected. */
     multiple?: boolean
+    /** Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk. */
+    directories?: boolean
     /** Ignores drags and drops: no active state, no events. */
     disabled?: boolean
     /** Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work. */
@@ -36,6 +39,7 @@
     description: '',
     accept: '',
     multiple: true,
+    directories: false,
     disabled: false,
     invalid: false,
     icon: 'pi pi-cloud-upload'
@@ -86,9 +90,21 @@
   }
 
   function deliver(event: DragEvent): void {
+    const entries = props.directories ? dropEntries(event.dataTransfer) : null
+    if (entries) {
+      void filesFromEntries(entries).then(
+        (files) => sort(event, files),
+        () => sort(event, Array.from(event.dataTransfer?.files ?? []))
+      )
+      return
+    }
+    sort(event, Array.from(event.dataTransfer?.files ?? []))
+  }
+
+  function sort(event: DragEvent, files: File[]): void {
     const accepted: File[] = []
     const rejected: File[] = []
-    for (const file of Array.from(event.dataTransfer?.files ?? [])) {
+    for (const file of files) {
       const fits = matchesAccept(file, props.accept) && (props.multiple || accepted.length === 0)
       if (fits) accepted.push(file)
       else rejected.push(file)

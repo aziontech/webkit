@@ -3,8 +3,8 @@ name: panel
 category: overlay
 structure: composition
 status: implemented
-spec_version: 1
-checksum: 951b12dca762cb17c43ce949ddfe7b7a5a1bf1f5d7cf1ea4d527ca0d27ae49e3
+spec_version: 2
+checksum: d0c953393a5f9d50125734940a2ee4552d9a03272ab89d5fe653fb239228742a
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -133,6 +133,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Scroll region: when `PanelContent` (outside a drawer's `ScrollArea`) overflows and holds nothing focusable, it takes `tabindex="0"` with an inset focus ring, so a keyboard user can scroll it (WCAG 2.1.1, axe `scrollable-region-focusable`); it is measured on resize and on content changes.
 
 ## Stories (Storybook)
 

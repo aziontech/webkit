@@ -279,6 +279,53 @@ export const ptBR: Messages = {
     copy: 'Copiar',
     copied: 'Copiado'
   },
+  responseBranches: {
+    label: 'Versões da resposta',
+    previous: 'Versão anterior',
+    next: 'Próxima versão',
+    position: '{current} de {total}'
+  },
+  feedbackReason: {
+    title: 'O que deu errado?',
+    description: 'Sua resposta ajuda a melhorar as próximas respostas.',
+    reason: 'Motivo',
+    details: 'Detalhes (opcional)',
+    detailsPlaceholder: 'O que você esperava?',
+    required: 'Escolha um motivo.',
+    cancel: 'Cancelar',
+    send: 'Enviar feedback',
+    inaccurate: 'Incorreta ou inventada',
+    notHelpful: 'Não ajudou',
+    ignoredRequest: 'Não seguiu meu pedido',
+    unsafe: 'Insegura ou nociva',
+    other: 'Outro'
+  },
+  conversationHistory: {
+    label: 'Histórico de conversas',
+    today: 'Hoje',
+    yesterday: 'Ontem',
+    previous7: 'Últimos 7 dias',
+    previous30: 'Últimos 30 dias',
+    older: 'Mais antigas',
+    empty: 'Nenhuma conversa ainda.',
+    remove: 'Excluir {title}'
+  },
+  promptInputMenu: {
+    results: {
+      one: '{count} sugestão',
+      other: '{count} sugestões'
+    },
+    noMatches: 'Nenhum resultado',
+    references: 'Referências'
+  },
+  qrCode: {
+    label: 'Código QR'
+  },
+  copyFallback: {
+    title: 'Copie manualmente',
+    field: 'Valor para copiar',
+    hint: 'Pressione {keys} para copiar.'
+  },
   dateRangePicker: {
     label: 'Intervalo de tempo',
     placeholder: 'Selecione um intervalo de tempo',

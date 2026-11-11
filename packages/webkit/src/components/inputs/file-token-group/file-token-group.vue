@@ -3,6 +3,7 @@
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import * as en from '../../../i18n/messages/en'
+  import { relativePathOf } from '../../../utils/file-entries'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Progress from '../../feedback/progress/progress.vue'
@@ -11,6 +12,7 @@
 
   export interface FileTokenGroupFile {
     name: string
+    webkitRelativePath?: string
     size?: number
     type?: string
     lastModified?: number
@@ -153,7 +155,7 @@
     >
       <li
         v-for="(item, index) in visible"
-        :key="`${index}-${item.file.name}`"
+        :key="`${index}-${relativePathOf(item.file)}`"
         :data-testid="`${testId}__token`"
         :data-status="statusOf(item)"
         class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[status=warning]:border-(--warning-border) data-[status=error]:border-(--danger-border) group-data-[alignment=horizontal]/ftg:w-(--container-3xs) group-data-[alignment=horizontal]/ftg:max-w-full"
@@ -167,8 +169,8 @@
           <div class="flex min-w-0 flex-1 flex-col">
             <span
               class="truncate text-label-sm text-(--text-default)"
-              :title="item.file.name"
-              ><bdi>{{ item.file.name }}</bdi></span
+              :title="relativePathOf(item.file)"
+              ><bdi>{{ relativePathOf(item.file) }}</bdi></span
             >
             <span
               v-if="metaOf(item.file)"
@@ -186,7 +188,7 @@
               icon="pi pi-times"
               kind="transparent"
               size="small"
-              :ariaLabel="t('fileTokenGroup.remove', { name: item.file.name })"
+              :ariaLabel="t('fileTokenGroup.remove', { name: relativePathOf(item.file) })"
               :aria-describedby="item.error || item.warning ? messageId(index) : undefined"
               :data-testid="`${testId}__remove`"
               @click="onDismiss(index)"
@@ -199,7 +201,7 @@
           :indeterminate="typeof item.progress !== 'number'"
           size="small"
           shape="rounded"
-          :aria-label="t('fileTokenGroup.uploading', { name: item.file.name })"
+          :aria-label="t('fileTokenGroup.uploading', { name: relativePathOf(item.file) })"
         />
         <p
           v-if="item.error || item.warning"
