@@ -16670,7 +16670,7 @@
      "notes": "—"
     }
    ],
-   "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover/active handled in CSS).",
+   "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover handled in CSS).",
    "useWhen": [
     "A standalone navigation link: a domain, a repository, a docs page, \"View all\".",
     "An in-console navigation action (\"Add custom domain\") with `showIcon` set to false."
@@ -29570,7 +29570,7 @@
    "title": "Templates/Platform/States/AsyncSubmit",
    "source": "blocks/platform/states/async-submit/async-submit.vue",
    "surface": "product",
-   "summary": "The async counterpart of the server rejection in the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: one `Toaster` is mounted with the page, the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`).",
+   "summary": "The async counterpart of the server rejection in the FormError template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: one `Toaster` is mounted with the page, the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`).",
    "intents": [
     "async submit",
     "long running action",
@@ -29654,7 +29654,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Idle",
-   "guidelinesSummary": "A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.",
+   "guidelinesSummary": "The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.",
    "variants": [
     {
      "name": "Running",
@@ -29733,37 +29733,33 @@
    ],
    "file": "catalog/patterns/platform/states/first-use.json"
   },
-  "platform/states/form-validation": {
-   "name": "FormValidation",
-   "title": "Templates/Platform/States/FormValidation",
-   "source": "blocks/platform/states/form-validation/form-validation.vue",
+  "platform/states/form-error": {
+   "name": "FormError",
+   "title": "Templates/Platform/States/FormError",
+   "source": "blocks/platform/states/form-error/form-error.vue",
    "surface": "product",
-   "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. The InSync, Rejected, Reloading and Reloaded variants show where a field-scoped server rejection renders: a Create Service page whose linked origin is deleted by another user while the form is open, so the save scrolls to the Origin section and lands as a danger `Alert` under its heading with Reload origins, the Origin select takes the invalid state and the focus, and a dashed simulation panel plays the other user; never a toast, never a validation summary.",
+   "summary": "The form-error pattern from the design sample (`/forms/error-validation`): a server rejection scoped to one section of a long create form. A Create Service page whose linked origin is deleted by another user while the form is open; Save sends it, the API answers with a field-scoped error, and the page scrolls to the Origin section, where one danger `Alert` opens under the section heading saying what happened and that nothing else was lost, with the recovery action on it (Reload origins). The Origin select turns invalid with its own one-line reason under it and takes the focus. Never a toast, never a validation summary. Reloading swaps the select for a `Skeleton` and disables Save; Reloaded closes the Alert, clears the select and flags it required. A dashed simulation panel above the form plays the other user. Same page anatomy as Templates/Platform/Create/SinglePageCreate: the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`.",
    "intents": [
-    "form validation",
-    "validation errors",
-    "submit states",
-    "required fields",
-    "server error on submit",
-    "conflict error",
-    "saved state",
-    "validação de formulário",
-    "erros de validação",
-    "campos obrigatórios",
+    "form error",
     "server validation",
     "server-side error",
     "rejected save",
     "field scoped error",
+    "section error",
     "stale reference",
+    "linked resource deleted",
     "api error on save",
     "reload options",
+    "erro de formulário",
     "validação no servidor",
     "erro da api",
-    "salvamento rejeitado"
+    "salvamento rejeitado",
+    "error de formulario",
+    "validación en el servidor"
    ],
    "skills": [
-    "webkit-form",
     "webkit-errors",
+    "webkit-form",
     "webkit-ui-states"
    ],
    "components": [
@@ -29781,7 +29777,6 @@
     "Item",
     "MultiSelect",
     "NumberInput",
-    "PageHeader",
     "RadioButton",
     "SaveBar",
     "SectionHeader",
@@ -29789,9 +29784,7 @@
     "SettingRow",
     "Skeleton",
     "Switch",
-    "Tag",
-    "Textarea",
-    "toast"
+    "Tag"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -29808,7 +29801,6 @@
     "@aziontech/webkit/item",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/number-input",
-    "@aziontech/webkit/page-header",
     "@aziontech/webkit/radio-button",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/section-header",
@@ -29816,12 +29808,73 @@
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/switch",
-    "@aziontech/webkit/tag",
+    "@aziontech/webkit/tag"
+   ],
+   "primary": "InSync",
+   "guidelinesSummary": "The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section. The user's job is to create a service; another user deletes the origin it links to while the form is open, so the save comes back with an error the Origin section owns. The page takes the user to that section, says what happened and that nothing else was lost, offers the one action that recovers (Reload origins), and marks the field with its own reason. This is the standard for every server rejection that a section or a field owns.",
+   "variants": [
+    {
+     "name": "Rejected",
+     "summary": "User 2 deleted web-origin-prod and Save was pressed: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists."
+    },
+    {
+     "name": "Reloading",
+     "summary": "Reload origins in flight: its button shows the loading state, the Origin select gives way to a Skeleton, and Save is disabled until the list is back."
+    },
+    {
+     "name": "Reloaded",
+     "summary": "The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue."
+    }
+   ],
+   "file": "catalog/patterns/platform/states/form-error.json"
+  },
+  "platform/states/form-validation": {
+   "name": "FormValidation",
+   "title": "Templates/Platform/States/FormValidation",
+   "source": "blocks/platform/states/form-validation/form-validation.vue",
+   "surface": "product",
+   "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. A rejection the server scopes to one section of a long form (a linked resource deleted while the form is open) is the FormError template (Templates/Platform/States/FormError).",
+   "intents": [
+    "form validation",
+    "validation errors",
+    "submit states",
+    "required fields",
+    "server error on submit",
+    "conflict error",
+    "saved state",
+    "validação de formulário",
+    "erros de validação",
+    "campos obrigatórios"
+   ],
+   "skills": [
+    "webkit-form",
+    "webkit-errors",
+    "webkit-ui-states"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Field",
+    "Input",
+    "PageHeader",
+    "Select",
+    "Skeleton",
+    "Textarea",
+    "toast"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/skeleton",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast"
    ],
    "primary": "Default",
-   "guidelinesSummary": "Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading, and then a long Create Service page where another user deletes the linked origin while the form is open, the case where a server rejection is scoped to one section.",
+   "guidelinesSummary": "Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading. A server rejection scoped to one section of a long form is its own block, `platform/states/form-error`.",
    "variants": [
     {
      "name": "ValidationErrors",
@@ -29846,22 +29899,6 @@
     {
      "name": "Loading",
      "summary": "The form while its data loads, such as the environments it offers or the record an edit form opens with. Skeleton rows hold the layout, and Create stays disabled until the fields arrive."
-    },
-    {
-     "name": "InSync",
-     "summary": "Where a rejected save renders: a Create Service page whose linked origin is deleted by another user while the form is open. The API rejects the save with a field-scoped error, so it lands as a danger `Alert` under the Origin section heading, the section that owns the broken reference, carrying Reload origins, while the Origin select takes the invalid state. Never a toast, never a validation summary. A dashed simulation panel above the form plays the other user. Same page anatomy as the in-page create form (Templates/Platform/Create/SinglePageCreate): the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer, here raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`."
-    },
-    {
-     "name": "Rejected",
-     "summary": "User 2 deleted web-origin-prod and Save was pressed: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists."
-    },
-    {
-     "name": "Reloading",
-     "summary": "Reload origins in flight: its button shows the loading state, the Origin select gives way to a Skeleton, and Save is disabled until the list is back."
-    },
-    {
-     "name": "Reloaded",
-     "summary": "The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue."
     }
    ],
    "file": "catalog/patterns/platform/states/form-validation.json"
@@ -30786,7 +30823,7 @@
   "platform/forms/sectioned-form": "platform/create/single-page-create#ImportFromGit",
   "platform/forms/sectioned-form#Default": "platform/create/single-page-create#ImportFromGit",
   "platform/forms/sectioned-form#Submitted": "platform/create/single-page-create#ImportFromGitSubmitted",
-  "platform/forms/server-validation": "platform/states/form-validation#InSync",
+  "platform/forms/server-validation": "platform/states/form-error",
   "platform/lists/table-view": "platform/view/table-view",
   "platform/overlays/delete-with-confirmation": "platform/delete/delete-with-confirmation",
   "platform/overlays/deploy-drawer": "platform/create/deploy-drawer",

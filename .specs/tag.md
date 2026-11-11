@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 2460685336c0693393d8bcda81bd04cbe465e484bf636b3e556545ed38ad70dd
+checksum: d1df10e13adaef2da2649012310cd2a2e097d03f4b131d15c2dcbbf5f45c520f
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -84,16 +84,17 @@ _none_
 
 ## Tokens
 
-| Region                 | Token (DESIGN.md)                                               |
-| ---------------------- | --------------------------------------------------------------- |
-| typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px) |
-| typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px) |
-| spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap             |
-| spacing (small)        | `var(--spacing-xxs)` horizontal padding and icon gap            |
-| shape (all severities) | `var(--shape-elements)`                                         |
-| surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                   |
-| shape (pill)           | `rounded-full`                                                  |
-| ring                   | `var(--ring-color)`                                             |
+| Region                 | Token (DESIGN.md)                                                    |
+| ---------------------- | -------------------------------------------------------------------- |
+| typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px)      |
+| typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px)      |
+| spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap                  |
+| spacing (small)        | `var(--spacing-xxs)` horizontal padding and icon gap                 |
+| shape (all severities) | `var(--shape-elements)`                                              |
+| surface (primary)      | `var(--primary)` / `var(--primary-contrast)`, WCAG AA in both themes |
+| surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                        |
+| shape (pill)           | `rounded-full`                                                       |
+| ring                   | `var(--ring-color)`                                                  |
 
 ## Theme gaps
 
