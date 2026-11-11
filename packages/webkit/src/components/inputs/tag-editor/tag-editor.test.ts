@@ -21,7 +21,7 @@ const Harness = (initial: TagEditorTag[], extra: Record<string, unknown> = {}) =
   })
 
 const keys = (view: ReturnType<typeof render>) =>
-  view.getAllByLabelText('Key') as HTMLInputElement[]
+  view.getAllByLabelText(/^Key/) as HTMLInputElement[]
 
 const errorOf = (input: HTMLElement) =>
   (input.getAttribute('aria-describedby') ?? '')

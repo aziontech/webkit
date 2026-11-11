@@ -77,8 +77,9 @@ describe('SchemaForm schema helpers', () => {
 })
 
 describe('SchemaForm', () => {
-  it('renders one labelled Field per property and a fieldset per object', () => {
+  it('renders one labelled Field per property and a fieldset per object', async () => {
     const view = render(SchemaForm, { props: { schema } })
+    await nextTick()
     expect(view.getByLabelText(/Name/)).toBeTruthy()
     expect(view.getByRole('switch', { name: /Debug/ })).toBeTruthy()
     expect(view.getByRole('group', { name: 'Origin' }).tagName).toBe('FIELDSET')

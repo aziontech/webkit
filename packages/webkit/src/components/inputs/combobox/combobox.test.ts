@@ -181,6 +181,7 @@ describe('Combobox', () => {
         </Field>`
     })
     const view = render(Host)
+    await nextTick()
     const input = view.getByRole('combobox', { name: /^Name/ })
     expect(input.getAttribute('aria-invalid')).toBe('true')
     expect(input.getAttribute('aria-required')).toBe('true')

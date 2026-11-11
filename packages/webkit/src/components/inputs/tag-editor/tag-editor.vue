@@ -96,9 +96,9 @@
     if (tag.markedForRemoval) return undefined
     const key = tag.key.trim()
     if (!key) return checkEmpty.value || tag.value.trim() ? t('tagEditor.keyRequired') : undefined
-    if (key.length > props.keyMaxLength) return t('tagEditor.tooLong', { max: props.keyMaxLength })
     if (props.reservedPrefix && key.toLowerCase().startsWith(props.reservedPrefix.toLowerCase()))
       return t('tagEditor.keyReserved', { prefix: props.reservedPrefix })
+    if (key.length > props.keyMaxLength) return t('tagEditor.tooLong', { max: props.keyMaxLength })
     if (!KEY_PATTERN.test(key)) return t('tagEditor.keyInvalid')
     if ((keyCounts.value.get(key) ?? 0) > 1) return t('tagEditor.keyDuplicate')
     return undefined

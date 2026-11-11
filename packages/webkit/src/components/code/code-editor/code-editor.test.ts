@@ -93,6 +93,19 @@ const fakeMonaco = () => {
 const textarea = (container: Element) =>
   container.querySelector<HTMLTextAreaElement>('[data-testid="code-code-editor__input"]')!
 
+
+const TOKENS = `:root{--bg-surface:#ffffff;--text-default:#171717;--border-default:#e5e5e5}:root[data-theme=dark]{--bg-surface:#0a0a0a;--text-default:#fafafa}`
+const withTokens = () => {
+  const style = document.head.appendChild(document.createElement('style'))
+  style.textContent = TOKENS
+  return () => style.remove()
+}
+
+const pressTab = (input: HTMLElement, shiftKey = false) =>
+  input.dispatchEvent(
+    new KeyboardEvent('keydown', { key: 'Tab', shiftKey, bubbles: true, cancelable: true })
+  )
+
 describe('CodeEditor', () => {
   it('renders the plain editor with a gutter and updates v-model', async () => {
     const view = render(CodeEditor, {
@@ -129,8 +142,7 @@ describe('CodeEditor', () => {
     await fireEvent.keyDown(input, { key: 'Tab', shiftKey: true })
     expect(value.value).toBe('  a\nb')
     await fireEvent.keyDown(input, { key: 'Escape' })
-    const escaped = await fireEvent.keyDown(input, { key: 'Tab' })
-    expect(escaped).toBe(true)
+    expect(pressTab(input)).toBe(true)
     expect(value.value).toBe('  a\nb')
   })
 
@@ -138,7 +150,7 @@ describe('CodeEditor', () => {
     const view = render(CodeEditor, { props: { modelValue: 'x', readonly: true, ariaLabel: 'Q' } })
     const input = textarea(view.container)
     expect(input.readOnly).toBe(true)
-    expect(await fireEvent.keyDown(input, { key: 'Tab' })).toBe(true)
+    expect(pressTab(input)).toBe(true)
   })
 
   it('paints markers on their lines, lists them and moves the caret to one', async () => {
@@ -191,6 +203,7 @@ describe('CodeEditor', () => {
   })
 
   it('mounts Monaco from the loader with a token theme and syncs value and markers', async () => {
+    const removeTokens = withTokens()
     const fake = fakeMonaco()
     const onReady = vi.fn()
     const value = ref('let a = 1')
@@ -230,10 +243,12 @@ describe('CodeEditor', () => {
     expect(fake.calls.markers.at(-1)).toEqual([])
 
     view.unmount()
+    removeTokens()
     expect(fake.calls.disposed).toBeGreaterThan(0)
   })
 
   it('re-applies the theme when the document theme changes', async () => {
+    const removeTokens = withTokens()
     const fake = fakeMonaco()
     const view = render(CodeEditor, {
       props: { loader: () => Promise.resolve(fake.api), ariaLabel: 'Code' }
@@ -246,6 +261,7 @@ describe('CodeEditor', () => {
     await waitFor(() => expect(fake.calls.themes.length).toBeGreaterThan(before))
     expect(fake.calls.themes.at(-1)?.theme.base).toBe('vs-dark')
     document.documentElement.removeAttribute('data-theme')
+    removeTokens()
   })
 
   it('keeps the plain editor and says so when the loader fails', async () => {
@@ -293,11 +309,12 @@ describe('CodeEditor', () => {
     await expectNoA11yViolations(view.container as HTMLElement)
   })
 
-  it('is labelled and described by a surrounding Field', () => {
+  it('is labelled and described by a surrounding Field', async () => {
     const view = render({
       components: { CodeEditor, Field, FieldLabel, FieldDescription },
       template: `<Field invalid><FieldLabel>Function code</FieldLabel><CodeEditor model-value="x" /><FieldDescription>Runs on request.</FieldDescription></Field>`
     })
+    await nextTick()
     const input = view.getByRole('textbox', { name: 'Function code' })
     expect(input.getAttribute('aria-invalid')).toBe('true')
     const ids = input.getAttribute('aria-describedby')?.split(' ') ?? []

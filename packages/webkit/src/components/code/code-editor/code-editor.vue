@@ -674,9 +674,9 @@
               class="shrink-0 text-body-xs data-[severity=error]:text-(--danger-contrast) data-[severity=info]:text-(--info-contrast) data-[severity=warning]:text-(--warning-contrast)"
               aria-hidden="true"
             />
-            <span class="sr-only">{{ severityLabel(marker.severity) }}:</span>
+            <span class="sr-only">{{ `${severityLabel(marker.severity)}: ` }}</span>
             <span class="shrink-0 text-(--text-muted) tabular-nums">{{
-              t('codeEditor.line', { line: marker.line })
+              `${t('codeEditor.line', { line: marker.line })} `
             }}</span>
             <bdi class="min-w-0 flex-1 truncate">{{ marker.message }}</bdi>
           </button>
