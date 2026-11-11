@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import assert from 'node:assert/strict'
 import {
   existsSync,
@@ -363,9 +364,10 @@ test('parseCheckArgs reads --update, --warn-intents and repeated --only prefixes
 })
 
 test('every block outside guidelines-pending.json has guidelines that match its SFC and variants', () => {
-  const { errors } = checkPatternGuidelines(catalog.patterns, { pending })
+  const blocks = readBlocks(fileURLToPath(new URL('../..', import.meta.url)))
+  const { errors } = checkPatternGuidelines(blocks, { pending })
   assert.deepEqual(errors, [])
-  for (const [id, p] of Object.entries(catalog.patterns)) {
+  for (const [id, p] of Object.entries(blocks)) {
     if (pending.includes(id)) continue
     assert.ok(p.guidelinesSummary, id)
   }

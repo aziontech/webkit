@@ -351,6 +351,9 @@ test('a pattern without guidelines keeps the plain howToUse and no guidelines fi
     patternAliases: {},
     patterns: {
       'platform/x': { name: 'X', primary: 'Default', sfc: '<template />', variants: [] }
+    },
+    pattern(id) {
+      return this.patterns[id]
     }
   }
   const p = getPattern(bare, 'platform/x')
