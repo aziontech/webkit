@@ -58,6 +58,12 @@ body {
   direction: ltr;
 }
 
+.docs-html pre.shiki code {
+  padding: 0;
+  border: 0;
+  background: transparent !important;
+}
+
 .docs-html pre.shiki span {
   color: var(--shiki-light);
 }
