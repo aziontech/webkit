@@ -20,7 +20,8 @@ Development material and the material WebKit ships to apps never mix:
 - **For WebKit development only**: `.claude/` (agents, commands, hooks, contributor rules and skills
   such as the mandatory `ui-craft` review, and the process docs `PROCESS.md`, `DOC_LINTS.md`,
   `OVERVIEW_LINT.md`, `OVERVIEW_TESTS.md`, `GOVERNANCE_IMPLEMENTATION.md`), `.specs/`,
-  `apps/storybook/`, `lint-canaries/` and `.github/`.
+  `apps/docs/` (docs site), `apps/demos/`, `apps/visual/` (styled visual suite), `lint-canaries/`
+  and `.github/`.
 
 Agents of any vendor start at the root [`AGENTS.md`](./AGENTS.md).
 
@@ -29,7 +30,8 @@ Agents of any vendor start at the root [`AGENTS.md`](./AGENTS.md).
 ```bash
 # Node >= 24, pnpm 11.x (corepack will install the pinned version)
 pnpm install
-pnpm storybook:dev
+pnpm docs:dev      # components, blocks, foundations from the files
+pnpm demos:dev     # routed flows assembled from blocks
 ```
 
 ## Adding a component or block (AI flow)
@@ -51,7 +53,7 @@ design opens the request and approves the merge, and nobody edits the code by ha
    | 2    | Research the benchmarks; check the catalog for reuse (`reuse-audit`, MCP `search_components` / `search_patterns`, `catalog.json#aliases`) | orchestrator, `reuse-auditor`     |
    | 3    | Spec as `draft` (`spec-create`, template 2) or, for a block, the block brief                                                              | `spec-author`                     |
    | 4    | Review by a second agent with a fixed checklist; approval flips the spec to `approved` with a checksum                                    | `spec-reviewer`, `spec-validator` |
-   | 5    | Build: component, test, examples (`packages/webkit/examples/<name>/`), story — or `block.json` + `.vue` + `variants/`                     | `/component-create` sub-agents    |
+   | 5    | Build: component, test, examples (`packages/webkit/examples/<name>/`) — or `block.json` + `.vue` + `variants/`                     | `/component-create` sub-agents    |
    | 6    | Machine gates (below)                                                                                                                     | orchestrator                      |
    | 7    | `ui-craft` review on the component, its examples and every block that uses it                                                             | orchestrator                      |
    | 8    | Usage check: a fresh agent session must pick the new piece through the MCP                                                                | `usage-check.mjs`                 |
@@ -69,10 +71,11 @@ pnpm --filter @aziontech/webkit run gates -- --only naming,catalog --bail
 
 It runs `catalog:check`, `naming:check`, `marketing:check`, `patterns:check`, `cited-names`,
 `spec-status` (no draft spec), `spec-template:check` (template-2 sections), `authoring`,
-`doc-standards`, `test:gate`, `gen-block-stories.mjs --check` and `test:toolkit`. The `toolkit`
+`doc-standards`, `test:gate`, the hook tests and `test:toolkit`. The `toolkit`
 job of `.github/workflows/governance.yml` runs the same commands on **every** PR; the lint, type,
 size, Vitest browser (including `src/test/copyable-sfcs.test.ts`, which mounts every block and
-example) and visual jobs run when `packages/` or `apps/storybook/` change.
+example) jobs run when `packages/webkit` changes; the docs/demos build and the styled visual job
+run when `packages/` or `apps/docs`, `apps/demos`, `apps/visual` change.
 
 **Spec template 2.** New specs carry `template: 2` and four more sections: `Internationalization`,
 `Right-to-left`, `Responsive` and `Performance`. `spec-template:check`, `spec-validate` and the
@@ -103,10 +106,10 @@ only resolves the target and prints the plan.
 
 ## The spec-driven pipeline
 
-Every new component starts as a spec at `.specs/<name>.md`. The spec is the contract; the `.vue`, story, and exports are derived from it. These are the commands the AI flow above calls in steps 3 to 5.
+Every new component starts as a spec at `.specs/<name>.md`. The spec is the contract; the `.vue`, examples, and exports are derived from it. These are the commands the AI flow above calls in steps 3 to 5.
 
 1. **Draft the spec** — `/spec-create <name>` writes `.specs/<name>.md` with `status: draft`. Review and flip to `status: approved`.
-2. **Scaffold** — `/component-create <name>` writes the `.vue`, the `packages/webkit/package.json#exports` entry, and a minimal `.stories.js`. It will refuse to add props, events, or slots that are not in the spec.
+2. **Scaffold** — `/component-create <name>` writes the `.vue`, the `packages/webkit/package.json#exports` entry, and the examples in `packages/webkit/examples/<name>/`. It will refuse to add props, events, or slots that are not in the spec.
 3. **Verify** — `/component-verify <name>` re-runs spec compliance and validators without touching files.
 
 The spec template lives at [`.specs/_template.md`](./.specs/_template.md). The Constraints block is verbatim by design — do not edit it.
@@ -128,8 +131,8 @@ source and the generated files disagree. Nobody rewrites the AI files by hand.
 
 | When you…                                                   | You write                                                                                    | Generated                                      | CI gate                                                             |
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------- |
-| Create or change a component or a section                   | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and the story    | `catalog.json` imports, with docs and examples | `catalog:check` (fails on a missing doc section), hooks             |
-| Create or change a story in `templates/` (not `marketing/`) | The story, with `parameters.webkit.intents` and `skills` (and `steps` for a multi-step flow) | `catalog.json` `patterns`                      | `patterns:check` (G1)                                               |
+| Create or change a component or a section                   | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and its examples | `catalog.json` imports, with docs and examples | `catalog:check` (fails on a missing doc section), hooks             |
+| Create or change a block in `packages/webkit/blocks/`       | `block.json` (with `intents` and `skills`), the `.vue`, `variants/`, `guidelines.md`         | `catalog.json` `patterns`                      | `patterns:check` (G1)                                               |
 | Rename, deprecate or remove a component                     | The spec, with `deprecated: true` / `replaced_by`                                            | The catalog                                    | `cited-names` (G2)                                                  |
 | Create or change a skill or a rule                          | `skills/<name>/SKILL.md` or `rules/<name>.md` at the repo root                               | The copy in the package (`prepack`)            | `cited-names` (G2), `doc-standards`, invariant tests                |
 | Change a token                                              | `packages/theme`                                                                             | Tokens in the catalog                          | `validate-tokens`                                                   |
@@ -151,7 +154,8 @@ pnpm webkit:lint:style      # Stylelint
 pnpm webkit:type-check      # vue-tsc --noEmit
 pnpm webkit:type-coverage   # type-coverage >= 95%
 pnpm webkit:format:check    # Prettier
-pnpm storybook:build        # Catches SFC compile errors invisible to vue-tsc
+pnpm --filter @aziontech/webkit test:ssr   # renders every block and example (SFC compile errors invisible to vue-tsc)
+pnpm docs:build             # the docs site, every route prerendered
 ```
 
 Or the aggregate:
@@ -182,19 +186,28 @@ PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm webkit:test
 
 Tests never ship to npm — `packages/webkit/package.json#files` excludes them, asserted in CI by `pnpm pack:check`.
 
-### Visual regression (Storybook test-runner)
+### Visual regression (styled, Playwright)
 
-The unit suite above runs on an **unstyled** DOM (no Tailwind) and owns behavior/structure/ARIA. Pixels are owned by the visual layer: `@storybook/test-runner` visits every story in the built Storybook, screenshots `#storybook-root` and compares against committed baselines (`jest-image-snapshot`). Config: [`apps/storybook/.storybook/test-runner.js`](./apps/storybook/.storybook/test-runner.js).
+The unit suite above runs on an **unstyled** DOM (no Tailwind) and owns behavior/structure/ARIA.
+Pixels are owned by [`apps/visual`](./apps/visual/README.md): Playwright serves the built docs
+site and demos and screenshots them **with the real theme CSS** — the first example of every
+component (`/example/<dir>/<file>`) in light and dark at 1280 px and light at 390 px, the primary
+state of every block (`/frame/<state>/<id>`) in light and dark at 1280 px and dark at 390 px, every
+state of the AI blocks (light, dark, 320 px, right to left), every demo route (plus the demo flows
+end to end) and the geometry checks in `tests/geometry.spec.ts`.
 
 ```bash
-pnpm storybook:test:visual                    # build + serve dist + compare (one-shot)
-pnpm --filter storybook run test:visual       # compare against a running `storybook:dev`
-pnpm --filter storybook run test:visual:update# regenerate LOCAL baselines
+pnpm docs:build && pnpm demos:build
+pnpm visual:test             # compare with apps/visual/baselines
 ```
 
-Baselines are **per-platform** (font rasterization differs): `apps/storybook/.storybook/test-visual/__image_snapshots__/linux/` is the CI contract and is committed; `darwin/` is local-only and gitignored. To bootstrap or intentionally update the committed baselines, run the **Visual Regression @ Storybook** workflow manually with `update_baselines=true`, download the `visual-baselines-linux` artifact and commit its contents — never commit baselines generated on macOS. Failed comparisons write annotated diffs to `test-visual/__diff_output__/` (uploaded as a CI artifact).
-
-Opt a story out of the snapshot (it is still visited for render errors) with `parameters: { visual: false }`.
+**Add an example and you are done**: the docs page and its visual test follow from
+`packages/webkit/examples/<name>/`, and a new block from `packages/webkit/blocks/`. The only manual
+step is the baseline. Baselines are committed and are valid only when taken in
+`mcr.microsoft.com/playwright:v1.62.0-noble` (the image the CI `visual` job runs in): dispatch
+`.github/workflows/visual-baselines.yml` with `update_baselines=true`
+(`pnpm visual:update:baseline`), review the `visual-baselines` artifact and commit it
+(`/regen-baselines`). Failed comparisons upload the Playwright report (with diffs) as an artifact.
 
 ## Commit convention
 
@@ -324,7 +337,7 @@ Reviewers will look for:
 2. **Token usage.** No HEX literals, no raw Tailwind palette (`bg-blue-500`), no inline `@keyframes`. Tokens only — see [`.claude/rules/styling.md`](./.claude/rules/styling.md).
 3. **No invented dependencies.** Imports resolve; no `floating-ui`, `popper`, `gsap`, `framer-motion`, etc.
 4. **Accessibility.** Keyboard paths, focus rings, `motion-reduce:*` fallbacks for any motion.
-5. **Storybook coverage.** The states listed in the spec each have a story.
+5. **Example coverage.** The states listed in the spec each appear in an example.
 
 ## Reporting bugs
 
@@ -332,7 +345,7 @@ Open an [issue](https://github.com/aziontech/webkit/issues/new) with:
 
 - Affected package and version (`@aziontech/webkit@x.y.z`).
 - Vue version and bundler (Vite/webpack/etc.).
-- Minimal reproduction — a Storybook story or a CodeSandbox is ideal.
+- Minimal reproduction — an example SFC (like those in `packages/webkit/examples/`) or a CodeSandbox is ideal.
 - Expected vs. actual behavior.
 
 ## Releasing

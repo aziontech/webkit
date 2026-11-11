@@ -10,7 +10,7 @@ For the Support page's tier comparison, use CompareSupportTiers.
 
 The band is the `ComparePlans` component from `@aziontech/webkit/compare-plans`; it composes `SectionModule`, `Select`, `Button`, `Overline`, `Hint`, `Tag` and `Link`, and keeps the plan picked on small screens as local state.
 
-## Stories
+## Examples
 
 ### Plan Matrix
 

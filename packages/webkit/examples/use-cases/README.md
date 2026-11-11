@@ -6,7 +6,7 @@ The title cell is the simplest variant of the media-and-title split: an overline
 
 The band is the `UseCases` component from `@aziontech/webkit/use-cases`; it composes `SectionModule`, `FrameBox`, `CardGrid`, `Topic`, `Overline` and `Button`.
 
-## Stories
+## Examples
 
 ### Default
 

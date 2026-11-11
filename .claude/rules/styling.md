@@ -315,7 +315,7 @@ The Vue HTML parser runs **before** JavaScript. **Do not** pass multiline templa
 
 ## Vue SFC pitfall — no HTML-like tags in `<script>` comments
 
-A tool that runs `@vitejs/plugin-vue` twice (as Storybook did, and as some consumer setups still do) may call `compiler-sfc` `parse()` on **already-compiled** module code. Any substring that looks like HTML in that output breaks the parse, so the rule stays for every consumer build.
+A tool that runs `@vitejs/plugin-vue` twice (as some consumer setups do) may call `compiler-sfc` `parse()` on **already-compiled** module code. Any substring that looks like HTML in that output breaks the parse, so the rule stays for every consumer build.
 
 ```ts
 // ❌ Survives compileScript and breaks the second vite:vue pass

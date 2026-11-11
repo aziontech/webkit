@@ -4,7 +4,7 @@
 
 The hooks fail open on unexpected errors (invalid JSON input, missing files, etc.) — they never silently break the workflow.
 
-Hooks do not own their logic: the checks live in **shared engines** ([`_lib/`](./_lib/) shims re-exporting [`packages/webkit/src/eslint-plugin/*.js`](../../packages/webkit/src/eslint-plugin/), plus the DS-internal `_lib/spec-compliance-checks.mjs` and `_lib/story-source-checks.mjs`) that the CI ratchet ([`packages/webkit/scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs repo-wide. The rule ⇄ gate pairing is declared in [`_lib/standards.mjs`](./_lib/standards.mjs) and asserted in CI by [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
+Hooks do not own their logic: the checks live in **shared engines** ([`_lib/`](./_lib/) shims re-exporting [`packages/webkit/src/eslint-plugin/*.js`](../../packages/webkit/src/eslint-plugin/), plus the DS-internal `_lib/spec-compliance-checks.mjs`) that the CI ratchet ([`packages/webkit/scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs repo-wide. The rule ⇄ gate pairing is declared in [`_lib/standards.mjs`](./_lib/standards.mjs) and asserted in CI by [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
 
 ## Hooks
 

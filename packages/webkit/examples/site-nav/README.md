@@ -6,7 +6,7 @@ From `xl` the menus sit in the bar. Below it the bar keeps the menu button, the 
 
 The bar is the `SiteNav` component from `@aziontech/webkit/site-nav`; it composes `GlobalHeader`, `NavigationMenu`, `Brand`, `Button`, `IconButton`, `Drawer`, `Menu` and `ScrollArea`, and keeps the sheet's open state and drill path as its own.
 
-## Stories
+## Examples
 
 ### Default
 

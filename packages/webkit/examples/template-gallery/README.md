@@ -6,7 +6,7 @@ Each template card is a mark, a title, one line and a `Deploy now` action. Retai
 
 The band is the `TemplateGallery` component from `@aziontech/webkit/template-gallery`; it composes `SectionModule`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `FrameBox` and `Ticker`.
 
-## Stories
+## Examples
 
 ### Default
 

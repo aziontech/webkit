@@ -6,7 +6,7 @@ On the site each cell holds a live fragment of the console that wakes on hover; 
 
 The band is the `FeatureWidgets` component from `@aziontech/webkit/feature-widgets`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `BentoGrid`, `Illustration`, `Button` and `ButtonHighlight`.
 
-## Stories
+## Examples
 
 ### Default
 

@@ -6,7 +6,7 @@ Three columns on desktop, two on a phone. Retail, Financial Services and Technol
 
 The band is the `ComplianceBadges` component from `@aziontech/webkit/compliance-badges`; it composes `SectionModule`, `MediaSplit` and `CardGrid`, with the badge files from `@aziontech/webkit/assets`.
 
-## Stories
+## Examples
 
 ### Default
 

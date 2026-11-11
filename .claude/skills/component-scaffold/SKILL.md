@@ -219,7 +219,7 @@ packages/webkit/src/components/actions/button/
    "./overlay/popover-content": "./src/components/overlay/popover/popover-content/popover-content.vue"
    ```
 
-6. **Write the starter test** `<name>.test.ts` next to the root `.vue`, using the template below. Fill the root's **required** props (spec Props with no default) so the render doesn't throw. This is a **FLOOR** — render + `data-testid` fallback + consumer override + axe. It uses `render(Component)` directly because the examples are written later (`examples/<name>/`); the author expands it (every event with payload, `disabled`/`loading` suppression, `v-model`, ARIA/`data-state`, keyboard, and `composeStories`) per [`.claude/rules/testing.md`](../../rules/testing.md). [`enforce-test-exists.mjs`](../../hooks/enforce-test-exists.mjs) surfaces a reminder if this file is missing.
+6. **Write the starter test** `<name>.test.ts` next to the root `.vue`, using the template below. Fill the root's **required** props (spec Props with no default) so the render doesn't throw. This is a **FLOOR** — render + `data-testid` fallback + consumer override + axe. It uses `render(Component)` directly because the examples are written later (`examples/<name>/`); the author expands it (every event with payload, `disabled`/`loading` suppression, `v-model`, ARIA/`data-state`, keyboard, and the examples as fixtures) per [`.claude/rules/testing.md`](../../rules/testing.md). [`enforce-test-exists.mjs`](../../hooks/enforce-test-exists.mjs) surfaces a reminder if this file is missing.
 
    ```ts
    // packages/webkit/src/components/<category>/<name>/<name>.test.ts

@@ -6,7 +6,7 @@ Financial Services and Technology use it.
 
 The band is the `ResourceGrid` component from `@aziontech/webkit/resource-grid`; it composes `SectionModule`, `MediaSplit`, `CardGrid`, `Topic`, `Button` and, past four cards, `ScrollArea`.
 
-## Stories
+## Examples
 
 ### Default
 

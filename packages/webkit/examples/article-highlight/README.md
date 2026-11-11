@@ -6,7 +6,7 @@ The wall is a tablist and the large article is its panel. Clicking a title swaps
 
 The band is the `ArticleHighlight` component from `@aziontech/webkit/article-highlight`; it composes `SectionModule`, `FrameBox`, `CardGrid` and `Button`, and keeps the selection as local state.
 
-## Stories
+## Examples
 
 ### Featured
 

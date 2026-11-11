@@ -79,7 +79,7 @@ stylelint config (consumer lint).
 Plurality is part of the name: a single token is `chip`; a container for many is a
 different component (`chip-group`), never a plural spelling of the same one.
 
-**Enforced by:** `validate-spec-compliance` + `validate-story-source` (write-time **and** re-run repo-wide by the CI ratchet).
+**Enforced by:** `validate-spec-compliance` (write-time **and** re-run repo-wide by the CI ratchet).
 
 ---
 
@@ -143,7 +143,7 @@ const props = withDefaults(defineProps<Props>(), { kind: 'primary', disabled: fa
 defineProps({ kind: { type: String }, isDisabled: Boolean })   // runtime form, is- prefix
 ```
 
-- **Variant unions are named, exported types** (`ButtonKind`) so consumers and stories can
+- **Variant unions are named, exported types** (`ButtonKind`) so consumers and examples can
   reference them.
 - **Optional text props default to `''`**, never `undefined` (stable bindings, no
   `"undefined"` rendering). `undefined` is only for props where absence ≠ empty

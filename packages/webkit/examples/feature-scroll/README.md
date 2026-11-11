@@ -6,7 +6,7 @@ It is the sibling of `StickyScrollCode`: the same pinned band, with media in pla
 
 The band is the `FeatureScroll` component from `@aziontech/webkit/feature-scroll`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `StickyStack`, `TextureMaterial`, `Button`, `CardGrid`, `MediaTile` and `Illustration`.
 
-## Stories
+## Examples
 
 ### Default
 

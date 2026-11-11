@@ -6,7 +6,7 @@ The footer under every marketing page: four link columns, then the social row be
 
 The band is the `SiteFooter` component from `@aziontech/webkit/site-footer`; it composes `Footer` (`Footer.Column`, `Footer.Link`), `Brand`, `IconButton`, `StatusIndicator` and `Select`.
 
-## Stories
+## Examples
 
 ### Default
 

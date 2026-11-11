@@ -2,7 +2,7 @@
  "purpose": "A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.",
  "useWhen": [
   "Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.",
-  "Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, in Storybook or on a documentation page.",
+  "Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, on a documentation page.",
   "Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.",
   "Showing that a result lives at a URL — a deployed site, a preview link — by setting `address`."
  ],

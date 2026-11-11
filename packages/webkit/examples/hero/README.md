@@ -6,7 +6,7 @@ Each story is the hero one family of pages opens with. The home page and the sol
 
 The first five bands are the `HeroBand` component from `@aziontech/webkit/hero-band`; it composes `Hero`, `Hero.Title`, `Button` and `Illustration`, and `kind` picks the layout: `centered`, `title-band`, `pixel-floor` or `copy-beside-art`. The Workloads band is the `HeroCopyOnTopArt` component from `@aziontech/webkit/hero-copy-on-top-art`; it composes the same hero with `Flow` and `Tag` for the scene.
 
-## Stories
+## Examples
 
 ### Centered carousel
 

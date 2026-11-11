@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "One statement, its attribution, and the company mark above it. Both are real: the mark is Magalu's, served from Storybook's static folder, and the sentence is quoted from the published success case the attribution names — point `logo` at your own asset. The wordmark ships in the brand blue rather than in one ink, so it reads on both themes; `logo` is a single URL with no per-theme swap, which a white-on-dark mark would need. `logoAlt` is empty here, so the mark takes its accessible name from `jobTitle`.",
+   "summary": "One statement, its attribution, and the company mark above it. Both are real: the mark is Magalu's, served from the docs site's public folder, and the sentence is quoted from the published success case the attribution names — point `logo` at your own asset. The wordmark ships in the brand blue rather than in one ink, so it reads on both themes; `logo` is a single URL with no per-theme swap, which a white-on-dark mark would need. `logoAlt` is empty here, so the mark takes its accessible name from `jobTitle`.",
    "sfc": "<script setup>\n  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'\n  import Quote from '@aziontech/webkit/quote'\n</script>\n\n<template>\n  <Quote\n    text=\"Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.\"\n    name=\"Allan Monteiro\"\n    job-title=\"CISO & Head of Technology at Magalu\"\n    :logo=\"magaluLogo\"\n  />\n</template>"
   },
   {

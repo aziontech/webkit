@@ -6,7 +6,7 @@ Below `lg` it unpins into a plain list with the sample under each capability.
 
 The band is the `StickyScrollCode` component from `@aziontech/webkit/sticky-scroll-code`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `StickyStack`, `CodeBlock`, `TextureMaterial` and `Button`.
 
-## Stories
+## Examples
 
 ### Default
 

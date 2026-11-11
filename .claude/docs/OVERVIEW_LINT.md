@@ -9,10 +9,10 @@ Code quality is enforced in **four layers of defense**, from the moment code is 
 
 | Layer                    | When                                   | What runs                                                                            |
 | ------------------------ | -------------------------------------- | ------------------------------------------------------------------------------------ |
-| **0 — Write time**       | as files are written (AI-assisted dev) | 7 Claude Code guardrail hooks (tokens, imports, specs, story shape, test existence)  |
+| **0 — Write time**       | as files are written (AI-assisted dev) | 6 Claude Code guardrail hooks (tokens, imports, specs, test existence)  |
 | **1 — Scripts / editor** | on demand                              | ESLint (zero warnings) · Stylelint · Prettier · `vue-tsc` · type-coverage ≥95%       |
 | **2 — Git hooks**        | `git commit`                           | husky → lint-staged (auto-fix staged files) + commitlint (message contract)          |
-| **3 — CI**               | PR / push to `main`, `dev`             | `governance.yml`: lint + types + security + build + Storybook smoke, behind one gate |
+| **3 — CI**               | PR / push to `main`, `dev`             | `governance.yml`: lint + types + security + build + docs/demos build + styled visual tests, behind one gate |
 
 Philosophy: **ESLint owns correctness, Prettier owns formatting, Stylelint owns CSS, vue-tsc owns types, commitlint owns release semantics** — no tool overlaps another's job, and warnings don't exist (`--max-warnings 0`: an issue is either an error or not a rule).
 
@@ -24,7 +24,7 @@ Philosophy: **ESLint owns correctness, Prettier owns formatting, Stylelint owns 
 flowchart TB
     subgraph L0["Layer 0 — Write time (.claude/hooks, AI-assisted dev)"]
         direction LR
-        H1["validate-tokens"] --- H2["validate-references"] --- H3["validate-story-source"] --- H4["spec hooks ×3"]
+        H1["validate-tokens"] --- H2["validate-references"] --- H4["spec hooks ×3"]
     end
 
     subgraph L1["Layer 1 — Scripts / editor (on demand)"]
@@ -39,7 +39,7 @@ flowchart TB
 
     subgraph L3["Layer 3 — CI (governance.yml)"]
         direction LR
-        C1["lint"] --- C2["types"] --- C3["security"] --- C4["build"] --- C5["storybook"]
+        C1["lint"] --- C2["types"] --- C3["security"] --- C4["build"] --- C5["site"]
     end
 
     L0 --> L1 --> L2 --> L3 --> GATE["Governance Gate → PR mergeable"]
@@ -138,7 +138,7 @@ Every ESLint invocation — script, lint-staged, CI — runs with **`--max-warni
 | `singleAttributePerLine`  | `true`   | one attribute per line in templates — long `data-[kind=…]` class/attribute stacks stay readable and diff line-by-line |
 | `vueIndentScriptAndStyle` | `true`   | `<script>`/`<style>` content indented inside SFC blocks                                                               |
 
-`packages/webkit/.prettierignore` skips generated output: `dist`, `*.min.css`, `*.d.ts`, `coverage`, `storybook-static`, `node_modules`.
+`packages/webkit/.prettierignore` skips generated output: `dist`, `*.min.css`, `*.d.ts`, `coverage`, `node_modules`.
 
 ---
 
@@ -252,7 +252,7 @@ flowchart TB
 
     LINT --> B["build<br/>• npm pack --dry-run<br/>• pack:check — no test files in tarball"]
     TY --> B
-    LINT --> SB["storybook<br/>build smoke — dist/ must exist"]
+    LINT --> SB["site<br/>docs:build + demos:build"]
     TY --> SB
 
     SEC --> GATE["governance-check<br/>every job success or cleanly skipped"]
@@ -268,10 +268,10 @@ What each job contributes:
 | **types**            | `vue-tsc` · type-coverage ≥95%                                                          | the type gates of §5, enforced on every PR                            |
 | **security**         | `pnpm audit` (high+) · TruffleHog verified-secret scan · `depcheck` (continue-on-error) | vulnerable deps and committed secrets block; unused deps are advisory |
 | **build**            | `pack:dry` + `pack:check`                                                               | publish safety — the npm tarball is valid and ships zero test files   |
-| **storybook**        | full `storybook:build`                                                                  | the docs app compiling is a smoke test over every story and component |
+| **site**             | `docs:build` + `demos:build`                                                            | the docs site prerendering every route is a smoke test over every example, block and component |
 | **governance-check** | aggregates all of the above                                                             | the **single required status** for branch protection                  |
 
-The functional and visual test workflows (`package-webkit-test.yml`, `app-storybook-visual.yml`) run alongside governance — see [`OVERVIEW_TESTS.md`](./OVERVIEW_TESTS.md).
+The functional and visual test workflows (the `tests` and `visual` jobs of `governance.yml`, and `visual-baselines.yml`) run alongside the static gates — see [`OVERVIEW_TESTS.md`](./OVERVIEW_TESTS.md).
 
 ---
 
@@ -283,13 +283,12 @@ A layer conventional linters don't have: this repo is developed AI-assisted, and
 | ------------------------------ | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `validate-tokens.mjs`          | Pre-write  | hardcoded hex colors, raw Tailwind palette, raw typography — anything outside the DESIGN.md token catalog; also `any` and `@ts-ignore`                         |
 | `validate-references.mjs`      | Pre-write  | phantom imports: any `@aziontech/webkit/*` path missing from the exports map, unresolvable relative imports, uninstalled packages (kills import hallucination) |
-| `validate-story-source.mjs`    | Pre-write  | stories whose "Show code" panel wouldn't be paste-and-runnable: dynamic source, lowercase component tags, nested `<template>`, import binding ≠ export name    |
 | `enforce-component-create.mjs` | Pre-write  | new component `.vue` created outside the spec-driven pipeline (`/spec-create` → `/component-create`)                                                           |
 | `enforce-spec-exists.mjs`      | Pre-write  | component code written without an **approved** spec — including checksum tamper-detection on the spec body                                                     |
 | `validate-spec-compliance.mjs` | Post-write | a `.vue` whose props / events / slots / name / testid / animations diverge from its `.specs/<name>.md`                                                         |
 | `enforce-test-exists.mjs`      | Post-write | (warning) a root `.vue` without its co-located `<name>.test.ts`                                                                                                |
 
-Together these encode the repo's core invariants — _spec is the contract, tokens are the palette, imports must exist, stories must run_ — as machine-enforced checks rather than review comments.
+Together these encode the repo's core invariants — _spec is the contract, tokens are the palette, imports must exist, examples must run_ — as machine-enforced checks rather than review comments.
 
 ---
 

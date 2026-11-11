@@ -885,7 +885,7 @@ Same determinism for `export` statements.
 **❌ Wrong**
 
 ```ts
-export { toSfc } from './story-source'
+export { useToast } from './use-toast'
 export { formatArgs } from './format-args'
 ```
 
@@ -893,7 +893,7 @@ export { formatArgs } from './format-args'
 
 ```ts
 export { formatArgs } from './format-args'
-export { toSfc } from './story-source'
+export { useToast } from './use-toast'
 ```
 
 ### `import/first`
@@ -1529,7 +1529,7 @@ Also enforced: never `Co-Authored-By` / attribution footers, never `--no-verify`
 
 ## 11. Write-time guardrail hooks (Layer 0)
 
-This repo is developed AI-assisted; `.claude/hooks/` lint the **writes themselves** — every `Write`/`Edit` is validated before (or right after) it lands, enforcing design-system invariants ESLint can't express. Most hooks flag only **newly introduced** violations; `validate-story-source` is **strict** (the whole stories tree is on the canonical pattern, so every check applies to the full result of the write). Pre-existing debt is not grandfathered by a whitelist — it is frozen in [`scripts/authoring-baseline.json`](../scripts/authoring-baseline.json), and the CI ratchet ([`check-authoring.mjs`](../scripts/check-authoring.mjs)) re-runs the same engines repo-wide, failing the PR on any **new** violation even from an editor push that never ran the hooks. Full rationale per rule lives in [`.claude/rules/`](../../../.claude/rules/).
+This repo is developed AI-assisted; `.claude/hooks/` lint the **writes themselves** — every `Write`/`Edit` is validated before (or right after) it lands, enforcing design-system invariants ESLint can't express. Most hooks flag only **newly introduced** violations. Pre-existing debt is not grandfathered by a whitelist — it is frozen in [`scripts/authoring-baseline.json`](../scripts/authoring-baseline.json), and the CI ratchet ([`check-authoring.mjs`](../scripts/check-authoring.mjs)) re-runs the same engines repo-wide, failing the PR on any **new** violation even from an editor push that never ran the hooks. Full rationale per rule lives in [`.claude/rules/`](../../../.claude/rules/).
 
 ### `validate-tokens.mjs` — tokens are the palette
 
@@ -1570,32 +1570,6 @@ Blocks introduced construction anti-patterns ([`props`](../../../.claude/rules/p
 <script setup lang="ts">
   const model = defineModel<string>()
 </script>
-```
-
-### `validate-story-source.mjs` — "Show code" must be paste-and-runnable
-
-**Strict** (no grandfathering) on every `*.stories.*` write. The 13 checks live in the shared engine [`.claude/hooks/_lib/story-source-checks.mjs`](../../../.claude/hooks/_lib/story-source-checks.mjs) — the same module the CI ratchet runs repo-wide: `docs-not-literal`, `handrolled-transform`, `dynamic-source`, `nested-template`, `lowercase-tag` (native HTML tags exempt), `import-binding-mismatch`, `argtypes-regex`, `legacy-csf2-assignment`, `figma-reference`, `args-destructure`, plus the presence checks `missing-helper`, `missing-source-code`, `missing-sourcestate` (foundations catalog pages are exempt from the helper/`toSfc` pair). Audit the whole tree with `node .claude/hooks/validate-story-source.mjs --all`. See [`storybook-source.md`](../../../.claude/rules/storybook-source.md).
-
-```js
-// ❌ blocked — dynamic source, binding ≠ subpath (import Chip from …/chips)
-import Chip from '@aziontech/webkit/chips'
-export const Default = {
-  parameters: { docs: { source: { type: 'dynamic' } } }
-}
-
-// ✅ explicit runnable SFC via toSfc + sourceState in the meta docs block
-import Chip from '@aziontech/webkit/chip'
-import { toSfc } from '../../../_shared/story-source'
-
-const IMPORT = "import Chip from '@aziontech/webkit/chip'"
-const meta = {
-  component: Chip,
-  parameters: { docs: { canvas: { sourceState: 'shown' } } }
-}
-export default meta
-export const Default = {
-  parameters: { docs: { source: { code: toSfc(IMPORT, '<Chip label="Edge" />') } } }
-}
 ```
 
 ### `enforce-spec-exists.mjs` + `enforce-component-create.mjs` — spec is the contract

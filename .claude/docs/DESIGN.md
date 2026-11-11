@@ -4,7 +4,7 @@ How to style components under `packages/webkit/src/components/webkit/` using tok
 
 ## Prerequisites
 
-- Import the theme stylesheet in the app (Storybook already does).
+- Import the theme stylesheet in the app (the docs site and the demos already do: `apps/docs/src/main.ts`, `apps/demos/src/main.ts`).
 - Rebuild theme tokens when `texts.data.js` or other token sources change: `pnpm` from the repo root, following `packages/theme` docs.
 
 ---
@@ -23,8 +23,8 @@ That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --b
 
 Integration points:
 
-- **Vite / Storybook:** register `@tailwindcss/vite` once. See [`apps/storybook/.storybook/main.js`](../../apps/storybook/.storybook/main.js).
-- **`@apply` inside secondary CSS files:** requires `@reference "@aziontech/theme/globals.css";` at the top of the file (Tailwind v4 constraint). Example: [`apps/storybook/src/styles/preview.css`](../../apps/storybook/src/styles/preview.css).
+- **Vite:** register `@tailwindcss/vite` once. See [`apps/docs/vite.config.ts`](../../apps/docs/vite.config.ts).
+- **`@apply` inside secondary CSS files:** requires `@reference "@aziontech/theme/globals.css";` at the top of the file (Tailwind v4 constraint). Example: [`apps/docs/src/styles/main.css`](../../apps/docs/src/styles/main.css) (`@reference "@aziontech/theme";`).
 - **`!important`:** use the v4 suffix syntax (`opacity-50!`, `size-10!`). The v3 prefix (`!opacity-50`) is forbidden.
 
 Do not add a `tailwind.config.*` file to any package under `packages/`. All theme customization lives in the token sources under `packages/theme/src/tokens/`, is compiled into `@theme { … }`, and reaches components via CSS custom properties.
@@ -207,7 +207,7 @@ Rhythm is two steps and no more: `--layout-section-gap` between the sections of 
 
 Every layout token is a `var()` reference to `--spacing-*` / `--container-*` — never a literal length —
 which is what lets the layout scale inherit the spacing scale's breakpoints instead of restating them.
-Full catalog: **Foundations → Layout** in Storybook.
+Full catalog: **Foundations → Layout and devices** on the docs site.
 
 ### Fixed content widths
 
@@ -365,7 +365,7 @@ Reference: `button.vue` kind variants (`bg-(--secondary)`, `text-(--secondary-co
 7. **Color** — `bg-(--…)`, `text-(--…)`, `border-(--…)`.
 8. **Interactive states** — `::before` / `::after` ghost layers for `--bg-hover` / `--bg-active`; `focus-visible:ring-2 focus-visible:ring-offset-1`; `duration-fast-02` + `ease-productive-*` (see § Interactive states).
 9. **Motion** — `duration` / `curve` from `animate.js` only; `data-state` overlays use a `presets/transitions.ts` module (see § Motion — reference: Drawer).
-10. **Storybook** — Add or update stories under `apps/storybook/src/stories/webkit/` for new states and sizes.
+10. **Examples** — Add or update examples under `packages/webkit/examples/<name>/` for new states and sizes.
 
 ---
 
@@ -570,7 +570,7 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 
 - Token architecture: `packages/theme/src/tokens/README.md`
 - Component structure and API: [`COMPONENT_REQUIREMENTS.md`](./COMPONENT_REQUIREMENTS.md)
-- Storybook foundations (typography catalog): `apps/storybook/src/foundations/data/typography.js`
+- Docs foundations (typography catalog, parsed from the theme): `apps/docs/src/lib/foundations.ts`
 - Monorepo agent guide: [`../AGENTS.md`](../AGENTS.md)
 - Agent rules (discipline layer): [`../rules/`](../rules/)
 - Per-component specs: [`../../.specs/`](../../.specs/)

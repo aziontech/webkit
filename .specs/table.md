@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 3a116a93fc013fb73865862a9ffcd9bdb200eb8635fc0c9085a98a507c4849ed
+checksum: 74467d0fd35f29167cf2ec17a63cf24970c2cbfddbeb2b40bbd59c93cc6a7011
 created: 2026-06-16
 last_updated: 2026-11-11
 ---
@@ -437,7 +437,7 @@ Per-column slots (data-driven mode) are name-computed at runtime, one per column
 - Touch target ≥40×40 px on the sort button and row action controls.
 - Teleported content: the `Table.Filter` and `Table.ColumnSelector` panels, teleported to `body`, bind `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so they keep the provider's direction and language. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
-## Stories (Storybook)
+## Examples
 
 This component has no `kind`/`size` on its root, so the canonical Types/Sizes stories do not apply. Instead there is one story per scenario (the component's value is the behaviors, not root variants) plus a Full reference; each wires its events to the Actions panel.
 
@@ -475,9 +475,8 @@ Most stories use the data-driven API (`<Table :data :columns>` via the TanStack 
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export and the root `package.json` main/module point at `index.ts`, `types` at `index.d.ts`. Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

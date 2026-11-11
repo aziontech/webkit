@@ -6,7 +6,7 @@ The media cell sits on the small pixelate texture, fading toward the top. With `
 
 The band is the `MediaSplitBand` component from `@aziontech/webkit/media-split-band`; it composes `SectionModule` and a `framed` `MediaSplit`, with a scene, an image or an `Illustration` in the media cell.
 
-## Stories
+## Examples
 
 ### Our values
 

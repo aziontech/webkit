@@ -18,7 +18,7 @@ This document outlines the requirements and best practices for building componen
 
 ## Names (v6)
 
-v6 uses the names of shadcn/ui and Radix. Never write a retired name in new code, docs or stories; `npx @aziontech/webkit migrate v6` rewrites them in consumer code ([`src/cli/migrations/v6.json`](../../packages/webkit/src/cli/migrations/v6.json)).
+v6 uses the names of shadcn/ui and Radix. Never write a retired name in new code, docs or examples; `npx @aziontech/webkit migrate v6` rewrites them in consumer code ([`src/cli/migrations/v6.json`](../../packages/webkit/src/cli/migrations/v6.json)).
 
 | Retired (v5)                                            | v6                                                                       |
 | ------------------------------------------------------- | ------------------------------------------------------------------------ |
@@ -65,7 +65,7 @@ packages/webkit/src/components/<category>/<name>/
 └── <name>.test.ts    # browser test (rules/testing.md)
 ```
 
-Categories: `actions`, `chart`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `sections`, `utils`. The spec is `.specs/<name>.md`, the story is `apps/storybook/src/stories/components/<category>/<name>/`, and runnable examples are `packages/webkit/examples/<export>/` (folder named after the export it documents). The full layout and script order are [`rules/component-structure.md`](../rules/component-structure.md).
+Categories: `actions`, `chart`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `sections`, `utils`. The spec is `.specs/<name>.md`, and runnable examples are `packages/webkit/examples/<export>/` (folder named after the export it documents). The full layout and script order are [`rules/component-structure.md`](../rules/component-structure.md).
 
 **Example:**
 
@@ -444,7 +444,7 @@ Some components may require Vue Router for navigation or routing features.
 - [ ] Add the `data-testid` fallback `<category>-<name>`
 - [ ] Add the export to `package.json`
 - [ ] Add the browser test `<name>.test.ts`
-- [ ] Add the story and `examples/<name>/`
+- [ ] Add `examples/<name>/`
 - [ ] Rebuild the catalog: `node scripts/build-catalog.mjs`
 
 ### Vue Router Components (Additional)
@@ -642,7 +642,7 @@ When the component owns relevant internal state (open/value/selected/expanded), 
 - **Controlled:** prop `open` (`boolean | undefined`) + emit `update:open` + `v-model:open` via `defineModel<boolean>('open')`.
 - **Uncontrolled:** prop `defaultOpen` (initial value), internally managed when `open === undefined`.
 - A computed `isOpen` decides between `openModel.value` (controlled) and `internalOpen.value` (uncontrolled).
-- Storybook stories `Controlled` and `Uncontrolled` document both usages.
+- Examples `controlled.vue` and `uncontrolled.vue` document both usages.
 
 ### 2.4. Slots tipados
 
@@ -779,7 +779,7 @@ Conventions:
 - **Shared `InjectionKey<T>` and TypeScript types in a sibling `injection-key.ts`** at the root level (sibling of `<name>.vue`, **not** inside any sub-component folder). Root imports `./injection-key`; sub-components import `../injection-key`.
 - **`as-child`** enabled on `Trigger` and `Close` variants.
 - **`data-state`** exposed on Root + Content for state-driven styling.
-- Each public sub-component receives an entry in `package.json#exports` (`./dialog`, `./dialog-trigger`, …). The Storybook story for the root component covers the composition anatomy through the spec's `## Usage` block (which renders the full tree) — there is no separate `WithComposition` story by default.
+- Each public sub-component receives an entry in `package.json#exports` (`./dialog`, `./dialog-trigger`, …). The root's `default.vue` example renders the full composition anatomy (the spec's `## Usage` tree) — there is no separate composition example by default.
 
 ### 3. Composition Pattern — só quando faz sentido
 
@@ -863,7 +863,7 @@ Sweep these locations before implementing. Create a new utility only when nothin
 
 ### 11. Light/dark obrigatório
 
-Every token used must work in both modes of `@aziontech/theme`. The Storybook story `LightDark` renders the component side by side in light and dark and is mandatory.
+Every token used must work in both modes of `@aziontech/theme`. The styled visual suite (`apps/visual`) screenshots the first example in light and dark, and the docs site switches both themes; no dedicated light/dark example is needed.
 
 ### 12. Figma Code Connect
 
@@ -885,173 +885,14 @@ Authoring the `.figma.ts` file works without the token; only publishing needs it
 - **CI (GitHub Actions):** add `FIGMA_ACCESS_TOKEN` as a repository secret (`Settings → Secrets and variables → Actions`) and reference it via `env: { FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }} }` in the workflow step that calls `figma:publish`.
 - **Never** commit the token. `.env` and `.env.*` are gitignored at the repo root; only [`.env.example`](../.env.example) is versioned.
 
-### 13. Storybook story — canonical pattern (Vue 3 + Storybook 8)
+### 13. Examples — canonical pattern
 
-> **"Show code" is governed by [`.claude/rules/storybook-source.md`](../rules/storybook-source.md).** The Docs panel must emit a **single runnable SFC with PascalCase tags** that match the import. Keep `parameters.docs` a plain object literal and give every story an explicit `source.code: toSfc(IMPORT, TEMPLATE)` (from `apps/storybook/src/stories/_shared/story-source.js`); never use `docs.source.transform` / `source.type: 'dynamic'`, and never set `docs` to a function call. `parameters.docs.description.component` is a **short prose lead** from `## Purpose` — the `## Usage` block is NOT appended into it (older guidance below is superseded on this point). Enforced by `validate-story-source.mjs`.
+Every component documents itself through copyable SFCs in `packages/webkit/examples/<name>/`:
 
-Stories follow the **market-standard CSF3 pattern for Vue 3** — concretely, the existing [`apps/storybook/src/stories/webkit/actions/button/Button.stories.js`](../../apps/storybook/src/stories/webkit/actions/button/Button.stories.js). The two distinguishing traits versus a generic CSF3 file:
-
-1. **Composite stories `Types` and `Sizes`** render every variant side-by-side in a single frame — replacing one-story-per-variant (`Primary`, `Secondary`, `Outlined`, …).
-2. **`parameters.docs.description.component` is the short Purpose prose lead** (see the rule callout above); the runnable usage is surfaced by the "Show code" panel via an explicit `source.code: toSfc(IMPORT, TEMPLATE)`, not by pasting the `## Usage` block into the description.
-
-````js
-// <Name>.stories.js — canonical shape (matches Button.stories.js)
-import Component from '@aziontech/webkit/<category>/<name>'
-
-/** @type {import('@storybook/vue3').Meta<typeof Component>} */
-const meta = {
-  title: 'Webkit/<Category>/<Name>',
-  component: Component,
-  // subcomponents: { ComponentTrigger, ComponentContent } // when Composition Pattern
-  tags: ['autodocs'],
-  parameters: {
-    layout: 'centered',
-    backgrounds: { default: 'dark' },
-    a11y: {
-      config: {
-        rules: [
-          { id: 'color-contrast', enabled: true },
-          { id: 'focus-order-semantics', enabled: true }
-        ]
-      }
-    },
-    docs: {
-      description: {
-        // <Purpose paragraph from .specs/<name>.md>
-        //
-        // ## Usage
-        //
-        // ```vue
-        // <script setup>
-        // import Component from '@aziontech/webkit/<category>/<name>'
-        // </script>
-        //
-        // <template>
-        //   <Component label="Click me" />
-        // </template>
-        // ```
-        component: /* the multi-line markdown built from the spec — see .claude/skills/storybook-write/SKILL.md step 3 */
-      }
-    }
-  },
-  argTypes: {
-    // --- PROPS ---
-    kind: {
-      control: 'select',
-      options: ['primary', 'secondary', 'outlined', 'text'],
-      description: 'Visual variant.',
-      table: {
-        category: 'props',
-        type: { summary: "'primary' | 'secondary' | 'outlined' | 'text'" },
-        defaultValue: { summary: "'primary'" }
-      }
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disables interaction and applies the disabled token set.',
-      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
-    },
-
-    // --- EVENTS ---
-    // CRITICAL: keys must be `on<EventName>` in camelCase. Vue 3 + `v-bind="args"`
-    // only recognizes listeners declared in that form. Kebab-case keys
-    // (e.g. `'action-click'`) silently fail — the Actions panel stays empty.
-    onClick: {
-      action: 'click',
-      description: 'Emitted when the button is activated.',
-      table: { category: 'events', type: { summary: 'MouseEvent' } }
-    }
-  },
-  args: {
-    kind: 'primary',
-    disabled: false
-  }
-}
-export default meta
-
-// Reusable Template — destructure event handlers off args and forward via @event.
-const Template = (args) => ({
-  components: { Component },
-  setup() {
-    const { onClick, ...props } = args
-    return { props, onClick }
-  },
-  template: '<Component v-bind="props" @click="onClick" />'
-})
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Component>} */
-export const Default = {
-  render: Template,
-  parameters: { docs: { description: { story: 'Default primary button at large size.' } } }
-}
-
-export const Types = {
-  render: () => ({
-    components: { Component },
-    template: `
-      <div class="flex flex-wrap items-center gap-4">
-        <Component kind="primary" label="Button" />
-        <Component kind="secondary" label="Button" />
-        <Component kind="outlined" label="Button" />
-        <Component kind="transparent" label="Button" />
-      </div>
-    `
-  }),
-  parameters: { docs: { description: { story: 'All kind variants side by side.' } } }
-}
-
-export const Sizes = {
-  render: () => ({
-    components: { Component },
-    template: `
-      <div class="flex flex-wrap items-center gap-4">
-        <Component size="small" label="Button" />
-        <Component size="medium" label="Button" />
-        <Component size="large" label="Button" />
-      </div>
-    `
-  }),
-  parameters: { docs: { description: { story: 'All size variants side by side.' } } }
-}
-
-export const Loading = {
-  args: { loading: true, label: 'Button' },
-  render: Template,
-  parameters: { docs: { description: { story: 'Loading state with spinner replacing the icon.' } } }
-}
-
-export const Disabled = {
-  args: { disabled: true, label: 'Button' },
-  render: Template,
-  parameters: { docs: { description: { story: 'Disabled state.' } } }
-}
-````
-
-**Hard rules:**
-
-- **`layout: 'centered'`** by default. Override to `'padded'` only when the component is full-width (header, sidebar, drawer).
-- **`parameters.docs.description.component` is a short prose lead** — the `## Purpose` paragraph only (one or two sentences). Do **not** paste the spec's `## Usage` fenced block (or any static code snippet) into the description; the runnable usage is surfaced by the Docs **"Show code"** panel via an explicit `source.code: toSfc(IMPORT, TEMPLATE)` on every story. Governed by [`.claude/rules/storybook-source.md`](../rules/storybook-source.md); enforced by `validate-story-source.mjs`. (This supersedes the older "Purpose + verbatim Usage block" guidance.)
-- **Composite `Types` / `Sizes` stories** are the canonical replacement for one-story-per-variant. Do not split them into `Primary`, `Secondary`, `Small`, `Medium`, etc.
-- **Events as `on<EventName>` camelCase** in `argTypes`, with `action: '<emitted-name>'`. Vue 3's `v-bind` ignores kebab-case keys, so `'action-click': { action: '...' }` silently breaks the Actions panel. Use `onActionClick: { action: 'action-click' }`. For v-model events, the key keeps the colon: `'onUpdate:open': { action: 'update:open' }`.
-- **Reusable `Template` forwards `args` reactively** — `setup() { return { args } }` + `v-bind="args"`, exactly like `Button.stories.js`. **Never destructure or spread `args`** (`const { onClick, ...props } = args`): it freezes the reactive proxy and silently breaks the Controls panel — `validate-story-source.mjs` blocks it. For **stateless** components, events declared in `argTypes` with `{ action }` auto-wire through `v-bind="args"` (no manual `@event` listeners). For **v-model** components, hold a local `ref` synced from `args.modelValue` (via `watch`), bind `:model-value="value"` + `@update:model-value="onUpdate"`, and have `onUpdate` call `args['onUpdate:modelValue']?.(next)` so the Actions panel still logs.
-- **Do NOT use** `parameters.actions.argTypesRegex` (deprecated in Storybook 8).
-- **Do NOT use** `parameters.actions.handles` (legacy Web Components addon, not Vue 3 emits).
-- **Use `table.category`** to group controls: `'props'`, `'events'`, `'slots'`.
-- **`control: false`** for slots and any non-controllable item.
-- **CSF3 object shape** (`export const Name = { args, render, parameters }`). Never CSF2 (`Name.args = {...}`).
-- **Slot demos** use a story-specific `template` with real markup inside the component — slots are not passed via `v-bind`.
-- **`tags: ['autodocs']`** on the meta.
-- **`subcomponents`** on the meta when Composition Pattern — Storybook generates Docs tabs per sub-component.
-
-**Mandatory stories — minimal by default:**
-
-- `Default`
-- `Types` (when the component has more than one `kind`)
-- `Sizes` (when the component has more than one `size`)
-- `Loading` (only if the component has a `loading` prop)
-- `Disabled` (only if the component has a `disabled` prop)
-
-**Forbidden by default** (do **not** add unless the spec explicitly lists and justifies them): `LightDark`, `Accessibility` with `play`, `Playground`, `WithSlots`, `WithComposition`, `Controlled`, `Uncontrolled`, one-story-per-variant (`Primary`, `Secondary`, `Small`, …). Storybook's `autodocs` + `a11y` addon + `backgrounds` already cover dark/light, axe checks, and consumer-driven exploration via Controls — adding bespoke stories duplicates work and rots over time.
+- `examples.json`: `{ "component": "<name>", "title": "Components/<Category>/<PascalName>", "examples": [{ "name", "summary", "file" }] }`. The first example is the default view and is the one the styled visual suite screenshots.
+- One `.vue` per example: `<script setup>` with the real `@aziontech/webkit/<subpath>` imports (binding = `PascalCase` of the subpath), a `<template>` with PascalCase tags and concrete props. It stands alone: copy the file and it runs.
+- Set: `default.vue` + one composite example per multi-option axis (`types.vue` for `kind`, `sizes.vue` for `size`) + one example per mutually-exclusive state the component declares (`loading.vue`, `disabled.vue`). Nothing else unless the spec's `## Examples` section lists and justifies it.
+- The docs site renders each example on `/components/<name>` beside its source and alone at `/example/<name>/<file>`; the catalog (`catalog.json`), the MCP (`get_component`) and the harnesses (copyable, hydration, server render, a11y) read the same files.
 
 ### 13.w Styling discipline (mandatory for new components)
 
@@ -1161,46 +1002,32 @@ The same rule applies. Each sub-component renders its own root with its own inli
 
 ---
 
-### 13.x Story discipline (mandatory)
+### 13.x Example discipline (mandatory)
 
-The rules below apply to **every** `.stories.js` produced for the webkit layer. The `storybook-write` skill, the `storybook-writer` sub-agent, and `echo-reporter` all enforce them.
-
-#### Forbidden Storybook patterns
-
-A `.stories.js` must NEVER contain any of these. The rule is mandatory for every webkit-layer story; `echo-reporter` flags violations and `spec-validator` rejects specs whose Constraints block doesn't carry the corresponding "Do not" line.
-
-- **`parameters.actions.argTypesRegex`** — deprecated in Storybook 8 and silently misroutes Vue 3 emits. Declare every event explicitly in `argTypes` with key `on<EventName>` (camelCase, e.g. `onClick`, `'onUpdate:open'`) and value `{ action: '<emitted-name>', table: { category: 'events' } }`. Never the legacy `argTypesRegex` shortcut.
-- **`parameters.actions.handles`** — Web Components / addon-actions DOM mode, not Vue.
-- **`Name.args = {...}`** — legacy CSF2 form. Use the CSF3 object shape (`export const Name = { args, render, parameters }`).
-- **`parameters.design`**, **`parameters.figma`**, or any other `addon-designs` slot.
-- **Figma URLs in `docs.description.component` or `docs.description.story`**, in JSDoc comments at the top of the file, or anywhere else in the story.
-- **Imports from `@storybook/addon-designs` / `storybook-addon-designs`** — the addon must not be installed; if it is, do not consume it.
-- **Hardcoded Figma node IDs** as strings (e.g. `'3750:15167'`) referenced from the story for documentation purposes.
-
-The Figma ↔ code link is owned by `<name>.figma.ts` (Code Connect). Hardcoded Figma URLs in stories rot silently when the design file is renamed or restructured.
+- No Figma URLs or node IDs in examples or `examples.json`; the Figma ↔ code link is owned by `<name>.figma.ts` (Code Connect).
+- No helpers that only exist for documentation: an example imports only `@aziontech/webkit/*`, `@aziontech/icons` and `vue`.
 
 #### Components with open/close state must default to **closed**
 
 For any component that exposes an open/close state (Dialog, Drawer, Sheet, Popover, Tooltip, DropdownMenu, NavigationMenu, ContextMenu, Accordion, Combobox, …):
 
-- The `Default` story renders the component in its **closed** state — the trigger is visible; the overlay is not.
-- The viewer activates the overlay by interacting with the trigger (click, hover, keyboard) inside the Storybook canvas — exactly as a real consumer would.
-- Per-variant stories (one per `kind`, one per `size`) also default to closed unless the variant cannot exist closed.
+- The `default.vue` example renders the component in its **closed** state — the trigger is visible; the overlay is not.
+- The viewer activates the overlay by interacting with the trigger (click, hover, keyboard) on the docs page — exactly as a real consumer would.
+- Per-variant examples (one per `kind`, one per `size`) also default to closed unless the variant cannot exist closed.
 
-```js
-// Dialog.stories.js
-export const Default = {
-  args: { open: false /* or omit when uncontrolled and defaultOpen is false */ },
-  render: Template,
-  parameters: { docs: { description: { story: 'Trigger renders the dialog. Click to open.' } } }
-}
+```vue
+<!-- examples/dialog/default.vue: the trigger renders, the dialog opens on click -->
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import Dialog from '@aziontech/webkit/dialog'
+</script>
 ```
 
 **Why:** consumers ship the component in its dormant state. The accessible name comes from the trigger; the focus path starts at the trigger; the keyboard shortcut targets the trigger. Defaulting to open hides those details and skews axe and keyboard checks.
 
 #### Variants: only basic ones
 
-The spec lists which `kind` / `size` stories exist. Do **not** add visual permutations the spec did not list. A "WithIcon", "WithLongLabel", "WithBadge" story belongs in the spec or it doesn't belong in the file.
+The spec lists which `kind` / `size` examples exist. Do **not** add visual permutations the spec did not list. A "WithIcon", "WithLongLabel", "WithBadge" example belongs in the spec or it doesn't belong in the folder.
 
 ### 14. Checklist atualizado (apêndice à checklist existente)
 
@@ -1255,22 +1082,16 @@ The spec lists which `kind` / `size` stories exist. Do **not** add visual permut
 - [ ] Texts via props (i18n-ready).
 - [ ] Consistency with neighbours in the category.
 
-#### Storybook (uso completo)
+#### Examples
 
-- [ ] Meta: `title`, `component`, `subcomponents` (when composition), `tags: ['autodocs']`.
-- [ ] `argTypes` for every prop with appropriate `control`, `description`, `table.defaultValue`.
-- [ ] `argTypes` for every event with key `on<EventName>` (camelCase, e.g. `onClick`, `'onUpdate:open'`) — never kebab-case — and value `{ action: '<emitted-name>', table: { category: 'events' } }`. No `argTypesRegex`, no `actions.handles`.
-- [ ] `args` with sensible defaults.
-- [ ] `parameters.actions`, `parameters.a11y`, `parameters.docs.description.*`, `parameters.backgrounds`, `parameters.layout`.
-- [ ] `decorators` when needed.
-- [ ] Stories: `Default` + `Types` (composite, when more than one `kind`) + `Sizes` (composite, when more than one `size`) + `Loading` (only when the component has a `loading` prop) + `Disabled` (only when the component has a `disabled` prop). Nothing else by default — see § 13 for the forbidden list.
-- [ ] `parameters.docs.description.component` is the short `## Purpose` prose lead only (no embedded `## Usage` block); every story sets an explicit `parameters.docs.source.code: toSfc(IMPORT, TEMPLATE)`, `parameters.docs` stays a plain object literal, and `canvas.sourceState: 'shown'` is set at meta level. Same convention as `Button.stories.js`. Governed by [`.claude/rules/storybook-source.md`](../rules/storybook-source.md).
-- [ ] Reusable `Template` at module scope forwarding `args` reactively (`setup() { return { args } }` + `v-bind="args"`) — never destructuring/spreading `args`. Stateless events auto-wire through `v-bind`; v-model components sync a local `ref` and call `args['onUpdate:modelValue']` so the Actions panel works.
+- [ ] `examples/<name>/examples.json` with `component`, `title` and one entry per example (`name`, `summary`, `file`).
+- [ ] `default.vue` + `types.vue` (composite, when more than one `kind`) + `sizes.vue` (composite, when more than one `size`) + `loading.vue` / `disabled.vue` only when the component has those props. Nothing else by default.
+- [ ] Each example stands alone, imports only real subpaths, and renders closed when the component opens and closes.
 
 #### Validação
 
 - [ ] `<name>.figma.ts` created next to the `.vue` (Code Connect available — see § 12).
-- [ ] `pnpm webkit:lint && webkit:type-check && webkit:type-coverage && storybook:build` all pass.
+- [ ] `pnpm webkit:lint && webkit:type-check && webkit:type-coverage && pnpm --filter @aziontech/webkit test:ssr` all pass.
 
 ---
 

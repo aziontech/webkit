@@ -6,7 +6,7 @@ The code sits in a wrapper with its own radius, so the wrapper casts the shadow.
 
 The band is the `CodeSplit` component from `@aziontech/webkit/code-split`; it composes `SectionModule`, a `framed` `MediaSplit`, `CodeBlock` and `Button`. The three bands below are the same component with different props, so all three use `_id: 'code-split'`.
 
-## Stories
+## Examples
 
 ### Default
 

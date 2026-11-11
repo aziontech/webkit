@@ -4,7 +4,7 @@ A grid of use cases that points at the ways a product is applied, under a header
 
 The band is the `UseCaseLinks` component from `@aziontech/webkit/use-case-links`; it composes `SectionModule`, `SectionTitle` and `CardGrid kind="divider"`, with a `Topic` per cell.
 
-## Stories
+## Examples
 
 ### Topics
 

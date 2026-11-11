@@ -6,7 +6,7 @@ Use it instead of hand-rolling the same split, as Cache, Application Accelerator
 
 The band is the `LogoWallQuote` component from `@aziontech/webkit/logo-wall-quote`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `LogoWall`, `Quote` and `Button`.
 
-## Stories
+## Examples
 
 ### Default
 

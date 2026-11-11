@@ -4,7 +4,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 
 The band is the `HeroForm` component from `@aziontech/webkit/hero-form`; it composes `Hero`, `Hero.Title`, `Topic`, the `Field*` controls, `Button` and `Alert`. The fields are data, so the Contact and Under attack pages are the same block with different `fields`. The block validates the fields itself and never sends them: a valid submit fires `submit` with the values, and the page posts them and sets the outcome back.
 
-## Stories
+## Examples
 
 ### Contact split
 
