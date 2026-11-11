@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: pending
+checksum: 845f7bd2ce1d49a6eec1be8d5227bbd935359997401ec395e2901e2022bd93b2
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
