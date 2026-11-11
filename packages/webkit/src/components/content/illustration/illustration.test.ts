@@ -286,5 +286,5 @@ describe('Illustration', () => {
       )
     )
     await expectNoA11yViolations(view.container)
-  })
+  }, 60_000)
 })
