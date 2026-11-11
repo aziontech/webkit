@@ -39,11 +39,13 @@ A search `Input` bound with `v-bind="filterProps"` (name, description, status) a
 
 When the teams do not load, a danger `Alert` with Retry takes the table's place and the heading stays.
 
-### G. Members — `Combobox`, `Button`, `Avatar`, `IconButton` (EditTeam)
+### G. Members — `Button`, `Avatar`, `IconButton` (EditTeam)
+
+Variant EditTeam only; it adds `Combobox`, `Field`, `SettingsSection`, `Switch`, `Textarea`, `Checkbox`, `Alert` and `SaveBar`.
 
 On the Edit Team page, a Members section above the matrix: an Add member `Combobox` over the account's users (`allow-custom` off, each option the name with the email as its description) with an Add button, then the members as a list with a square `Avatar`, name, email and a Remove `IconButton` named `Remove <name>`. With no member, a dashed sentence says the team grants nothing until someone joins. Members join from existing users only; inviting a new person belongs to `platform/account/users`.
 
-### H. Delete team and save — `ConfirmDialog`, `SaveBar` (EditTeam)
+### H. Delete team and save — `ConfirmDialog`, `Button` (EditTeam)
 
 A Delete team section at the end of the form opens a `ConfirmDialog` that says how many members lose what the team grants; the confirm button spins while the request runs. The `SaveBar` says `You have unsaved changes.` and offers Discard and Save changes only once something differs from the saved team; unchanged, it offers Back to teams and a disabled Save changes.
 

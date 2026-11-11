@@ -12,6 +12,14 @@ export const es: Messages = {
   aiLoading: {
     generating: 'Generando una respuesta'
   },
+  artifactCanvas: {
+    close: 'Cerrar {title}',
+    copy: 'Copiar {title}',
+    download: 'Descargar {title}',
+    versions: 'Versiones del artefacto',
+    content: 'Contenido de {title}',
+    streaming: 'Generando una nueva versión'
+  },
   artifactPreview: {
     open: 'Abrir',
     openLabel: 'Abrir {title}',

@@ -1117,6 +1117,12 @@
     "limit": "2.5 KB"
   },
   {
+    "name": "artifact-canvas",
+    "path": "src/components/ai/artifact-canvas/artifact-canvas.vue",
+    "limit": "6.5 KB",
+    "entryOnly": true
+  },
+  {
     "name": "artifact-preview",
     "path": "src/components/ai/artifact-preview/artifact-preview.vue",
     "limit": "9.75 KB",

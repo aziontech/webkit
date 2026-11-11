@@ -2290,6 +2290,92 @@
    "examplesFile": "catalog/examples/ai-loading.json",
    "docsFile": "catalog/components/ai-loading.json"
   },
+  "artifact-canvas": {
+   "import": "@aziontech/webkit/artifact-canvas",
+   "target": "./src/components/ai/artifact-canvas/artifact-canvas.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/artifact-canvas",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "File name or title of the artifact (`top-orders.sql`); names the panel."
+    },
+    {
+     "name": "meta",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Facts that help recognize it, after the title: language, size, rows (`SQL · 12 lines`)."
+    },
+    {
+     "name": "kind",
+     "type": "'code' | 'table' | 'document'",
+     "default": "'document'",
+     "required": "false",
+     "doc": "What the artifact is; picks the icon and `data-kind`. The body is always the owner's slot."
+    },
+    {
+     "name": "versions",
+     "type": "number",
+     "default": "1",
+     "required": "false",
+     "doc": "How many versions exist. With more than one, the toolbar shows the `ResponseBranches` pager."
+    },
+    {
+     "name": "copyValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text the Copy control puts on the clipboard, of the version shown. Empty hides Copy."
+    },
+    {
+     "name": "downloadHref",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "URL of the version shown, for Download (`download` takes the title). Empty hides Download."
+    },
+    {
+     "name": "streaming",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "A new version is being generated: the pager locks, the body is `aria-busy` and a polite status says so."
+    }
+   ],
+   "events": [
+    {
+     "name": "close",
+     "payload": "—",
+     "notes": ""
+    },
+    {
+     "name": "copy",
+     "payload": "value: string",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "{ version: number }",
+     "notes": "The artifact of the version shown: a `CodeBlock`, a `TableRoot`, prose. Scrolls inside."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Extra icon actions in the toolbar, before Copy and Download (Insert into editor, Run)."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/artifact-canvas.json",
+   "docsFile": "catalog/components/artifact-canvas.json"
+  },
   "artifact-preview": {
    "import": "@aziontech/webkit/artifact-preview",
    "target": "./src/components/ai/artifact-preview/artifact-preview.vue",

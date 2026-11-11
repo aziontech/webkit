@@ -1,0 +1,125 @@
+{
+ "name": "artifact-canvas",
+ "binding": "ArtifactCanvas",
+ "import": "@aziontech/webkit/artifact-canvas",
+ "treeShakeableImport": "@aziontech/webkit/artifact-canvas",
+ "category": "ai",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The side panel that shows one generated artifact in full next to the conversation: a SQL file, a configuration, a table of results, a document. A header names it (title, meta, Close), a toolbar pages through its versions with `ResponseBranches` and offers Copy and Download, and the body scrolls on its own. It is the full view behind `ArtifactPreview`'s Open: the preview sits in the message, the canvas beside the thread. The owner places it in a `Resizable` pane, so the reader can widen it, narrow it or collapse it from the keyboard; the canvas fills whatever the pane gives it. Benchmarks: the artifact or canvas panel of chat assistants (a document beside the thread with versions), Cloudscape's split panel (a resizable side region with its own header and close).",
+ "setup": null,
+ "useWhen": [
+  "An assistant answer produced something longer than a message can show: a file, a long query, a table, a document the reader will copy or keep.",
+  "The reader asks for changes to that thing and each answer makes a new version to compare with the earlier ones.",
+  "The reader reads the artifact and keeps chatting at the same time."
+ ],
+ "avoidWhen": [
+  "A short snippet that fits the message → `CodeBlock` or `ArtifactPreview` inside `ChatMessage`.",
+  "A setting or a form the reader must fill → `Drawer` with the form.",
+  "Help text about the page → `HelpPanel`.",
+  "A narrow screen: show the same canvas in a full-height `Drawer` instead of a side pane (see Responsive)."
+ ],
+ "related": [
+  "artifact-preview` — the card in the message; its Open opens this canvas.",
+  "response-branches` — the version pager the toolbar reuses.",
+  "resizable` — the split the owner puts the canvas in (pane, handle, collapse).",
+  "chat-message`, `conversation` — the thread beside the canvas.",
+  "copy-button` — the Copy control."
+ ],
+ "bestPractices": [
+  "Open the canvas from `ArtifactPreview`'s Open, then call `focus()` so the reader lands on its title; on Close return focus to the Open that opened it.",
+  "Put it in a `Resizable.Pane` with a `min` that keeps the toolbar on one row (about 320 px) and a handle named after the canvas (`Resize the artifact`).",
+  "Show the newest version when a new one finishes (set `v-model:version` to the last index); while it is generated set `streaming`, which locks the pager and marks the body busy.",
+  "Keep Copy and Download about the version shown; `copyValue` and `downloadHref` change with `version`.",
+  "One canvas at a time. Opening another artifact replaces the content and keeps the pane width."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "File name or title of the artifact (`top-orders.sql`); names the panel."
+  },
+  {
+   "name": "meta",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Facts that help recognize it, after the title: language, size, rows (`SQL · 12 lines`)."
+  },
+  {
+   "name": "kind",
+   "type": "'code' | 'table' | 'document'",
+   "default": "'document'",
+   "required": "false",
+   "doc": "What the artifact is; picks the icon and `data-kind`. The body is always the owner's slot."
+  },
+  {
+   "name": "versions",
+   "type": "number",
+   "default": "1",
+   "required": "false",
+   "doc": "How many versions exist. With more than one, the toolbar shows the `ResponseBranches` pager."
+  },
+  {
+   "name": "copyValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Text the Copy control puts on the clipboard, of the version shown. Empty hides Copy."
+  },
+  {
+   "name": "downloadHref",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "URL of the version shown, for Download (`download` takes the title). Empty hides Download."
+  },
+  {
+   "name": "streaming",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "A new version is being generated: the pager locks, the body is `aria-busy` and a polite status says so."
+  }
+ ],
+ "events": [
+  {
+   "name": "close",
+   "payload": "—",
+   "notes": ""
+  },
+  {
+   "name": "copy",
+   "payload": "value: string",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "{ version: number }",
+   "notes": "The artifact of the version shown: a `CodeBlock`, a `TableRoot`, prose. Scrolls inside."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "Extra icon actions in the toolbar, before Copy and Download (Insert into editor, Run)."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'\n  import ArtifactPreview from '@aziontech/webkit/artifact-preview'\n  import CodeBlock from '@aziontech/webkit/code-block'\n  import Resizable from '@aziontech/webkit/resizable'\n  import { nextTick, ref } from 'vue'\n\n  const versions = [\n    'SELECT * FROM orders;',\n    'SELECT id, customer_id, total\\nFROM orders\\nORDER BY total DESC;',\n    'SELECT id, customer_id, total\\nFROM orders\\nWHERE created_at > now() - interval 7 day\\nORDER BY total DESC\\nLIMIT 10;'\n  ]\n  const version = ref(versions.length - 1)\n  const open = ref(true)\n  const width = ref(420)\n  const canvas = ref(null)\n  const opener = ref(null)\n\n  const show = async () => {\n    open.value = true\n    await nextTick()\n    canvas.value?.focus()\n  }\n  const hide = async () => {\n    open.value = false\n    await nextTick()\n    opener.value?.querySelector('button')?.focus()\n  }\n</script>\n\n<template>\n  <Resizable\n    class=\"h-(--container-xs) w-full rounded-(--shape-card) border border-(--border-default)\"\n    aria-label=\"Conversation and artifact\"\n  >\n    <Resizable.Pane>\n      <div\n        ref=\"opener\"\n        class=\"flex h-full flex-col gap-(--spacing-sm) overflow-auto p-(--spacing-md)\"\n      >\n        <p class=\"m-0 text-body-sm text-(--text-default)\">\n          Here are the ten biggest orders of the last seven days.\n        </p>\n        <ArtifactPreview\n          title=\"top-orders.sql\"\n          meta=\"SQL\"\n          icon=\"pi pi-code\"\n          openable\n          @open=\"show\"\n        />\n      </div>\n    </Resizable.Pane>\n    <Resizable.Handle\n      v-if=\"open\"\n      aria-label=\"Resize the artifact\"\n    />\n    <Resizable.Pane\n      v-if=\"open\"\n      v-model:basis=\"width\"\n      :min=\"300\"\n      :max=\"720\"\n    >\n      <ArtifactCanvas\n        ref=\"canvas\"\n        v-model:version=\"version\"\n        title=\"top-orders.sql\"\n        :meta=\"`SQL · ${versions[version].split('\\n').length} lines`\"\n        kind=\"code\"\n        :versions=\"versions.length\"\n        :copy-value=\"versions[version]\"\n        @close=\"hide\"\n      >\n        <CodeBlock\n          :tabs=\"[{ label: 'SQL', value: 'sql', code: versions[version], language: 'sql' }]\"\n          :copyable=\"false\"\n          :bordered=\"false\"\n        />\n      </ArtifactCanvas>\n    </Resizable.Pane>\n  </Resizable>\n</template>"
+  },
+  {
+   "name": "Table",
+   "sfc": "<script setup>\n  import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'\n  import Button from '@aziontech/webkit/button'\n  import { onBeforeUnmount, ref } from 'vue'\n\n  const rows = [\n    { country: 'Brazil', requests: '1,204,330', hit: '92%' },\n    { country: 'United States', requests: '884,102', hit: '89%' },\n    { country: 'Portugal', requests: '120,448', hit: '95%' }\n  ]\n  const streaming = ref(false)\n  let timer = 0\n\n  const regenerate = () => {\n    streaming.value = true\n    clearTimeout(timer)\n    timer = setTimeout(() => {\n      streaming.value = false\n    }, 1500)\n  }\n  onBeforeUnmount(() => clearTimeout(timer))\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-md) flex-col gap-(--spacing-sm)\">\n    <div\n      class=\"h-(--container-3xs) overflow-hidden rounded-(--shape-card) border border-(--border-default)\"\n    >\n      <ArtifactCanvas\n        title=\"cache-hits-by-country.csv\"\n        meta=\"Last 7 days · 3 rows\"\n        kind=\"table\"\n        :streaming=\"streaming\"\n        download-href=\"data:text/csv;charset=utf-8,country,requests,hit\"\n      >\n        <table class=\"w-full border-collapse text-body-sm\">\n          <thead class=\"bg-(--bg-surface-raised)\">\n            <tr>\n              <th\n                scope=\"col\"\n                class=\"px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm\"\n              >\n                Country\n              </th>\n              <th\n                scope=\"col\"\n                class=\"px-(--spacing-sm) py-(--spacing-xs) text-end text-label-sm\"\n              >\n                Requests\n              </th>\n              <th\n                scope=\"col\"\n                class=\"px-(--spacing-sm) py-(--spacing-xs) text-end text-label-sm\"\n              >\n                Hit ratio\n              </th>\n            </tr>\n          </thead>\n          <tbody>\n            <tr\n              v-for=\"row in rows\"\n              :key=\"row.country\"\n              class=\"border-t border-(--border-muted)\"\n            >\n              <td class=\"px-(--spacing-sm) py-(--spacing-xs)\">{{ row.country }}</td>\n              <td class=\"px-(--spacing-sm) py-(--spacing-xs) text-end tabular-nums\">\n                {{ row.requests }}\n              </td>\n              <td class=\"px-(--spacing-sm) py-(--spacing-xs) text-end tabular-nums\">\n                {{ row.hit }}\n              </td>\n            </tr>\n          </tbody>\n        </table>\n      </ArtifactCanvas>\n    </div>\n    <Button\n      class=\"self-start\"\n      label=\"Regenerate\"\n      kind=\"outlined\"\n      size=\"small\"\n      icon=\"pi pi-refresh\"\n      :loading=\"streaming\"\n      @click=\"regenerate\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/artifact-canvas.md"
+}

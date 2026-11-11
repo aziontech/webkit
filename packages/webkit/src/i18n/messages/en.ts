@@ -1024,6 +1024,15 @@ export const aiLoading = {
   generating: 'Generating a response'
 } as const
 
+export const artifactCanvas = {
+  close: 'Close {title}',
+  copy: 'Copy {title}',
+  download: 'Download {title}',
+  versions: 'Artifact versions',
+  content: '{title} content',
+  streaming: 'Generating a new version'
+} as const
+
 export const artifactPreview = {
   open: 'Open',
   openLabel: 'Open {title}',
@@ -1128,6 +1137,7 @@ export const en = {
   alert,
   appLayout,
   articleIndex,
+  artifactCanvas,
   artifactPreview,
   attributeEditor,
   avatar,

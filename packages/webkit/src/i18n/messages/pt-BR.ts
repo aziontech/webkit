@@ -12,6 +12,14 @@ export const ptBR: Messages = {
   aiLoading: {
     generating: 'Gerando uma resposta'
   },
+  artifactCanvas: {
+    close: 'Fechar {title}',
+    copy: 'Copiar {title}',
+    download: 'Baixar {title}',
+    versions: 'Versões do artefato',
+    content: 'Conteúdo de {title}',
+    streaming: 'Gerando uma nova versão'
+  },
   artifactPreview: {
     open: 'Abrir',
     openLabel: 'Abrir {title}',

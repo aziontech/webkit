@@ -1,0 +1,16 @@
+{
+  "component": "artifact-canvas",
+  "title": "Components/Primitives/AI/ArtifactCanvas",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A generated SQL query with three versions in a resizable side pane next to the conversation: the pager switches versions, Copy copies the version shown, Close hides the pane and Open in the message brings it back with focus on its title.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Table",
+      "summary": "A generated table with one version and Download; Regenerate marks the canvas as streaming, which locks the pager and marks the body busy until the new version arrives.",
+      "file": "table.vue"
+    }
+  ]
+}
