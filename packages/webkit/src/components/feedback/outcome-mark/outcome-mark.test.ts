@@ -6,6 +6,7 @@ import Animated from '../../../../examples/outcome-mark/animated.vue'
 import Default from '../../../../examples/outcome-mark/default.vue'
 import Sizes from '../../../../examples/outcome-mark/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import OutcomeMark from './outcome-mark.vue'
 
@@ -54,7 +55,7 @@ describe('OutcomeMark', () => {
       render: () =>
         h(
           WebkitProvider,
-          { locale: 'pt-BR' },
+          { locale: 'pt-BR', catalogs: LOCALES },
           { default: () => h(OutcomeMark, { severity: 'danger' }) }
         )
     })
