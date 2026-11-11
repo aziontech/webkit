@@ -317,6 +317,31 @@ Scope: `shells/console` primary (ListPage) and DetailPage rebuilt on `AppLayout`
 - Nothing is written on drop; every line is previewed with its number, status `Tag` and reason in text (not colour alone); the counts are a polite status; errors raise one danger `Alert` that says the ready lines still import; Import is disabled at zero and the toast counts what was left out. The hidden file input is out of the tab order; Browse files is the keyboard path.
 - Note: axe best practice `empty-table-header` fires on the records table's action column, which predates this WP (its header is intentionally empty); the WCAG harness does not include that rule.
 
+## WP marketplace
+
+Scope: `Card` `kind="integration"` (additive), new blocks `platform/view/template-browser` (Default; Preview, NoMatch, Loading, Failed) and `platform/view/marketplace` (Default; Templates, Detail, Installing, Installed, InstallFailed, NoMatch, Loading). Sources: the design sample's `IntegrationCard.vue`, `TemplateCard.vue`, `TemplateBrowser.vue`, `TemplatePreview.vue` and `pages/marketplace/Marketplace.vue` (tabs, Featured, search plus Publisher, Category and Context filters, the tile anatomy); the Console Kit's `SolutionView.vue` (vendor, version, last update, Overview) and `IntegrationInstall.vue` with `PermissionsFieldset.vue` (required application, the permissions list).
+
+### Card integration kind
+
+- Anatomy from the sample's `IntegrationCard`: 40 px raised logo box, name, "by" vendor in muted body-xs, description (clamped to three lines), badge. Additions the inventory asked for: `installed` (success `Tag` with a check, a prop so it reads the same everywhere), `badges` (secondary info), one `action` slot. The title is the stretched target (a link with `href`, otherwise a button that emits `select`), so the tile is one target and the action stays a separate target above it; the focus ring is inset on the stretched box, so `overflow-clip` on the card never cuts it. Vendor and title in `bdi`; logical utilities only.
+- Decision: the sample's featured layout (centred, with the primary glow) is not a second kind; the Featured row uses the same tile. One shape per recurring element (rule 10).
+- Finding: the first cut built "by {vendor}" by trimming a translated string. Fixed: the whole `card.byVendor` message renders in one `bdi`, so word order stays the translator's.
+
+### template-browser
+
+- Structure: one band, one `PropertyFilter` (no second search, no filter popover), sections in a fixed category order that drop when empty, a drawer preview so the filter and scroll stay put. States: loading (disabled filter, skeleton tiles, `aria-busy`), no match (Clear filters), failure (danger `Alert` with Retry and an Import from Git way out). Deploy is a link into `deploy-template`; this screen never runs a deploy, so the async-submit toast belongs to that flow.
+- Finding: the hover wash was a class on `<Card>` (consumer lint `no-style-override`). Fixed: the translucent `--bg-hover` wash is on the stretched target's `after` box, with `motion-reduce:after:transition-none`.
+- Finding: guidelines first lettered Loading and Load failure as building blocks naming variant-only components. Fixed: described in the States lines.
+
+### marketplace
+
+- Structure: tabs for the two item kinds; Featured hides while filtering so results start at the top; Status (Installed or Available) is a filter property derived from where each integration runs; the tile action is named with the integration (`Install Rate Guard`). The drawer is a `novalidate` form: permissions before the target, a required Application `Field` that only errors after submit, and only the applications it is not on yet.
+- Async install (async-submit rule): `loading` on Install, the field disabled, one toast id so progress turns into the outcome; success is closable with Configure and Open application, failure is permanent with Edit and Reinstall (never Retry, Try again or View deployments), and the drawer repeats the outcome as an `Alert`.
+- Finding: after a successful install the field reset to empty while the submit flag stayed on, so the required error showed at once. Fixed: the flag resets on success.
+- Finding (caught by `src/test/marketplace-block.test.ts`): the Installed variant called the success path without the run's application, so the `Alert` read "installed on .". Fixed: the success path records the application.
+- Finding: `class` on `Tabs.Root` and `Tabs.Content` (16 `no-style-override` hits over 8 SFCs). Fixed: the section step sits on a wrapper and the panel gap on the panel's first child.
+- Decision: the block opens on Integrations (the sample opens on Templates), because the template catalog has its own block and the Templates tab here only links to it.
+
 ## WP site-sections
 
 Scope: new sections `CapabilityGrid`, `ProcessScroll`, `StickyCarousel`, `ConsolePanel`, `CustomerSpotlight`, `SectionCommand`; the design sample's Heroes, QuoteBand and PlanMatrix as variants of `HeroBand`, `LogoWallQuote` and `ComparePlans`; docs parts `DocAccordionGroup`, `DocAccordionItem`, `DocCodeGroup`, `DocTabs`, `DocTab`, `DocHeading`, `DocCta`; `LineFigure` (engine and 25 figures); `BannerArt` (globe, map, network); every example under `examples/<name>/` for them. Source order: the design sample (`site/ui/sections/*`, `site/docs/ui/*`, `shared/ui/line-figure/*`, `shared/ui/banners/*`); the Console Kit and Cloudscape have nothing for marketing bands. ArticleIndex, CompareCompetitors and PlanMatrix already existed as `article-index-blog` / `article-index-resource-hub`, `comparison-table` and `compare-plans`, and were not rebuilt. A mechanical pass over every new SFC found no raw colours, palette classes, physical direction utilities or raw sizes, and every transition and animation carries a `motion-reduce` escape on the same class string. The rendered result was checked against the sample itself (`docs/reviews/m2.9-site-parity.md`).

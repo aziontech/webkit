@@ -102,6 +102,11 @@ export const calendar = {
   localTimezone: 'Local'
 } as const
 
+export const card = {
+  byVendor: 'by {vendor}',
+  installed: 'Installed'
+} as const
+
 export const cards = {
   label: 'Items',
   selectAll: 'Select all items',
@@ -1071,6 +1076,7 @@ export const en = {
   browserFrame,
   buttonGroup,
   calendar,
+  card,
   cards,
   carousel,
   chart,
