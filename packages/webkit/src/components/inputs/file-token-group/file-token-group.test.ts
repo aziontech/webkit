@@ -55,7 +55,10 @@ describe('FileTokenGroup', () => {
         ]
       }
     })
-    expect(view.getByText('site/css/main.css')).toHaveAttribute('title', 'site/css/main.css')
+    expect(view.getByText('site/css/main.css').closest('[title]')).toHaveAttribute(
+      'title',
+      'site/css/main.css'
+    )
     expect(view.getByRole('button', { name: 'Remove site/css/main.css' })).toBeTruthy()
     expect(view.getByRole('progressbar', { name: 'Uploading site/logo.svg' })).toBeTruthy()
   })
