@@ -440,7 +440,12 @@
                 @click="splitOpen = false"
               />
             </div>
-            <div class="min-h-0 flex-1 overflow-auto p-(--spacing-md)">
+            <div
+              tabindex="0"
+              role="group"
+              :aria-labelledby="splitTitleId"
+              class="min-h-0 flex-1 overflow-auto p-(--spacing-md) outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
+            >
               <slot name="split-panel" />
             </div>
           </section>
@@ -496,7 +501,12 @@
               @click="splitOpen = false"
             />
           </div>
-          <div class="min-h-0 flex-1 overflow-auto p-(--spacing-md)">
+          <div
+            tabindex="0"
+            role="group"
+            :aria-labelledby="splitTitleId"
+            class="min-h-0 flex-1 overflow-auto p-(--spacing-md) outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
+          >
             <slot name="split-panel" />
           </div>
         </section>
@@ -526,7 +536,12 @@
               @click="toolsOpen = false"
             />
           </div>
-          <div class="min-h-0 flex-1 overflow-auto">
+          <div
+            tabindex="0"
+            role="group"
+            :aria-labelledby="toolsTitleId"
+            class="min-h-0 flex-1 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
+          >
             <slot name="tools" />
           </div>
         </section>

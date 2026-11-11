@@ -54,14 +54,14 @@
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the marker.
-- Keyboard map: the marker is a `button` in the tab order after the wrapped control; `Enter` / `Space` opens its step (and makes it current). Inside the popover `Tab` cycles Close, Previous and Next (the `Popover` loop); `Esc` closes the step and returns focus to the marker. Next, Previous and the marker move focus into the new step's popover; Finish moves focus to the panel's completion heading.
+- Keyboard map: the marker is a `button` in the tab order after the wrapped control (before it with `side="start"`); `Enter` / `Space` opens its step (and makes it current). Inside the popover `Tab` cycles Close, Previous and Next (the `Popover` loop); `Esc` closes the step and returns focus to the marker. Next, Previous and the marker move focus into the new step's popover; Finish moves focus to the panel's completion heading.
 - ARIA: the marker is named `Tutorial step: <title>` and carries `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls` (from `Popover.Trigger`). The popover is a non-modal `dialog` labelled by the step title and described by `Step n of N`. The pulse ring and dot are `aria-hidden`.
 - Contrast: the marker's `--primary` against the canvas ≥3:1 (non-text) in both themes.
 - Touch target: the visible marker is 24 px; a `before:` pseudo-element extends the hit area by 8 px on each side (40 px).
 
 ## Right-to-left
 
-- Layout: the root is a flex row that follows `dir`; `side="start"` uses `flex-row-reverse`, which is logical. The popover placement mirrors through `usePlacement`.
+- Layout: the root is a flex row that follows `dir`; `side="start"` renders the marker before the control in the DOM, so reading, tab and visual order agree in both directions. The popover placement mirrors through `usePlacement`.
 - Icons: none in the marker.
 - Keyboard: no arrow keys.
 - User data: none.

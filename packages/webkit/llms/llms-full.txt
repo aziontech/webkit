@@ -12866,14 +12866,14 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the marker.
-- Keyboard map: the marker is a `button` in the tab order after the wrapped control; `Enter` / `Space` opens its step (and makes it current). Inside the popover `Tab` cycles Close, Previous and Next (the `Popover` loop); `Esc` closes the step and returns focus to the marker. Next, Previous and the marker move focus into the new step's popover; Finish moves focus to the panel's completion heading.
+- Keyboard map: the marker is a `button` in the tab order after the wrapped control (before it with `side="start"`); `Enter` / `Space` opens its step (and makes it current). Inside the popover `Tab` cycles Close, Previous and Next (the `Popover` loop); `Esc` closes the step and returns focus to the marker. Next, Previous and the marker move focus into the new step's popover; Finish moves focus to the panel's completion heading.
 - ARIA: the marker is named `Tutorial step: <title>` and carries `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls` (from `Popover.Trigger`). The popover is a non-modal `dialog` labelled by the step title and described by `Step n of N`. The pulse ring and dot are `aria-hidden`.
 - Contrast: the marker's `--primary` against the canvas ≥3:1 (non-text) in both themes.
 - Touch target: the visible marker is 24 px; a `before:` pseudo-element extends the hit area by 8 px on each side (40 px).
 
 ## Right-to-left
 
-- Layout: the root is a flex row that follows `dir`; `side="start"` uses `flex-row-reverse`, which is logical. The popover placement mirrors through `usePlacement`.
+- Layout: the root is a flex row that follows `dir`; `side="start"` renders the marker before the control in the DOM, so reading, tab and visual order agree in both directions. The popover placement mirrors through `usePlacement`.
 - Icons: none in the marker.
 - Keyboard: no arrow keys.
 - User data: none.
@@ -20489,7 +20489,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ## Accessibility
 
 - Visible focus: the separator shows `var(--accent)` on `focus-visible`; the region buttons are `IconButton` with their own ring.
-- Keyboard map: `Tab` reaches the region controls in DOM order (navigation, header, content, split panel, tools). On the split separator: `ArrowUp` / `ArrowDown` grow and shrink a bottom panel; `ArrowLeft` / `ArrowRight` grow and shrink a side panel (mirrored under RTL); `Shift` makes the step 64 px instead of 16 px; `Home` / `End` go to the minimum / maximum. `Escape` closes a compact drawer (from `Drawer`) and returns focus to the control that opened it.
+- Keyboard map: `Tab` reaches the region controls in DOM order (navigation, header, content, split panel, tools). On the split separator: `ArrowUp` / `ArrowDown` grow and shrink a bottom panel; `ArrowLeft` / `ArrowRight` grow and shrink a side panel (mirrored under RTL); `Shift` makes the step 64 px instead of 16 px; `Home` / `End` go to the minimum / maximum. `Escape` closes a compact drawer (from `Drawer`) and returns focus to the control that opened it. The split panel and tools bodies are focusable scroll regions (`tabindex="0"`, `role="group"` named by their heading), so a keyboard reader can scroll them when they hold no control.
 - ARIA: the tools region and the split panel are `<section aria-labelledby>` their header title (`<h2>`); the separator is `role="separator"` with `aria-orientation`, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` in pixels, `aria-controls` the split panel and an accessible name from the catalog. The compact drawers are named by `navigationLabel` and `toolsLabel`. The layout adds no landmark of its own around the content; the consumer's `<main>` and `Sidebar` `<nav>` are the landmarks.
 - Contrast ≥4.5:1 for the region titles; ≥3:1 for the separator against the surfaces.
 - `motion-reduce:transition-none` on the separator transition.

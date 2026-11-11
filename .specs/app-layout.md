@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 51d2da695cfa8fd72fe9eca495e25a28a0c270659059c63c59fc92b879e560ec
+checksum: 2a4d1839a7974021e049eb9a82532033f411647e28bbbfd25199123c5af31721
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -194,7 +194,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the separator shows `var(--accent)` on `focus-visible`; the region buttons are `IconButton` with their own ring.
-- Keyboard map: `Tab` reaches the region controls in DOM order (navigation, header, content, split panel, tools). On the split separator: `ArrowUp` / `ArrowDown` grow and shrink a bottom panel; `ArrowLeft` / `ArrowRight` grow and shrink a side panel (mirrored under RTL); `Shift` makes the step 64 px instead of 16 px; `Home` / `End` go to the minimum / maximum. `Escape` closes a compact drawer (from `Drawer`) and returns focus to the control that opened it.
+- Keyboard map: `Tab` reaches the region controls in DOM order (navigation, header, content, split panel, tools). On the split separator: `ArrowUp` / `ArrowDown` grow and shrink a bottom panel; `ArrowLeft` / `ArrowRight` grow and shrink a side panel (mirrored under RTL); `Shift` makes the step 64 px instead of 16 px; `Home` / `End` go to the minimum / maximum. `Escape` closes a compact drawer (from `Drawer`) and returns focus to the control that opened it. The split panel and tools bodies are focusable scroll regions (`tabindex="0"`, `role="group"` named by their heading), so a keyboard reader can scroll them when they hold no control.
 - ARIA: the tools region and the split panel are `<section aria-labelledby>` their header title (`<h2>`); the separator is `role="separator"` with `aria-orientation`, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` in pixels, `aria-controls` the split panel and an accessible name from the catalog. The compact drawers are named by `navigationLabel` and `toolsLabel`. The layout adds no landmark of its own around the content; the consumer's `<main>` and `Sidebar` `<nav>` are the landmarks.
 - Contrast ≥4.5:1 for the region titles; ≥3:1 for the separator against the surfaces.
 - `motion-reduce:transition-none` on the separator transition.
