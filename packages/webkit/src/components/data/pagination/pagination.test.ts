@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -397,5 +399,39 @@ describe('Pagination (composition)', () => {
       const { container } = render(Composed)
       await expectNoA11yViolations(container)
     })
+  })
+})
+
+const boxOf = (width: number) => {
+  const host = document.createElement('div')
+  host.style.width = `${width}px`
+  document.body.appendChild(host)
+  return host
+}
+
+describe('Pagination in a narrow box', () => {
+  const mountIn = (width: number) =>
+    render(Pagination, { props: { total: 100, pageSize: 10, page: 4 }, container: boxOf(width) })
+
+  const visiblePages = (view: ReturnType<typeof render>) =>
+    view
+      .getAllByTestId('data-pagination__button')
+      .filter(
+        (button) =>
+          button.dataset['kind'] === 'number' && getComputedStyle(button).display !== 'none'
+      )
+
+  it('keeps only the current page between previous and next', () => {
+    const view = mountIn(320)
+
+    expect(visiblePages(view).map((button) => button.textContent?.trim())).toEqual(['4'])
+    expect(view.getByRole('button', { name: 'Previous page' })).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Next page' })).toBeTruthy()
+  })
+
+  it('lists the page numbers in a wide box', () => {
+    const view = mountIn(900)
+
+    expect(visiblePages(view).length).toBeGreaterThan(1)
   })
 })

@@ -11,7 +11,7 @@
         :close-delay="300"
         orientation="horizontal"
         aria-label="Azion"
-        class="mx-auto flex w-full max-w-(--container-xl) items-center gap-(--spacing-6) px-(--spacing-6) py-(--spacing-4)"
+        class="mx-auto flex w-full max-w-(--container-xl) flex-wrap items-center gap-(--spacing-6) px-(--spacing-6) py-(--spacing-4)"
       >
         <NavigationMenu.List>
           <NavigationMenu.Item value="solucoes">

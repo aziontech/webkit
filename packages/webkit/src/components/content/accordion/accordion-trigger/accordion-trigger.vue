@@ -96,7 +96,7 @@
       @click="onClick"
       @keydown="onKeydown"
     >
-      <span class="flex-1 data-[arrow=left]:flex-none group-data-[arrow=left]:flex-none">
+      <span class="min-w-0 flex-1 data-[arrow=left]:flex-none group-data-[arrow=left]:flex-none">
         <slot />
       </span>
       <i

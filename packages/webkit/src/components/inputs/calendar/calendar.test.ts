@@ -788,3 +788,11 @@ describe('Calendar', () => {
     await expectNoA11yViolations(document.body)
   })
 })
+
+describe('Calendar on devices', () => {
+  it('never grows past its container', () => {
+    const view = render(Calendar)
+
+    expect(view.getByTestId('input-calendar').className).toContain('max-w-full')
+  })
+})

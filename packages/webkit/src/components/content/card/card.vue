@@ -63,7 +63,8 @@
 
   const titleClasses = 'text-label-md text-(--text-default)'
 
-  const contentClasses = 'flex min-h-0 flex-1 flex-col data-[padded]:p-(--spacing-md)'
+  const contentClasses =
+    '@container/card flex min-h-0 flex-1 flex-col data-[padded]:p-(--spacing-md)'
 
   const footerClasses =
     'flex min-h-14 shrink-0 items-center justify-center gap-(--spacing-sm) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm)'
@@ -94,7 +95,7 @@
         </h2>
         <div
           v-if="hasHeaderActionSlot"
-          class="ms-auto opacity-0 transition-opacity motion-reduce:transition-none group-hover:opacity-100 group-focus-within:opacity-100"
+          class="ms-auto opacity-0 transition-opacity motion-reduce:transition-none group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
           :data-testid="`${testId}__header-action`"
         >
           <slot name="header-action" />

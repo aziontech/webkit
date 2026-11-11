@@ -60,7 +60,7 @@
 
   const optionClasses = cn(
     selectableBlockCardClasses,
-    'flex shrink-0 cursor-pointer flex-col gap-(--spacing-xxs)',
+    'flex max-w-full shrink-0 cursor-pointer flex-col gap-(--spacing-xxs)',
     'px-(--spacing-sm) py-(--spacing-sm)',
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
     'data-[selected]:border-(--border-selected) data-[selected]:bg-(--primary-selected)',

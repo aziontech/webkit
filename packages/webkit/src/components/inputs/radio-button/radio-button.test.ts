@@ -181,3 +181,13 @@ describe('RadioButton', () => {
     await expectNoA11yViolations(container)
   })
 })
+
+describe('RadioButton touch target', () => {
+  it('grows the native input to 24px, and 44px on coarse pointers', () => {
+    const view = render(RadioButton, { attrs: { 'aria-label': 'Option' } })
+    const input = view.getByRole('radio')
+
+    expect(input.className).toContain('inset-[min(0rem,calc(50%-12px))]')
+    expect(input.className).toContain('pointer-coarse:inset-[min(0rem,calc(50%-22px))]')
+  })
+})

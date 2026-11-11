@@ -6,7 +6,7 @@
 </script>
 
 <template>
-  <div class="w-(--container-xs)">
+  <div class="w-full max-w-(--container-xs)">
     <Slider
       v-model="value"
       :min="0"

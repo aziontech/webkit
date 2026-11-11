@@ -3,10 +3,10 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: 9f82874dc4ca8687ebe18e9db6135968bd5ecf8766fec6edfad377c1892a6858
+checksum: 17e3d864701c1047113b6cd239245648d34b1d54fee8534c91504953b883add5
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # HelpPanel — Component Spec
@@ -248,6 +248,7 @@ The three task markers, and what each one renders:
 
 The tutorial's progress line reads `<complete> of <total> complete`, counting registered tasks whose
 `status` is `complete`. It is derived; the consumer never passes the counts.
+- Responsive: the root is the `@container/help-panel`, so the content in the side panel adapts to the panel width.
 
 ## Motion & Animations
 

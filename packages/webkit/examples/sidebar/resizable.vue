@@ -41,6 +41,7 @@
       resizable
       collapsible
       aria-label="Console"
+      class="max-md:hidden"
     >
       <template #header>
         <SidebarHeader>

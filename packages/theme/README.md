@@ -164,6 +164,54 @@ Use them directly:
 
 Utility equivalents are generated in the same stylesheet (e.g. `@utility text-default`), so `class="text-default"` works wherever Tailwind runs.
 
+## Breakpoints and container sizes
+
+Two scales answer two different questions. Both ship in `dist/v4/globals.css` and Tailwind v4 reads
+them directly.
+
+**Viewport breakpoints** (`sm:`, `md:` … and `max-sm:`, `max-md:` …) say how big the **window** is.
+Use them only for what belongs to the window: the app shell (sidebar or navigation drawer), dialogs
+and drawers turning into sheets, the page boundary.
+
+| Variant | Token              | Width   | What changes there                                                                |
+| ------- | ------------------ | ------- | --------------------------------------------------------------------------------- |
+| `sm`    | `--breakpoint-sm`  | 640 px  | Below it: phones. Dialogs and drawers are full-height, full-width sheets.         |
+| `md`    | `--breakpoint-md`  | 768 px  | Below it: dialogs and drawers are bottom sheets; the console sidebar is a drawer. |
+| `lg`    | `--breakpoint-lg`  | 1024 px | Tablets in landscape and small laptops.                                           |
+| `xl`    | `--breakpoint-xl`  | 1280 px | Laptops: the site header shows its navigation inline.                             |
+| `2xl`   | `--breakpoint-2xl` | 1536 px | Desktops.                                                                         |
+
+Wider screens (1920, 2560 px) add margin, not line length: every page column is capped by a
+`--layout-measure*` token (the widest is `--container-7xl`, 1620 px) through the `layout-column*`
+utilities.
+
+**Container sizes** (`@container`, then `@sm:`, `@md:` … and `@max-sm:` …) say how big the
+**component's own box** is. A table in a drawer, a header in a split view, a field in a card lay out
+for that box, not for the window. The variants read the same `--container-*` scale used for widths
+(this theme replaces Tailwind's default container scale), so `@md:` means "my container is at least
+472 px".
+
+| Variant | Token             | Width  | Variant | Token             | Width   |
+| ------- | ----------------- | ------ | ------- | ----------------- | ------- |
+| `@3xs`  | `--container-3xs` | 256 px | `@2xl`  | `--container-2xl` | 752 px  |
+| `@2xs`  | `--container-2xs` | 300 px | `@3xl`  | `--container-3xl` | 876 px  |
+| `@xs`   | `--container-xs`  | 348 px | `@4xl`  | `--container-4xl` | 1024 px |
+| `@sm`   | `--container-sm`  | 408 px | `@5xl`  | `--container-5xl` | 1192 px |
+| `@md`   | `--container-md`  | 472 px | `@6xl`  | `--container-6xl` | 1388 px |
+| `@lg`   | `--container-lg`  | 552 px | `@7xl`  | `--container-7xl` | 1620 px |
+| `@xl`   | `--container-xl`  | 644 px |         |                   |         |
+
+Name a container when a nested one could answer first: `@container/card` on the box, then
+`@md/card:grid-cols-2` inside. Only put `@container` on a box whose width comes from its parent
+(a block, a grid track, a `flex-1` item): inline-size containment gives the box no intrinsic width,
+so a shrink-to-fit box (`inline-flex`, `w-fit`, an absolutely positioned popover) collapses.
+
+**Touch and pointer.** Interactive targets are at least 24 × 24 px everywhere and 44 × 44 px on a
+coarse pointer: grow the hit area with `pointer-coarse:` (built into Tailwind v4.1+) rather than the
+drawn size where the drawn size is part of a dense layout. Tailwind v4 already limits `hover:` to
+`@media (hover: hover)`; anything revealed on hover must also be revealed on focus and under
+`[@media(hover:none)]:`, so no affordance is hover-only.
+
 ## Token resolution
 
 Tokens use a reference system for maintainability:

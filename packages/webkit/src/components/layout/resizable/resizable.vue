@@ -58,7 +58,7 @@
     :aria-label="ariaLabel || undefined"
     :data-testid="testId"
     :data-orientation="orientation"
-    class="flex min-h-0 min-w-0 data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+    class="flex min-h-0 min-w-0 data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:overflow-x-clip data-[orientation=vertical]:flex-col data-[orientation=vertical]:overflow-y-clip"
   >
     <slot />
   </div>

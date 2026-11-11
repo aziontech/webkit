@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 61e5c8962f75afc6352c140b0b5f8ce638be4e516d411d78a2a2c3cfa951f244
+last_updated: 2026-11-11
+checksum: a97d77fa2b8c62e11b184b8fa8f5eb024853de7dfdbd4693a649bba945e50746
 ---
 # ArticleHighlight — Component Spec
 
@@ -82,6 +82,7 @@ import ArticleHighlight from '@aziontech/webkit/article-highlight'
 - Visual states: `default`, `hover` (a wall title lights, the panel cover scales up), `focus-visible` (inset ring), `selected` (`data-active` on the selected wall title)
 - `data-columns` on the wall: four columns with four or more articles, three otherwise
 - Empty: when `items` is empty the band renders nothing
+- Reflow: the hidden layout sizer is `min-w-0`, so the panel never grows past a 320 px box.
 
 ## Motion & Animations
 

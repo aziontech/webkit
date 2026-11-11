@@ -35,19 +35,19 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-kind="kind"
-    class="group/save-bar sticky bottom-0 z-10 shrink-0 data-[kind=floating]:h-0 data-[kind=plain]:border-t-(length:--border-width-default) data-[kind=plain]:border-(--border-muted) data-[kind=plain]:bg-(--bg-surface)"
+    class="group/save-bar @container/save-bar sticky bottom-0 z-10 shrink-0 data-[kind=floating]:h-0 data-[kind=plain]:border-t-(length:--border-width-default) data-[kind=plain]:border-(--border-muted) data-[kind=plain]:bg-(--bg-surface)"
   >
     <div
-      class="group-data-[kind=docked]/save-bar:border-t group-data-[kind=docked]/save-bar:border-(--border-default) group-data-[kind=docked]/save-bar:bg-(--bg-canvas) group-data-[kind=docked]/save-bar:lg:h-14 group-data-[kind=floating]/save-bar:absolute group-data-[kind=floating]/save-bar:inset-x-0 group-data-[kind=floating]/save-bar:bottom-0 group-data-[kind=floating]/save-bar:border-t group-data-[kind=floating]/save-bar:border-(--border-default) group-data-[kind=floating]/save-bar:bg-(--bg-canvas) group-data-[kind=floating]/save-bar:lg:h-14"
+      class="group-data-[kind=docked]/save-bar:border-t group-data-[kind=docked]/save-bar:border-(--border-default) group-data-[kind=docked]/save-bar:bg-(--bg-canvas) group-data-[kind=docked]/save-bar:@xl/save-bar:h-14 group-data-[kind=floating]/save-bar:absolute group-data-[kind=floating]/save-bar:inset-x-0 group-data-[kind=floating]/save-bar:bottom-0 group-data-[kind=floating]/save-bar:border-t group-data-[kind=floating]/save-bar:border-(--border-default) group-data-[kind=floating]/save-bar:bg-(--bg-canvas) group-data-[kind=floating]/save-bar:@xl/save-bar:h-14"
     >
       <div
         v-if="kind === 'plain'"
-        class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) py-(--spacing-md)"
+        class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) py-(--spacing-md) @max-md/save-bar:flex-col @max-md/save-bar:items-stretch"
       >
         <div
           v-if="$slots['default']"
           :data-testid="`${testId}__message`"
-          class="me-auto flex min-w-0 items-start gap-(--spacing-xs)"
+          class="me-auto flex min-w-0 items-start gap-(--spacing-xs) @max-md/save-bar:me-0"
         >
           <i
             class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
@@ -59,14 +59,14 @@
         </div>
         <div
           :data-testid="`${testId}__actions`"
-          class="flex items-center gap-(--spacing-sm)"
+          class="flex items-center gap-(--spacing-sm) @max-md/save-bar:flex-col-reverse @max-md/save-bar:items-stretch @max-md/save-bar:gap-(--spacing-xs)"
         >
           <slot name="actions" />
         </div>
       </div>
       <div
         v-else
-        class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) py-(--spacing-sm) lg:h-full lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-(--spacing-xl) lg:py-0"
+        class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) pt-(--spacing-sm) pb-[max(var(--spacing-sm),env(safe-area-inset-bottom))] @xl/save-bar:h-full @xl/save-bar:flex-row @xl/save-bar:flex-wrap @xl/save-bar:items-center @xl/save-bar:justify-between @xl/save-bar:gap-x-(--spacing-xl) @xl/save-bar:py-0"
       >
         <div
           v-if="$slots['default']"
@@ -83,7 +83,7 @@
         </div>
         <div
           :data-testid="`${testId}__actions`"
-          class="flex flex-col-reverse gap-(--spacing-xs) lg:ms-auto lg:shrink-0 lg:flex-row lg:items-center lg:gap-(--spacing-sm)"
+          class="flex flex-col-reverse gap-(--spacing-xs) @xl/save-bar:ms-auto @xl/save-bar:shrink-0 @xl/save-bar:flex-row @xl/save-bar:items-center @xl/save-bar:gap-(--spacing-sm)"
         >
           <slot name="actions" />
         </div>

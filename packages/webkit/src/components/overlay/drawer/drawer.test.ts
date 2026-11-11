@@ -390,3 +390,14 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
     })
   })
 })
+
+describe('Drawer on phones', () => {
+  it('opens as a full-height, full-width sheet below sm', async () => {
+    render(composed({ defaultOpen: true }))
+    await settle()
+
+    const shell = byTestId('overlay-drawer__panel-shell')
+    expect(shell?.className).toContain('max-sm:h-dvh')
+    expect(byTestId('overlay-drawer__panel')?.className).toContain('max-sm:top-0')
+  })
+})

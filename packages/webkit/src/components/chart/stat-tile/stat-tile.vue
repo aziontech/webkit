@@ -102,9 +102,11 @@
     :data-loading="loading || null"
     :aria-labelledby="labelId"
     :aria-busy="loading || undefined"
-    class="flex min-w-0 flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+    class="@container/stat-tile flex min-w-0 flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
   >
-    <div class="flex min-h-20 flex-1 flex-col justify-center gap-(--spacing-xxs) p-(--spacing-md)">
+    <div
+      class="flex min-h-20 flex-1 flex-col justify-center gap-(--spacing-xxs) p-(--spacing-md) @max-3xs/stat-tile:p-(--spacing-sm)"
+    >
       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
         <span
           :id="labelId"

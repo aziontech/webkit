@@ -365,3 +365,14 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
     })
   })
 })
+
+describe('Dialog on phones', () => {
+  it('opens as a full-height, full-width sheet below sm', async () => {
+    render(composed({ defaultOpen: true }))
+    await settle()
+
+    const shell = byTestId('overlay-dialog__panel-shell')
+    expect(shell?.className).toContain('max-sm:h-dvh')
+    expect(shell?.className).toContain('max-sm:rounded-none')
+  })
+})

@@ -39,7 +39,7 @@
     :aria-busy="loading ? 'true' : undefined"
     :data-testid="testId"
     :data-loading="loading || null"
-    class="flex w-full flex-col gap-(--spacing-lg) p-(--spacing-md)"
+    class="@container/help-panel flex w-full flex-col gap-(--spacing-lg) p-(--spacing-md)"
   >
     <div
       v-if="loading"

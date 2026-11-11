@@ -463,7 +463,7 @@
     :data-state="isOpen ? 'open' : 'closed'"
     :data-size="size"
     :data-disabled="disabled || null"
-    class="inline-flex"
+    class="inline-flex max-w-full"
   >
     <span
       ref="triggerRef"

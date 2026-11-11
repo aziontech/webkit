@@ -397,3 +397,12 @@ describe('Chart', () => {
     }
   })
 })
+
+describe('Chart table twin on devices', () => {
+  it('clips the twin inside a visually hidden box so it adds no horizontal overflow', () => {
+    const view = mount()
+    const twin = view.getByTestId('chart-chart__twin')
+
+    expect(twin.parentElement?.className).toBe('sr-only')
+  })
+})

@@ -359,3 +359,13 @@ describe('useWizardContext', () => {
     )
   })
 })
+
+describe('Wizard on devices', () => {
+  it('hides the step rail when its own box is narrow, not the window', async () => {
+    const view = await mount()
+    const rail = view.getByRole('navigation').parentElement
+
+    expect(rootOf(view).className).toContain('@container/wizard')
+    expect(rail?.className).toContain('@max-2xl/wizard:hidden')
+  })
+})

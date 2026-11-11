@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: fd0e0d4e5083ae79f4f471958a1b7415af46fe3e678daf8bd3b35ac02cfe703f
+checksum: 579e90cf06e60444849078881ecfebcb9a2d0d98a04dc52b9a3e002a69b8d294
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Icon Button — Component Spec
@@ -98,6 +98,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
+- Touch: the drawn size is unchanged (28/32/40 px); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px.
 
 ## Motion & Animations
 

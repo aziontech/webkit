@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 889764247d9b268f3664ce34c91e57062562090ca2910dd949c251b71f9e907e
+checksum: 19188d2ac4da5a706c37e7e2416b8f2bdbf1f233ff1c2080ad83b2be3dd04eaf
 created: 2026-05-22
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Button — Component Spec
@@ -103,6 +103,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
 - With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
+- Touch: the drawn size is unchanged (28/32/40 px, all above the 24 px minimum); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px around the button.
 
 ## Motion & Animations
 

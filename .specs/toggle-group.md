@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 940250d53bfaf2fc6bc2f335ad797c9bc8d7263e66a52eb8dc41560c7e9a5d52
+checksum: 0767c312f3294ef054e8925e9e5f45841c0bf535e0a604ddb101cc2ab79d8c1b
 created: 2026-11-09
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # ToggleGroup — Component Spec
@@ -105,6 +105,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 - Indicator: an `aria-hidden` span positioned under the selected segment from its measured size and offset; hidden when nothing is selected or the selected segment is not rendered. It re-measures on option, selection and size changes (`ResizeObserver`).
 - Option normalization: a missing `label` falls back to `value`, then to `Option <n>`; a missing `value` falls back to `label`, then to the index.
 - Test ids: root `actions-toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
+- Reflow: the root is capped at the width of its container (`max-w-full`, `min-w-0`) and the options shrink, truncating their labels, instead of overflowing a narrow box.
 
 ## Motion & Animations
 

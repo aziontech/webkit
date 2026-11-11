@@ -164,3 +164,11 @@ describe('DonutChart', () => {
     }
   })
 })
+
+describe('DonutChart table twin on devices', () => {
+  it('clips the twin inside a visually hidden box so it adds no horizontal overflow', () => {
+    const twin = mount().getByTestId('chart-donut-chart__twin')
+
+    expect(twin.parentElement?.className).toBe('sr-only')
+  })
+})

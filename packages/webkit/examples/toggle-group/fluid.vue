@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  <div class="flex w-[34rem] flex-col gap-4">
+  <div class="flex w-full max-w-[34rem] flex-col gap-4">
     <ToggleGroup
       :options="options"
       default-value="new"

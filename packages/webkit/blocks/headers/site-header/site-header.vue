@@ -41,7 +41,7 @@
         </GlobalHeader.Left>
 
         <GlobalHeader.Middle>
-          <div class="flex w-full min-w-0 items-center justify-start">
+          <div class="hidden w-full min-w-0 items-center justify-start xl:flex">
             <div class="min-w-0">
               <NavigationMenu
                 aria-label="Azion"

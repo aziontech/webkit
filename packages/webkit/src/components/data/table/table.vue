@@ -16,7 +16,7 @@
     useVueTable,
     type VisibilityState
   } from '@tanstack/vue-table'
-  import { useDebounceFn } from '@vueuse/core'
+  import { useDebounceFn, useElementSize } from '@vueuse/core'
   import {
     computed,
     getCurrentInstance,
@@ -88,7 +88,7 @@
 
   type TableColumnMeta = Pick<
     TableColumn,
-    'grow' | 'frozen' | 'align' | 'kind' | 'resizable' | 'label'
+    'grow' | 'frozen' | 'align' | 'kind' | 'resizable' | 'label' | 'principal'
   >
 
   defineOptions({
@@ -152,6 +152,8 @@
       initialState?: Partial<TableStateSnapshot>
       /** Default filename for Table.Export and exportCsv(). */
       exportFilename?: string
+      /** Data-driven mode: when the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of a horizontally scrolling grid. Set false to keep the grid at every width. */
+      stackable?: boolean
     }>(),
     {
       maxHeight: '',
@@ -180,7 +182,8 @@
       filterFields: () => [],
       state: undefined,
       initialState: undefined,
-      exportFilename: 'export.csv'
+      exportFilename: 'export.csv',
+      stackable: true
     }
   )
 
@@ -358,7 +361,8 @@
         align: col.align,
         kind: col.kind,
         resizable: col.resizable,
-        label: col.label
+        label: col.label,
+        principal: index === principalIndex.value
       } satisfies TableColumnMeta
     }))
   )
@@ -689,6 +693,7 @@
   const widthOf = (id: string): number | undefined =>
     props.columns.find((c: TableColumn) => columnId(c) === id)?.width
   const cellStyleOf = (column: ColumnLike & { id: string }): Record<string, string> | undefined => {
+    if (stacked.value) return undefined
     const style: Record<string, string> = {}
     const meta = metaOf(column)
     const width =
@@ -748,9 +753,28 @@
 
   const rootEl = ref<HTMLElement | null>(null)
 
+  const STACK_FALLBACK_WIDTH = 552
+  const stackWidth = ref<number>(STACK_FALLBACK_WIDTH)
+  const { width: rootWidth } = useElementSize(rootEl)
+  const stacked = computed<boolean>(
+    () =>
+      props.stackable &&
+      dataDriven.value &&
+      rootWidth.value > 0 &&
+      rootWidth.value < stackWidth.value
+  )
+  const isStackedField = (column: ColumnLike): boolean => {
+    const meta = metaOf(column)
+    return !meta.principal && (meta.kind ?? 'default') === 'default'
+  }
+  const stackedLabelOf = (column: ColumnLike & { id: string }): string => {
+    const header = (column.columnDef as { header?: unknown }).header
+    return metaOf(column).label ?? (typeof header === 'string' ? header : column.id)
+  }
+
   const measureAutoWidths = (): void => {
     const root = rootEl.value
-    if (!root || props.loading) return
+    if (!root || props.loading || stacked.value) return
     const headCells = Array.from(root.querySelectorAll<HTMLElement>('[role="columnheader"]'))
     const offset = props.enableRowSelection ? 1 : 0
     const next: Record<string, number> = {}
@@ -774,6 +798,12 @@
   const scheduleAutoFit = useDebounceFn(() => measureAutoWidths(), 32)
 
   onMounted(() => {
+    const token = rootEl.value
+      ? Number.parseFloat(
+          globalThis.getComputedStyle(rootEl.value).getPropertyValue('--container-lg')
+        )
+      : Number.NaN
+    if (Number.isFinite(token) && token > 0) stackWidth.value = token
     void nextTick(() => measureAutoWidths())
     const fonts = (globalThis.document as Document & { fonts?: { ready?: Promise<unknown> } }).fonts
     if (fonts?.ready) void fonts.ready.then(() => measureAutoWidths())
@@ -785,7 +815,8 @@
       props.loading,
       props.enableRowSelection,
       rows.value.map((row) => row.original),
-      headers.value.map((header) => header.column.id).join('|')
+      headers.value.map((header) => header.column.id).join('|'),
+      stacked.value
     ],
     () => void scheduleAutoFit()
   )
@@ -848,15 +879,16 @@
     role="table"
     :data-testid="testId"
     :data-border="bordered || null"
+    :data-stacked="stacked || null"
     :aria-busy="loading || undefined"
     :style="viewportHeightVar"
-    class="flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
+    class="@container/table flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
   >
     <div
       v-if="$slots['title'] || $slots['toolbar']"
       role="presentation"
       :data-testid="`${testId}__toolbar`"
-      class="flex items-center gap-(--spacing-xs) border-b-(length:--border-width-default) border-solid border-(--border-default) p-(--spacing-sm)"
+      class="flex flex-wrap items-center gap-(--spacing-xs) border-b-(length:--border-width-default) border-solid border-(--border-default) p-(--spacing-sm)"
     >
       <div
         v-if="$slots['title']"
@@ -866,7 +898,7 @@
       </div>
       <div
         v-if="$slots['toolbar']"
-        class="flex flex-1 items-center justify-end gap-(--spacing-xs)"
+        class="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-(--spacing-xs) @max-md/table:basis-full @max-md/table:justify-start"
       >
         <slot
           name="toolbar"
@@ -906,11 +938,13 @@
       <div
         role="presentation"
         class="flex w-max min-w-full flex-col"
+        :class="stacked ? 'w-full!' : undefined"
       >
         <template v-if="dataDriven">
           <TableHeader
             frozen
             :kind="headerKind"
+            :class="stacked ? 'sr-only!' : undefined"
           >
             <TableRow>
               <TableHeadCell
@@ -954,15 +988,22 @@
           <TableBody
             v-if="loading"
             key="skeleton"
+            :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
           >
             <TableRow
               v-for="n in skeletonRowCount"
               :key="'sk-' + n"
+              :class="
+                stacked
+                  ? 'flex-wrap rounded-(--shape-elements) border! py-(--spacing-xxs)'
+                  : undefined
+              "
             >
               <TableCell
                 v-if="enableRowSelection"
                 kind="checkbox"
                 :frozen="selectionFrozen ? 'start' : undefined"
+                :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
               >
                 <Skeleton
                   kind="shape"
@@ -978,6 +1019,13 @@
                 :align="metaOf(header.column).align ?? 'start'"
                 :frozen="metaOf(header.column).frozen"
                 :kind="metaOf(header.column).kind ?? 'default'"
+                :class="
+                  stacked
+                    ? isStackedField(header.column)
+                      ? 'order-1 basis-full! min-h-8! justify-start! text-start! whitespace-normal static! before:hidden! after:hidden!'
+                      : 'static! before:hidden! after:hidden!'
+                    : undefined
+                "
               >
                 <Skeleton
                   v-if="metaOf(header.column).kind !== 'action'"
@@ -998,18 +1046,25 @@
             <TableBody
               v-if="!loading && rows.length > 0"
               key="rows"
+              :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
             >
               <TableRow
                 v-for="row in rows"
                 :key="row.id"
-                v-memo="[row.getIsSelected(), row.original, resizeWidths, autoWidths]"
+                v-memo="[row.getIsSelected(), row.original, resizeWidths, autoWidths, stacked]"
                 :selected="row.getIsSelected()"
+                :class="
+                  stacked
+                    ? 'flex-wrap rounded-(--shape-elements) border! py-(--spacing-xxs)'
+                    : undefined
+                "
                 @click="onRowClick($event, row)"
               >
                 <TableCell
                   v-if="enableRowSelection"
                   kind="checkbox"
                   :frozen="selectionFrozen ? 'start' : undefined"
+                  :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                 >
                   <Checkbox
                     binary
@@ -1026,7 +1081,21 @@
                   :align="metaOf(cell.column).align ?? 'start'"
                   :frozen="metaOf(cell.column).frozen"
                   :kind="metaOf(cell.column).kind ?? 'default'"
+                  :class="
+                    stacked
+                      ? isStackedField(cell.column)
+                        ? 'order-1 basis-full! min-h-8! justify-start! text-start! whitespace-normal static! before:hidden! after:hidden!'
+                        : 'static! before:hidden! after:hidden!'
+                      : undefined
+                  "
                 >
+                  <span
+                    v-if="stacked && isStackedField(cell.column)"
+                    aria-hidden="true"
+                    :data-testid="`${testId}__stacked-label`"
+                    class="w-2/5 shrink-0 truncate text-label-sm text-(--text-muted)"
+                    >{{ stackedLabelOf(cell.column) }}</span
+                  >
                   <slot
                     v-if="hasSlot('cell-' + cell.column.id)"
                     :name="'cell-' + cell.column.id"

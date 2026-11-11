@@ -3,10 +3,10 @@ name: key-value-pairs
 category: content
 structure: composition
 status: implemented
-checksum: 8254b11202120aad4ae4b6eabd146f3f133afc52fc237e021c0742556e9b2d9c
+checksum: 9d5710f0d5e57b246a45520c2fede6983161d3431cc2e4533ffc1d6802c01f57
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # KeyValuePairs — Component Spec
@@ -148,11 +148,11 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ## Props
 
-| Prop        | Type               | Default | Required | JSDoc                                                                                            |
-| ----------- | ------------------ | ------- | -------- | ------------------------------------------------------------------------------------------------ |
-| `columns`   | `1 \| 2 \| 3 \| 4` | `1`     | false    | Columns at full width; collapses to one column below `md` and to two at `md` when set to 3 or 4. |
-| `loading`   | `boolean`          | `false` | false    | Replaces every value with a skeleton while the data loads; labels stay visible.                  |
-| `ariaLabel` | `string`           | `''`    | false    | Accessible name of the list when no visible heading names it.                                    |
+| Prop        | Type               | Default | Required | JSDoc                                                                                       |
+| ----------- | ------------------ | ------- | -------- | ------------------------------------------------------------------------------------------- |
+| `columns`   | `1 \| 2 \| 3 \| 4` | `1`     | false    | Columns at full width; fewer columns when a cell would get narrower than `--container-3xs`. |
+| `loading`   | `boolean`          | `false` | false    | Replaces every value with a skeleton while the data loads; labels stay visible.             |
+| `ariaLabel` | `string`           | `''`    | false    | Accessible name of the list when no visible heading names it.                               |
 
 ## Events
 
@@ -172,14 +172,7 @@ Read-only display; interactive values (links, copy buttons) emit their own event
 - `data-columns` on the root mirrors `columns` and drives the grid template through `data-[columns=n]:` variants
 - `data-loading` on the root mirrors `loading`; `aria-busy="true"` while loading
 - Empty value: the Item's `<dd>` shows `—` (`aria-hidden`) plus a visually hidden "Not set"
-- Responsive columns (viewport breakpoints):
-
-  | `columns` | below `md` | `md` | `lg` and up |
-  | --------- | ---------- | ---- | ----------- |
-  | 1         | 1          | 1    | 1           |
-  | 2         | 1          | 2    | 2           |
-  | 3         | 1          | 2    | 3           |
-  | 4         | 1          | 2    | 4           |
+- Responsive columns follow the list's own box, not the viewport: the grid is `repeat(auto-fill, minmax(min(100%, max(--container-3xs, share)), 1fr))`, where the share is the box divided by `columns`. It shows `columns` columns when every cell gets at least `--container-3xs` (256 px), fewer otherwise, and one column in a narrow box; a list in a drawer or split view lays out for that box.
 
 - No `disabled`, `invalid`, `readonly`, `error`, `open` states: the component is read-only and fetches nothing. An error loading the facts is the page's surface (e.g. `message`), not this component's.
 

@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: e1f58582348ca74aaee2afd4fab2b36d2426cffe5fb5908487fc21f6a0039563
+checksum: 951b12dca762cb17c43ce949ddfe7b7a5a1bf1f5d7cf1ea4d527ca0d27ae49e3
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Panel — Component Spec
@@ -102,6 +102,7 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
+- Responsive: `PanelContent` is the `@container/panel`, so the content of a dialog or a drawer lays out for the panel width. Below `sm` the `PanelFooter` wraps, stretches its direct children to equal widths (`max-sm:*:flex-1`) and pads the bottom by `env(safe-area-inset-bottom)`.
 
 ## Motion & Animations
 

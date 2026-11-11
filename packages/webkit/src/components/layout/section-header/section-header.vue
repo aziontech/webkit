@@ -51,7 +51,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
-    class="group/heading flex flex-col"
+    class="group/heading @container/section-header flex flex-col"
   >
     <div class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)">
       <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
@@ -66,7 +66,7 @@
           </h2>
           <span
             v-if="anchor"
-            class="shrink-0 opacity-0 transition-opacity duration-150 ease-out group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
+            class="shrink-0 opacity-0 transition-opacity duration-150 ease-out group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:opacity-100 motion-reduce:transition-none"
           >
             <CopyButton
               :value="anchorUrl"
@@ -89,7 +89,7 @@
       <div
         v-if="$slots['actions']"
         :data-testid="`${testId}__actions`"
-        class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) md:w-auto md:max-w-full"
+        class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) @md/section-header:w-auto @md/section-header:max-w-full"
       >
         <slot name="actions" />
       </div>

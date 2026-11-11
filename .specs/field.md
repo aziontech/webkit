@@ -4,9 +4,9 @@ category: inputs
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 511f6b9a9536d122e93295f714a7f95ee5b1fdb01b8cbf10f42e60354cc5ddb2
+checksum: f7ceb236294efb9a4da9d7aca6f72ddf8e0364564784cf8939d3fe1b6a0bf452
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Field — Component Spec
@@ -41,7 +41,7 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
 - Let the Field own the ids. Pass an explicit `id` on the control and `for` on `Field.Label` only when another part of the page needs the id (focusing the first invalid field, an error summary link).
 - Render `Field.Description` for guidance and `Field.Error` for a validation message; both are announced through `aria-describedby`. `Field.Error` has `role="alert"`, so render it only when there is an error.
 - Choice cards: `<Field.Label><Field orientation="horizontal">control + Field.Content</Field></Field.Label>`. Never nest a choice card inside another `Field`; group cards with `Field.Set`.
-- Use `orientation="responsive"` inside a `Field.Group` for settings rows that stack on narrow containers and sit side by side on wide ones.
+- Use `orientation="responsive"` for settings rows that stack in a narrow container and sit side by side in a wide one; it follows the nearest container (a `Field.Group`, a Card, a dialog or drawer body).
 
 ## Usage
 
@@ -120,7 +120,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
   - Props: _none_. Events: _none_. Slots: `default`.
 - `field-error/field-error.vue` — validation message rendered through `HelperText kind="invalid"` with `role="alert"`; registers its id with the Field.
   - Props: _none_. Events: _none_. Slots: `default`.
-- `field-group/field-group.vue` — vertical stack of fields; it is the `@container/field-group` that `orientation="responsive"` queries.
+- `field-group/field-group.vue` — vertical stack of fields; it is a `@container/field-group`, one of the containers `orientation="responsive"` can follow.
   - Props: _none_. Events: _none_. Slots: `default`.
 - `field-set/field-set.vue` — native `<fieldset>` without browser chrome, for a group of related fields or choices.
   - Props: _none_. Events: _none_. Slots: `default`.
@@ -154,12 +154,12 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 ## Props
 
-| Prop          | Type                                         | Default      | Required | JSDoc                                                                                                     |
-| ------------- | -------------------------------------------- | ------------ | -------- | --------------------------------------------------------------------------------------------------------- |
-| `orientation` | `'vertical' \| 'horizontal' \| 'responsive'` | `'vertical'` | false    | Layout axis: label above the control, beside it, or beside it once the FieldGroup is wide enough.         |
-| `invalid`     | `boolean`                                    | `false`      | false    | Marks the field invalid: the control sets aria-invalid and FieldDescription switches to the invalid tone. |
-| `disabled`    | `boolean`                                    | `false`      | false    | Disables the wrapped control and dims the field.                                                          |
-| `required`    | `boolean`                                    | `false`      | false    | Shows the Required marker on FieldLabel and sets required on the wrapped control.                         |
+| Prop          | Type                                         | Default      | Required | JSDoc                                                                                                                                                  |
+| ------------- | -------------------------------------------- | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `orientation` | `'vertical' \| 'horizontal' \| 'responsive'` | `'vertical'` | false    | Layout axis: label above the control, beside it, or beside it once the enclosing container (a FieldGroup, Card, drawer or dialog body) is wide enough. |
+| `invalid`     | `boolean`                                    | `false`      | false    | Marks the field invalid: the control sets aria-invalid and FieldDescription switches to the invalid tone.                                              |
+| `disabled`    | `boolean`                                    | `false`      | false    | Disables the wrapped control and dims the field.                                                                                                       |
+| `required`    | `boolean`                                    | `false`      | false    | Shows the Required marker on FieldLabel and sets required on the wrapped control.                                                                      |
 
 ## Events
 
@@ -178,6 +178,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 - `data-orientation`: `vertical` | `horizontal` | `responsive`
 - `data-invalid`, `data-disabled`, `data-required` mirror the props on the root
 - `data-slot` identifies every part (`field`, `field-label`, `field-description`, `field-error`, `field-group`, `field-set`, `field-legend`, `field-content`, `field-title`, `field-separator`)
+- Responsive: `orientation="responsive"` queries the nearest container (`@md:`), not only `Field.Group`: inside a Card, a drawer or dialog body (`@container/panel`), a settings section or a `Field.Group` it stacks the label above the control in a narrow box and puts them side by side from `@md`. With no container ancestor it stays vertical.
 
 ## Motion & Animations
 

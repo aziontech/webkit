@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: c26d983b2c69770925f85e753429516de1c07d3cfe513d0bee99bcf20ebedfad
+checksum: 2cac86d123302c8d45b75a42c20c2025bfe8cb00a208e3158e7e778f4eb45247
 created: 2026-06-16
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Pagination — Component Spec
@@ -171,6 +171,8 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
 - `data-selected` on PaginationButton mirrors the current-page `selected` prop; `aria-current="page"` set when selected.
 - `data-disabled` on PaginationButton mirrors the `disabled` prop; `disabled` attribute and `aria-disabled` set.
 - Data-driven mode: `Previous` is disabled on the first page, `Next` on the last; the current page button is `selected` (`aria-current="page"`); the overflow ellipsis (`more`) is non-interactive: an `aria-hidden` `span`, out of the tab order, that emits nothing.
+- Responsive: the root is the `@container/pagination`. Below `@sm` of its box only Previous, the current page and Next stay visible (the other page numbers and the ellipsis hide); the page-size control wraps under them.
+- Touch: on a coarse pointer (`pointer-coarse:`) every page button and the page-size select grow to 44 px.
 
 ## Motion & Animations
 

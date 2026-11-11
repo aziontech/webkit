@@ -4,11 +4,11 @@ category: layout
 structure: composition
 status: implemented
 spec_version: 1
-checksum: bf150815455d6fbfb15919d2ebb5cc2742c9c8e7729f727c7331e8dcf06c9cf5
+checksum: 90d790486fbc373e01873ea4bc51b3d57585a87d6b1aff24758300eb8955dc2d
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
 created: 2026-08-16
-last_updated: 2026-08-16
+last_updated: 2026-11-11
 ---
 
 # Resizable Panel — Component Spec
@@ -148,6 +148,7 @@ PANE that owns the two-way values (see Sub-components) and the root only carries
 - `data-collapsed` mirrors the pane's `collapsed` state
 - `data-resizing` on the handle while a drag is in flight
 - `data-disabled` mirrors the handle's `disabled` prop
+- Reflow: the group clips on its main axis (`overflow-x-clip` / `overflow-y-clip`), so the hit area of a handle at the edge (a collapsed end pane) never adds overflow.
 
 ## Motion & Animations
 

@@ -3,10 +3,10 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: e7f9785795c2ace4ba6d4719ab86b6928ae5132121ab25f35f7a8b8558121de2
+checksum: f1ef6992081cf3ecf03466f85e935d029752784c40aeb58378c7da8c62ae2192
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Wizard — Component Spec
@@ -255,17 +255,17 @@ folder only):
 
 State matrix:
 
-| State        | Trigger                               | Renders                                                                                                                                                                     |
-| ------------ | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| first step   | `activeStep === 0`                    | Previous is not rendered. The footer shows Cancel at the start and Next at the end.                                                                                         |
-| middle step  | `0 < activeStep < N − 1`              | Cancel, Previous and Next.                                                                                                                                                  |
-| last step    | `activeStep === N − 1`                | The primary action reads `submitLabel` and emits `submit`.                                                                                                                  |
-| single step  | `N === 1`                             | Previous is not rendered, and the primary action is the submit action from the start.                                                                                       |
-| loading      | `loading`                             | The primary `Button` gets `loading` (spinner + `aria-busy`, click suppressed). Cancel and Previous are `disabled`, and every `Stepper.Step` is `disabled`.                  |
-| next blocked | `next` handler calls `preventDefault` | The wizard stays on the step. The consumer renders the reason inside the step's slot.                                                                                       |
-| below `md`   | viewport under the `md` breakpoint    | The rail is not displayed (`max-md:hidden`). The step header's `Step n of N` overline and title act as the compact progress line above the content. The footer stays below. |
+| State        | Trigger                               | Renders                                                                                                                                                                              |
+| ------------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| first step   | `activeStep === 0`                    | Previous is not rendered. The footer shows Cancel at the start and Next at the end.                                                                                                  |
+| middle step  | `0 < activeStep < N − 1`              | Cancel, Previous and Next.                                                                                                                                                           |
+| last step    | `activeStep === N − 1`                | The primary action reads `submitLabel` and emits `submit`.                                                                                                                           |
+| single step  | `N === 1`                             | Previous is not rendered, and the primary action is the submit action from the start.                                                                                                |
+| loading      | `loading`                             | The primary `Button` gets `loading` (spinner + `aria-busy`, click suppressed). Cancel and Previous are `disabled`, and every `Stepper.Step` is `disabled`.                           |
+| next blocked | `next` handler calls `preventDefault` | The wizard stays on the step. The consumer renders the reason inside the step's slot.                                                                                                |
+| narrow box   | wizard box under `@2xl`               | The rail is not displayed (`@max-2xl/wizard:hidden`). The step header's `Step n of N` overline and title act as the compact progress line above the content. The footer stays below. |
 
-Layout at `md` and up: a row with the rail column (`md:w-(--container-3xs) md:shrink-0`) on the start
+Layout from `@2xl` of the wizard's own box (`@container/wizard`, so a wizard in a drawer or split view follows that box): a row with the rail column (`@2xl/wizard:w-(--container-3xs) @2xl/wizard:shrink-0`) on the start
 side and the content column (`min-w-0 flex-1`) beside it. The content column stacks the active step,
 then the footer. The footer is a row with Cancel at the start and Previous + Next grouped at the end,
 separated from the content by a top border.
@@ -292,8 +292,8 @@ separated from the content by a top border.
 | description ink                           | `var(--text-muted)`     |
 | Optional ink                              | `var(--text-muted)`     |
 | footer divider                            | `var(--border-default)` |
-| rail column width (md+)                   | `var(--container-3xs)`  |
-| spacing (rail ↔ content, md+)             | `var(--spacing-xxl)`    |
+| rail column width (@2xl+)                 | `var(--container-3xs)`  |
+| spacing (rail ↔ content, @2xl+)           | `var(--spacing-xxl)`    |
 | spacing (counter ↔ heading ↔ description) | `var(--spacing-xxs)`    |
 | spacing (header ↔ step content)           | `var(--spacing-lg)`     |
 | spacing (step content ↔ footer)           | `var(--spacing-xl)`     |

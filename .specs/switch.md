@@ -7,9 +7,9 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: c496d57532fc195a2981559819b20518a66da366a908d271ec1c3d48e1a1456f
+checksum: ac9b5b47f27fad2e5ffb4be4dcc6591c375fcc00a625b0d3456bdd3fe7c0e215
 created: 2026-05-22
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Switch — Component Spec
@@ -90,6 +90,7 @@ Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plai
 - `data-kind` mirrors the `kind` prop (`default` | `privacy`)
 - `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions.
 - Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`data-[disabled]:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
+- Touch: an invisible `::after` extends the hit area of the 36 × 20 px track to 24 px tall, and to 44 × 44 px on a coarse pointer.
 
 ## Motion & Animations
 

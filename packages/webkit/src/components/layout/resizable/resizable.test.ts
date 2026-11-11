@@ -105,3 +105,13 @@ describe('Resizable', () => {
     await expectNoA11yViolations(container)
   })
 })
+
+describe('Resizable on devices', () => {
+  it('clips the handle hit area at its own edge', () => {
+    const { getByTestId } = render(group())
+
+    expect(getByTestId('layout-resizable').className).toContain(
+      'data-[orientation=horizontal]:overflow-x-clip'
+    )
+  })
+})

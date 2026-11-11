@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -88,5 +90,38 @@ describe('PageHeader', () => {
   it('has no accessibility violations', async () => {
     const { container } = render(Default)
     await expectNoA11yViolations(container)
+  })
+})
+
+const boxOf = (width: number) => {
+  const host = document.createElement('div')
+  host.style.width = `${width}px`
+  document.body.appendChild(host)
+  return host
+}
+
+describe('PageHeader in a narrow box', () => {
+  const mountIn = (width: number) =>
+    render(PageHeader, {
+      props: { title: 'Resources' },
+      slots: { actions: '<button type="button">Create</button>' },
+      container: boxOf(width)
+    })
+
+  it('stretches each action to the full width of a narrow box', () => {
+    const view = mountIn(320)
+    const action = view.getByRole('button', { name: 'Create' })
+    const header = view.getByTestId('layout-page-header')
+
+    expect(Math.round(action.getBoundingClientRect().width)).toBe(
+      Math.round(header.getBoundingClientRect().width)
+    )
+  })
+
+  it('keeps the actions at their own width beside the title in a wide box', () => {
+    const view = mountIn(1024)
+    const action = view.getByRole('button', { name: 'Create' })
+
+    expect(action.getBoundingClientRect().width).toBeLessThan(200)
   })
 })

@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <div class="flex items-start gap-4">
+  <div class="flex flex-wrap items-start gap-4">
     <Calendar
       v-model="range"
       mode="range"

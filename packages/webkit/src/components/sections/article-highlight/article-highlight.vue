@@ -126,14 +126,14 @@
               <div
                 aria-hidden="true"
                 inert
-                class="pointer-events-none grid opacity-0 *:col-start-1 *:row-start-1"
+                class="pointer-events-none grid min-w-0 opacity-0 *:col-start-1 *:row-start-1"
               >
                 <div
                   v-for="item in items"
                   :key="item.key"
-                  class="grid lg:grid-cols-2"
+                  class="grid min-w-0 lg:grid-cols-2"
                 >
-                  <span class="block aspect-video lg:aspect-4/3" />
+                  <span class="block min-w-0 aspect-video lg:aspect-4/3" />
                   <div
                     class="flex flex-col gap-(--spacing-sm) p-(--spacing-xl) lg:p-(--spacing-xxl)"
                   >

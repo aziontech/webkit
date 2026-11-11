@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 67735fc08a4e623f8a56a716883d2c805ca27183a8023bfa1793d041977d9a64
+checksum: 74c2174324f2ed54c570bf917a5b1a0a410d4041def71b3e860e3796c879bc8d
 created: 2026-05-22
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Card Box — Component Spec
@@ -103,6 +103,8 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Responsive: the content region is the `@container/card`, so `KeyValuePairs`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
+- Hover-free devices: the `header-action` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
 
 ## Motion & Animations
 

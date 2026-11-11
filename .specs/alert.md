@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 081e3622f505106604ca9885df26a51c14cf87a2d18668fcc80419f8f3be5e9f
+checksum: 55547f59d8d4e4a236596531c95771884b01d9e0e64629bc34d92c8c06e4b066
 created: 2026-05-22
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Alert — Component Spec
@@ -97,6 +97,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 ## States
 
 - Visual states: default (per severity)
+- Responsive: the root is the `@container/alert`. Below `@sm` of its box the action (built-in or the `action` slot, wrapped in `[data-slot=alert-action]`) moves to its own line under the message while the close button stays on the message line.
 
 ## Motion & Animations
 

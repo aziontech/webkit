@@ -307,3 +307,14 @@ describe('Button', () => {
     })
   })
 })
+
+describe('Button touch target', () => {
+  it('adds a 44px hit area on coarse pointers without changing the drawn size', () => {
+    const view = render(Button, { props: { label: 'Save' } })
+    const target = view.getByRole('button').querySelector('[data-slot="touch-target"]')
+
+    expect(target?.getAttribute('aria-hidden')).toBe('true')
+    expect(target?.className).toContain('pointer-coarse:block')
+    expect(target?.className).toContain('inset-[min(0rem,calc(50%-22px))]')
+  })
+})

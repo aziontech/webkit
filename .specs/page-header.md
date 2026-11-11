@@ -3,10 +3,10 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: b2b2ea4fa07cf3633ffb849fd200f52b8a0ab2399a1ed58f5517ae9df8ba8e04
+checksum: 60bf9de47717f95e8ba323bc71b3b67f5ac43abd8ebdb55afdd441a85a797c82
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # PageHeader — Component Spec
@@ -96,6 +96,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop on the root and the h1
+- Responsive: the root is the `@container/page-header`. Below `@md` of its own box the actions drop under the copy and each one stretches to the full width; from `@md` they sit beside the title at their own width. A header inside a drawer or a split view lays out for that box, not the window.
 
 ## Motion & Animations
 
