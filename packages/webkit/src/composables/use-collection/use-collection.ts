@@ -244,6 +244,8 @@ const DEFAULT_PAGE_SIZES = [10, 25, 50, 100]
 const columnIdOf = (column: CollectionColumn): string =>
   column.id ?? column.accessorKey ?? column.header ?? ''
 
+let collator: Intl.Collator | undefined
+
 function compareValues(a: unknown, b: unknown): number {
   const missingA = a === null || a === undefined || a === ''
   const missingB = b === null || b === undefined || b === ''
@@ -251,7 +253,8 @@ function compareValues(a: unknown, b: unknown): number {
   if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime()
   if (typeof a === 'number' && typeof b === 'number') return a - b
   if (typeof a === 'boolean' && typeof b === 'boolean') return Number(a) - Number(b)
-  return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' })
+  collator ??= new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
+  return collator.compare(String(a), String(b))
 }
 
 function resolveUrl(

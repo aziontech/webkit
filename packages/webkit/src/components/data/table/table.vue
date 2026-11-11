@@ -804,7 +804,7 @@
   const initialColumnWidth = (column: ColumnLike & { id: string }): number =>
     widthOf(column.id) ?? autoWidths.value[column.id] ?? (metaOf(column).grow ?? 1) * 150
 
-  const measureCellContentWidth = (cellEl: HTMLElement, host: HTMLElement): number => {
+  const contentClone = (cellEl: HTMLElement): HTMLElement => {
     const clone = cellEl.cloneNode(true) as HTMLElement
     clone.removeAttribute('data-grow')
     clone.removeAttribute('data-frozen')
@@ -817,26 +817,32 @@
     clone.style.setProperty('max-width', 'none', 'important')
     clone.style.setProperty('visibility', 'hidden', 'important')
     clone.style.setProperty('pointer-events', 'none', 'important')
-    host.appendChild(clone)
-    const width = clone.getBoundingClientRect().width
-    clone.remove()
-    return width
+    return clone
   }
 
-  const columnContentMinWidth = (headEl: HTMLElement): number => {
-    const tableEl = headEl.closest('[role="table"]') as HTMLElement | null
-    const row = headEl.closest('[role="row"]') as HTMLElement | null
-    const host = tableEl ?? globalThis.document.body
-    const colIndex = row ? Array.from(row.children).indexOf(headEl) : -1
-    const cells: HTMLElement[] =
-      tableEl && colIndex >= 0
-        ? Array.from(tableEl.querySelectorAll<HTMLElement>('[role="row"]'))
-            .map((r) => r.children[colIndex])
-            .filter((c): c is HTMLElement => c instanceof globalThis.HTMLElement)
-        : [headEl]
-    let max = 0
-    for (const cell of cells) max = Math.max(max, measureCellContentWidth(cell, host))
-    return Math.ceil(max) || RESIZE_FALLBACK_MIN_WIDTH
+  const columnContentMinWidths = (headEls: HTMLElement[]): number[] => {
+    const groups = headEls.map((headEl) => {
+      const tableEl = headEl.closest('[role="table"]') as HTMLElement | null
+      const row = headEl.closest('[role="row"]') as HTMLElement | null
+      const host = tableEl ?? globalThis.document.body
+      const colIndex = row ? Array.from(row.children).indexOf(headEl) : -1
+      const cells: HTMLElement[] =
+        tableEl && colIndex >= 0
+          ? Array.from(tableEl.querySelectorAll<HTMLElement>('[role="row"]'))
+              .map((r) => r.children[colIndex])
+              .filter((c): c is HTMLElement => c instanceof globalThis.HTMLElement)
+          : [headEl]
+      const clones = cells.map(contentClone)
+      host.append(...clones)
+      return clones
+    })
+    const widths = groups.map(
+      (clones) =>
+        Math.ceil(Math.max(0, ...clones.map((c) => c.getBoundingClientRect().width))) ||
+        RESIZE_FALLBACK_MIN_WIDTH
+    )
+    for (const clones of groups) for (const clone of clones) clone.remove()
+    return widths
   }
 
   const rootEl = ref<HTMLElement | null>(null)
@@ -1107,13 +1113,19 @@
     const headCells = Array.from(root.querySelectorAll<HTMLElement>('[role="columnheader"]'))
     const offset = props.enableRowSelection ? 1 : 0
     const next: Record<string, number> = {}
+    const measuredIds: string[] = []
+    const cells: HTMLElement[] = []
     headers.value.forEach((header, index) => {
       const column = props.columns.find((c: TableColumn) => columnId(c) === header.column.id)
-      if (column?.minWidth == null || column.width != null) return
       const cell = headCells[index + offset]
-      if (!cell) return
-      next[header.column.id] = Math.max(column.minWidth, columnContentMinWidth(cell))
+      if (column?.minWidth == null || column.width != null || !cell) return
+      next[header.column.id] = column.minWidth
+      measuredIds.push(header.column.id)
+      cells.push(cell)
     })
+    columnContentMinWidths(cells).forEach(
+      (w, i) => (next[measuredIds[i]!] = Math.max(next[measuredIds[i]!]!, w))
+    )
     const current = autoWidths.value
     const ids = new Set([...Object.keys(next), ...Object.keys(current)])
     for (const id of ids) {
@@ -1179,7 +1191,7 @@
       resizeWidths.value[column.id] ??
       headEl?.getBoundingClientRect().width ??
       initialColumnWidth(column)
-    const minWidth = headEl ? columnContentMinWidth(headEl) : RESIZE_FALLBACK_MIN_WIDTH
+    const minWidth = headEl ? columnContentMinWidths([headEl])[0]! : RESIZE_FALLBACK_MIN_WIDTH
     resizingColumnId.value = column.id
     const doc = globalThis.document
     const onMove = (moveEvent: MouseEvent | globalThis.TouchEvent): void => {

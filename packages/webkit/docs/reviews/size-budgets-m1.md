@@ -83,3 +83,11 @@ Four more entries changed in M1.11, from the WebKit run. For `locale="ar"` Node 
 | doc-tooltip        | 6.25          | 6.20            | 6.25         | 6.35       | Raised: its `Link` label goes through the shared translator. |
 | article-index-blog | 21.7          | 21.66           | 21.73        | 21.85      | Raised: dates and counts through the shared formatters.      |
 | wizard-root        | 6.3           | 6.24            | 6.30         | 6.4        | Raised: its step counter goes through the shared translator. |
+
+Three more entries changed later in M1.11, from the WebKit reflow run. `Table` measured the content width of auto-fit columns one cell at a time (append a clone, read its width, remove it), forcing a full layout for every cell: 130 layouts on mount of `platform/view/split-view`, 4.4 s in WebKit and about 0.5 s in Chromium. The clones of every measured column are now appended together, read together and removed together, so an auto-fit costs one layout (WebKit: 4.7 s → 0.3 s after mount). The batch costs about 30 bytes gzipped; the clone styling was tried as a loop over an object and compressed worse.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                     |
+| --------------- | ------------- | --------------- | ------------ | ---------- | -------------------------------------------------------- |
+| table-root      | 50.25         | 50.14           | 50.27        | 50.35      | Raised: auto-fit columns measure in one layout.          |
+| listing-browser | 64.85         | 64.76           | 64.88        | 64.95      | Raised: it ships `Table`, same change.                   |
+| listing-table   | 56.15         | 56.03           | 56.17        | 56.25      | Raised: it ships `Table` and `TableFooter`, same change. |
