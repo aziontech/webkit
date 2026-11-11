@@ -9945,6 +9945,138 @@ The code of every state is in [blocks/platform/view/query-editor.md](blocks/plat
 
 ---
 
+<!-- blocks/platform/view/rules-list.md -->
+
+# RulesList (`platform/view/rules-list`)
+
+> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a composed `Table` with Order, Name, Description, Status and Last modified. The Order cell carries a position `Input` (type a number and press Enter), a grip `IconButton` that drags the row or moves it with the up and down arrow keys, and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `Table` and its parts, `IconButton`, `Tooltip`, `Tag`, `Switch`, `Skeleton`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`.
+
+- Surface: product
+- Source: `blocks/platform/view/rules-list/rules-list.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/view/rules-list")`
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
+
+## Asked as
+
+rules list; rules engine list; reorder rules; rule order; drag and drop reorder; firewall rules; request and response phases; review changes; enable disable rule; lista de regras; ordem das regras; reordenar regras; regras do firewall; fases de requisição e resposta; lista de reglas; reordenar reglas
+
+An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys or a typed position move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves.
+
+## When to use
+
+- A resource runs an ordered program of rules and the user needs to see it, reorder it and turn rules on or off: application rules engine, firewall rules, routing rules.
+- Rules split into phases that never interleave (request and response), each with its own order.
+- Changes to the order must be reviewed before they apply to live traffic.
+
+## When not to use
+
+- Records whose order does not matter: use `platform/view/table-view`.
+- Writing or editing one rule's criteria and behaviors: use `platform/edit/rule-builder`, which this list opens from Add Rule and from a rule's name.
+- Fewer than two rules that can move: show the list without the Order controls.
+
+## Building blocks
+
+### A. Header — `PageHeader`, `Button` (required)
+
+`PageHeader` at `size="small"` titled Rules, with a one-sentence description that says order is behavior and that an inactive rule keeps its place. Actions: outlined Documentation, then outlined Add Rule on the outer edge.
+
+### B. Search — `Input`, `Alert` (required)
+
+A medium `Input` with a search icon, named "Search rules", matching name, description and author. While it holds text, an info `Alert` says reordering is off and how to turn it back on; phases with matches open, and each trigger reads "n of total".
+
+### C. Phases — `Card`, `Accordion` (required)
+
+A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, the arrow on the start side, one item per phase, all open by default. Each trigger is an `h2` reading "Request phase" with the rule count in muted tabular figures. A resource with a single phase keeps the same anatomy with one item.
+
+### D. Rules table — `Table`, `Table.Header`, `Table.Row`, `Table.HeadCell`, `Table.Cell`, `Tag`, `Switch` (required)
+
+A composed `Table` per phase: Order (fixed width), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen").
+
+### E. Order controls — `Input`, `IconButton`, `Tooltip` (required)
+
+In the Order cell, in this order: a small position `Input` (numeric, centered; Enter or blur moves the rule there, Escape cancels), a grip `IconButton` (`pi pi-bars`) that is the drag handle and moves the rule one place with the up and down arrow keys, and Move up and Move down `IconButton`s. Each control is named after its rule and phase, and its `Tooltip` repeats the action or, when it is disabled, the reason. Leading locked rules are pinned: their controls are disabled and nothing can move above them. After a move, focus returns to the same control on the moved rule (the grip when that control is now disabled), and a polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
+
+### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Toaster` (required)
+
+Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save shows its loading state and the dialog cannot be dismissed while saving. On success the dialog closes and a success toast says "Rule order saved." On failure the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again.
+
+### G. States — `Skeleton`, `EmptyState` (required)
+
+Loading: triggers read Loading, the search is disabled and each table shows three skeleton rows shaped like its columns. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: one muted line, "No request rule matches “cache”."
+
+## Do
+
+- Keep phases separate: a rule moves only within its phase, and drag ignores drops on another phase.
+- Offer every way to move: drag for a pointer, arrow keys on the grip, Move up and Move down for touch and switch access, and a typed position for long lists.
+- Say why a control is disabled, in its accessible name and its tooltip.
+- Collect changes and apply them only after Review changes and Save; the review lists every rule whose position changes, not only the one the user dragged.
+- Let a rule be turned off in place; an inactive rule keeps its position and is skipped at runtime.
+- Follow `skills/webkit-tables` for the table, `skills/webkit-form` for the save bar and `skills/webkit-errors` for the failed save.
+
+## Don't
+
+- Don't save on every drop; one wrong drag would reorder live traffic.
+- Don't allow reordering while a search hides rows; positions would be ambiguous.
+- Don't let anything move above a locked default rule, or turn it off.
+- Don't put the review in a toast or a popover; it is a decision with a list to read.
+- Don't offer drag as the only way to reorder.
+
+## Copy
+
+- **Phase triggers:** "Request phase", "Response phase", with "5 rules" or "2 of 5" beside.
+- **Order control names:** "Reorder Docs rewrite, position 5 of 5 in the Request phase. Use the up and down arrow keys to move it.", "Move Docs rewrite up".
+- **Disabled reasons:** "The default rule runs first and stays first.", "Clear the search to change the order rules run in.", "There is no other rule in this phase to move it past."
+- **Announcements:** "Docs rewrite moved to position 3 of 5 in the Request phase.", "Changes discarded. The rules are back in their saved order."
+- **Save bar:** "3 changes to the rules, not saved yet." with Discard and Review changes.
+- **Review lines:** "<Rule> moves from position 5 to 3.", "<Rule> is turned on."
+- **Failure:** "The new order wasn't saved. The rules still run in the saved order; save again to apply it."
+- **Success toast:** "Rule order saved." with "The application runs its rules in the new order."
+- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+
+## Accessibility
+
+- Each phase is a disclosure: the trigger is a button inside an `h2` with `aria-expanded`, and the panel is a region named by it.
+- Every Order control has a name that includes the rule and the phase; disabled controls include the reason.
+- Keyboard: Tab reaches the position field, grip, Move up, Move down, the rule link and its switch, in that order; the grip moves the rule with Up and Down; Enter in the position field commits and Escape cancels. Focus follows the moved rule.
+- Moves and discards are announced once in a polite `role="status"` region that exists from the first render.
+- The `Switch` is named "Run <rule>"; its visible Active or Inactive text is hidden from the accessibility tree so the state is read once, from `aria-checked`.
+- The review dialog traps focus, returns it to Review changes on close, and is not dismissible while saving; the failure `Alert` is read when it appears.
+- Drop targets show a 2 px accent line and the dragged row fades; transitions respect reduced motion.
+
+## States
+
+- Application: Request and Response phases, a locked Default rule first in Request, one inactive rule per phase.
+- Firewall: one Request phase, every rule movable.
+- ReviewChanges: two moves and one status change, the save bar and the review dialog open.
+- SaveFailed: the review dialog open with the failure `Alert` and Save again.
+- Searching: "cache" typed, reordering off with its `Alert`, phases reading "n of total".
+- Empty: a firewall with no rules, the Request phase showing its `EmptyState`.
+- Loading: skeleton rows in each phase.
+
+## Related
+
+- `platform/edit/rule-builder` — the drawer that adds or edits one rule.
+- `platform/view/table-view` — lists whose order does not matter.
+- `platform/states/form-error` — the failed-save `Alert` pattern the review dialog follows.
+- `platform/view/waf-tuning` — the WAF tuning list a firewall's WAF rule links to.
+
+## Variants
+
+- `Application` — primary (the code below)
+- `Firewall` — A firewall's rules: one Request phase, five rules and no locked rule, so every rule moves; the page says rules run until one refuses the request.
+- `ReviewChanges` — After two moves and one rule turned on: the SaveBar counts the changes and the Review changes dialog is open, listing Docs rewrite moving from 5 to 3 (and the rules it pushed down), Maintenance page turned on, and Security headers moving to the top of the Response phase.
+- `SaveFailed` — The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; the next attempt saves and closes the dialog with the success toast.
+- `Searching` — A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip.
+- `Empty` — A firewall with no rules: the Request phase panel shows a small EmptyState with Add Rule instead of the table.
+- `Loading` — While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns.
+
+Each variant is the same screen in another state: `get_pattern("platform/view/rules-list", { variant })`, or the file under `blocks/platform/view/rules-list/variants/`.
+
+The code of every state is in [blocks/platform/view/rules-list.md](blocks/platform/view/rules-list.md) and `blocks/platform/view/rules-list/rules-list.vue`.
+
+---
+
 <!-- blocks/platform/view/split-view.md -->
 
 # SplitView (`platform/view/split-view`)
@@ -10263,6 +10395,120 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 Each variant is the same screen in another state: `get_pattern("platform/view/table-view", { variant })`, or the file under `blocks/platform/view/table-view/variants/`.
 
 The code of every state is in [blocks/platform/view/table-view.md](blocks/platform/view/table-view.md) and `blocks/platform/view/table-view/table-view.vue`.
+
+---
+
+<!-- blocks/platform/view/waf-tuning.md -->
+
+# WafTuning (`platform/view/waf-tuning`)
+
+> The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `TableRoot` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, two shown and a `Tag` counting the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `TableRoot`, `Tag`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Textarea` and `Toaster`.
+
+- Surface: product
+- Source: `blocks/platform/view/waf-tuning/waf-tuning.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/view/waf-tuning")`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), `TableRoot`, [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
+
+## Asked as
+
+waf tuning; web application firewall; allow rules; false positives; attacks table; matched requests; waf allowed rules; threshold; ajuste do waf; falsos positivos; permitir regras; ajuste de waf; falsos positivos waf
+
+The Tuning tab of a WAF rule set. It shows the requests the rule set matched, grouped by the rule that matched them, with enough context (hits, top addresses, countries and paths) for the user to tell an attack from a false positive, and turns the legitimate ones into allowed rules with a recorded reason.
+
+## When to use
+
+- A security rule set blocks or flags traffic, and users need to review what it caught and allow what is legitimate.
+- Each finding is a rule that matched many requests, summarized by its sources and targets.
+- Allowing changes what the rule set lets through, so it needs a reason that stays with the change.
+
+## When not to use
+
+- A plain list of records to browse and act on one at a time: use `platform/view/table-view`.
+- Charts of attack volume over time: use `platform/dashboard/security-dashboard`.
+- Editing the allowed rules once created: an `edit-resource` form on the Allowed Rules tab.
+
+## Building blocks
+
+### A. Header — `PageHeader`, `Button` (required)
+
+`PageHeader` at `size="small"` titled Tuning, with a description that says what the list is and what to do with it. Actions: outlined Export to CSV (disabled while loading or empty) and the allow action, which reads Add Allowed Rule and is disabled until rows are checked, then reads "Allow 2 selected".
+
+### B. Threshold settings — `Field`, `Select`, `Input`, `IconButton`, `Tooltip` (required)
+
+A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `Input` (numeric; "Use a whole number." under it when it is not one), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. Hidden when the rule set has no match at all.
+
+### C. Matches table — `Card`, `TableRoot`, `Tag`, `EmptyState` (required)
+
+A flush `Card` with a data-driven `TableRoot`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells show two values and a small `Tag` with "+n". The `empty` slot is a small `EmptyState` naming the minimum and the range and saying how to widen them.
+
+### D. Allow dialog — `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
+
+A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says requests these rules matched on their paths will no longer be blocked and how many allowed rules will be created (one per rule and path); a list of the selected rules with their threat and path count; and a required Reason `Textarea` with a description saying it is kept with the allowed rules. "Enter why these requests are legitimate." shows under it only after Allow rules is pressed with it empty, and focus moves to it. Footer: Cancel and primary Allow rules, which shows its loading state; the dialog cannot be dismissed while it runs.
+
+### E. Outcome — `Toaster`, `Alert` (required)
+
+Success closes the dialog, clears the selection and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `platform/states/form-error`).
+
+## Do
+
+- Sort by hits so the noisiest rules come first, and keep the sort when settings change.
+- Show sources and targets as samples with a count of the rest, not as full lists.
+- Say how many allowed rules the action creates before the user confirms it.
+- Require a reason, and validate it only after the user tries to allow.
+- Keep the selection when settings change, so the user can narrow the list and still act on what they checked.
+
+## Don't
+
+- Don't allow from a single click on a row; allowing changes what the rule set blocks.
+- Don't hide the threshold settings in a menu; they decide what the list shows.
+- Don't put a free-text reason in a toast or a confirm without a field.
+- Don't use real or customer addresses in examples; use documentation ranges (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24).
+
+## Copy
+
+- **Header action:** "Add Allowed Rule", then "Allow 2 selected".
+- **Settings labels:** "Time range", "Minimum hits".
+- **Empty after threshold:** "No rule reaches the minimum", "No rule matched 100 times or more in the last 24 hours. Lower the minimum hits or widen the time range."
+- **First use:** "No matches yet", "This rule set has not matched any request. Matches appear here as traffic arrives."
+- **Dialog:** title "Allow 2 rules", submit "Allow rules", reason error "Enter why these requests are legitimate."
+- **Outcome:** "6 allowed rules created." and "The allowed rules weren't created. Nothing changed in the rule set; try again."
+- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+
+## Accessibility
+
+- Time range and Minimum hits have visible labels; the search and Refresh have accessible names.
+- The selection checkboxes and sort buttons come from `TableRoot` and are named per row and column.
+- The dialog is a labelled `form`: its title names it, the reason is a required `Field` whose error is tied by `aria-describedby`, and Enter in a text field does not submit by accident because the reason is a `Textarea`.
+- The failure `Alert` is read when it appears; focus stays in the dialog and returns to the allow action on close.
+- Code-font values (rule ids, addresses, paths) are plain text; nothing depends on color.
+
+## States
+
+- Default: five rules matched in the last 24 hours, minimum 100 hits.
+- Allow: two rules checked and the dialog open.
+- AllowFailed: the dialog with the failure `Alert` and Try again.
+- Empty: no match yet, no settings.
+- Loading: settings disabled, skeleton rows.
+
+## Related
+
+- `platform/view/rules-list` — the firewall's rules, where a WAF rule set is applied.
+- `platform/view/table-view` — the list recipe this table follows.
+- `platform/states/form-error` — the failure pattern in the dialog.
+- `platform/dashboard/security-dashboard` — attack volume over time.
+
+## Variants
+
+- `Default` — primary (the code below)
+- `Allow` — Two rules checked and the Allow 2 rules dialog open: rule 1005 (SQL injection on 3 paths) and 1201 (Cross-site scripting on 3 paths), 6 allowed rules in all, and an empty Reason.
+- `AllowFailed` — The same dialog after the allowed rules could not be created: a danger Alert says nothing changed in the rule set, and the submit button reads Try again.
+- `Empty` — A rule set that has not matched any request: no threshold settings, and an EmptyState saying matches appear as traffic arrives.
+- `Loading` — While the matches load: the settings and actions are disabled and the table shows skeleton rows.
+
+Each variant is the same screen in another state: `get_pattern("platform/view/waf-tuning", { variant })`, or the file under `blocks/platform/view/waf-tuning/variants/`.
+
+The code of every state is in [blocks/platform/view/waf-tuning.md](blocks/platform/view/waf-tuning.md) and `blocks/platform/view/waf-tuning/waf-tuning.vue`.
 
 ---
 
