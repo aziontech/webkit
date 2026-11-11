@@ -1,0 +1,46 @@
+{
+  "id": "platform/account/mfa-management",
+  "name": "MfaManagement",
+  "title": "Templates/Platform/Account/MfaManagement",
+  "surface": "product",
+  "summary": "Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "mfa management",
+    "multi-factor authentication",
+    "two-factor authentication",
+    "2fa",
+    "require mfa",
+    "reset mfa",
+    "security settings",
+    "gerenciar mfa",
+    "autenticação multifator",
+    "exigir mfa",
+    "redefinir mfa"
+  ],
+  "skills": ["webkit-lists", "webkit-tables", "webkit-ui-states", "webkit-microcopy"],
+  "primary": {
+    "name": "Default",
+    "file": "mfa-management.vue"
+  },
+  "variants": [
+    {
+      "name": "Required",
+      "summary": "MFA required for the account: the Switch on, no password-only warning; people without MFA still listed as Not set up until their next sign-in.",
+      "file": "variants/required.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: the Switch disabled and the table's loading rows.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The MFA status did not load: a danger Alert with Retry replaces the table and the Switch is disabled.",
+      "file": "variants/failed.vue"
+    }
+  ]
+}

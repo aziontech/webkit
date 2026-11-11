@@ -24896,6 +24896,79 @@
    ],
    "file": "catalog/patterns/platform/account/change-plan-drawer.json"
   },
+  "platform/account/mfa-management": {
+   "name": "MfaManagement",
+   "title": "Templates/Platform/Account/MfaManagement",
+   "source": "blocks/platform/account/mfa-management/mfa-management.vue",
+   "surface": "product",
+   "summary": "Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`.",
+   "intents": [
+    "mfa management",
+    "multi-factor authentication",
+    "two-factor authentication",
+    "2fa",
+    "require mfa",
+    "reset mfa",
+    "security settings",
+    "gerenciar mfa",
+    "autenticação multifator",
+    "exigir mfa",
+    "redefinir mfa"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Avatar",
+    "Button",
+    "Card",
+    "ConfirmDialog",
+    "DropdownMenu",
+    "Input",
+    "PageHeader",
+    "SettingRow",
+    "Switch",
+    "Table",
+    "toast",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/setting-row",
+    "@aziontech/webkit/switch",
+    "@aziontech/webkit/table",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "Multi-factor authentication for a whole account. An admin sees who signs in with a second factor and who uses a password only, requires MFA for everyone, reminds the people who have not set it up, and resets the factor of someone who lost their device. Setting up a factor and the sign-in challenge are `platform/auth` (`MfaSetup`, `MfaChallenge`); this page manages them for other people.",
+   "variants": [
+    {
+     "name": "Required",
+     "summary": "MFA required for the account: the Switch on, no password-only warning; people without MFA still listed as Not set up until their next sign-in."
+    },
+    {
+     "name": "Loading",
+     "summary": "The first load: the Switch disabled and the table's loading rows."
+    },
+    {
+     "name": "Failed",
+     "summary": "The MFA status did not load: a danger Alert with Retry replaces the table and the Switch is disabled."
+    }
+   ],
+   "file": "catalog/patterns/platform/account/mfa-management.json"
+  },
   "platform/account/onboarding-form": {
    "name": "OnboardingForm",
    "title": "Templates/Platform/Account/OnboardingForm",

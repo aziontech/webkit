@@ -48,7 +48,7 @@ The Teams cell is a small `MultiSelect` named `Teams of <person>` whose value re
 
 `Table.CellActions` named after the person, disabled for the owner. An invited person gets `Resend invitation` (toast: the earlier link stops working) and `Cancel invitation`; everyone else gets `Remove from account`. Both removals ask in a `ConfirmDialog` that says what the person loses and what stays.
 
-### F. Invite drawer — `Drawer`, `DrawerTitle`, `DrawerDescription`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
+### F. Invite drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerDescription`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
 
 A medium right `Drawer` around a `form`: a description of what the invitation does, a required Email `Field` and a required Teams `Field` with Developers preselected and a description saying permissions add up. Footer: Cancel and the primary `Send invitation`, which shows its loading state; the drawer cannot be dismissed while it sends. Errors follow `platform/states/form-error`: nothing is red before the first Send; after it each field shows its own `Field.Error` and focus moves to the first invalid one.
 

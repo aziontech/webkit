@@ -31,6 +31,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [ActivityHistory (platform/account/activity-history)](blocks/platform/account/activity-history.md): The account's audit log.
 - [ChangePlanDrawer (platform/account/change-plan-drawer)](blocks/platform/account/change-plan-drawer.md): The drawer the Billing page opens from its Subscription Plan card.
+- [MfaManagement (platform/account/mfa-management)](blocks/platform/account/mfa-management.md): Multi-factor authentication for a whole account.
 - [OnboardingForm (platform/account/onboarding-form)](blocks/platform/account/onboarding-form.md): The `/signup/onboarding` screen, frame included.
 - [PaymentMethodCard (platform/account/payment-method-card)](blocks/platform/account/payment-method-card.md): The Payment method card of the Upgrade to Pro drawer.
 - [Profile (platform/account/profile)](blocks/platform/account/profile.md): The profile page of a signed-in account, and the layout every account settings page follows.

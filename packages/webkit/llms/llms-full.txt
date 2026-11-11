@@ -2103,6 +2103,112 @@ The code of every state is in [blocks/platform/account/change-plan-drawer.md](bl
 
 ---
 
+<!-- blocks/platform/account/mfa-management.md -->
+
+# MfaManagement (`platform/account/mfa-management`)
+
+> Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`.
+
+- Surface: product
+- Source: `blocks/platform/account/mfa-management/mfa-management.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/account/mfa-management")`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [SettingRow](../../../components/setting-row.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Toast](../../../components/toast.md), `use-collection`
+- Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
+
+## Asked as
+
+mfa management; multi-factor authentication; two-factor authentication; 2fa; require mfa; reset mfa; security settings; gerenciar mfa; autenticação multifator; exigir mfa; redefinir mfa
+
+Multi-factor authentication for a whole account. An admin sees who signs in with a second factor and who uses a password only, requires MFA for everyone, reminds the people who have not set it up, and resets the factor of someone who lost their device. Setting up a factor and the sign-in challenge are `platform/auth` (`MfaSetup`, `MfaChallenge`); this page manages them for other people.
+
+## When to use
+
+- An account or organisation page where admins enforce or audit multi-factor authentication.
+- Helping a person who lost the device that holds their factor.
+
+## When not to use
+
+- A person setting up their own factor: use `platform/auth#MfaSetup`.
+- The code prompt at sign-in: use `platform/auth#MfaChallenge`.
+- Inviting or removing people: use `platform/account/users`.
+
+## Building blocks
+
+### A. Page heading — `PageHeader`, `Button` (required)
+
+Title `Multi-factor authentication` and one sentence on what the page holds. Action: Documentation.
+
+### B. Require MFA — `Card`, `SettingRow`, `Switch`, `ConfirmDialog` (required)
+
+One `SettingRow` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`kind="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once with a toast. While data loads or failed, the switch is disabled.
+
+### C. Password-only warning — `Alert` (conditional)
+
+While MFA is optional and someone has no factor, a warning `Alert` counts them (`2 of 5 people sign in with a password only.`) and points at the two remedies.
+
+### D. People table — `Input`, `Table`, `Avatar`, `useCollection` (required)
+
+A search `Input` with `v-bind="filterProps"`, then a `Table` with `v-bind="tableProps"` in a flush `Card`: Name (square `Avatar`, name, email under it), MFA as `Table.CellStatus` (Enabled success, Not set up warning), Method, and Set up as `Table.CellTime` or a dash.
+
+### E. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
+
+`Table.CellActions` named after the person: Reset MFA for an enabled factor, behind a `ConfirmDialog` that says what the person loses and when to use it; Send setup reminder for a person without one.
+
+### F. Load failure and outcomes — `Alert`, `Toaster` (required)
+
+When the list fails to load, a danger `Alert` with Retry takes the table's place. Require, optional, reset and reminder end in a success toast; they are not deploys, so no toast carries Edit or Redeploy.
+
+## Do
+
+- Name who is affected before requiring MFA.
+- Keep people without a factor visible and marked, with a way to remind them.
+- Say what a reset does (password only until they set it up again) before confirming it.
+
+## Don't
+
+- Don't show or copy anyone's secret or recovery codes here; only the owner of the factor sees them.
+- Don't reset without a confirmation; it weakens one person's sign-in.
+- Don't make the warning color the only signal; the Alert and the status say it in words.
+
+## Copy
+
+- **Title:** `Multi-factor authentication`. **Setting:** `Require MFA`.
+- **Statuses:** `Enabled`, `Not set up`. **Actions:** `Reset MFA`, `Send setup reminder`.
+- **Toasts:** `MFA is now required.`, `MFA is optional again.`, `MFA reset for Jordan Reyes.`, `Reminder sent to priya.nair@example.com.`
+- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- The Switch is named Require MFA and the setting description explains the effect.
+- The row menu is named `Actions for <person>`; status is text, not color.
+- Both confirmations are dialogs that return focus to their trigger.
+
+## States
+
+- Default: five people, three with a factor, MFA optional, the warning shown.
+- Required: MFA required for the account.
+- Loading: the first load.
+- Failed: the list did not load; a danger Alert with Retry.
+
+## Related
+
+- `platform/auth` — `MfaSetup` and `MfaChallenge`, the person's own side.
+- `platform/account/users` — the people in the account.
+- `platform/account/activity-history` — where MFA changes are audited.
+
+## Variants
+
+- `Default` — primary (the code below)
+- `Required` — MFA required for the account: the Switch on, no password-only warning; people without MFA still listed as Not set up until their next sign-in.
+- `Loading` — The first load: the Switch disabled and the table's loading rows.
+- `Failed` — The MFA status did not load: a danger Alert with Retry replaces the table and the Switch is disabled.
+
+Each variant is the same screen in another state: `get_pattern("platform/account/mfa-management", { variant })`, or the file under `blocks/platform/account/mfa-management/variants/`.
+
+The code of every state is in [blocks/platform/account/mfa-management.md](blocks/platform/account/mfa-management.md) and `blocks/platform/account/mfa-management/mfa-management.vue`.
+
+---
+
 <!-- blocks/platform/account/onboarding-form.md -->
 
 # OnboardingForm (`platform/account/onboarding-form`)
@@ -2776,7 +2882,7 @@ The Teams cell is a small `MultiSelect` named `Teams of <person>` whose value re
 
 `Table.CellActions` named after the person, disabled for the owner. An invited person gets `Resend invitation` (toast: the earlier link stops working) and `Cancel invitation`; everyone else gets `Remove from account`. Both removals ask in a `ConfirmDialog` that says what the person loses and what stays.
 
-### F. Invite drawer — `Drawer`, `DrawerTitle`, `DrawerDescription`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
+### F. Invite drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerDescription`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
 
 A medium right `Drawer` around a `form`: a description of what the invitation does, a required Email `Field` and a required Teams `Field` with Developers preselected and a description saying permissions add up. Footer: Cancel and the primary `Send invitation`, which shows its loading state; the drawer cannot be dismissed while it sends. Errors follow `platform/states/form-error`: nothing is red before the first Send; after it each field shows its own `Field.Error` and focus moves to the first invalid one.
 
