@@ -25,7 +25,7 @@
 
   const props = withDefaults(
     defineProps<{
-      /** The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`…). Unknown values draw the generic card glyph. */
+      /** The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. */
       brand?: string
       /** Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms. */
       size?: PaymentBrandSize
@@ -60,7 +60,17 @@
     dinersclub: 'diners'
   }
 
-  const DRAWN = new Set<PaymentBrandId>(['visa', 'mastercard', 'amex', 'diners', 'jcb'])
+  const DRAWN = new Set<PaymentBrandId>([
+    'visa',
+    'mastercard',
+    'amex',
+    'diners',
+    'jcb',
+    'discover',
+    'elo',
+    'hipercard',
+    'unionpay'
+  ])
 
   const attrs = useAttrs()
   const { t } = useTranslate({ paymentBrand: en.paymentBrand })
@@ -179,6 +189,80 @@
       <path
         d="M2.7692 10.816c-.8673.0002-1.7304-.1147-2.5638-.3413V9.3013c.6467.3777 1.386.5908 2.1459.6187.8697 0 1.3554-.576 1.3554-1.3654V5.333h2.146v3.2213c0 1.2587-.7003 2.2614-3.0835 2.2614zM8.1116 6.08c.6551-.5973 1.7846-.9707 3.6143-.8853.9939.0426 2.033.32 2.033.32v1.184c-.5943-.3395-1.2623-.5474-1.954-.608-1.3892-.1174-2.2363.6186-2.2363 1.9093s.8471 2.0267 2.2363 1.92c.692-.0661 1.3597-.2775 1.954-.6187v1.1734s-1.0391.288-2.033.3306c-1.8297.0854-2.9592-.288-3.6143-.8853zM21.6652 9.28c0 .8533-.7003 1.3867-1.6377 1.3867h-4.0096V5.3333h3.6481l.2598.0107c.8245.0427 1.4344.5013 1.4344 1.2907 0 .6186-.4179 1.152-1.1746 1.28v.032c.8358.0533 1.4796.5546 1.4796 1.3333zm-2.8801-3.104a1 1 0 0 0-.1469-.0107h-1.3553v1.344h1.5022c.2823-.064.5195-.3093.5195-.672s-.2372-.608-.5195-.6613zm.1694 2.176a1 1 0 0 0-.1807-.0107h-1.4909v1.4614h1.4909l.1807-.0214c.2824-.064.5196-.3413.5196-.7146s-.2259-.64-.5196-.7147z"
         class="fill-(--bg-surface)"
+      />
+    </svg>
+    <svg
+      v-else-if="id === 'discover'"
+      viewBox="0 0 40 8"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M0 .6h2.6c2 0 3.3 1.3 3.3 3.4S4.6 7.4 2.6 7.4H0zm1.5 1.3v4.2h1c1.1 0 1.8-.8 1.8-2.1s-.7-2.1-1.8-2.1zM6.9.6h1.5v6.8H6.9zM13.6 1.1v1.5c-.6-.4-1.2-.7-1.8-.7-.5 0-.8.2-.8.5 0 .9 2.8.8 2.8 3 0 1.3-1 2.1-2.4 2.1-.8 0-1.5-.2-2.1-.6V5.4c.6.5 1.3.8 1.9.8.6 0 .9-.2.9-.6 0-1-2.8-.8-2.8-2.9C9.3 1.4 10.2.5 11.6.5c.7 0 1.4.2 2 .6zM19.3 1.1v1.7c-.5-.5-1.1-.8-1.8-.8-1.2 0-2 .9-2 2.1s.8 2.1 2 2.1c.7 0 1.3-.3 1.8-.8v1.7c-.6.3-1.2.5-1.9.5-2 0-3.5-1.5-3.5-3.5S15.4.5 17.4.5c.7 0 1.3.2 1.9.6z"
+        fill="currentColor"
+      />
+      <circle
+        cx="23.6"
+        cy="4"
+        r="3.5"
+        fill="currentColor"
+      />
+      <path
+        d="m27.4.6h1.6l1.6 4.3L32.3.6h1.6l-2.8 6.8h-.9zM34.6.6h3.9v1.3h-2.4v1.4h2.3v1.3h-2.3v1.5h2.4v1.3h-3.9z"
+        fill="currentColor"
+      />
+    </svg>
+    <svg
+      v-else-if="id === 'elo'"
+      viewBox="0 0 24 12"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M5 2.2a3.8 3.8 0 1 0 3.5 5.3l-1.5-.6A2.2 2.2 0 0 1 2.9 6.6h5.8V6A3.8 3.8 0 0 0 5 2.2zm-2 3a2.2 2.2 0 0 1 4 0zM10.4 0H12v9.8h-1.6zM18.2 2.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6zm0 1.6a2.2 2.2 0 1 1 0 4.4 2.2 2.2 0 0 1 0-4.4z"
+        fill="currentColor"
+      />
+    </svg>
+    <svg
+      v-else-if="id === 'hipercard'"
+      viewBox="0 0 24 10"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <rect
+        width="24"
+        height="10"
+        rx="2"
+        fill="currentColor"
+      />
+      <path
+        d="M3 2h1.4v2.3h2.2V2H8v6H6.6V5.6H4.4V8H3zM9.2 4h1.3v4H9.2zm0-2h1.3v1.2H9.2zM11.6 4h1.2v.4c.3-.3.7-.5 1.2-.5 1 0 1.7.9 1.7 2.1S15 8.1 14 8.1c-.5 0-.9-.2-1.1-.5V10h-1.3zm2.1 1c-.5 0-.9.4-.9 1s.4 1 .9 1 .9-.4.9-1-.4-1-.9-1zM18.3 3.9c1.1 0 1.9.8 1.9 2v.4h-2.7c.1.5.5.8 1 .8.4 0 .7-.1 1-.4l.6.8c-.4.4-1 .6-1.6.6-1.3 0-2.2-.9-2.2-2.1s.9-2.1 2-2.1zm-.8 1.6H19c-.1-.4-.4-.6-.7-.6s-.6.2-.8.6zM20.9 4h1.2v.6c.3-.4.6-.7 1.2-.7v1.3c-.7 0-1.1.3-1.1 1V8h-1.3z"
+        class="fill-(--bg-surface)"
+      />
+    </svg>
+    <svg
+      v-else-if="id === 'unionpay'"
+      viewBox="0 0 24 15"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M3.2 0h6.2L6.4 15H.2z"
+        fill="currentColor"
+      />
+      <path
+        d="M9.4 0h6.2l-3 15H6.4z"
+        fill="currentColor"
+        fill-opacity="0.7"
+      />
+      <path
+        d="M15.6 0h6.2l-3 15h-6.2z"
+        fill="currentColor"
+        fill-opacity="0.45"
       />
     </svg>
     <svg

@@ -55,12 +55,14 @@
 - `data-state` mirrors `default` or `copied`
 - `data-disabled` mirrors the `disabled` prop
 - The composed `Tooltip` carries its own `data-state` (`open` | `closed`) and is disabled with the button
+- Fallback: when `navigator.clipboard.writeText` rejects (permission denied, insecure context, unfocused document), the button loads a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from the `copyFallback` catalog group.
 
 ## Accessibility
 
 - Visible focus: inherited from `IconButton` (`focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`)
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates copy.
 - ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied.
+- Fallback popover: `role="dialog"` named by its title and described by the key hint; focus moves into the selected read-only field and returns to the button on close.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.

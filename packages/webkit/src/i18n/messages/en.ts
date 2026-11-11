@@ -224,6 +224,16 @@ export const copyButton = {
   copied: 'Copied'
 } as const
 
+export const qrCode = {
+  label: 'QR code'
+} as const
+
+export const copyFallback = {
+  title: 'Copy manually',
+  field: 'Value to copy',
+  hint: 'Press {keys} to copy.'
+} as const
+
 export const dateRangePicker = {
   label: 'Time range',
   placeholder: 'Select a time range',
@@ -1101,6 +1111,8 @@ export const en = {
   confirmDialog,
   conversation,
   copyButton,
+  copyFallback,
+  qrCode,
   dateRangePicker,
   dialog,
   docFrame,

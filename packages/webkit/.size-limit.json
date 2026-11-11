@@ -1215,6 +1215,11 @@
     "limit": "4.05 KB"
   },
   {
+    "name": "qr-code",
+    "path": "src/components/content/qr-code/qr-code.vue",
+    "limit": "3.6 KB"
+  },
+  {
     "name": "otp-input",
     "path": "src/components/inputs/otp-input/otp-input.vue",
     "limit": "3.2 KB"

@@ -279,6 +279,14 @@ export const es: Messages = {
     copy: 'Copiar',
     copied: 'Copiado'
   },
+  qrCode: {
+    label: 'Código QR'
+  },
+  copyFallback: {
+    title: 'Copia manualmente',
+    field: 'Valor para copiar',
+    hint: 'Pulsa {keys} para copiar.'
+  },
   dateRangePicker: {
     label: 'Intervalo de tiempo',
     placeholder: 'Selecciona un intervalo de tiempo',

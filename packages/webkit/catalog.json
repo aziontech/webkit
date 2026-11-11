@@ -6712,7 +6712,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`…). Unknown values draw the generic card glyph."
+     "doc": "The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph."
     },
     {
      "name": "size",
@@ -7178,6 +7178,13 @@
      "doc": "Add a leading selection-checkbox column."
     },
     {
+     "name": "rowSelectable",
+     "type": "(row: RowRecord) => boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all."
+    },
+    {
      "name": "selectOnRowClick",
      "type": "boolean",
      "default": "false",
@@ -7544,6 +7551,13 @@
      "default": "false",
      "required": "false",
      "doc": "Add a leading selection-checkbox column."
+    },
+    {
+     "name": "rowSelectable",
+     "type": "(row: RowRecord) => boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all."
     },
     {
      "name": "selectOnRowClick",

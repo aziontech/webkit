@@ -473,6 +473,29 @@ describe('Table (composition + data-driven)', () => {
       expect(selection[selection.length - 1][0]).toEqual({ '1': true })
       expect(emitted()['row-click']).toBeTruthy()
     })
+
+    it('rowSelectable leaves a rejected row without a checkbox, row click or select-all', async () => {
+      const { getAllByLabelText, getByLabelText, getAllByRole, emitted } = render(Table, {
+        props: {
+          data: rows,
+          columns,
+          enableRowSelection: true,
+          selectOnRowClick: true,
+          rowKey: 'id',
+          rowSelectable: (row: Record<string, unknown>) => row.id !== '1' && row.id !== 1
+        }
+      })
+
+      expect(getAllByLabelText('Select row')).toHaveLength(2)
+      await fireEvent.click(getAllByRole('row')[1])
+      expect(emitted()['update:rowSelection']).toBeUndefined()
+      expect(emitted()['row-click']).toBeTruthy()
+
+      await fireEvent.click(getByLabelText('Select all rows'))
+      const events = emitted()['update:rowSelection'] as unknown[][]
+      expect(events[events.length - 1][0]).toEqual({ '2': true, '3': true })
+      expect(getByLabelText('Select all rows')).toBeChecked()
+    })
   })
 
   describe('v-model round-trip (controlled rowSelection)', () => {

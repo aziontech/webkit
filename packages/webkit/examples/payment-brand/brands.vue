@@ -1,7 +1,18 @@
 <script setup>
   import PaymentBrand from '@aziontech/webkit/payment-brand'
 
-  const brands = ['Visa', 'Mastercard', 'American Express', 'Diners Club', 'JCB', 'Elo']
+  const brands = [
+    'Visa',
+    'Mastercard',
+    'American Express',
+    'Diners Club',
+    'JCB',
+    'Discover',
+    'Elo',
+    'Hipercard',
+    'UnionPay',
+    'Maestro'
+  ]
 </script>
 
 <template>

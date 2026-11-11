@@ -240,6 +240,7 @@
     "./key-value-pairs": "./src/components/content/key-value-pairs/index.ts",
     "./overflow-count": "./src/components/content/overflow-count/overflow-count.vue",
     "./payment-brand": "./src/components/content/payment-brand/payment-brand.vue",
+    "./qr-code": "./src/components/content/qr-code/qr-code.vue",
     "./key-value-pairs-root": "./src/components/content/key-value-pairs/key-value-pairs.vue",
     "./key-value-pairs-item": "./src/components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue",
     "./key-value-pairs-group": "./src/components/content/key-value-pairs/key-value-pairs-group/key-value-pairs-group.vue",

@@ -279,6 +279,14 @@ export const ptBR: Messages = {
     copy: 'Copiar',
     copied: 'Copiado'
   },
+  qrCode: {
+    label: 'Código QR'
+  },
+  copyFallback: {
+    title: 'Copie manualmente',
+    field: 'Valor para copiar',
+    hint: 'Pressione {keys} para copiar.'
+  },
   dateRangePicker: {
     label: 'Intervalo de tempo',
     placeholder: 'Selecione um intervalo de tempo',

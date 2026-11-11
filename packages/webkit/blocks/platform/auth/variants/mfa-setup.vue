@@ -8,11 +8,12 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import OtpInput from '@aziontech/webkit/otp-input'
   import PageHeader from '@aziontech/webkit/page-header'
+  import QrCode from '@aziontech/webkit/qr-code'
   import { nextTick, ref } from 'vue'
 
   const account = 'ana.silva@example.com'
   const setupKey = 'JBSW Y3DP EHPK 3PXP'
-  const qrCodeSrc = ''
+  const otpauthUri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${setupKey.replaceAll(' ', '')}&issuer=Azion`
 
   const code = ref('')
   const codeError = ref('')
@@ -134,23 +135,10 @@
                       </ol>
 
                       <div class="flex flex-col items-center gap-(--spacing-sm)">
-                        <img
-                          v-if="qrCodeSrc"
-                          :src="qrCodeSrc"
-                          :alt="`QR code to add ${account} to an authenticator app`"
-                          class="size-40 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs)"
+                        <QrCode
+                          :value="otpauthUri"
+                          :label="`QR code to add ${account} to an authenticator app`"
                         />
-                        <div
-                          v-else
-                          role="img"
-                          :aria-label="`QR code to add ${account} to an authenticator app`"
-                          class="flex size-40 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) text-(--text-muted)"
-                        >
-                          <i
-                            class="pi pi-qrcode text-heading-xl"
-                            aria-hidden="true"
-                          />
-                        </div>
                       </div>
 
                       <div class="flex flex-col gap-(--spacing-xxs)">

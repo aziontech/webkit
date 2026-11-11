@@ -10331,7 +10331,7 @@ When a transfer finishes the page reports it with a toast as well as the card, b
 
 Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
-`enable-row-selection` with `v-model:row-selection` adds the checkbox column; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move). Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of every folder in the storage (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves.
+`enable-row-selection` with `v-model:row-selection` adds the checkbox column, and `:row-selectable="(row) => row.kind === 'file'"` keeps it to files: folders and the `..` row draw no checkbox and Select all skips them; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move). Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of every folder in the storage (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves.
 
 ## Do
 
@@ -12292,12 +12292,14 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - `data-state` mirrors `default` or `copied`
 - `data-disabled` mirrors the `disabled` prop
 - The composed `Tooltip` carries its own `data-state` (`open` | `closed`) and is disabled with the button
+- Fallback: when `navigator.clipboard.writeText` rejects (permission denied, insecure context, unfocused document), the button loads a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from the `copyFallback` catalog group.
 
 ## Accessibility
 
 - Visible focus: inherited from `IconButton` (`focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`)
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates copy.
 - ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied.
+- Fallback popover: `role="dialog"` named by its title and described by the key hint; focus moves into the selected read-only field and returns to the button on close.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
@@ -18410,7 +18412,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 # Payment Brand
 
-> The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB) drawn in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Discover, Elo, Hipercard, UnionPay, or an unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
+> The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Maestro, Hiper, or any unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
 
 - Import: `import PaymentBrand from '@aziontech/webkit/payment-brand'`
 - Category: content · Surface: product · Structure: monolithic
@@ -18443,7 +18445,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `brand` | `string` | `''` | false | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`…). Unknown values draw the generic card glyph. |
+| `brand` | `string` | `''` | false | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms. |
 | `label` | `string` | `undefined` | false | Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand. |
 | `decorative` | `boolean` | `false` | false | Hide the plate from assistive technology when the text next to it already names the brand. |
@@ -20204,6 +20206,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `rowKey` | `string` | `'id'` | false | Field used as the stable row id (for selection). |
 | `enableSorting` | `boolean` | `false` | false | Enable sorting globally; per-column `enableSorting` overrides. |
 | `enableRowSelection` | `boolean` | `false` | false | Add a leading selection-checkbox column. |
+| `rowSelectable` | `(row: RowRecord) => boolean` | `undefined` | false | Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all. |
 | `selectOnRowClick` | `boolean` | `false` | false | Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click. |
 | `headerKind` | `'default' \| 'compact'` | `'default'` | false | Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `kind`. |
 | `paginated` | `boolean` | `false` | false | Render a Pagination in the footer. |
@@ -20326,6 +20329,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - `data-clickable` on TableCell mirrors the `clickable` prop.
 - Stacked rows (data-driven, `stackable`): the table measures its own box; below `--container-lg` (552 px) it sets `data-stacked` and each body row becomes a bordered card. The checkbox, the principal column and the action column share the first line; every other column takes its own line as a label (the column `label` or `header`, `aria-hidden`) and its value. The header row stays in the DOM visually hidden, so screen readers keep the column headers; frozen offsets and fades are dropped. `stackable: false` keeps the scrolling grid. A hand-composed table never stacks.
 - Stacked select-all (data-driven, `enableRowSelection`): in the stacked layout the header checkbox is not rendered; a visible, labelled **Select all rows** checkbox sits above the stacked rows (`__stacked-select-all`) and toggles the page, with the same indeterminate state.
+- Per-row selectability (data-driven, `rowSelectable`): a row the function rejects renders an empty selection cell, ignores `selectOnRowClick` and is skipped by Select all; the header checkbox reads `all` when every selectable row is selected.
 - Density and wrapping: `data-density="compact"` on the root shrinks body cells (`min-h-9`, `--spacing-xxs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. `striped` shades odd body rows with `var(--bg-surface-raised)` (selected and hover still win).
 - Virtual rows (`virtual`): only the rows in view plus 8 above and below render; the slice starts on an even row so stripes stay put; rows of different heights (`wrapLines` with long text) are measured as they render and the rows in view do not shift while scrolling; the root sets `aria-rowcount` and each row `aria-rowindex`. Skeleton and stacked layouts render every row.
 - Long lists (more than 200 rows, not `virtual`): the first 50 rows render, a spacer (`__lazy-rows`, `aria-hidden`) stands in for the rest and more rows mount as it nears the viewport, until every row is in the DOM; while rows are still missing the root sets `aria-rowcount` and each row `aria-rowindex`.

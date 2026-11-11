@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, onBeforeUnmount, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -42,6 +42,12 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ copyButton: en.copyButton })
 
+  const CopyButtonFallback = defineAsyncComponent(() => import('./copy-button-fallback.vue'))
+
+  const root = ref<globalThis.HTMLElement | null>(null)
+  const fallbackRequested = ref(false)
+  const fallbackOpen = ref(false)
+
   const copied = ref(false)
   let copiedTimeoutId: ReturnType<typeof setTimeout> | null = null
 
@@ -65,6 +71,8 @@
     try {
       await globalThis.navigator.clipboard.writeText(props.value)
     } catch {
+      fallbackRequested.value = true
+      fallbackOpen.value = true
       return
     }
 
@@ -90,6 +98,7 @@
 
 <template>
   <span
+    ref="root"
     class="inline-flex"
     :data-state="copied ? 'copied' : 'default'"
     :data-disabled="disabled ? '' : undefined"
@@ -110,5 +119,12 @@
         @click="handleCopy"
       />
     </Tooltip>
+    <CopyButtonFallback
+      v-if="fallbackRequested"
+      v-model:open="fallbackOpen"
+      :value="value"
+      :anchor="root?.querySelector('button') ?? root"
+      :test-id="testId"
+    />
   </span>
 </template>
