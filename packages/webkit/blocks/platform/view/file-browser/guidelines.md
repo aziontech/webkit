@@ -54,21 +54,25 @@ The root's `select` event hands the option and the row to the page: Open enters 
 
 The table's `#empty` slot holds a medium `EmptyState` with one sentence and a secondary Add to files `SplitButton` with the same options as the toolbar's. Inside a folder the `..` row always remains, so the user can still go back up.
 
-### J. Upload — `Dialog`, `FileDropzone`, `FileTokenGroup`, `Button` (Uploading)
+### J. Upload — `SplitButton` (optional)
+
+Variant Uploading only; it adds `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FileDropzone` and `FileTokenGroup` to the page.
 
 Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload closes the dialog and starts the transfer; the dialog does not wait for it.
 
 A second `FileDropzone kind="overlay"` sits inside the `section` that holds the card (made `relative`), so dragging files anywhere over the page shows `Drop files to upload them to <folder>` over the listing; a drop uploads straight into the folder in view and refuses files over the limit with a danger toast.
 
-### K. Transfer card — `UploadProgress` (Uploading, MoveObject)
+### K. Transfer card and outcome toast — `Button` (optional)
+
+Variants Uploading and MoveObject only; they add `UploadProgress` and the `Toaster` with `toast`.
 
 Every transfer (upload, move) runs in one floating `UploadProgress` at the inline-end bottom corner, so the person can keep browsing, change folder or open another resource while it runs. The header counts finished files over one overall bar (`Uploading 2 of 5 files`), each row carries its bar, Cancel while it runs or waits, Retry when it failed with the reason under the name. Files land in the table as each finishes, not at the end. Close appears when everything finished and returns focus to Add to files (or to the toolbar, after a move). At most two files upload at a time; the rest wait.
 
-### L. Outcome toast — `Toaster`, `toast` (Uploading, MoveObject)
-
 When a transfer finishes the page reports it with a toast as well as the card, because the card may be collapsed or the person may be elsewhere. Its actions fit the files, never a deploy action: after a clean upload or move, `Open folder` (goes to the destination); after a partial upload, a danger toast `1 of 5 files weren't uploaded.` that says where the rest went and offers `Retry failed`. Storage objects are not deployed, so the async-submit Edit and Redeploy pair does not apply. The `Toaster` sits at `top-right` so it never covers the transfer card.
 
-### M. Selection and Move — `TableRoot` selection, `Dialog`, `Field`, `Combobox` (MoveObject)
+### L. Selection and Move — `TableRoot`, `DropdownMenuOption` (optional)
+
+Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
 `enable-row-selection` with `v-model:row-selection` adds the checkbox column; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move). Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of every folder in the storage (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves.
 

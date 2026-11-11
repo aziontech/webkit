@@ -76,6 +76,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CodeEditor (platform/edit/code-editor)](blocks/platform/edit/code-editor.md): The editing page of a service whose behavior lives in source code.
 - [EditResource (platform/edit/edit-resource)](blocks/platform/edit/edit-resource.md): The settings page of one existing resource.
 - [RuleBuilder (platform/edit/rule-builder)](blocks/platform/edit/rule-builder.md): A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match.
+- [SchemaEditor (platform/edit/schema-editor)](blocks/platform/edit/schema-editor.md): The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it.
 - [SettingsForm (platform/settings/settings-form)](blocks/platform/settings/settings-form.md): The place the user goes to change how an account or a project behaves.
 - [AsyncSubmit (platform/states/async-submit)](blocks/platform/states/async-submit.md): The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen.
 - [FirstUse (platform/states/first-use)](blocks/platform/states/first-use.md): What a first-level list shows before the account owns any resource of that kind.

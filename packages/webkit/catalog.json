@@ -27926,6 +27926,121 @@
    ],
    "file": "catalog/patterns/platform/edit/rule-builder.json"
   },
+  "platform/edit/schema-editor": {
+   "name": "SchemaEditor",
+   "title": "Templates/Platform/Edit/SchemaEditor",
+   "source": "blocks/platform/edit/schema-editor/schema-editor.vue",
+   "surface": "product",
+   "summary": "The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an ordered list of column rows (grip that reorders with the arrow keys, name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`, remove), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action.",
+   "intents": [
+    "schema editor",
+    "create table",
+    "add column",
+    "insert row",
+    "alter column",
+    "change column type",
+    "truncate table",
+    "table schema",
+    "database schema",
+    "column types",
+    "criar tabela",
+    "adicionar coluna",
+    "inserir linha",
+    "alterar coluna",
+    "esvaziar tabela",
+    "esquema do banco"
+   ],
+   "skills": [
+    "webkit-form",
+    "webkit-create-surface",
+    "webkit-tables",
+    "webkit-errors",
+    "webkit-ui-states"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "Checkbox",
+    "CodeEditor",
+    "ConfirmDialog",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "DropdownMenu",
+    "Field",
+    "HelperText",
+    "IconButton",
+    "Input",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "Select",
+    "SettingsSection",
+    "Switch",
+    "TableRoot",
+    "Tag",
+    "toast",
+    "Tooltip"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/checkbox",
+    "@aziontech/webkit/code-editor",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/helper-text",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/settings-section",
+    "@aziontech/webkit/switch",
+    "@aziontech/webkit/table-root",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/tooltip"
+   ],
+   "primary": "CreateTable",
+   "guidelinesSummary": "The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create Table, Add column, Insert and table menu buttons of `platform/view/query-editor`.",
+   "variants": [
+    {
+     "name": "AddColumn",
+     "summary": "The Add column drawer over the customers definition, filled with phone as varchar; Primary key and Not null switches below, with Not null locked on while Primary key is on."
+    },
+    {
+     "name": "InsertRow",
+     "summary": "The Insert row drawer for customers after Insert was pressed with email empty: one field per column in table order, id generated and disabled, created_at falling back to now(), and email invalid because it is NOT NULL."
+    },
+    {
+     "name": "ChangeType",
+     "summary": "The Change type dialog for email: a warning that the table is rebuilt, the New type select, and the BEGIN … COMMIT statements that will run in a read-only CodeEditor; Change type is disabled until the type differs."
+    },
+    {
+     "name": "TruncateTable",
+     "summary": "The Truncate customers dialog: a warning, the row count that goes, the TRUNCATE TABLE statement and a field that must match the table name before the danger button enables."
+    },
+    {
+     "name": "Failed",
+     "summary": "Create Table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were."
+    }
+   ],
+   "file": "catalog/patterns/platform/edit/schema-editor.json"
+  },
   "platform/settings/settings-form": {
    "name": "SettingsForm",
    "title": "Templates/Platform/Settings/SettingsForm",
