@@ -66,6 +66,11 @@
       "name": "WithCollection",
       "summary": "Server mode of `useCollection`: `fetch` receives the text, sort, page and page size (and an abort signal) and returns one page and the total; `tableProps` binds data, loading, sorting, pagination and selection in one `v-bind`, and selection survives paging.",
       "file": "with-collection.vue"
+    },
+    {
+      "name": "CellPresets",
+      "summary": "The cell presets every list shares: `Table.CellLink` for a name that opens another screen (tooltip names the destination) and for a domain with its `+N` overflow and a copy button pinned to the end edge, `Table.CellId` with a copy button, `Table.CellStatus` (one semantic chip per row), `Table.CellTags` showing as many tags as fit, `Table.CellTime` (avatar plus relative time, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row).",
+      "file": "cell-presets.vue"
     }
   ]
 }

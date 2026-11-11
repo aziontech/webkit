@@ -1127,5 +1127,35 @@
     "name": "overflow-count",
     "path": "src/components/content/overflow-count/overflow-count.vue",
     "limit": "9 KB"
+  },
+  {
+    "name": "table-cell-status",
+    "path": "src/components/data/table/table-cell-status/table-cell-status.vue",
+    "limit": "3 KB"
+  },
+  {
+    "name": "table-cell-link",
+    "path": "src/components/data/table/table-cell-link/table-cell-link.vue",
+    "limit": "14 KB"
+  },
+  {
+    "name": "table-cell-id",
+    "path": "src/components/data/table/table-cell-id/table-cell-id.vue",
+    "limit": "5 KB"
+  },
+  {
+    "name": "table-cell-time",
+    "path": "src/components/data/table/table-cell-time/table-cell-time.vue",
+    "limit": "7 KB"
+  },
+  {
+    "name": "table-cell-tags",
+    "path": "src/components/data/table/table-cell-tags/table-cell-tags.vue",
+    "limit": "13 KB"
+  },
+  {
+    "name": "table-cell-actions",
+    "path": "src/components/data/table/table-cell-actions/table-cell-actions.vue",
+    "limit": "10 KB"
   }
 ]
