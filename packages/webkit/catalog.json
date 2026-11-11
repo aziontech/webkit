@@ -23919,6 +23919,80 @@
    "variants": [],
    "file": "catalog/patterns/headers/site-header.json"
   },
+  "platform/account/activity-history": {
+   "name": "ActivityHistory",
+   "title": "Templates/Platform/Account/ActivityHistory",
+   "source": "blocks/platform/account/activity-history/activity-history.vue",
+   "surface": "product",
+   "summary": "The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `Table` of events, newest first: Event, Category as `Table.CellStatus`, User, IP address with a `CopyButton`, and Date as `Table.CellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry.",
+   "intents": [
+    "activity history",
+    "audit log",
+    "audit trail",
+    "account activity",
+    "security log",
+    "who did what",
+    "user activity",
+    "event history",
+    "histórico de atividades",
+    "log de auditoria",
+    "trilha de auditoria",
+    "atividade da conta"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "CollectionPreferences",
+    "CopyButton",
+    "DateRangePicker",
+    "EmptyState",
+    "IconButton",
+    "PageHeader",
+    "PropertyFilter",
+    "Table",
+    "Tooltip",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/collection-preferences",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/date-range-picker",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/table",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The account's audit log. An admin or a security reviewer answers \"who did this, from where, and when\": a token that was revoked, a role that changed, a sign-in that failed, a plan that was upgraded. They narrow the log by period, category, person and address, read the newest events first, copy an IP address into another tool, and export what they found.",
+   "variants": [
+    {
+     "name": "Empty",
+     "summary": "No event in the selected period (the last 15 minutes): the controls stay, and a flush EmptyState offers Show the last 30 days."
+    },
+    {
+     "name": "Loading",
+     "summary": "The first load: the controls and the table's loading rows."
+    },
+    {
+     "name": "Failed",
+     "summary": "The log did not load: a danger Alert with Retry replaces the table; Retry loads the events."
+    }
+   ],
+   "file": "catalog/patterns/platform/account/activity-history.json"
+  },
   "platform/account/change-plan-drawer": {
    "name": "ChangePlanDrawer",
    "title": "Templates/Platform/Account/ChangePlanDrawer",
@@ -24250,6 +24324,93 @@
    "guidelinesSummary": "The profile page of a signed-in account, and the layout every account settings page follows. The user comes to check or change how the account is identified, billed and signed into: a small page heading over stacked sections, each a flush card of setting rows in the form column, with a save bar that rises once a saved field changes. Billing, credentials, users and teams keep the same column and swap the sections for their own cards or tables.",
    "variants": [],
    "file": "catalog/patterns/platform/account/profile.json"
+  },
+  "platform/account/team-permissions": {
+   "name": "TeamPermissions",
+   "title": "Templates/Platform/Account/TeamPermissions",
+   "source": "blocks/platform/account/team-permissions/team-permissions.vue",
+   "surface": "product",
+   "summary": "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`.",
+   "intents": [
+    "teams",
+    "teams and permissions",
+    "roles",
+    "roles and permissions",
+    "permission matrix",
+    "access control",
+    "rbac",
+    "create team",
+    "user groups",
+    "times e permissões",
+    "papéis e permissões",
+    "matriz de permissões",
+    "controle de acesso",
+    "criar time"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Avatar",
+    "Button",
+    "Card",
+    "Checkbox",
+    "ConfirmDialog",
+    "DropdownMenu",
+    "EmptyState",
+    "Field",
+    "IconButton",
+    "Input",
+    "PageHeader",
+    "SaveBar",
+    "SettingsSection",
+    "Switch",
+    "Table",
+    "Textarea",
+    "toast",
+    "Tooltip",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/checkbox",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/save-bar",
+    "@aziontech/webkit/settings-section",
+    "@aziontech/webkit/switch",
+    "@aziontech/webkit/table",
+    "@aziontech/webkit/textarea",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model.",
+   "variants": [
+    {
+     "name": "CreateTeam",
+     "summary": "The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Save in a SaveBar; errors on the name field and above the matrix."
+    },
+    {
+     "name": "Empty",
+     "summary": "No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table."
+    }
+   ],
+   "file": "catalog/patterns/platform/account/team-permissions.json"
   },
   "platform/account/tokens": {
    "name": "Tokens",
