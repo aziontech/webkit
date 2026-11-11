@@ -389,6 +389,8 @@ written (the M1 intents fixed them); both are in the set.
 
 ## M2.7 — Final AI evaluation
 
+**Deferred (2026-11-11, project owner):** runs only when the owner asks, after the rest of Milestone 2 is done.
+
 Fresh sessions with two agents (Claude Code and Codex or Cursor) build a fixed list of console
 screens from intent-only prompts; score component choice, block reuse, lint, `doctor`, a11y,
 RTL and mobile rendering against v5.11.0. Then run it on every release.
@@ -533,6 +535,8 @@ before the branch is closed.
 | 34  | M2.9 marketplace    | The integration detail is a drawer only: the Console Kit's solution page (Usage and Changelog sections, version history, an Update available state per application in the Application select) and the screen behind Configure are not built, and the template preview has no full-page form (the drawer covers facts, README and Deploy).                                                                                                                                                                                                                                                                               | Add `marketplace#DetailPage` (the drawer's content as a page with Usage and Changelog), mark applications with an older version in the select, and a Configure variant on `platform/edit/edit-resource` with the integration's settings.                                                                                                                         |
 
 ## M2.11 — Close the branch and merge into `main`
+
+**Owner decision (2026-11-11):** the merge into `main` and the release happen only when the owner asks. This item prepares the branch (final full test pass, every row below checked) and stops before the merge.
 
 | #                                                                                                    | Item                         | Detail                                                                                                                                                                                                                                                                                                                                                                             |
 | ---------------------------------------------------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
