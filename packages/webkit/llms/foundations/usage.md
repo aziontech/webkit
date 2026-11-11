@@ -8,12 +8,17 @@
 
 ## Start here: a screen begins from a pattern
 
-Before composing anything, ask the `webkit` MCP whether the screen already exists: `search_patterns`
-with the screen in plain words ("login", "account settings", "delete confirmation"), then
-`get_pattern` with the best id. Before adapting it, read the `guidelines` field `get_pattern`
-returns: when to use the screen and when another block fits better, what each building block (A,
+Before composing anything, check whether the screen already exists as a block:
+`npx @aziontech/webkit search <the screen in plain words>` ("login", "account settings", "delete
+confirmation"), or the `webkit` MCP `search_patterns`. Read the best one with
+`npx @aziontech/webkit view <block-id>` (or `get_pattern`), then start the screen with
+`npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state): it copies the SFC
+into the views directory, checks its imports, records it in `webkit.blocks.json` and prints the
+route entry. `npx @aziontech/webkit diff <block-id>` later shows what you changed against the
+canonical block. Before adapting it, read the guidelines (`view`, or the `guidelines` field
+`get_pattern` returns): when to use the screen and when another block fits better, what each building block (A,
 B, C…) is for, do and don't, the copy rules and the accessibility rules. If "When not to use"
-matches your case, switch to the block it names. Then copy that SFC and change only the content,
+matches your case, switch to the block it names. Then change only the content of the copy,
 keeping to the guidelines. Only when no pattern fits, compose from components (below). A marketing band is a page section, not a pattern (rule
 `webkit-sections`).
 
