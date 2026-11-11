@@ -1,0 +1,95 @@
+{
+ "name": "avatar",
+ "binding": "Avatar",
+ "import": "@aziontech/webkit/avatar",
+ "treeShakeableImport": "@aziontech/webkit/avatar",
+ "category": "content",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Displays content or metadata in the UI. Lives at `packages/webkit/src/components/content/avatar/`.",
+ "setup": null,
+ "useWhen": [
+  "Identify a person next to their name: comment threads, member lists, \"Last modified\" cells, quotes.",
+  "The user entry in a header or account menu."
+ ],
+ "avoidWhen": [
+  "The Azion logo → use `brand`.",
+  "A count or short status → use `badge`.",
+  "A loading placeholder → use `skeleton`."
+ ],
+ "related": [
+  "badge` — overlay on an avatar to show a count.",
+  "quote` — composes an avatar for the speaker.",
+  "brand` — the product mark, not a person."
+ ],
+ "bestPractices": [
+  "Pass initials in `label` (`\"JD\"`); it keeps the first two characters, so a full name shows its first two letters, not initials.",
+  "Set `alt` to the person's name (\"Jane Doe\"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role=\"img\"`), so a screen reader hears \"Jane Doe\", not \"JD\". Without `alt` the name falls back to the initials, then \"Avatar\" for an image or \"User avatar\" for the icon.",
+  "Content precedence is `src`, then `label`, then `icon` (default `pi pi-user`).",
+  "size` maps to 24 / 32 / 48 px with `medium` as the default; `kind` is `circle` (default) or `square`."
+ ],
+ "props": [
+  {
+   "name": "src",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Image URL. When set, renders a photo and takes precedence over label and icon."
+  },
+  {
+   "name": "alt",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Initials shown when no image (normalized to two uppercase characters)."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "'pi pi-user'",
+   "required": "false",
+   "doc": "Icon class for the fallback when no image or label (PrimeIcons class)."
+  },
+  {
+   "name": "kind",
+   "type": "AvatarKind",
+   "default": "'circle'",
+   "required": "false",
+   "doc": "Visual shape of the avatar container."
+  },
+  {
+   "name": "size",
+   "type": "AvatarSize",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size preset matching Figma sm / md / lg (24 / 32 / 48 px)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Avatar from '@aziontech/webkit/avatar'\n</script>\n\n<template>\n  <Avatar\n    label=\"AB\"\n    kind=\"circle\"\n    size=\"medium\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import Avatar from '@aziontech/webkit/avatar'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-end gap-6\">\n    <div class=\"flex flex-col items-center gap-2\">\n      <Avatar\n        kind=\"circle\"\n        label=\"AB\"\n        size=\"medium\"\n      />\n      <span class=\"text-body-xs text-(--text-muted)\">Circle</span>\n    </div>\n    <div class=\"flex flex-col items-center gap-2\">\n      <Avatar\n        kind=\"square\"\n        label=\"AB\"\n        size=\"medium\"\n      />\n      <span class=\"text-body-xs text-(--text-muted)\">Square</span>\n    </div>\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import Avatar from '@aziontech/webkit/avatar'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-end gap-4\">\n    <Avatar\n      label=\"AB\"\n      size=\"small\"\n    />\n    <Avatar\n      label=\"AB\"\n      size=\"medium\"\n    />\n    <Avatar\n      label=\"AB\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/avatar.md"
+}

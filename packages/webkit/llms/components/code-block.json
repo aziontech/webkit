@@ -1,0 +1,118 @@
+{
+ "name": "code-block",
+ "binding": "CodeBlock",
+ "import": "@aziontech/webkit/code-block",
+ "treeShakeableImport": "@aziontech/webkit/code-block",
+ "category": "code",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:",
+ "setup": null,
+ "useWhen": [
+  "Read-only code in docs, API examples or configuration previews that readers copy from.",
+  "The same snippet in several languages, switched by tabs (one `tabs` entry per language).",
+  "Showing a change as a diff (`lineChanges`) or pointing at one line (`highlightedLine`) on the active tab."
+ ],
+ "avoidWhen": [
+  "The content is build or deploy output with timestamps and log levels → use `log-view`.",
+  "It is a marketing band that pairs a claim with its code → use `code-split`, or `sticky-scroll-code` for several claims.",
+  "It is a terminal session of CLI commands on a product page → use `cli-terminal`.",
+  "You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`."
+ ],
+ "related": [
+  "copy-button` — the copy control CodeBlock embeds; use it alone for one-line values.",
+  "log-view` — terminal-style viewer for CI and deploy logs.",
+  "code-split` — page section built around one code sample.",
+  "scroll-area` — the scroll container the code region runs in."
+ ],
+ "bestPractices": [
+  "Put the source on each tab's `code`. There is no top-level `code` prop, and a tab without a `value` or a `code` is dropped.",
+  "Set `language` on every tab. Only JavaScript/TypeScript, shell, HCL, GraphQL and Markdown are tokenised; anything else renders as flat text.",
+  "Use `default-value` for the initial tab, and `v-model` only when something outside the block must follow the selected tab.",
+  "Set `:copyable=\"false\"` on decorative blocks, and `:bordered=\"false\"` when the block sits inside a surface that already frames it.",
+  "Keep `animate-lines` for marketing layouts; leave it off in docs and console screens."
+ ],
+ "props": [
+  {
+   "name": "tabs",
+   "type": "CodeBlockTab[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata."
+  },
+  {
+   "name": "defaultValue",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Initial active tab when uncontrolled."
+  },
+  {
+   "name": "showLineNumbers",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows a fixed-width gutter with zero-padded line numbers before each code line."
+  },
+  {
+   "name": "copyAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`)."
+  },
+  {
+   "name": "copyable",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the copy control; turn it off for a decorative block nobody copies from."
+  },
+  {
+   "name": "animateLines",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart."
+  },
+  {
+   "name": "bordered",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Draw the outer card border around the block. On by default; set `:bordered=\"false\"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected."
+  }
+ ],
+ "events": [
+  {
+   "name": "copy",
+   "payload": "string",
+   "notes": "Fires after the active tab code is copied to the clipboard."
+  }
+ ],
+ "slots": [
+  {
+   "name": "tab-icon",
+   "scope": "{ tab: CodeBlockTab }",
+   "notes": "Leading mark before a tab's label in the tab strip; nothing renders when it is not filled."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n\n  const tabs = [\n    {\n      label: 'Javascript',\n      value: 'js',\n      language: 'javascript',\n      fileName: 'file name.js',\n      code: \"export default {\\n  async fetch(request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    },\n    {\n      label: 'Typescript',\n      value: 'ts',\n      language: 'typescript',\n      fileName: 'file name.ts',\n      code: \"export default {\\n  async fetch(request: Request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"max-w-[692px]\">\n    <CodeBlock\n      :tabs=\"tabs\"\n      default-value=\"js\"\n      show-line-numbers\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "WithoutLineNumbers",
+   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n\n  const tabs = [\n    {\n      label: 'Javascript',\n      value: 'js',\n      language: 'javascript',\n      fileName: 'file name.js',\n      code: \"export default {\\n  async fetch(request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    },\n    {\n      label: 'Typescript',\n      value: 'ts',\n      language: 'typescript',\n      fileName: 'file name.ts',\n      code: \"export default {\\n  async fetch(request: Request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"max-w-[692px]\">\n    <CodeBlock\n      :tabs=\"tabs\"\n      default-value=\"js\"\n      :show-line-numbers=\"false\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "WithoutCopy",
+   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n\n  const tabs = [\n    {\n      label: 'Javascript',\n      value: 'js',\n      language: 'javascript',\n      fileName: 'file name.js',\n      code: \"export default {\\n  async fetch(request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    },\n    {\n      label: 'Typescript',\n      value: 'ts',\n      language: 'typescript',\n      fileName: 'file name.ts',\n      code: \"export default {\\n  async fetch(request: Request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"max-w-[692px]\">\n    <CodeBlock\n      :tabs=\"tabs\"\n      default-value=\"js\"\n      show-line-numbers\n      :copyable=\"false\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/code-block.md"
+}

@@ -1,0 +1,104 @@
+{
+ "name": "command",
+ "binding": "Command",
+ "import": "@aziontech/webkit/command",
+ "treeShakeableImport": "@aziontech/webkit/command-root",
+ "category": "overlay",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/command-input",
+  "@aziontech/webkit/command-list",
+  "@aziontech/webkit/command-group",
+  "@aziontech/webkit/command-item",
+  "@aziontech/webkit/command-empty",
+  "@aziontech/webkit/command-separator"
+ ],
+ "purpose": "Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the substring filter, and roving active-item navigation. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.",
+ "setup": null,
+ "useWhen": [
+  "Provide a global ⌘K launcher for navigating to pages or running actions across an app.",
+  "Let users filter a large, grouped list of commands by typing, then activate with the keyboard."
+ ],
+ "avoidWhen": [
+  "A small menu anchored to a trigger button → use `dropdown`.",
+  "Picking a value for a form field → use `select` / `multi-select`.",
+  "A confirmation or content modal without search/list semantics → use `dialog` directly."
+ ],
+ "related": [
+  "dialog` — the overlay primitive Command Menu wraps for panel, backdrop, focus trap, and Escape.",
+  "kbd` — renders each item's keyboard-shortcut hint and the ⌘K affordance.",
+  "dropdown` — trigger-anchored menu; reach for it when the list is short and positioned by a trigger."
+ ],
+ "bestPractices": [
+  "Write items as Title Case verb phrases describing an action (\"Deploy Project\"), not navigation labels.",
+  "Keep the palette controlled via `v-model:open` so the app can open it from a button and from the global ⌘K shortcut.",
+  "Group related actions with `<Command.Group heading=\"…\">` and separate distinct sections with `<Command.Separator>`."
+ ],
+ "props": [
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the palette is uncontrolled."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled."
+  },
+  {
+   "name": "dismissible",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "When true, backdrop click and Escape close the palette."
+  },
+  {
+   "name": "shortcut",
+   "type": "string",
+   "default": "'meta+k'",
+   "required": "false",
+   "doc": "Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:open",
+   "payload": "boolean",
+   "notes": "Fires on every open/closed transition; supports `v-model:open`."
+  },
+  {
+   "name": "select",
+   "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+   "notes": "Fires when an enabled item is activated (click or `Enter`). `event` is the activation event; `value` is the item's identifier. The palette closes automatically and focus returns to the element that was focused before opening."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The palette content: a `<Command.Input>` followed by a `<Command.List>`. Rendered inside the teleported dialog panel."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import Command from '@aziontech/webkit/command'\n  import CommandInput from '@aziontech/webkit/command-input'\n  import CommandList from '@aziontech/webkit/command-list'\n  import CommandGroup from '@aziontech/webkit/command-group'\n  import CommandItem from '@aziontech/webkit/command-item'\n  import CommandSeparator from '@aziontech/webkit/command-separator'\n  import Input from '@aziontech/webkit/input'\n  import Kbd from '@aziontech/webkit/kbd'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <Input\n    model-value=\"\"\n    placeholder=\"Search…\"\n    size=\"large\"\n    readonly\n    aria-keyshortcuts=\"Meta+K\"\n    class=\"max-w-[360px] cursor-pointer\"\n    @click=\"open = true\"\n    @keydown.enter=\"open = true\"\n  >\n    <template #iconLeft>\n      <span\n        class=\"pi pi-search\"\n        aria-hidden=\"true\"\n      />\n    </template>\n    <template #iconRight>\n      <Kbd\n        meta\n        size=\"small\"\n        >K</Kbd\n      >\n    </template>\n  </Input>\n\n  <Command\n    v-model:open=\"open\"\n    shortcut=\"meta+k\"\n  >\n    <CommandInput placeholder=\"Search commands…\" />\n    <CommandList>\n      <CommandGroup heading=\"Suggestions\">\n        <CommandItem value=\"deploy\">Deploy Project</CommandItem>\n        <CommandItem value=\"new-app\">Create Application</CommandItem>\n        <CommandItem value=\"settings\">Go to Settings</CommandItem>\n      </CommandGroup>\n      <CommandSeparator />\n      <CommandGroup heading=\"Commands\">\n        <CommandItem\n          value=\"search\"\n          shortcut=\"meta+k\"\n          >Search everything</CommandItem\n        >\n        <CommandItem\n          value=\"new-app-cmd\"\n          shortcut=\"meta+n\"\n          >New Application</CommandItem\n        >\n        <CommandItem\n          value=\"toggle-theme\"\n          shortcut=\"meta+shift+l\"\n          >Toggle Theme</CommandItem\n        >\n      </CommandGroup>\n    </CommandList>\n  </Command>\n</template>"
+  },
+  {
+   "name": "Grouped",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import Command from '@aziontech/webkit/command'\n  import CommandInput from '@aziontech/webkit/command-input'\n  import CommandList from '@aziontech/webkit/command-list'\n  import CommandGroup from '@aziontech/webkit/command-group'\n  import CommandItem from '@aziontech/webkit/command-item'\n  import CommandSeparator from '@aziontech/webkit/command-separator'\n  import Button from '@aziontech/webkit/button'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <Button\n    label=\"Open grouped palette\"\n    kind=\"primary\"\n    @click=\"open = true\"\n  />\n\n  <Command\n    v-model:open=\"open\"\n    shortcut=\"\"\n  >\n    <CommandInput placeholder=\"Search commands…\" />\n    <CommandList>\n      <CommandGroup heading=\"Actions\">\n        <CommandItem value=\"deploy\">\n          <template #prefix\n            ><i\n              class=\"pi pi-cloud-upload\"\n              aria-hidden=\"true\"\n          /></template>\n          Deploy Project\n        </CommandItem>\n        <CommandItem value=\"new-app\">Create Application</CommandItem>\n      </CommandGroup>\n      <CommandSeparator />\n      <CommandGroup heading=\"Navigation\">\n        <CommandItem value=\"settings\">\n          <template #prefix\n            ><i\n              class=\"pi pi-cog\"\n              aria-hidden=\"true\"\n          /></template>\n          Go to Settings\n        </CommandItem>\n        <CommandItem value=\"billing\">Go to Billing</CommandItem>\n      </CommandGroup>\n      <CommandGroup heading=\"Account\">\n        <CommandItem value=\"profile\">\n          <template #prefix\n            ><i\n              class=\"pi pi-user\"\n              aria-hidden=\"true\"\n          /></template>\n          View Profile\n        </CommandItem>\n        <CommandItem value=\"logout\">Log Out</CommandItem>\n      </CommandGroup>\n    </CommandList>\n  </Command>\n</template>"
+  },
+  {
+   "name": "WithShortcuts",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import Command from '@aziontech/webkit/command'\n  import CommandInput from '@aziontech/webkit/command-input'\n  import CommandList from '@aziontech/webkit/command-list'\n  import CommandGroup from '@aziontech/webkit/command-group'\n  import CommandItem from '@aziontech/webkit/command-item'\n  import Button from '@aziontech/webkit/button'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <Button\n    label=\"Open palette with shortcuts\"\n    kind=\"primary\"\n    @click=\"open = true\"\n  />\n\n  <Command\n    v-model:open=\"open\"\n    shortcut=\"\"\n  >\n    <CommandInput placeholder=\"Search commands…\" />\n    <CommandList>\n      <CommandGroup heading=\"Actions\">\n        <CommandItem\n          value=\"command\"\n          shortcut=\"meta+k\"\n          >Open Command Menu</CommandItem\n        >\n        <CommandItem\n          value=\"command-palette\"\n          shortcut=\"meta+shift+p\"\n          >Open Command Palette</CommandItem\n        >\n        <CommandItem\n          value=\"close\"\n          shortcut=\"esc\"\n          >Close Overlay</CommandItem\n        >\n      </CommandGroup>\n    </CommandList>\n  </Command>\n</template>"
+  }
+ ],
+ "docs": "components/command.md"
+}

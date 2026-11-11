@@ -1,0 +1,120 @@
+{
+ "name": "log-view",
+ "binding": "LogView",
+ "import": "@aziontech/webkit/log-view",
+ "treeShakeableImport": "@aziontech/webkit/log-view",
+ "category": "code",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/log-view-content",
+  "@aziontech/webkit/log-view-footer",
+  "@aziontech/webkit/log-view-header"
+ ],
+ "purpose": "Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **LogViewHeader**, **LogViewContent**, and **LogViewFooter** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer.",
+ "setup": null,
+ "useWhen": [
+  "Showing build, deploy or CI output as timestamped lines the reader can search, filter to warnings, and copy.",
+  "A log shell whose toolbar and footer vary by screen — compose `LogViewHeader`, `LogViewContent` and `LogViewFooter` in the order you need, or drop the ones you don't.",
+  "A log that is still loading from the server — set `loading` to show a spinner and `loading-label` in place of the body."
+ ],
+ "avoidWhen": [
+  "Static, read-only code or configuration snippets → use `code-block`.",
+  "An animated terminal session on a marketing page → use `cli-terminal`.",
+  "Rows of structured records with columns, sorting or paging → use `table`."
+ ],
+ "related": [
+  "code-block` — highlighted source code with a copy action, not a stream of typed log lines.",
+  "cli-terminal` — marketing band that plays a scripted terminal session.",
+  "deploy-success` — the post-deploy screen that embeds `log-view` for the build log."
+ ],
+ "bestPractices": [
+  "Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`, `warning`); the type drives the line's rendering and the warnings filter.",
+  "Bind `v-model:search` and `v-model:warnings-only` when the app needs the filter state; otherwise leave them unbound and the header manages them.",
+  "Set `:bordered=\"false\"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).",
+  "The copy control hides while `disabled` or `loading`, or when there is nothing to copy; listen to `@copy` for the copied text instead of reading the clipboard.",
+  "Use the header's `left` / `right` / `search` slots and the footer's default slot to add actions, rather than rebuilding the toolbar."
+ ],
+ "props": [
+  {
+   "name": "lines",
+   "type": "LogViewLine[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Log entries; filtered in LogViewContent by search and warnings-only."
+  },
+  {
+   "name": "bordered",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Draw the outer card border and corner radius around the log shell. On by default; set `:bordered=\"false\"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected."
+  },
+  {
+   "name": "searchPlaceholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder for the default header search field. Empty uses the locale catalog (`Find in logs`)."
+  },
+  {
+   "name": "copyable",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent)."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables toolbar controls in LogViewHeader."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Replaces the LogViewContent log body with a centered spinner and label."
+  },
+  {
+   "name": "loadingLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "copy",
+   "payload": "string",
+   "notes": "Fires after a successful copy; payload is the copied plain text."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Sub-components (LogViewHeader, LogViewContent, LogViewFooter) composed in the desired order."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import LogView from '@aziontech/webkit/log-view'\n  import LogViewHeader from '@aziontech/webkit/log-view-header'\n  import LogViewContent from '@aziontech/webkit/log-view-content'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }\n  ]\n  const search = ref('')\n  const warningsOnly = ref(false)\n</script>\n\n<template>\n  <LogView\n    :lines=\"lines\"\n    v-model:search=\"search\"\n    v-model:warnings-only=\"warningsOnly\"\n    class=\"h-[640px]\"\n  >\n    <LogViewHeader />\n    <LogViewContent />\n  </LogView>\n</template>"
+  },
+  {
+   "name": "Flush",
+   "sfc": "<script setup>\n  import LogView from '@aziontech/webkit/log-view'\n  import LogViewHeader from '@aziontech/webkit/log-view-header'\n  import LogViewContent from '@aziontech/webkit/log-view-content'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }\n  ]\n  const search = ref('')\n  const warningsOnly = ref(false)\n</script>\n\n<template>\n  <div\n    class=\"rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)\"\n  >\n    <span class=\"text-label-sm text-(--text-muted)\">Deploy output</span>\n    <LogView\n      :lines=\"lines\"\n      :bordered=\"false\"\n      v-model:search=\"search\"\n      v-model:warnings-only=\"warningsOnly\"\n      class=\"mt-(--spacing-sm) h-[420px]\"\n    >\n      <LogViewHeader />\n      <LogViewContent />\n    </LogView>\n  </div>\n</template>"
+  },
+  {
+   "name": "Loading",
+   "sfc": "<script setup>\n  import LogView from '@aziontech/webkit/log-view'\n  import LogViewHeader from '@aziontech/webkit/log-view-header'\n  import LogViewContent from '@aziontech/webkit/log-view-content'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }\n  ]\n  const search = ref('')\n  const warningsOnly = ref(false)\n</script>\n\n<template>\n  <LogView\n    :lines=\"lines\"\n    loading\n    v-model:search=\"search\"\n    v-model:warnings-only=\"warningsOnly\"\n    class=\"h-[640px]\"\n  >\n    <LogViewHeader />\n    <LogViewContent />\n  </LogView>\n</template>"
+  }
+ ],
+ "docs": "components/log-view.md"
+}

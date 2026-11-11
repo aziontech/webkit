@@ -1,0 +1,76 @@
+{
+ "name": "save-bar",
+ "binding": "SaveBar",
+ "import": "@aziontech/webkit/save-bar",
+ "treeShakeableImport": "@aziontech/webkit/save-bar",
+ "category": "layout",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown; `fade` closes a wizard step with no border or surface, the step content fading into the canvas above Back and Next.",
+ "setup": null,
+ "useWhen": [
+  "A settings page whose changes are staged and saved together: show the floating bar while the form is dirty or saving.",
+  "A create page or account form with one Save for the whole page (`plain`).",
+  "A full-page wizard step: Back in `leading`, the step's primary action in `actions` (`fade`)."
+ ],
+ "avoidWhen": [
+  "A card that saves on its own → put the actions in the card footer.",
+  "A drawer or dialog form → use the `PanelFooter` of `drawer` or `dialog`.",
+  "A one-off confirmation → use `confirm-dialog`."
+ ],
+ "related": [
+  "button` — the actions: an outlined Discard or Cancel, then a primary Save with `loading` while it runs.",
+  "settings-section` — the bands the bar saves.",
+  "confirm-dialog` — the guard shown when someone leaves with unsaved changes."
+ ],
+ "bestPractices": [
+  "Render the floating bar with `v-if=\"dirty || saving\"` inside a `Transition`, so it slides in when the first change is made.",
+  "Say what changed and when it takes effect in the status sentence; keep it to one line.",
+  "Disable Discard and set `loading` on Save while saving."
+ ],
+ "props": [
+  {
+   "name": "kind",
+   "type": "'floating' | 'docked' | 'plain' | 'fade'",
+   "default": "'floating'",
+   "required": "false",
+   "doc": "How the bar sits at the bottom of its scroll region."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The status sentence on the left, such as You have unsaved changes."
+  },
+  {
+   "name": "leading",
+   "scope": "—",
+   "notes": "Replaces the whole leading region (the info icon and the sentence) with your own content, such as a `StatusIndicator` (Saving…, Saved) or an unsaved-changes count. Takes precedence over `default`."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "Discard or Cancel, then Save, on the right."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Floating",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SaveBar from '@aziontech/webkit/save-bar'\n  import { ref } from 'vue'\n\n  const saving = ref(false)\n\n  const save = () => {\n    saving.value = true\n    setTimeout(() => {\n      saving.value = false\n    }, 1200)\n  }\n</script>\n\n<template>\n  <div class=\"relative flex h-64 flex-col overflow-auto\">\n    <div class=\"layout-boundary-inline flex-1 py-(--spacing-lg) text-body-sm text-(--text-muted)\">\n      The settings form scrolls under the bar.\n    </div>\n    <SaveBar>\n      You have unsaved changes.\n      <template #actions>\n        <Button\n          type=\"button\"\n          label=\"Discard\"\n          kind=\"outlined\"\n          size=\"medium\"\n          :disabled=\"saving\"\n        />\n        <Button\n          label=\"Save\"\n          kind=\"primary\"\n          size=\"medium\"\n          :loading=\"saving\"\n          @click=\"save\"\n        />\n      </template>\n    </SaveBar>\n  </div>\n</template>"
+  },
+  {
+   "name": "Docked",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SaveBar from '@aziontech/webkit/save-bar'\n</script>\n\n<template>\n  <SaveBar kind=\"docked\">\n    Project settings changed.\n    <span class=\"text-(--text-muted)\">Saving publishes them on the next deployment.</span>\n    <template #actions>\n      <Button\n        type=\"button\"\n        label=\"Discard\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n      <Button\n        label=\"Save\"\n        kind=\"primary\"\n        size=\"medium\"\n      />\n    </template>\n  </SaveBar>\n</template>"
+  },
+  {
+   "name": "Plain",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SaveBar from '@aziontech/webkit/save-bar'\n</script>\n\n<template>\n  <SaveBar kind=\"plain\">\n    <template #actions>\n      <Button\n        type=\"button\"\n        label=\"Cancel\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n      <Button\n        label=\"Save\"\n        kind=\"primary\"\n        size=\"medium\"\n      />\n    </template>\n  </SaveBar>\n</template>"
+  }
+ ],
+ "docs": "components/save-bar.md"
+}

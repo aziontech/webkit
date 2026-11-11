@@ -1,0 +1,127 @@
+{
+ "name": "pagination",
+ "binding": "Pagination",
+ "import": "@aziontech/webkit/pagination",
+ "treeShakeableImport": "@aziontech/webkit/pagination-root",
+ "category": "data",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/pagination-button",
+  "@aziontech/webkit/pagination-info",
+  "@aziontech/webkit/pagination-page-size"
+ ],
+ "purpose": "Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Pagination renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](table.md) component.",
+ "setup": null,
+ "useWhen": [
+  "A list or table outside `table`'s own footer needs page navigation and a rows-per-page selector.",
+  "You know the item count — pass `total` and bind `v-model:page` / `v-model:page-size`; the component renders the info text, the windowed page numbers and the selector.",
+  "The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Info`, `Pagination.Button` and `Pagination.PageSize` through the slots."
+ ],
+ "avoidWhen": [
+  "The rows live in a data-driven `table` → set `paginated` on the table; it renders this pagination in its footer and wires it for you.",
+  "It is the previous / next pair at the end of a documentation page → use `doc-pagination`.",
+  "The content loads more as the reader scrolls or clicks \"Load more\" → use a `button` at the end of the list."
+ ],
+ "related": [
+  "table` — renders a wired pagination in its footer when `paginated` is set.",
+  "doc-pagination` — previous / next links between documentation pages, not numbered pages of a list."
+ ],
+ "bestPractices": [
+  "Prefer data-driven mode (`total` set); in composition mode the root emits nothing and you own every button's `selected` / `disabled` state and every click.",
+  "page` is 1-based. Changing the page size through the selector emits `update:pageSize` and resets the page to `1`.",
+  "Keep `page-size-options` aligned with what your data source accepts; the default is `[10, 25, 50, 100]`.",
+  "Tune `sibling-count` (default `1`) instead of hiding buttons — it controls how many numbers sit on each side of the current page before the overflow ellipsis.",
+  "Set `aria-label` when a page carries more than one pagination, so each navigation landmark has a distinct name."
+ ],
+ "props": [
+  {
+   "name": "page",
+   "type": "number",
+   "default": "1",
+   "required": "false",
+   "doc": "Current page, 1-based (data-driven mode). Supports `v-model:page`."
+  },
+  {
+   "name": "total",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Total item count. When set, the Pagination runs in data-driven mode and renders its own controls."
+  },
+  {
+   "name": "pageSize",
+   "type": "number",
+   "default": "10",
+   "required": "false",
+   "doc": "Rows per page (data-driven mode). Supports `v-model:page-size`."
+  },
+  {
+   "name": "pageSizeOptions",
+   "type": "number[]",
+   "default": "[10, 25, 50, 100]",
+   "required": "false",
+   "doc": "Page-size options offered in the rows-per-page selector."
+  },
+  {
+   "name": "siblingCount",
+   "type": "number",
+   "default": "1",
+   "required": "false",
+   "doc": "Page numbers shown on each side of the current page before collapsing into an overflow ellipsis."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name for the navigation landmark. Empty uses the locale catalog (`Pagination`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:page",
+   "payload": "[page: number]",
+   "notes": "Current page changed in data-driven mode (Previous / Next / page number). Supports `v-model:page`."
+  },
+  {
+   "name": "update:pageSize",
+   "payload": "[pageSize: number]",
+   "notes": "Rows-per-page changed via the internal selector. Supports `v-model:page-size`."
+  }
+ ],
+ "slots": [
+  {
+   "name": "info",
+   "scope": "—",
+   "notes": "Left region: page-info text (typically PaginatorInfo). In data-driven mode, overrides the default \"Showing X to Y of Z entries\" text."
+  },
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Center region: pagination navigation buttons (composition mode only — ignored in data-driven mode, where the buttons are rendered internally)."
+  },
+  {
+   "name": "controls",
+   "scope": "—",
+   "notes": "Right region: rows-per-page selector (PaginatorPageSize). In data-driven mode, overrides the internally-rendered selector."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n</script>\n\n<template>\n  <Pagination>\n    <template #info>\n      <Pagination.Info>Showing 1 to 10 of 20 entries</Pagination.Info>\n    </template>\n\n    <Pagination.Button\n      kind=\"previous\"\n      aria-label=\"Previous page\"\n      disabled\n    />\n    <Pagination.Button\n      kind=\"number\"\n      selected\n      >1</Pagination.Button\n    >\n    <Pagination.Button kind=\"number\">2</Pagination.Button>\n    <Pagination.Button kind=\"number\">3</Pagination.Button>\n    <Pagination.Button kind=\"more\" />\n    <Pagination.Button\n      kind=\"next\"\n      aria-label=\"Next page\"\n    />\n\n    <template #controls>\n      <Pagination.PageSize\n        :model-value=\"10\"\n        :options=\"[10, 25, 50, 100]\"\n      />\n    </template>\n  </Pagination>\n</template>"
+  },
+  {
+   "name": "Buttons",
+   "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <Pagination aria-label=\"Pagination kinds\">\n      <Pagination.Button\n        kind=\"previous\"\n        aria-label=\"Previous page\"\n      />\n      <Pagination.Button kind=\"number\">1</Pagination.Button>\n      <Pagination.Button\n        kind=\"number\"\n        selected\n        >2</Pagination.Button\n      >\n      <Pagination.Button kind=\"more\" />\n      <Pagination.Button\n        kind=\"next\"\n        aria-label=\"Next page\"\n      />\n    </Pagination>\n    <Pagination aria-label=\"Pagination disabled states\">\n      <Pagination.Button\n        kind=\"previous\"\n        aria-label=\"Previous page\"\n        disabled\n      />\n      <Pagination.Button\n        kind=\"number\"\n        disabled\n        >1</Pagination.Button\n      >\n      <Pagination.Button\n        kind=\"next\"\n        aria-label=\"Next page\"\n        disabled\n      />\n    </Pagination>\n  </div>\n</template>"
+  },
+  {
+   "name": "DataDriven",
+   "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n  import { ref } from 'vue'\n\n  const page = ref(1)\n  const pageSize = ref(10)\n</script>\n\n<template>\n  <Pagination\n    v-model:page=\"page\"\n    v-model:page-size=\"pageSize\"\n    :total=\"200\"\n    :page-size-options=\"[10, 25, 50, 100]\"\n    :sibling-count=\"1\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/pagination.md"
+}

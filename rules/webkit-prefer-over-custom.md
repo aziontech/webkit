@@ -4,7 +4,7 @@ Before you write UI, check whether the design system already has it. It almost a
 
 ## Do this first
 
-1. Check the catalog: the webkit MCP (`suggest_component` with a plain description of what you need) or `node_modules/@aziontech/webkit/catalog.json` (the `imports` object lists every component).
+1. Check the catalog: the webkit MCP (`suggest_component` with a plain description of what you need), `node_modules/@aziontech/webkit/llms/llms.txt` (a page per block and component, for agents without the MCP) or `node_modules/@aziontech/webkit/catalog.json` (the `imports` object lists every component).
 2. If a component exists, use it. Compose it, pass its props, fill its slots.
 3. If it almost fits, prefer configuring/composing the webkit component over forking it.
 

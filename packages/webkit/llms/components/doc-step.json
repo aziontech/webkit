@@ -1,0 +1,49 @@
+{
+ "name": "doc-step",
+ "binding": "DocStep",
+ "import": "@aziontech/webkit/doc-step",
+ "treeShakeableImport": "@aziontech/webkit/doc-step",
+ "category": "documentation",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One numbered step of a `DocSteps` walkthrough: the circled index, the rail that continues to the next step, the step heading, and any content the author nests underneath. The number and the last-step mark come from the `DocSteps` context — the step registers itself during setup and reads its reactive index back, so an author writes a title and never a number. Rendered outside a `DocSteps` provider it throws (`useDocStepsContext must be used within DocSteps.`) instead of rendering unnumbered.",
+ "setup": null,
+ "useWhen": [
+  "Only as a direct child of `DocSteps`, one per instruction the reader performs."
+ ],
+ "avoidWhen": [
+  "Anywhere outside a `DocSteps` column — the context composable throws by design.",
+  "For a checklist entry or a feature bullet — a step claims an order and a number."
+ ],
+ "related": [
+  "DocSteps` — the sibling root that numbers this; it provides the context this step registers with.",
+  "DocProse` — the step heading marks itself `data-doc-chrome`, so prose rules stop at its edge."
+ ],
+ "bestPractices": [
+  "Lead the title with the verb and keep it to one line of instruction.",
+  "Put elaboration — prose, a code block, another component — in the body slot, not in the title.",
+  "Never restate the number in the title; the circle carries it."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The step heading."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Optional body under the step heading: prose, code, or another component."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [],
+ "docs": "components/doc-step.md"
+}

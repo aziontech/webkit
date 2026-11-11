@@ -1,0 +1,64 @@
+{
+ "name": "hint",
+ "binding": "Hint",
+ "import": "@aziontech/webkit/hint",
+ "treeShakeableImport": "@aziontech/webkit/hint",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Small info affordance — a muted `pi pi-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a \"why does this matter?\" note to a field name without spending a line of vertical space on it, and it is what `Label`'s `hint` prop renders.",
+ "setup": null,
+ "useWhen": [
+  "A field, switch or setting whose name is clear but whose consequence is not (what \"Sensitive\" does to a stored value).",
+  "A short, self-contained sentence — one that reads fine in a tooltip and is not needed to complete the field.",
+  "Beside a label, a section heading, or a table column header, where a permanent line of helper text would add noise."
+ ],
+ "avoidWhen": [
+  "Guidance the user needs while typing, or any validation message → use `helper-text` (it stays on screen and is wired with `aria-describedby`).",
+  "More than a sentence, links, or formatted content → use `popover`, which is dismissible and can hold real content.",
+  "A plain description of an action already labelled by a control → use `tooltip` directly on that control."
+ ],
+ "related": [
+  "tooltip` — the overlay `Hint` composes; reach for it when the trigger is an existing control rather than a standalone info glyph.",
+  "helper-text` — persistent guidance under a field; the right choice when the text must always be visible.",
+  "label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component."
+ ],
+ "bestPractices": [
+  "One sentence, ending in a period. If it needs two, it belongs in `helper-text` or a `popover`.",
+  "Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.",
+  "The `text` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.",
+  "Place it immediately after the thing it explains, not at the end of a row."
+ ],
+ "props": [
+  {
+   "name": "text",
+   "type": "string",
+   "default": "''",
+   "required": "true",
+   "doc": "Guidance text revealed on hover or focus; also the trigger's accessible name."
+  },
+  {
+   "name": "placement",
+   "type": "'top' | 'right' | 'bottom' | 'left' | 'auto'",
+   "default": "'top'",
+   "required": "false",
+   "doc": "Anchor side of the tooltip relative to the glyph."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Hint from '@aziontech/webkit/hint'\n</script>\n\n<template>\n  <Hint text=\"Values are encrypted at rest and never displayed again after saving.\" />\n</template>"
+  },
+  {
+   "name": "Placements",
+   "sfc": "<script setup>\n  import Hint from '@aziontech/webkit/hint'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-lg)\">\n    <Hint\n      text=\"Anchored above the glyph.\"\n      placement=\"top\"\n    />\n    <Hint\n      text=\"Anchored to the right of the glyph.\"\n      placement=\"right\"\n    />\n    <Hint\n      text=\"Anchored below the glyph.\"\n      placement=\"bottom\"\n    />\n    <Hint\n      text=\"Anchored to the left of the glyph.\"\n      placement=\"left\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/hint.md"
+}

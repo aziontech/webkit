@@ -1,0 +1,119 @@
+{
+ "name": "popover",
+ "binding": "Popover",
+ "import": "@aziontech/webkit/popover",
+ "treeShakeableImport": "@aziontech/webkit/popover-root",
+ "category": "overlay",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/popover-trigger",
+  "@aziontech/webkit/popover-content",
+  "@aziontech/webkit/popover-header",
+  "@aziontech/webkit/popover-title",
+  "@aziontech/webkit/popover-description",
+  "@aziontech/webkit/popover-close",
+  "@aziontech/webkit/popover-footer"
+ ],
+ "purpose": "Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `overlay/tooltip` (plain text, non-interactive) and `overlay/dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.",
+ "setup": null,
+ "useWhen": [
+  "Interactive content anchored to a trigger while the page stays usable: an inline form, a filter builder, a quick edit of one field.",
+  "Contextual detail or a light confirmation that needs buttons or links inside it."
+ ],
+ "avoidWhen": [
+  "A short, non-interactive hint on hover or focus → use `tooltip`.",
+  "A list of actions or options to pick from → use `dropdown`.",
+  "Choosing a form value from a list → use `select`.",
+  "A blocking task that must be completed or cancelled first → use `dialog`.",
+  "A long form or a secondary workflow → use `drawer`."
+ ],
+ "related": [
+  "tooltip` — plain text only and non-interactive; opens on hover and focus, not on click.",
+  "dropdown` — same trigger and anchoring model, but renders option rows and emits `select`.",
+  "dialog` — modal and centered, traps focus and locks scroll; the popover does neither.",
+  "drawer` — edge-anchored modal panel for longer content."
+ ],
+ "bestPractices": [
+  "Place `Popover.Trigger` first and `Popover.Content` after it. The trigger wires `aria-expanded`, `aria-controls` and the click toggle onto your element, so don't bind them yourself.",
+  "Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.",
+  "Set `width` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.",
+  "Use `placement=\"auto\"` for triggers that can sit near a viewport edge.",
+  "Set `dismissible` to `false` only when an outside click would discard input. Then give the user a way out: `Popover.Close` or a footer action."
+ ],
+ "props": [
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled."
+  },
+  {
+   "name": "placement",
+   "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+   "default": "'bottom-start'",
+   "required": "false",
+   "doc": "Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on available viewport space."
+  },
+  {
+   "name": "offset",
+   "type": "number",
+   "default": "4",
+   "required": "false",
+   "doc": "Pixel gap between the trigger and the panel."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Prevents the trigger from opening the panel and applies disabled tokens."
+  },
+  {
+   "name": "width",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`."
+  },
+  {
+   "name": "dismissible",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:open",
+   "payload": "boolean",
+   "notes": "Fires on every open/closed transition; supports `v-model:open`. Emitted on trigger toggle, `Popover.Close`, `Esc`, and outside-click."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Place `<Popover.Trigger>` followed by `<Popover.Content>`."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Popover, {\n    PopoverTrigger,\n    PopoverContent,\n    PopoverHeader,\n    PopoverTitle,\n    PopoverDescription,\n    PopoverClose,\n    PopoverFooter\n  } from '@aziontech/webkit/popover'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <Popover>\n    <PopoverTrigger>\n      <Button\n        kind=\"secondary\"\n        label=\"Open popover\"\n      />\n    </PopoverTrigger>\n\n    <PopoverContent>\n      <PopoverHeader>\n        <PopoverTitle>Popover title</PopoverTitle>\n        <PopoverClose />\n      </PopoverHeader>\n\n      <div class=\"p-(--spacing-md) text-body-sm text-(--text-default)\">\n        This content is rendered inside the popover panel.\n      </div>\n    </PopoverContent>\n  </Popover>\n</template>"
+  },
+  {
+   "name": "Placements",
+   "sfc": "<script setup>\n  import Popover, {\n    PopoverTrigger,\n    PopoverContent,\n    PopoverHeader,\n    PopoverTitle,\n    PopoverDescription,\n    PopoverClose,\n    PopoverFooter\n  } from '@aziontech/webkit/popover'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div\n    class=\"grid grid-cols-2 gap-(--spacing-xxl) place-items-center min-h-[24rem] p-(--spacing-xxl)\"\n  >\n    <Popover placement=\"bottom-start\">\n      <PopoverTrigger>\n        <Button\n          kind=\"secondary\"\n          label=\"bottom-start\"\n        />\n      </PopoverTrigger>\n      <PopoverContent>\n        <PopoverHeader>\n          <PopoverTitle>bottom-start</PopoverTitle>\n          <PopoverClose />\n        </PopoverHeader>\n        <div class=\"p-(--spacing-md) text-body-sm text-(--text-default)\">Popover content.</div>\n      </PopoverContent>\n    </Popover>\n\n    <Popover placement=\"bottom-end\">\n      <PopoverTrigger>\n        <Button\n          kind=\"secondary\"\n          label=\"bottom-end\"\n        />\n      </PopoverTrigger>\n      <PopoverContent>\n        <PopoverHeader>\n          <PopoverTitle>bottom-end</PopoverTitle>\n          <PopoverClose />\n        </PopoverHeader>\n        <div class=\"p-(--spacing-md) text-body-sm text-(--text-default)\">Popover content.</div>\n      </PopoverContent>\n    </Popover>\n\n    <Popover placement=\"top-start\">\n      <PopoverTrigger>\n        <Button\n          kind=\"secondary\"\n          label=\"top-start\"\n        />\n      </PopoverTrigger>\n      <PopoverContent>\n        <PopoverHeader>\n          <PopoverTitle>top-start</PopoverTitle>\n          <PopoverClose />\n        </PopoverHeader>\n        <div class=\"p-(--spacing-md) text-body-sm text-(--text-default)\">Popover content.</div>\n      </PopoverContent>\n    </Popover>\n\n    <Popover placement=\"top-end\">\n      <PopoverTrigger>\n        <Button\n          kind=\"secondary\"\n          label=\"top-end\"\n        />\n      </PopoverTrigger>\n      <PopoverContent>\n        <PopoverHeader>\n          <PopoverTitle>top-end</PopoverTitle>\n          <PopoverClose />\n        </PopoverHeader>\n        <div class=\"p-(--spacing-md) text-body-sm text-(--text-default)\">Popover content.</div>\n      </PopoverContent>\n    </Popover>\n  </div>\n</template>"
+  },
+  {
+   "name": "AutoPlacement",
+   "sfc": "<script setup>\n  import Popover, {\n    PopoverTrigger,\n    PopoverContent,\n    PopoverHeader,\n    PopoverTitle,\n    PopoverDescription,\n    PopoverClose,\n    PopoverFooter\n  } from '@aziontech/webkit/popover'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div class=\"relative h-[30rem] w-full border border-dashed border-(--border-muted)\">\n    <p\n      class=\"absolute top-(--spacing-md) left-1/2 -translate-x-1/2 text-body-sm text-(--text-muted) text-center max-w-md\"\n    >\n      All triggers use placement=\"auto\". Each panel resolves to the best-fitting corner based on its\n      position in the viewport.\n    </p>\n\n    <div class=\"absolute top-(--spacing-md) start-(--spacing-md)\">\n      <Popover\n        :open=\"true\"\n        placement=\"auto\"\n      >\n        <PopoverTrigger>\n          <Button\n            kind=\"secondary\"\n            label=\"top-left\"\n          />\n        </PopoverTrigger>\n        <PopoverContent>\n          <PopoverHeader>\n            <PopoverTitle>Popover</PopoverTitle>\n            <PopoverClose />\n          </PopoverHeader>\n          <div class=\"p-(--spacing-md) text-body-sm text-(--text-default)\">Popover content.</div>\n        </PopoverContent>\n      </Popover>\n    </div>\n\n    <div class=\"absolute top-(--spacing-md) end-(--spacing-md)\">\n      <Popover\n        :open=\"true\"\n        placement=\"auto\"\n      >\n        <PopoverTrigger>\n          <Button\n            kind=\"secondary\"\n            label=\"top-right\"\n          />\n        </PopoverTrigger>\n        <PopoverContent>\n          <PopoverHeader>\n            <PopoverTitle>Popover</PopoverTitle>\n            <PopoverClose />\n          </PopoverHeader>\n          <div class=\"p-(--spacing-md) text-body-sm text-(--text-default)\">Popover content.</div>\n        </PopoverContent>\n      </Popover>\n    </div>\n\n    <div class=\"absolute bottom-(--spacing-md) start-(--spacing-md)\">\n      <Popover\n        :open=\"true\"\n        placement=\"auto\"\n      >\n        <PopoverTrigger>\n          <Button\n            kind=\"secondary\"\n            label=\"bottom-left\"\n          />\n        </PopoverTrigger>\n        <PopoverContent>\n          <PopoverHeader>\n            <PopoverTitle>Popover</PopoverTitle>\n            <PopoverClose />\n          </PopoverHeader>\n          <div class=\"p-(--spacing-md) text-body-sm text-(--text-default)\">Popover content.</div>\n        </PopoverContent>\n      </Popover>\n    </div>\n\n    <div class=\"absolute bottom-(--spacing-md) end-(--spacing-md)\">\n      <Popover\n        :open=\"true\"\n        placement=\"auto\"\n      >\n        <PopoverTrigger>\n          <Button\n            kind=\"secondary\"\n            label=\"bottom-right\"\n          />\n        </PopoverTrigger>\n        <PopoverContent>\n          <PopoverHeader>\n            <PopoverTitle>Popover</PopoverTitle>\n            <PopoverClose />\n          </PopoverHeader>\n          <div class=\"p-(--spacing-md) text-body-sm text-(--text-default)\">Popover content.</div>\n        </PopoverContent>\n      </Popover>\n    </div>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/popover.md"
+}

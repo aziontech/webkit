@@ -1,0 +1,98 @@
+{
+ "name": "copy-button",
+ "binding": "CopyButton",
+ "import": "@aziontech/webkit/copy-button",
+ "treeShakeableImport": "@aziontech/webkit/copy-button",
+ "category": "actions",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens, and `Tooltip` for its name: an icon-only button is silent to a pointer user until hovered, so the glyph is always labelled on hover/focus. The tooltip text is the same string as the accessible name — `ariaLabel` while idle, `copiedLabel` for the two seconds after a write — so the confirmation is seen as well as announced. It is suppressed with `disabled`.",
+ "setup": null,
+ "useWhen": [
+  "Next to a value the user will paste elsewhere: an ID, a domain, a token, a CLI command.",
+  "Inside key/value rows, terminal mocks and code samples that need a one-click copy."
+ ],
+ "avoidWhen": [
+  "The action is anything other than copying → use `icon-button`.",
+  "A labelled \"Copy\" action in a form or dialog footer → use `button`.",
+  "A full code sample with its own copy control → use `code-block`."
+ ],
+ "related": [
+  "icon-button` — the control it composes; `kind` and `size` are forwarded to it.",
+  "tooltip` — composed to show `ariaLabel` and then `copiedLabel` on hover and focus.",
+  "code-block` — already embeds a copy-button for its content."
+ ],
+ "bestPractices": [
+  "Pass the exact text in `value`; an empty `value` makes the click a no-op.",
+  "Localize `ariaLabel` and `copiedLabel`: each is both the accessible name and the tooltip text.",
+  "Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.",
+  "The click stops propagation, so it is safe inside clickable rows and cards.",
+  "Keep the `transparent` / `small` defaults in dense rows."
+ ],
+ "props": [
+  {
+   "name": "value",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "Text copied to the clipboard on activation."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name while idle. Empty uses the locale catalog (`Copy`)."
+  },
+  {
+   "name": "copiedLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`)."
+  },
+  {
+   "name": "kind",
+   "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'",
+   "default": "'transparent'",
+   "required": "false",
+   "doc": "Visual variant forwarded to `IconButton`."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'small'",
+   "required": "false",
+   "doc": "Size token forwarded to `IconButton`."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies disabled tokens."
+  }
+ ],
+ "events": [
+  {
+   "name": "copy",
+   "payload": "string",
+   "notes": "Emitted after a successful clipboard write with the copied value."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n</script>\n\n<template>\n  <CopyButton\n    value=\"https://example.com/deploy/abc123\"\n    ariaLabel=\"Copy URL\"\n  />\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n</script>\n\n<template>\n  <CopyButton\n    value=\"https://example.com/deploy/abc123\"\n    ariaLabel=\"Copy URL\"\n    disabled\n  />\n</template>"
+  }
+ ],
+ "docs": "components/copy-button.md"
+}

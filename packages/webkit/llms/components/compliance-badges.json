@@ -1,0 +1,80 @@
+{
+ "name": "compliance-badges",
+ "binding": "ComplianceBadges",
+ "import": "@aziontech/webkit/compliance-badges",
+ "treeShakeableImport": "@aziontech/webkit/compliance-badges",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a \"see more\" cell. It is a page section — the site places it from a `{ _id: 'compliance-badges', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split` and `card-grid`.",
+ "setup": null,
+ "useWhen": [
+  "On security, enterprise or pricing pages, to list the certifications and link to the compliance page."
+ ],
+ "avoidWhen": [
+  "For client logos → use `logo-wall-quote` or `client-mosaic`."
+ ],
+ "related": [
+  "media-split` — the copy-beside-media band this section renders through."
+ ],
+ "bestPractices": [
+  "Four or five certifications plus the link cell fill two rows of three.",
+  "Give every badge an `alt` naming the certification; the pill repeats it for sighted readers."
+ ],
+ "props": [
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the headline."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the media split as its `h2`; the band renders nothing when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting sentence under the headline."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the badge list."
+  },
+  {
+   "name": "certifications",
+   "type": "ComplianceBadgesCertification[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text."
+  },
+  {
+   "name": "primaryAction",
+   "type": "ComplianceBadgesAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The closing \"see more\" cell; `{ label, href }`. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ComplianceBadges from '@aziontech/webkit/compliance-badges'\n</script>\n\n<template>\n  <ComplianceBadges\n    eyebrow=\"Compliance\"\n    title=\"Meet your compliance requirements\"\n    description=\"Azion's certifications help customers and global partners meet a wide range of compliance requirements.\"\n    aria-label=\"Compliance certifications\"\n    :certifications=\"[\n      {\n        label: 'SOC 2 & 3',\n        badge: '/marketing-components/badges/soc.svg',\n        alt: 'AICPA SOC 2 Type 2 and SOC 3 badge'\n      },\n      {\n        label: 'PCI DSS',\n        badge: '/marketing-components/badges/pci-dss.svg',\n        alt: 'PCI DSS badge'\n      },\n      {\n        label: 'LGPD',\n        badge: '/marketing-components/badges/lgpd.svg',\n        alt: 'LGPD badge'\n      },\n      {\n        label: 'GDPR',\n        badge: '/marketing-components/badges/gdpr.svg',\n        alt: 'GDPR badge'\n      },\n      {\n        label: 'CCPA',\n        badge: '/marketing-components/badges/ccpa.svg',\n        alt: 'CCPA badge'\n      }\n    ]\"\n    :primary-action=\"{ label: 'See more', href: '/compliance' }\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/compliance-badges.md"
+}

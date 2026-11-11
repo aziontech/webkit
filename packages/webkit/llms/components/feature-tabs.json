@@ -1,0 +1,75 @@
+{
+ "name": "feature-tabs",
+ "binding": "FeatureTabs",
+ "import": "@aziontech/webkit/feature-tabs",
+ "treeShakeableImport": "@aziontech/webkit/feature-tabs",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The feature walkthrough band of a product page: a left-aligned section title over up to three tabs on one side and the active tab's illustration on the other, closed by a small link under the frame. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `media-tabs`, `illustration` and `mini-button`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
+ "setup": null,
+ "useWhen": [
+  "To walk through the two or three features behind one claim, one picture at a time, like Functions' Observability."
+ ],
+ "avoidWhen": [
+  "For architectures drawn as diagrams across the full width → use `architecture-tabs`.",
+  "For a scroll-driven walkthrough of more features → use `feature-scroll`."
+ ],
+ "related": [
+  "media-tabs` — the timed tabs this section renders through.",
+  "illustration` — the scene each tab shows."
+ ],
+ "bestPractices": [
+  "Keep to three tabs; tabs past the limit are not rendered.",
+  "Give every tab an `illustrationLabel` saying what its picture shows."
+ ],
+ "props": [
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the section title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the left section title as its `h2`; the band renders no header when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting sentence under the headline."
+  },
+  {
+   "name": "tabs",
+   "type": "FeatureTabsTab[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The features, in order, at most three; each is `{ title, description, illustration, illustrationLabel? }` where `illustration` is a registry name and `illustrationLabel` its accessible name."
+  },
+  {
+   "name": "primaryAction",
+   "type": "FeatureTabsAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Small link under the frame; `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import FeatureTabs from '@aziontech/webkit/feature-tabs'\n\n  const tabs = [\n    {\n      title: 'Trace',\n      description:\n        'The run as a waterfall: each step placed against the invocation it belongs to, nested where it nested.',\n      illustration: 'live-debugging',\n      illustrationLabel: 'A trace waterfall of one invocation'\n    },\n    {\n      title: 'Logs',\n      description:\n        'Structured output on the same clock as the trace, filtered by level, searchable in place.',\n      illustration: 'stay-in-control',\n      illustrationLabel: 'Structured logs filtered by level'\n    },\n    {\n      title: 'Request path',\n      description:\n        'The workload, application, function and connector it travelled, each captioned with the time spent there.',\n      illustration: 'distributed-apis',\n      illustrationLabel: 'The path a request took through the platform'\n    }\n  ]\n\n  const primaryAction = {\n    label: 'Open an invocation',\n    href: '/product-preview',\n    trailing: true\n  }\n</script>\n\n<template>\n  <FeatureTabs\n    eyebrow=\"Observability\"\n    title=\"Inspect every run end-to-end\"\n    description=\"Every invocation of a function is traced on the platform itself — spans, logs and the path the request took. Nothing to configure, no storage to attach. Pick a document to open it.\"\n    :tabs=\"tabs\"\n    :primary-action=\"primaryAction\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/feature-tabs.md"
+}

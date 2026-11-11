@@ -1,0 +1,82 @@
+{
+ "name": "cli-terminal",
+ "binding": "CliTerminal",
+ "import": "@aziontech/webkit/cli-terminal",
+ "treeShakeableImport": "@aziontech/webkit/cli-terminal",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal session on the pixelate texture that runs off the frame's bottom rule, its lines entering one after another. It is a page section — the site places it from a `{ _id: 'cli-terminal', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `texture-material` and `code-block`.",
+ "setup": null,
+ "useWhen": [
+  "To close a product argument on how little it takes to ship from the terminal, like Functions and Workloads."
+ ],
+ "avoidWhen": [
+  "For a config file or handler beside the claim → use `code-split`.",
+  "For several capabilities, each with its own file → use `sticky-scroll-code`."
+ ],
+ "related": [
+  "code-block` — the terminal session the band shows.",
+  "code-split` — the sibling band with the sample beside the copy."
+ ],
+ "bestPractices": [
+  "Keep the session to a few commands and their output; comment the output lines so the copied text still runs.",
+  "Name the copy button with `copyAriaLabel` so a screen reader says what it copies."
+ ],
+ "props": [
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the section title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting sentence beside the headline."
+  },
+  {
+   "name": "session",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The terminal session shown under the header, commands and their output verbatim, highlighted as bash; the band renders nothing when empty."
+  },
+  {
+   "name": "copyAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the session's copy button; empty keeps the code block's own."
+  },
+  {
+   "name": "primaryAction",
+   "type": "CliTerminalAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import CliTerminal from '@aziontech/webkit/cli-terminal'\n\n  const session =\n    'azion link --preset javascript --name auth-handler --auto\\n# Project successfully configured\\n\\nazion deploy --auto\\n# Upload completed successfully!\\n# Your Application was deployed successfully\\n# Domain: https://k7q2fmx4ze.map.azionedge.net\\n\\ncurl https://k7q2fmx4ze.map.azionedge.net/\\n# Hello World'\n\n  const primaryAction = {\n    label: 'Install the CLI',\n    href: 'https://www.azion.com/en/documentation/products/azion-cli/overview/',\n    trailing: true\n  }\n</script>\n\n<template>\n  <CliTerminal\n    eyebrow=\"Azion CLI\"\n    title=\"Deploy your first function in two commands\"\n    description=\"Link a project, deploy it, and curl the domain the CLI hands back. Builds run on your machine with --local, or on Azion.\"\n    :session=\"session\"\n    copy-aria-label=\"Copy the deploy session\"\n    :primary-action=\"primaryAction\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/cli-terminal.md"
+}

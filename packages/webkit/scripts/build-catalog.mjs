@@ -8,6 +8,7 @@ import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
 import { missingComponentDocs } from './lib/component-docs.mjs'
 import { readBlocks, readExamples } from './lib/blocks.mjs'
+import { summary as llmsSummary, writeLlms } from './build-llms.mjs'
 import { buildAliases, retiredNames } from './lib/naming.mjs'
 import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
 import {
@@ -515,8 +516,9 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
     writeFileSync(abs, serialize(part), 'utf-8')
   }
   writeFileSync(OUT_PATH, serialize(catalog), 'utf-8')
+  const llms = writeLlms()
   const componentCount = Object.values(catalog.imports).filter((e) => e.kind === 'component').length
   process.stdout.write(
-    `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components), ${Object.keys(catalog.patterns).length} patterns @ ${catalog.webkitVersion}; ${Object.keys(files).length} files in catalog/\n`
+    `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components), ${Object.keys(catalog.patterns).length} patterns @ ${catalog.webkitVersion}; ${Object.keys(files).length} files in catalog/\n${llmsSummary(llms)}\n`
   )
 }

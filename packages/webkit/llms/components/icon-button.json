@@ -1,0 +1,132 @@
+{
+ "name": "icon-button",
+ "binding": "IconButton",
+ "import": "@aziontech/webkit/icon-button",
+ "treeShakeableImport": "@aziontech/webkit/icon-button",
+ "category": "actions",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Interactive control for user actions. Lives at `packages/webkit/src/components/actions/icon-button/`.",
+ "setup": null,
+ "useWhen": [
+  "Compact actions in toolbars, table rows, card headers and overlay close controls where the glyph is widely understood (close, refresh, delete, more).",
+  "Swapping between two icons in place (copy to check, show to hide), with `iconTransition` animating the change.",
+  "An icon-only link: set `href` and it renders as an anchor."
+ ],
+ "avoidWhen": [
+  "The action needs a visible label → use `button`.",
+  "Copying a value to the clipboard → use `copy-button`, which already wires the icon swap, the tooltip and the `copy` event.",
+  "Choosing one of a few mutually exclusive options → use `toggle-group`."
+ ],
+ "related": [
+  "button` — labelled counterpart; sizes line up and its `text` kind matches `transparent` here.",
+  "copy-button` — IconButton plus Tooltip with the clipboard write built in.",
+  "tooltip` — wrap an IconButton to show its name on hover and focus.",
+  "split-button` — uses an IconButton as its chevron menu toggle."
+ ],
+ "bestPractices": [
+  "ariaLabel` is required and is the only accessible name; describe the action (\"Delete domain\"), not the glyph (\"Trash\").",
+  "Wrap it in `tooltip` when the glyph is not self-evident, so pointer users see the name screen readers hear.",
+  "Use `kind=\"transparent\"` in dense rows and toolbars; keep `primary` for a lone emphasized action.",
+  "Set `iconTransition` only when `icon` changes at runtime; with a static icon it adds nothing.",
+  "Use `iconClass` for glyph-level tweaks instead of styling the root."
+ ],
+ "props": [
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "PrimeIcons class for the leading/trailing icon."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "Accessible name for icon-only controls."
+  },
+  {
+   "name": "kind",
+   "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'",
+   "default": "'primary'",
+   "required": "false",
+   "doc": "Visual variant."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'large'",
+   "required": "false",
+   "doc": "Size token; affects height, padding, and typography."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies disabled tokens."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows loading state and disables activation."
+  },
+  {
+   "name": "href",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "When set, renders as a link (`<a>`)."
+  },
+  {
+   "name": "target",
+   "type": "'_blank' | '_self'",
+   "default": "'_self'",
+   "required": "false",
+   "doc": "Link target when `href` is set."
+  },
+  {
+   "name": "iconTransition",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Animates icon swaps with enter/leave transitions."
+  },
+  {
+   "name": "iconClass",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Extra classes applied to the icon glyph."
+  }
+ ],
+ "events": [
+  {
+   "name": "click",
+   "payload": "MouseEvent",
+   "notes": "—"
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <IconButton\n    kind=\"primary\"\n    size=\"large\"\n    icon=\"pi pi-plus\"\n    aria-label=\"Add\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <IconButton\n      kind=\"primary\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"secondary\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"outlined\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"transparent\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"danger\"\n      icon=\"pi pi-trash\"\n      aria-label=\"Delete\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <IconButton\n      size=\"small\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      size=\"medium\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      size=\"large\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/icon-button.md"
+}

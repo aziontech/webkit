@@ -1,0 +1,111 @@
+{
+ "name": "closing-call-to-action-newsletter",
+ "binding": "ClosingCallToActionNewsletter",
+ "import": "@aziontech/webkit/closing-call-to-action-newsletter",
+ "treeShakeableImport": "@aziontech/webkit/closing-call-to-action-newsletter",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatched closing frame. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-newsletter', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `overline`, `field`, `input`, `button` and `texture-material`. The block never sends: it validates the address locally (an empty field and a malformed address each show their message under the field) and on a valid submit emits `submit` with the event and `{ email }`; the site posts the address and reports the outcome back through `loading`, `submitted` and `error`, which the band renders with the messages from `form`.",
+ "setup": null,
+ "useWhen": [
+  "To close the Blog or the Resource Hub on a newsletter subscription."
+ ],
+ "avoidWhen": [
+  "For a close on one or two link actions → use `closing-call-to-action`.",
+  "For a lead form with several fields → use `hero-form`."
+ ],
+ "related": [
+  "closing-call-to-action` — the closing band whose ask is a link action.",
+  "alert` — renders the success and failure messages."
+ ],
+ "bestPractices": [
+  "Set `loading` while the address is sent, then `submitted` or `error` with the outcome.",
+  "Keep `description` to one sentence; it is set as the large headline.",
+  "Write `form.invalidMessage` with an example address so the fix is obvious."
+ ],
+ "props": [
+  {
+   "name": "form",
+   "type": "ClosingCallToActionNewsletterForm",
+   "default": "—",
+   "required": "true",
+   "doc": "Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline on the lead side, closed by the blinking cursor."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The ask, rendered as the label of the email field; it also names the band."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The pitch, rendered as the band's large `h2` on the lead side."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored."
+  },
+  {
+   "name": "submitted",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "The site sent the address: the form gives way to `form.successMessage`."
+  },
+  {
+   "name": "error",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "The site could not send the address: `form.errorMessage` shows under the form."
+  }
+ ],
+ "events": [
+  {
+   "name": "submit",
+   "payload": "(event: SubmitEvent, values: Record<string, string>)",
+   "notes": "Fired on a valid submit, not while `loading`; `values` is `{ email }` with the trimmed address. The block never sends it."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'\n\n  const form = {\n    placeholder: 'Your email',\n    submitLabel: 'Subscribe',\n    successMessage: 'Thanks for subscribing to the Azion newsletter',\n    errorMessage: 'We could not subscribe you. Try again.',\n    requiredMessage: 'Enter your email address.',\n    invalidMessage: 'Enter an email address like name@example.com.'\n  }\n\n  const onSubmit = (event, values) => {\n    console.log(event.type, values)\n  }\n</script>\n\n<template>\n  <ClosingCallToActionNewsletter\n    anchor=\"contact\"\n    eyebrow=\"Stay up to date\"\n    title=\"Subscribe to our newsletter\"\n    description=\"Product updates, event highlights, and industry insights, delivered to your inbox.\"\n    :form=\"form\"\n    @submit=\"onSubmit\"\n  />\n</template>"
+  },
+  {
+   "name": "Loading",
+   "sfc": "<script setup>\n  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'\n\n  const form = {\n    placeholder: 'Your email',\n    submitLabel: 'Subscribe',\n    successMessage: 'Thanks for subscribing to the Azion newsletter',\n    errorMessage: 'We could not subscribe you. Try again.',\n    requiredMessage: 'Enter your email address.',\n    invalidMessage: 'Enter an email address like name@example.com.'\n  }\n\n  const onSubmit = (event, values) => {\n    console.log(event.type, values)\n  }\n</script>\n\n<template>\n  <ClosingCallToActionNewsletter\n    anchor=\"contact\"\n    eyebrow=\"Stay up to date\"\n    title=\"Subscribe to our newsletter\"\n    description=\"Product updates, event highlights, and industry insights, delivered to your inbox.\"\n    :form=\"form\"\n    :loading=\"true\"\n    @submit=\"onSubmit\"\n  />\n</template>"
+  },
+  {
+   "name": "Submitted",
+   "sfc": "<script setup>\n  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'\n\n  const form = {\n    placeholder: 'Your email',\n    submitLabel: 'Subscribe',\n    successMessage: 'Thanks for subscribing to the Azion newsletter',\n    errorMessage: 'We could not subscribe you. Try again.',\n    requiredMessage: 'Enter your email address.',\n    invalidMessage: 'Enter an email address like name@example.com.'\n  }\n\n  const onSubmit = (event, values) => {\n    console.log(event.type, values)\n  }\n</script>\n\n<template>\n  <ClosingCallToActionNewsletter\n    anchor=\"contact\"\n    eyebrow=\"Stay up to date\"\n    title=\"Subscribe to our newsletter\"\n    description=\"Product updates, event highlights, and industry insights, delivered to your inbox.\"\n    :form=\"form\"\n    :submitted=\"true\"\n    @submit=\"onSubmit\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/closing-call-to-action-newsletter.md"
+}

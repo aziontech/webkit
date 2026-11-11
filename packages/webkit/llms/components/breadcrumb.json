@@ -1,0 +1,75 @@
+{
+ "name": "breadcrumb",
+ "binding": "Breadcrumb",
+ "import": "@aziontech/webkit/breadcrumb",
+ "treeShakeableImport": "@aziontech/webkit/breadcrumb",
+ "category": "navigation",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/breadcrumb-item"
+ ],
+ "purpose": "Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Webkit tokens).",
+ "setup": null,
+ "useWhen": [
+  "A page sits two or more levels deep and the reader needs a way back to its parents (resource detail under a list, a settings sub-page).",
+  "The trail is known as data — pass `items` and let the component render the segments, separators and the collapse below `md`.",
+  "The trail needs a custom layout the `items` array cannot express — compose `Breadcrumb.List`, `Breadcrumb.Item` and `Breadcrumb.Separator` in the default slot."
+ ],
+ "avoidWhen": [
+  "It is the app's primary navigation → use `navigation-menu` or `sidebar` with `menu`.",
+  "It moves between sibling views of the same page → use `tabs`.",
+  "It is the previous / next pair at the end of a docs page → use `doc-pagination`."
+ ],
+ "related": [
+  "breadcrumb-item` — the single segment this component renders; use it alone only inside a hand-composed trail.",
+  "navigation-menu` — top-level navigation with dropdown panels, not a location trail.",
+  "link` — a standalone link; a breadcrumb segment is a link with the trail's muted / current styling."
+ ],
+ "bestPractices": [
+  "Prefer `items`; only `items` mode collapses the middle segments into an overflow menu below `md`. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.",
+  "Let the last entry be the current page — it is treated as current unless its `current` is set to `false`; give every ancestor an `href`.",
+  "Handle routing in `@navigate`, which receives `(event, href)` for ancestor segments; call `event.preventDefault()` when a client-side router takes over.",
+  "In slot mode, wrap each `Breadcrumb.Item` in an `li`: `Breadcrumb.List` is an `ol` and the item renders an `a` / `span`, while `Breadcrumb.Separator` is already an `li`."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "BreadcrumbItemData[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry."
+  }
+ ],
+ "events": [
+  {
+   "name": "navigate",
+   "payload": "(event: MouseEvent, href: string)",
+   "notes": "Fires when an ancestor segment is activated. `event` is the activation event; `href` is the segment's destination."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Custom composition (`BreadcrumbList` + items + separators). Used when `items` is empty."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Breadcrumb from '@aziontech/webkit/breadcrumb'\n\n  const items = [\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Current Page', current: true }\n  ]\n</script>\n\n<template>\n  <Breadcrumb\n    :items=\"items\"\n    class=\"max-w-[42.5rem]\"\n  />\n</template>"
+  },
+  {
+   "name": "Depths",
+   "sfc": "<script setup>\n  import Breadcrumb from '@aziontech/webkit/breadcrumb'\n\n  const single = [{ label: 'Page Name', current: true }]\n  const two = [\n    { label: 'Page Name', href: '#' },\n    { label: 'Current Page', current: true }\n  ]\n  const full = [\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Current Page', current: true }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4 max-w-[42.5rem]\">\n    <Breadcrumb :items=\"single\" />\n    <Breadcrumb :items=\"two\" />\n    <Breadcrumb :items=\"full\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "LongLabel",
+   "sfc": "<script setup>\n  import Breadcrumb from '@aziontech/webkit/breadcrumb'\n\n  const items = [\n    { label: 'Page Name', href: '#' },\n    { label: 'production-edge-application-with-a-very-long-configuration-name', current: true }\n  ]\n</script>\n\n<template>\n  <Breadcrumb :items=\"items\" />\n</template>"
+  }
+ ],
+ "docs": "components/breadcrumb.md"
+}

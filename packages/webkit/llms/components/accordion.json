@@ -1,0 +1,100 @@
+{
+ "name": "accordion",
+ "binding": "Accordion",
+ "import": "@aziontech/webkit/accordion",
+ "treeShakeableImport": "@aziontech/webkit/accordion-root",
+ "category": "content",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/accordion-item",
+  "@aziontech/webkit/accordion-trigger",
+  "@aziontech/webkit/accordion-content"
+ ],
+ "purpose": "A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel. Use it to condense long content into scannable sections. Unlike `tabs` (mutually-exclusive panels shown in place), an accordion can keep one item open at a time (`type=\"single\"`) or several at once (`type=\"multiple\"`), and its content expands inline below each header.",
+ "setup": null,
+ "useWhen": [
+  "Long content splits into independent sections the reader scans by heading and opens on demand (settings groups, help topics, a details list).",
+  "The reader may want one section open at a time (`type=\"single\"`) or to compare several side by side (`type=\"multiple\"`).",
+  "Content should expand inline below its heading, pushing the rest of the page down."
+ ],
+ "avoidWhen": [
+  "The panels are mutually exclusive views shown in the same place → use `tabs`.",
+  "It is the frequently-asked-questions band of a marketing page → use `faq-section` (or `faq` for the band without the page-section wiring).",
+  "It is hierarchical navigation with expandable rows → use `menu`."
+ ],
+ "related": [
+  "tabs` — switches between panels in place; one panel visible, headers in a row.",
+  "faq` — the marketing FAQ band that composes `accordion` with a heading column and hairline register.",
+  "menu` — expanding rows for navigation, not for revealing content."
+ ],
+ "bestPractices": [
+  "Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.",
+  "Bind `v-model` to a string in `type=\"single\"` and to an array in `type=\"multiple\"`; set `collapsible` to `false` only when one item must always stay open.",
+  "Set the trigger's `level` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.",
+  "Accordion.Content` applies no padding; pad the content you put inside it.",
+  "Set `size` and `arrow-position` on the root, not per item — they are provided to every item through context."
+ ],
+ "props": [
+  {
+   "name": "type",
+   "type": "'single' | 'multiple'",
+   "default": "'single'",
+   "required": "false",
+   "doc": "Whether one or multiple items can be open at the same time."
+  },
+  {
+   "name": "defaultValue",
+   "type": "string | string[] | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Initial open item(s) when uncontrolled."
+  },
+  {
+   "name": "collapsible",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "In single mode, lets the open item collapse so that no item is open."
+  },
+  {
+   "name": "size",
+   "type": "'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; affects header height, padding, and typography. Provided to every item via context."
+  },
+  {
+   "name": "arrowPosition",
+   "type": "'left' | 'right'",
+   "default": "'right'",
+   "required": "false",
+   "doc": "Side of the header the chevron sits on. Provided to every item via context."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The `Accordion.Item` children. Each sub-component's own `default` slot is documented in the Sub-components section."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Accordion from '@aziontech/webkit/accordion'\n</script>\n\n<template>\n  <Accordion\n    type=\"single\"\n    collapsible\n    default-value=\"overview\"\n    size=\"medium\"\n    arrow-position=\"right\"\n    class=\"w-full max-w-[40rem]\"\n  >\n    <Accordion.Item value=\"overview\">\n      <Accordion.Trigger>What is Azion?</Accordion.Trigger>\n      <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>\n    </Accordion.Item>\n    <Accordion.Item value=\"pricing\">\n      <Accordion.Trigger>How does pricing work?</Accordion.Trigger>\n      <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>\n    </Accordion.Item>\n    <Accordion.Item value=\"support\">\n      <Accordion.Trigger>Enterprise support</Accordion.Trigger>\n      <Accordion.Content>Available on Business and Enterprise plans.</Accordion.Content>\n    </Accordion.Item>\n  </Accordion>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import Accordion from '@aziontech/webkit/accordion'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-8 w-full max-w-[40rem]\">\n    <Accordion\n      type=\"single\"\n      collapsible\n      default-value=\"overview\"\n      size=\"medium\"\n    >\n      <Accordion.Item value=\"overview\">\n        <Accordion.Trigger>What is Azion?</Accordion.Trigger>\n        <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>\n      </Accordion.Item>\n      <Accordion.Item value=\"pricing\">\n        <Accordion.Trigger>How does pricing work?</Accordion.Trigger>\n        <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>\n      </Accordion.Item>\n    </Accordion>\n    <Accordion\n      type=\"single\"\n      collapsible\n      default-value=\"overview\"\n      size=\"large\"\n    >\n      <Accordion.Item value=\"overview\">\n        <Accordion.Trigger>What is Azion?</Accordion.Trigger>\n        <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>\n      </Accordion.Item>\n      <Accordion.Item value=\"pricing\">\n        <Accordion.Trigger>How does pricing work?</Accordion.Trigger>\n        <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>\n      </Accordion.Item>\n    </Accordion>\n  </div>\n</template>"
+  },
+  {
+   "name": "ArrowPosition",
+   "sfc": "<script setup>\n  import Accordion from '@aziontech/webkit/accordion'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-8 w-full max-w-[40rem]\">\n    <Accordion\n      type=\"single\"\n      collapsible\n      default-value=\"overview\"\n      arrow-position=\"right\"\n    >\n      <Accordion.Item value=\"overview\">\n        <Accordion.Trigger>What is Azion?</Accordion.Trigger>\n        <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>\n      </Accordion.Item>\n      <Accordion.Item value=\"pricing\">\n        <Accordion.Trigger>How does pricing work?</Accordion.Trigger>\n        <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>\n      </Accordion.Item>\n    </Accordion>\n    <Accordion\n      type=\"single\"\n      collapsible\n      default-value=\"overview\"\n      arrow-position=\"left\"\n    >\n      <Accordion.Item value=\"overview\">\n        <Accordion.Trigger>What is Azion?</Accordion.Trigger>\n        <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>\n      </Accordion.Item>\n      <Accordion.Item value=\"pricing\">\n        <Accordion.Trigger>How does pricing work?</Accordion.Trigger>\n        <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>\n      </Accordion.Item>\n    </Accordion>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/accordion.md"
+}

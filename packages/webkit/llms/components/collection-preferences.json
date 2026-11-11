@@ -1,0 +1,119 @@
+{
+ "name": "collection-preferences",
+ "binding": "CollectionPreferences",
+ "import": "@aziontech/webkit/collection-preferences",
+ "treeShakeableImport": "@aziontech/webkit/collection-preferences",
+ "category": "data",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The preferences panel of a collection, after Cloudscape's collection preferences: a cog button opens a dialog (or a drawer) with the page size, the columns (shown, hidden and ordered; a locked column always shows), wrapped lines, striped rows and density. Changes are a draft until Confirm; Cancel, `Esc` and the close button discard them. It holds no saved state itself: `useCollection` saves the confirmed value in `localStorage` and `preferencesProps` binds the value, the columns and the page sizes in one `v-bind`.",
+ "setup": null,
+ "useWhen": [
+  "A table or card collection whose people choose how many items a page shows and which fields they see.",
+  "Any collection driven by `useCollection`, which saves the result per collection."
+ ],
+ "avoidWhen": [
+  "A single column-visibility toggle inside a table toolbar → use `table-column-selector`.",
+  "Settings of the resource itself (not of how the list shows it) → use a form page or `dialog`."
+ ],
+ "related": [
+  "use-collection` — saves the preferences; `preferencesProps` is the binding.",
+  "table` — takes `density`, `wrapLines`, `striped`, the visible columns and their order.",
+  "cards` — takes the page size and the visible fields.",
+  "property-filter` — sits beside it in the controls row."
+ ],
+ "bestPractices": [
+  "Lock the column that names the item (`locked: true`): a row without its name is unreadable.",
+  "Show only the sections the collection uses (`sections`): cards have no striped rows.",
+  "Keep the trigger at the end of the controls row, after Refresh and Download."
+ ],
+ "props": [
+  {
+   "name": "preferences",
+   "type": "CollectionPreferencesValue",
+   "default": "{}",
+   "required": "false",
+   "doc": "The saved preferences. Supports v-model:preferences; changes apply on Confirm."
+  },
+  {
+   "name": "columns",
+   "type": "CollectionPreferencesColumn[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Columns to show, hide and order. Empty hides the columns section."
+  },
+  {
+   "name": "pageSizeOptions",
+   "type": "number[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Page sizes offered. Empty hides the page size section."
+  },
+  {
+   "name": "sections",
+   "type": "CollectionPreferencesSection[]",
+   "default": "['page-size', 'columns', 'wrap-lines', 'striped', 'density']",
+   "required": "false",
+   "doc": "Sections the panel shows, in this order."
+  },
+  {
+   "name": "container",
+   "type": "'dialog' | 'drawer'",
+   "default": "'dialog'",
+   "required": "false",
+   "doc": "Opens in a centered dialog or a side drawer."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Panel title and trigger label. Empty uses the locale catalog."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the trigger."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:preferences",
+   "payload": "CollectionPreferencesValue",
+   "notes": "Confirm was activated."
+  },
+  {
+   "name": "confirm",
+   "payload": "CollectionPreferencesValue",
+   "notes": "Same value, for a handler that is not a model."
+  },
+  {
+   "name": "cancel",
+   "payload": "void",
+   "notes": "Cancel was activated; the draft is discarded."
+  }
+ ],
+ "slots": [
+  {
+   "name": "trigger",
+   "scope": "{ open: () => void }",
+   "notes": "Replaces the cog button; call `open` to open the panel."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import CollectionPreferences from '@aziontech/webkit/collection-preferences'\n  import { ref } from 'vue'\n\n  const columns = [\n    { id: 'name', label: 'Name', locked: true },\n    { id: 'status', label: 'Status' },\n    { id: 'region', label: 'Region' },\n    { id: 'requests', label: 'Requests' }\n  ]\n\n  const preferences = ref({\n    pageSize: 25,\n    columns: [\n      { id: 'name', visible: true },\n      { id: 'status', visible: true },\n      { id: 'region', visible: false },\n      { id: 'requests', visible: true }\n    ],\n    wrapLines: false,\n    striped: false,\n    density: 'comfortable'\n  })\n</script>\n\n<template>\n  <CollectionPreferences\n    v-model:preferences=\"preferences\"\n    :columns=\"columns\"\n    :page-size-options=\"[10, 25, 50, 100]\"\n  />\n</template>"
+  },
+  {
+   "name": "InADrawer",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CollectionPreferences from '@aziontech/webkit/collection-preferences'\n  import { ref } from 'vue'\n\n  const columns = [\n    { id: 'name', label: 'Name', locked: true },\n    { id: 'domain', label: 'Domain' },\n    { id: 'status', label: 'Status' }\n  ]\n\n  const preferences = ref({ density: 'compact' })\n</script>\n\n<template>\n  <CollectionPreferences\n    v-model:preferences=\"preferences\"\n    :columns=\"columns\"\n    :sections=\"['columns', 'density']\"\n    container=\"drawer\"\n  >\n    <template #trigger=\"{ open }\">\n      <Button\n        label=\"Table settings\"\n        icon=\"pi pi-cog\"\n        kind=\"outlined\"\n        size=\"medium\"\n        @click=\"open\"\n      />\n    </template>\n  </CollectionPreferences>\n</template>"
+  }
+ ],
+ "docs": "components/collection-preferences.md"
+}

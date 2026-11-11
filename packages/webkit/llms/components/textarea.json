@@ -1,0 +1,102 @@
+{
+ "name": "textarea",
+ "binding": "Textarea",
+ "import": "@aziontech/webkit/textarea",
+ "treeShakeableImport": "@aziontech/webkit/textarea",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resizable` prop (defaults to `vertical`). Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.",
+ "setup": null,
+ "useWhen": [
+  "Capture multiple lines of free-form text (descriptions, comments, messages)."
+ ],
+ "avoidWhen": [
+  "The value is a single line → use `input`.",
+  "The value is strictly numeric → use `number-input`."
+ ],
+ "related": [
+  "input` — single-line sibling with the same field API."
+ ],
+ "bestPractices": [
+  "Give it a sensible default size; avoid auto-growing beyond the viewport.",
+  "Use the `field-*` wrapper for label/help/error."
+ ],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Bound value (v-model)."
+  },
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder shown when the field is empty."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies disabled tokens."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field as read-only; keeps focus styling, blocks edits, and renders transparent with a dashed border and no hover so it never looks editable."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field as required and sets `aria-required`."
+  },
+  {
+   "name": "resizable",
+   "type": "'vertical' | 'horizontal' | 'both' | 'none'",
+   "default": "'vertical'",
+   "required": "false",
+   "doc": "Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:modelValue",
+   "payload": "string",
+   "notes": "v-model update."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Textarea from '@aziontech/webkit/textarea'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <Textarea\n    v-model=\"value\"\n    placeholder=\"Write your message\"\n  />\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import Textarea from '@aziontech/webkit/textarea'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <Textarea\n    v-model=\"value\"\n    placeholder=\"Placeholder\"\n    disabled\n  />\n</template>"
+  },
+  {
+   "name": "Invalid",
+   "sfc": "<script setup>\n  import Textarea from '@aziontech/webkit/textarea'\n  import { ref } from 'vue'\n\n  const value = ref('Text Filled')\n</script>\n\n<template>\n  <Textarea\n    v-model=\"value\"\n    invalid\n  />\n</template>"
+  }
+ ],
+ "docs": "components/textarea.md"
+}

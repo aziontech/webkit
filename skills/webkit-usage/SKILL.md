@@ -45,7 +45,8 @@ Do not guess a component name or import path. Look it up.
 1. Ask the webkit MCP. The server exposes tools grounded in the exact webkit version this project installed:
    - `suggest_component` — describe what you need in plain words; it returns the matching component(s).
    - Import/validation tools — confirm a subpath is real and get the canonical path.
-2. Read the catalog directly. `node_modules/@aziontech/webkit/catalog.json` has an `imports` object; every key is a real published subpath (`button`, `empty-state`, `table`, ...). If a subpath is not a key there, it does not exist.
+2. No MCP? Read `node_modules/@aziontech/webkit/llms/llms.txt`. It links one Markdown page per block (`llms/blocks/<id>.md`: guidelines, variants, the primary SFC), per component (`llms/components/<name>.md`: props, events, slots, examples, accessibility, do and don't, with the same data as JSON in `<name>.json`) and per foundation (`llms/foundations/`: tokens, color, typography, spacing, motion, i18n, RTL, devices). `llms-full.txt` is every page in one file.
+3. Read the catalog directly. `node_modules/@aziontech/webkit/catalog.json` has an `imports` object; every key is a real published subpath (`button`, `empty-state`, `table`, ...). If a subpath is not a key there, it does not exist.
 
 ## App-level setup (`setup` in the catalog)
 

@@ -1,0 +1,64 @@
+{
+ "name": "subject-library",
+ "binding": "SubjectLibrary",
+ "import": "@aziontech/webkit/subject-library",
+ "treeShakeableImport": "@aziontech/webkit/subject-library",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-library', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `frame-box`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.",
+ "setup": null,
+ "useWhen": [
+  "On the Learning Center index, to list every subject with the articles that teach it.",
+  "Whenever a page needs a grid of topic cards that each carry a short list of links, closed by one call to action."
+ ],
+ "avoidWhen": [
+  "For a grid of features with artwork → use `feature-tiles`.",
+  "For a filterable list of rows → use `listing-browser`.",
+  "Inside another band's cell → compose `frame-box` and `call-to-action` directly."
+ ],
+ "related": [
+  "call-to-action` — the `lead` band drawn in the closing cell.",
+  "card-grid` — the divider grid the subject cards sit in."
+ ],
+ "bestPractices": [
+  "Give every subject a unique `slug`; it is the card's `id`, so a `#slug` link lands on it.",
+  "Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell fills the last row exactly.",
+  "Keep each subject's articles to a handful; the card grows with its list."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page `id` of the band, the target of a `#hash` link."
+  },
+  {
+   "name": "subjects",
+   "type": "SubjectLibrarySubject[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped."
+  },
+  {
+   "name": "closing",
+   "type": "SubjectLibraryClosing",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import SubjectLibrary from '@aziontech/webkit/subject-library'\n</script>\n\n<template>\n  <SubjectLibrary\n    anchor=\"subjects\"\n    :subjects=\"[\n      {\n        slug: 'bots',\n        title: 'Bots',\n        description:\n          'Bots are automated software programs that perform repetitive tasks on websites and applications.',\n        articles: [\n          {\n            label: 'What is a Bot?',\n            href: 'https://www.azion.com/en/learning/bots/what-is-a-bot/'\n          },\n          {\n            label: 'What is Bot Management?',\n            href: 'https://www.azion.com/en/learning/bots/what-is-bot-management/'\n          }\n        ]\n      },\n      {\n        slug: 'cdn',\n        title: 'CDN',\n        description: 'Reduce latency by caching static content on servers close to the user.',\n        articles: [\n          { label: 'What is a CDN?', href: 'https://www.azion.com/en/learning/cdn/what-is-a-cdn/' },\n          {\n            label: 'What is Caching?',\n            href: 'https://www.azion.com/en/learning/cdn/what-is-caching/'\n          }\n        ]\n      }\n    ]\"\n    :closing=\"{\n      eyebrow: 'Next step',\n      title: 'Put what you learned to work.',\n      titleMuted: 'On Azion.',\n      description:\n        'Deploy your first application in minutes, or talk to an expert about your architecture.',\n      primaryAction: { label: 'Start for free', href: '/signup' },\n      secondaryAction: { label: 'Talk to a specialist', href: '/contact', trailing: true }\n    }\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/subject-library.md"
+}

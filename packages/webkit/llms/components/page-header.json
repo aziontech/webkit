@@ -1,0 +1,92 @@
+{
+ "name": "page-header",
+ "binding": "PageHeader",
+ "import": "@aziontech/webkit/page-header",
+ "treeShakeableImport": "@aziontech/webkit/page-header",
+ "category": "layout",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. It replaces the header markup every list, detail, settings and create page used to copy by hand.",
+ "setup": null,
+ "useWhen": [
+  "The top of any console page: a first-level list (`medium`), a detail tab or settings sub-page (`small`), a creation hub headline (`large`).",
+  "A page that owns actions (Documentation, a create action) that belong next to its title."
+ ],
+ "avoidWhen": [
+  "The heading of one band inside a page → use `section-header`.",
+  "A settings band with a Hint and a card of rows → use `settings-section`.",
+  "A documentation page heading → use `doc-page-header`."
+ ],
+ "related": [
+  "section-header` — the h2 band heading inside a page.",
+  "page-tabs` — the second-level navigation strip that sits above a detail page's header.",
+  "button` — the usual content of the `actions` slot (outlined, `size=\"medium\"`)."
+ ],
+ "bestPractices": [
+  "One PageHeader per page; it renders the page's only h1.",
+  "Put the Documentation link first and the create action on the outer edge, both outlined at the medium size.",
+  "Do not set `class=\"w-full\"` on the action buttons; the header makes them full width on a phone.",
+  "Set `titleId` when a form or landmark names itself with `aria-labelledby`."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "The page title, rendered as the page h1."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One sentence under the title that says what the page is for."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Heading scale of the title."
+  },
+  {
+   "name": "titleId",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id set on the h1, so a landmark or form can name itself with aria-labelledby."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "description",
+   "scope": "—",
+   "notes": "Rich description content (links, inline buttons); replaces the `description` prop."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "The actions the page owns, Documentation first and the create action on the outer edge."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "ListPage",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PageHeader from '@aziontech/webkit/page-header'\n</script>\n\n<template>\n  <PageHeader\n    title=\"Resources\"\n    description=\"View and manage your resources.\"\n  >\n    <template #actions>\n      <Button\n        label=\"Documentation\"\n        icon=\"pi pi-book\"\n        kind=\"outlined\"\n        size=\"medium\"\n        href=\"https://example.com/docs/resources\"\n        target=\"_blank\"\n      />\n      <Button\n        label=\"Create Resource\"\n        icon=\"pi pi-plus\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n    </template>\n  </PageHeader>\n</template>"
+  },
+  {
+   "name": "SettingsPage",
+   "sfc": "<script setup>\n  import PageHeader from '@aziontech/webkit/page-header'\n</script>\n\n<template>\n  <PageHeader\n    title=\"Settings\"\n    description=\"Core configuration for this resource.\"\n    size=\"small\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import PageHeader from '@aziontech/webkit/page-header'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <PageHeader\n      title=\"Start a new project\"\n      description=\"Start from a repository or use a framework template.\"\n      size=\"large\"\n    />\n    <PageHeader\n      title=\"Resources\"\n      description=\"View and manage your resources.\"\n    />\n    <PageHeader\n      title=\"Settings\"\n      description=\"Core configuration for this resource.\"\n      size=\"small\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/page-header.md"
+}

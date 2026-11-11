@@ -1,0 +1,55 @@
+{
+ "name": "contact-hub",
+ "binding": "ContactHub",
+ "import": "@aziontech/webkit/contact-hub",
+ "treeShakeableImport": "@aziontech/webkit/contact-hub",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid`, `topic` and `button`. A lane can carry a second link to the system status page, so a reader can check for an incident before opening a ticket.",
+ "setup": null,
+ "useWhen": [
+  "On the Contact page, to route a reader to the team or channel that answers them."
+ ],
+ "avoidWhen": [
+  "For a closing ask at the end of a page → use `closing-call-to-action`.",
+  "For a grid of product use cases → use `use-cases`."
+ ],
+ "related": [
+  "topic` — each self-serve channel is a linked topic.",
+  "use-cases` — the sibling band of icon-led topics."
+ ],
+ "bestPractices": [
+  "Keep two lanes so they split the frame evenly, and three channels for the three-column row.",
+  "Keep each lane's description to one sentence that states what that team handles.",
+  "Set `target: '_blank'` on a channel or status link that leaves the site."
+ ],
+ "props": [
+  {
+   "name": "lanes",
+   "type": "ContactHubLane[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The team lanes side by side, in order; each is `{ icon, title, description, action?, statusLink? }` where `action` is the lane's button and `statusLink` the system status link beside it."
+  },
+  {
+   "name": "channels",
+   "type": "ContactHubChannel[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The self-serve channels under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ContactHub from '@aziontech/webkit/contact-hub'\n</script>\n\n<template>\n  <ContactHub\n    :lanes=\"[\n      {\n        icon: 'pi pi-briefcase',\n        title: 'Sales',\n        description:\n          'Discuss your requirements, get custom pricing, or see the platform running on your own workload.',\n        action: { label: 'Talk to sales', href: '/contact/sales' }\n      },\n      {\n        icon: 'pi pi-headphones',\n        title: 'Support',\n        description:\n          'Log in with your Azion account to open a ticket. Our engineers pick it up 24/7 on paid support plans.',\n        action: {\n          label: 'Log in to open a ticket',\n          href: 'https://console.azion.com/login',\n          trailing: true\n        },\n        statusLink: { label: 'System status', href: 'https://status.azion.com/', target: '_blank' }\n      }\n    ]\"\n    :channels=\"[\n      {\n        icon: 'pi pi-shield',\n        title: 'Under a cyberattack?',\n        description:\n          'Get emergency mitigation for an attack in progress, even before you become a customer.',\n        href: 'https://www.azion.com/en/lp/under-attack-mitigation/',\n        target: '_blank'\n      },\n      {\n        icon: 'pi pi-discord',\n        title: 'Join the community',\n        description: 'Ask developers and the Azion team on Discord. Open to everyone, on any plan.',\n        href: 'https://discord.com/invite/pM8ANzztuB',\n        target: '_blank'\n      },\n      {\n        icon: 'pi pi-book',\n        title: 'Read the docs',\n        description: 'Guides, API reference, and troubleshooting for every Azion product.',\n        href: 'https://www.azion.com/en/documentation/',\n        target: '_blank'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/contact-hub.md"
+}

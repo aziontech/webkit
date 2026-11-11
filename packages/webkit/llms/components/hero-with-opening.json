@@ -1,0 +1,83 @@
+{
+ "name": "hero-with-opening",
+ "binding": "HeroWithOpening",
+ "import": "@aziontech/webkit/hero-with-opening",
+ "treeShakeableImport": "@aziontech/webkit/hero-with-opening",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The opening band of a product page followed straight by its arguments: a large centered title band with the page `h1`, overline, sentence and up to two actions, then a frame grid of three-column argument cells in the page column, closed by a hatched gap. It is a page section — the site places it from a `{ _id: 'hero-with-opening', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button`, `section-container`, `section-module`, `frame-box`, `card-grid`, `topic` and `section-gap`. The grid starts at the hero floor with no gap, so the arguments read as the second half of the hero.",
+ "setup": null,
+ "useWhen": [
+  "To open a product page that argues on three or six claims right under its headline."
+ ],
+ "avoidWhen": [
+  "For an opening band with no arguments → use `hero-band`.",
+  "For a reasons band further down the page → use `feature-tiles` or `use-cases`."
+ ],
+ "related": [
+  "hero-band` — the opening band without the argument grid.",
+  "topic` — the icon, heading and sentence each argument is rendered with."
+ ],
+ "bestPractices": [
+  "Use three or six items so every row of the grid is full.",
+  "Keep each item to a short title and one sentence.",
+  "A title longer than 45 characters widens the headline column so it breaks into two lines instead of three."
+ ],
+ "props": [
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Short overline above the headline."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Page headline, rendered as the page `h1`; the band renders nothing when empty. A title longer than 45 characters widens the headline column."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Sentence under the headline."
+  },
+  {
+   "name": "primaryAction",
+   "type": "HeroWithOpeningAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "HeroWithOpeningAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+  },
+  {
+   "name": "items",
+   "type": "HeroWithOpeningItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The arguments in reading order, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import HeroWithOpening from '@aziontech/webkit/hero-with-opening'\n</script>\n\n<template>\n  <HeroWithOpening\n    eyebrow=\"Firewall\"\n    title=\"Programmable firewall for distributed applications\"\n    description=\"Protect users, applications, and networks with rules you program, from layer 3 to layer 7.\"\n    :primary-action=\"{ label: 'Start for free', href: 'https://console.azion.com/signup/' }\"\n    :secondary-action=\"{\n      label: 'Docs',\n      href: 'https://www.azion.com/en/documentation/',\n      trailing: true\n    }\"\n    :items=\"[\n      {\n        icon: 'pi pi-shield',\n        title: 'Programmable rule engine',\n        description:\n          'Define custom rules and behaviors across OSI layers L3-L7 to control traffic before it reaches your applications.'\n      },\n      {\n        icon: 'pi pi-code',\n        title: 'Extensible with Functions',\n        description:\n          'Run custom JavaScript security code and marketplace integrations on Azion’s distributed infrastructure.'\n      },\n      {\n        icon: 'pi pi-sync',\n        title: 'Real-time synchronization',\n        description:\n          'Rules sync automatically across every data center. SIEM integration keeps threat intelligence flowing.'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/hero-with-opening.md"
+}

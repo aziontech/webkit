@@ -1,4 +1,11 @@
 import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../eslint-plugin/layout-classes.js'
+import {
+  COMPONENT_TERMS,
+  MARKETING_WORDS,
+  SCREEN_WORDS,
+  STOPWORDS,
+  SYNONYM_GROUPS
+} from './search-lexicon.js'
 
 const NOT_AVAILABLE = {
   ok: false,
@@ -290,55 +297,92 @@ export function getImport(catalog, name) {
 }
 
 function scoreMatch(name, entry, query) {
-  const q = query.toLowerCase().trim()
+  const q = normalize(query)
   if (!q) return 0
-  const n = name.toLowerCase()
-  const c = (entry.category || '').toLowerCase()
-  const words = q.split(/[\s/_-]+/).filter(Boolean)
-  const prose = [entry.purpose || '', ...(entry.useWhen || [])].join(' ').toLowerCase()
+  const n = normalize(name)
+  const c = normalize(entry.category || '')
+  const words = q.split(' ').filter((w) => w.length >= 3 && !STOPWORDS.has(w))
+  const prose = normalize([entry.purpose || '', ...(entry.useWhen || [])].join(' '))
 
   let score = 0
   if (n === q) score += 100
-  if (n.includes(q)) score += 40
-  if (q.includes(n) && n.length >= 3) score += 30
-  if (c && (c === q || q.includes(c))) score += 10
+  if (hasPhrase(n, q)) score += 40
+  if (hasPhrase(q, n) && n.length >= 3) score += 30
+  if (c && (c === q || hasPhrase(q, c))) score += 10
   for (const w of words) {
-    if (w.length < 2) continue
     if (n === w) score += 25
-    else if (n.includes(w)) score += 15
+    else if (hasPhrase(n, w)) score += 15
+    else if (n.includes(w)) score += 8
     else if (w.includes(n) && n.length >= 3) score += 12
     if (c.includes(w)) score += 4
-    if (w.length >= 3 && prose.includes(w)) score += 6
+    if (hasPhrase(prose, w)) score += 6
   }
   return score
 }
 
-export function searchComponents(catalog, query) {
+const NORMALIZED_TERMS = Object.entries(COMPONENT_TERMS).flatMap(([key, terms]) =>
+  terms.map((term) => ({ key, term: normalize(term) }))
+)
+
+function conceptHits(catalog, query) {
+  const q = normalize(query)
+  const hits = new Map()
+  if (!q) return hits
+  for (const { key, term } of longestMatches(q, NORMALIZED_TERMS)) {
+    if (!catalog.getEntry(key)) continue
+    const boost = term === q ? 90 : 30
+    if ((hits.get(key) ?? 0) < boost) hits.set(key, boost)
+  }
+  return hits
+}
+
+export function searchComponents(catalog, query, { surface } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(query || '')
+  const nq = normalize(q)
+  const wantedSurface = surfaceOf(surface)
   const aliases = aliasHits(catalog, q)
+  const concepts = conceptHits(catalog, q)
   const ranked = catalog.subpaths
     .filter((sub) => catalog.getEntry(sub)?.kind === 'component')
+    .filter((sub) => !wantedSurface || catalog.getEntry(sub)?.surface === wantedSurface)
     .map((sub) => {
       const e = catalog.getEntry(sub)
-      return { sub, score: scoreMatch(sub, e, q) + (aliases.get(sub)?.boost ?? 0) }
+      const score =
+        scoreMatch(sub, e, q) + (aliases.get(sub)?.boost ?? 0) + (concepts.get(sub) ?? 0)
+      return { sub, score }
     })
     .filter((r) => r.score > 0)
     .sort((a, b) => b.score - a.score || a.sub.localeCompare(b.sub))
     .slice(0, 10)
     .map((r) => {
       const card = { ...componentCard(catalog, r.sub), score: r.score }
+      if (normalize(r.sub) === nq || concepts.get(r.sub) === 90) card.exact = true
       const hit = aliases.get(r.sub)
-      return hit ? { ...card, aliasOf: hit.alias, note: aliasNote(hit.alias, r.sub) } : card
+      return hit
+        ? {
+            ...card,
+            exact: hit.boost === 100,
+            aliasOf: hit.alias,
+            note: aliasNote(hit.alias, r.sub)
+          }
+        : card
     })
 
-  return { ok: true, available: true, query: q, count: ranked.length, matches: ranked }
+  return {
+    ok: true,
+    available: true,
+    query: q,
+    ...(wantedSurface ? { surface: wantedSurface } : {}),
+    count: ranked.length,
+    matches: ranked
+  }
 }
 
-function componentSuggestion(catalog, need) {
+function componentSuggestion(catalog, need, opts) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(need || '')
-  const search = searchComponents(catalog, q)
+  const search = searchComponents(catalog, q, opts)
   if (search.matches.length > 0) {
     const [best, ...rest] = search.matches
     return {
@@ -535,95 +579,6 @@ export function validateUsage(catalog, { import: importPath, classes, component 
   return { ok: problems.length === 0, available: true, problems }
 }
 
-const SYNONYM_GROUPS = [
-  [
-    'login',
-    'log in',
-    'sign in',
-    'signin',
-    'entrar',
-    'acessar',
-    'acessar conta',
-    'auth',
-    'authentication',
-    'autenticação',
-    'logar'
-  ],
-  [
-    'signup',
-    'sign up',
-    'register',
-    'registration',
-    'create account',
-    'cadastro',
-    'cadastrar',
-    'criar conta',
-    'registrar'
-  ],
-  [
-    'reset password',
-    'forgot password',
-    'esqueci a senha',
-    'redefinir senha',
-    'recover password',
-    'recuperar senha'
-  ],
-  [
-    'verify email',
-    'check inbox',
-    'confirm email',
-    'verificar e-mail',
-    'confirmar e-mail',
-    'email verification'
-  ],
-  ['settings', 'preferences', 'configuration', 'configurações', 'configuracoes', 'ajustes'],
-  ['account settings', 'account', 'profile', 'conta', 'perfil'],
-  ['list', 'listing', 'index', 'table', 'lista', 'listagem', 'tabela'],
-  ['create', 'new', 'add', 'criar', 'novo', 'nova', 'adicionar', 'creation'],
-  ['delete', 'remove', 'destroy', 'excluir', 'apagar', 'remover'],
-  ['onboarding', 'first access', 'welcome', 'get started', 'primeiro acesso', 'boas-vindas'],
-  ['billing', 'payment', 'invoice', 'plan', 'pagamento', 'cobrança', 'fatura', 'plano'],
-  ['users', 'members', 'team', 'usuários', 'membros', 'time', 'equipe'],
-  ['editor', 'code', 'function', 'código', 'função'],
-  ['metrics', 'dashboard', 'observability', 'analytics', 'métricas', 'painel'],
-  ['header', 'top bar', 'navbar', 'cabeçalho'],
-  ['shell', 'layout', 'frame', 'app shell', 'estrutura']
-]
-
-const SCREEN_WORDS = [
-  'page',
-  'screen',
-  'tela',
-  'página',
-  'pagina',
-  'view',
-  'flow',
-  'fluxo',
-  'form',
-  'formulário'
-]
-
-const MARKETING_WORDS = [
-  'landing',
-  'marketing',
-  'site',
-  'hero',
-  'pricing',
-  'testimonial',
-  'testimonials',
-  'newsletter',
-  'faq',
-  'footer',
-  'banner',
-  'band',
-  'section',
-  'cta',
-  'call to action',
-  'case study',
-  'blog',
-  'careers'
-]
-
 function normalize(text) {
   return String(text || '')
     .toLowerCase()
@@ -639,14 +594,34 @@ function hasPhrase(haystack, phrase) {
   return h.includes(` ${phrase} `)
 }
 
-function expandQuery(query) {
+const NORMALIZED_GROUPS = SYNONYM_GROUPS.map((group) => [...new Set(group.map(normalize))])
+const NORMALIZED_SCREEN_WORDS = SCREEN_WORDS.map(normalize)
+
+function longestMatches(q, candidates) {
+  const hits = candidates.filter((c) => c.term && hasPhrase(q, c.term))
+  return hits.filter(
+    (h) =>
+      !hits.some(
+        (o) => o.key !== h.key && o.term.length > h.term.length && hasPhrase(o.term, h.term)
+      )
+  )
+}
+
+function contentWords(q) {
+  return q
+    .split(' ')
+    .filter((w) => w.length >= 3 && !STOPWORDS.has(w) && !NORMALIZED_SCREEN_WORDS.includes(w))
+}
+
+export function expandQuery(query) {
   const q = normalize(query)
-  const phrases = new Set([q])
-  for (const group of SYNONYM_GROUPS) {
-    const normalized = group.map(normalize)
-    if (normalized.some((term) => hasPhrase(q, term))) normalized.forEach((t) => phrases.add(t))
-  }
-  return { q, phrases: [...phrases].filter(Boolean) }
+  const candidates = NORMALIZED_GROUPS.flatMap((group, key) => group.map((term) => ({ key, term })))
+  const hits = longestMatches(q, candidates)
+  const keys = [...new Set(hits.map((h) => h.key))]
+  const groups = keys.map((k) => NORMALIZED_GROUPS[k].filter((t) => t !== q))
+  const words = contentWords(q)
+  const generic = hits.length > 0 && words.every((w) => hits.some((h) => hasPhrase(h.term, w)))
+  return { q, groups, generic, phrases: [q, ...groups.flat()], words }
 }
 
 function patternCard(id, p, score) {
@@ -666,26 +641,33 @@ function patternCard(id, p, score) {
   }
 }
 
-function scorePattern(id, p, { q, phrases }) {
+function isExactPattern(id, p, q) {
+  return [id, id.split('/').pop(), p.name].some((s) => normalize(s) === q)
+}
+
+function scorePattern(id, p, { q, groups, generic, words }) {
   const intents = (p.intents || []).map(normalize)
   const nameText = normalize(`${id} ${p.name}`)
   const components = normalize((p.components || []).join(' '))
   const summary = normalize(p.summary)
-  const words = q.split(' ').filter((w) => w.length >= 3)
-  let score = 0
-  let synonym = 0
-  for (const phrase of phrases) {
+  const phraseScore = (phrase, exact = 100) => {
     let s = 0
-    if (intents.includes(phrase)) s += 100
+    if (intents.includes(phrase)) s += exact
     else if (
       intents.some((i) => hasPhrase(i, phrase) || (phrase.length >= 4 && hasPhrase(phrase, i)))
     )
       s += 60
     if (hasPhrase(nameText, phrase)) s += 40
-    if (phrase === q) score += s
-    else synonym = Math.max(synonym, s * 0.8)
+    return s
   }
-  score += synonym
+  const genericScreen = (phrase) =>
+    NORMALIZED_SCREEN_WORDS.some((w) => intents.includes(`${phrase} ${w}`))
+  let score = isExactPattern(id, p, q) ? 1000 : 0
+  score += phraseScore(q, 160)
+  for (const group of groups) {
+    score += 0.8 * Math.max(0, ...group.map((t) => phraseScore(t)))
+    if (generic && group.some(genericScreen)) score += 15
+  }
   for (const w of words) {
     if (intents.some((i) => hasPhrase(i, w))) score += 12
     if (hasPhrase(nameText, w)) score += 10
@@ -695,15 +677,24 @@ function scorePattern(id, p, { q, phrases }) {
   return Math.round(score)
 }
 
-export function searchPatterns(catalog, query) {
+function surfaceOf(wanted) {
+  return wanted ? String(wanted).toLowerCase().trim() : null
+}
+
+export function searchPatterns(catalog, query, { surface } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
-  const entries = Object.entries(catalog.patterns || {})
+  const wantedSurface = surfaceOf(surface)
+  const entries = Object.entries(catalog.patterns || {}).filter(
+    ([, p]) => !wantedSurface || (p.surface ?? 'product') === wantedSurface
+  )
   const raw = String(query || '').trim()
+  const scope = wantedSurface ? { surface: wantedSurface } : {}
   if (!raw) {
     return {
       ok: true,
       available: true,
       query: raw,
+      ...scope,
       count: entries.length,
       matches: entries.map(([id, p]) => patternCard(id, p))
     }
@@ -719,6 +710,7 @@ export function searchPatterns(catalog, query) {
     ok: true,
     available: true,
     query: raw,
+    ...scope,
     count: matches.length,
     matches,
     hint: matches.length
@@ -817,7 +809,7 @@ export function getPattern(catalog, id, { variant } = {}) {
 
 function sectionSuggestion(catalog, need) {
   const q = normalize(need)
-  const words = q.split(' ').filter((w) => w.length >= 3 && !SCREEN_WORDS.includes(w))
+  const words = contentWords(q)
   const ranked = catalog.subpaths
     .filter((sub) => {
       const e = catalog.getEntry(sub)
@@ -848,14 +840,19 @@ function preferProductSurface(catalog, component) {
   return { ...component, best: ordered[0], alternatives: ordered.slice(1) }
 }
 
-export function suggestComponent(catalog, need) {
+export function suggestComponent(catalog, need, { surface } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(need || '')
   const nq = normalize(q)
-  const isMarketing = MARKETING_WORDS.some((w) => hasPhrase(nq, normalize(w)))
-  const component = isMarketing
-    ? componentSuggestion(catalog, q)
-    : preferProductSurface(catalog, componentSuggestion(catalog, q))
+  const wantedSurface = surfaceOf(surface)
+  const opts = wantedSurface ? { surface: wantedSurface } : {}
+  const isMarketing =
+    wantedSurface === 'marketing' ||
+    (!wantedSurface && MARKETING_WORDS.some((w) => hasPhrase(nq, normalize(w))))
+  const component =
+    isMarketing || wantedSurface
+      ? componentSuggestion(catalog, q, opts)
+      : preferProductSurface(catalog, componentSuggestion(catalog, q, opts))
 
   if (isMarketing) {
     const sections = sectionSuggestion(catalog, q)
@@ -874,12 +871,14 @@ export function suggestComponent(catalog, need) {
     }
   }
 
-  const patterns = searchPatterns(catalog, q)
+  const patterns = searchPatterns(catalog, q, opts)
   const topPattern = patterns.matches?.[0]
   const screenIntent = SCREEN_WORDS.some((w) => hasPhrase(nq, normalize(w)))
   const exactComponent =
     component.best &&
-    (normalize(component.best.name) === nq || normalize(component.best.aliasOf ?? '') === nq)
+    (component.best.exact === true ||
+      normalize(component.best.name) === nq ||
+      normalize(component.best.aliasOf ?? '') === nq)
   if (
     topPattern &&
     (screenIntent ? topPattern.score >= 25 : topPattern.score >= 60 && !exactComponent)

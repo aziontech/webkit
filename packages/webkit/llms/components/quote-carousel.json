@@ -1,0 +1,76 @@
+{
+ "name": "quote-carousel",
+ "binding": "QuoteCarousel",
+ "import": "@aziontech/webkit/quote-carousel",
+ "treeShakeableImport": "@aziontech/webkit/quote-carousel",
+ "category": "marketing",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A band of customer testimonials laid out as one scrollable row of flush cards. It is the wall form of `quote`: the same quotation, attribution and company mark, repeated across a track that snaps card by card and fades at both ends, so a page can carry more proof than the row is wide. The cards sit edge to edge with no gutter — each draws its own hairline and the next one's overlaps it, so the row reads as one ruled strip rather than a set of floating tiles. The fade at either end is what says the strip continues past the band's edge.",
+ "setup": null,
+ "useWhen": [
+  "When a page has more testimonials than fit in one row and the reader chooses how far to go.",
+  "As the proof band under a section headline, where a grid of quotes would run down the page instead of across it.",
+  "When every quote carries equal weight — the track gives no card more room than its neighbours.",
+  "For a row of analyst recognitions, where the source is a firm rather than a person: leave `name` out and the mark leads the card alone."
+ ],
+ "avoidWhen": [
+  "For a single testimonial → use `quote` directly; a track of one has nothing to scroll.",
+  "For the one quotation a page features above the others → use `quote` in its `highlight` register.",
+  "For a row of company marks with no quotation → use `ticker` (moving) or `logo-wall` (static).",
+  "For a set of quotes the reader must read → lay them out as a `card-grid`; anything past the first card in a track can be missed."
+ ],
+ "related": [
+  "quote` — the single testimonial this band repeats; the `inline` register is what each card draws.",
+  "carousel` — the scrollable track underneath, with the snap points, the step controls and the keyboard behaviour.",
+  "ticker` — the same clients without their words, moving on their own.",
+  "logo-wall` — the static wall of marks, when a quotation is not the point.",
+  "section-title` — the headline composed above the band; this component carries no heading of its own."
+ ],
+ "bestPractices": [
+  "Keep each `text` to one or two sentences. Cards in a track are read at a glance, and a paragraph turns a scannable strip into a wall.",
+  "Give a person's quote a `name`. It is the attribution's lead and the source of the initials the card draws when there is no `photo`.",
+  "Leave `name` out when the source is an institution — an analyst firm, a publication. The card then draws no likeness, the mark leads it, and `jobTitle` carries the report or article the claim comes from. Name the firm in that line as well, because the mark is decorative and a screen reader never reaches it.",
+  "Name the company with `mark`, using a registry name rather than a URL, so the mark inherits the card's ink and reads on both themes. A name the registry does not carry is written as its own wordmark, which keeps the card complete while the artwork lands.",
+  "Always pass `ariaLabel`. A scroll region with no name tells a screen-reader user nothing about what they are about to move through.",
+  "Compose the headline above the band with `section-title`, unframed, so the band owns only the strip.",
+  "Keep the band full width. The row is designed to run past the reader's view — inset it and the fade loses the thing it is signalling.",
+  "The band is pure composition — Carousel, then `Carousel.Item`, then `quote` — so its flush ruled cards and end fades come from `carousel` and read the same as any other carousel on the page. It adds only the card width and the header row of likeness and mark."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "QuoteCarouselItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The testimonials rendered as cards, in order; each item is `{ text, name?, jobTitle?, photo?, mark? }` — the quotation, who said it, the rest of the attribution, their likeness and the registry name of the company's mark."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name for the scrollable row of testimonials, announced before its contents."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import QuoteCarousel from '@aziontech/webkit/quote-carousel'\n  import SectionTitle from '@aziontech/webkit/section-title'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl) py-(--spacing-xxl)\">\n    <SectionTitle\n      kind=\"left\"\n      :framed=\"false\"\n      title=\"Battle-Tested by the World's Largest Banks and E-commerce Companies\"\n    />\n    <QuoteCarousel\n      aria-label=\"Customer testimonials\"\n      :items=\"[\n        {\n          text: 'With Azion, we scale proprietary AI models without managing infrastructure — inspecting millions of websites daily and automating the fastest threat takedown in the market.',\n          name: 'Fabio Ramos',\n          jobTitle: 'CEO',\n          mark: 'axur'\n        },\n        {\n          text: 'Filing season triples our traffic in a week. Azion absorbs it without a capacity conversation, and we ship changes to the edge in minutes.',\n          name: 'Vitor Torres',\n          jobTitle: 'CEO',\n          mark: 'contabilizei'\n        },\n        {\n          text: 'Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.',\n          name: 'Allan Monteiro',\n          jobTitle: 'CISO & Head of Technology',\n          mark: 'magalu'\n        },\n        {\n          text: 'One of the best CDN and WAF solutions I have ever used. Easy to implement and integrate, with the speed and low latency that make a real difference for our customers.',\n          name: 'Julian H',\n          jobTitle: 'IT OPS, SRE & SEC Manager',\n          mark: 'dafiti'\n        },\n        {\n          text: 'We block more than four million threats in six months without a single rule running on our own servers, and the security team reads one dashboard instead of five.',\n          name: 'Renata Alves',\n          jobTitle: 'Head of Information Security',\n          mark: 'netshoes'\n        }\n      ]\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Fallback",
+   "sfc": "<script setup>\n  import QuoteCarousel from '@aziontech/webkit/quote-carousel'\n</script>\n\n<template>\n  <QuoteCarousel\n    aria-label=\"Customer testimonials\"\n    :items=\"[\n      {\n        text: 'Orders peak in the same forty minutes every night. Azion holds the edge steady through it, so our release window is no longer the riskiest hour of the day.',\n        name: 'Camila Duarte',\n        jobTitle: 'VP of Engineering',\n        mark: 'iFood'\n      },\n      {\n        text: 'Payments cannot wait on an origin round trip. Running the checks at the edge cut our approval latency in half and took a whole tier out of the stack.',\n        name: 'Rafael Nunes',\n        jobTitle: 'CTO',\n        mark: 'Zoop'\n      },\n      {\n        text: 'Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.',\n        name: 'Allan Monteiro',\n        jobTitle: 'CISO & Head of Technology',\n        mark: 'magalu'\n      }\n    ]\"\n  />\n</template>"
+  },
+  {
+   "name": "Recognitions",
+   "sfc": "<script setup>\n  import QuoteCarousel from '@aziontech/webkit/quote-carousel'\n</script>\n\n<template>\n  <QuoteCarousel\n    aria-label=\"Analyst recognitions\"\n    :items=\"[\n      {\n        text: 'Named a Leader and Fast Mover, and the only vendor whose platform meets every key criterion the report sets for a full-stack edge deployment.',\n        jobTitle: 'GigaOm Radar for Full-Stack Edge Deployments v3 — May 2026',\n        mark: 'gigaom'\n      },\n      {\n        text: 'Evaluated as a Strong Performer among the edge development platforms that matter most.',\n        jobTitle: 'The Forrester Wave™: Edge Development Platforms, Q1 2026 — March 2026',\n        mark: 'forrester'\n      },\n      {\n        text: 'Covered as a vendor in the market guide that defines the edge distribution platform category, in two consecutive editions.',\n        jobTitle: 'Gartner Market Guide for Edge Distribution Platforms — November 2025',\n        mark: 'gartner'\n      },\n      {\n        text: 'Recognized as Latin America Company of the Year in the edge distribution platform industry.',\n        jobTitle: 'Frost & Sullivan, 2026 Latin America Company of the Year — June 2026',\n        mark: 'frost-and-sullivan'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/quote-carousel.md"
+}

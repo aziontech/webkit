@@ -1,0 +1,48 @@
+{
+ "name": "spinner",
+ "binding": "Spinner",
+ "import": "@aziontech/webkit/spinner",
+ "treeShakeableImport": "@aziontech/webkit/spinner",
+ "category": "utils",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Shared visual utility used by other components. Lives at `packages/webkit/src/components/utils/spinner/`.",
+ "setup": null,
+ "useWhen": [
+  "An inline busy mark inside a row, log line or custom control that has no loading state of its own.",
+  "A small in-progress indicator next to text in a toast or status row."
+ ],
+ "avoidWhen": [
+  "A button waiting on its action → set `loading` on `button`, `icon-button` or `button-highlight`.",
+  "Content that is still loading → use `skeleton`.",
+  "Progress you can measure → use `progress`.",
+  "A status with a color and a label → use `status-indicator`."
+ ],
+ "related": [
+  "skeleton` — reserves the shape of content while it loads.",
+  "progress` — determinate progress.",
+  "button` — renders a Spinner itself when `loading` is set."
+ ],
+ "bestPractices": [
+  "It has no props: size it with a `size-*` class (`size-3`, `size-4`) and color it through the inherited text color (it strokes `currentColor`).",
+  "It is `aria-hidden`; announce the busy state on the surrounding element (`aria-busy`, a live region or visible text).",
+  "The spin stops under reduced motion, so pair it with text when the wait matters."
+ ],
+ "props": [],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Spinner from '@aziontech/webkit/spinner'\n</script>\n\n<template>\n  <Spinner class=\"size-4 text-(--text-default)\" />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import Spinner from '@aziontech/webkit/spinner'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-4 text-(--text-default)\">\n    <Spinner class=\"size-3\" />\n    <Spinner class=\"size-4\" />\n    <Spinner class=\"size-6\" />\n    <Spinner class=\"size-8\" />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/spinner.md"
+}

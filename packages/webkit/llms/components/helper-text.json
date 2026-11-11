@@ -1,0 +1,68 @@
+{
+ "name": "helper-text",
+ "binding": "HelperText",
+ "import": "@aziontech/webkit/helper-text",
+ "treeShakeableImport": "@aziontech/webkit/helper-text",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`). Each variant changes only color (and, for `disabled`, prepends a lock icon) so the visual weight stays consistent with the field above it.",
+ "setup": null,
+ "useWhen": [
+  "Guidance under a bare input you compose yourself (format hints, limits).",
+  "A validation error (`kind=\"invalid\"`), a required reminder (`kind=\"required\"`), or a locked-field notice (`kind=\"disabled\"`) under a field."
+ ],
+ "avoidWhen": [
+  "A standard form field → use `field`, whose `Field.Description` / `Field.Error` render this helper and wire it to the control.",
+  "The field name or required marker above the input → use `label`.",
+  "Feedback about a whole form or page rather than one field → use `message`."
+ ],
+ "related": [
+  "label` — sits above the input; HelperText sits below it.",
+  "field` — `Field.Description` switches the helper `kind` from the Field's `disabled`, `invalid` and `required` state.",
+  "message` — banner-level feedback with severity and an optional action."
+ ],
+ "bestPractices": [
+  "Give it an `id` and point the input's `aria-describedby` at it so screen readers read it with the field.",
+  "Pick `kind` from the field state: `invalid` for errors, `required` for a missing required value, `disabled` when the field is locked.",
+  "Keep it to one short line; `kind=\"disabled\"` already prepends the lock icon, so do not add another."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fallback text when the default slot is empty."
+  },
+  {
+   "name": "kind",
+   "type": "'helper' | 'invalid' | 'required' | 'disabled'",
+   "default": "'helper'",
+   "required": "false",
+   "doc": "Visual variant; `disabled` also prepends a `pi pi-lock` icon."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Helper text; falls back to `label` prop when empty."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import HelperText from '@aziontech/webkit/helper-text'\n</script>\n\n<template>\n  <HelperText\n    kind=\"helper\"\n    label=\"Helper Text\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import HelperText from '@aziontech/webkit/helper-text'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-2\">\n    <HelperText\n      kind=\"helper\"\n      label=\"Helper Text\"\n    />\n    <HelperText\n      kind=\"invalid\"\n      label=\"Text Error\"\n    />\n    <HelperText\n      kind=\"required\"\n      label=\"Text Error\"\n    />\n    <HelperText\n      kind=\"disabled\"\n      label=\"Helper Text\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/helper-text.md"
+}

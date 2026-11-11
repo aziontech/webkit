@@ -51,6 +51,12 @@ the full component catalog (`list_components`, `get_component`, `list_tokens`,
 `suggest_component`, `get_best_practices`, `validate_usage`) — so it starts each screen from the
 reviewed layout and writes the right import, prop, and token on the first try.
 
+No MCP? The package ships the same content as plain files for any agent or reader:
+`node_modules/@aziontech/webkit/llms/llms.txt` (in the [llms.txt](https://llmstxt.org) format)
+links one Markdown page per block, component and foundation, a JSON API per component
+(`llms/components/<name>.json`), and `llms-full.txt` holds every page in one file. They are
+generated from `catalog.json` (`pnpm --filter @aziontech/webkit llms:build`).
+
 ### 1 · Install
 
 ```bash

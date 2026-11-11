@@ -1,0 +1,66 @@
+{
+ "name": "investor-marks",
+ "binding": "InvestorMarks",
+ "import": "@aziontech/webkit/investor-marks",
+ "treeShakeableImport": "@aziontech/webkit/investor-marks",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a \"visit website\" line. It is a page section — the site places it from a `{ _id: 'investor-marks', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `bento-grid`.",
+ "setup": null,
+ "useWhen": [
+  "On the company page, to name the investors with their marks."
+ ],
+ "avoidWhen": [
+  "For client marks → use `client-mosaic` or `logo-wall-quote`."
+ ],
+ "related": [
+  "bento-grid` — the grid the marks are laid in."
+ ],
+ "bestPractices": [
+  "Give each item a `logoLight` when its mark needs a different file on the light theme; otherwise one `logo` serves both.",
+  "Keep `linkLabel` short; it is revealed under the mark on hover and read before the investor name."
+ ],
+ "props": [
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the section title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty."
+  },
+  {
+   "name": "linkLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Line revealed under a mark on hover, and the start of each link's accessible name."
+  },
+  {
+   "name": "items",
+   "type": "InvestorMarksItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The investors, in order; each is `{ name, logo, logoLight?, href }` where `logo` is the mark on the dark theme and `logoLight` the one on the light theme."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import InvestorMarks from '@aziontech/webkit/investor-marks'\n</script>\n\n<template>\n  <InvestorMarks\n    eyebrow=\"Investors\"\n    title=\"Backed by visionary investors\"\n    link-label=\"Visit website\"\n    :items=\"[\n      {\n        name: 'monashees+',\n        logo: '/marketing-components/logos/monashees-extended-reversed.svg',\n        logoLight: '/marketing-components/logos/monashees-extended-mono.svg',\n        href: 'https://www.monashees.com'\n      },\n      {\n        name: 'Qualcomm Ventures',\n        logo: '/marketing-components/logos/qualcomm-extended-reversed.svg',\n        logoLight: '/marketing-components/logos/qualcomm-extended-mono.svg',\n        href: 'https://www.qualcommventures.com'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/investor-marks.md"
+}

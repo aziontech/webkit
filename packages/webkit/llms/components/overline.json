@@ -1,0 +1,85 @@
+{
+ "name": "overline",
+ "binding": "Overline",
+ "import": "@aziontech/webkit/overline",
+ "treeShakeableImport": "@aziontech/webkit/overline",
+ "category": "content",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the \"eyebrow\"). It renders its default slot in `.text-overline-md` in the brand primary color, optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `ticker`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `ticker`) through it.",
+ "setup": null,
+ "useWhen": [
+  "Name a section, panel or column group with one or two words set above its headline.",
+  "Build a custom marketing header that must match the eyebrow treatment of `section-title` and `hero-title` (the `//` prefix and the blinking cursor).",
+  "Label a band inside a page section (a comparison group, a closing panel) with the same uppercase code-style mark."
+ ],
+ "avoidWhen": [
+  "The header has a headline, description and actions → use `section-title` (or `hero-title` for the hero), which already renders its `eyebrow` through Overline.",
+  "The text is a status, count or category attached to an item → use `tag` or `badge`.",
+  "The text is the heading itself → use a real heading element; Overline renders a `div` and is not a heading.",
+  "The text is a keyboard shortcut → use `kbd`.",
+  "The text is a field label → use `label`."
+ ],
+ "related": [
+  "section-title` — the framed section header; renders its `eyebrow` as an Overline with `prefix=\"//\"` and `show-cursor`.",
+  "hero-title` — the hero copy block; renders its `eyebrow` as an Overline closed by the cursor, with `single-line` turned off.",
+  "tag` — a compact label attached to an item, not a heading companion.",
+  "badge` — a compact count or status indicator."
+ ],
+ "bestPractices": [
+  "Keep the label to one or two words: it is set uppercase and, with the default `single-line`, stays on one line whenever it fits its container.",
+  "Turn `single-line` off only when the label can be longer than its container (narrow columns, translated copy); the label then wraps under `text-pretty`, which avoids a lone word on the last line.",
+  "Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is decorative and hidden from screen readers (`aria-hidden=\"true\"`), so never put meaning in it.",
+  "Use `show-cursor` for one eyebrow per view at most; the blink stops under reduced motion.",
+  "Keep the semantic heading in the element after the Overline; the Overline itself carries no heading role."
+ ],
+ "props": [
+  {
+   "name": "singleLine",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Keeps the prefix unbroken and the label on one line while it fits; a longer label wraps instead of overflowing."
+  },
+  {
+   "name": "showCursor",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a blinking terminal-style cursor after the label."
+  },
+  {
+   "name": "prefix",
+   "type": "'' | '//' | '<>' | '</>'",
+   "default": "''",
+   "required": "false",
+   "doc": "Preset prefix rendered before the label; empty renders no prefix."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The label text, rendered uppercase in the brand primary color."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Overline from '@aziontech/webkit/overline'\n</script>\n\n<template>\n  <Overline>OVERLINE TEXT</Overline>\n</template>"
+  },
+  {
+   "name": "Prefixes",
+   "sfc": "<script setup>\n  import Overline from '@aziontech/webkit/overline'\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-4\">\n    <Overline prefix=\"//\">COMMENT STYLE</Overline>\n    <Overline prefix=\"<>\">CODE LABEL</Overline>\n    <Overline prefix=\"</>\">CLOSING TAG</Overline>\n  </div>\n</template>"
+  },
+  {
+   "name": "Cursor",
+   "sfc": "<script setup>\n  import Overline from '@aziontech/webkit/overline'\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-4\">\n    <Overline\n      show-cursor\n      prefix=\"//\"\n      >OVERLINE TEXT</Overline\n    >\n    <Overline show-cursor>NO PREFIX</Overline>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/overline.md"
+}
