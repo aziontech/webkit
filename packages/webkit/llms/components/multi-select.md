@@ -90,7 +90,7 @@
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on trigger and on every option row.
 - Keyboard map (trigger): `Tab` focuses; `Space`/`Enter`/`ArrowDown` opens the panel; `Escape` closes it.
-- Keyboard map (open panel): `ArrowDown`/`ArrowUp` move active option; `Home`/`End` jump to first/last; `Enter`/`Space` toggles the active option's selection without closing the panel; `Escape` closes; `Tab` closes and moves focus to the next form control.
+- Keyboard map (open panel): opening focuses the search field when there is one, else the first selected option, else the first enabled option; `ArrowDown`/`ArrowUp` move between enabled options and wrap; `Home`/`End` jump to first/last enabled; `Enter`/`Space` toggles the focused option and keeps the panel open; `Escape` closes and returns focus to the trigger; `Tab` closes and moves focus to the control after the trigger; `Shift+Tab` closes and returns focus to the trigger. Tests: `multi-select.test.ts` › keyboard map (spec).
 - ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the content element. Content uses `role="listbox"` with `aria-multiselectable="true"`. Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`pi pi-chevron-down`, `pi-heart`, etc.) are `aria-hidden="true"`. The checkbox indicator is decorative for screen readers (the `role="option"` + `aria-selected` carries the semantic); the inner `Checkbox` is `aria-hidden="true"`.
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
@@ -122,6 +122,7 @@
 <template>
   <div style="width: 280px">
     <MultiSelect
+      aria-label="Options"
       v-model="value"
       placeholder="Select options"
     >
@@ -163,6 +164,7 @@
     style="width: 280px"
   >
     <MultiSelect
+      :aria-label="`Option, ${s}`"
       v-for="s in sizes"
       :key="s"
       v-model="value"
@@ -216,6 +218,7 @@
 <template>
   <div style="width: 280px">
     <MultiSelect
+      aria-label="Options"
       v-model="value"
       placeholder="Select options"
     >

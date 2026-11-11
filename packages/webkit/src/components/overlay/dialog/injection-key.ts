@@ -21,6 +21,8 @@ export interface DialogContext {
   titleId: string
   descriptionId: string
   triggerRef: Ref<HTMLElement | null>
+  /** Element focused when the overlay opened; focus returns to it when there is no trigger. */
+  returnFocusRef: Ref<HTMLElement | null>
 }
 
 export const DialogInjectionKey: InjectionKey<DialogContext> = Symbol('DialogContext')

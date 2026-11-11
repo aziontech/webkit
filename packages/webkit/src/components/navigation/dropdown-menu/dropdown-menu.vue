@@ -170,6 +170,8 @@
   }
 
   function onPanelKeydown(event: globalThis.KeyboardEvent) {
+    const typing = (event.target as globalThis.HTMLElement | null)?.matches?.('input, textarea')
+    if (typing && (event.key === 'Home' || event.key === 'End')) return
     if (event.key === 'ArrowDown') {
       event.preventDefault()
       focusNextOption()
@@ -187,7 +189,9 @@
       setOpen(false)
       focusTrigger()
     } else if (event.key === 'Tab') {
+      if (event.shiftKey) event.preventDefault()
       setOpen(false)
+      focusTrigger()
     }
   }
 
@@ -338,11 +342,7 @@
           v-if="isOpenRef"
           :dir="portalLocale.dir"
           :lang="portalLocale.lang"
-          :id="panelId"
           ref="panelRef"
-          role="menu"
-          tabindex="-1"
-          :aria-labelledby="triggerRef?.id || triggerId"
           :aria-hidden="!isOpenRef || undefined"
           :data-testid="`${testId}__panel`"
           :data-state="isOpenRef ? 'open' : 'closed'"
@@ -360,7 +360,11 @@
           </div>
 
           <div
+            :id="panelId"
             ref="panelBodyRef"
+            role="menu"
+            tabindex="-1"
+            :aria-labelledby="triggerRef?.id || triggerId"
             :data-testid="`${testId}__body`"
             class="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto"
           />

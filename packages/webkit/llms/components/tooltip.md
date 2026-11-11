@@ -71,7 +71,7 @@
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger wrapper.
-- Keyboard map: `Tab` focuses the trigger → tooltip opens; `Escape` closes; tooltip never traps focus.
+- Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. Tests: `tooltip.test.ts` › keyboard map (spec).
 - ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into a WebKit `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.
 - `motion-reduce:animate-none` on the panel; reduced-motion users get instant show/hide.

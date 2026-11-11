@@ -13,6 +13,7 @@
 <template>
   <div class="flex flex-col gap-4 w-[280px]">
     <Select
+      :aria-label="`Option, ${s}`"
       v-for="s in sizes"
       :key="s"
       v-model="value"

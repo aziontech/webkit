@@ -219,7 +219,7 @@
                 colspan="3"
                 class="sticky top-[calc(3.5rem+var(--compare-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) py-(--spacing-sm) text-start font-normal"
               >
-                <span class="text-overline-md text-(--primary)">{{ group.title }}</span>
+                <span class="text-overline-md text-(--text-primary)">{{ group.title }}</span>
               </th>
             </tr>
             <tr

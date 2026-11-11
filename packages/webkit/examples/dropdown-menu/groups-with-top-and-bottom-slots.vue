@@ -36,6 +36,7 @@
       <template #bottom>
         <Button
           kind="transparent"
+          role="menuitem"
           size="small"
           label="Manage account"
           class="w-full"
@@ -60,6 +61,7 @@
       <template #bottom>
         <Button
           kind="transparent"
+          role="menuitem"
           size="small"
           label="Workspace settings"
           class="w-full"

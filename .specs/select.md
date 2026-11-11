@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 466c39dc19dff12d1ba578eaa89bd4f04bd75120234bddb8a6d15b6f93d70295
+checksum: 8c601ec43099d1814ac3e6b1b766ac37a4dfb0e6c57d7f5d8ca5aa347734cc6f
 created: 2026-06-15
 last_updated: 2026-11-11
 ---
@@ -173,7 +173,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on trigger and on every option row.
 - Keyboard map (trigger): `Tab` focuses; `Space`/`Enter`/`ArrowDown` opens the panel; `Escape` closes it.
-- Keyboard map (open panel): `ArrowDown`/`ArrowUp` move active option; `Home`/`End` jump to first/last; `Enter`/`Space` select (single) or toggle (multi); `Escape` closes; `Tab` closes and moves focus to the next form control.
+- Keyboard map (open panel): opening focuses the search field when there is one, else the selected option, else the first enabled option; `ArrowDown`/`ArrowUp` move the active option and wrap; `Home`/`End` jump to first/last; `Enter`/`Space` select, close and return focus to the trigger; `Escape` closes and returns focus to the trigger; `Tab` closes and moves focus to the control after the trigger; `Shift+Tab` closes and returns focus to the trigger. Tests: `select.test.ts` › keyboard map (spec).
 - ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the content element. Content uses `role="listbox"` with `aria-multiselectable` mirroring `multiple`. Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`pi pi-chevron-down`, `pi-heart`, etc.) are `aria-hidden="true"`.
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.

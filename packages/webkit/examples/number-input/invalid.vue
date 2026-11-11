@@ -9,6 +9,7 @@
   <div class="w-[20rem]">
     <NumberInput
       v-model="value"
+      aria-label="Quantity"
       invalid
       required
     />

@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/dialog/default.vue'
@@ -377,5 +378,117 @@ describe('Dialog on phones', () => {
     const shell = byTestId('overlay-dialog__panel-shell')
     expect(shell?.className).toContain('max-sm:h-dvh')
     expect(shell?.className).toContain('max-sm:rounded-none')
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const twoActions = defineComponent({
+    components: {
+      Dialog,
+      DialogTrigger,
+      DialogPortal,
+      DialogOverlay,
+      DialogContent,
+      DialogTitle
+    },
+    setup() {
+      const open = ref(false)
+      return { open }
+    },
+    template: `
+      <Dialog v-model:open="open">
+        <DialogTrigger>
+          <button type="button">Open dialog</button>
+        </DialogTrigger>
+        <DialogPortal>
+          <DialogOverlay />
+          <DialogContent>
+            <DialogTitle>Rename</DialogTitle>
+            <button type="button" data-testid="first-action">First</button>
+            <button type="button" data-testid="last-action">Last</button>
+          </DialogContent>
+        </DialogPortal>
+      </Dialog>
+    `
+  })
+
+  const openWithKey = async (key: string) => {
+    const { getByTestId } = render(twoActions)
+    await settle()
+    const trigger = getByTestId('overlay-dialog__trigger').querySelector('button')!
+    trigger.focus()
+    await userEvent.keyboard(key)
+    await settle()
+    return { trigger, getByTestId }
+  }
+
+  it.each(['{Enter}', ' '])(
+    '%s on the trigger opens and focuses the first control',
+    async (key) => {
+      await openWithKey(key)
+      expect(panel()).not.toBeNull()
+      await vi.waitFor(() => {
+        expect(document.activeElement).toBe(byTestId('first-action'))
+      })
+    }
+  )
+
+  it('Tab on the last control wraps to the first (focus is trapped)', async () => {
+    await openWithKey('{Enter}')
+    byTestId('last-action')!.focus()
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(byTestId('first-action'))
+  })
+
+  it('Shift+Tab on the first control wraps to the last', async () => {
+    await openWithKey('{Enter}')
+    byTestId('first-action')!.focus()
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    expect(document.activeElement).toBe(byTestId('last-action'))
+  })
+
+  it('Escape closes and returns focus to the trigger', async () => {
+    const { trigger, getByTestId } = await openWithKey('{Enter}')
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
+    await vi.waitFor(() => {
+      expect(document.activeElement).toBe(trigger)
+    })
+  })
+
+  it('returns focus to the previously focused element when opened without a trigger', async () => {
+    const controlled = defineComponent({
+      components: { Dialog, DialogPortal, DialogContent, DialogTitle },
+      setup() {
+        const open = ref(false)
+        return { open }
+      },
+      template: `
+        <div>
+          <button type="button" data-testid="opener" @click="open = true">Open</button>
+          <Dialog v-model:open="open">
+            <DialogPortal>
+              <DialogContent>
+                <DialogTitle>Controlled</DialogTitle>
+                <button type="button">Inside</button>
+              </DialogContent>
+            </DialogPortal>
+          </Dialog>
+        </div>
+      `
+    })
+    const { getByTestId } = render(controlled)
+    await settle()
+    const opener = getByTestId('opener')
+    opener.focus()
+    await userEvent.keyboard('{Enter}')
+    await settle()
+    expect(panel()).not.toBeNull()
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    await vi.waitFor(() => {
+      expect(document.activeElement).toBe(opener)
+    })
   })
 })

@@ -53,6 +53,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Forced colors: the dot opts out of forced colour adjustment and paints `CanvasText`, so it stays visible when backgrounds are forced to `Canvas`; the severity is still carried by the label text, never by the dot's colour alone. Tests: `src/test/forced-colors.test.ts`.
 
 ## Examples
 

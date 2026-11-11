@@ -55,7 +55,8 @@
   watch(isOpen, async (open, wasOpen) => {
     if (open || !wasOpen || !ctx) return
     await nextTick()
-    ctx.triggerRef.value?.focus()
+    const target = ctx.triggerRef.value ?? ctx.returnFocusRef.value
+    if (target?.isConnected) target.focus()
   })
 
   const shellClasses = computed(() =>

@@ -182,7 +182,7 @@
   }
 
   const regions = computed<Region[]>(() => {
-    const map = new Map<ToastPosition, ToastView[]>()
+    const map = new Map<ToastPosition, ToastView[]>([[props.position, []]])
     items.value.forEach((item) => {
       const pos = item.entry.position ?? props.position
       const bucket = map.get(pos)
@@ -324,7 +324,8 @@
         :data-testid="`${testId}-${region.position}`"
         :data-position="region.position"
         :data-expanded="isExpanded(region) || null"
-        :aria-live="region.all.some((i) => i.entry.type === 'error') ? 'assertive' : 'polite'"
+        aria-live="polite"
+        aria-relevant="additions text"
         aria-atomic="false"
         :style="regionStyle(region)"
         class="motion-reduce:transition-none"

@@ -42,7 +42,9 @@
       return
     }
     if (event.key === 'Tab') {
+      if (event.shiftKey) event.preventDefault()
       ctx.setOpen(false)
+      ctx.triggerRef.value?.focus()
       return
     }
     if (
@@ -88,14 +90,33 @@
     ctx.setOpen(false)
   }
 
+  const focusInitial = () => {
+    const el = root.value
+    if (!el) return
+    const search = el.querySelector<HTMLElement>(
+      'input:not([type="checkbox"]):not([type="radio"]):not([disabled])'
+    )
+    const target =
+      search ??
+      el.querySelector<HTMLElement>('[role="option"][aria-selected="true"]:not([data-disabled])') ??
+      el.querySelector<HTMLElement>('[role="option"]:not([data-disabled])')
+    target?.focus()
+  }
+
   watch(
     () => ctx.open.value,
     async (next) => {
       if (next) {
         await nextTick()
+        focusInitial()
         document.addEventListener('pointerdown', onDocumentPointerDown, true)
       } else {
+        const hadFocus = !!root.value?.contains(document.activeElement)
         document.removeEventListener('pointerdown', onDocumentPointerDown, true)
+        if (hadFocus) {
+          await nextTick()
+          ctx.triggerRef.value?.focus()
+        }
       }
     }
   )

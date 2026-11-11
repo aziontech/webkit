@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: c9c99b994cca9ff7f33ef56d56edbd1bd9a6de4f2d3919264f8a77be217d7425
+checksum: 66b1bd69922c13c7aecf31296fd01fb96c5c969b72e11d0e534e6e1b90127c39
 created: 2026-06-25
 last_updated: 2026-11-11
 ---
@@ -175,7 +175,7 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on trigger and on every option row.
 - Keyboard map (trigger): `Tab` focuses; `Space`/`Enter`/`ArrowDown` opens the panel; `Escape` closes it.
-- Keyboard map (open panel): `ArrowDown`/`ArrowUp` move active option; `Home`/`End` jump to first/last; `Enter`/`Space` toggles the active option's selection without closing the panel; `Escape` closes; `Tab` closes and moves focus to the next form control.
+- Keyboard map (open panel): opening focuses the search field when there is one, else the first selected option, else the first enabled option; `ArrowDown`/`ArrowUp` move between enabled options and wrap; `Home`/`End` jump to first/last enabled; `Enter`/`Space` toggles the focused option and keeps the panel open; `Escape` closes and returns focus to the trigger; `Tab` closes and moves focus to the control after the trigger; `Shift+Tab` closes and returns focus to the trigger. Tests: `multi-select.test.ts` › keyboard map (spec).
 - ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the content element. Content uses `role="listbox"` with `aria-multiselectable="true"`. Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`pi pi-chevron-down`, `pi-heart`, etc.) are `aria-hidden="true"`. The checkbox indicator is decorative for screen readers (the `role="option"` + `aria-selected` carries the semantic); the inner `Checkbox` is `aria-hidden="true"`.
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.

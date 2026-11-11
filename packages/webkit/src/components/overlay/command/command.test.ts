@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -423,5 +424,76 @@ describe('Command key names follow the locale', () => {
     expect(keycaps.some((text) => text?.endsWith('Enter'))).toBe(true)
     expect(keycaps).toContain('Espaço')
     view.unmount()
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const activeText = () =>
+    document.body.querySelector('[role="option"][aria-selected="true"]')?.textContent?.trim()
+  const input = () => byTestId('overlay-command__input')!.querySelector('input')!
+
+  const withOpener = defineComponent({
+    components: { Palette: composed() },
+    template: `<div><button type="button" data-testid="opener">Opener</button><Palette /></div>`
+  })
+
+  const openPalette = async () => {
+    const view = render(withOpener)
+    await settle()
+    view.getByTestId('opener').focus()
+    await userEvent.keyboard('{Control>}k{/Control}')
+    await settle()
+    await vi.waitFor(() => expect(document.activeElement).toBe(input()))
+    return view
+  }
+
+  it('Ctrl+K (Cmd+K on macOS) opens the palette and focuses the search field', async () => {
+    await openPalette()
+    expect(panel()).not.toBeNull()
+    expect(activeText()).toBe('Deploy Project')
+  })
+
+  it('ArrowDown moves to the next enabled item and wraps, skipping disabled ones', async () => {
+    await openPalette()
+    await userEvent.keyboard('{ArrowDown}')
+    expect(activeText()).toBe('Create Application')
+    await userEvent.keyboard('{ArrowDown}')
+    expect(activeText()).toBe('Deploy Project')
+  })
+
+  it('ArrowUp from the first item wraps to the last enabled item', async () => {
+    await openPalette()
+    await userEvent.keyboard('{ArrowUp}')
+    expect(activeText()).toBe('Create Application')
+  })
+
+  it('End and Home jump to the last and first enabled items', async () => {
+    await openPalette()
+    await userEvent.keyboard('{End}')
+    expect(activeText()).toBe('Create Application')
+    await userEvent.keyboard('{Home}')
+    expect(activeText()).toBe('Deploy Project')
+  })
+
+  it('Enter activates the active item, closes, and returns focus to the opener', async () => {
+    const { getByTestId } = await openPalette()
+    await userEvent.keyboard('{Enter}')
+    await settle()
+    expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
+    await vi.waitFor(() => expect(document.activeElement).toBe(getByTestId('opener')))
+  })
+
+  it('Escape closes and returns focus to the element focused before opening', async () => {
+    const { getByTestId } = await openPalette()
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
+    await vi.waitFor(() => expect(document.activeElement).toBe(getByTestId('opener')))
+  })
+
+  it('Tab stays inside the palette', async () => {
+    await openPalette()
+    await userEvent.keyboard('{Tab}')
+    expect(panel()!.contains(document.activeElement)).toBe(true)
   })
 })

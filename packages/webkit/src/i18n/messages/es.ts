@@ -530,6 +530,9 @@ export const es: Messages = {
   popover: {
     close: 'Cerrar'
   },
+  progress: {
+    label: 'Progreso'
+  },
   propertyFilterQuery: {
     label: 'Consulta',
     placeholder: 'Escribe una consulta, por ejemplo status = Active AND requests > 10',

@@ -310,6 +310,8 @@ text-(--text-default) text-(--text-muted) ring-(--ring-color)
 | Feedback      | `--success`, `--success-border`, `--success-contrast`, `--warning`, `--warning-border`, `--warning-contrast`, `--danger`, `--danger-border`, `--danger-contrast`, `--info`, `--info-border`, `--info-contrast` |
 | Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation`, `--code-sintax-comment` |
 
+Text on `--bg-surface-overlay` is `--text-default`. In dark the overlay fill is `#4D4D4D`, and `--text-muted` (`#999999`) on it is 2.96:1, under the 4.5:1 that WCAG 1.4.3 asks for (found by the a11y harness, M2.9 WP a11y).
+
 ### Loading placeholders
 
 A loading placeholder (skeleton, image stand-in, lazy block) does **not** use a surface token. Surface tokens

@@ -153,7 +153,7 @@
     <div
       class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface-overlay) p-(--spacing-md)"
     >
-      <span class="text-label-sm text-(--text-muted)">--bg-surface-overlay</span>
+      <span class="text-label-sm text-(--text-default)">--bg-surface-overlay</span>
       <Skeleton
         kind="shape"
         width="100%"

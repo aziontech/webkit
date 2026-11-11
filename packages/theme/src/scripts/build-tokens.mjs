@@ -203,6 +203,42 @@ const emitBaseLayer = () =>
     '}',
   ].join('\n');
 
+const FORCED_COLORS_SELECTED = [
+  '[role="option"][aria-selected="true"]',
+  '[role="tab"][aria-selected="true"]',
+  '[role="row"][aria-selected="true"]',
+  '[role="gridcell"][aria-selected="true"]',
+  '[role="treeitem"][aria-selected="true"]',
+  '[role="menuitemradio"][aria-checked="true"]',
+  '[role="menuitemcheckbox"][aria-checked="true"]',
+  '[aria-current]:not([aria-current="false"])',
+  '[aria-pressed="true"]',
+];
+
+const emitAccessibilityMedia = () =>
+  [
+    '@media (forced-colors: active) {',
+    '  :focus-visible {',
+    '    outline: 2px solid Highlight !important;',
+    '    outline-offset: 2px !important;',
+    '  }',
+    '',
+    `  :is(${FORCED_COLORS_SELECTED.join(', ')}) {`,
+    '    outline: 2px solid SelectedItem;',
+    '    outline-offset: -2px;',
+    '  }',
+    '}',
+    '',
+    '@media (prefers-reduced-motion: reduce) {',
+    '  *, *::before, *::after {',
+    '    animation-duration: 0.01ms !important;',
+    '    animation-iteration-count: 1 !important;',
+    '    transition-duration: 0.01ms !important;',
+    '    scroll-behavior: auto !important;',
+    '  }',
+    '}',
+  ].join('\n');
+
 const emitKeyframes = () => {
   const blocks = [];
   for (const [name, steps] of Object.entries(keyframes)) {
@@ -306,6 +342,8 @@ const emitCssV4 = () => {
     emitSemanticColorUtilities(),
     '',
     emitBaseLayer(),
+    '',
+    emitAccessibilityMedia(),
     '',
   ].join('\n');
 };

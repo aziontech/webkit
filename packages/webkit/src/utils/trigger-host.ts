@@ -57,6 +57,26 @@ function isInert(nodes: VNodeArrayChildren): boolean {
   )
 }
 
+const NON_TEXT_INPUTS = [
+  'button',
+  'submit',
+  'reset',
+  'checkbox',
+  'radio',
+  'file',
+  'image',
+  'color',
+  'range'
+]
+
+const POPUP_ARIA = ['aria-expanded', 'aria-haspopup', 'aria-controls']
+
+function isTextEntry(el: globalThis.HTMLElement): boolean {
+  if (el.hasAttribute('role')) return false
+  if (el instanceof globalThis.HTMLTextAreaElement) return true
+  return el instanceof globalThis.HTMLInputElement && !NON_TEXT_INPUTS.includes(el.type)
+}
+
 function merge(nodes: VNode[], aria: () => TriggerAria): boolean {
   const index = nodes.findIndex(
     (vnode) => vnode.type !== Comment && !(vnode.type === Text && !String(vnode.children).trim())
@@ -66,6 +86,14 @@ function merge(nodes: VNode[], aria: () => TriggerAria): boolean {
   if (isControl(first)) {
     const own = aria()
     own['id'] = first.props?.['id'] ?? own['id']
+    const p = first.props ?? {}
+    if (
+      !p['role'] &&
+      (first.type === 'textarea' ||
+        (first.type === 'input' && !NON_TEXT_INPUTS.includes(String(p['type'] ?? 'text'))))
+    ) {
+      for (const name of POPUP_ARIA) delete own[name]
+    }
     nodes[index] = cloneVNode(first, own, true)
     return true
   }
@@ -118,6 +146,9 @@ export const TriggerHost = defineComponent({
         control = next
       }
       const attrs = next === host ? hostAttrs() : { ...props.aria, id: undefined }
+      if (isTextEntry(next)) {
+        for (const name of POPUP_ARIA) delete attrs[name]
+      }
       if (ownsId) attrs['id'] = props.controlId
       for (const [name, value] of Object.entries(attrs))
         if (value !== undefined) next.setAttribute(name, value)

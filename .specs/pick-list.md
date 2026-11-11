@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: implemented
 spec_version: 2
-checksum: cdb06ccfb9efbf7631038cc55d1e8d1f9de62e256bf8d5555b21ba333f35488a
+checksum: 9c50a24410c33daf1442692740bc0b1cbdaf6eb1b41a7efa177c9f2e46b49c53
 created: 2026-06-25
 last_updated: 2026-11-11
 ---
@@ -182,7 +182,7 @@ The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its 
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on each option and on every move control.
 - Keyboard map: `Tab` moves between the two listboxes and the control column; within a listbox `Space`/`Enter` toggle the focused option's selection; the move controls are activated with `Enter`/`Space`. Double-click on an option is a pointer affordance for moving it to the opposite list; the same move is reachable via select + the move controls (no keyboard-only feature is double-click-only).
-- ARIA: each list is `role="listbox"` with `aria-label` from its title text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled`.
+- ARIA: each list is `role="listbox"` with `aria-label` from its title text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled` on both listboxes, and a disabled root becomes `role="group"` with `aria-disabled="true"`, so the titles dimmed by the root's `opacity-60` belong to a disabled control (WCAG 1.4.3 inactive-component exemption) instead of reading as low-contrast live text.
 - Contrast ≥4.5:1 (text) / ≥3:1 (borders + icons), including the disabled state.
 - A loading list sets `aria-busy="true"`; its `Spinner` is decorative (`aria-hidden`) and carries its own reduced-motion fallback. Control hover transitions pair with `motion-reduce:transition-none`.
 - Touch target ≥40×40 px for every move control (medium icon-button height).

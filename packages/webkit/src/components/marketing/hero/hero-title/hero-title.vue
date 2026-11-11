@@ -87,7 +87,7 @@
     >
       <span
         v-if="highlight"
-        class="text-(--primary) [text-shadow:0_0_2rem_color-mix(in_srgb,var(--primary)_30%,transparent)]"
+        class="text-(--text-primary) [text-shadow:0_0_2rem_color-mix(in_srgb,var(--primary)_30%,transparent)]"
         >{{ highlight }}</span
       >
       {{ title }}

@@ -231,12 +231,14 @@ export const textsData = {
     fontSize: 'inherit',
     lineHeight: 'inherit',
     color: 'var(--text-link)',
+    textDecorationLine: 'underline',
+    textUnderlineOffset: '0.15em',
     borderRadius: 'var(--shape-elements)',
     transition: `all ${duration['fast-02']} ${curve['productive-entrance']}`,
     states: {
       hover: {
         color: 'var(--text-link-hover)',
-        textDecoration: 'underline'
+        textDecorationThickness: '2px'
       },
       'focus-visible': {
         outline: '2px solid var(--ring-color)',

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
 
@@ -89,23 +89,6 @@
     return isChecked.value ? 'checked' : 'unchecked'
   })
 
-  const ariaChecked = computed<'true' | 'false' | 'mixed'>(() => {
-    if (props.indeterminate) return 'mixed'
-    return isChecked.value ? 'true' : 'false'
-  })
-
-  const inputRef = ref<globalThis.HTMLInputElement | null>(null)
-
-  watch(
-    () => props.indeterminate,
-    (value) => {
-      if (inputRef.value) {
-        inputRef.value.indeterminate = value
-      }
-    },
-    { immediate: true, flush: 'post' }
-  )
-
   const handleChange = () => {
     if (isDisabled.value || props.readonly) {
       return
@@ -142,7 +125,7 @@
   >
     <input
       :id="controlId || ''"
-      ref="inputRef"
+      :indeterminate.prop="indeterminate"
       :name="name || ''"
       type="checkbox"
       :aria-describedby="describedBy"
@@ -154,7 +137,6 @@
       :disabled="isDisabled"
       :readonly="readonly"
       :tabindex="tabindex"
-      :aria-checked="ariaChecked"
       :data-testid="`${testId}__input`"
       v-bind="passthroughAttrs"
       @change="handleChange"

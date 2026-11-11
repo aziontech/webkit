@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: b146b9eb7a6f72cff249c8caa9e3b48955b4abfaa3f53e6dd30a8becbfb022a1
+checksum: 3b074c8b2ca562f889823c17d08d940fe29411d64f23ce406eec4626982dea4b
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-11
 
 ## Purpose
 
-Binary selection control. Supports a single boolean (`binary: true`) and array-based multi-select (adds or removes its `value` in the `modelValue` array) (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) and sets `aria-checked="mixed"` — used by parents that own a partial-selection summary (e.g. "select all" rows where some children are selected). Aligned with Figma frame `2027:7311`.
+Binary selection control. Supports a single boolean (`binary: true`) and array-based multi-select (adds or removes its `value` in the `modelValue` array) (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) and sets the native `indeterminate` property, which exposes the mixed state — used by parents that own a partial-selection summary (e.g. "select all" rows where some children are selected). Aligned with Figma frame `2027:7311`.
 
 ## When to use
 
@@ -39,7 +39,7 @@ Binary selection control. Supports a single boolean (`binary: true`) and array-b
 
 - Set `binary` for a plain true/false value; without it the checkbox adds or removes its `value` in an array `modelValue`.
 - Give every checkbox an accessible name: point a `label` element's `for` at `inputId`, or pass `aria-label` (attributes land on the inner input).
-- `indeterminate` only changes the visual and sets `aria-checked="mixed"`; the parent computes it and decides what a click does.
+- `indeterminate` only changes the visual and sets the native `indeterminate` property (exposed as mixed); the parent computes it and decides what a click does.
 - Use `readonly` for a value that cannot change in this context and `disabled` for an option that is unavailable.
 
 ## Usage
@@ -129,7 +129,7 @@ The checkbox is a leaf primitive — no slots. Label/description live in the enc
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Space` toggles. (The native `<input type="checkbox">` carries the semantics.)
-- ARIA: native `<input type="checkbox">` is the source of truth. `aria-checked` is set to `'mixed'` when `indeterminate` is true (with `indeterminate` DOM property also set on the input). The wrapping `<span>` is decorative.
+- ARIA: native `<input type="checkbox">` is the source of truth. No `aria-checked` is set on it: the checked state comes from `checked`, and the mixed state from the `indeterminate` DOM property, which browsers expose as mixed (an `aria-checked` on a native checkbox conflicts with its real state, axe `aria-conditional-attr`). The wrapping `<span>` is decorative.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.
 - Touch target — the `1.125rem` size is below 40×40 px; consumers should wrap it in a horizontal `Field` (the label extends the target) or expand the parent click area when the control sits on its own.
@@ -137,7 +137,7 @@ The checkbox is a leaf primitive — no slots. Label/description live in the enc
 ## Stories (Storybook)
 
 - Default
-- Indeterminate — justification: documents the tri-state visual (horizontal bar) and the `aria-checked="mixed"` semantics added in `spec_version: 3`. Not reachable from any other story.
+- Indeterminate — justification: documents the tri-state visual (horizontal bar) and the mixed semantics added in `spec_version: 3`. Not reachable from any other story.
 - Disabled
 
 ## Constraints — DO NOT

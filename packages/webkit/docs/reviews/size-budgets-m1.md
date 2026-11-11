@@ -186,3 +186,16 @@ Two new entries and five raises. `DateRangePicker` composes the calendar parts (
 | webkit-provider  | 6.7           | 6.78         | 6.95       | Raised: the `topologyDiagram` and `outcomeMark` English strings.          |
 | locales-pt-BR    | 6.1           | 6.12         | 6.35       | Raised: the same groups in Portuguese.                                    |
 | locales-es       | 6.15          | 6.17         | 6.4        | Raised: the same groups in Spanish.                                       |
+
+### M2.9 WP a11y
+
+No new entries. Six small raises, all from accessibility fixes in shared parts that these entries compose: `TriggerHost` leaves popup ARIA off text inputs (every `Popover`, `Tooltip` and `DropdownMenu` trigger), `Dialog` and `Drawer` return focus to the element focused before opening, `Table` moves `role="table"` onto its grid and forwards naming attributes there, `Chip` splits its body from the remove button, and `Progress` has a default accessible name (one more key in the English catalog that `doc-page-header` imports whole).
+
+| Entry            | Budget before | Measured now | New budget | Why                                                            |
+| ---------------- | ------------- | ------------ | ---------- | -------------------------------------------------------------- |
+| doc-page-header  | 26.5          | 26.67        | 26.8       | Imports the whole English catalog, which gained keys.          |
+| comparison-table | 22            | 22.09        | 22.25      | `Popover` and `Tooltip` triggers go through `TriggerHost`.     |
+| listing-browser  | 64.75         | 64.91        | 65.1       | `Table` grid role and attribute forwarding, `Chip` body split. |
+| listing-table    | 56            | 56.09        | 56.25      | `Table` grid role and attribute forwarding.                    |
+| hotspot          | 11.25         | 11.32        | 11.4       | Built on `Popover`, whose trigger goes through `TriggerHost`.  |
+| confirm-dialog   | 23.8          | 23.99        | 24.1       | `Dialog` focus return to the element focused before it opened. |

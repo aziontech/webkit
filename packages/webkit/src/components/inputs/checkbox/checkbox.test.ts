@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { nextTick } from 'vue'
 
 import Default from '../../../../examples/checkbox/default.vue'
 import Disabled from '../../../../examples/checkbox/disabled.vue'
@@ -85,7 +86,7 @@ describe('Checkbox', () => {
 
       const input = getByTestId('input-checkbox__input') as HTMLInputElement
       expect(input.checked).toBe(true)
-      expect(input.getAttribute('aria-checked')).toBe('true')
+      expect(input.hasAttribute('aria-checked')).toBe(false)
       expect(getByTestId('input-checkbox').getAttribute('data-state')).toBe('checked')
       expect(getByTestId('input-checkbox').getAttribute('data-checked')).toBe('true')
     })
@@ -97,7 +98,7 @@ describe('Checkbox', () => {
 
       const input = getByTestId('input-checkbox__input') as HTMLInputElement
       expect(input.checked).toBe(false)
-      expect(input.getAttribute('aria-checked')).toBe('false')
+      expect(input.hasAttribute('aria-checked')).toBe(false)
       expect(getByTestId('input-checkbox').getAttribute('data-state')).toBe('unchecked')
       expect(getByTestId('input-checkbox').getAttribute('data-checked')).toBeNull()
     })
@@ -123,7 +124,7 @@ describe('Checkbox', () => {
   })
 
   describe('indeterminate', () => {
-    it('sets aria-checked="mixed", data-state and data-indeterminate, and renders the bar icon', () => {
+    it('sets the native indeterminate property, data-state and data-indeterminate, and renders the bar icon', () => {
       const { getByTestId } = render(Checkbox, {
         props: { binary: true, modelValue: false, indeterminate: true }
       })
@@ -131,7 +132,8 @@ describe('Checkbox', () => {
       const root = getByTestId('input-checkbox')
       const input = getByTestId('input-checkbox__input') as HTMLInputElement
 
-      expect(input.getAttribute('aria-checked')).toBe('mixed')
+      expect(input.indeterminate).toBe(true)
+      expect(input.hasAttribute('aria-checked')).toBe(false)
       expect(root.getAttribute('data-state')).toBe('indeterminate')
       expect(root.getAttribute('data-indeterminate')).toBe('true')
       // The indeterminate (bar) glyph renders, not the checkmark.
@@ -249,9 +251,10 @@ describe('Checkbox', () => {
       expect(getByTestId('input-checkbox')).toBeTruthy()
     })
 
-    it('renders the Indeterminate story with a mixed input', () => {
+    it('renders the Indeterminate story with a mixed input', async () => {
       const { getByTestId } = render(Indeterminate)
-      expect(getByTestId('input-checkbox__input').getAttribute('aria-checked')).toBe('mixed')
+      await nextTick()
+      expect((getByTestId('input-checkbox__input') as HTMLInputElement).indeterminate).toBe(true)
     })
 
     it('renders the Disabled story with disabled inputs', () => {

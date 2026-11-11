@@ -4,12 +4,12 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: eb570065b04a3995c42709ae840b16c4ee58a383531b0bd7c37f9e36a52d7775
+checksum: 855d7db6e38a7090adff96fe553f4d8b51e0dc7f0244b6423be438c8b59aee9f
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
 created: 2026-06-26
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Progress Bar — Component Spec
@@ -110,6 +110,7 @@ quantity.
 ## Accessibility (WCAG 2.1 AA)
 
 - Non-interactive: the bar is not focusable and takes no keyboard input.
+- Name: the bar takes `aria-label` or `aria-labelledby` from the consumer; with neither it is named by the locale catalog (`progress.label`, "Progress"), so a bare bar never fails `aria-progressbar-name`.
 - ARIA: root uses `role="progressbar"`. Determinate sets `aria-valuemin="0"`, `aria-valuemax="<max>"`, `aria-valuenow="<value>"`; indeterminate omits `aria-valuenow` and sets `aria-busy="true"`.
 - Contrast ≥3:1 between the fill (`var(--primary)`) and the track (`var(--bg-placeholder)`). The track is an alpha overlay, not an opaque surface, so it keeps that contrast on any background the bar is placed over (canvas, surface, raised, overlay).
 - `motion-reduce:transition-none` on the determinate width morph and `motion-reduce:animate-none` on the indeterminate animation (it falls back to a static fill under reduced motion).

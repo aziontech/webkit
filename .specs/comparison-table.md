@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 9bc97f3f15893cf535aad5f44c996a20d413bd910c5211bc9ce54c30df948881
+last_updated: 2026-11-11
+checksum: 2f16539b87ee5d1e7f22a562850d724152ff02329a447c45ff9d0dcf54c39339
 ---
 
 # ComparisonTable — Component Spec
@@ -103,7 +103,7 @@ _none_
 |---|---|
 | typography (column heads, category heads) | `.text-overline-md` |
 | typography (row heads) | `.text-label-md` |
-| category head text | `var(--primary)` |
+| category head text | `var(--text-primary)` |
 | column head text | `var(--text-muted)` |
 | row head text | `var(--text-default)` |
 | full / partial / none glyph | `var(--success-contrast)` / `var(--warning-contrast)` / `var(--text-muted)` |

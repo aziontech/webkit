@@ -51,6 +51,8 @@
     type="button"
     :id="triggerId"
     :aria-describedby="describedBy"
+    :aria-label="(attrs['aria-label'] as string | undefined) ?? ctx.ariaLabel.value"
+    :aria-labelledby="(attrs['aria-labelledby'] as string | undefined) ?? ctx.ariaLabelledby.value"
     role="combobox"
     aria-haspopup="listbox"
     :aria-expanded="ctx.open.value"

@@ -508,6 +508,10 @@ export const popover = {
   close: 'Close'
 } as const
 
+export const progress = {
+  label: 'Progress'
+} as const
+
 export const propertyFilter = {
   label: 'Filter',
   placeholder: 'Filter by property or text',
@@ -996,6 +1000,7 @@ export const en = {
   phoneInput,
   pickList,
   popover,
+  progress,
   promptInput,
   propertyFilter,
   propertyFilterQuery,

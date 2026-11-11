@@ -75,6 +75,11 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'input-multi-select'
   )
 
+  const rootAttrs = computed(() => {
+    const { 'aria-label': _label, 'aria-labelledby': _labelledby, ...rest } = attrs
+    return rest
+  })
+
   const uncontrolledOpen = ref(props.defaultOpen)
   const openState = computed(() => (props.open !== undefined ? props.open : uncontrolledOpen.value))
 
@@ -123,6 +128,8 @@
     required: isRequired,
     controlId,
     describedBy,
+    ariaLabel: computed(() => attrs['aria-label'] as string | undefined),
+    ariaLabelledby: computed(() => attrs['aria-labelledby'] as string | undefined),
     placeholder: computed(() => props.placeholder),
     displayValue: displayValueComputed,
     filled
@@ -131,7 +138,7 @@
 
 <template>
   <div
-    v-bind="$attrs"
+    v-bind="rootAttrs"
     :data-testid="testId"
     :data-state="openState ? 'open' : 'closed'"
     :data-size="size"

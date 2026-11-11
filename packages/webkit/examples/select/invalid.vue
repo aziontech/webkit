@@ -15,6 +15,7 @@
 <template>
   <div class="w-[280px]">
     <Select
+      aria-label="Option"
       v-model="value"
       :invalid="invalid"
       placeholder="Select an option"

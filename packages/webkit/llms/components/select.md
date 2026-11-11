@@ -92,7 +92,7 @@
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on trigger and on every option row.
 - Keyboard map (trigger): `Tab` focuses; `Space`/`Enter`/`ArrowDown` opens the panel; `Escape` closes it.
-- Keyboard map (open panel): `ArrowDown`/`ArrowUp` move active option; `Home`/`End` jump to first/last; `Enter`/`Space` select (single) or toggle (multi); `Escape` closes; `Tab` closes and moves focus to the next form control.
+- Keyboard map (open panel): opening focuses the search field when there is one, else the selected option, else the first enabled option; `ArrowDown`/`ArrowUp` move the active option and wrap; `Home`/`End` jump to first/last; `Enter`/`Space` select, close and return focus to the trigger; `Escape` closes and returns focus to the trigger; `Tab` closes and moves focus to the control after the trigger; `Shift+Tab` closes and returns focus to the trigger. Tests: `select.test.ts` › keyboard map (spec).
 - ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the content element. Content uses `role="listbox"` with `aria-multiselectable` mirroring `multiple`. Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`pi pi-chevron-down`, `pi-heart`, etc.) are `aria-hidden="true"`.
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
@@ -120,6 +120,7 @@
 
 <template>
   <Select
+    aria-label="Option"
     v-model="value"
     size="large"
     placeholder="Select an option"
@@ -155,6 +156,7 @@
 <template>
   <div class="flex flex-col gap-4 w-[280px]">
     <Select
+      :aria-label="`Option, ${s}`"
       v-for="s in sizes"
       :key="s"
       v-model="value"
@@ -193,6 +195,7 @@
 
 <template>
   <Select
+    aria-label="Options"
     v-model="value"
     multiple
     placeholder="Select an option"

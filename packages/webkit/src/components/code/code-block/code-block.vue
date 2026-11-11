@@ -712,7 +712,7 @@
                 <div
                   v-for="(lineTokens, offset) in chunk.items"
                   :key="`${activeTab.value}-${panelVersion}-${chunk.start + offset}`"
-                  class="group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm data-[state=added]:bg-(--success) data-[state=removed]:bg-(--danger) data-[state=highlighted]:bg-(--info)"
+                  class="group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40"
                   :class="getLineMotionClasses(chunk.start + offset)"
                   :style="getLineMotionStyle(chunk.start + offset)"
                   :data-testid="`${testId}__line`"

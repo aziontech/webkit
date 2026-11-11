@@ -1,5 +1,6 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, nextTick } from 'vue'
 
 import Default from '../../../../examples/popover/default.vue'
@@ -635,5 +636,75 @@ describe('Popover (compound / overlay)', () => {
     expect((byTestId('overlay-popover__title') as HTMLElement).textContent).toContain(
       'Popover title'
     )
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const openWith = async (key: string) => {
+    render(host())
+    control().focus()
+    await userEvent.keyboard(key)
+    await waitFor(() => expect(panel()).not.toBeNull())
+  }
+
+  it.each(['{Enter}', ' '])(
+    '%s on the trigger opens the panel and keeps focus on the trigger',
+    async (key) => {
+      await openWith(key)
+      expect(document.activeElement).toBe(control())
+    }
+  )
+
+  it('Tab from the trigger moves into the panel, to its first control', async () => {
+    await openWith('{Enter}')
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(byTestId('overlay-popover__close'))
+  })
+
+  it('Tab on the last control returns focus to the trigger', async () => {
+    await openWith('{Enter}')
+    const controls = panel()!.querySelectorAll<HTMLElement>('button')
+    controls[controls.length - 1]!.focus()
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(control())
+    expect(panel()).not.toBeNull()
+  })
+
+  it('Shift+Tab on the first control returns focus to the trigger', async () => {
+    await openWith('{Enter}')
+    byTestId('overlay-popover__close')!.focus()
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    expect(document.activeElement).toBe(control())
+  })
+
+  it('Escape inside the panel closes it and returns focus to the trigger', async () => {
+    await openWith('{Enter}')
+    byTestId('overlay-popover__close')!.focus()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(panel()).toBeNull())
+    expect(document.activeElement).toBe(control())
+  })
+})
+
+describe('text input as the trigger control', () => {
+  it('leaves the popup attributes off a textbox, where ARIA does not allow them', async () => {
+    const Host = defineComponent({
+      components: { Popover, PopoverTrigger, PopoverContent },
+      template: `
+        <Popover>
+          <PopoverTrigger>
+            <input type="text" aria-label="Domain" data-testid="domain-input" />
+          </PopoverTrigger>
+          <PopoverContent>Checks</PopoverContent>
+        </Popover>
+      `
+    })
+    const { getByTestId, container } = render(Host)
+    await nextTick()
+    const input = getByTestId('domain-input')
+    expect(input.hasAttribute('aria-expanded')).toBe(false)
+    expect(input.hasAttribute('aria-haspopup')).toBe(false)
+    expect(input.hasAttribute('aria-controls')).toBe(false)
+    await expectNoA11yViolations(container)
   })
 })

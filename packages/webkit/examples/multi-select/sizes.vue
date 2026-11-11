@@ -19,6 +19,7 @@
     style="width: 280px"
   >
     <MultiSelect
+      :aria-label="`Option, ${s}`"
       v-for="s in sizes"
       :key="s"
       v-model="value"

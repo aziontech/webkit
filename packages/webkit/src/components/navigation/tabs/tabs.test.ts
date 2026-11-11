@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent as keyboardUser } from 'vitest/browser'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/tabs/default.vue'
@@ -199,7 +200,7 @@ describe('Tabs (composition)', () => {
         props: { value: 'a', label: 'Alpha' }
       })
 
-      await fireEvent.click(getByRole('tab'))
+      await fireEvent.click(getByRole('button'))
 
       const events = emitted().click
       expect(events).toHaveLength(1)
@@ -211,7 +212,7 @@ describe('Tabs (composition)', () => {
         props: { value: 'a', label: 'Alpha', disabled: true }
       })
 
-      await fireEvent.click(getByRole('tab'))
+      await fireEvent.click(getByRole('button'))
 
       expect(emitted().click).toBeUndefined()
     })
@@ -222,7 +223,9 @@ describe('Tabs (composition)', () => {
       })
 
       const close = getByTestId('navigation-tabs-item__close')
-      expect(close.getAttribute('aria-label')).toBe('Close tab')
+      expect(close.getAttribute('aria-hidden')).toBe('true')
+      expect(close.getAttribute('role')).toBeNull()
+      expect(close.getAttribute('title')).toBe('Close tab')
 
       await fireEvent.click(close)
 
@@ -232,12 +235,29 @@ describe('Tabs (composition)', () => {
       // @click.stop on the close box stops propagation → the tab click is not emitted.
       expect(emitted().click).toBeUndefined()
     })
+    it('emits close on Delete from a closable tab, and nothing from a plain one', async () => {
+      const { getByTestId, emitted, rerender } = render(TabsItem, {
+        props: { value: 'a', label: 'Alpha', closable: true }
+      })
+      const tab = getByTestId('navigation-tabs-item')
+      expect(tab.getAttribute('aria-keyshortcuts')).toBe('Delete')
+
+      await fireEvent.keyDown(tab, { key: 'Delete' })
+      expect(emitted().close).toHaveLength(1)
+      expect(emitted().close[0][0]).toBeInstanceOf(KeyboardEvent)
+
+      await rerender({ value: 'a', label: 'Alpha', closable: false })
+      await fireEvent.keyDown(tab, { key: 'Delete' })
+      expect(emitted().close).toHaveLength(1)
+      expect(tab.hasAttribute('aria-keyshortcuts')).toBe(false)
+    })
+
     it('marks a dirty tab with a dot and a hidden "Unsaved changes"', async () => {
       const { getByRole, getByTestId, queryByTestId, rerender } = render(TabsItem, {
         props: { value: 'a', label: 'Alpha', dirty: true }
       })
 
-      const tab = getByRole('tab')
+      const tab = getByRole('button')
       expect(tab.hasAttribute('data-dirty')).toBe(true)
       expect(getByTestId('navigation-tabs-item__dirty').getAttribute('aria-hidden')).toBe('true')
       expect(tab.textContent).toContain('Unsaved changes')
@@ -414,5 +434,59 @@ describe('Tabs (composition)', () => {
       expect(getByTestId('navigation-tabs')).toBeTruthy()
       await expectNoA11yViolations(container)
     })
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const setup = async (props: Record<string, unknown> = {}) => {
+    const view = render(Tree, { props })
+    const tab = (label: string) => view.getByText(label).closest('[role="tab"]') as HTMLElement
+    const before = document.createElement('button')
+    before.textContent = 'Before'
+    document.body.prepend(before)
+    before.focus()
+    await keyboardUser.keyboard('{Tab}')
+    before.remove()
+    return { ...view, tab }
+  }
+
+  it('Tab enters the tab list on the selected tab only', async () => {
+    const { tab } = await setup({ defaultValue: 'tab-2' })
+    expect(document.activeElement).toBe(tab('Second'))
+    expect(tab('First').getAttribute('tabindex')).toBe('-1')
+  })
+
+  it('ArrowRight selects and focuses the next tab, wrapping at the end', async () => {
+    const { tab } = await setup({ defaultValue: 'tab-3' })
+    await keyboardUser.keyboard('{ArrowRight}')
+    expect(document.activeElement).toBe(tab('First'))
+    expect(tab('First').getAttribute('aria-selected')).toBe('true')
+  })
+
+  it('ArrowLeft selects and focuses the previous tab, wrapping at the start', async () => {
+    const { tab } = await setup()
+    await keyboardUser.keyboard('{ArrowLeft}')
+    expect(document.activeElement).toBe(tab('Third'))
+    expect(tab('Third').getAttribute('aria-selected')).toBe('true')
+  })
+
+  it('Home and End select the first and last enabled tabs', async () => {
+    const { tab } = await setup({ defaultValue: 'tab-2' })
+    await keyboardUser.keyboard('{End}')
+    expect(document.activeElement).toBe(tab('Third'))
+    await keyboardUser.keyboard('{Home}')
+    expect(document.activeElement).toBe(tab('First'))
+  })
+
+  it('arrows skip disabled tabs', async () => {
+    const { tab } = await setup({ disableSecond: true })
+    await keyboardUser.keyboard('{ArrowRight}')
+    expect(document.activeElement).toBe(tab('Third'))
+  })
+
+  it('Tab from the selected tab moves into its panel', async () => {
+    const { getByText } = await setup()
+    await keyboardUser.keyboard('{Tab}')
+    expect(document.activeElement).toBe(getByText('Content one').closest('[role="tabpanel"]'))
   })
 })

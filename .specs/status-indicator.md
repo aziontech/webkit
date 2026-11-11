@@ -4,7 +4,7 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 7a25a7ae36ae7981ec6572afade3c63c2f43011aff720c4ed5d30b39c6c015ac
+checksum: a658516e5423a1a2b529e9519a7fc98b88dd5c857b5f67f97bea0f4e3db45327
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -104,6 +104,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Forced colors: the dot opts out of forced colour adjustment and paints `CanvasText`, so it stays visible when backgrounds are forced to `Canvas`; the severity is still carried by the label text, never by the dot's colour alone. Tests: `src/test/forced-colors.test.ts`.
 
 ## Stories (Storybook)
 

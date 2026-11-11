@@ -530,6 +530,9 @@ export const ptBR: Messages = {
   popover: {
     close: 'Fechar'
   },
+  progress: {
+    label: 'Progresso'
+  },
   propertyFilterQuery: {
     label: 'Consulta',
     placeholder: 'Digite uma consulta, por exemplo status = Active AND requests > 10',

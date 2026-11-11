@@ -122,6 +122,7 @@
 <template>
   <Textarea
     v-model="value"
+    aria-label="Description"
     invalid
   />
 </template>

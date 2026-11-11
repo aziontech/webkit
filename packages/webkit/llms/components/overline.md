@@ -65,7 +65,7 @@
 - Visible focus: not applicable — the component renders no focusable element.
 - Keyboard map: none; the component is not interactive.
 - ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is decorative and carries `aria-hidden="true"`, so only the label is announced; the cursor `span` is empty and contributes no text.
-- Contrast ≥4.5:1 (text): the label uses `var(--primary)` and the prefix `var(--text-default)` on the surface the consumer places it on.
+- Contrast ≥4.5:1 (text): the label uses `var(--text-primary)` (`primary-700` in light, 4.77:1 or more on every light surface; `primary-500` in dark) and the prefix `var(--text-default)` on the surface the consumer places it on.
 - `motion-reduce:animate-none` on the cursor's `animate-blink`.
 - Touch target: not applicable (non-interactive).
 

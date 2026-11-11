@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: b745f205ed8760a0154721e68f739919f5a6db9992800261c2b27f9eb51924d8
+checksum: f38fba4bce4e4f50276628b75ef0fe90f8c2b0378dbaf64282bce9cba053c16a
 created: 2026-06-25
 last_updated: 2026-11-11
 ---
@@ -201,7 +201,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 | day typography (large)                  | `.text-body-md`             |
 | option row (preset / period) typography | `.text-label-sm`            |
 | month header typography                 | `.text-body-sm`             |
-| header / muted text                     | `var(--text-muted)`         |
+| header / muted text, adjacent-month day | `var(--text-muted)`         |
 | default text                            | `var(--text-default)`       |
 | disabled text                           | `var(--text-disabled)`      |
 | selected day surface                    | `var(--secondary)`          |

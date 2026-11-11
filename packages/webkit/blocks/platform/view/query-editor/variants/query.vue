@@ -1428,6 +1428,7 @@ LIMIT 3;`
                         <i
                           v-if="column.primaryKey"
                           class="pi pi-key ms-auto shrink-0 ps-(--spacing-xs) text-(--primary)"
+                          role="img"
                           aria-label="Primary key"
                         />
                       </div>

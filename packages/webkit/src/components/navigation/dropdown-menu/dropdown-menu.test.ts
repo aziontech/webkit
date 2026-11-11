@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
-import { defineComponent, h, ref } from 'vue'
+import { userEvent } from 'vitest/browser'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/dropdown-menu/default.vue'
 import Groups from '../../../../examples/dropdown-menu/groups.vue'
@@ -169,12 +170,13 @@ describe('DropdownMenu (compound / overlay)', () => {
     await waitForOpen(3)
 
     const panel = getPanel() as HTMLElement
-    expect(panel.getAttribute('role')).toBe('menu')
+    const menu = panel.querySelector('[role="menu"]') as HTMLElement
+    expect(menu).not.toBeNull()
     // Panel is Teleported OUT of the render container, onto document.body.
     expect(panel.closest('[data-testid="navigation-dropdown-menu"]')).toBeNull()
     // aria-labelledby wires back to the trigger id (shared context).
     const trigger = getByTestId('navigation-dropdown-menu__trigger')
-    expect(panel.getAttribute('aria-labelledby')).toBe(control().id)
+    expect(menu.getAttribute('aria-labelledby')).toBe(control().id)
     // Trigger aria-expanded now reflects open via injected isOpen.
     expect(control().getAttribute('aria-expanded')).toBe('true')
     expect(trigger.getAttribute('data-state')).toBe('open')
@@ -484,5 +486,93 @@ describe('DropdownMenu (compound / overlay)', () => {
       '[data-testid="navigation-dropdown-menu__option__command"]'
     )
     expect(command?.textContent?.trim()).toBe('⌘P')
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const Sandwich = defineComponent({
+    setup() {
+      return () =>
+        h('div', [h(Host), h('button', { type: 'button', 'data-testid': 'after' }, 'After')])
+    }
+  })
+
+  const focused = () => (document.activeElement as HTMLElement | null)?.textContent?.trim()
+
+  const openWith = async (key: string) => {
+    render(Sandwich)
+    await nextTick()
+    control().focus()
+    await userEvent.keyboard(key)
+    await waitFor(() => expect(getPanel()).not.toBeNull())
+    await nextTick()
+  }
+
+  it.each(['{Enter}', ' ', '{ArrowDown}'])(
+    '%s on the trigger opens and focuses the first option',
+    async (key) => {
+      await openWith(key)
+      await waitFor(() => expect(focused()).toBe('Profile'))
+    }
+  )
+
+  it('ArrowUp on the trigger opens and focuses the last option', async () => {
+    await openWith('{ArrowUp}')
+    await waitFor(() => expect(focused()).toBe('Sign out'))
+  })
+
+  it('ArrowDown and ArrowUp move between options and wrap', async () => {
+    await openWith('{Enter}')
+    await waitFor(() => expect(focused()).toBe('Profile'))
+    await userEvent.keyboard('{ArrowDown}')
+    expect(focused()).toBe('Settings')
+    await userEvent.keyboard('{ArrowUp}{ArrowUp}')
+    expect(focused()).toBe('Sign out')
+    await userEvent.keyboard('{ArrowDown}')
+    expect(focused()).toBe('Profile')
+  })
+
+  it('End and Home jump to the last and first options', async () => {
+    await openWith('{Enter}')
+    await waitFor(() => expect(focused()).toBe('Profile'))
+    await userEvent.keyboard('{End}')
+    expect(focused()).toBe('Sign out')
+    await userEvent.keyboard('{Home}')
+    expect(focused()).toBe('Profile')
+  })
+
+  it.each(['{Enter}', ' '])(
+    '%s on an option selects it, closes and returns focus to the trigger',
+    async (key) => {
+      await openWith('{Enter}')
+      await waitFor(() => expect(focused()).toBe('Profile'))
+      await userEvent.keyboard(key)
+      await waitFor(() => expect(getPanel()).toBeNull())
+      expect(document.activeElement).toBe(control())
+    }
+  )
+
+  it('Escape closes and returns focus to the trigger', async () => {
+    await openWith('{Enter}')
+    await waitFor(() => expect(focused()).toBe('Profile'))
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(getPanel()).toBeNull())
+    expect(document.activeElement).toBe(control())
+  })
+
+  it('Tab closes and moves focus on to the next control after the trigger', async () => {
+    await openWith('{Enter}')
+    await waitFor(() => expect(focused()).toBe('Profile'))
+    await userEvent.keyboard('{Tab}')
+    await waitFor(() => expect(getPanel()).toBeNull())
+    expect((document.activeElement as HTMLElement).dataset['testid']).toBe('after')
+  })
+
+  it('Shift+Tab closes and returns focus to the trigger', async () => {
+    await openWith('{Enter}')
+    await waitFor(() => expect(focused()).toBe('Profile'))
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    await waitFor(() => expect(getPanel()).toBeNull())
+    expect(document.activeElement).toBe(control())
   })
 })

@@ -7,6 +7,7 @@ import Default from '../../../../examples/table/default.vue'
 import Empty from '../../../../examples/table/empty.vue'
 import WithCheckboxes from '../../../../examples/table/with-checkboxes.vue'
 import { useCollection } from '../../../composables/use-collection'
+import { expectNoA11yViolations } from '../../../test/axe'
 import Table from './index'
 import TableBody from './table-body/table-body.vue'
 import TableCaption from './table-caption/table-caption.vue'
@@ -136,11 +137,33 @@ describe('Table (composition + data-driven)', () => {
       expect(getByTestId('my-table__body')).toBeTruthy()
       expect(getByTestId('my-table__cell')).toBeTruthy()
     })
-    // NOTE: an axe pass on the composed tree is intentionally omitted — see the
-    // notes in the run summary. The component nests the ScrollArea viewport
-    // (a `div[tabindex]` with no ARIA role) directly inside `role="table"`,
-    // which axe flags as `aria-required-children` (critical). This is a real
-    // component defect, not a test artifact; the .vue is not edited here.
+    it('keeps the toolbar, scroll viewport, empty state and pagination outside role="table"', async () => {
+      const view = render(Table, {
+        attrs: { 'aria-label': 'Domains' },
+        props: {
+          data: Array.from({ length: 12 }, (_, i) => ({ id: String(i), name: `Row ${i}` })),
+          columns: [{ accessorKey: 'name', header: 'Name' }],
+          paginated: true,
+          pageSize: 5,
+          enableRowSelection: true
+        },
+        slots: { toolbar: '<button type="button">Refresh</button>' }
+      })
+      const table = view.getByRole('table')
+      expect(table.getAttribute('aria-label')).toBe('Domains')
+      expect(view.getByTestId('data-table').hasAttribute('aria-label')).toBe(false)
+      expect(table.contains(view.getByTestId('data-table__viewport'))).toBe(false)
+      expect(table.contains(view.getByRole('navigation'))).toBe(false)
+      expect(table.contains(view.getByText('Refresh'))).toBe(false)
+      await expectNoA11yViolations(view.container)
+
+      const empty = render(Table, {
+        props: { data: [], columns: [{ accessorKey: 'name', header: 'Name' }] }
+      })
+      const emptyTable = empty.getAllByRole('table').at(-1) as HTMLElement
+      expect(emptyTable.contains(empty.getByTestId('data-table__empty'))).toBe(false)
+      await expectNoA11yViolations(empty.container)
+    })
   })
 
   describe('TableRow — selected state (composition)', () => {
@@ -694,7 +717,7 @@ describe('Table (composition + data-driven)', () => {
       const rendered = view.getAllByRole('row').length - 1
       expect(rendered).toBeGreaterThan(5)
       expect(rendered).toBeLessThan(60)
-      expect(view.getByTestId('data-table').getAttribute('aria-rowcount')).toBe('10001')
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('10001')
 
       const viewport = view.getByTestId('data-table__viewport')
       viewport.style.maxHeight = '480px'
@@ -736,7 +759,7 @@ describe('Table (composition + data-driven)', () => {
         { container: host }
       )
       expect(view.getAllByRole('row').length - 1).toBeLessThan(60)
-      expect(view.getByTestId('data-table').getAttribute('aria-rowcount')).toBe('10001')
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('10001')
 
       await fireEvent.click(view.getByLabelText('Select all rows'))
       await nextTick()
@@ -836,7 +859,7 @@ describe('Table (composition + data-driven)', () => {
       const view = render(Table, { props: { columns, data: many }, container: host })
       const rendered = () => view.getAllByRole('row').length - 1
       expect(rendered()).toBeLessThan(100)
-      expect(view.getByTestId('data-table').getAttribute('aria-rowcount')).toBe('1001')
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('1001')
       const gap = view.getByTestId('data-table__lazy-rows')
       expect(gap.offsetHeight).toBeGreaterThan(40 * 900)
       gap.scrollIntoView()
@@ -844,7 +867,7 @@ describe('Table (composition + data-driven)', () => {
       window.scrollTo(0, document.documentElement.scrollHeight)
       await waitFor(() => expect(view.getByText('row-999')).toBeTruthy(), { timeout: 4000 })
       await waitFor(() => expect(view.queryByTestId('data-table__lazy-rows')).toBeNull())
-      expect(view.getByTestId('data-table').hasAttribute('aria-rowcount')).toBe(false)
+      expect(view.getByTestId('data-table__table').hasAttribute('aria-rowcount')).toBe(false)
       window.scrollTo(0, 0)
     })
 

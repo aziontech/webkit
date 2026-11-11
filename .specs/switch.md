@@ -7,7 +7,7 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 5e65d2e47daa3c68155f43d63978832afe6a0cafabab2b69be0335cab2a89ef4
+checksum: 53cb28afdc38294ef10f980aafb027d53e9e2a9d5355e768f8186c6668b431e3
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -136,6 +136,7 @@ The handle slides toward the inline end when checked: `translate-x-3.5` in LTR, 
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: the control itself is 36×20 — the consumer is responsible for placing it inside a ≥40×40 hit area (typically a horizontal `Field`, whose label extends the target). The component still exposes a clickable root.
+- Forced colors: the track border is `CanvasText` (`Highlight` when checked) and the handle opts out of forced colour adjustment (`forced-color-adjust: none`) to paint `CanvasText`, `Highlight` when checked and `GrayText` when disabled; without it the handle's background is forced to `Canvas` and disappears into the track. Tests: `src/test/forced-colors.test.ts`.
 
 ## Stories (Storybook)
 

@@ -20,7 +20,7 @@
     selected?: boolean
     /** Disables interaction. */
     disabled?: boolean
-    /** Shows a close affordance (Figma variant set). */
+    /** Shows a pointer close affordance and lets Delete on the focused tab emit close (Figma variant set). */
     closable?: boolean
     /** Marks the tab as holding unsaved changes: a dot after the label and a hidden "Unsaved changes". */
     dirty?: boolean
@@ -133,6 +133,15 @@
     emit('close', event, resolvedValue.value)
   }
 
+  const onKeydown = (event: globalThis.KeyboardEvent) => {
+    if (!props.closable || event.key !== 'Delete') {
+      return
+    }
+
+    event.preventDefault()
+    onCloseClick(event)
+  }
+
   onMounted(() => {
     if (!context || props.value === undefined) {
       return
@@ -158,18 +167,21 @@
   <button
     ref="buttonRef"
     type="button"
-    role="tab"
+    :role="context ? 'tab' : undefined"
     :id="tabId"
     :class="itemClasses"
     :data-testid="testId"
     :data-state="isSelected ? 'active' : 'inactive'"
     :data-disabled="isDisabled ? '' : undefined"
     :data-dirty="dirty ? '' : undefined"
-    :aria-selected="isSelected"
+    :aria-selected="context ? isSelected : undefined"
+    :aria-pressed="context ? undefined : isSelected"
     :aria-controls="panelId"
-    :tabindex="tabIndex"
+    :tabindex="context ? tabIndex : undefined"
     :disabled="isDisabled"
+    :aria-keyshortcuts="closable ? 'Delete' : undefined"
     @click="activate"
+    @keydown="onKeydown"
   >
     <span
       v-if="$slots['leading']"
@@ -205,12 +217,9 @@
       v-if="closable"
       :class="closeClasses"
       :data-testid="`${testId}__close`"
-      role="button"
-      tabindex="-1"
-      :aria-label="t('tabs.close')"
+      :title="t('tabs.close')"
+      aria-hidden="true"
       @click.stop="onCloseClick"
-      @keydown.enter.prevent.stop="onCloseClick"
-      @keydown.space.prevent.stop="onCloseClick"
     >
       <i
         class="pi pi-times"

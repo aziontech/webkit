@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useResizeObserver } from '@vueuse/core'
   import { computed, provide, ref, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
@@ -28,8 +29,17 @@
 
   const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'data-flow')
 
+  const rootRef = ref<HTMLElement | null>(null)
   const containerRef = ref<HTMLElement | null>(null)
   const { paths, viewBox } = useFlowConnectors(containerRef)
+
+  const overflowing = ref(false)
+  const measureOverflow = () => {
+    const el = rootRef.value
+    overflowing.value = !!el && el.scrollWidth > el.clientWidth + 1
+  }
+  useResizeObserver(rootRef, measureOverflow)
+  useResizeObserver(containerRef, measureOverflow)
 
   provide(FlowInjectionKey, {
     testId: testId.value,
@@ -37,15 +47,20 @@
   })
 
   const outerClass = computed(() =>
-    cn('w-full overflow-x-auto p-(--spacing-md)', attrs.class as string | undefined)
+    cn(
+      'w-full overflow-x-auto p-(--spacing-md) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset',
+      attrs.class as string | undefined
+    )
   )
 </script>
 
 <template>
   <div
+    ref="rootRef"
     v-bind="$attrs"
     role="list"
     :data-testid="testId"
+    :tabindex="overflowing ? 0 : undefined"
     :class="outerClass"
   >
     <div

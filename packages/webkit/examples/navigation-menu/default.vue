@@ -148,7 +148,6 @@
 
     <div
       class="mx-auto flex max-w-2xl flex-col items-center px-(--spacing-6) py-(--spacing-24) text-center"
-      aria-hidden="true"
     >
       <h1 class="text-heading-lg text-(--text-default)">Navigation menu demo</h1>
       <p class="mt-(--spacing-6) text-body-sm text-(--text-muted)">

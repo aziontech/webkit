@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 1fc81ac9ecfaeb4d595e049cbb14ad186591b5335558cbe2ab55fb5b6601c5cc
+checksum: 39dad8c2c5a310229372f5d75815676ac423aa596247648160e6e213570d888d
 created: 2026-06-02
 last_updated: 2026-11-11
 ---
@@ -129,7 +129,7 @@ The panel is positioned with the standalone **`translate`** property, never `top
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger wrapper.
-- Keyboard map: `Tab` focuses the trigger → tooltip opens; `Escape` closes; tooltip never traps focus.
+- Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. Tests: `tooltip.test.ts` › keyboard map (spec).
 - ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into a WebKit `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.
 - `motion-reduce:animate-none` on the panel; reduced-motion users get instant show/hide.

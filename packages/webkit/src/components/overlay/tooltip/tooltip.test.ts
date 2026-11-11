@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/tooltip/default.vue'
@@ -330,5 +331,51 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
       expect(tip!.getAttribute('role')).toBe('tooltip')
       expect(tip!.textContent).toContain('This is a Tooltip')
     })
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const sandwich = defineComponent({
+    components: { Tooltip },
+    template: `
+      <div>
+        <button type="button" data-testid="before">Before</button>
+        <Tooltip text="Delete domain">
+          <button type="button" data-testid="target">Trigger</button>
+        </Tooltip>
+        <button type="button" data-testid="after">After</button>
+      </div>
+    `
+  })
+
+  const focusTarget = async () => {
+    const view = render(sandwich)
+    await settle()
+    view.getByTestId('before').focus()
+    await userEvent.keyboard('{Tab}')
+    await settle()
+    return view
+  }
+
+  it('Tab onto the trigger opens the tooltip at once', async () => {
+    const { getByTestId } = await focusTarget()
+    expect(document.activeElement).toBe(getByTestId('target'))
+    expect(panel()).not.toBeNull()
+  })
+
+  it('Escape closes the tooltip and keeps focus on the trigger', async () => {
+    const { getByTestId } = await focusTarget()
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    await vi.waitFor(() => expect(panel()).toBeNull())
+    expect(document.activeElement).toBe(getByTestId('target'))
+  })
+
+  it('Tab away from the trigger closes the tooltip', async () => {
+    const { getByTestId } = await focusTarget()
+    await userEvent.keyboard('{Tab}')
+    await settle()
+    expect(document.activeElement).toBe(getByTestId('after'))
+    await vi.waitFor(() => expect(panel()).toBeNull())
   })
 })

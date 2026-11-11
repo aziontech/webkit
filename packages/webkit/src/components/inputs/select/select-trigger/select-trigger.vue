@@ -55,6 +55,8 @@
     v-bind="$attrs"
     :id="triggerId"
     :aria-describedby="describedBy"
+    :aria-label="(attrs['aria-label'] as string | undefined) ?? ctx.ariaLabel.value"
+    :aria-labelledby="(attrs['aria-labelledby'] as string | undefined) ?? ctx.ariaLabelledby.value"
     type="button"
     role="combobox"
     :aria-haspopup="ctx.multiple.value ? 'listbox' : 'listbox'"

@@ -170,6 +170,7 @@
       :data-disabled="disabled || null"
       :data-invalid="invalid || null"
       :role="isInline ? 'group' : undefined"
+      :aria-disabled="isInline && disabled ? 'true' : undefined"
       :aria-labelledby="isInline ? titleId : undefined"
       :aria-describedby="isInline && description ? descriptionId : undefined"
       :aria-hidden="isInline ? undefined : 'true'"
