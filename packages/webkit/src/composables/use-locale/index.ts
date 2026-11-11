@@ -25,3 +25,5 @@ export {
   provideLocale,
   useLocale
 } from './use-locale'
+export type { PortalLocaleAttrs } from './use-translate'
+export { usePortalLocale } from './use-translate'

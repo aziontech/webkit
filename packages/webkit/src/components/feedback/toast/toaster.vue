@@ -11,6 +11,7 @@
     watch
   } from 'vue'
 
+  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { ToastInjectionKey } from './injection-key'
   import {
     getRegionTransitionStyle,
@@ -308,6 +309,8 @@
       ...getToastTransitionStyle(false)
     }
   }
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -316,6 +319,8 @@
       <div
         v-for="region in regions"
         :key="region.position"
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
         :data-testid="`${testId}-${region.position}`"
         :data-position="region.position"
         :data-expanded="isExpanded(region) || null"

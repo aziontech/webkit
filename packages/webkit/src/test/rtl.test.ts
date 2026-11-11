@@ -1,12 +1,31 @@
-import { fireEvent, render } from '@testing-library/vue'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { type Component, defineComponent, h, ref } from 'vue'
 
 import Pagination from '../components/data/pagination/pagination.vue'
+import PhoneInput from '../components/inputs/phone-input/phone-input.vue'
+import Select from '../components/inputs/select/select.vue'
+import SelectContent from '../components/inputs/select/select-content/select-content.vue'
+import SelectOption from '../components/inputs/select/select-option/select-option.vue'
+import SelectTrigger from '../components/inputs/select/select-trigger/select-trigger.vue'
 import Slider from '../components/inputs/slider/slider.vue'
+import DropdownMenu, {
+  DropdownMenuGroup,
+  DropdownMenuOption,
+  DropdownMenuTrigger
+} from '../components/navigation/dropdown-menu/index'
 import Tabs from '../components/navigation/tabs/index'
 import TabsItem from '../components/navigation/tabs/tabs-item.vue'
 import TabsList from '../components/navigation/tabs/tabs-list.vue'
+import Dialog from '../components/overlay/dialog/dialog.vue'
+import DialogContent from '../components/overlay/dialog/dialog-content.vue'
+import DialogPortal from '../components/overlay/dialog/dialog-portal.vue'
+import DialogTitle from '../components/overlay/dialog/dialog-title.vue'
+import Popover from '../components/overlay/popover/popover.vue'
+import PopoverContent from '../components/overlay/popover/popover-content/popover-content.vue'
+import PopoverTrigger from '../components/overlay/popover/popover-trigger/popover-trigger.vue'
+import Tooltip from '../components/overlay/tooltip/tooltip.vue'
+import WebkitProvider from '../components/utils/webkit-provider/webkit-provider.vue'
 
 const modules = {
   ...import.meta.glob<{ default: Component }>('../../blocks/**/*.vue'),
@@ -120,5 +139,95 @@ describe('arrow keys follow the reading direction', () => {
     const next = ltr.querySelector('[aria-label="Next page"]') as HTMLElement
     await fireEvent.keyDown(next, { key: 'ArrowLeft' })
     expect(ltrPages).toEqual([2])
+  })
+})
+
+const overlays = () => [
+  h(Dialog, { open: true }, () =>
+    h(DialogPortal, null, () => h(DialogContent, null, () => h(DialogTitle, null, () => 'Dialog')))
+  ),
+  h(Popover, { open: true }, () => [
+    h(PopoverTrigger, null, () => h('button', { type: 'button' }, 'Popover')),
+    h(PopoverContent, null, () => 'Popover body')
+  ]),
+  h(Tooltip, { open: true, text: 'Tip' }, () => h('button', { type: 'button' }, 'Tooltip')),
+  h(Select, { open: true, modelValue: 'a' }, () => [
+    h(SelectTrigger, { 'aria-label': 'Pick' }),
+    h(SelectContent, null, () => h(SelectOption, { value: 'a', label: 'Alpha' }))
+  ]),
+  h(DropdownMenu, { open: true }, () => [
+    h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
+    h(DropdownMenuGroup, null, () => h(DropdownMenuOption, { value: 'one', label: 'One' }))
+  ])
+]
+
+const PANELS = {
+  dialog: '[role="dialog"][aria-modal="true"]',
+  popover: '[data-testid="overlay-popover__panel"]',
+  tooltip: '[role="tooltip"]',
+  select: '[role="listbox"]',
+  menu: '[role="menu"]'
+}
+
+const panels = () =>
+  Object.fromEntries(
+    Object.entries(PANELS).map(([name, selector]) => [
+      name,
+      document.body.querySelector<HTMLElement>(selector)
+    ])
+  )
+
+describe('overlays teleported to body keep the WebkitProvider dir and lang', () => {
+  afterEach(() => {
+    document.body.innerHTML = ''
+  })
+
+  it('Dialog, Popover, Tooltip, Select and DropdownMenu resolve to rtl and ar under <WebkitProvider locale="ar">', async () => {
+    render(defineComponent({ setup: () => () => h(WebkitProvider, { locale: 'ar' }, overlays) }))
+    await waitFor(() => expect(Object.values(panels()).every(Boolean)).toBe(true))
+    for (const [name, panel] of Object.entries(panels())) {
+      const host = panel?.closest('[dir]')
+      expect(host?.closest('[data-testid="utils-webkit-provider"]'), name).toBeNull()
+      expect(host?.getAttribute('dir'), name).toBe('rtl')
+      expect(panel?.closest('[lang]')?.getAttribute('lang'), name).toBe('ar')
+    }
+  })
+
+  it('sets nothing on the teleported roots without a provider', async () => {
+    render(defineComponent({ setup: () => () => h('div', null, overlays()) }))
+    await waitFor(() => expect(Object.values(panels()).every(Boolean)).toBe(true))
+    for (const [name, panel] of Object.entries(panels())) {
+      expect(panel?.closest('[dir]'), name).toBeNull()
+    }
+  })
+})
+
+describe('values keep their own direction inside an rtl trigger', () => {
+  it('PhoneInput: the closed trigger isolates the dial code as ltr, so +55 does not read 55+', () => {
+    const { getByTestId } = render(PhoneInput, {
+      container: rtlContainer('rtl'),
+      props: { country: 'BR' }
+    })
+    const value = getByTestId('select-trigger__value')
+    const isolate = value.querySelector('bdi')
+    expect(isolate?.getAttribute('dir')).toBe('ltr')
+    expect(isolate?.textContent).toBe('+55')
+    expect(value.closest('[dir]')?.getAttribute('dir')).toBe('rtl')
+  })
+
+  it('Select: the shown value sits in a <bdi> that follows its own first strong character', () => {
+    const { getByTestId } = render(
+      defineComponent({
+        setup: () => () =>
+          h(Select, { modelValue: 'Alpha' }, () => [
+            h(SelectTrigger, { 'aria-label': 'Pick' }),
+            h(SelectContent, null, () => h(SelectOption, { value: 'Alpha', label: 'Alpha' }))
+          ])
+      }),
+      { container: rtlContainer('rtl') }
+    )
+    const isolate = getByTestId('select-trigger__value').querySelector('bdi')
+    expect(isolate?.textContent).toBe('Alpha')
+    expect(isolate?.hasAttribute('dir')).toBe(false)
   })
 })

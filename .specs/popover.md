@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: d6a1e77a2d63044e968d9c1c19a2bb8823ee177525d2fa3a4b5eaf47e54a15a5
+checksum: 9c198add7fdaf580fdae3ea04ea2095d8da06665886e6af267197f38642ee6fe
 created: 2026-06-30
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Popover — Component Spec
@@ -240,6 +240,7 @@ export default Object.assign(Popover, {
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled trigger state (validated via `--text-muted` / `--text-disabled` tokens).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/focus states.
 - Touch target ≥40×40 px on the trigger (consumer's element — flagged in docs); the close `IconButton` follows `IconButton`'s own target sizing.
+- Teleported content: the teleported `role="dialog"` panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Stories (Storybook)
 

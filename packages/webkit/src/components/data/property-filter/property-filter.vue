@@ -11,7 +11,7 @@
     type PropertyFilterToken,
     tokenText
   } from '../../../composables/use-collection/property-filter'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
@@ -322,6 +322,8 @@
     if (group === 'values') return t('propertyFilter.values')
     return ''
   }
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -369,6 +371,8 @@
       >
         <ul
           v-show="expanded"
+          :dir="portalLocale.dir"
+          :lang="portalLocale.lang"
           :id="listId"
           ref="panelRef"
           role="listbox"

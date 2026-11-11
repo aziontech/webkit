@@ -239,8 +239,10 @@ Three things follow:
    travels with the user through the whole app.
 3. **The error toast is permanent and closable.** `duration: 0` — a failure the user was not present for
    must not expire unseen — and `closable: true`, because anything that never expires must be
-   dismissible by hand. It carries **both ways out** (retry, and an escape to the module that lists the
-   runs), because once dismissed the toast was the only reference to the failure on screen.
+   dismissible by hand. It carries **both ways out**, **Edit** (the item that failed) and **Redeploy**,
+   because once dismissed the toast was the only reference to the failure on screen. Pass them as
+   `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` (the first two render; it
+   wins over `action`), not by rebuilding the toast body in the `Toaster` slot.
 
 The success counterpart is the ordinary case: `duration: 6000`, closable, no action needed.
 

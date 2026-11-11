@@ -10,6 +10,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
+  import SaveBar from '@aziontech/webkit/save-bar'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
@@ -213,12 +214,8 @@
           </div>
         </div>
 
-        <footer
-          class="flex min-h-14 shrink-0 flex-col border-t border-(--border-default) bg-(--bg-surface)"
-        >
-          <div
-            class="layout-boundary-inline flex min-w-0 flex-1 items-center gap-(--spacing-sm) py-(--spacing-xs)"
-          >
+        <SaveBar kind="plain">
+          <template #leading>
             <div class="flex min-w-0 items-center gap-(--spacing-sm)">
               <Button
                 type="button"
@@ -240,22 +237,22 @@
                 aria-hidden="true"
               />
             </div>
-            <div class="ms-auto flex shrink-0 items-center gap-(--spacing-sm)">
-              <Button
-                type="button"
-                label="Cancel"
-                kind="outlined"
-                size="medium"
-              />
-              <Button
-                label="Save"
-                kind="primary"
-                size="medium"
-                type="submit"
-              />
-            </div>
-          </div>
-        </footer>
+          </template>
+          <template #actions>
+            <Button
+              type="button"
+              label="Cancel"
+              kind="outlined"
+              size="medium"
+            />
+            <Button
+              label="Save"
+              kind="primary"
+              size="medium"
+              type="submit"
+            />
+          </template>
+        </SaveBar>
       </form>
     </main>
   </div>

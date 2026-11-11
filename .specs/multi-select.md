@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: 7cb4ffc0a430cf1190273c089a3903006f125a2d5f5af64e1756fa3a9b738d9d
+checksum: c9c99b994cca9ff7f33ef56d56edbd1bd9a6de4f2d3919264f8a77be217d7425
 created: 2026-06-25
 last_updated: 2026-11-11
 ---
@@ -181,6 +181,7 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.
 - Touch target ≥40×40 px on `size="large"`; smaller sizes are documented as dense-layout-only (consistent with `Input`).
+- Teleported content: the teleported `role="listbox"` content binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Stories (Storybook)
 

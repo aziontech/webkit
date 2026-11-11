@@ -126,3 +126,16 @@ export function useTranslate(fallback: PartialMessages = {}): UseTranslateReturn
   )
   return { locale, dir, t }
 }
+
+/** `dir` and `lang` of the nearest `WebkitProvider`, for an element teleported out of it (empty with no provider). */
+export interface PortalLocaleAttrs {
+  dir?: Direction
+  lang?: string
+}
+
+export function usePortalLocale(): ComputedRef<PortalLocaleAttrs> {
+  const context = inject(LocaleInjectionKey, null)
+  return computed<PortalLocaleAttrs>(() =>
+    context ? { dir: context.dir.value, lang: context.locale.value } : {}
+  )
+}

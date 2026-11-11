@@ -111,16 +111,16 @@ Dims the page behind the open drawer.
 
 Holds the `Sidebar`, labelled `aria-label="Navigation"`; choosing an item closes it.
 
-### X. Run toast — `Toast` (required)
+### X. Run toast — `Toaster` (required)
 
-One `Toaster` (the default export of `@aziontech/webkit/toast`) mounted with the page, `position="bottom-right"`, raised through `toast` with one id per run so each state replaces the last. Its default slot renders each entry as `Toast.Item` with `Toast.Title` and `Toast.Description`, and gives every outcome toast two `Toast.Action`s, **Edit** and **Redeploy**, beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Failed the permanent failure toast and Succeeded the success toast; leaving the page dismisses the story's toast so the next story starts clean.
+One `Toaster` (named export of `@aziontech/webkit/toast`, beside `toast`) mounted with the page, `position="bottom-right"`, with no slot of its own, raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Failed the permanent failure toast and Succeeded the success toast; leaving the page dismisses the story's toast so the next story starts clean.
 
 ## Do
 
 - Keep the run, its timer and its outcome outside the page component (a small module-scope store), so leaving the page never cancels it or loses the result.
 - Show progress as a `loading` toast (no duration, not closable) that follows the user through the app while the run lasts.
 - Report the end wherever the user is, on success and on failure. A failure toast is permanent (`duration: 0`) and `closable`; a success toast is `closable` with the default 6 second duration.
-- Give both toasts the same two actions: **Edit** for the item that was deployed, and **Redeploy**.
+- Give both toasts the same two actions through `toast()`'s `actions` option: **Edit** for the item that was deployed, and **Redeploy**. Don't rebuild the toast body in the `Toaster` slot to get two actions.
 - On the page that started the run, show the outcome inline as well, with the same two actions as the toast: a danger `Alert` with the reason, **Edit** and **Redeploy** over the stopped logs, or a success `Alert` naming the new address with **Edit**, **Redeploy** and **Open service**.
 - Disable Deploy and the controls that would change the run while it is in progress, with Deploy in `loading`.
 

@@ -26,7 +26,7 @@
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import Toast, { toast } from '@aziontech/webkit/toast'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   const navGroups = [
@@ -602,7 +602,11 @@
       id: RUN_TOAST,
       description: 'The routing rules were refused.',
       duration: 0,
-      closable: true
+      closable: true,
+      actions: [
+        { label: 'Edit', onClick: edit },
+        { label: 'Redeploy', onClick: redeploy }
+      ]
     })
   )
 
@@ -1428,27 +1432,6 @@
       </DrawerPortal>
     </Drawer>
 
-    <Toast position="bottom-right">
-      <template #default="{ toast: entry, dismiss }">
-        <Toast.Item :type="entry.type">
-          <Toast.Title>{{ entry.message }}</Toast.Title>
-          <Toast.Description v-if="entry.description">{{ entry.description }}</Toast.Description>
-          <template
-            v-if="entry.type !== 'loading'"
-            #trailing
-          >
-            <Toast.Action
-              label="Edit"
-              @click="edit"
-            />
-            <Toast.Action
-              label="Redeploy"
-              @click="redeploy"
-            />
-            <Toast.Close @click="dismiss" />
-          </template>
-        </Toast.Item>
-      </template>
-    </Toast>
+    <Toaster position="bottom-right" />
   </div>
 </template>

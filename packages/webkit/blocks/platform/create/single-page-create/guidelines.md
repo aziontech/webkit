@@ -39,9 +39,9 @@ A `SettingRow` per field: its title names the field and its description carries 
 
 On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at its natural size, named by an `aria-label` that matches the row title, e.g. "Enable DNSSEC".
 
-### F. Commit bar — `Button` (required)
+### F. Commit bar — `SaveBar`, `Button` (required)
 
-A footer fixed under the scrolling region, on the page's own measure, with an optional leading slot (an outlined Import `Button` and one muted line) and, at the end, outlined Cancel and the primary submit, both medium. The submit is the form's only `type="submit"`. A long create uses `SaveBar kind="plain"` as a full-bleed sticky footer; the Import from Git form instead ends with one Deploy `Button` at the end of the column.
+`SaveBar kind="plain"`, fixed under the scrolling region on the form's measure. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar as a full-bleed sticky footer; the Import from Git form instead ends with one Deploy `Button` at the end of the column.
 
 ## Do
 

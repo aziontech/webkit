@@ -50,7 +50,7 @@
     data-testid="input-calendar__period"
   >
     <div
-      class="flex min-w-(--container-4xs) flex-col gap-(--spacing-xxs)"
+      class="flex min-w-(--container-3xs) flex-col gap-(--spacing-xxs)"
       :class="horizontal ? '' : 'border-b border-(--border-default) pb-(--spacing-sm)'"
     >
       <button

@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 6f5d6e404bb08fe217b5a1d00f8b443683398170289c1fbcd9b248f6a21ff82a
+checksum: d85946f21a5902fd32b4ae246eb804101042ae75bcb7fb9dfa47438eae379f6e
 created: 2026-08-22
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # DocTooltip — Component Spec
@@ -132,6 +132,7 @@ The inline gloss: a term in running prose that carries its own definition, shown
 - Leaving an interactive panel is deferred by one short beat, because the pointer has to cross the offset gap to reach the CTA; closing on the first `mouseleave` makes that link unclickable. A passive panel has nothing to travel to and closes at once.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the trigger is inline text, sized by the prose around it; tapping toggles rather than hovers.
+- Teleported content: the teleported panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Stories (Storybook)
 

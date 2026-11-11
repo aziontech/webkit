@@ -50,9 +50,9 @@ A choice that changes what follows, such as the list type, is a `SettingRow kind
 
 A stacked row with a five-row `Textarea` whose label, placeholder and guidance follow the choice above it. Its required message is a `HelperText` tied by `aria-describedby`.
 
-### I. Footer — `Button` (required)
+### I. Footer — `SaveBar` (required)
 
-A bar fixed under the form: transparent Cancel on the left; outlined Back (hidden on the first step) and the primary submit on the right, all medium. The submit reads Next and becomes the create label on the last step. It is the form's only `type="submit"`, so Enter advances.
+`SaveBar kind="plain"` fixed under the form, on the create measure (a wrapper sets `--layout-measure-form` to `--layout-measure-form-create`, since the bar takes no classes of its own): transparent Cancel in its `#leading` slot, on the left; outlined Back (hidden on the first step) and the primary submit in `#actions`, on the right, all medium `Button`s. The submit reads Next and becomes the create label on the last step. It is the form's only `type="submit"`, so Enter advances.
 
 ## Do
 

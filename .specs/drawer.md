@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: ffde18bc7b53b072815731d6190aabc7905005e293829909550a523b6e42838a
+checksum: cdd3355f3f01aaf9f39db2871c175122cdc76f6da7a0d18d729991603963e765
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -164,6 +164,7 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Stories (Storybook)
 

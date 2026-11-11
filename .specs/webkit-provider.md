@@ -3,7 +3,7 @@ name: webkit-provider
 category: utils
 structure: monolithic
 status: implemented
-checksum: a2ed9c1e442b875730565d579c312d5cb81e7828d181c1d08ec5f8d0c4bed578
+checksum: 8460f9fc532e01f309748ed5fd6c9205ba381d0738f2bc9ef6c73575073de7bc
 spec_version: 1
 created: 2026-11-11
 last_updated: 2026-11-11
@@ -95,6 +95,7 @@ _none_
 
 - `lang` on the root lets screen readers pick the right voice and pronunciation (WCAG 3.1.1 / 3.1.2).
 - `dir` on the root mirrors reading order for right-to-left languages.
+- Overlays that teleport to `body` (Dialog, Drawer, Popover, Tooltip, DropdownMenu, Select, MultiSelect, Toaster, Calendar, PropertyFilter, NavigationMenu.Portal, the doc overlays) read the provider through `usePortalLocale()` (`@aziontech/webkit/use-locale`) and set the same `dir` and `lang` on their teleported root, so they do not fall back to the document's direction and language. A consumer's own `<Teleport>` does the same with `v-bind="usePortalLocale().value"` on its root.
 - Every assistive label WebKit ships (close buttons, pagination, sort state, empty states) is read in the provider's language.
 - No focusable element of its own; it adds no role and no landmark.
 
