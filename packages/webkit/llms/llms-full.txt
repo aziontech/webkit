@@ -9609,7 +9609,7 @@ The code of every state is in [blocks/platform/view/query-editor.md](blocks/plat
 - Surface: product
 - Source: `blocks/platform/view/split-view/split-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/split-view")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), `CalendarRoot`, [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), `PanelHeader`, [Popover](../../../components/popover.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), `CalendarRoot`, [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), `PanelHeader`, [Popover](../../../components/popover.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -9654,9 +9654,9 @@ One medium `Chip` per applied field under the controls row. A chip summarizes it
 
 A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values that applies a value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
-### F. Log — `TableRoot`, `Tag`, `EmptyState` (required)
+### F. Log — `Chart`, `TableRoot`, `Tag`, `EmptyState` (required)
 
-Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume chart by level. Clicking a bucket filters the period to it and dragging selects a span; the arrow keys step through buckets and Enter applies one. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a `Tag`, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
+Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar stacked` with `Chart.Brush`, bound to `v-model:range`). Clicking a bucket filters the period to it and dragging selects a span; the arrow keys step through buckets and Enter applies one. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a `Tag`, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
 
 ### G. Event document — `Sidebar`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
@@ -12959,7 +12959,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 
 # Chart
 
-> A cartesian chart — lines, areas and bars over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.
+> A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.
 
 - Import: `import ChartRoot from '@aziontech/webkit/chart-root'`
 - Compound import (dot notation, not tree-shakeable): `import Chart from '@aziontech/webkit/chart'`
@@ -12972,6 +12972,9 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 - Comparing magnitudes across ordered categories — top countries, attack families — as vertical or horizontal bars.
 - Parts of a total over time — allowed / blocked / logged — as stacked areas or stacked bars.
 - Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals.
+- Two measures of one unit where one is the total and one a part — requests as bars, cached requests as a line (mixed).
+- How one measure spreads against another — response time by object size — as scatter dots on a `linear` label scale.
+- A volume histogram that filters a log or a table to a time span: add `Chart.Brush` and read `v-model:range`.
 
 ## Do
 
@@ -12982,6 +12985,8 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 - Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.
 - Keep filters and the time range in one row above the dashboard, never inside a chart.
 - While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton.
+- Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.
+- Use `labelScale="linear"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.
 
 ## Don’t
 
@@ -12989,6 +12994,8 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 - Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.
 - More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.
 - Two measures on different scales → two charts side by side; this component never draws a second value axis.
+- One reading against its range (CPU, cache hit ratio) → use `gauge-chart`.
+- Values by country or location → use `map-chart`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -13005,6 +13012,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 | `series` | `ChartSeries[]` | `[]` | false | Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other. |
 | `labels` | `ChartLabel[]` | `[]` | false | One category label per index: a string, a number, or a Date. |
 | `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` | false | Value axis direction. Horizontal lays categories down the side, for ordered bars. |
+| `labelScale` | `'category' \| 'linear'` | `'category'` | false | How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets. |
 | `min` | `number` | `0` | false | Floor of the value axis. Marks grow from one baseline. |
 | `max` | `number` | `undefined` | false | Ceiling of the value axis. When absent, the nice ceiling of the visible data. |
 | `cap` | `number` | `6` | false | Series kept before the rest fold into Other. |
@@ -13032,7 +13040,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order. |
+| `default` | — | The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order. |
 | `empty` | — | Replaces the default EmptyState. |
 | `empty-actions` | — | Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it. |
 | `error` | — | Replaces the default danger Alert. |
@@ -13042,10 +13050,12 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 - `@aziontech/webkit/chart-area`
 - `@aziontech/webkit/chart-axis`
 - `@aziontech/webkit/chart-bar`
+- `@aziontech/webkit/chart-brush`
 - `@aziontech/webkit/chart-crosshair`
 - `@aziontech/webkit/chart-grid`
 - `@aziontech/webkit/chart-legend`
 - `@aziontech/webkit/chart-line`
+- `@aziontech/webkit/chart-scatter`
 - `@aziontech/webkit/chart-tooltip`
 - `@aziontech/webkit/chart-card`
 
@@ -13074,6 +13084,14 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `labeled?: boolean` (default `false` — the formatted value at each bar end, for ordered bars).
   - Events: _none_.
   - Slots: _none_.
+- `chart-scatter/chart-scatter.vue` — one dot per value (r 4, a 1.5px `var(--bg-surface)` ring), r 6 at the active index; no connecting line. With `labelScale="linear"` the dots sit at their label value, so it reads as a scatter plot.
+  - Props: `ids?: string[]` (default `[]`).
+  - Events: _none_.
+  - Slots: _none_.
+- `chart-brush/chart-brush.vue` — turns on range selection and paints the selected span as a band in `var(--bg-selected)` edged with `var(--border-selected)`. Drag across the plot, or Shift + arrows then Enter; the root reports the span through `v-model:range`.
+  - Props: _none_.
+  - Events: _none_ (the span flows through the root's `v-model:range`).
+  - Slots: _none_.
 - `chart-crosshair/chart-crosshair.vue` — the hairline at the active index in `var(--chart-crosshair)`.
   - Props: _none_.
   - Events: _none_.
@@ -13089,16 +13107,19 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ## v-model
 
-| Model                  | Type             | Default | Emits                 | Notes                                                                                             |
-| ---------------------- | ---------------- | ------- | --------------------- | ------------------------------------------------------------------------------------------------- |
-| `v-model:activeIndex`  | `number \| null` | `null`  | `update:activeIndex`  | The category index under the pointer or keyboard focus. Bind it to sync crosshairs across charts. |
-| `v-model:hiddenSeries` | `string[]`       | `[]`    | `update:hiddenSeries` | Ids of series the legend has hidden. A hidden series keeps its color slot.                        |
+| Model                  | Type                       | Default | Emits                 | Notes                                                                                             |
+| ---------------------- | -------------------------- | ------- | --------------------- | ------------------------------------------------------------------------------------------------- |
+| `v-model:activeIndex`  | `number \| null`           | `null`  | `update:activeIndex`  | The category index under the pointer or keyboard focus. Bind it to sync crosshairs across charts. |
+| `v-model:hiddenSeries` | `string[]`                 | `[]`    | `update:hiddenSeries` | Ids of series the legend has hidden. A hidden series keeps its color slot.                        |
+| `v-model:range`        | `[number, number] \| null` | `null`  | `update:range`        | The selected span of category indexes, first to last, when a `Chart.Brush` is placed.             |
 
 ## States
 
 - Visual states: `default`, `loading` (Skeleton), `error` (Alert), `empty` (EmptyState with a chart icon, the title, the optional description and actions, filling the plot height), `refetching` (marks at reduced opacity), `table-view`, `active` (an index is hovered or focused)
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view`, `data-active` on the root mirror the state; priority loading, then error, then empty, then marks
 - `data-orientation`: `vertical` | `horizontal`
+- `data-label-scale`: `category` | `linear`
+- `data-brushing` on the root and the brush layer while a span is being dragged or extended from the keyboard
 - `data-entered` on each mark flips after two animation frames to run its entrance transition
 - `data-dimmed` on a series when another series is emphasized from the legend
 - Reflow: the visually hidden table twin sits inside an `sr-only` box so its intrinsic width never adds horizontal overflow at 320 px.
@@ -13107,7 +13128,8 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 ## Accessibility
 
 - Root is a `<figure>` named by `ariaLabel` or by the enclosing ChartCard title (`aria-labelledby`) and described by its ChartCard description or a generated summary.
-- The plot cell is one tab stop: `role="group"` with `aria-roledescription="chart"`. Keyboard map: Left / Right (Up / Down when horizontal) move the active index, Home / End jump to the ends, Enter / Space fire `point-click`, Escape clears. The tooltip follows keyboard focus exactly as it follows the pointer.
+- The plot cell is one tab stop: `role="group"` with `aria-roledescription="chart"`. Keyboard map: Left / Right (Up / Down when horizontal) move the active index, Home / End jump to the ends, Up / Down (Left / Right when horizontal) move the focus from series to series so the live region reads only that series and the others dim, Enter / Space fire `point-click`, Escape clears the draft span, then the focused series, then the active index, then the range. With a `Chart.Brush`: Shift with the index keys extends a span from the active index, Enter commits it (or the active index alone) to `v-model:range`. The tooltip follows keyboard focus exactly as it follows the pointer.
+- A polite live region announces the span while it is drawn (`Selecting from … to …`) and once committed (`Selected from … to …`).
 - A polite live region announces the label and every visible series value at the active index.
 - A data table twin (labels by series) is always rendered, visually hidden unless `tableView`; every value is reachable without hover. Above 1,000 categories the hidden twin keeps an even sample of at most 1,000 rows (the first and last category included) so a 10k-point chart mounts within its runtime budget; every value stays reachable with the arrow keys and the live region, and `tableView` shows every row.
 - Every SVG part is `aria-hidden`; identity never rests on color alone — the legend names each series and the tooltip pairs each value with its name.
@@ -13115,6 +13137,36 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the plot and every legend button.
 - Series colors clear 3:1 on the chart surfaces and on the tooltip in both themes (pinned by `packages/theme/test/chart-role.test.mjs`).
 - `motion-reduce:transition-none` on every transition.
+
+## Right-to-left
+
+- Layout: the category axis runs from the right (index 0 at the inline start), the value axis and its labels sit at the right edge, horizontal bars grow from the right and round their left end. SVG coordinates are physical, so the parts mirror by computing positions, and the SVG text layers set `direction="ltr"` so `text-anchor` stays physical; the tooltip is placed with a physical `left` for the same reason. The legend wraps with logical flow.
+- Icons: none.
+- Keyboard: ArrowLeft moves to the next index under rtl and ArrowRight to the previous (`logicalArrowKey`); series focus keeps Up / Down.
+- User data: series names and labels render as given; no `bdi`.
+
+## Internationalization
+
+| Key                     | English source                                 | Override prop         |
+| ----------------------- | ---------------------------------------------- | --------------------- |
+| `chart.emptyTitle`      | `No data available`                            | `emptyTitle`          |
+| `chart.noData`          | `no data`                                      | —                     |
+| `chart.label`           | `Label`                                        | —                     |
+| `chart.roleDescription` | `chart`                                        | —                     |
+| `chart.summary`         | `{series} series over {points} points{range}.` | `ariaLabel` (caption) |
+| `chart.summaryRange`    | `, from {from} to {to}`                        | —                     |
+| `chart.otherSeries`     | `Other`                                        | `otherLabel`          |
+| `chart.rangeDraft`      | `Selecting from {from} to {to}`                | —                     |
+| `chart.rangeSelected`   | `Selected from {from} to {to}`                 | —                     |
+
+- Formatting: `Intl.NumberFormat` (compact values) and `Intl.DateTimeFormat` (Date labels, in `timeZone`) with the locale from `WebkitProvider`.
+
+## Responsive
+
+- Container queries: none; the plot measures its own box and fills its container (`height` is a minimum).
+- Narrow (≤ 640 px or a narrow container): category labels thin to the width they have; the legend wraps.
+- Touch: legend buttons ≥ 24 px; with a brush the plot sets `touch-action: pan-y`, so a horizontal drag selects and a vertical drag scrolls the page. Hover-only readings are reachable from the keyboard and in the table twin.
+- Reflow: no horizontal scroll at 320 px; the hidden twin sits in an `sr-only` box.
 
 ## Examples
 
@@ -13330,6 +13382,291 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 ```
 
 2 more example(s) in [components/donut-chart.md](https://github.com/aziontech/webkit/blob/main/.specs/components/donut-chart.md).
+
+---
+
+<!-- components/gauge-chart.md -->
+
+# Gauge Chart
+
+> One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.
+
+- Import: `import GaugeChart from '@aziontech/webkit/gauge-chart'`
+- Category: chart · Surface: product · Structure: monolithic
+- API as JSON: [gauge-chart.json](https://github.com/aziontech/webkit/blob/main/.specs/gauge-chart.json)
+
+## When to use
+
+- A utilization or ratio with a fixed range: CPU, memory, cache hit ratio, quota used.
+- A latency or score against a target, where bands (healthy, busy, critical) carry the meaning.
+- A headline reading on a detail page or in a dashboard card, beside the time series that explains it.
+
+## Do
+
+- Give the range that means something for the reading (0 to 100 for a ratio, 0 to the quota for usage); the dial is meaningless without it.
+- Name every band (`label`) so the value is read with its meaning, not only with a color.
+- Use status colors for bands (`success`, `warning`, `danger`) and severity colors only when the reading is a severity.
+- Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`.
+
+## Don’t
+
+- A number with a change against a period and a trend → use `stat-tile`.
+- A value over time → use `chart` (line or area).
+- Progress of a task toward done → use `progress-bar`.
+- Several readings to compare with each other → use `bar-list` or `chart` with horizontal bars; dials side by side compare badly.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [stat-tile](stat-tile.md) — one figure with a delta and a sparkline, for a KPI row.
+- chart-card` — the box a dashboard gauge sits in; the gauge takes its accessible name from the card title.
+- progress-bar` — completion of a task, not a reading.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `number \| null` | `null` | false | The reading. Null or absent renders the empty state. |
+| `min` | `number` | `0` | false | Start of the scale. |
+| `max` | `number` | `100` | false | End of the scale. |
+| `label` | `string` | `''` | false | Caption under the reading: what is measured, or the unit. |
+| `thresholds` | `GaugeChartThreshold[]` | `[]` | false | Bands from low to high; the arc takes the color of the band the value falls in, and each band start is marked on the track. |
+| `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats the reading and the scale ends. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Width of the dial: 160, 224 or 288 pixels. |
+| `loading` | `boolean` | `false` | false | Renders a Skeleton sized to the dial. |
+| `refetching` | `boolean` | `false` | false | Holds the previous reading at reduced opacity while new data loads. |
+| `error` | `string` | `''` | false | Error message; when set, a danger Alert replaces the dial. |
+| `emptyTitle` | `string` | `''` | false | Title of the empty state shown when there is no reading. Empty uses the locale catalog (`No data available`). |
+| `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why there is no reading, or what to do next. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the meter when it is not inside a ChartCard with a title. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `value` | { value: number; text: string; status: string } | Replaces the reading and caption under the arc. |
+| `empty` | — | Replaces the default EmptyState. |
+| `empty-actions` | — | Actions under the default EmptyState. |
+| `error` | — | Replaces the default danger Alert. |
+
+## States
+
+- Visual states: `default`, `loading` (Skeleton at the dial ratio), `error` (Alert), `empty` (EmptyState), `refetching` (reduced opacity)
+- `data-loading`, `data-error`, `data-empty`, `data-refetching` on the root; priority loading, then error, then empty, then the dial
+- `data-size`: `small` | `medium` | `large`
+- `data-status` on the meter: the color of the band the value falls in
+- `data-entered` on the arc flips after two animation frames to run its entrance
+
+## Accessibility
+
+- The dial is `role="meter"` with `aria-valuemin`, `aria-valuemax`, `aria-valuenow` and `aria-valuetext` (the formatted value, then the band name: `93%, Critical`).
+- Named by `ariaLabel`, else by `label`, else by the enclosing ChartCard title (`aria-labelledby`); described by the range (`Range 0 to 100`).
+- The SVG is `aria-hidden`; the meaning never rests on color alone — the band name is read and shown with the value.
+- The meter is not focusable: it has no interaction (the value is reachable as text).
+- Arc colors clear 3:1 on the surface in both themes (status and series tokens, pinned by the theme chart role test).
+- `motion-reduce:transition-none` on every transition.
+
+## Right-to-left
+
+- Layout: the dial is mirrored (`scale(-1 1)` on the arc group), so it fills from the inline start; the scale ends swap sides through flex order. Logical utilities only.
+- Icons: none.
+- Keyboard: none (not interactive).
+- User data: none.
+
+## Internationalization
+
+| Key                          | English source         | Override prop        |
+| ---------------------------- | ---------------------- | -------------------- |
+| `gaugeChart.emptyTitle`      | `No data available`    | `emptyTitle`         |
+| `gaugeChart.valueWithStatus` | `{value}, {status}`    | `thresholds[].label` |
+| `gaugeChart.range`           | `Range {min} to {max}` | —                    |
+
+- Formatting: `Intl.NumberFormat` compact values with the locale from `WebkitProvider`, unless `formatValue` is passed.
+
+## Responsive
+
+- Container queries: none: the dial takes the container width up to its size (160, 224 or 288 px) and keeps a 15:8 ratio.
+- Narrow (≤ 640 px or a narrow container): the dial shrinks with its container; the caption clamps to two lines.
+- Touch: no targets.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import GaugeChart from '@aziontech/webkit/gauge-chart'
+
+  const thresholds = [
+    { value: 0, color: 'success', label: 'Healthy' },
+    { value: 70, color: 'warning', label: 'Busy' },
+    { value: 90, color: 'danger', label: 'Critical' }
+  ]
+  const formatValue = (value) => `${value}%`
+</script>
+
+<template>
+  <GaugeChart
+    :value="74"
+    label="Cache hit ratio"
+    :thresholds="thresholds"
+    :format-value="formatValue"
+  />
+</template>
+```
+
+2 more example(s) in [components/gauge-chart.md](https://github.com/aziontech/webkit/blob/main/.specs/components/gauge-chart.md).
+
+---
+
+<!-- components/map-chart.md -->
+
+# Map Chart
+
+> Values by place on the dotted world map of `NetworkMap`: countries shaded on a five-step sequential scale (a choropleth on the dot grid) and locations drawn as bubbles whose area follows the value. One tab stop walks every place from the highest value down, with a tooltip, a polite announcement and a table twin, so nothing on the map needs a pointer. The country shapes are a lazy chunk; the map itself adds no dependency.
+
+- Import: `import MapChart from '@aziontech/webkit/map-chart'`
+- Category: chart · Surface: product · Structure: monolithic
+- API as JSON: [map-chart.json](https://github.com/aziontech/webkit/blob/main/.specs/map-chart.json)
+
+## When to use
+
+- Requests, threats or bandwidth by country (Real-Time Metrics map card).
+- Traffic by point of presence or by city, as bubbles.
+- A regional view of either, framed with `view` (for example `south-america`).
+
+## Do
+
+- Pair the map with a ranked list or a table: the map shows where, the list shows how much.
+- Pass ISO 3166-1 alpha-2 codes as region ids; names come from the locale (`Intl.DisplayNames`) unless you pass `name`.
+- Keep region and point ids distinct: `v-model:activeId` holds one of them.
+- Give points a status color only when the color means a state; otherwise leave the series slot.
+
+## Don’t
+
+- Ranking a handful of countries where the exact order matters → use `bar-list`; a map hides small countries.
+- A decorative network backdrop with no data → use `network-map`.
+- Values over time → use `chart`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [network-map](network-map.md) — the same dot grid as decoration in marketing and empty states.
+- [bar-list](bar-list.md) — the ranked list that usually sits beside the map.
+- chart-card` — the card a dashboard map sits in; the map takes its accessible name from the card title.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `regions` | `MapChartRegion[]` | `[]` | false | Countries shaded by value on a five-step sequential scale. |
+| `points` | `MapChartPoint[]` | `[]` | false | Locations drawn as bubbles sized by value. |
+| `view` | `'world' \| 'americas' \| 'north-america' \| 'south-america' \| 'europe' \| 'africa' \| 'asia' \| 'oceania'` | `'world'` | false | Part of the world the map frames. |
+| `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats values in the tooltip, legend and table. |
+| `loading` | `boolean` | `false` | false | Renders a Skeleton sized to the map and suppresses interaction. |
+| `refetching` | `boolean` | `false` | false | Holds the previous render at reduced opacity while new data loads. |
+| `error` | `string` | `''` | false | Error message; when set, a danger Alert replaces the map. |
+| `emptyTitle` | `string` | `''` | false | Title of the empty state shown when no region or point has a value. Empty uses the locale catalog (`No data available`). |
+| `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the range is empty, or what to do next. |
+| `tableView` | `boolean` | `false` | false | Shows the data table in place of the map. The table is always present for assistive tech. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the map when it is not inside a ChartCard with a title. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `region-click` | `(event: MouseEvent \| KeyboardEvent, region: MapChartRegion)` | Click on a shaded country, or Enter / Space while it is active. |
+| `point-click` | `(event: MouseEvent \| KeyboardEvent, point: MapChartPoint)` | Click on a bubble, or Enter / Space while it is active. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `empty` | — | Replaces the default EmptyState. |
+| `empty-actions` | — | Actions under the default EmptyState, such as a Clear filters button. |
+| `error` | — | Replaces the default danger Alert. |
+
+## v-model
+
+| Model              | Type             | Default | Emits             | Notes                                                    |
+| ------------------ | ---------------- | ------- | ----------------- | -------------------------------------------------------- |
+| `v-model:activeId` | `string \| null` | `null`  | `update:activeId` | The region or point under the pointer or keyboard focus. |
+
+## States
+
+- Visual states: `default`, `loading` (Skeleton at the map ratio), `error` (Alert), `empty` (EmptyState), `refetching`, `table-view`, `active` (a place is hovered or focused; the others dim)
+- `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view`, `data-active`, `data-view` on the root
+- `data-geometry`: `loading` | `ready` while the country shapes chunk loads (only when `regions` is set)
+- `data-bin` (0 to 4) on each shaded country; `data-entered` on marks after two animation frames
+- Server render and hydration: the land, the bubbles, the legend and the table render on the server; the country shading appears after the shapes chunk loads on the client, so the first client render matches the server.
+
+## Accessibility
+
+- Root is a `<figure>`; the map is one tab stop: `role="group"` with `aria-roledescription="map"`, named by `ariaLabel` or the ChartCard title, described by a summary (`5 places on the map, 104K in total.`).
+- Keyboard map: Right / Down move to the next place and Left / Up to the previous (countries first, then locations, each from the highest value), Home / End jump to the ends, Enter / Space fire `region-click` or `point-click`, Escape clears.
+- A polite live region announces the active place and its value; the tooltip follows focus as it follows the pointer.
+- A data table twin (name, value) is always rendered, visually hidden unless `tableView`.
+- The SVG is `aria-hidden`; value never rests on color alone — the legend states the range, the tooltip and table give each value.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the map.
+- `motion-reduce:transition-none` on every transition.
+
+## Right-to-left
+
+- Layout: geography is never mirrored; the legend and table follow the inline direction with logical utilities. The tooltip is placed in physical map coordinates (inline `left` plus translate), because SVG coordinates are physical.
+- Icons: none.
+- Keyboard: Left and Right swap under rtl (`logicalArrowKey`), so the key toward the inline end always moves to the next place.
+- User data: names render as given.
+
+## Internationalization
+
+| Key                        | English source                                          | Override prop         |
+| -------------------------- | ------------------------------------------------------- | --------------------- |
+| `mapChart.emptyTitle`      | `No data available`                                     | `emptyTitle`          |
+| `mapChart.roleDescription` | `map`                                                   | —                     |
+| `mapChart.name`            | `Name`                                                  | —                     |
+| `mapChart.value`           | `Value`                                                 | —                     |
+| `mapChart.summary`         | `{count} places on the map, {total} in total.` (plural) | `ariaLabel` (caption) |
+| `mapChart.legend`          | `From {min} to {max}`                                   | —                     |
+
+- Formatting: `Intl.NumberFormat` compact values and `Intl.DisplayNames` (type `region`) country names, with the locale from `WebkitProvider`.
+
+## Responsive
+
+- Container queries: none: the map takes the container width at the framed region's aspect ratio.
+- Narrow (≤ 640 px or a narrow container): the map scales down; the tooltip caps at `--container-3xs`.
+- Touch: tapping a country or bubble activates it; every value is in the table twin and reachable from the keyboard.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import MapChart from '@aziontech/webkit/map-chart'
+
+  const regions = [
+    { id: 'BR', value: 48200 },
+    { id: 'US', value: 31600 },
+    { id: 'DE', value: 18900 },
+    { id: 'IN', value: 15400 },
+    { id: 'JP', value: 9800 },
+    { id: 'MX', value: 7600 },
+    { id: 'ZA', value: 4100 },
+    { id: 'AU', value: 3900 }
+  ]
+</script>
+
+<template>
+  <MapChart
+    :regions="regions"
+    aria-label="Requests by country"
+  />
+</template>
+```
+
+2 more example(s) in [components/map-chart.md](https://github.com/aziontech/webkit/blob/main/.specs/components/map-chart.md).
 
 ---
 

@@ -11,26 +11,33 @@
   "@aziontech/webkit/chart-area",
   "@aziontech/webkit/chart-axis",
   "@aziontech/webkit/chart-bar",
+  "@aziontech/webkit/chart-brush",
   "@aziontech/webkit/chart-crosshair",
   "@aziontech/webkit/chart-grid",
   "@aziontech/webkit/chart-legend",
   "@aziontech/webkit/chart-line",
+  "@aziontech/webkit/chart-scatter",
   "@aziontech/webkit/chart-tooltip",
   "@aziontech/webkit/chart-card"
  ],
- "purpose": "A cartesian chart — lines, areas and bars over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
+ "purpose": "A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
  "setup": null,
  "useWhen": [
   "A measure over time — requests, threats, bandwidth per bucket — as one or more lines or areas.",
   "Comparing magnitudes across ordered categories — top countries, attack families — as vertical or horizontal bars.",
   "Parts of a total over time — allowed / blocked / logged — as stacked areas or stacked bars.",
-  "Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals."
+  "Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals.",
+  "Two measures of one unit where one is the total and one a part — requests as bars, cached requests as a line (mixed).",
+  "How one measure spreads against another — response time by object size — as scatter dots on a `linear` label scale.",
+  "A volume histogram that filters a log or a table to a time span: add `Chart.Brush` and read `v-model:range`."
  ],
  "avoidWhen": [
   "A single headline number with a delta → use `stat-tile`.",
   "Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.",
   "More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.",
-  "Two measures on different scales → two charts side by side; this component never draws a second value axis."
+  "Two measures on different scales → two charts side by side; this component never draws a second value axis.",
+  "One reading against its range (CPU, cache hit ratio) → use `gauge-chart`.",
+  "Values by country or location → use `map-chart`."
  ],
  "related": [
   "chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.",
@@ -45,7 +52,9 @@
   "Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.",
   "Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.",
   "Keep filters and the time range in one row above the dashboard, never inside a chart.",
-  "While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton."
+  "While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton.",
+  "Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.",
+  "Use `labelScale=\"linear\"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced."
  ],
  "props": [
   {
@@ -68,6 +77,13 @@
    "default": "'vertical'",
    "required": "false",
    "doc": "Value axis direction. Horizontal lays categories down the side, for ordered bars."
+  },
+  {
+   "name": "labelScale",
+   "type": "'category' | 'linear'",
+   "default": "'category'",
+   "required": "false",
+   "doc": "How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets."
   },
   {
    "name": "min",
@@ -191,7 +207,7 @@
   {
    "name": "default",
    "scope": "—",
-   "notes": "The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order."
+   "notes": "The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order."
   },
   {
    "name": "empty",

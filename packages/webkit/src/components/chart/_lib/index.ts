@@ -2,7 +2,15 @@ export { formatCompact, formatLabel, formatShare, formatSignedPercent } from './
 export type { BarEnd } from './path'
 export { areaPath, barPath, linePath } from './path'
 export type { CategoryLayout, LinearScale, NiceTicks } from './scale'
-export { categoryLayout, linearScale, maxOf, niceTicks } from './scale'
+export {
+  categoryLayout,
+  labelValue,
+  linearLayout,
+  linearScale,
+  maxOf,
+  mirrorLayout,
+  niceTicks
+} from './scale'
 export type { NormalizeOptions } from './series'
 export {
   colorToken,
@@ -18,9 +26,11 @@ export type {
   ChartColor,
   ChartCurve,
   ChartLabel,
+  ChartLabelScale,
   ChartMarkKind,
   ChartPoint,
   ChartPosition,
+  ChartRange,
   ChartSeries,
   ChartSeverity,
   ChartSlot,

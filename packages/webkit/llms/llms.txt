@@ -123,8 +123,10 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Components: Charts
 
 - [BarList](components/bar-list.md): A ranked list of named values: each row is a tinted bar whose length is the value against the largest one, with the name inside the bar and the formatted value in a right-aligned column.
-- [Chart](components/chart.md): A cartesian chart — lines, areas and bars over one category axis — composed from parts the consumer places by hand.
+- [Chart](components/chart.md): A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand.
 - [DonutChart](components/donut-chart.md): A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per series, the total in the center, a legend beside it.
+- [GaugeChart](components/gauge-chart.md): One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it.
+- [MapChart](components/map-chart.md): Values by place on the dotted world map of `NetworkMap`: countries shaded on a five-step sequential scale (a choropleth on the dot grid) and locations drawn as bubbles whose area follows the value.
 - [SparkChart](components/spark-chart.md): A word-sized chart: one series drawn as an area, a line or bars, with no axes, grid, legend or tooltip, filling the width of its container at a fixed height.
 - [StatTile](components/stat-tile.md): A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom.
 - [Tracker](components/tracker.md): A status strip: one block per period — a day, an hour, a deployment — colored by its severity, with a readout of the period's label on hover or keyboard focus.

@@ -87,3 +87,31 @@ Scope: `AppLayout`, `Board` (`Board.Item`) and the `platform/dashboard/configura
 - Finding: the variant failed the consumer lint: classes on `<AppLayout>`, `<GlobalHeader>` and `<Badge>`. Fixed: moved to wrapper elements.
 - Finding: building blocks named components the primary does not import, which the pattern check rejects. Fixed: described in the Notifications state instead.
 - The bell is a pressed toggle that names the unread count; the Badge is hidden from assistive technology; unread items carry a hidden "Unread:" prefix, not colour alone; deploy notifications offer Edit and Redeploy (async-submit rule), never View deployments.
+
+## WP charts-2
+
+Scope: `Chart` gains `Chart.Scatter`, `Chart.Brush` (`v-model:range`), `labelScale="linear"`, series focus from the keyboard and RTL axes (line, area, stacked area and bar parts were already in the family, so line, area, stacked-area and mixed are compositions, shown in the `mixed` example); new `GaugeChart` and `MapChart`; the `platform/view/split-view` volume histogram rebuilt on `Chart` with a brush; a `metric-panel` example of `ChartCard` with `StatTile` for the Console MetricPanel. A mechanical pass over every changed SFC and example found no raw colours, palette classes, physical direction utilities or raw sizes, and every transition carries a `motion-reduce` escape.
+
+### Chart (scatter, brush, linear scale, RTL)
+
+- Scatter dots use the series slot colour with a 1.5 px surface ring so overlapping dots stay countable; the active dot grows from r 4 to r 6 instead of changing colour. No defect.
+- The brush band paints in `--bg-selected` edged with `--border-selected` under the marks. Pointer drag and Shift + arrows draw the same span; Enter commits, Escape steps back draft → focused series → active index → range. The live region says "Selecting from … to …" while drawing and "Selected from … to …" once committed. No defect.
+- Up / Down move the focus between series; the others dim and the live region reads only the focused series, so a five-series stack is no longer a five-value announcement per step.
+- Under RTL the category axis mirrors, the value axis moves to the inline end, and the arrow keys follow the reading direction (`logicalArrowKey`). No defect.
+- Finding: the tooltip anchored at `left: '0px'`, which the authoring ratchet rejects. Fixed: `0`.
+
+### GaugeChart
+
+- A half-circle `role="meter"` with `aria-valuenow`, min and max and an `aria-valuetext` that carries the band name ("72%, Busy"); the band name also shows as text under the value, so colour never carries the meaning alone. Loading, empty and error use the chart family surface. No defect.
+- Finding: the spec's Events table had an `_none_` row, which the compliance check read as an event called `_none_`. Fixed: the no-events sentence that `StatTile` uses.
+
+### MapChart
+
+- Countries shade on a five-step sequential scale on the `NetworkMap` dot grid; points draw as bubbles by area. One tab stop walks the places from the highest value down with a tooltip, a polite announcement and a table twin (Name, Value), and the legend has a screen-reader sentence ("From … to …"). The country geometry is a lazy chunk, so the entry stays near 17 KB. No defect.
+- The map carries values by place, not time, so it has no `timeZone` prop; `formatValue` defaults to the locale compact format like `Chart`.
+- Finding: the tooltip used `left: '0px'`. Fixed: `0`.
+
+### split-view and metric panel
+
+- The volume histogram is `Chart.Bar stacked` by level with `Chart.Brush`; `range` is bound to `null` and `update:range` turns the span into the period filter, so the chart, the chips and the table agree on one window. Guidelines section F names `Chart`.
+- The metric panel example is a row of `ChartCard`s holding a `StatTile` with trend and footer period; no new component was needed for it.

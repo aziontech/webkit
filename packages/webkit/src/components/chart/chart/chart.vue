@@ -12,6 +12,7 @@
     watch
   } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Alert from '../../feedback/alert/alert.vue'
@@ -20,14 +21,19 @@
   import {
     categoryLayout,
     type ChartLabel,
+    type ChartLabelScale,
     type ChartPoint,
+    type ChartRange,
     type ChartSeries,
     formatCompact,
     formatLabel as formatCategoryLabel,
     hasAnyValue,
     isFiniteNumber,
+    labelValue,
+    linearLayout,
     linearScale,
     maxOf,
+    mirrorLayout,
     niceTicks,
     normalizeSeries,
     stackedMax
@@ -49,6 +55,8 @@
     labels?: ChartLabel[]
     /** Value axis direction. Horizontal lays categories down the side, for ordered bars. */
     orientation?: ChartOrientation
+    /** How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets. */
+    labelScale?: ChartLabelScale
     /** Floor of the value axis. Marks grow from one baseline. */
     min?: number
     /** Ceiling of the value axis. When absent, the nice ceiling of the visible data. */
@@ -85,6 +93,7 @@
     series: () => [],
     labels: () => [],
     orientation: 'vertical',
+    labelScale: 'category',
     min: 0,
     max: undefined,
     cap: 6,
@@ -109,9 +118,10 @@
 
   const activeIndex = defineModel<number | null>('activeIndex', { default: null })
   const hiddenSeries = defineModel<string[]>('hiddenSeries', { default: () => [] })
+  const range = defineModel<ChartRange | null>('range', { default: null })
 
   defineSlots<{
-    /** The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order. */
+    /** The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order. */
     default(): unknown
     /** Replaces the default EmptyState. */
     empty(): unknown
@@ -138,12 +148,18 @@
   const card = inject(ChartCardInjectionKey, null)
   const uid = useId()
   const reducedMotion = usePreferredReducedMotion()
+  const direction = useDirection()
+  const rtl = computed(() => direction.value === 'rtl')
   const stageRef = ref<globalThis.HTMLElement | null>(null)
   const { width: stageWidth, height: stageHeight } = useElementSize(stageRef)
 
   const marks = shallowReactive(new Map<symbol, () => ChartMarkRegistration>())
   const axes = shallowReactive(new Map<symbol, () => ChartAxisKind>())
+  const brushes = shallowReactive(new Set<symbol>())
   const emphasized = ref<string | null>(null)
+  const focusedSeries = ref<string | null>(null)
+  const draft = ref<ChartRange | null>(null)
+  const committed = ref(false)
   const entered = ref(false)
   let frame = 0
 
@@ -236,11 +252,13 @@
         LABEL_GUTTER
     )
     const labeled = markList.value.some((mark) => mark.labeled)
+    const far = vertical.value ? 8 : labeled ? 56 : 16
+    const near = hasY ? (vertical.value ? valueWidth : categoryWidth) : 8
     return {
       top: 8,
-      right: vertical.value ? 8 : labeled ? 56 : 16,
+      right: rtl.value ? near : far,
       bottom: hasX ? 28 : 8,
-      left: hasY ? (vertical.value ? valueWidth : categoryWidth) : 8
+      left: rtl.value ? far : near
     }
   })
 
@@ -260,15 +278,31 @@
         )
       : linearScale(
           [props.min, domainMax.value],
-          [plot.value.left, plot.value.left + plot.value.width]
+          rtl.value
+            ? [plot.value.left + plot.value.width, plot.value.left]
+            : [plot.value.left, plot.value.left + plot.value.width]
         )
   )
   const baseline = computed(() => valueScale.value(props.min))
-  const category = computed(() =>
-    vertical.value
-      ? categoryLayout(count.value, plot.value.left, plot.value.width, banded.value)
-      : categoryLayout(count.value, plot.value.top, plot.value.height, true)
-  )
+  const category = computed(() => {
+    const start = vertical.value ? plot.value.left : plot.value.top
+    const length = vertical.value ? plot.value.width : plot.value.height
+    const layout =
+      props.labelScale === 'linear'
+        ? linearLayout(labels.value.map(labelValue), start, length)
+        : categoryLayout(count.value, start, length, vertical.value ? banded.value : true)
+    return vertical.value && rtl.value ? mirrorLayout(layout, start, length) : layout
+  })
+
+  const selection = computed<ChartRange | null>(() => {
+    const current = draft.value ?? range.value
+    if (!current) return null
+    const last = count.value - 1
+    const from = Math.max(0, Math.min(current[0], current[1]))
+    const to = Math.min(last, Math.max(current[0], current[1]))
+    return from <= to ? [from, to] : null
+  })
+  const hasBrush = computed(() => brushes.size > 0)
 
   const accessibleName = computed(() => props.ariaLabel || undefined)
   const labelledBy = computed(() =>
@@ -300,11 +334,27 @@
     )
   })
 
+  const rangeText = (key: 'chart.rangeDraft' | 'chart.rangeSelected', span: ChartRange) => {
+    const from = labels.value[span[0]]
+    const to = labels.value[span[1]]
+    return t(key, {
+      from: from === undefined ? '' : labelText(from),
+      to: to === undefined ? '' : labelText(to)
+    })
+  }
+
   const announcement = computed(() => {
+    if (!showMarks.value) return ''
+    if (draft.value && selection.value) return rangeText('chart.rangeDraft', selection.value)
+    if (committed.value && selection.value) return rangeText('chart.rangeSelected', selection.value)
     const index = activeIndex.value
-    if (index === null || !showMarks.value) return ''
+    if (index === null) return ''
     const label = labels.value[index]
+    const focus = visibleSeries.value.some((entry) => entry.id === focusedSeries.value)
+      ? focusedSeries.value
+      : null
     const readings = visibleSeries.value
+      .filter((entry) => focus === null || entry.id === focus)
       .map((entry) => {
         const value = entry.values[index]
         return `${entry.name} ${isFiniteNumber(value) ? valueText(value) : t('chart.noData')}`
@@ -351,7 +401,20 @@
   onScopeDispose(cancelEnter)
 
   function setActiveIndex(index: number | null) {
+    committed.value = false
     if (activeIndex.value !== index) activeIndex.value = index
+  }
+
+  function setFocusedSeries(id: string | null) {
+    focusedSeries.value = id
+    emphasized.value = id
+  }
+
+  function commitRange(span: ChartRange | null) {
+    draft.value = null
+    if (!span) return
+    range.value = [Math.min(span[0], span[1]), Math.max(span[0], span[1])]
+    committed.value = true
   }
 
   function setEmphasized(id: string | null) {
@@ -383,16 +446,52 @@
     }
   }
 
-  function onPointerMove(event: globalThis.PointerEvent) {
+  function registerBrush() {
+    const key = Symbol('brush')
+    brushes.add(key)
+    return () => {
+      brushes.delete(key)
+    }
+  }
+
+  function indexAtPointer(event: globalThis.PointerEvent): number | null {
     const stage = stageRef.value
-    if (!stage || !count.value) return
+    if (!stage || !count.value) return null
     const rect = stage.getBoundingClientRect()
     const offset = vertical.value ? event.clientX - rect.left : event.clientY - rect.top
-    setActiveIndex(category.value.indexAt(offset))
+    return category.value.indexAt(offset)
+  }
+
+  function onPointerDown(event: globalThis.PointerEvent) {
+    if (!hasBrush.value || event.button !== 0) return
+    const index = indexAtPointer(event)
+    if (index === null) return
+    draft.value = [index, index]
+    setActiveIndex(index)
+    try {
+      stageRef.value?.setPointerCapture?.(event.pointerId)
+    } catch {
+      return
+    }
+  }
+
+  function onPointerMove(event: globalThis.PointerEvent) {
+    const index = indexAtPointer(event)
+    if (index === null) return
+    if (draft.value) draft.value = [draft.value[0], index]
+    setActiveIndex(index)
+  }
+
+  function onPointerUp() {
+    if (draft.value) commitRange(draft.value)
+  }
+
+  function onPointerCancel() {
+    draft.value = null
   }
 
   function onPointerLeave() {
-    setActiveIndex(null)
+    if (!draft.value) setActiveIndex(null)
   }
 
   function onClick(event: MouseEvent) {
@@ -400,20 +499,50 @@
     emit('point-click', event, pointAt(activeIndex.value))
   }
 
+  function stepSeries(delta: number) {
+    const list = visibleSeries.value
+    if (list.length < 2) return
+    const at = list.findIndex((entry) => entry.id === focusedSeries.value)
+    const next = at === -1 ? (delta > 0 ? 0 : list.length - 1) : at + delta
+    const target = list[next]
+    setFocusedSeries(target ? target.id : null)
+    if (activeIndex.value === null) setActiveIndex(0)
+  }
+
   function onKeydown(event: globalThis.KeyboardEvent) {
     const last = count.value - 1
     if (last < 0) return
     const current = activeIndex.value
+    const key = logicalArrowKey(event.key, direction.value)
     const forward = vertical.value ? 'ArrowRight' : 'ArrowDown'
     const backward = vertical.value ? 'ArrowLeft' : 'ArrowUp'
-    if (event.key === forward) setActiveIndex(current === null ? 0 : Math.min(last, current + 1))
-    else if (event.key === backward)
-      setActiveIndex(current === null ? last : Math.max(0, current - 1))
-    else if (event.key === 'Home') setActiveIndex(0)
-    else if (event.key === 'End') setActiveIndex(last)
-    else if (event.key === 'Escape') setActiveIndex(null)
-    else if (event.key === 'Enter' || event.key === ' ') {
-      if (current !== null) emit('point-click', event, pointAt(current))
+    const nextSeries = vertical.value ? 'ArrowDown' : 'ArrowRight'
+    const previousSeries = vertical.value ? 'ArrowUp' : 'ArrowLeft'
+    let target: number | null = null
+    if (key === forward) target = current === null ? 0 : Math.min(last, current + 1)
+    else if (key === backward) target = current === null ? last : Math.max(0, current - 1)
+    else if (key === 'Home') target = 0
+    else if (key === 'End') target = last
+
+    if (target !== null) {
+      if (hasBrush.value && event.shiftKey) {
+        const anchor = draft.value?.[0] ?? current ?? target
+        draft.value = [anchor, target]
+      } else if (draft.value) draft.value = null
+      setActiveIndex(target)
+    } else if (key === nextSeries) stepSeries(1)
+    else if (key === previousSeries) stepSeries(-1)
+    else if (key === 'Escape') {
+      if (draft.value) draft.value = null
+      else if (focusedSeries.value !== null) setFocusedSeries(null)
+      else if (current !== null) setActiveIndex(null)
+      else if (range.value) range.value = null
+    } else if (key === 'Enter' || key === ' ') {
+      if (draft.value) commitRange(draft.value)
+      else if (current !== null) {
+        if (hasBrush.value) commitRange([current, current])
+        emit('point-click', event, pointAt(current))
+      }
     } else return
     event.preventDefault()
   }
@@ -421,6 +550,8 @@
   provide(ChartInjectionKey, {
     testId: testId.value,
     orientation: computed(() => props.orientation),
+    labelScale: computed(() => props.labelScale),
+    rtl,
     series,
     visibleSeries,
     hidden,
@@ -434,6 +565,8 @@
     activeIndex,
     emphasized,
     entered,
+    selection,
+    brushing: computed(() => draft.value !== null),
     formatValue: (value: number) => valueText(value),
     formatLabel: (label: ChartLabel) => labelText(label),
     resolveSeries,
@@ -441,7 +574,8 @@
     setEmphasized,
     toggleSeries,
     registerMark,
-    registerAxis
+    registerAxis,
+    registerBrush
   })
 </script>
 
@@ -456,6 +590,8 @@
     :data-refetching="refetching || null"
     :data-table-view="tableView || null"
     :data-active="activeIndex !== null || null"
+    :data-label-scale="labelScale"
+    :data-brushing="draft !== null || null"
     :aria-busy="loading || refetching || undefined"
     :style="{ '--chart-plot-min': `${height}px` }"
     class="relative m-0 grid h-full min-w-0 grid-cols-1 grid-rows-[minmax(var(--chart-plot-min),1fr)_auto] transition-opacity duration-moderate-01 motion-reduce:transition-none data-[refetching]:opacity-60"
@@ -567,9 +703,13 @@
         :aria-labelledby="labelledBy"
         :aria-describedby="describedBy"
         :data-testid="`${testId}__plot`"
+        :data-brush="hasBrush || null"
         :style="{ minHeight: `${height}px` }"
-        class="col-start-1 row-start-1 min-h-0 min-w-0 cursor-crosshair rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+        class="col-start-1 row-start-1 min-h-0 min-w-0 cursor-crosshair rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[brush]:touch-pan-y"
+        @pointerdown="onPointerDown"
         @pointermove="onPointerMove"
+        @pointerup="onPointerUp"
+        @pointercancel="onPointerCancel"
         @pointerleave="onPointerLeave"
         @click="onClick"
         @keydown="onKeydown"

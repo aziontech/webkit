@@ -26,6 +26,11 @@
       "name": "Draggable",
       "summary": "Three cards on a 12-column grid. Drag a card by its handle to drop it on another, or focus the handle and use the arrow keys. The page owns the order; the card only reports the gesture.",
       "file": "draggable.vue"
+    },
+    {
+      "name": "MetricPanel",
+      "summary": "The metric panel of a metrics page: one card per metric with the current value, its unit, the change against the previous period and a sparkline of the period. A rise in latency is bad, so that panel sets inverse.",
+      "file": "metric-panel.vue"
     }
   ]
 }

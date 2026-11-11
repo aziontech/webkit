@@ -3533,10 +3533,12 @@
     "@aziontech/webkit/chart-area",
     "@aziontech/webkit/chart-axis",
     "@aziontech/webkit/chart-bar",
+    "@aziontech/webkit/chart-brush",
     "@aziontech/webkit/chart-crosshair",
     "@aziontech/webkit/chart-grid",
     "@aziontech/webkit/chart-legend",
     "@aziontech/webkit/chart-line",
+    "@aziontech/webkit/chart-scatter",
     "@aziontech/webkit/chart-tooltip",
     "@aziontech/webkit/chart-card"
    ],
@@ -3563,6 +3565,13 @@
      "default": "'vertical'",
      "required": "false",
      "doc": "Value axis direction. Horizontal lays categories down the side, for ordered bars."
+    },
+    {
+     "name": "labelScale",
+     "type": "'category' | 'linear'",
+     "default": "'category'",
+     "required": "false",
+     "doc": "How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets."
     },
     {
      "name": "min",
@@ -3686,7 +3695,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order."
+     "notes": "The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order."
     },
     {
      "name": "empty",
@@ -3739,6 +3748,13 @@
      "doc": "Value axis direction. Horizontal lays categories down the side, for ordered bars."
     },
     {
+     "name": "labelScale",
+     "type": "'category' | 'linear'",
+     "default": "'category'",
+     "required": "false",
+     "doc": "How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets."
+    },
+    {
      "name": "min",
      "type": "number",
      "default": "0",
@@ -3860,7 +3876,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order."
+     "notes": "The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order."
     },
     {
      "name": "empty",
@@ -3905,6 +3921,14 @@
    "treeShakeableImport": "@aziontech/webkit/chart-bar",
    "surface": "product"
   },
+  "chart-brush": {
+   "import": "@aziontech/webkit/chart-brush",
+   "target": "./src/components/chart/chart/chart-brush/chart-brush.vue",
+   "kind": "subcomponent",
+   "parent": "chart",
+   "treeShakeableImport": "@aziontech/webkit/chart-brush",
+   "surface": "product"
+  },
   "chart-crosshair": {
    "import": "@aziontech/webkit/chart-crosshair",
    "target": "./src/components/chart/chart/chart-crosshair/chart-crosshair.vue",
@@ -3935,6 +3959,14 @@
    "kind": "subcomponent",
    "parent": "chart",
    "treeShakeableImport": "@aziontech/webkit/chart-line",
+   "surface": "product"
+  },
+  "chart-scatter": {
+   "import": "@aziontech/webkit/chart-scatter",
+   "target": "./src/components/chart/chart/chart-scatter/chart-scatter.vue",
+   "kind": "subcomponent",
+   "parent": "chart",
+   "treeShakeableImport": "@aziontech/webkit/chart-scatter",
    "surface": "product"
   },
   "chart-tooltip": {
@@ -4346,6 +4378,251 @@
    "surface": "product",
    "examplesFile": "catalog/examples/donut-chart.json",
    "docsFile": "catalog/components/donut-chart.json"
+  },
+  "gauge-chart": {
+   "import": "@aziontech/webkit/gauge-chart",
+   "target": "./src/components/chart/gauge-chart/gauge-chart.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/gauge-chart",
+   "category": "chart",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "value",
+     "type": "number | null",
+     "default": "null",
+     "required": "false",
+     "doc": "The reading. Null or absent renders the empty state."
+    },
+    {
+     "name": "min",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Start of the scale."
+    },
+    {
+     "name": "max",
+     "type": "number",
+     "default": "100",
+     "required": "false",
+     "doc": "End of the scale."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Caption under the reading: what is measured, or the unit."
+    },
+    {
+     "name": "thresholds",
+     "type": "GaugeChartThreshold[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Bands from low to high; the arc takes the color of the band the value falls in, and each band start is marked on the track."
+    },
+    {
+     "name": "formatValue",
+     "type": "(value: number) => string",
+     "default": "formatCompact",
+     "required": "false",
+     "doc": "Formats the reading and the scale ends."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Width of the dial: 160, 224 or 288 pixels."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders a Skeleton sized to the dial."
+    },
+    {
+     "name": "refetching",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Holds the previous reading at reduced opacity while new data loads."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Error message; when set, a danger Alert replaces the dial."
+    },
+    {
+     "name": "emptyTitle",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Title of the empty state shown when there is no reading. Empty uses the locale catalog (`No data available`)."
+    },
+    {
+     "name": "emptyDescription",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Supporting line under the empty title: why there is no reading, or what to do next."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the meter when it is not inside a ChartCard with a title."
+    }
+   ],
+   "slots": [
+    {
+     "name": "value",
+     "scope": "{ value: number; text: string; status: string }",
+     "notes": "Replaces the reading and caption under the arc."
+    },
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Replaces the default EmptyState."
+    },
+    {
+     "name": "empty-actions",
+     "scope": "—",
+     "notes": "Actions under the default EmptyState."
+    },
+    {
+     "name": "error",
+     "scope": "—",
+     "notes": "Replaces the default danger Alert."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/gauge-chart.json",
+   "docsFile": "catalog/components/gauge-chart.json"
+  },
+  "map-chart": {
+   "import": "@aziontech/webkit/map-chart",
+   "target": "./src/components/chart/map-chart/map-chart.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/map-chart",
+   "category": "chart",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "regions",
+     "type": "MapChartRegion[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Countries shaded by value on a five-step sequential scale."
+    },
+    {
+     "name": "points",
+     "type": "MapChartPoint[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Locations drawn as bubbles sized by value."
+    },
+    {
+     "name": "view",
+     "type": "'world' | 'americas' | 'north-america' | 'south-america' | 'europe' | 'africa' | 'asia' | 'oceania'",
+     "default": "'world'",
+     "required": "false",
+     "doc": "Part of the world the map frames."
+    },
+    {
+     "name": "formatValue",
+     "type": "(value: number) => string",
+     "default": "formatCompact",
+     "required": "false",
+     "doc": "Formats values in the tooltip, legend and table."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders a Skeleton sized to the map and suppresses interaction."
+    },
+    {
+     "name": "refetching",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Holds the previous render at reduced opacity while new data loads."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Error message; when set, a danger Alert replaces the map."
+    },
+    {
+     "name": "emptyTitle",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Title of the empty state shown when no region or point has a value. Empty uses the locale catalog (`No data available`)."
+    },
+    {
+     "name": "emptyDescription",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Supporting line under the empty title: why the range is empty, or what to do next."
+    },
+    {
+     "name": "tableView",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the data table in place of the map. The table is always present for assistive tech."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the map when it is not inside a ChartCard with a title."
+    }
+   ],
+   "events": [
+    {
+     "name": "region-click",
+     "payload": "(event: MouseEvent | KeyboardEvent, region: MapChartRegion)",
+     "notes": "Click on a shaded country, or Enter / Space while it is active."
+    },
+    {
+     "name": "point-click",
+     "payload": "(event: MouseEvent | KeyboardEvent, point: MapChartPoint)",
+     "notes": "Click on a bubble, or Enter / Space while it is active."
+    }
+   ],
+   "slots": [
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Replaces the default EmptyState."
+    },
+    {
+     "name": "empty-actions",
+     "scope": "—",
+     "notes": "Actions under the default EmptyState, such as a Clear filters button."
+    },
+    {
+     "name": "error",
+     "scope": "—",
+     "notes": "Replaces the default danger Alert."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/map-chart.json",
+   "docsFile": "catalog/components/map-chart.json"
   },
   "stat-tile": {
    "import": "@aziontech/webkit/stat-tile",
@@ -27919,6 +28196,7 @@
     "Button",
     "ButtonHighlight",
     "CalendarRoot",
+    "Chart",
     "Checkbox",
     "Chip",
     "CodeBlock",
@@ -27954,6 +28232,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/calendar-root",
+    "@aziontech/webkit/chart",
     "@aziontech/webkit/checkbox",
     "@aziontech/webkit/chip",
     "@aziontech/webkit/code-block",

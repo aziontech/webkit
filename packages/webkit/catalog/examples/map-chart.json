@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Requests by country on the dotted network map, in five sequential steps from the lowest to the highest value. Focus the map and use the arrow keys to read each country, highest first.",
+   "sfc": "<script setup>\n  import MapChart from '@aziontech/webkit/map-chart'\n\n  const regions = [\n    { id: 'BR', value: 48200 },\n    { id: 'US', value: 31600 },\n    { id: 'DE', value: 18900 },\n    { id: 'IN', value: 15400 },\n    { id: 'JP', value: 9800 },\n    { id: 'MX', value: 7600 },\n    { id: 'ZA', value: 4100 },\n    { id: 'AU', value: 3900 }\n  ]\n</script>\n\n<template>\n  <MapChart\n    :regions=\"regions\"\n    aria-label=\"Requests by country\"\n  />\n</template>"
+  },
+  {
+   "name": "Points",
+   "summary": "Locations as bubbles whose area follows the value, for points of presence or cities.",
+   "sfc": "<script setup>\n  import MapChart from '@aziontech/webkit/map-chart'\n\n  const points = [\n    { id: 'sao-paulo', name: 'São Paulo', lat: -23.55, lon: -46.63, value: 18400 },\n    { id: 'miami', name: 'Miami', lat: 25.76, lon: -80.19, value: 9200 },\n    { id: 'frankfurt', name: 'Frankfurt', lat: 50.11, lon: 8.68, value: 12600 },\n    { id: 'mumbai', name: 'Mumbai', lat: 19.07, lon: 72.88, value: 6100 },\n    { id: 'tokyo', name: 'Tokyo', lat: 35.68, lon: 139.69, value: 8300 },\n    { id: 'sydney', name: 'Sydney', lat: -33.87, lon: 151.21, value: 2700 }\n  ]\n</script>\n\n<template>\n  <MapChart\n    :points=\"points\"\n    aria-label=\"Requests by point of presence\"\n  />\n</template>"
+  },
+  {
+   "name": "View",
+   "summary": "The map framed on one part of the world, with shaded countries and bubbles together.",
+   "sfc": "<script setup>\n  import MapChart from '@aziontech/webkit/map-chart'\n\n  const regions = [\n    { id: 'BR', value: 48200 },\n    { id: 'AR', value: 9100 },\n    { id: 'CO', value: 6800 },\n    { id: 'CL', value: 5200 },\n    { id: 'PE', value: 3100 }\n  ]\n  const points = [\n    { id: 'sao-paulo', name: 'São Paulo', lat: -23.55, lon: -46.63, value: 18400, color: 2 },\n    { id: 'buenos-aires', name: 'Buenos Aires', lat: -34.6, lon: -58.38, value: 4300, color: 2 }\n  ]\n</script>\n\n<template>\n  <MapChart\n    :regions=\"regions\"\n    :points=\"points\"\n    view=\"south-america\"\n    aria-label=\"Requests in South America\"\n  />\n</template>"
+  }
+ ]
+}

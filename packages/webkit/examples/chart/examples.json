@@ -28,6 +28,21 @@
       "file": "horizontal.vue"
     },
     {
+      "name": "Mixed",
+      "summary": "Bars and a line on one value axis: requests as bars, the part served from cache as a line. The bar sets the axis to bands, so the line points sit on the bar centers.",
+      "file": "mixed.vue"
+    },
+    {
+      "name": "Scatter",
+      "summary": "Dots with no connecting line, on a linear label scale: each object size sits at its own distance along the axis, so the spacing reads as the measure it is.",
+      "file": "scatter.vue"
+    },
+    {
+      "name": "Brush",
+      "summary": "Drag across the plot, or hold Shift with the arrow keys and press Enter, to select a span. The chart reports it through v-model:range; the page filters to it. Escape clears it.",
+      "file": "brush.vue"
+    },
+    {
       "name": "Loading",
       "summary": "A Skeleton fills the plot while the first response loads.",
       "file": "loading.vue"
