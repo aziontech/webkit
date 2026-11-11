@@ -53,8 +53,6 @@ import vueParser from 'vue-eslint-parser'
 import tsParser from '@typescript-eslint/parser'
 
 export default [
-  // webkit rules — imports, tokens, tree-shaking, no-restyle, prefer-webkit-component,
-  // defineModel, deprecation. Every rule is an error (nothing out of standard is a warning).
   ...webkitPlugin.configs.${severityConfig},
   {
     files: ['**/*.vue'],
@@ -62,9 +60,6 @@ export default [
       parser: vueParser,
       parserOptions: { parser: tsParser }
     },
-    // Static a11y floor for the composition layer — the lint half of the
-    // webkit-accessibility-implementation skill (the runtime half is axe, via the
-    // webkit-ui-verifier agent). Mirrors the design system's own config.
     plugins: { 'vuejs-accessibility': a11y },
     rules: {
       'vuejs-accessibility/alt-text': 'error',

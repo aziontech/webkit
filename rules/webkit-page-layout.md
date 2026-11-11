@@ -60,8 +60,9 @@ follows the nearest container.
   sticky action bar (`kind="plain"` is the form-column footer).
 - Size cards, dialogs and side columns with the container scale: `max-w-(--container-sm)` …
   `max-w-(--container-7xl)`.
-- Start a screen from its pattern (`search_patterns` → `get_pattern` in the webkit MCP): the pattern
-  already carries the right container and rhythm.
+- Start a screen from its block (`npx @aziontech/webkit search <words>` → `npx @aziontech/webkit add
+<block-id>`, or `search_patterns` → `get_pattern` in the webkit MCP): the block already carries
+  the right container and rhythm.
 
 ## Do not
 
