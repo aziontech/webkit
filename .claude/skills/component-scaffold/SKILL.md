@@ -152,9 +152,9 @@ packages/webkit/src/components/actions/button/
 
    Never write a `<style>` block. Never declare a `.css`/`.scss` file inside the component directory. Never declare any JavaScript variable that holds a class string (`const kindClasses = {...}`, `const sharedClasses = [...]`, etc.). Variants are HTML data-attributes, not JS dictionaries.
 
-   **Never use backtick template literals inside `<template> :class="cn(\`...\`)"`** — the Vue HTML parser throws `Element is missing end tag` and Storybook/Vite fail to load the story. Put the flat class string in `<script setup>` as `const ROOT_CLASS = '...'` and bind `:class="cn(ROOT_CLASS, attrs.class)"`, or use a plain multiline `class="..."` on the root. See [`.claude/rules/styling.md`](../../rules/styling.md) § "Vue SFC pitfall".
+   **Never use backtick template literals inside `<template> :class="cn(\`...\`)"`** — the Vue HTML parser throws `Element is missing end tag` and Vite fails to load the component. Put the flat class string in `<script setup>` as `const ROOT_CLASS = '...'` and bind `:class="cn(ROOT_CLASS, attrs.class)"`, or use a plain multiline `class="..."` on the root. See [`.claude/rules/styling.md`](../../rules/styling.md) § "Vue SFC pitfall".
 
-   **Never put HTML-like tags in script JSDoc** (e.g. `` `<a>` ``, `<template>`) — Storybook runs two `@vitejs/plugin-vue` passes; the second re-parses compiled JS and fails with the same error. Use plain language ("anchor link") instead.
+   **Never put HTML-like tags in script JSDoc** (e.g. `` `<a>` ``, `<template>`) — a build that runs `@vitejs/plugin-vue` twice re-parses compiled JS and fails with the same error. Use plain language ("anchor link") instead.
 
 3. **(Composition only) Write each sub-component into its own folder.** For each sub-component `<name>-<part>` listed in the spec's Sub-components section, create:
 
@@ -219,7 +219,7 @@ packages/webkit/src/components/actions/button/
    "./overlay/popover-content": "./src/components/overlay/popover/popover-content/popover-content.vue"
    ```
 
-6. **Write the starter test** `<name>.test.ts` next to the root `.vue`, using the template below. Fill the root's **required** props (spec Props with no default) so the render doesn't throw. This is a **FLOOR** — render + `data-testid` fallback + consumer override + axe. It uses `render(Component)` directly (**not** `composeStories`) because the story is written later by [`storybook-write`](../storybook-write/SKILL.md); the author expands it (every event with payload, `disabled`/`loading` suppression, `v-model`, ARIA/`data-state`, keyboard, and `composeStories`) per [`.claude/rules/testing.md`](../../rules/testing.md). [`enforce-test-exists.mjs`](../../hooks/enforce-test-exists.mjs) surfaces a reminder if this file is missing.
+6. **Write the starter test** `<name>.test.ts` next to the root `.vue`, using the template below. Fill the root's **required** props (spec Props with no default) so the render doesn't throw. This is a **FLOOR** — render + `data-testid` fallback + consumer override + axe. It uses `render(Component)` directly because the examples are written later (`examples/<name>/`); the author expands it (every event with payload, `disabled`/`loading` suppression, `v-model`, ARIA/`data-state`, keyboard, and the examples as fixtures) per [`.claude/rules/testing.md`](../../rules/testing.md). [`enforce-test-exists.mjs`](../../hooks/enforce-test-exists.mjs) surfaces a reminder if this file is missing.
 
    ```ts
    // packages/webkit/src/components/<category>/<name>/<name>.test.ts
@@ -230,7 +230,7 @@ packages/webkit/src/components/actions/button/
    import <PascalName> from './<name>.vue'
 
    // Starter suite emitted by the scaffold — a FLOOR, not the ceiling. Expand per
-   // .claude/rules/testing.md: reuse the Storybook story via composeStories, then
+   // .claude/rules/testing.md: mount the examples from examples/<name>/, then
    // assert every event with its payload, disabled/loading suppression, v-model
    // round-trip, ARIA / data-state, and keyboard interaction.
    describe('<PascalName>', () => {

@@ -6,7 +6,7 @@ The loop pauses on hover and keyboard focus. Under reduced motion it stops, and 
 
 The band is the `RecognitionMarquee` component from `@aziontech/webkit/recognition-marquee`; it composes `SectionModule`, `SectionTitle`, `FrameBox` and `Quote`, with the `animate-brand-marquee` utility.
 
-## Stories
+## Examples
 
 ### Default
 

@@ -85,7 +85,7 @@
             class="flex items-center gap-(--spacing-xs)"
           >
             <span
-              class="h-0.5 w-3 shrink-0 rounded-full bg-(--chart-tooltip-key)"
+              class="h-0.5 w-3 shrink-0 rounded-full bg-(--chart-tooltip-key) forced-color-adjust-none"
               :style="{ '--chart-tooltip-key': row.color }"
             />
             <span class="min-w-0 flex-1 truncate text-label-md text-(--chart-tooltip-muted)">

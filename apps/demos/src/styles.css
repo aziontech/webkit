@@ -1,0 +1,16 @@
+@import 'tailwindcss/utilities' source(none);
+@reference "@aziontech/theme";
+@source './';
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--bg-canvas);
+  color: var(--text-default);
+}
+
+.azion {
+  font-family: Rubik, ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizelegibility;
+}

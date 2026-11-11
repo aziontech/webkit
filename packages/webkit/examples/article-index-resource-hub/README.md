@@ -6,7 +6,7 @@ Every resource is a ruled row: its cover on the left; on the right its overline,
 
 The list is the `ArticleIndexResourceHub` component from `@aziontech/webkit/article-index-resource-hub`; it composes `SectionModule`, `FrameBox`, `Select`, `Input` and `Button`. The selections are local state. The Blog list is `ArticleIndexBlog` (`@aziontech/webkit/article-index-blog`).
 
-## Stories
+## Examples
 
 ### Resource Hub
 

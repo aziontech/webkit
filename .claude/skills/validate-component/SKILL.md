@@ -1,10 +1,10 @@
 ---
 name: validate-component
-description: Run the project's pnpm checks (lint, type-check, type-coverage, storybook build) on the freshly-written component. Pure runner; never edits code.
+description: Run the project's pnpm checks (lint, type-check, type-coverage, server render of every example) on the freshly-written component. Pure runner; never edits code.
 status: active
 last_updated: 2026-05-22
 scope: webkit
-enforced_by: [storybook-source, props, dependencies]
+enforced_by: [props, dependencies]
 ---
 
 # Skill: validate-component
@@ -31,7 +31,7 @@ Run the four checks in this fixed order; stop on the first failure and surface i
 | 1 | `pnpm webkit:lint` | ESLint reports an error or warning that crosses the project threshold. |
 | 2 | `pnpm webkit:type-check` | `vue-tsc` reports a TypeScript error in the component, its sub-components, or the consuming exports. |
 | 3 | `pnpm webkit:type-coverage` | Type coverage below the threshold (project default: 95%). |
-| 4 | `pnpm storybook:build` | The new `.stories.js` breaks the Storybook build. |
+| 4 | `pnpm --filter @aziontech/webkit test:ssr` | An example of the new component does not render (or compile) with `vue/server-renderer`. |
 
 For each command, capture the exit code and the last 40 lines of stdout/stderr. Emit a table:
 
@@ -41,7 +41,7 @@ For each command, capture the exit code and the last 40 lines of stdout/stderr. 
 | `pnpm webkit:lint` | ✅ pass | 0 warnings |
 | `pnpm webkit:type-check` | ✅ pass | — |
 | `pnpm webkit:type-coverage` | ✅ pass | 97.2% (threshold 95%) |
-| `pnpm storybook:build` | ✅ pass | build output OK |
+| `pnpm --filter @aziontech/webkit test:ssr` | ✅ pass | every block and example rendered |
 ```
 
 If any row is ❌, include the last 40 lines of the tool's output below the table and stop.

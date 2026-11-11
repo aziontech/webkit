@@ -105,7 +105,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 - Icons: none mirror.
 - Keyboard: `ArrowRight`/`ArrowLeft` move between the file tabs, swapped under `dir="rtl"` (`logicalArrowKey`); the tab indicator is anchored with a physical `left: 0` and moved by `offsetLeft`.
 - Motion: the panel slide between tabs mirrors (`rtl:` flips the `translate-x` presets).
-- User data: code lines render `dir="ltr"`: code always reads left to right.
+- User data: code lines render `dir="ltr"`: code always reads left to right. The scroll area keeps the copy button's width free on its side (`pe-10` when `copyable`), so under `dir="rtl"` the button never covers the start of a line.
 
 ## Examples
 

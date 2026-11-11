@@ -1,5 +1,5 @@
 ---
-description: Add one or more icons to `@aziontech/icons` — decides monochrome (font) vs colored (`ai-*-cor`), normalizes names, places the SVGs, rebuilds, and verifies they surface in the catalog, CSS, gallery, and Storybook.
+description: Add one or more icons to `@aziontech/icons` — decides monochrome (font) vs colored (`ai-*-cor`), normalizes names, places the SVGs, rebuilds, and verifies they surface in the catalog, CSS, gallery, and docs site.
 argument-hint: [svg file(s) / pasted svg / names] [ai|pi]
 ---
 
@@ -11,7 +11,7 @@ You are running `/include-icons`. Bring new icon SVGs into the `@aziontech/icons
 
 - Package + workflow: [`packages/icons/README.md`](../../packages/icons/README.md) (§ Adding a new icon / colored icon).
 - Build orchestrator: [`packages/icons/scripts/build.mjs`](../../packages/icons/scripts/build.mjs). Font config: [`packages/icons/fantasticon.config.mjs`](../../packages/icons/fantasticon.config.mjs).
-- Consumers: [`apps/icons-gallery`](../../apps/icons-gallery) (catalog + `color-catalog`), Storybook [`Foundations/Icons`](../../apps/storybook/src/stories/foundations/Icons.stories.js).
+- Consumers: [`apps/icons-gallery`](../../apps/icons-gallery) (catalog + `color-catalog`) and the docs site (`apps/docs`), which loads `@aziontech/icons` for every example.
 
 ## The one decision that drives everything: monochrome vs colored
 
@@ -38,7 +38,7 @@ Detect colored automatically: the SVG has `<linearGradient>`/`<radialGradient>`,
 7. **Verify** (state results plainly — counts, not vibes):
    - **Monochrome:** the name is in `dist/catalog.json` as `{ icon: "ai ai-<name>", … }`; it is **not** in `color-catalog.json`.
    - **Colored:** the name is in `dist/color-catalog.json` (well-formed `<svg>`, no `currentColor`) **and** has a `.ai-<name>-cor` rule in `dist/azionicons-color.css` whose data-URI decodes to the colored SVG; it is **not** in `catalog.json` and **not** in the woff2 font.
-   - **Apps:** rebuild the gallery (`apps/icons-gallery`) and Storybook (`apps/storybook`) and confirm the icon appears in the grid / `Foundations/Icons`. For colored, confirm `<i class="ai ai-<name>-cor">` paints the logo (the `azionicons-color.css` class is bundled via the `index.css` barrel).
+   - **Apps:** rebuild the gallery (`apps/icons-gallery`) and confirm the icon appears in the grid; run `pnpm docs:dev` to see it in an example if one uses it. For colored, confirm `<i class="ai ai-<name>-cor">` paints the logo (the `azionicons-color.css` class is bundled via the `index.css` barrel).
 8. **Report** what you added (names, kind), how to use each (`<i class="ai ai-<name>">` or `<i class="ai ai-<name>-cor">`), and the verification outcome.
 
 ## Rules (hard)

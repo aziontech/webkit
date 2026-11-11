@@ -53,7 +53,7 @@
 - Root is a `<p>` element so the text is part of the document flow; consumers wire the input with `aria-describedby="<helper-id>"` to expose the helper text to assistive tech.
 - Keyboard map: not focusable (descriptive text); the lock icon for `kind="disabled"` is decorative and marked `aria-hidden="true"`.
 - ARIA: when `kind="invalid"`, consumers should also set `aria-invalid="true"` on the associated input; the helper text content carries the human-readable error.
-- Contrast ≥4.5:1 between each `kind` color and `var(--bg-canvas)` (verified by Storybook a11y addon).
+- Contrast ≥4.5:1 between each `kind` color and `var(--bg-canvas)` (verified with the theme by the styled visual suite).
 - `motion-reduce:transition-none motion-reduce:transform-none` not applicable (no motion).
 - Touch target: text is non-interactive; not subject to the 40×40 px rule.
 

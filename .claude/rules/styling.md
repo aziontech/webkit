@@ -285,7 +285,7 @@ padding: 0 var(--spacing-md);
 The Vue HTML parser runs **before** JavaScript. **Do not** pass multiline template literals from the template:
 
 ```vue
-<!-- ❌ Breaks Vite / Storybook: vite:vue "Element is missing end tag" (often last line, high column) -->
+<!-- ❌ Breaks Vite: vite:vue "Element is missing end tag" (often last line, high column) -->
 <button
   :class="
     cn(
@@ -311,11 +311,11 @@ The Vue HTML parser runs **before** JavaScript. **Do not** pass multiline templa
 1. **Plain multiline `class` on the root** (no JS quotes) + optional `:class="attrs.class"` for consumer overrides.
 2. **Single-quoted `ROOT_CLASS` in `<script setup>`** + `:class="cn(ROOT_CLASS, attrs.class)"` — one flat literal string, not a `kindClasses` / `sizeClasses` map.
 
-`pnpm webkit:lint` and `vue-tsc` may still pass; only the SFC template compiler (Storybook dev, `storybook:build`) catches this.
+`pnpm webkit:lint` and `vue-tsc` may still pass; only the SFC template compiler (`pnpm docs:dev`, `pnpm docs:build`) catches this.
 
 ## Vue SFC pitfall — no HTML-like tags in `<script>` comments
 
-Storybook registers **two** `@vitejs/plugin-vue` instances (`@storybook/vue3-vite` + `viteFinal` in `apps/storybook/.storybook/main.js`). The second pass may call `compiler-sfc` `parse()` on **already-compiled** module code. Any substring that looks like HTML in that output breaks the parse.
+A tool that runs `@vitejs/plugin-vue` twice (as some consumer setups do) may call `compiler-sfc` `parse()` on **already-compiled** module code. Any substring that looks like HTML in that output breaks the parse, so the rule stays for every consumer build.
 
 ```ts
 // ❌ Survives compileScript and breaks the second vite:vue pass
@@ -331,11 +331,11 @@ Storybook registers **two** `@vitejs/plugin-vue` instances (`@storybook/vue3-vit
 
 | Step | Command / action                                                                                                                    |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| 1    | Read Storybook terminal: `Plugin: vite:vue` + `Element is missing end tag`                                                          |
+| 1    | Read the Vite terminal: `Plugin: vite:vue` + `Element is missing end tag`                                                           |
 | 2    | Confirm raw SFC parses: `node -e "require('vue/compiler-sfc').parse(fs.readFileSync('…vue','utf8'),{filename:'…'})"` → `errors: []` |
 | 3    | Grep script for `` `<…>` ``, `<template`, `</…>` in comments and JSDoc                                                              |
 | 4    | Remove backtick multiline literals from `<template> :class="cn(\`…\`)"`(move class string to script`ROOT_CLASS`)                    |
-| 5    | Restart `pnpm storybook:dev` after fixing (clear stale HMR descriptor if needed)                                                    |
+| 5    | Restart `pnpm docs:dev` after fixing (clear stale HMR descriptor if needed)                                                         |
 
 ## When you legitimately need conditional styling
 

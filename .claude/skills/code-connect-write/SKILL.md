@@ -15,7 +15,7 @@ Map Figma variants (kind / size / state) → Vue props, Figma slots → Vue chil
 
 ## When to invoke
 
-- Step 6 of `/component-create`, after the scaffolder and storybook-write succeeded.
+- Step 6 of `/component-create`, after the scaffolder and the examples succeeded.
 
 ## Inputs
 

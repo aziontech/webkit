@@ -4,7 +4,7 @@ A row of big figures that proves the claims around it are measured. Each figure 
 
 The band is the `StatsBand` component from `@aziontech/webkit/stats-band`; it composes `SectionModule`, `FrameBox` and `BigNumbers`, which picks its column count from the number of figures.
 
-## Stories
+## Examples
 
 ### Reach
 

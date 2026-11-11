@@ -97,9 +97,8 @@
   },
   "devDependencies": {
     "@figma/code-connect": "^2.1.0",
-    "@storybook/test": "^8.6.15",
-    "@storybook/vue3": "^8.6.19",
     "@tailwindcss/vite": "^4.0.0",
+    "@testing-library/user-event": "^14.5.2",
     "@testing-library/vue": "^8.1.0",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vitest/browser": "^4.1.12",
@@ -108,6 +107,7 @@
     "@vitest/ui": "^4.1.12",
     "astro-eslint-parser": "^3.1.0",
     "axe-core": "^4.10.3",
+    "esbuild": "^0.25.12",
     "eslint": "^9.39.3",
     "monaco-editor": "0.57.0",
     "playwright": "^1.61.1",

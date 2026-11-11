@@ -534,8 +534,8 @@ describe('Select (compound / overlay)', () => {
   // The panel is `position: fixed` inside its Teleport target (document.body).
   // A transform on an ancestor of that target makes it the panel's containing
   // block, so viewport coordinates written to top/left get scaled a second time
-  // and the panel lands away from the trigger. Storybook's zoom control does
-  // exactly this — it scales the preview body.
+  // and the panel lands away from the trigger. A zoomed preview container does
+  // exactly this — it scales the body.
   it('anchors the panel to the trigger when the Teleport target is scaled', async () => {
     const previousTransform = document.body.style.transform
     const previousOrigin = document.body.style.transformOrigin

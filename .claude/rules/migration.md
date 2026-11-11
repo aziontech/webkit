@@ -4,7 +4,7 @@ When importing a component, pattern, or any artifact from **outside** this codeb
 
 ## The rule
 
-> **NEVER create anything outside the standard.** Every artifact you produce — spec, `.vue`, `package.json`, `.figma.ts`, `.stories.js`, rule update — must conform to our patterns. No exceptions, no "temporary" deviations, no "to make migration easier."
+> **NEVER create anything outside the standard.** Every artifact you produce — spec, `.vue`, `package.json`, `.figma.ts`, examples, rule update — must conform to our patterns. No exceptions, no "temporary" deviations, no "to make migration easier."
 
 ## What this means in practice
 
@@ -49,7 +49,7 @@ You **delete** the inherited doc. Specs live in `.specs/`, and only specs in our
 
 ## Hard prohibitions
 
-- Do not paste content from external sources into our specs, components, or stories without rewriting to our conventions.
+- Do not paste content from external sources into our specs, components, or examples without rewriting to our conventions.
 - Do not inherit naming choices that conflict with ours.
 - Do not inherit animation choices that conflict with our catalog.
 - Do not inherit dependencies that conflict with [`dependencies.md`](./dependencies.md).

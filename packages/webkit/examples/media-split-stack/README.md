@@ -6,7 +6,7 @@ Every band sits on the same small pixelate texture, fading toward the top. A ban
 
 The band is the `MediaSplitStack` component from `@aziontech/webkit/media-split-stack`; it composes `SectionModule`, `SectionTitle`, `BandStack` and `MediaSplit`, with `Illustration` scenes and `Button` actions. `kind` picks the layout: `media-end` (every picture at the closing end) or `alternating` (the picture swaps sides band by band, starting at the opening end). Both use `_id: 'media-split-stack'`.
 
-## Stories
+## Examples
 
 ### Solutions
 

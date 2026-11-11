@@ -6,7 +6,7 @@ Home shows it right under the hero. The solution, product and Pricing pages repe
 
 The band is the `PlatformDirectory` component from `@aziontech/webkit/platform-directory`; it composes `SectionModule`, `SectionTitle`, `FrameBox` and `ColumnNavigation`.
 
-## Stories
+## Examples
 
 ### Primitives
 

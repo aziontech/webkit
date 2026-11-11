@@ -28,7 +28,7 @@ const panel = () => byTestId('overlay-dialog__panel')
 const backdrop = () => byTestId('overlay-dialog__backdrop')
 
 /**
- * A realistic composed tree wired exactly like the Storybook Default: Root >
+ * A realistic composed tree wired exactly like the Default example: Root >
  * Trigger (Button-like) + Portal > Overlay + Content (Title / Description /
  * Close). Slots take strings so we don't pull in Panel/Button, keeping the
  * assertions grounded purely in the dialog sub-components under test.
@@ -295,7 +295,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
     // DialogContent locks the page behind the overlay via useScrollLock(body).
     // Asserted through the inline style the lock writes, which is real in this
     // env — unlike the panel's own scrolling, which is Tailwind layout and so
-    // lives in the Storybook / visual layer (see LongContentMobile).
+    // lives in the styled visual suite (see LongContentMobile).
     it('locks body scroll while open and restores it on close', async () => {
       const before = document.body.style.overflow
 
@@ -354,7 +354,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
     })
   })
 
-  describe('Storybook Default story composes and opens', () => {
+  describe('Default fixture composes and opens', () => {
     it('renders the composed Default and opens via its trigger', async () => {
       const { getByTestId } = render(Default)
       await settle()

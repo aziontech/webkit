@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-11
-checksum: 0a43d0cd353c8ac10debd23d86fbe4facdd652b6a5fde4df4b65dd373c861947
+checksum: 549b10821455ec995d4a5c1c1fac531354b7f006209e75a45f96c8c6c0c8e7fb
 ---
 
 # BrowserFrame — Component Spec
@@ -18,7 +18,7 @@ A browser window that renders live webkit components inside a viewport of its ow
 ## When to use
 
 - Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.
-- Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, in Storybook or on a documentation page.
+- Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, on a documentation page.
 - Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.
 - Showing that a result lives at a URL — a deployed site, a preview link — by setting `address`.
 
@@ -186,7 +186,7 @@ Resizing itself is not animated — the size follows the pointer or key press im
 - Pointer: the width drag delta is inverted under `rtl`.
 - User data: the address bar renders `dir="ltr"`: a URL always reads left to right.
 
-## Stories (Storybook)
+## Examples
 
 - Default — a composed screen of real components filling the container width at the default height, with an address.
 - Breakpoints — composite story rendering the same composed screen at `375 × 812`, `768 × 1024` and `1280 × 800`, each pinned with `width` and `height`. Justified addition: showing device sizes is the component's purpose, and there is no `kind`/`size` axis that would otherwise demonstrate it.
@@ -207,10 +207,8 @@ Resizing itself is not animated — the size follows the pointer or key press im
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

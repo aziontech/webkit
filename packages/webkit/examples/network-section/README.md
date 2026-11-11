@@ -6,7 +6,7 @@ The headline sits at the top and the claims at the bottom, so the map shows betw
 
 The band is the `NetworkSection` component from `@aziontech/webkit/network-section`; it composes `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle`, and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit. `kind` picks the floor: `outcomes` (the default) or `benefits`.
 
-## Stories
+## Examples
 
 ### Client quotes
 

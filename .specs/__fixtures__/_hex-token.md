@@ -52,7 +52,7 @@ Fixture: the Tokens table references a HEX literal instead of a DESIGN.md token.
 
 - Visible focus ring.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - LightDark

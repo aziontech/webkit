@@ -679,7 +679,10 @@
       <ScrollArea
         orientation="both"
         :class="
-          cn('min-h-0 min-w-0 flex-1 py-(--spacing-sm)', 'focus-visible:ring-offset-(--bg-surface)')
+          cn(
+            'min-h-0 min-w-0 flex-1 py-(--spacing-sm) in-data-[copyable]:pe-10',
+            'focus-visible:ring-offset-(--bg-surface)'
+          )
         "
         :data-testid="`${testId}__scroll`"
       >

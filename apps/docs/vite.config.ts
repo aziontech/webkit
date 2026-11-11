@@ -20,6 +20,7 @@ function staticRoutes(): string[] {
     ...components.map((item) => `/components/${item.name}`),
     ...blocks.map((block) => `/blocks/${block.id}`),
     ...blocks.flatMap((block) => block.states.map((state) => `/frame/${state.slug}/${block.id}`)),
+    '/example',
     '/404'
   ]
 }

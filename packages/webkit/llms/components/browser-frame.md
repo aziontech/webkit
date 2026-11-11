@@ -9,7 +9,7 @@
 ## When to use
 
 - Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.
-- Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, in Storybook or on a documentation page.
+- Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, on a documentation page.
 - Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.
 - Showing that a result lives at a URL — a deployed site, a preview link — by setting `address`.
 

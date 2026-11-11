@@ -271,7 +271,7 @@ describe('PasswordInput', () => {
     await expectNoA11yViolations(container)
   })
 
-  // --- story fixture proves composeStories wiring ---
+  // --- Default fixture renders ---
 
   it('renders the Default story fixture cleanly', async () => {
     // The story documents the bare field (its label is the form-field layer's job), so

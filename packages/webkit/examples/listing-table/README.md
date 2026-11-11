@@ -6,7 +6,7 @@ Each row is one link, named by its first column. The whole row is clickable with
 
 The band is the `ListingTable` component from `@aziontech/webkit/listing-table`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `Table` and, on phones, `Item`.
 
-## Stories
+## Examples
 
 ### Latest Roles
 

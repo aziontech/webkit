@@ -6,7 +6,7 @@ The tabs advance on a timer. It pauses under the pointer or keyboard focus, and 
 
 The band is the `FeatureTabs` component from `@aziontech/webkit/feature-tabs`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `MediaTabs`, `Illustration` and `MiniButton`.
 
-## Stories
+## Examples
 
 ### Default
 

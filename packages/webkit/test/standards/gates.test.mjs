@@ -23,9 +23,7 @@ test('every local gate also runs in the governance workflow', () => {
     for (const step of gate.steps) {
       if (step[0] === 'git') continue
       const scripts = scriptsFor(step)
-      const direct = step.find((a) => a.includes('gen-block-stories'))
       const ok =
-        (direct && workflow.includes('gen-block-stories.mjs --check')) ||
         (step.includes('--test') && workflow.includes('test:toolkit')) ||
         scripts.some((name) => new RegExp(`webkit (run )?${name}\\n`).test(workflow))
       assert.ok(ok, `${gate.id}: ${step.join(' ')} is not in governance.yml`)

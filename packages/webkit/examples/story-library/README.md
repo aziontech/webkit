@@ -6,7 +6,7 @@ Each card is one link, named by its company: the client mark in a single ink, th
 
 The band is the `StoryLibrary` component from `@aziontech/webkit/story-library`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `Input`, `Select`, `Button` and, when nothing matches, `EmptyState`. The search, the facet selections and each select's option search are local state.
 
-## Stories
+## Examples
 
 ### Default
 

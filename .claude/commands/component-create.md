@@ -1,5 +1,5 @@
 ---
-description: Spec-driven orchestrator. Reads `.specs/<name>.md`, delegates phases to isolated sub-agents, and produces `<name>.vue` + `package.json` + exports entry + minimal Storybook story.
+description: Spec-driven orchestrator. Reads `.specs/<name>.md`, delegates phases to isolated sub-agents, and produces `<name>.vue` + `package.json` + exports entry + the examples in `packages/webkit/examples/<name>/`.
 argument-hint: <name> [--dry-run]
 ---
 
@@ -43,8 +43,8 @@ Hooks that fire on every Write:
 
 If any hook blocks, surface the stderr and abort. **Do not retry with workarounds.**
 
-### Step 5 — Storybook (writes)
-Spawn the `storybook-writer` sub-agent. Writes only the stories the spec lists (Default + per kind + per size + Disabled by default — nothing else unless the spec is explicit).
+### Step 5 — Examples (writes)
+Write `packages/webkit/examples/<name>/`: `examples.json` (`component`, `title`, `examples[]` with `name`, `summary`, `file`) and one copyable `.vue` per example the spec's `## Examples` section lists (Default + per kind + per size + Disabled by default — nothing else unless the spec is explicit). Each example imports only `@aziontech/webkit/*` subpaths and stands alone. The docs site renders every example on the component page and at `/example?path=<name>/<file>`, and the styled visual suite (`apps/visual`) screenshots the first one; nothing else to register.
 
 ### Step 6 — Code Connect (writes or skip)
 Spawn the `code-connect-writer` sub-agent. Skips itself if `@figma/code-connect` is not installed; that becomes a Pending Item in the final report.
@@ -56,7 +56,7 @@ Spawn the `echo-reporter` sub-agent. Independently re-parses every file written 
 - 2 — hook and echo disagree. Mark `degraded`; ask the user to review.
 
 ### Step 8 — Validation (read-only)
-Spawn the `validate-component` sub-agent. Runs `pnpm webkit:lint && type-check && type-coverage && storybook:build`. Surfaces failures.
+Spawn the `validate-component` sub-agent. Runs `pnpm webkit:lint && type-check && type-coverage && pnpm --filter @aziontech/webkit test:ssr`. Surfaces failures.
 
 ### Step 9 — Finalize
 - Flip `.specs/<name>.md` `status: approved → implemented` (or stay at `implemented` for re-runs).

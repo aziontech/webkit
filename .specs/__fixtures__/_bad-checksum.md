@@ -53,7 +53,7 @@ enforce-spec-exists must block.
 
 - Visible focus ring.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - LightDark

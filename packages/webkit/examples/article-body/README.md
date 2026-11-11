@@ -6,7 +6,7 @@ Both rails stick under the header and fold away below `lg`, leaving the column a
 
 The band is the `ArticleBody` component from `@aziontech/webkit/article-body`; it composes `SectionContainer`, `SectionModule`, `FrameBox`, `Breadcrumb`, `HeroTitle`, `Separator`, `DocProse`, `Tooltip`, `IconButton`, `SplitButton` and `DocOnThisPage`. The body is markdown rendered block by block — `##` / `###` headings, `-` lists and paragraphs — and the copy buttons write to the clipboard.
 
-## Stories
+## Examples
 
 ### Success Story
 

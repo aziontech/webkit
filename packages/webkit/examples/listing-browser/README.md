@@ -6,7 +6,7 @@ It shares ListingTable's anatomy: overline column headers, one link per row name
 
 The band is the `ListingBrowser` component from `@aziontech/webkit/listing-browser`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `Input`, `Select`, `Table`, `EmptyState`, `Button` and, on phones, `Item`. Search, facets and order run in the browser over the rows the page carries.
 
-## Stories
+## Examples
 
 ### Open Positions
 

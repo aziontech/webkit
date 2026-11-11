@@ -6,7 +6,7 @@ On hover and keyboard focus the mark lifts and a "Visit website" line rises unde
 
 The band is the `InvestorMarks` component from `@aziontech/webkit/investor-marks`; it composes `SectionModule`, `SectionTitle`, `FrameBox` and `BentoGrid`.
 
-## Stories
+## Examples
 
 ### Default
 

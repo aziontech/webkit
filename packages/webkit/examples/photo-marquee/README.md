@@ -6,7 +6,7 @@ The loop pauses on hover and keyboard focus. Under reduced motion it stops, and 
 
 The band is the `PhotoMarquee` component from `@aziontech/webkit/photo-marquee`; it composes `SectionModule`, `SectionTitle` and `FrameBox`, with the `animate-brand-marquee` utility.
 
-## Stories
+## Examples
 
 ### Default
 

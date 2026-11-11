@@ -10,9 +10,6 @@
       "Bash(pnpm webkit:type-coverage)",
       "Bash(pnpm webkit:format)",
       "Bash(pnpm webkit:format:check)",
-      "Bash(pnpm storybook:build)",
-      "Bash(pnpm storybook:dev)",
-      "Bash(pnpm storybook:preview)",
       "Bash(pnpm icons:build)",
       "Bash(pnpm icons:validate)",
       "Bash(pnpm governance)",
@@ -47,10 +44,6 @@
           {
             "type": "command",
             "command": "node .claude/hooks/validate-references.mjs"
-          },
-          {
-            "type": "command",
-            "command": "node .claude/hooks/validate-story-source.mjs"
           },
           {
             "type": "command",

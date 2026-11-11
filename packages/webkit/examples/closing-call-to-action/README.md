@@ -6,7 +6,7 @@ Almost every page ends with the split form, and only its copy changes per page. 
 
 The split, panel and primary forms are the `ClosingCallToAction` component from `@aziontech/webkit/closing-call-to-action`; it composes `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on the closing frame (and behind the copy in `primary`), and `kind` picks the form (`split`, `panel` or `primary`). The newsletter form is its own component, `ClosingCallToActionNewsletter` from `@aziontech/webkit/closing-call-to-action-newsletter`, since its ask is a subscribe form. The agents form is its own component too, `ClosingCallToActionAgents` from `@aziontech/webkit/closing-call-to-action-agents`, since it carries an audience switch and a typed line; it composes `CallToAction` in its `primary` register with `ToggleGroup`, `InputGroup`, `CopyButton` and `Button`.
 
-## Stories
+## Examples
 
 ### Split
 

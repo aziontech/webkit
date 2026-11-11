@@ -6,7 +6,7 @@ The media cell holds the article's cover. When the article has no cover, it hold
 
 The band is the `ArticleCards` component from `@aziontech/webkit/article-cards`; it composes `SectionModule`, `SectionTitle`, `FrameBox` and `CardGrid` (`CardGrid.Cell`). `kind` places the heading: `left` (an article's closing row) or `centered` (a landing-page band). Every variant uses the one `_id`, `article-cards`.
 
-## Stories
+## Examples
 
 ### Related Articles
 

@@ -6,7 +6,7 @@ Support carries a second link to the system status page, so a reader can check f
 
 The band is the `ContactHub` component from `@aziontech/webkit/contact-hub`; it composes `SectionModule`, `FrameBox`, `CardGrid`, `CardGridCell`, `Topic` and `Button`.
 
-## Stories
+## Examples
 
 ### Default
 

@@ -20,7 +20,7 @@ const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data
 const panel = () => byTestId('overlay-tooltip__panel')
 
 // The trigger slot is a plain <button> so the trigger has something focusable
-// and interactive to hover/focus, exactly like the Storybook default.
+// and interactive to hover/focus, exactly like the Default example.
 const composed = (props: Record<string, unknown> = {}) =>
   defineComponent({
     components: { Tooltip },
@@ -317,7 +317,7 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
     })
   })
 
-  describe('Storybook Default story renders and opens', () => {
+  describe('Default fixture renders and opens', () => {
     it('composes the Default trigger and opens on focus', async () => {
       const { getByTestId } = render(Default)
       await settle()

@@ -4,7 +4,7 @@ The frequently asked questions band near the end of a landing page. The heading 
 
 The band is the `FaqSection` component from `@aziontech/webkit/faq-section`; it composes `SectionModule` and `Faq`. Give it `anchor: 'faq'` so a page can link straight to it.
 
-## Stories
+## Examples
 
 ### With link
 

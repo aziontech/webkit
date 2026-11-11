@@ -51,7 +51,7 @@ Fixture: the "Constraints — DO NOT" block is absent. spec-validator must rejec
 
 - Visible focus ring.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - LightDark

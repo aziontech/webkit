@@ -6,7 +6,7 @@ Two tiles tell a story: a headline over the client's photo, with a "Learn more" 
 
 The band is the `ClientMosaic` component from `@aziontech/webkit/client-mosaic`; it composes `SectionModule`, `FrameBox`, `BentoGrid` (`BentoGrid.Cell`) and `MiniButton`.
 
-## Stories
+## Examples
 
 ### Default
 
