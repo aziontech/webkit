@@ -746,7 +746,7 @@
         <main class="layout-column flex min-h-full flex-col">
           <section class="flex min-w-0 flex-col gap-(--layout-section-gap)">
             <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-              <header class="flex items-center gap-(--layout-group-gap)">
+              <header class="flex flex-wrap items-center gap-(--layout-group-gap)">
                 <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
                   <Button
                     label="Filter"
@@ -771,7 +771,7 @@
                     </Input>
                   </div>
                 </div>
-                <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+                <div class="flex flex-wrap items-center gap-(--spacing-xs)">
                   <Tooltip
                     text="Refresh"
                     class="shrink-0"

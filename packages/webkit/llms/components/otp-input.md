@@ -87,9 +87,9 @@
 ## Responsive
 
 - Container queries: none.
-- Narrow: boxes are 40 px with an 8 px gap; six boxes plus a separator fit in 320 px.
+- Narrow: boxes are 40 px with an 8 px gap and shrink to 24 px when the row is narrower than that, so eight boxes plus a separator fit in 320 px (checked in `apps/visual`, `geometry otp input grouped`).
 - Touch: the whole row is the input's hit area.
-- Reflow: no horizontal scroll at 320 px for `length` up to 6 with a separator.
+- Reflow: no horizontal scroll at 320 px for `length` up to 8 with a separator.
 
 ## Examples
 

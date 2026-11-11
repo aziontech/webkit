@@ -948,7 +948,19 @@
   })
   const visibleHeightOf = (el: HTMLElement): number =>
     Math.min(el.clientHeight, globalThis.innerHeight || el.clientHeight)
+  const overflowStart = ref<boolean>(false)
+  const overflowEnd = ref<boolean>(false)
+  const measureEdges = (): void => {
+    const el = viewportEl()
+    if (!el) return
+    const offset = Math.abs(el.scrollLeft)
+    overflowStart.value = offset > 1
+    overflowEnd.value = el.scrollWidth - el.clientWidth - offset > 1
+  }
+  let edgeObserver: ResizeObserver | null = null
+
   const onViewportScroll = (event: Event): void => {
+    measureEdges()
     if (!props.virtual) return
     const el = event.currentTarget as HTMLElement
     scrollTop.value = el.scrollTop
@@ -1068,6 +1080,7 @@
   onBeforeUnmount(() => {
     lazyObserver?.disconnect()
     rowObserver?.disconnect()
+    edgeObserver?.disconnect()
     globalThis.cancelAnimationFrame(heightsFrame)
   })
 
@@ -1154,7 +1167,15 @@
         )
       : Number.NaN
     if (Number.isFinite(token) && token > 0) stackWidth.value = token
-    void nextTick(() => measureAutoWidths())
+    void nextTick(() => {
+      measureAutoWidths()
+      measureEdges()
+      const el = viewportEl()
+      if (!el || typeof ResizeObserver === 'undefined') return
+      edgeObserver = new ResizeObserver(measureEdges)
+      edgeObserver.observe(el)
+      if (el.firstElementChild) edgeObserver.observe(el.firstElementChild)
+    })
     const fonts = (globalThis.document as Document & { fonts?: { ready?: Promise<unknown> } }).fonts
     if (fonts?.ready) void fonts.ready.then(() => measureAutoWidths())
   })
@@ -1421,8 +1442,10 @@
       @scroll.passive="onViewportScroll"
     >
       <div
-        class="flex w-max min-w-full flex-col"
+        class="group/table flex w-max min-w-full flex-col"
         :class="stacked ? 'w-full!' : undefined"
+        :data-overflow-start="overflowStart || undefined"
+        :data-overflow-end="overflowEnd || undefined"
       >
         <div
           v-if="dataDriven && stacked && enableRowSelection && !loading && rowTotal > 0"
@@ -1609,7 +1632,7 @@
                     striped && (windowStart + index) % 2 === 1
                       ? '[--table-row-bg:var(--bg-surface-raised)]'
                       : undefined,
-                    'transition-[opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:-outline-offset-2 data-[dragging]:outline-(--accent) data-[drop=before]:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:shadow-[inset_0_-2px_0_var(--accent)]'
+                    'relative transition-[opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none after:pointer-events-none after:absolute after:inset-0 after:z-20 data-[dragging]:opacity-60 data-[dragging]:after:outline-dashed data-[dragging]:after:outline-2 data-[dragging]:after:-outline-offset-2 data-[dragging]:after:outline-(--accent) data-[drop=before]:after:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:after:shadow-[inset_0_-2px_0_var(--accent)]'
                   ]"
                   @click="onRowClick($event, row)"
                 >

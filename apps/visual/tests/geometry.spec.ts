@@ -16,7 +16,9 @@ for (const theme of THEMES) {
     test(`geometry table cell presets ${label(mode)}`, async ({ page }) => {
       await prepare(page, mode)
       const preview = await openExample(page, 'table/cell-presets', mode)
-      await expect(preview).toHaveScreenshot(shot(`geometry/table-cell-presets--${label(mode)}.png`))
+      await expect(preview).toHaveScreenshot(
+        shot(`geometry/table-cell-presets--${label(mode)}.png`)
+      )
     })
   }
 
@@ -46,10 +48,15 @@ for (const theme of THEMES) {
     const mode: Mode = { theme, width: 768 }
     await prepare(page, mode)
     const preview = await openExample(page, 'table/reorderable-frozen', mode)
-    await preview.locator('[data-testid$="__viewport"]').first().evaluate((el) => {
-      el.scrollLeft = 160
-    })
-    await expect(preview).toHaveScreenshot(shot(`geometry/table-reorder-scrolled--${label(mode)}.png`))
+    await preview
+      .locator('[data-testid$="__viewport"]')
+      .first()
+      .evaluate((el) => {
+        el.scrollLeft = 160
+      })
+    await expect(preview).toHaveScreenshot(
+      shot(`geometry/table-reorder-scrolled--${label(mode)}.png`)
+    )
   })
 
   test(`geometry overflow count open ${theme}`, async ({ page }) => {
@@ -86,8 +93,36 @@ for (const theme of THEMES) {
         await prepare(page, mode)
         await page.goto(`${DOCS}/frame/${state}/${id}${query(mode)}`)
         await settle(page)
-        await expect(page).toHaveScreenshot(shot(`geometry/${id.split('/').pop()}-${state}--${label(mode)}.png`))
+        if (state === 'account-switch') {
+          await page.getByRole('button', { name: /Switch account/ }).first().click()
+          await expect(page.getByRole('dialog').last()).toBeVisible()
+          await settle(page)
+        }
+        await expect(page).toHaveScreenshot(
+          shot(`geometry/${id.split('/').pop()}-${state}--${label(mode)}.png`)
+        )
       })
     }
   }
+}
+
+for (const example of [
+  'button/default',
+  'checkbox/default',
+  'switch/default',
+  'tabs/default',
+  'status-indicator/default',
+  'chart/default',
+  'spark-chart/default',
+  'gauge-chart/default'
+]) {
+  test(`forced colors ${example}`, async ({ page }) => {
+    const mode: Mode = { theme: 'dark', width: 1280 }
+    await prepare(page, mode)
+    await page.emulateMedia({ forcedColors: 'active', colorScheme: 'dark' })
+    const preview = await openExample(page, example, mode)
+    await expect(preview).toHaveScreenshot(
+      shot(`forced-colors/${example.replace('/', '-')}--${label(mode)}.png`)
+    )
+  })
 }

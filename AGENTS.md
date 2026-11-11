@@ -6,13 +6,13 @@ follow the `webkit-usage` skill that `npx @aziontech/webkit init` writes into yo
 
 ## Where things live
 
-| Area                                                      | Audience                            | Ships to npm |
-| --------------------------------------------------------- | ----------------------------------- | ------------ |
-| `packages/*`                                              | everyone (the libraries)            | yes          |
-| `skills/`, `rules/`, `adapters/`                          | apps that consume WebKit            | yes          |
-| `.claude/` (agents, commands, docs, hooks, rules, skills) | people and agents developing WebKit | no           |
-| `.specs/`                                                 | the contract of every component     | no           |
-| `apps/docs/`, `apps/demos/`, `apps/visual/`, `lint-canaries/`, `.github/` | docs site, demos, visual suite, CI | no |
+| Area                                                                      | Audience                            | Ships to npm |
+| ------------------------------------------------------------------------- | ----------------------------------- | ------------ |
+| `packages/*`                                                              | everyone (the libraries)            | yes          |
+| `skills/`, `rules/`, `adapters/`                                          | apps that consume WebKit            | yes          |
+| `.claude/` (agents, commands, docs, hooks, rules, skills)                 | people and agents developing WebKit | no           |
+| `.specs/`                                                                 | the contract of every component     | no           |
+| `apps/docs/`, `apps/demos/`, `apps/visual/`, `lint-canaries/`, `.github/` | docs site, demos, visual suite, CI  | no           |
 
 A skill or rule for building apps goes in `skills/` or `rules/` (`scope: general`). Anything only
 WebKit developers need goes in `.claude/` (`scope: webkit`). `test/standards/ai-bundle-boundary`

@@ -1,19 +1,18 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import { primitives } from '@aziontech/theme/colors'
   import Avatar from '@aziontech/webkit/avatar'
-  import RadioCards from '@aziontech/webkit/radio-cards'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
+  import Input from '@aziontech/webkit/input'
   import Label from '@aziontech/webkit/label'
   import Progress from '@aziontech/webkit/progress'
+  import RadioCards from '@aziontech/webkit/radio-cards'
   import { computed, ref } from 'vue'
   import { useRouter } from 'vue-router'
-
-  import { primitives } from '@aziontech/theme/colors'
 
   const accents = [
     {

@@ -165,7 +165,6 @@ test('the token and spec-compliance engines are shared by hook AND ratchet', () 
   const specHook = readFileSync(join(ROOT, '.claude/hooks/validate-spec-compliance.mjs'), 'utf-8')
   assert.match(specHook, /_lib\/spec-compliance-checks\.mjs/, 'spec hook does not use the engine')
   assert.match(ratchet, /spec-compliance-checks\.mjs/, 'ratchet does not import the spec engine')
-
 })
 
 test('authoring-docs hook AND ratchet share the single _lib/authoring-docs-checks engine', () => {

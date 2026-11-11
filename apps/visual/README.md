@@ -13,12 +13,12 @@ pnpm visual:update                    # rewrite the baselines (only inside the P
 
 ## What it covers
 
-| Spec                    | Pages                                                                    | Matrix                                                                                   |
-| ----------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
-| `tests/examples.spec.ts` | `/example/<dir>/<file>` — the first example of every component           | light 1280, dark 1280, light 390                                                         |
-| `tests/blocks.spec.ts`   | `/frame/<state>/<id>` — the primary state of every block                 | light 1280, dark 1280, dark 390; every state of `platform/ai/*` in light and dark at 320 and 1280 and right to left |
-| `tests/demos.spec.ts`    | every demo route, plus the flows end to end                              | light 1280, dark 1280, dark 390; resource routes also light 1280 right to left in pt-BR  |
-| `tests/geometry.spec.ts` | styled geometry that the unstyled unit suite cannot see                  | `Table` cell presets at 360 / 768 / 1280, a reorder mid-drag beside frozen columns, the open `OverflowCount`, `OtpInput` at 320, team permissions, the token reveal and the account switcher at 320 / 1920 / right to left |
+| Spec                     | Pages                                                          | Matrix                                                                                                                                                                                                                     |
+| ------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/examples.spec.ts` | `/example/<dir>/<file>` — the first example of every component | light 1280, dark 1280, light 390                                                                                                                                                                                           |
+| `tests/blocks.spec.ts`   | `/frame/<state>/<id>` — the primary state of every block       | light 1280, dark 1280, dark 390; every state of `platform/ai/*` in light and dark at 320 and 1280 and right to left                                                                                                        |
+| `tests/demos.spec.ts`    | every demo route, plus the flows end to end                    | light 1280, dark 1280, dark 390; resource routes also light 1280 right to left in pt-BR                                                                                                                                    |
+| `tests/geometry.spec.ts` | styled geometry that the unstyled unit suite cannot see        | `Table` cell presets at 360 / 768 / 1280, a reorder mid-drag beside frozen columns, the open `OverflowCount`, `OtpInput` at 320, team permissions, the token reveal and the account switcher at 320 / 1920 / right to left |
 
 New examples, blocks and demo routes are picked up from the files: add an example to
 `packages/webkit/examples/<name>/` and the docs page and its visual test exist; the only manual

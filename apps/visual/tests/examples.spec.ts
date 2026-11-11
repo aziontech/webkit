@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { DOCS, exampleGroups, label, type Mode, prepare, query, settle, stem, shot } from './lib'
+import { DOCS, exampleGroups, label, type Mode, prepare, query, settle, shot, stem } from './lib'
 
 const MODES: Mode[] = [
   { theme: 'light', width: 1280 },
@@ -16,7 +16,9 @@ for (const group of exampleGroups()) {
       await prepare(page, mode)
       await page.goto(`${DOCS}/example/${group.dir}/${stem(first.file)}${query(mode)}`)
       await settle(page)
-      await expect(page).toHaveScreenshot(shot(`examples/${group.dir}/${stem(first.file)}--${label(mode)}.png`))
+      await expect(page).toHaveScreenshot(
+        shot(`examples/${group.dir}/${stem(first.file)}--${label(mode)}.png`)
+      )
     })
   }
 }

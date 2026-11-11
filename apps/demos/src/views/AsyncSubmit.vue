@@ -17,11 +17,11 @@
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
   import PageHeader from '@aziontech/webkit/page-header'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
@@ -383,7 +383,6 @@
     if (status.value === 'success') return { label: 'Deployed', severity: 'success' }
     return { label: 'Idle', severity: 'secondary' }
   })
-
 </script>
 
 <template>
@@ -1134,6 +1133,5 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
-
   </div>
 </template>

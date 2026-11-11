@@ -14,17 +14,17 @@ pnpm demos:preview   # preview the build on http://localhost:4174
 
 ## Flows
 
-| Route                          | Screen (block)                                                       | What it does                                                                                     |
-| ------------------------------ | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `/resources`                   | `shells/console` around `platform/view/table-view`                   | List with filters, preferences and row actions (View, Deploy, Delete)                            |
-| `/resources/new`               | `platform/create/single-page-create`                                 | Create with validation; Save adds the resource, toasts and opens its detail                      |
-| `/resources/:id`               | `platform/detail/details-page`                                       | Detail of the resource; Resource actions → Edit, Deploy, Delete                                  |
-| `/resources/:id/edit`          | `platform/edit/edit-resource`                                        | Edit with the save bar; Save updates the store, toasts and returns to the detail                  |
-| `/resources/:id/delete`        | `platform/delete/delete-with-confirmation` over the list             | Typed confirmation; Delete removes the row, toasts and closes                                    |
-| `/resources/:id/deploy`        | `platform/states/async-submit`                                       | A deploy that runs outside the page: progress toast, then a toast with **Edit** and **Redeploy** |
-| `/settings`                    | `platform/settings/settings-form`                                    | Account settings with save all / per group / per card                                            |
-| `/onboarding` → `/plan` → `/profile` | `platform/account/onboarding-form` (Organization, Plan, Profile) | Three steps; creating the organization goes to the list                                           |
-| `/assistant`                   | `platform/ai/ai-chat`                                                | AI assistant: prompt, streamed answer with reasoning and sources, suggestions                    |
+| Route                                | Screen (block)                                                   | What it does                                                                                     |
+| ------------------------------------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `/resources`                         | `shells/console` around `platform/view/table-view`               | List with filters, preferences and row actions (View, Deploy, Delete)                            |
+| `/resources/new`                     | `platform/create/single-page-create`                             | Create with validation; Save adds the resource, toasts and opens its detail                      |
+| `/resources/:id`                     | `platform/detail/details-page`                                   | Detail of the resource; Resource actions → Edit, Deploy, Delete                                  |
+| `/resources/:id/edit`                | `platform/edit/edit-resource`                                    | Edit with the save bar; Save updates the store, toasts and returns to the detail                 |
+| `/resources/:id/delete`              | `platform/delete/delete-with-confirmation` over the list         | Typed confirmation; Delete removes the row, toasts and closes                                    |
+| `/resources/:id/deploy`              | `platform/states/async-submit`                                   | A deploy that runs outside the page: progress toast, then a toast with **Edit** and **Redeploy** |
+| `/settings`                          | `platform/settings/settings-form`                                | Account settings with save all / per group / per card                                            |
+| `/onboarding` → `/plan` → `/profile` | `platform/account/onboarding-form` (Organization, Plan, Profile) | Three steps; creating the organization goes to the list                                          |
+| `/assistant`                         | `platform/ai/ai-chat`                                            | AI assistant: prompt, streamed answer with reasoning and sources, suggestions                    |
 
 The bar at the bottom corner switches the flow, the theme (light / dark), the direction (left to
 right / right to left) and the language (English / Português, through the opt-in

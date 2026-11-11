@@ -101,6 +101,7 @@
     "@vitest/ui": "^4.1.12",
     "astro-eslint-parser": "^3.1.0",
     "axe-core": "^4.10.3",
+    "esbuild": "^0.25.12",
     "eslint": "^9.39.3",
     "playwright": "^1.61.1",
     "stylelint": "^17.7.0",

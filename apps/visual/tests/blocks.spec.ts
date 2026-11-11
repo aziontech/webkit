@@ -28,7 +28,9 @@ for (const block of blocks()) {
         await prepare(page, mode)
         await page.goto(`${DOCS}/frame/${state.slug}/${block.id}${query(mode)}`)
         await settle(page)
-        await expect(page).toHaveScreenshot(shot(`blocks/${block.id}/${state.slug}--${label(mode)}.png`))
+        await expect(page).toHaveScreenshot(
+          shot(`blocks/${block.id}/${state.slug}--${label(mode)}.png`)
+        )
       })
     }
   }

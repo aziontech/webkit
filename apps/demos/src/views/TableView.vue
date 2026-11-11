@@ -205,6 +205,7 @@
           </header>
           <section class="flex min-h-0 flex-col">
             <Card
+              key="card-1"
               v-if="status === 'empty'"
               :padded="false"
             >
@@ -238,6 +239,7 @@
               </template>
             </Card>
             <Card
+              key="card-2"
               v-else
               :padded="false"
             >

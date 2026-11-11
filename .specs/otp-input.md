@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 58afe0fed8f3ed3d7cbfab952f5745ee2830511a3c4d8f976972721d415d6e03
+checksum: 5dcbb11c0dfa1c5a2a464fb5b825185c63b2cee42efed151adb7560043b0f9e0
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -148,9 +148,9 @@ _none_
 ## Responsive
 
 - Container queries: none.
-- Narrow: boxes are 40 px with an 8 px gap; six boxes plus a separator fit in 320 px.
+- Narrow: boxes are 40 px with an 8 px gap and shrink to 24 px when the row is narrower than that, so eight boxes plus a separator fit in 320 px (checked in `apps/visual`, `geometry otp input grouped`).
 - Touch: the whole row is the input's hit area.
-- Reflow: no horizontal scroll at 320 px for `length` up to 6 with a separator.
+- Reflow: no horizontal scroll at 320 px for `length` up to 8 with a separator.
 
 ## Performance
 

@@ -28,9 +28,9 @@
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
-  import { toast } from '@aziontech/webkit/toast'
   import { useRoute, useRouter } from 'vue-router'
 
   import { settings } from '../lib/settings'
@@ -249,7 +249,10 @@
   const resource = findResource(route.params.id)
   const breadcrumb = [
     { label: 'Resources', href: '/resources' },
-    { label: resource?.name ?? 'web-app', href: resource ? `/resources/${resource.id}` : undefined },
+    {
+      label: resource?.name ?? 'web-app',
+      href: resource ? `/resources/${resource.id}` : undefined
+    },
     { label: 'Settings' }
   ]
 
