@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The baseline Chip rendering its `label`.",
+   "sfc": "<script setup>\n  import Chip from '@aziontech/webkit/chip'\n</script>\n\n<template>\n  <Chip\n    label=\"Label\"\n    kind=\"filled\"\n    size=\"medium\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "summary": "The three kinds in the order they read in a filter surface: an applied value, an available one, and the control that adds one.",
+   "sfc": "<script setup>\n  import Chip from '@aziontech/webkit/chip'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Chip\n      label=\"Production\"\n      kind=\"filled\"\n      size=\"medium\"\n      removable\n    />\n    <Chip\n      label=\"Status\"\n      kind=\"outlined\"\n      size=\"medium\"\n      clickable\n    />\n    <Chip\n      label=\"Add filter\"\n      kind=\"dashed\"\n      size=\"medium\"\n      clickable\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Both sizes side by side.",
+   "sfc": "<script setup>\n  import Chip from '@aziontech/webkit/chip'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Chip\n      label=\"Small\"\n      size=\"small\"\n    />\n    <Chip\n      label=\"Medium\"\n      size=\"medium\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

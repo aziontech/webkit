@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: c142f99728c3da96f2068686050d7176311ff1556aced137efcf7a0dbbe5813e
+checksum: 7cb4ffc0a430cf1190273c089a3903006f125a2d5f5af64e1756fa3a9b738d9d
 created: 2026-06-25
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # MultiSelect — Component Spec
@@ -126,6 +126,7 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 - `data-size` on the trigger mirrors the `size` prop
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-selected` on `<MultiSelectOption>` when the option's value is part of the current selection
+- Long lists: above 300 options the list mounts in chunks of 100 as they scroll near view (unmounted chunks keep their height, 32 px per option), so opening a 1,000-option list stays within its runtime budget. The first arrow, `Home` or `End` key in the list mounts every option before moving focus, so keyboard navigation always reaches every option.
 
 ## Motion & Animations
 

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default circle avatar with initials.",
+   "sfc": "<script setup>\n  import Avatar from '@aziontech/webkit/avatar'\n</script>\n\n<template>\n  <Avatar\n    label=\"AB\"\n    kind=\"circle\"\n    size=\"medium\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "summary": "Both shape variants side by side: circle and square at medium size.",
+   "sfc": "<script setup>\n  import Avatar from '@aziontech/webkit/avatar'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-end gap-6\">\n    <div class=\"flex flex-col items-center gap-2\">\n      <Avatar\n        kind=\"circle\"\n        label=\"AB\"\n        size=\"medium\"\n      />\n      <span class=\"text-body-xs text-(--text-muted)\">Circle</span>\n    </div>\n    <div class=\"flex flex-col items-center gap-2\">\n      <Avatar\n        kind=\"square\"\n        label=\"AB\"\n        size=\"medium\"\n      />\n      <span class=\"text-body-xs text-(--text-muted)\">Square</span>\n    </div>\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All three size presets (24 / 32 / 48 px) with initials.",
+   "sfc": "<script setup>\n  import Avatar from '@aziontech/webkit/avatar'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-end gap-4\">\n    <Avatar\n      label=\"AB\"\n      size=\"small\"\n    />\n    <Avatar\n      label=\"AB\"\n      size=\"medium\"\n    />\n    <Avatar\n      label=\"AB\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

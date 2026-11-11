@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default helper variant with muted text color.",
+   "sfc": "<script setup>\n  import HelperText from '@aziontech/webkit/helper-text'\n</script>\n\n<template>\n  <HelperText\n    kind=\"helper\"\n    label=\"Helper Text\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "summary": "All kind variants side by side.",
+   "sfc": "<script setup>\n  import HelperText from '@aziontech/webkit/helper-text'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-2\">\n    <HelperText\n      kind=\"helper\"\n      label=\"Helper Text\"\n    />\n    <HelperText\n      kind=\"invalid\"\n      label=\"Text Error\"\n    />\n    <HelperText\n      kind=\"required\"\n      label=\"Text Error\"\n    />\n    <HelperText\n      kind=\"disabled\"\n      label=\"Helper Text\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

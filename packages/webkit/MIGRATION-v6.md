@@ -273,6 +273,34 @@ catalog, so an empty string no longer removes the label; `HelpPanel.Links` `titl
 (`1,200`, `1.200` in Portuguese). `useLocale()` from `@aziontech/webkit/use-locale` gives your own
 components the same locale, `t()` and `Intl` helpers.
 
+### Tools that read `catalog.json` directly
+
+The MCP server, the ESLint plugin and the CLI read the new layout; this section matters only for your
+own scripts that open `node_modules/@aziontech/webkit/catalog.json`. The file is now metadata only
+(1.4 MB, was 7.5 MB); the source code moved next to it into `catalog/`:
+
+| v5 field                       | v6 location                                                                                             |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `patterns[id].sfc`             | `catalog/patterns/<id>.json` → `sfc` (the path is in `patterns[id].file`)                               |
+| `patterns[id].variants[i].sfc` | `catalog/patterns/<id>.json` → `variants[i].sfc`; `catalog.json` keeps each variant's `name`, `summary` |
+| `patterns[id].guidelines`      | `catalog/patterns/<id>.json` → `guidelines`                                                             |
+| `imports[subpath].examples`    | `catalog/examples/<subpath>.json` → `examples` (the path is in `imports[subpath].examplesFile`)         |
+
+Paths in `file` and `examplesFile` are relative to the folder that holds `catalog.json`. The MCP tools
+(`get_pattern`, `get_component`, `get_usage_example`) return the same answers as before.
+
+### Performance
+
+- `PhoneInput` loads the flag sprite (about 80 KB) with a dynamic `import()` when the country list
+  first opens; until it arrives the flag boxes are blank. Bundles that include `PhoneInput` drop
+  about 80 KB gzipped from the initial chunk.
+- `Select`, `MultiSelect`, `LogView` and `CodeBlock` mount lists longer than 300 rows in chunks of
+  100 as they scroll near view. Tests that count every rendered option, line or log row of a long
+  list see only the first chunks; scroll the list, or press an arrow key in a `Select` list, which
+  mounts every option.
+- `Chart` keeps an even sample of at most 1,000 rows in its visually hidden data table; `tableView`
+  still shows every row.
+
 ## 5. Unchanged
 
 Theme tokens (apart from the sans stack above), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style

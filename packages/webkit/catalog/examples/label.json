@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default label without the required indicator.",
+   "sfc": "<script setup>\n  import Label from '@aziontech/webkit/label'\n</script>\n\n<template>\n  <Label label=\"Label\" />\n</template>"
+  },
+  {
+   "name": "Required",
+   "summary": "Required label — appends the inline `* (Required)` indicator.",
+   "sfc": "<script setup>\n  import Label from '@aziontech/webkit/label'\n</script>\n\n<template>\n  <Label\n    label=\"Label\"\n    required\n  />\n</template>"
+  },
+  {
+   "name": "Hinted",
+   "summary": "Hinted label — `hint` appends a Hint glyph after the text. Hover or focus it to read the explanation.",
+   "sfc": "<script setup>\n  import Label from '@aziontech/webkit/label'\n</script>\n\n<template>\n  <Label\n    label=\"Sensitive\"\n    hint=\"Values are encrypted at rest and never displayed again after saving.\"\n  />\n</template>"
+  }
+ ]
+}

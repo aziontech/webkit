@@ -14,7 +14,7 @@
   import Select from '@aziontech/webkit/select'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import TextureMaterial from '@aziontech/webkit/texture-material'
-  import { onBeforeUnmount, ref } from 'vue'
+  import { onBeforeUnmount, onMounted, ref } from 'vue'
 
   const links = ['Solutions', 'Products', 'Developer', 'Resources', 'Pricing']
   const figures = [
@@ -79,18 +79,21 @@
   const languages = ['EN', 'PT-BR', 'ES']
   const language = ref('EN')
 
-  const lgProbe = document.createElement('span')
-  lgProbe.className = 'hidden lg:block'
-  document.body.append(lgProbe)
-  const isLg = () => getComputedStyle(lgProbe).display !== 'none'
-  const brandLeadsSocialRow = ref(isLg())
+  const brandLeadsSocialRow = ref(false)
+  let lgProbe = null
   const syncBrand = () => {
-    brandLeadsSocialRow.value = isLg()
+    brandLeadsSocialRow.value = getComputedStyle(lgProbe).display !== 'none'
   }
-  window.addEventListener('resize', syncBrand)
+  onMounted(() => {
+    lgProbe = document.createElement('span')
+    lgProbe.className = 'hidden lg:block'
+    document.body.append(lgProbe)
+    syncBrand()
+    window.addEventListener('resize', syncBrand)
+  })
   onBeforeUnmount(() => {
     window.removeEventListener('resize', syncBrand)
-    lgProbe.remove()
+    lgProbe?.remove()
   })
 </script>
 

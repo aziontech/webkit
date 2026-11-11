@@ -1,3 +1,4 @@
+import { maxOf } from './scale'
 import { isFiniteNumber } from './series'
 
 export interface StackLayer {
@@ -26,5 +27,5 @@ export function stackedMax(
 ): number {
   const stacked = stackValues(layers, count)
   const top = stacked[stacked.length - 1]
-  return top ? Math.max(0, ...top.upper) : 0
+  return top ? maxOf(top.upper) : 0
 }

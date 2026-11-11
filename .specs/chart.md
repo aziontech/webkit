@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: approved
-checksum: 40226ec06fb546ac51b625f0344fd61954c237602eeba8ad9cc14108ba2ff9ec
+checksum: b940698df04b877bfc00952202f45b40fd637cce4e7caa3e1d83b01a44f0cee7
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-11
@@ -248,7 +248,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 - Root is a `<figure>` named by `ariaLabel` or by the enclosing ChartCard title (`aria-labelledby`) and described by its ChartCard description or a generated summary.
 - The plot cell is one tab stop: `role="group"` with `aria-roledescription="chart"`. Keyboard map: Left / Right (Up / Down when horizontal) move the active index, Home / End jump to the ends, Enter / Space fire `point-click`, Escape clears. The tooltip follows keyboard focus exactly as it follows the pointer.
 - A polite live region announces the label and every visible series value at the active index.
-- A data table twin (labels by series) is always rendered, visually hidden unless `tableView`; every value is reachable without hover.
+- A data table twin (labels by series) is always rendered, visually hidden unless `tableView`; every value is reachable without hover. Above 1,000 categories the hidden twin keeps an even sample of at most 1,000 rows (the first and last category included) so a 10k-point chart mounts within its runtime budget; every value stays reachable with the arrow keys and the live region, and `tableView` shows every row.
 - Every SVG part is `aria-hidden`; identity never rests on color alone — the legend names each series and the tooltip pairs each value with its name.
 - Legend entries are buttons with `aria-pressed`, at least 24px tall.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the plot and every legend button.

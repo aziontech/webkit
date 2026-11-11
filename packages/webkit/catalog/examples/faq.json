@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Five objections a buyer raises before signing, each written the way the reader would ask it. Every answer starts closed, so the band opens as a scannable list of questions rather than a wall of prose. Edit `title` and `items` in the Controls panel — a band with no items renders no frame at all.",
+   "sfc": "<script setup>\n  import Faq from '@aziontech/webkit/faq'\n</script>\n\n<template>\n  <Faq\n    title=\"Frequently asked questions\"\n    :items=\"[\n      {\n        value: 'pricing',\n        question: 'How does pricing work?',\n        answer:\n          'You pay for what you use — requests, data transfer and compute time — with no seats and no upfront commitment. Usage is metered and billed monthly.'\n      },\n      {\n        value: 'free-tier',\n        question: 'Is there a free tier?',\n        answer:\n          'Yes. Every core product has a monthly free allowance, and billing starts only once you pass it.'\n      },\n      {\n        value: 'migration',\n        question: 'How much work is it to migrate?',\n        answer:\n          'Most teams move a first workload in a day. Point the domain at us, keep the origin where it is, and cut traffic over once the numbers look right.'\n      },\n      {\n        value: 'compliance',\n        question: 'Where does my data run, and are you compliant?',\n        answer:\n          'You choose the regions a workload and its data are allowed in. Current audit reports and certifications are available on request.'\n      },\n      {\n        value: 'support',\n        question: 'What support do I get?',\n        answer:\n          'Every account has documentation, community and email support. Paid plans add a 24/7 incident channel and a named engineer.'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ]
+}

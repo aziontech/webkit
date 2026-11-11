@@ -87,6 +87,24 @@ function makeHost(options: {
 }
 
 describe('LogView (composition: provide/inject over Header/Content/Footer)', () => {
+  it('mounts a long log in chunks while the count, search and copy cover every line', async () => {
+    const lines: LogViewLine[] = Array.from({ length: 2000 }, (_, i) => ({
+      id: String(i),
+      time: '13:47:33',
+      type: 'text',
+      message: `Line ${i}`
+    }))
+    const { Host, search } = makeHost({ lines })
+    const { getAllByTestId, getByTestId } = render(Host)
+    const mounted = getAllByTestId('code-log-view__line').length
+    expect(mounted).toBeGreaterThan(0)
+    expect(mounted).toBeLessThan(2000)
+    expect(getByTestId('code-log-view__header__line-count').textContent).toMatch(/2[,. ]?000/)
+    search.value = 'Line 1999'
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(getAllByTestId('code-log-view__line')).toHaveLength(1)
+  })
+
   describe('composition wiring — the public sub-components are real components sharing one context', () => {
     it('resolves each sub-component as a Vue component with its own defineOptions name', () => {
       // These are the exact modules published as @aziontech/webkit/log-view-*.

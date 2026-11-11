@@ -1,11 +1,11 @@
-import { useEventListener } from '@vueuse/core'
+import { defaultDocument, useEventListener } from '@vueuse/core'
 import { nextTick, onUnmounted, watch } from 'vue'
 
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 export function useFocusTrap(containerRef, active) {
-  const stop = useEventListener(document, 'keydown', (event) => {
+  const stop = useEventListener(defaultDocument, 'keydown', (event) => {
     if (!active.value || event.key !== 'Tab') return
 
     const root = containerRef.value

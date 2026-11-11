@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Four measured facts at the default `medium` scale. The unit rides in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in each cell. Edit `items` in the Controls panel to see the band grow or shrink — a band with no items renders nothing at all.",
+   "sfc": "<script setup>\n  import BigNumbers from '@aziontech/webkit/big-numbers'\n</script>\n\n<template>\n  <BigNumbers\n    :items=\"[\n      { value: '120', suffix: '+', label: 'Points of presence' },\n      { value: '99.99', suffix: '%', label: 'Availability' },\n      { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n      { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n    ]\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Every `size` value, one band under the other. Only the figure moves up the big-number scale — the caption stays at overline scale and the cell keeps its frame, so a denser section can drop to `small` and a page hero can reach for `large` without the band changing shape.",
+   "sfc": "<script setup>\n  import BigNumbers from '@aziontech/webkit/big-numbers'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xxl)\">\n    <BigNumbers\n      size=\"small\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n    <BigNumbers\n      size=\"medium\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n    <BigNumbers\n      size=\"large\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

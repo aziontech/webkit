@@ -93,6 +93,19 @@ afterEach(() => {
 })
 
 describe('Select (compound / overlay)', () => {
+  it('mounts a 1,000-option list in chunks and mounts every option on the first arrow key', async () => {
+    render(Host, { props: { startOpen: true, extraOptions: 997 } })
+    await nextTick()
+    const mountedAtOpen = getOptions().length
+    expect(mountedAtOpen).toBeGreaterThan(0)
+    expect(mountedAtOpen).toBeLessThan(1000)
+    await fireEvent.keyDown(getContent() as HTMLElement, { key: 'End' })
+    await nextTick()
+    await nextTick()
+    expect(getOptions()).toHaveLength(1000)
+    expect(document.activeElement?.textContent).toContain('Extra option 996')
+  })
+
   // ---- Compound API: dot-notation resolves ----------------------------------
   it('attaches every sub-component to the compound root for dot-notation', () => {
     expect(Select.Trigger).toBe(SelectTrigger)

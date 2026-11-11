@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band spans the window; its copy stays on the page’s measure.",
+   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <Hero max-width=\"7xl\">\n    <Hero.Title\n      centered\n      eyebrow=\"Infrastructure\"\n      eyebrow-prefix=\"//\"\n      title=\"A global network built for fast applications\"\n      description=\"Run closer to users with low-latency delivery and stable routing.\"\n    />\n  </Hero>\n</template>"
+  },
+  {
+   "name": "Widths",
+   "summary": "Three caps in one view — a width only reads against another.",
+   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <div>\n    <Hero max-width=\"4xl\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">4xl</p>\n    </Hero>\n    <Hero max-width=\"7xl\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">7xl</p>\n    </Hero>\n    <Hero max-width=\"full\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">full</p>\n    </Hero>\n  </div>\n</template>"
+  },
+  {
+   "name": "Screen",
+   "summary": "With `kind=\"screen\"` the band measures one viewport, minus whatever `--banner-offset` a sticky bar above it declares.",
+   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <Hero\n    kind=\"screen\"\n    max-width=\"site\"\n  >\n    <Hero.Title\n      centered\n      eyebrow=\"Infrastructure\"\n      eyebrow-prefix=\"//\"\n      title=\"A global network built for fast applications\"\n    />\n  </Hero>\n</template>"
+  }
+ ]
+}

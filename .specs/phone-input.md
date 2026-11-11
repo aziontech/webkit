@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: c3bad1bc02ad8061d04ea41c522129ae96b1ceca9277232343acd757af734d52
+checksum: 43ca66c37778d2b46bea05ea8cf400b0759234767286c5a4c5345a14d7fd3d94
 created: 2026-11-10
 last_updated: 2026-11-11
 ---
@@ -111,6 +111,7 @@ Masks: `#` is a digit slot and every other character is a literal. Digits are al
 - `invalid`, `disabled` and `required` combine the prop with the enclosing `Field`.
 - The dial-code `Select` is disabled whenever the control is `disabled` **or** `readonly`.
 - Completeness is reported through `update:phone`, never rendered.
+- The flag sprite (`country-flags.png`, about 80 KB) loads with a dynamic `import()` the first time the dial-code list opens; until it arrives each option keeps its flag box blank. The closed field never fetches it.
 
 ## Motion & Animations
 

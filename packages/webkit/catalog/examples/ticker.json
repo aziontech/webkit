@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Eleven client marks looping under an overline. Every mark is an inline SVG drawn in `currentColor`, so the row takes one ink from the surface it sits on and follows the theme without a second asset or a filter — flip the toolbar between light and dark and the marks come with it. The track holds the row twice and travels exactly -50%, which is why the seam never shows; the second copy is `aria-hidden`, so a screen reader hears each company once. Hover anywhere on the strip to pause it. Leave `duration` at 0 and the pass is derived from the mark count, so this strip and a thirty-mark one advance at the same speed rather than in the same time.",
+   "sfc": "<script setup>\n  import Ticker from '@aziontech/webkit/ticker'\n</script>\n\n<template>\n  <Ticker\n    label=\"Trusted by mission-critical workloads\"\n    aria-label=\"Companies running on Azion\"\n    :marks=\"[\n      'global-fashion-group',\n      'herospark',\n      'itau',\n      'nzn',\n      'netshoes',\n      'caixa',\n      'agibank',\n      'prime-video',\n      'america-movil',\n      'gpa',\n      'fourbank'\n    ]\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The two scales, one above the other. `medium` is a responsive ladder rather than one height — 32 px on a phone, 40 px from `md`, 48 px from `lg` — because the same 48 px mark that reads as a row on a desktop is one logo drifting past on a 375 px viewport. `small` is a flat 24 px for a column that is asking for a form field, where the strip is proof rather than a feature. The cell width moves with the height (150/200/240, and 120 for small), so every mark advances on one constant pitch instead of on its own artwork width.",
+   "sfc": "<script setup>\n  import Ticker from '@aziontech/webkit/ticker'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-12\">\n    <Ticker\n      size=\"medium\"\n      label=\"Medium — the marketing band\"\n      :marks=\"[\n        'global-fashion-group',\n        'herospark',\n        'itau',\n        'nzn',\n        'netshoes',\n        'caixa',\n        'agibank',\n        'prime-video',\n        'america-movil',\n        'gpa',\n        'fourbank'\n      ]\"\n    />\n    <Ticker\n      size=\"small\"\n      label=\"Small — a column's floor\"\n      :marks=\"[\n        'global-fashion-group',\n        'herospark',\n        'itau',\n        'nzn',\n        'netshoes',\n        'caixa',\n        'agibank',\n        'prime-video',\n        'america-movil',\n        'gpa',\n        'fourbank'\n      ]\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Frameworks",
+   "summary": "The same component making a different claim: frameworks, clouds and tooling rather than customers. The registry holds both populations, so a framework mark resolves exactly as a client mark does and the two strips on one page are one component with two lists. Twenty marks derive a longer pass than eleven do, which is the point of deriving it — the row advances at the same rate either way. Marks load on demand, so a page carries only the ones it names.",
+   "sfc": "<script setup>\n  import Ticker from '@aziontech/webkit/ticker'\n</script>\n\n<template>\n  <Ticker\n    label=\"Your Stack, Your Way\"\n    aria-label=\"Frameworks and clouds Azion runs\"\n    :marks=\"[\n      'nextjs',\n      'astro',\n      'react',\n      'vue',\n      'angular',\n      'nuxt',\n      'gatsby',\n      'hugo',\n      'preact',\n      'remix',\n      'qwik',\n      'vite',\n      'aws',\n      'gcp',\n      'azure',\n      'terraform',\n      'github',\n      'openai',\n      'anthropic',\n      'sqlite'\n    ]\"\n  />\n</template>"
+  }
+ ]
+}

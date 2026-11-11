@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Two lists with select-and-move and move-all controls. Double-clicking an item moves it to the opposite list (and fires `item-double-click`); toggle the `moveOnDoubleClick` control to cancel the auto-move.",
+   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    data-key=\"id\"\n  >\n    <PickList.Source title=\"Available\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "summary": "Disabled state: selection and all move controls are inert.",
+   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    data-key=\"id\"\n    disabled\n  >\n    <PickList.Source title=\"Available\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
+  },
+  {
+   "name": "Loading",
+   "summary": "One side loading: the source shows a spinner and its moves are locked while the target stays interactive. Set the `loading` control to `true` for both sides, or `'target'` for the other side.",
+   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    data-key=\"id\"\n  >\n    <PickList.Source\n      title=\"Available\"\n      loading\n    >\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
+  }
+ ]
+}

@@ -85,3 +85,9 @@ export function categoryLayout(
     indexAt: (offset) => clamp(Math.round((offset - start) / (step || 1)))
   }
 }
+
+export function maxOf(values: Iterable<number>, floor = 0): number {
+  let max = floor
+  for (const value of values) if (value > max) max = value
+  return max
+}

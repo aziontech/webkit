@@ -92,16 +92,14 @@ async function main() {
   const warnIntents = process.argv.includes('--warn-intents')
   const catalog = JSON.parse(readFileSync(CATALOG_PATH, 'utf-8'))
   const patterns = catalog.patterns || {}
-  const metadata = checkPatternMetadata(
-    patterns,
-    Object.keys(readBlocks(resolve(SCRIPT_DIR, '..')))
-  )
+  const blocks = readBlocks(resolve(SCRIPT_DIR, '..'))
+  const metadata = checkPatternMetadata(patterns, Object.keys(blocks))
   const errors = warnIntents ? metadata.errors : [...metadata.errors, ...metadata.warnings]
   if (warnIntents) {
     for (const w of metadata.warnings) process.stdout.write(`⚠ ${w}\n`)
   }
 
-  const { counts, samples } = await lintPatterns(patterns)
+  const { counts, samples } = await lintPatterns(blocks)
   if (update) {
     const sorted = Object.fromEntries(Object.entries(counts).sort(([a], [b]) => a.localeCompare(b)))
     writeFileSync(BASELINE_PATH, JSON.stringify(sorted, null, 2) + '\n', 'utf-8')

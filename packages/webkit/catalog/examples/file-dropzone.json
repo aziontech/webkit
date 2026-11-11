@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "An inline drop region with a \"Browse files\" button wired to a hidden file input, the keyboard path to the same outcome.",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import Button from '@aziontech/webkit/button'\n  import FileDropzone from '@aziontech/webkit/file-dropzone'\n\n  const input = ref(null)\n  const browse = () => input.value?.click()\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <FileDropzone description=\"Or browse for files on your computer.\">\n      <Button\n        label=\"Browse files\"\n        kind=\"secondary\"\n        size=\"medium\"\n        @click=\"browse\"\n      />\n    </FileDropzone>\n    <input\n      ref=\"input\"\n      type=\"file\"\n      multiple\n      class=\"hidden\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Overlay",
+   "summary": "Hidden at rest. Drag a file over the window and the overlay fades in over its nearest positioned ancestor, here the wrapper around the card.",
+   "sfc": "<script setup>\n  import Card from '@aziontech/webkit/card'\n  import FileDropzone from '@aziontech/webkit/file-dropzone'\n</script>\n\n<template>\n  <div class=\"relative w-full max-w-(--container-md)\">\n    <Card title=\"Project files\">\n      <template #content>\n        <div class=\"flex min-h-48 flex-col gap-(--spacing-xs)\">\n          <p class=\"text-body-sm text-(--text-muted)\">\n            Drag a file from your computer over this window. The drop target covers this card until\n            you drop the file, leave the window or press Escape.\n          </p>\n        </div>\n      </template>\n    </Card>\n    <FileDropzone kind=\"overlay\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Accept",
+   "summary": "With `accept=\"image/*\"`, image files arrive in `drop` and every other file arrives in `reject`. Drop a mix of files to see both lists fill.",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import FileDropzone from '@aziontech/webkit/file-dropzone'\n\n  const accepted = ref([])\n  const rejected = ref([])\n  const onDrop = (event, files) => {\n    accepted.value = [...accepted.value, ...files.map((file) => file.name)]\n  }\n  const onReject = (event, files) => {\n    rejected.value = [...rejected.value, ...files.map((file) => file.name)]\n  }\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-md) flex-col gap-(--spacing-md)\">\n    <FileDropzone\n      accept=\"image/*\"\n      description=\"Images only. Other file types are rejected.\"\n      @drop=\"onDrop\"\n      @reject=\"onReject\"\n    />\n    <div class=\"flex flex-col gap-(--spacing-xxs) text-body-sm\">\n      <p class=\"text-(--text-default)\">\n        Accepted: {{ accepted.length ? accepted.join(', ') : 'none yet' }}\n      </p>\n      <p class=\"text-(--text-muted)\">\n        Rejected: {{ rejected.length ? rejected.join(', ') : 'none yet' }}\n      </p>\n    </div>\n  </div>\n</template>"
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default large mini button with trailing icon.",
+   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <MiniButton\n    size=\"large\"\n    label=\"Learn more\"\n    href=\"#\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <MiniButton\n      size=\"medium\"\n      label=\"Learn more\"\n      href=\"#\"\n    />\n    <MiniButton\n      size=\"large\"\n      label=\"Learn more\"\n      href=\"#\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

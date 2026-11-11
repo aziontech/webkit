@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Hover or focus the glyph to reveal the hint.",
+   "sfc": "<script setup>\n  import Hint from '@aziontech/webkit/hint'\n</script>\n\n<template>\n  <Hint text=\"Values are encrypted at rest and never displayed again after saving.\" />\n</template>"
+  },
+  {
+   "name": "Placements",
+   "summary": "The four anchors. Hover each glyph to see where its tooltip opens.",
+   "sfc": "<script setup>\n  import Hint from '@aziontech/webkit/hint'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-lg)\">\n    <Hint\n      text=\"Anchored above the glyph.\"\n      placement=\"top\"\n    />\n    <Hint\n      text=\"Anchored to the right of the glyph.\"\n      placement=\"right\"\n    />\n    <Hint\n      text=\"Anchored below the glyph.\"\n      placement=\"bottom\"\n    />\n    <Hint\n      text=\"Anchored to the left of the glyph.\"\n      placement=\"left\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

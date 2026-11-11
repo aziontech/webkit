@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, useAttrs, useId, watch } from 'vue'
+  import { computed, provide, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useLocale } from '../../../composables/use-locale'
@@ -17,7 +17,9 @@
     defaultCountries,
     flagStyle,
     formatNational,
+    hasFlag,
     isComplete,
+    loadFlagSprite,
     maxDigits,
     placeholderFor,
     stripToDigits
@@ -189,6 +191,15 @@
     onCommit: () => document.getElementById(resolvedInputId.value)?.focus()
   })
 
+  const flagSprite = shallowRef('')
+  watch(open, (isOpen) => {
+    if (isOpen && !flagSprite.value) {
+      loadFlagSprite().then((url) => {
+        flagSprite.value = url
+      })
+    }
+  })
+
   const filteredCountries = computed(() => {
     const keys = new Set(filtered.value.map((item) => item.key))
     return props.countries.filter((c) => keys.has(c.code))
@@ -249,8 +260,8 @@
         >
           <template #left>
             <i
-              v-if="flagStyle(c.code)"
-              :style="flagStyle(c.code)"
+              v-if="hasFlag(c.code)"
+              :style="flagStyle(c.code, flagSprite)"
               class="block w-4 aspect-[22/15] bg-no-repeat"
               aria-hidden="true"
               :data-country="c.code"

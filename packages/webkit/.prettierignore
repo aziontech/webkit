@@ -6,4 +6,5 @@ node_modules
 coverage
 storybook-static
 catalog.json
+/catalog/
 CHANGELOG.md

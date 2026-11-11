@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Hover or Tab to the dotted term to open it. The panel is closed until the reader asks for it — a gloss never opens on its own.",
+   "sfc": "<script setup>\n  import DocProse from '@aziontech/webkit/doc-prose'\n  import DocTooltip from '@aziontech/webkit/doc-tooltip'\n</script>\n\n<template>\n  <DocProse>\n    <p>\n      Every deploy produces an\n      <DocTooltip\n        title=\"Edge Application\"\n        tip=\"The build that runs at the edge, close to the people using it.\"\n      >\n        edge application\n      </DocTooltip>\n      built from your <code>azion.config.js</code>.\n    </p>\n  </DocProse>\n</template>"
+  },
+  {
+   "name": "Kinds",
+   "summary": "The two a11y contracts side by side. The first panel is a `role=\"tooltip\"` and its trigger takes `aria-describedby`; the second carries a link, so it is a `role=\"dialog\"` announced through `aria-expanded`, named by its headline, and enterable with Tab. Tab again from inside it and focus returns to the term.",
+   "sfc": "<script setup>\n  import DocProse from '@aziontech/webkit/doc-prose'\n  import DocTooltip from '@aziontech/webkit/doc-tooltip'\n</script>\n\n<template>\n  <DocProse>\n    <p>\n      A passive gloss just defines the term: a\n      <DocTooltip\n        title=\"workload\"\n        tip=\"The binding between a domain and the application that answers on it.\"\n      >\n        workload\n      </DocTooltip>\n      is the pairing the deploy creates. Its panel is a real tooltip describing the term.\n    </p>\n    <p>\n      An interactive gloss closes on somewhere to go, so it is a small dialog instead: an\n      <DocTooltip\n        title=\"Edge Application\"\n        tip=\"The build that runs at the edge, close to the people using it.\"\n        link-label=\"Read the guide\"\n        href=\"/docs/edge-application\"\n      >\n        edge application\n      </DocTooltip>\n      can be read about at length.\n    </p>\n  </DocProse>\n</template>"
+  }
+ ]
+}

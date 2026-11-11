@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The investors band as the company page places it: a centered eyebrow and headline over the investor marks in a two-column bento grid. Hover or focus a mark to reveal its link line. Edit the props in the Controls panel — a band with no items renders nothing at all.",
+   "sfc": "<script setup>\n  import InvestorMarks from '@aziontech/webkit/investor-marks'\n</script>\n\n<template>\n  <InvestorMarks\n    eyebrow=\"Investors\"\n    title=\"Backed by visionary investors\"\n    link-label=\"Visit website\"\n    :items=\"[\n      {\n        name: 'monashees+',\n        logo: '/marketing-components/logos/monashees-extended-reversed.svg',\n        logoLight: '/marketing-components/logos/monashees-extended-mono.svg',\n        href: 'https://www.monashees.com'\n      },\n      {\n        name: 'Qualcomm Ventures',\n        logo: '/marketing-components/logos/qualcomm-extended-reversed.svg',\n        logoLight: '/marketing-components/logos/qualcomm-extended-mono.svg',\n        href: 'https://www.qualcommventures.com'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ]
+}

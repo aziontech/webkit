@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "One frame at the default `video` ratio. The source is a placeholder document inlined as a `data:` URI rather than a live third-party URL: a real embed pulls in a document from another origin, which a docs build should not do on every page view. Change `ratio` in the Controls panel and the frame changes shape without the page shifting, because the ratio is reserved before the document loads. `title` has no default on purpose — an `iframe` without one is announced as an unnamed frame, and a screen-reader user meets that name before any content.",
+   "sfc": "<script setup>\n  import Embed from '@aziontech/webkit/embed'\n</script>\n\n<template>\n  <Embed\n    src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n    title=\"A placeholder document standing in for an embedded demo\"\n    ratio=\"video\"\n  />\n</template>"
+  },
+  {
+   "name": "Ratios",
+   "summary": "Every `ratio` value, one frame under the other, around the same placeholder document. Each frame keeps its shape at any width — only the height follows. Pick the ratio the source already has: a `video` frame around a square form leaves bands of empty surface above and below it, and no ratio will crop a document that disagrees, it will just scroll inside the frame. Each frame states its own `title`, because every embedded document needs its own name.",
+   "sfc": "<script setup>\n  import Embed from '@aziontech/webkit/embed'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xxl)\">\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a 16:9 frame\"\n      ratio=\"video\"\n    />\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a square frame\"\n      ratio=\"square\"\n    />\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a 21:9 frame\"\n      ratio=\"wide\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

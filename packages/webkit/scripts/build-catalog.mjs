@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { dirname, join, relative, resolve } from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
@@ -21,6 +21,8 @@ const PKG_ROOT = resolve(SCRIPT_DIR, '..')
 const PKG_PATH = resolve(REPO_ROOT, 'packages/webkit/package.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
+const PARTS_DIR = resolve(REPO_ROOT, 'packages/webkit/catalog')
+const PATTERN_HEAVY_KEYS = ['sfc', 'variants', 'guidelines']
 const V6_MIGRATION = resolve(PKG_ROOT, 'src/cli/migrations/v6.json')
 const V6_BLOCKS = resolve(PKG_ROOT, 'src/cli/migrations/v6-blocks.json')
 
@@ -222,7 +224,7 @@ function _readSpec(subpath) {
   }
 }
 
-async function build() {
+export async function build() {
   const pkg = JSON.parse(readFileSync(PKG_PATH, 'utf-8'))
   const exportsMap = pkg.exports || {}
   const subpaths = Object.keys(exportsMap)
@@ -428,17 +430,93 @@ function buildTokens() {
   return { cssVars, typography, groups, animations, animationGuide }
 }
 
-const catalog = await build()
-const missingDocs = missingComponentDocs(catalog.imports)
-if (missingDocs.length) {
-  process.stderr.write(
-    `✖ ${missingDocs.length} exported component(s) without agent docs in .specs/<name>.md:\n  ${missingDocs.join('\n  ')}\n` +
-      'Every exported component needs ## Purpose, ## When to use and ## When NOT to use in its spec.\n'
-  )
-  process.exit(1)
+export function splitCatalog(full) {
+  const files = {}
+  const patterns = {}
+  for (const [id, p] of Object.entries(full.patterns)) {
+    const file = `catalog/patterns/${id}.json`
+    const part = {}
+    const meta = {}
+    for (const [k, v] of Object.entries(p)) {
+      if (PATTERN_HEAVY_KEYS.includes(k)) part[k] = v
+      else meta[k] = v
+    }
+    meta.variants = (p.variants || []).map((v) => ({ name: v.name, summary: v.summary }))
+    meta.file = file
+    patterns[id] = meta
+    files[file] = part
+  }
+  const imports = {}
+  for (const [subpath, e] of Object.entries(full.imports)) {
+    if (!e.examples) {
+      imports[subpath] = e
+      continue
+    }
+    const { examples, ...meta } = e
+    const file = `catalog/examples/${subpath}.json`
+    meta.examplesFile = file
+    imports[subpath] = meta
+    files[file] = { examples }
+  }
+  return { catalog: { ...full, imports, patterns }, files }
 }
-writeFileSync(OUT_PATH, JSON.stringify(catalog, null, 2) + '\n', 'utf-8')
-const componentCount = Object.values(catalog.imports).filter((e) => e.kind === 'component').length
-process.stdout.write(
-  `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components), ${Object.keys(catalog.patterns).length} patterns @ ${catalog.webkitVersion}\n`
-)
+
+const serialize = (value) => JSON.stringify(value, null, 1) + '\n'
+
+function listParts(dir, out = []) {
+  if (!existsSync(dir)) return out
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name)
+    if (e.isDirectory()) listParts(p, out)
+    else out.push(relative(PKG_ROOT, p).split('\\').join('/'))
+  }
+  return out
+}
+
+function checkParts(catalog, files) {
+  const drift = []
+  const expected = { 'catalog.json': serialize(catalog) }
+  for (const [file, part] of Object.entries(files)) expected[file] = serialize(part)
+  for (const [file, text] of Object.entries(expected)) {
+    const abs = resolve(PKG_ROOT, file)
+    if (!existsSync(abs)) drift.push(`missing ${file}`)
+    else if (readFileSync(abs, 'utf-8') !== text) drift.push(`stale ${file}`)
+  }
+  for (const file of listParts(PARTS_DIR)) if (!(file in expected)) drift.push(`extra ${file}`)
+  return drift
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+  const full = await build()
+  const missingDocs = missingComponentDocs(full.imports)
+  if (missingDocs.length) {
+    process.stderr.write(
+      `✖ ${missingDocs.length} exported component(s) without agent docs in .specs/<name>.md:\n  ${missingDocs.join('\n  ')}\n` +
+        'Every exported component needs ## Purpose, ## When to use and ## When NOT to use in its spec.\n'
+    )
+    process.exit(1)
+  }
+  const { catalog, files } = splitCatalog(full)
+  if (process.argv.includes('--check')) {
+    const drift = checkParts(catalog, files)
+    if (drift.length) {
+      process.stderr.write(
+        `✖ catalog out of sync (${drift.length}):\n  ${drift.slice(0, 20).join('\n  ')}\nRun: pnpm --filter @aziontech/webkit catalog:build\n`
+      )
+      process.exit(1)
+    }
+    process.stdout.write(`✓ catalog.json and ${Object.keys(files).length} catalog/ files in sync\n`)
+    process.exit(0)
+  }
+  rmSync(PARTS_DIR, { recursive: true, force: true })
+  for (const [file, part] of Object.entries(files)) {
+    const abs = resolve(PKG_ROOT, file)
+    mkdirSync(dirname(abs), { recursive: true })
+    writeFileSync(abs, serialize(part), 'utf-8')
+  }
+  writeFileSync(OUT_PATH, serialize(catalog), 'utf-8')
+  const componentCount = Object.values(catalog.imports).filter((e) => e.kind === 'component').length
+  process.stdout.write(
+    `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components), ${Object.keys(catalog.patterns).length} patterns @ ${catalog.webkitVersion}; ${Object.keys(files).length} files in catalog/\n`
+  )
+}

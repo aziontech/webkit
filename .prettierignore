@@ -1,4 +1,5 @@
 packages/webkit/catalog.json
+packages/webkit/catalog/
 **/CHANGELOG.md
 
 # Lint canaries are DELIBERATELY rule-breaking / mis-formatted fixtures that

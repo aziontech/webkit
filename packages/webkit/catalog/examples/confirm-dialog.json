@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Confirm",
+   "summary": "A removal: title, one sentence of what happens, Cancel and a danger confirm button; closed behind a visible trigger.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Remove domain\"\n    description=\"shop.example.com stops answering for this resource once you save. Traffic already pointed at it gets no response.\"\n    confirm-label=\"Remove Domain\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Remove domain\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
+  },
+  {
+   "name": "DiscardChanges",
+   "summary": "The unsaved-changes guard on a form that cannot be saved from the dialog: Keep editing returns to the form and the danger Discard changes leaves it.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Unsaved changes\"\n    description=\"This page has changes you haven't saved. If you leave now, they're discarded.\"\n    cancel-label=\"Keep editing\"\n    confirm-label=\"Discard changes\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Leave page\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
+  },
+  {
+   "name": "RunAgain",
+   "summary": "A commit rather than a removal, so the confirm button is primary (`kind=\"primary\"`).",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Clear cached content again?\"\n    description=\"This clears the same 2 URLs from the Edge cache again. Each object is fetched from your origin on its next request.\"\n    confirm-label=\"Clear again\"\n    kind=\"primary\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Run again\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
+  }
+ ]
+}

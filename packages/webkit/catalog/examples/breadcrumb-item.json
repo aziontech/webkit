@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Ancestor segment rendered as a link with muted label text.",
+   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Page Name\"\n    href=\"#\"\n  />\n</template>"
+  },
+  {
+   "name": "Current",
+   "summary": "Current page segment: rendered as a span with `aria-current=\"page\"` and default (non-muted) text.",
+   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Current Page\"\n    current\n  />\n</template>"
+  },
+  {
+   "name": "WithIcon",
+   "summary": "Segment with a leading PrimeIcons icon before the label.",
+   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Page Name\"\n    href=\"#\"\n    show-icon\n    icon=\"pi pi-box\"\n  />\n</template>"
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A single keycap driven by the controls.",
+   "sfc": "<script setup>\n  import Kbd from '@aziontech/webkit/kbd'\n</script>\n\n<template>\n  <Kbd meta>K</Kbd>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All sizes side by side.",
+   "sfc": "<script setup>\n  import Kbd from '@aziontech/webkit/kbd'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Kbd\n      meta\n      size=\"small\"\n      >K</Kbd\n    >\n    <Kbd\n      meta\n      size=\"medium\"\n      >K</Kbd\n    >\n  </div>\n</template>"
+  },
+  {
+   "name": "Combinations",
+   "summary": "Representative shortcuts, showing single keys, modifier combinations, and OS-aware glyphs.",
+   "sfc": "<script setup>\n  import Kbd from '@aziontech/webkit/kbd'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Kbd>/</Kbd>\n    <Kbd meta>K</Kbd>\n    <Kbd\n      meta\n      shift\n      >P</Kbd\n    >\n    <Kbd>Esc</Kbd>\n  </div>\n</template>"
+  }
+ ]
+}

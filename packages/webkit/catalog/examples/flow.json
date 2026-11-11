@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A sequential flow of nodes joined by connectors.",
+   "sfc": "<script setup>\n  import Flow from '@aziontech/webkit/flow'\n</script>\n\n<template>\n  <Flow align=\"center\">\n    <Flow.Node>Source</Flow.Node>\n    <Flow.Node>Transform</Flow.Node>\n    <Flow.Node>Deliver</Flow.Node>\n  </Flow>\n</template>"
+  },
+  {
+   "name": "Parallel",
+   "summary": "A parallel group fans out from the previous node and back into the next.",
+   "sfc": "<script setup>\n  import Flow from '@aziontech/webkit/flow'\n</script>\n\n<template>\n  <Flow align=\"center\">\n    <Flow.Node>Start</Flow.Node>\n    <Flow.Parallel>\n      <Flow.Node>Branch A</Flow.Node>\n      <Flow.Node>Branch B</Flow.Node>\n      <Flow.Node>Branch C</Flow.Node>\n    </Flow.Parallel>\n    <Flow.Node>End</Flow.Node>\n  </Flow>\n</template>"
+  },
+  {
+   "name": "Branches",
+   "summary": "A leading parallel fans in and a trailing parallel fans out — connectors route correctly at the edges of the sequence.",
+   "sfc": "<script setup>\n  import Flow from '@aziontech/webkit/flow'\n</script>\n\n<template>\n  <Flow align=\"center\">\n    <Flow.Parallel>\n      <Flow.Node>HTTP Trigger</Flow.Node>\n      <Flow.Node>Cron Trigger</Flow.Node>\n    </Flow.Parallel>\n    <Flow.Node>Process Request</Flow.Node>\n    <Flow.Parallel>\n      <Flow.Node>Log Analytics</Flow.Node>\n      <Flow.Node>Update Cache</Flow.Node>\n      <Flow.Node>Send Notification</Flow.Node>\n    </Flow.Parallel>\n    <Flow.Node>Complete</Flow.Node>\n  </Flow>\n</template>"
+  }
+ ]
+}

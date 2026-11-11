@@ -137,7 +137,9 @@ test('the catalog carries one pattern per block in headers, shells and platform'
   assert.ok(ids.length >= 58)
   assert.ok(ids.every((id) => /^(headers|shells|platform)\//.test(id)))
   for (const p of Object.values(catalog.patterns)) {
-    assert.ok(p.sfc.includes('<template>'))
+    const part = JSON.parse(readFileSync(new URL(`../../${p.file}`, import.meta.url), 'utf-8'))
+    assert.ok(part.sfc.includes('<template>'))
+    assert.equal('sfc' in p, false)
     assert.match(p.source, /^blocks\//)
     assert.equal('status' in p, false)
   }

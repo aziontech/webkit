@@ -44,6 +44,7 @@
   watch(
     () => props.name,
     (name) => {
+      if (typeof document === 'undefined') return
       const load = name ? resolveIllustrationAsset(name) : null
       if (!load) {
         if (name) {

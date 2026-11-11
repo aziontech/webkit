@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band as the Functions page places it: the two-command deploy, then a curl to the domain the CLI hands back, under the headline and its install button. Edit the props in the Controls panel — an empty `session` renders nothing at all.",
+   "sfc": "<script setup>\n  import CliTerminal from '@aziontech/webkit/cli-terminal'\n\n  const session =\n    'azion link --preset javascript --name auth-handler --auto\\n# Project successfully configured\\n\\nazion deploy --auto\\n# Upload completed successfully!\\n# Your Application was deployed successfully\\n# Domain: https://k7q2fmx4ze.map.azionedge.net\\n\\ncurl https://k7q2fmx4ze.map.azionedge.net/\\n# Hello World'\n\n  const primaryAction = {\n    label: 'Install the CLI',\n    href: 'https://www.azion.com/en/documentation/products/azion-cli/overview/',\n    trailing: true\n  }\n</script>\n\n<template>\n  <CliTerminal\n    eyebrow=\"Azion CLI\"\n    title=\"Deploy your first function in two commands\"\n    description=\"Link a project, deploy it, and curl the domain the CLI hands back. Builds run on your machine with --local, or on Azion.\"\n    :session=\"session\"\n    copy-aria-label=\"Copy the deploy session\"\n    :primary-action=\"primaryAction\"\n  />\n</template>"
+  }
+ ]
+}

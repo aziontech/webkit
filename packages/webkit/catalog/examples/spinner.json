@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default spinner sized with `size-4` and colored through `currentColor`.",
+   "sfc": "<script setup>\n  import Spinner from '@aziontech/webkit/spinner'\n</script>\n\n<template>\n  <Spinner class=\"size-4 text-(--text-default)\" />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The spinner scales with the theme `size-*` utilities applied through `class`; color inherits from the parent.",
+   "sfc": "<script setup>\n  import Spinner from '@aziontech/webkit/spinner'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-4 text-(--text-default)\">\n    <Spinner class=\"size-3\" />\n    <Spinner class=\"size-4\" />\n    <Spinner class=\"size-6\" />\n    <Spinner class=\"size-8\" />\n  </div>\n</template>"
+  }
+ ]
+}
