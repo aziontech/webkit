@@ -5,9 +5,10 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: 72d09f3a979c3fb39ce305e1d2df2b47c1355236572873161559929598d819c9
+last_updated: 2026-11-11
+checksum: 733051a7c8a099b1ad17ee95c937c575cc4d791b3ab6fbac9b3a0d465861e9ac
 ---
+
 # ComplianceBadges — Component Spec
 
 ## Purpose
@@ -35,7 +36,7 @@ The compliance band: a framed media split whose copy states the certifications a
 
 ```vue
 <script setup>
-import ComplianceBadges from '@aziontech/webkit/compliance-badges'
+  import ComplianceBadges from '@aziontech/webkit/compliance-badges'
 </script>
 
 <template>
@@ -54,14 +55,14 @@ import ComplianceBadges from '@aziontech/webkit/compliance-badges'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Overline above the headline. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the media split as its `h2`; the band renders nothing when empty. |
-| `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the badge list. |
-| `certifications` | `ComplianceBadgesCertification[]` | `[]` | false | The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text. |
-| `primaryAction` | `ComplianceBadgesAction` | `undefined` | false | The closing "see more" cell; `{ label, href }`. Omitted when absent. |
+| Prop             | Type                              | Default     | Required | JSDoc                                                                                                             |
+| ---------------- | --------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`        | `string`                          | `''`        | false    | Overline above the headline.                                                                                      |
+| `title`          | `string`                          | `''`        | false    | Headline of the band, rendered by the media split as its `h2`; the band renders nothing when empty.               |
+| `description`    | `string`                          | `''`        | false    | Supporting sentence under the headline.                                                                           |
+| `ariaLabel`      | `string`                          | `''`        | false    | Accessible name of the badge list.                                                                                |
+| `certifications` | `ComplianceBadgesCertification[]` | `[]`        | false    | The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text. |
+| `primaryAction`  | `ComplianceBadgesAction`          | `undefined` | false    | The closing "see more" cell; `{ label, href }`. Omitted when absent.                                              |
 
 ## Events
 
@@ -78,34 +79,34 @@ import ComplianceBadges from '@aziontech/webkit/compliance-badges'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover / focus on the see-more cell | `transition-colors duration-moderate-02 ease-expressive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
-| hover on the see-more chevron | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                            | Animation / Transition                                                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ---------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| hover / focus on the see-more cell | `transition-colors duration-moderate-02 ease-expressive-entrance`      | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| hover on the see-more chevron      | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (pill) | `.text-overline-sm` |
-| typography (see more) | `.text-overline-md` |
-| pill text | `var(--text-default)` |
-| see-more text | `var(--text-muted)` |
-| pill border | `var(--border-muted)` |
-| pill fill | `var(--bg-surface-raised)` |
-| check bubble fill | `var(--success-contrast)` |
-| check glyph | `var(--success)` |
-| see-more hover fill | `var(--bg-hover)` |
-| focus ring | `var(--ring-color)` |
-| cell rhythm | `var(--spacing-lg)` |
-| cell inset | `var(--spacing-xl)` |
-| pill gap | `var(--spacing-xs)` |
+| Region                | Token (DESIGN.md)          |
+| --------------------- | -------------------------- |
+| typography (pill)     | `.text-overline-sm`        |
+| typography (see more) | `.text-overline-md`        |
+| pill text             | `var(--text-default)`      |
+| see-more text         | `var(--text-muted)`        |
+| pill border           | `var(--border-muted)`      |
+| pill fill             | `var(--bg-surface-raised)` |
+| check bubble fill     | `var(--success-contrast)`  |
+| check glyph           | `var(--success)`           |
+| see-more hover fill   | `var(--bg-hover)`          |
+| focus ring            | `var(--ring-color)`        |
+| cell rhythm           | `var(--spacing-lg)`        |
+| cell inset            | `var(--spacing-xl)`        |
+| pill gap              | `var(--spacing-xs)`        |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -115,6 +116,13 @@ import ComplianceBadges from '@aziontech/webkit/compliance-badges'
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): pill `var(--text-default)` on `var(--bg-surface-raised)`; see-more `var(--text-muted)` rising to `var(--text-default)` on hover.
 - `motion-reduce:transition-none motion-reduce:transform-none` on both transitions above.
 - Touch target ≥40×40 px — the see-more cell is a full grid cell.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the "more" chevron mirrors (`rtl:-scale-x-100`) and its hover nudge moves toward the end edge.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

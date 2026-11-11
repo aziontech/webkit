@@ -1,4 +1,5 @@
 import authoringStandards from './rules/authoring-standards.js'
+import containerNeedsWidth from './rules/container-needs-width.js'
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
@@ -25,7 +26,8 @@ const rules = {
   'prefer-webkit-component': preferWebkitComponent,
   'prefer-define-model': preferDefineModel,
   'no-style-override': noStyleOverride,
-  'authoring-standards': authoringStandards
+  'authoring-standards': authoringStandards,
+  'container-needs-width': containerNeedsWidth
 }
 
 const FILES = [
@@ -70,10 +72,15 @@ const RECOMMENDED = {
   'prefer-webkit-component': 'error',
   'prefer-define-model': 'error',
   'no-style-override': 'error',
-  'authoring-standards': 'error'
+  'authoring-standards': 'error',
+  'container-needs-width': 'warn'
 }
 
-const STRICT = Object.fromEntries(Object.keys(rules).map((r) => [r, 'error']))
+export const HEURISTIC_RULES = Object.freeze(['container-needs-width'])
+
+const STRICT = Object.fromEntries(
+  Object.keys(rules).map((r) => [r, HEURISTIC_RULES.includes(r) ? 'warn' : 'error'])
+)
 
 const PERFORMANCE = {
   'no-barrel-import': 'error',
@@ -89,5 +96,5 @@ plugin.configs = {
 
 export default plugin
 export { rules }
-export { logicalClass, physicalDirectionClasses } from './direction-classes.js'
+export { logicalClass, mirroredGradient, physicalDirectionClasses } from './direction-classes.js'
 export { isLayoutClass, LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from './layout-classes.js'

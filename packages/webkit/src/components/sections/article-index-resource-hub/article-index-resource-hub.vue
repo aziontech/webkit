@@ -149,7 +149,7 @@
 
           <div
             v-if="facets.length > 0"
-            class="flex flex-col gap-(--spacing-sm) sm:flex-row"
+            class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:flex-wrap"
           >
             <Select
               v-for="facet in facets"

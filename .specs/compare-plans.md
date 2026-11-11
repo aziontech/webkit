@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 9f14cb752aa74bbc6b16defd3d6662d66d7bd3e02293bc93ca51754eb62676a0
+last_updated: 2026-11-11
+checksum: b1948a37f4ff604feb8a90c041d06c421b9829364c669cfeb683520f4e0581a8
 ---
 
 # ComparePlans — Component Spec
@@ -39,7 +39,7 @@ The feature-by-feature matrix under the plan cards on Pricing: one column per pl
 
 ```vue
 <script setup>
-import ComparePlans from '@aziontech/webkit/compare-plans'
+  import ComparePlans from '@aziontech/webkit/compare-plans'
 </script>
 
 <template>
@@ -52,7 +52,12 @@ import ComparePlans from '@aziontech/webkit/compare-plans'
     excluded-label="Not included"
     :plans="[
       { id: 'hobby', name: 'Hobby', action: { label: 'Start for free', href: '/signup' } },
-      { id: 'pro', name: 'Pro', highlighted: true, action: { label: 'Start with Pro', href: '/signup' } }
+      {
+        id: 'pro',
+        name: 'Pro',
+        highlighted: true,
+        action: { label: 'Start with Pro', href: '/signup' }
+      }
     ]"
     :sections="[
       {
@@ -60,7 +65,11 @@ import ComparePlans from '@aziontech/webkit/compare-plans'
         title: 'Applications',
         description: 'Build, run and scale applications globally.',
         rows: [
-          { label: 'Rules Engine', hint: 'Conditional rules evaluated per request.', values: ['✓', '✓'] },
+          {
+            label: 'Rules Engine',
+            hint: 'Conditional rules evaluated per request.',
+            values: ['✓', '✓']
+          },
           { label: 'Rules per application', values: ['10 included', '20 included'] }
         ]
       }
@@ -72,17 +81,17 @@ import ComparePlans from '@aziontech/webkit/compare-plans'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
-| `caption` | `string` | `''` | false | Screen-reader caption naming the table. |
-| `columnLabel` | `string` | `''` | false | Heading of the feature column, shown from the large breakpoint up. |
-| `pickerAriaLabel` | `string` | `''` | false | Accessible name of the plan picker shown below the large breakpoint. |
-| `includedLabel` | `string` | `''` | false | Screen-reader text of a ticked cell. |
-| `excludedLabel` | `string` | `''` | false | Screen-reader text of a dashed cell. |
-| `plans` | `ComparePlansPlan[]` | `[]` | false | The plan columns, in order; each is `{ id, name, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. |
-| `sections` | `ComparePlansSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows }` and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
-| `primaryAction` | `ComparePlansAction` | `undefined` | false | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. |
+| Prop              | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                                     |
+| ----------------- | ----------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`          | `string`                | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                  |
+| `caption`         | `string`                | `''`        | false    | Screen-reader caption naming the table.                                                                                                                                                                                                   |
+| `columnLabel`     | `string`                | `''`        | false    | Heading of the feature column, shown from the large breakpoint up.                                                                                                                                                                        |
+| `pickerAriaLabel` | `string`                | `''`        | false    | Accessible name of the plan picker shown below the large breakpoint.                                                                                                                                                                      |
+| `includedLabel`   | `string`                | `''`        | false    | Screen-reader text of a ticked cell.                                                                                                                                                                                                      |
+| `excludedLabel`   | `string`                | `''`        | false    | Screen-reader text of a dashed cell.                                                                                                                                                                                                      |
+| `plans`           | `ComparePlansPlan[]`    | `[]`        | false    | The plan columns, in order; each is `{ id, name, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped.                                                                                            |
+| `sections`        | `ComparePlansSection[]` | `[]`        | false    | The product bands, in order; each is `{ eyebrow, title, description, rows }` and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
+| `primaryAction`   | `ComparePlansAction`    | `undefined` | false    | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent.                                                                                                                                                |
 
 ## Events
 
@@ -106,26 +115,26 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (band title) | `.text-heading-lg` |
-| typography (plan name) | `.text-heading-md` |
-| typography (band lead) | `.text-body-sm` / `.text-body-md` |
-| typography (rows and cells) | `.text-label-md` |
-| typography (column head) | `.text-overline-md` |
-| header fill | `var(--bg-canvas)` |
-| accent bar | `var(--border-selected)` |
-| tick | `var(--success-contrast)` |
-| muted text | `var(--text-muted)` |
-| default text | `var(--text-default)` |
-| rules | `var(--border-default)` |
-| cell padding | `var(--spacing-sm)` / `var(--spacing-md)` / `var(--spacing-lg)` / `var(--spacing-xl)` |
+| Region                      | Token (DESIGN.md)                                                                     |
+| --------------------------- | ------------------------------------------------------------------------------------- |
+| typography (band title)     | `.text-heading-lg`                                                                    |
+| typography (plan name)      | `.text-heading-md`                                                                    |
+| typography (band lead)      | `.text-body-sm` / `.text-body-md`                                                     |
+| typography (rows and cells) | `.text-label-md`                                                                      |
+| typography (column head)    | `.text-overline-md`                                                                   |
+| header fill                 | `var(--bg-canvas)`                                                                    |
+| accent bar                  | `var(--border-selected)`                                                              |
+| tick                        | `var(--success-contrast)`                                                             |
+| muted text                  | `var(--text-muted)`                                                                   |
+| default text                | `var(--text-default)`                                                                 |
+| rules                       | `var(--border-default)`                                                               |
+| cell padding                | `var(--spacing-sm)` / `var(--spacing-md)` / `var(--spacing-lg)` / `var(--spacing-xl)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -135,6 +144,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the composed controls carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the plan buttons and the picker are `large`.
+- Reflow: below `lg` (one plan column beside the row labels) the header cells, the section headings and the row labels use `var(--spacing-sm)` side padding instead of `var(--spacing-lg)`, so the two columns fit a 640px box at 200% zoom; from `lg` the padding is unchanged.
 
 ## Stories (Storybook)
 

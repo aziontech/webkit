@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 4f5354c9f34ed8cd08d7d3aa8e1349a9b86b5f403976154c5ec8b754ffd3b8f4
+last_updated: 2026-11-11
+checksum: a959efd1bde93b606605f18c5d2f8fbd53eed7da861e08915a19c12baa7005c4
 ---
 
 # CompareSupportTiers — Component Spec
@@ -38,7 +38,7 @@ The tier-by-tier comparison on the Support page: one column per support tier wit
 
 ```vue
 <script setup>
-import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'
+  import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'
 </script>
 
 <template>
@@ -50,17 +50,26 @@ import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'
     included-label="Included"
     excluded-label="Not included"
     :tiers="[
-      { id: 'developer', name: 'Developer', description: 'Ideal for exploring the platform.', action: { label: 'Start for free', href: '/signup' } },
-      { id: 'enterprise', name: 'Enterprise', description: 'Ideal for advanced support.', highlighted: true, action: { label: 'Talk to a specialist', href: '/contact' } }
+      {
+        id: 'developer',
+        name: 'Developer',
+        description: 'Ideal for exploring the platform.',
+        action: { label: 'Start for free', href: '/signup' }
+      },
+      {
+        id: 'enterprise',
+        name: 'Enterprise',
+        description: 'Ideal for advanced support.',
+        highlighted: true,
+        action: { label: 'Talk to a specialist', href: '/contact' }
+      }
     ]"
     :sections="[
       {
         eyebrow: 'Support',
         title: 'Get help when it matters most',
         action: { label: 'See pricing', href: '/docs/pricing#support' },
-        rows: [
-          { label: 'Phone and video support', values: ['—', true] }
-        ]
+        rows: [{ label: 'Phone and video support', values: ['—', true] }]
       }
     ]"
   />
@@ -69,16 +78,16 @@ import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
-| `caption` | `string` | `''` | false | Screen-reader caption naming the table. |
-| `columnLabel` | `string` | `''` | false | Heading of the service column, shown from the large breakpoint up. |
-| `pickerAriaLabel` | `string` | `''` | false | Accessible name of the tier picker shown below the large breakpoint. |
-| `includedLabel` | `string` | `''` | false | Screen-reader text of a ticked cell. |
-| `excludedLabel` | `string` | `''` | false | Screen-reader text of a dashed cell. |
-| `tiers` | `CompareSupportTiersTier[]` | `[]` | false | The tier columns, in order; each is `{ id, name, description, highlighted?, action }` with `action` as `{ label, href }`; a tier without a name is dropped. |
-| `sections` | `CompareSupportTiersSection[]` | `[]` | false | The service bands, in order; each is `{ eyebrow, title, action?, rows }` where `action` is the closing `{ label, href }` link, and a row is `{ label, values, group? }` with one value per tier: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
+| Prop              | Type                           | Default | Required | JSDoc                                                                                                                                                                                                                                                                          |
+| ----------------- | ------------------------------ | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `anchor`          | `string`                       | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                       |
+| `caption`         | `string`                       | `''`    | false    | Screen-reader caption naming the table.                                                                                                                                                                                                                                        |
+| `columnLabel`     | `string`                       | `''`    | false    | Heading of the service column, shown from the large breakpoint up.                                                                                                                                                                                                             |
+| `pickerAriaLabel` | `string`                       | `''`    | false    | Accessible name of the tier picker shown below the large breakpoint.                                                                                                                                                                                                           |
+| `includedLabel`   | `string`                       | `''`    | false    | Screen-reader text of a ticked cell.                                                                                                                                                                                                                                           |
+| `excludedLabel`   | `string`                       | `''`    | false    | Screen-reader text of a dashed cell.                                                                                                                                                                                                                                           |
+| `tiers`           | `CompareSupportTiersTier[]`    | `[]`    | false    | The tier columns, in order; each is `{ id, name, description, highlighted?, action }` with `action` as `{ label, href }`; a tier without a name is dropped.                                                                                                                    |
+| `sections`        | `CompareSupportTiersSection[]` | `[]`    | false    | The service bands, in order; each is `{ eyebrow, title, action?, rows }` where `action` is the closing `{ label, href }` link, and a row is `{ label, values, group? }` with one value per tier: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
 
 ## Events
 
@@ -102,26 +111,26 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (band title) | `.text-heading-lg` |
-| typography (tier name) | `.text-heading-md` |
-| typography (tier description) | `.text-body-sm` |
-| typography (rows and cells) | `.text-label-md` |
-| typography (column head) | `.text-overline-md` |
-| header fill | `var(--bg-canvas)` |
-| accent bar | `var(--border-selected)` |
-| tick | `var(--success-contrast)` |
-| muted text | `var(--text-muted)` |
-| default text | `var(--text-default)` |
-| rules | `var(--border-default)` |
-| cell padding | `var(--spacing-sm)` / `var(--spacing-md)` / `var(--spacing-lg)` / `var(--spacing-xl)` |
+| Region                        | Token (DESIGN.md)                                                                     |
+| ----------------------------- | ------------------------------------------------------------------------------------- |
+| typography (band title)       | `.text-heading-lg`                                                                    |
+| typography (tier name)        | `.text-heading-md`                                                                    |
+| typography (tier description) | `.text-body-sm`                                                                       |
+| typography (rows and cells)   | `.text-label-md`                                                                      |
+| typography (column head)      | `.text-overline-md`                                                                   |
+| header fill                   | `var(--bg-canvas)`                                                                    |
+| accent bar                    | `var(--border-selected)`                                                              |
+| tick                          | `var(--success-contrast)`                                                             |
+| muted text                    | `var(--text-muted)`                                                                   |
+| default text                  | `var(--text-default)`                                                                 |
+| rules                         | `var(--border-default)`                                                               |
+| cell padding                  | `var(--spacing-sm)` / `var(--spacing-md)` / `var(--spacing-lg)` / `var(--spacing-xl)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -131,6 +140,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the composed controls carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the tier buttons and the picker are `large`.
+- Reflow: below `lg` (one tier column beside the row labels) the header cells, the section headings and the row labels use `var(--spacing-sm)` side padding instead of `var(--spacing-lg)`, so the two columns fit a 640px box at 200% zoom; from `lg` the padding is unchanged.
 
 ## Stories (Storybook)
 

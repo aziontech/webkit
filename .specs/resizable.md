@@ -4,7 +4,7 @@ category: layout
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 3d6d837624fdcc22ac5792225d7494e3a1c8363d2766e6c052c0e10282b1afa7
+checksum: dfc4cfe6577e3a49c8daca0f4c511dc07787948adf8c7ab435114c4574a917d2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
 created: 2026-08-16
@@ -181,6 +181,14 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state
 - `motion-reduce:transition-none` on the handle's colour transition
 - Touch target: the handle draws a `--spacing-xxs` rail and extends its hit area to 16px across the axis with a pseudo-element, so the edge is grabbable without drawing a thick bar.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the grip is symmetric and does not mirror.
+- Keyboard: on a horizontal group `ArrowLeft`/`ArrowRight` nudge the handle toward the start/end panel, swapped under `dir="rtl"` (`useDirection(handleRef)`), so `ArrowRight` always moves the handle right on screen.
+- Pointer: the drag delta is inverted on horizontal groups under `rtl`, because the first panel sits on the right.
+- User data: none.
 
 ## Stories (Storybook)
 

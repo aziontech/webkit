@@ -9,6 +9,7 @@
 //   - a new composable authored as .js                       → composables are .ts (composables.md)
 //   - @deprecated with no replacement/version                → name it (deprecation.md)
 //   - a prose comment anywhere under packages/               → API docs only (comments.md)
+//   - a literal UI string in a component template / prop default → locale catalog (webkit-strings.md)
 //
 // Same discipline as validate-tokens.mjs: reconstruct the RESULTING file content, and only
 // block when a check's occurrence count GROWS past the baseline's.
@@ -18,6 +19,11 @@ import { readFileSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
 
 import { CONTENT_CHECKS, MESSAGES } from './_lib/authoring-checks.mjs'
+import {
+  appliesToBuiltInStrings,
+  scanBuiltInStrings,
+  STRING_MESSAGES
+} from './_lib/built-in-strings.mjs'
 
 const ROOT = process.cwd()
 const TARGET_PREFIX = 'packages/webkit/src/'
@@ -99,6 +105,16 @@ async function main() {
     if (!c.applies(relPath)) continue
     const added = occurrences(c, result, relPath) - occurrences(c, baseline, relPath)
     if (added > 0) violations.push({ id: c.id, message: c.message, added })
+  }
+
+  if (appliesToBuiltInStrings(relPath)) {
+    const before = scanBuiltInStrings(baseline)
+    const after = scanBuiltInStrings(result)
+    for (const id of Object.keys(STRING_MESSAGES)) {
+      const added =
+        after.filter((found) => found === id).length - before.filter((found) => found === id).length
+      if (added > 0) violations.push({ id: `i18n:${id}`, message: STRING_MESSAGES[id], added })
+    }
   }
 
   if (violations.length === 0) process.exit(0)

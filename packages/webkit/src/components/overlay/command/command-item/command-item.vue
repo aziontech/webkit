@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, onMounted, ref, toRef, useAttrs } from 'vue'
 
-  import Kbd from '../../../content/kbd/kbd.vue'
+  import Kbd, { type KbdKeyName } from '../../../content/kbd/kbd.vue'
   import { CommandGroupIdKey, type CommandItemValue, useCommandMenuContext } from '../injection-key'
 
   defineOptions({
@@ -56,10 +56,20 @@
       .filter(Boolean)
   )
   const hasShortcut = computed(() => shortcutTokens.value.length > 0)
-  const shortcutKey = computed(() => {
-    const tokens = shortcutTokens.value
-    return tokens.length ? tokens[tokens.length - 1].toUpperCase() : ''
-  })
+  const NAMED_KEYS: Record<string, KbdKeyName> = {
+    esc: 'escape',
+    escape: 'escape',
+    enter: 'enter',
+    return: 'enter',
+    space: 'space',
+    tab: 'tab',
+    backspace: 'backspace',
+    delete: 'delete',
+    del: 'delete'
+  }
+  const lastToken = computed(() => shortcutTokens.value.at(-1) ?? '')
+  const shortcutKeyName = computed<KbdKeyName | undefined>(() => NAMED_KEYS[lastToken.value])
+  const shortcutKey = computed(() => (shortcutKeyName.value ? '' : lastToken.value.toUpperCase()))
   const shortcutMeta = computed(() => shortcutTokens.value.slice(0, -1).includes('meta'))
   const shortcutCtrl = computed(() => shortcutTokens.value.slice(0, -1).includes('ctrl'))
   const shortcutShift = computed(() => shortcutTokens.value.slice(0, -1).includes('shift'))
@@ -129,6 +139,7 @@
       :ctrl="shortcutCtrl"
       :shift="shortcutShift"
       :alt="shortcutAlt"
+      :key-name="shortcutKeyName"
       size="small"
       >{{ shortcutKey }}</Kbd
     >

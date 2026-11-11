@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: f436085d4bb19c1b25760798ae059f6abe6a3a0942e2142c93a6bc68ffb4d6e5
+checksum: 4b65fbdd15ff899ceba09a9a8d4e627609fd3b9b07e66bb56865b99d969eda4f
 created: 2026-06-22
 last_updated: 2026-11-11
 ---
@@ -134,6 +134,13 @@ Numeric input field with optional increment/decrement spinner buttons. Use when 
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none` on animated state changes.
 - Touch target ≥40×40 px on the large size; spinner buttons remain ≥24×24 px on `small`/`medium` per Figma — justified because arrow keys provide the primary interaction.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the stepper buttons point up and down and do not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: the `<input>` renders `dir="auto"`; a `dir` attribute overrides it.
 
 ## Stories (Storybook)
 

@@ -3,7 +3,7 @@ name: chart-card
 category: chart
 structure: composition
 status: approved
-checksum: 03f63275a9ddf8d9aaa6f2965b1c085d07f13598354f77064ea8c9f601bc5491
+checksum: f8f9f5ac91c4ea76697e34de508e60a528177c4d11b9f7f42917cc5f5e27b78f
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-11
@@ -216,6 +216,14 @@ A pointer resize follows the pointer 1:1 with no transition; it is direct manipu
 - Resize handle: `role="separator"`, one tab stop, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` such as "6 of 12 columns, 552 pixels tall". Keyboard map: Left / Right change the span by one column, Up / Down change the height by 24 pixels, Home / End jump to the smallest and largest span, Escape cancels a pointer resize in progress.
 - Both handles are at least 24px with a visible focus ring `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - `motion-reduce:transition-none` on every transition.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the drag and resize grips are symmetric and do not mirror.
+- Keyboard: the drag handle moves the card one slot with the arrow keys and the resize handle grows (`ArrowRight`) or shrinks (`ArrowLeft`) the column span; both swap under `dir="rtl"` (`logicalArrowKey`).
+- Pointer: the resize delta is inverted under `rtl` (`useDirection(handleRef)`), so dragging toward the end edge widens the card.
+- User data: chart values keep the number format of the locale.
 
 ## Stories (Storybook)
 

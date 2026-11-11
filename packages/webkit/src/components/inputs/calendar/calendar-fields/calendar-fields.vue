@@ -6,14 +6,14 @@
   import Input from '../../input/input.vue'
   import { asRange, asSingle, formatDate, formatTime } from '../format'
   import { CalendarInjectionKey } from '../injection-key'
-  import { parseFixedDate } from '../parse-period'
+  import { parseFixedDate, parseTime } from '../parse-period'
 
   defineOptions({
     name: 'CalendarFields',
     inheritAttrs: false
   })
 
-  const { t } = useLocale({ calendar: en.calendar })
+  const { t, locale } = useLocale({ calendar: en.calendar })
 
   const ctx = inject(CalendarInjectionKey, null)
 
@@ -45,43 +45,30 @@
   )
 
   const syncFromDraft = () => {
-    startDateText.value = startDate.value ? formatDate(startDate.value) : ''
-    startTimeText.value = startDate.value ? formatTime(startDate.value) : ''
-    endDateText.value = endDate.value ? formatDate(endDate.value) : ''
-    endTimeText.value = endDate.value ? formatTime(endDate.value) : ''
+    startDateText.value = startDate.value ? formatDate(startDate.value, '', locale.value) : ''
+    startTimeText.value = startDate.value ? formatTime(startDate.value, '', locale.value) : ''
+    endDateText.value = endDate.value ? formatDate(endDate.value, '', locale.value) : ''
+    endTimeText.value = endDate.value ? formatTime(endDate.value, '', locale.value) : ''
   }
 
-  watch(() => ctx?.draft.value, syncFromDraft, { immediate: true, deep: true })
+  watch([() => ctx?.draft.value, locale], syncFromDraft, { immediate: true, deep: true })
 
-  const parseTime = (text: string): { hours: number; minutes: number } | null => {
-    const match = text.trim().match(/^(\d{1,2}):(\d{2})\s*(am|pm)?$/i)
-    if (!match) {
-      return null
-    }
-    let hours = Number(match[1])
-    const minutes = Number(match[2])
-    const meridiem = match[3]?.toLowerCase()
-    if (minutes > 59) {
-      return null
-    }
-    if (meridiem) {
-      if (hours < 1 || hours > 12) {
-        return null
-      }
-      if (meridiem === 'pm' && hours !== 12) {
-        hours += 12
-      }
-      if (meridiem === 'am' && hours === 12) {
-        hours = 0
-      }
-    } else if (hours > 23) {
-      return null
-    }
-    return { hours, minutes }
-  }
+  const placeholderYear = new Date().getFullYear()
+  const startDatePlaceholder = computed(() =>
+    formatDate(new Date(placeholderYear, 5, 1), '', locale.value)
+  )
+  const endDatePlaceholder = computed(() =>
+    formatDate(new Date(placeholderYear, 5, 30), '', locale.value)
+  )
+  const startTimePlaceholder = computed(() =>
+    formatTime(new Date(placeholderYear, 0, 1, 0, 0), '', locale.value)
+  )
+  const endTimePlaceholder = computed(() =>
+    formatTime(new Date(placeholderYear, 0, 1, 23, 59), '', locale.value)
+  )
 
   const commitDate = (which: 'start' | 'end', text: string) => {
-    const parsed = parseFixedDate(text)
+    const parsed = parseFixedDate(text, new Date(), { locale: locale.value })
     if (!parsed) {
       syncFromDraft()
       return
@@ -128,7 +115,7 @@
             :model-value="startDateText"
             :size="size"
             :disabled="disabled"
-            placeholder="Jun 1, 2026"
+            :placeholder="startDatePlaceholder"
             @update:model-value="startDateText = $event"
             @change="commitDate('start', startDateText)"
           />
@@ -142,7 +129,7 @@
             :size="size"
             :disabled="disabled"
             :aria-label="startTimeLabel"
-            placeholder="00:00"
+            :placeholder="startTimePlaceholder"
             @update:model-value="startTimeText = $event"
             @change="commitTime('start', startTimeText)"
           />
@@ -167,7 +154,7 @@
             :model-value="endDateText"
             :size="size"
             :disabled="disabled"
-            placeholder="Jun 30, 2026"
+            :placeholder="endDatePlaceholder"
             @update:model-value="endDateText = $event"
             @change="commitDate('end', endDateText)"
           />
@@ -181,7 +168,7 @@
             :size="size"
             :disabled="disabled"
             :aria-label="t('calendar.endTime')"
-            placeholder="23:59"
+            :placeholder="endTimePlaceholder"
             @update:model-value="endTimeText = $event"
             @change="commitTime('end', endTimeText)"
           />

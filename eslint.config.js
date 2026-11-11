@@ -69,11 +69,14 @@ export default [
           shallowOnly: false
         }
       ],
-      "vue/no-reserved-component-names": ['error', {
-        "disallowVueBuiltInComponents": true,
-        "disallowVue3BuiltInComponents": true,
-        "htmlElementCaseSensitive": true,
-      }],
+      'vue/no-reserved-component-names': [
+        'error',
+        {
+          disallowVueBuiltInComponents: true,
+          disallowVue3BuiltInComponents: true,
+          htmlElementCaseSensitive: true
+        }
+      ],
       'vue/no-restricted-syntax': 'error',
       'vue/no-reserved-keys': [
         'error',
@@ -143,5 +146,12 @@ export default [
     files: ['**/*.vue'],
     plugins: { webkit: { rules: { 'no-physical-direction': noPhysicalDirection } } },
     rules: { 'webkit/no-physical-direction': 'error' }
+  },
+  {
+    files: [
+      '**/src/components/data/table/table-cell/table-cell.vue',
+      '**/src/components/data/table/table-head-cell/table-head-cell.vue'
+    ],
+    rules: { 'webkit/no-physical-direction': ['error', { gradients: false }] }
   }
 ]

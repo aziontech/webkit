@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3211-220
   node_id: 3211:220
-checksum: 5339c99be71775d87808244775268388692412f0846fb4408acbfdb0c747e6e9
+checksum: 8a62f4365de59bd896df619e12424617a550a995109f132ac010b5730baabc26
 created: 2026-06-01
 last_updated: 2026-11-11
 ---
@@ -125,6 +125,13 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px at `size: 'large'`; medium is for dense layouts.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: a directional glyph passed to `icon` (chevrons, angles, arrows, carets, `sign-in`/`sign-out`, `reply`, `undo`: the list in `utils/directional-icons.ts`) gets `rtl:-scale-x-100`; external-link arrows, media and brand glyphs do not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

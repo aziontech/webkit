@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: d55d307f3b210b870e38ae84b5f9bb583a71f2f1cc39338d5f6f75116b9fd575
+checksum: 2a2ec145b4b00b1f8259461dd4ddc464ad54e32d9be72d7324077b42bfefa51e
 created: 2026-07-13
 last_updated: 2026-11-11
 ---
@@ -118,6 +118,14 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target: segments follow the compact Figma sizing (28px pill height, 28×20px segments) and are below the 40×40 px target; justified deviation for a dense global control, consistent with the design.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the sun, moon and monitor glyphs do not mirror.
+- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous theme, swapped under `dir="rtl"` (`logicalArrowKey`).
+- Indicator: the selection pill is anchored with a physical `left: 0` and moved by the measured offset, so it lands on the selected option in both directions.
+- User data: none.
 
 ## Stories (Storybook)
 

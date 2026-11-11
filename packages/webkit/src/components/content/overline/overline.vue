@@ -6,7 +6,7 @@
   export type OverlinePrefix = '' | '//' | '\x3C\x3E' | '\x3C/\x3E'
 
   interface Props {
-    /** Keeps the prefix and the label on one line (no wrapping). */
+    /** Keeps the prefix unbroken and the label on one line while it fits; a longer label wraps instead of overflowing. */
     singleLine?: boolean
     /** Shows a blinking terminal-style cursor after the label. */
     showCursor?: boolean
@@ -40,14 +40,11 @@
       v-if="prefix"
       aria-hidden="true"
       class="text-default font-medium text-overline-md"
-      :class="{ 'whitespace-nowrap max-sm:whitespace-normal': singleLine }"
+      :class="{ 'whitespace-nowrap': singleLine }"
     >
       {{ prefix }}
     </span>
-    <span
-      class="text-pretty text-primary font-medium uppercase text-overline-md"
-      :class="{ 'whitespace-nowrap max-sm:whitespace-normal': singleLine }"
-    >
+    <span class="min-w-0 text-pretty text-primary font-medium uppercase text-overline-md">
       <slot />
     </span>
     <span

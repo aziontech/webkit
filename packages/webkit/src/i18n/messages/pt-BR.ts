@@ -52,6 +52,7 @@ export const ptBR: Messages = {
     lastYear: 'Último ano',
     relativeHints: 'Digite tempos relativos',
     fixedHints: 'Digite datas fixas',
+    rangeSeparators: 'a|até',
     timezone: 'Fuso horário',
     localTimezone: 'Local'
   },
@@ -174,6 +175,17 @@ export const ptBR: Messages = {
   },
   keyValuePairs: {
     notSet: 'Não definido'
+  },
+  kbd: {
+    ctrl: 'Ctrl',
+    alt: 'Alt',
+    shift: 'Shift',
+    escape: 'Esc',
+    enter: 'Enter',
+    space: 'Espaço',
+    tab: 'Tab',
+    backspace: 'Backspace',
+    delete: 'Del'
   },
   label: {
     required: '(Obrigatório)'

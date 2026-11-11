@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: e853a8ab2cd802be280cb287f535e186a51845357901fc74aa7c7246e06548fc
+checksum: 264e9af075c29837de880e78cd055ff4bc304a7f46788ef073837307abde2cc4
 created: 2026-09-23
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Ticker — Component Spec
@@ -63,15 +63,15 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 ## Props
 
-| Prop        | Type                  | Default    | Required | JSDoc                                                                                                                                              |
-| ----------- | --------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prop        | Type                  | Default    | Required | JSDoc                                                                                                                                                                                        |
+| ----------- | --------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `kind`      | `'plain' \| 'band'`   | `'plain'`  | false    | Whether the strip paints its own ground; `band` fills it with the page canvas so a textured hero cannot show through the marks, and the floor still reads continuous with the band above it. |
-| `marks`     | `string[]`            | `[]`       | false    | Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete. |
-| `items`     | `TickerItem[]`        | `[]`       | false    | Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered. |
-| `label`     | `string`              | `''`       | false    | Overline above the row, stating the claim the marks make.                                                                                          |
-| `size`      | `'small' \| 'medium'` | `'medium'` | false    | Mark scale; `medium` is the marketing band and climbs 32/40/48 px by device class, `small` is a flat 24 px for a column.                           |
-| `duration`  | `number`              | `0`        | false    | Seconds for one full pass; left at `0` it is derived from the number of marks, or of items, so every strip moves at one speed.                                   |
-| `ariaLabel` | `string`              | `''`       | false    | Accessible name for the row of marks, announced instead of an unnamed list.                                                                        |
+| `marks`     | `string[]`            | `[]`       | false    | Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete.                                           |
+| `items`     | `TickerItem[]`        | `[]`       | false    | Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered.                                                 |
+| `label`     | `string`              | `''`       | false    | Overline above the row, stating the claim the marks make.                                                                                                                                    |
+| `size`      | `'small' \| 'medium'` | `'medium'` | false    | Mark scale; `medium` is the marketing band and climbs 32/40/48 px by device class, `small` is a flat 24 px for a column.                                                                     |
+| `duration`  | `number`              | `0`        | false    | Seconds for one full pass; left at `0` it is derived from the number of marks, or of items, so every strip moves at one speed.                                                               |
+| `ariaLabel` | `string`              | `''`       | false    | Accessible name for the row of marks, announced instead of an unnamed list.                                                                                                                  |
 
 ## Events
 
@@ -101,17 +101,17 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 ## Tokens
 
-| Region                            | Token (DESIGN.md)                                   |
-| --------------------------------- | --------------------------------------------------- |
-| typography (fallback wordmark)    | `.text-heading-xxs`                                 |
-| typography (item label)           | `.text-body-md`, `.text-body-sm` under `small`      |
+| Region                            | Token (DESIGN.md)                                      |
+| --------------------------------- | ------------------------------------------------------ |
+| typography (fallback wordmark)    | `.text-heading-xxs`                                    |
+| typography (item label)           | `.text-body-md`, `.text-body-sm` under `small`         |
 | spacing (item row gap)            | `max(var(--spacing-xxl), calc(var(--spacing-xl) * 2))` |
-| spacing (item icon ↔ label)       | `var(--spacing-xs)`                                 |
-| ink (mark)                        | `var(--text-default)` at 70% opacity, full on hover |
-| spacing (label ↔ row)             | `var(--spacing-xl)`                                 |
-| spacing (row gap, medium)         | `var(--spacing-4)` / `var(--spacing-8)`             |
-| spacing (row gap, small)          | `var(--spacing-10)`, cells sized to the mark        |
-| spacing (reduced-motion grid gap) | `var(--spacing-md)`                                 |
+| spacing (item icon ↔ label)       | `var(--spacing-xs)`                                    |
+| ink (mark)                        | `var(--text-default)` at 70% opacity, full on hover    |
+| spacing (label ↔ row)             | `var(--spacing-xl)`                                    |
+| spacing (row gap, medium)         | `var(--spacing-4)` / `var(--spacing-8)`                |
+| spacing (row gap, small)          | `var(--spacing-10)`, cells sized to the mark           |
+| spacing (reduced-motion grid gap) | `var(--spacing-md)`                                    |
 
 ## Theme gaps
 
@@ -127,6 +127,13 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): marks are drawn in `var(--text-default)` at 70%, which WCAG 1.4.11 exempts as a logotype; the typographic fallback is real text and clears the minimum in both themes at that strength. Item labels are real text drawn at full `var(--text-default)`, so their contrast is the ground's to meet, and a strip placed on anything but the canvas or a surface must keep the labels at body size or larger.
 - `motion-reduce:animate-none` on the track and `motion-reduce:transition-none` on the mark hover. WCAG 2.2.2 applies — the loop is longer than five seconds, so it pauses on hover and on focus-within, and stops outright under `prefers-reduced-motion`.
 - Touch target ≥40×40 px: marks are not interactive targets; the whole strip is one decorative band.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Motion: the marquee runs toward the start edge in both directions: under `dir="rtl"` the track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed; `motion-reduce` stops it in both.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

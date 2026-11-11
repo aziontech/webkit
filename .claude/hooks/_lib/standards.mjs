@@ -68,7 +68,8 @@ export const STANDARDS = [
       { surface: 'lint', by: 'no-hardcoded-color' },
       { surface: 'lint', by: 'no-hardcoded-motion' },
       { surface: 'lint', by: 'no-style-override' },
-      { surface: 'lint', by: 'no-physical-direction' }
+      { surface: 'lint', by: 'no-physical-direction' },
+      { surface: 'lint', by: 'container-needs-width' }
     ],
     note: 'The ratchet runs the same token-checks engine repo-wide, so an editor push cannot bypass the hook; consumers get the color/motion/override lints.'
   },

@@ -55,6 +55,7 @@ export const calendar = {
   lastYear: 'Last Year',
   relativeHints: 'Type relative times',
   fixedHints: 'Type fixed times',
+  rangeSeparators: 'to|through',
   timezone: 'Timezone',
   localTimezone: 'Local'
 } as const
@@ -199,6 +200,18 @@ export const heroForm = {
 
 export const keyValuePairs = {
   notSet: 'Not set'
+} as const
+
+export const kbd = {
+  ctrl: 'Ctrl',
+  alt: 'Alt',
+  shift: 'Shift',
+  escape: 'Esc',
+  enter: 'Enter',
+  space: 'Space',
+  tab: 'Tab',
+  backspace: 'Backspace',
+  delete: 'Del'
 } as const
 
 export const label = {
@@ -493,6 +506,7 @@ export const en = {
   helpPanel,
   heroForm,
   keyValuePairs,
+  kbd,
   label,
   link,
   logView,

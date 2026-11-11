@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: cc9d56b8b036904f54ffa51542343d5e37138a7ef4d6fad31872416f6eec6098
+checksum: c1c56b6df899d4b1b5c48ce821ad919fc03d629cc2615c2522ea15318ac37df5
 created: 2026-05-25
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Breadcrumb — Component Spec
@@ -146,6 +146,13 @@ _none_
 - ARIA: root `nav` with `aria-label="Breadcrumb"`; list uses `<ol>` / `<li>`; separators are `aria-hidden`.
 - Contrast ≥4.5:1 for labels and chevron.
 - `motion-reduce:transition-none` on segment color transitions.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the separator chevron and any directional item `icon` mirror (`rtl:-scale-x-100`), so the trail reads from the start edge.
+- Keyboard: no horizontal arrow-key logic.
+- User data: item labels are text; page names in another script keep their own direction.
 
 ## Stories (Storybook)
 

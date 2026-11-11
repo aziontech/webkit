@@ -81,6 +81,10 @@
 
   const isLast = computed<boolean>(() => current.value === total.value - 1)
 
+  const progressText = computed<string>(() =>
+    total.value > 0 ? t('wizard.stepOf', { step: current.value + 1, total: total.value }) : ''
+  )
+
   const railValue = computed<string>({
     get: () => String(current.value),
     set: (value) => {
@@ -178,6 +182,14 @@
     </div>
     <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl)">
       <div>
+        <p
+          :data-testid="`${testId}__progress`"
+          aria-live="polite"
+          aria-atomic="true"
+          class="hidden text-overline-xs text-(--text-muted) @max-2xl/wizard:block @max-2xl/wizard:pb-(--spacing-xxs)"
+        >
+          {{ progressText }}
+        </p>
         <slot />
       </div>
       <div

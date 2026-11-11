@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 117ec87cb46b3a94ce2578e7ccd1bf0f8d58b8da73c976a52f00ddb204481b1d
+checksum: 226b05ad47e26b9761136e987583f7697b2d4b0126b7beb5d6ca54f326bc0239
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -148,6 +148,14 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: the tab item is 32 px tall (`var(--size-8)`) — a justified deviation from 40×40 px matching the Figma tab-item size token, mitigated by the full label + padding being the hit area and by the tab list's own keyboard model.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous tab, swapped under `dir="rtl"` (`logicalArrowKey`); the indicator is anchored with a physical `left: 0` and moved by `offsetLeft`; scroll fades pair `bg-gradient-to-r` with `rtl:bg-gradient-to-l` and read `Math.abs(scrollLeft)`.
+- Motion: panel slides mirror (`rtl:` flips the `translate-x` presets).
+- User data: none.
 
 ## Stories (Storybook)
 

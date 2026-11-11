@@ -122,6 +122,10 @@ const ESLINT_CANARIES = [
   {
     file: 'eslint/webkit/no-physical-direction.vue',
     rule: 'webkit/no-physical-direction'
+  },
+  {
+    file: 'eslint/webkit/no-physical-direction-gradient.vue',
+    rule: 'webkit/no-physical-direction'
   }
 ]
 

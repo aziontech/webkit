@@ -4,9 +4,9 @@ category: content
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 3ff552f5a8e94578efba39409563777aea2c2c79530da80750d91c0a0a433d19
+checksum: 852aed531867f2ac7b3fd6329c3b8dd9a95d146a936d89564d303cdec434ed34
 created: 2026-10-21
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # ShellMockup — Component Spec
@@ -47,8 +47,8 @@ A scaled, inert picture of an Azion Console screen, for marketing bands that sho
 
 ```vue
 <script setup>
-import ShellMockup from '@aziontech/webkit/shell-mockup'
-import Button from '@aziontech/webkit/button'
+  import ShellMockup from '@aziontech/webkit/shell-mockup'
+  import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
@@ -61,7 +61,10 @@ import Button from '@aziontech/webkit/button'
       <Button label="Create workload" />
     </ShellMockup.Part>
     <ShellMockup.Part :order="1">
-      <Button label="Deploy" kind="secondary" />
+      <Button
+        label="Deploy"
+        kind="secondary"
+      />
     </ShellMockup.Part>
   </ShellMockup>
 </template>
@@ -71,8 +74,8 @@ Tree-shaking alternative — the standalone root and part from their own entries
 
 ```vue
 <script setup>
-import ShellMockup from '@aziontech/webkit/shell-mockup-root'
-import ShellMockupPart from '@aziontech/webkit/shell-mockup-part'
+  import ShellMockup from '@aziontech/webkit/shell-mockup-root'
+  import ShellMockupPart from '@aziontech/webkit/shell-mockup-part'
 </script>
 ```
 
@@ -101,23 +104,23 @@ Exports: `./shell-mockup` → `index.ts`, `./shell-mockup-root` → `shell-mocku
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'window' \| 'bare'` | `'window'` | false | How the mockup is plated: a bordered console window, or bare parts floating on the host's surface. |
-| `shell` | `'console' \| 'legacy'` | `'console'` | false | Console generation the shell draws: the current one, or the previous one with its top bar. |
-| `width` | `number` | `860` | false | Design width of the frame from `md` up; the frame scales to fit its host. |
-| `mobileWidth` | `number` | `390` | false | Design width of the frame below `md`. |
-| `fade` | `'none' \| 'bottom' \| 'top' \| 'left' \| 'right' \| 'y'` | `'none'` | false | Edge the mockup fades out along; `y` fades top and bottom. |
-| `chrome` | `boolean` | `true` | false | Draws the console bar over the body. |
-| `title` | `string` | `''` | false | Module label on the console bar; with a rail, `›` splits it into breadcrumbs. |
-| `rail` | `string` | `''` | false | Active entry of the console's side rail; empty renders no rail. |
-| `texture` | `'dots' \| 'grid' \| 'lines' \| 'dither' \| 'pixelate' \| 'none'` | `'none'` | false | Texture the frame is grounded with, behind the body. |
-| `textureFade` | `'none' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'edges' \| 'vignette'` | `'vignette'` | false | How the frame's texture fades out before its edges. |
-| `travel` | `'fast-01' \| 'fast-02' \| 'moderate-01' \| 'moderate-02' \| 'slow-01' \| 'slow-02'` | `'slow-01'` | false | Duration token of each part's travel. |
-| `beat` | `'fast-01' \| 'fast-02' \| 'moderate-01' \| 'moderate-02' \| 'slow-01' \| 'slow-02'` | `'fast-01'` | false | Duration token of the gap between one part's beat and the next. |
-| `active` | `boolean` | `true` | false | Whether this mockup is the one showing; parts replay their entrance each time it becomes active. |
-| `interactive` | `boolean` | `false` | false | Lets the viewer operate the controls inside instead of drawing them as an inert picture. |
-| `animated` | `boolean` | `true` | false | Plays the entrance as the frame comes into view and replays it when `active` turns back on. Off draws every part in place from the start, with no entrance and no replay. |
+| Prop          | Type                                                                                 | Default      | Required | JSDoc                                                                                                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------ | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`        | `'window' \| 'bare'`                                                                 | `'window'`   | false    | How the mockup is plated: a bordered console window, or bare parts floating on the host's surface.                                                                        |
+| `shell`       | `'console' \| 'legacy'`                                                              | `'console'`  | false    | Console generation the shell draws: the current one, or the previous one with its top bar.                                                                                |
+| `width`       | `number`                                                                             | `860`        | false    | Design width of the frame from `md` up; the frame scales to fit its host.                                                                                                 |
+| `mobileWidth` | `number`                                                                             | `390`        | false    | Design width of the frame below `md`.                                                                                                                                     |
+| `fade`        | `'none' \| 'bottom' \| 'top' \| 'left' \| 'right' \| 'y'`                            | `'none'`     | false    | Edge the mockup fades out along; `y` fades top and bottom.                                                                                                                |
+| `chrome`      | `boolean`                                                                            | `true`       | false    | Draws the console bar over the body.                                                                                                                                      |
+| `title`       | `string`                                                                             | `''`         | false    | Module label on the console bar; with a rail, `›` splits it into breadcrumbs.                                                                                             |
+| `rail`        | `string`                                                                             | `''`         | false    | Active entry of the console's side rail; empty renders no rail.                                                                                                           |
+| `texture`     | `'dots' \| 'grid' \| 'lines' \| 'dither' \| 'pixelate' \| 'none'`                    | `'none'`     | false    | Texture the frame is grounded with, behind the body.                                                                                                                      |
+| `textureFade` | `'none' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'edges' \| 'vignette'`          | `'vignette'` | false    | How the frame's texture fades out before its edges.                                                                                                                       |
+| `travel`      | `'fast-01' \| 'fast-02' \| 'moderate-01' \| 'moderate-02' \| 'slow-01' \| 'slow-02'` | `'slow-01'`  | false    | Duration token of each part's travel.                                                                                                                                     |
+| `beat`        | `'fast-01' \| 'fast-02' \| 'moderate-01' \| 'moderate-02' \| 'slow-01' \| 'slow-02'` | `'fast-01'`  | false    | Duration token of the gap between one part's beat and the next.                                                                                                           |
+| `active`      | `boolean`                                                                            | `true`       | false    | Whether this mockup is the one showing; parts replay their entrance each time it becomes active.                                                                          |
+| `interactive` | `boolean`                                                                            | `false`      | false    | Lets the viewer operate the controls inside instead of drawing them as an inert picture.                                                                                  |
+| `animated`    | `boolean`                                                                            | `true`       | false    | Plays the entrance as the frame comes into view and replays it when `active` turns back on. Off draws every part in place from the start, with no entrance and no replay. |
 
 `chrome` and `active` default to `true`: a mockup draws its bar and plays its entrance unless the host opts out, and both read positively.
 
@@ -127,10 +130,10 @@ _No events — the mockup is a picture; nothing in it reports activation._
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The mockup's body, composed of `ShellMockup.Part` beats. |
-| `overlay` | — | A layer over the whole frame, bar and rail included, such as a drawer. |
+| Slot      | Scope | Notes                                                                  |
+| --------- | ----- | ---------------------------------------------------------------------- |
+| `default` | —     | The mockup's body, composed of `ShellMockup.Part` beats.               |
+| `overlay` | —     | A layer over the whole frame, bar and rail included, such as a drawer. |
 
 ## States
 
@@ -144,39 +147,39 @@ _No events — the mockup is a picture; nothing in it reports activation._
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger                                       | Animation / Transition                                                                                                                                                                                                                       | Token (see `.claude/docs/DESIGN.md` § Animations)                                                                                                         | Reduced-motion fallback                                                                                                                                           |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | part entrance (root enters view while active) | `transition-[opacity,translate]` on each part, landing classes flipped by `data-entered`; the part's root sets only the `--part-duration` and `--part-delay` custom properties inline, so a consumer class can still override the transition | `--part-duration` from `travel` and `--part-delay` = `order × beat`, both from `@aziontech/theme/animations` `duration`; curve `ease-expressive-entrance` | `motion-reduce:transition-none` plus `motion-reduce:translate-y-0 motion-reduce:opacity-100` (parts drawn in place); `still` sets both custom properties to `0ms` |
 
 No `animate-*` keyframes: the entrance is a transition on a `data-*` flip, so every part's timing comes from the root's context.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| window shape | `var(--shape-card)` |
-| window + frame fill | `var(--bg-canvas)` |
-| window edge, bar dividers, rail divider, search edge | `var(--border-default)` |
-| window edge width | `var(--border-width-default)` |
-| legacy bar surface | `var(--bg-surface-raised)` |
-| search field surface | `var(--bg-surface)` |
-| rail active entry | `var(--bg-selected)` |
-| rail entry + search shape | `var(--shape-elements)` |
-| title, group label, crumbs, icons | `var(--text-muted)` |
-| current crumb, rail entry | `var(--text-default)` |
-| bar title + rail group label + search placeholder typography | `.text-label-sm` |
-| rail entry typography | `.text-label-md` |
-| crumbs typography | `.text-body-sm` |
-| rail icon typography | `.text-body-md` |
-| bar spacing (gap) | `var(--spacing-sm)`, `var(--spacing-md)` |
-| bar padding x | `var(--spacing-md)`, `var(--spacing-xl)` (legacy) |
-| rail padding + entry gaps | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-xxs)` |
-| fade color (default) | `var(--bg-canvas)` |
+| Region                                                       | Token (DESIGN.md)                                              |
+| ------------------------------------------------------------ | -------------------------------------------------------------- |
+| window shape                                                 | `var(--shape-card)`                                            |
+| window + frame fill                                          | `var(--bg-canvas)`                                             |
+| window edge, bar dividers, rail divider, search edge         | `var(--border-default)`                                        |
+| window edge width                                            | `var(--border-width-default)`                                  |
+| legacy bar surface                                           | `var(--bg-surface-raised)`                                     |
+| search field surface                                         | `var(--bg-surface)`                                            |
+| rail active entry                                            | `var(--bg-selected)`                                           |
+| rail entry + search shape                                    | `var(--shape-elements)`                                        |
+| title, group label, crumbs, icons                            | `var(--text-muted)`                                            |
+| current crumb, rail entry                                    | `var(--text-default)`                                          |
+| bar title + rail group label + search placeholder typography | `.text-label-sm`                                               |
+| rail entry typography                                        | `.text-label-md`                                               |
+| crumbs typography                                            | `.text-body-sm`                                                |
+| rail icon typography                                         | `.text-body-md`                                                |
+| bar spacing (gap)                                            | `var(--spacing-sm)`, `var(--spacing-md)`                       |
+| bar padding x                                                | `var(--spacing-md)`, `var(--spacing-xl)` (legacy)              |
+| rail padding + entry gaps                                    | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-xxs)` |
+| fade color (default)                                         | `var(--bg-canvas)`                                             |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable                                                                                            | Temporary primitive                                                                                                                                                                                        | Follow-up                                                                       |
+| --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | — (no Figma source; ported from the sample's mockup): the window's rim light, a lit-from-the-corners edge | the `--illustration-rim*` tokens with a fallback that draws the same 135° ramp from `var(--border-default)` at `var(--border-width-default)`, because the illustration theme foundation is not on main yet | `TODO: drop the fallbacks once the illustration theme foundation lands on main` |
 
 ## Accessibility (WCAG 2.1 AA)
@@ -187,6 +190,13 @@ No `animate-*` keyframes: the entrance is a transition on a `data-*` flip, so ev
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the shell's text uses `var(--text-default)` and `var(--text-muted)` on `var(--bg-canvas)` / `var(--bg-surface-raised)`, the same pairs the console uses.
 - `motion-reduce:` landing classes and `motion-reduce:transition-none` on every part.
 - Touch target: not applicable by default (inert). Interactive content keeps the composed components' own targets.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the breadcrumb angle mirrors (`rtl:-scale-x-100`); the `Kbd` search hint stays left to right.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

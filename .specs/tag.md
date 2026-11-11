@@ -7,10 +7,11 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: da564029271664dc9a96eadeb95584b1fbee76c5ad0129fd5943f7f624ac74b9
+checksum: ad4b03279f69d18f995e5931d66ae910ca2aa785fc66b0ce25c64c23c3beb7c3
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
+
 # Tag — Component Spec
 
 ## Purpose
@@ -41,23 +42,27 @@ Compact status or category label with severity-based color coding. Supports opti
 
 ```vue
 <script setup>
-import Tag from '@aziontech/webkit/tag'
+  import Tag from '@aziontech/webkit/tag'
 </script>
 
 <template>
-  <Tag label="Label" severity="primary" size="medium" />
+  <Tag
+    label="Label"
+    severity="primary"
+    size="medium"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast'` | `'primary'` | false | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
-| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
-| `rounded` | `boolean` | `false` | false | Pill shape when true. |
-| `icon` | `string` | `undefined` | false | PrimeIcons class for the leading icon. |
+| Prop       | Type                                                                                                 | Default     | Required | JSDoc                                                                                                     |
+| ---------- | ---------------------------------------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------- |
+| `label`    | `string`                                                                                             | `''`        | false    | Fallback text when the default slot is empty.                                                             |
+| `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast'` | `'primary'` | false    | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
+| `size`     | `'small' \| 'medium'`                                                                                | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                       |
+| `rounded`  | `boolean`                                                                                            | `false`     | false    | Pill shape when true.                                                                                     |
+| `icon`     | `string`                                                                                             | `undefined` | false    | PrimeIcons class for the leading icon.                                                                    |
 
 ## Events
 
@@ -65,9 +70,9 @@ import Tag from '@aziontech/webkit/tag'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Main content. |
+| Slot      | Scope | Notes         |
+| --------- | ----- | ------------- |
+| `default` | —     | Main content. |
 
 ## States
 
@@ -79,16 +84,16 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (medium) | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px) |
-| typography (small) | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px) |
-| spacing (medium) | `var(--spacing-xs)` horizontal padding and icon gap |
-| spacing (small) | `var(--spacing-xxs)` horizontal padding and icon gap |
-| shape (all severities) | `var(--shape-elements)` |
-| surface (contrast) | `var(--bg-contrast)` / `var(--text-contrast)` |
-| shape (pill) | `rounded-full` |
-| ring | `var(--ring-color)` |
+| Region                 | Token (DESIGN.md)                                               |
+| ---------------------- | --------------------------------------------------------------- |
+| typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px) |
+| typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px) |
+| spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap             |
+| spacing (small)        | `var(--spacing-xxs)` horizontal padding and icon gap            |
+| shape (all severities) | `var(--shape-elements)`                                         |
+| surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                   |
+| shape (pill)           | `rounded-full`                                                  |
+| ring                   | `var(--ring-color)`                                             |
 
 ## Theme gaps
 
@@ -102,6 +107,13 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: a directional `icon` is the consumer's choice and does not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- Isolation: the label renders `dir="auto"`, so a value in another script (a domain, an ID) keeps its own direction inside right-to-left UI.
 
 ## Stories (Storybook)
 

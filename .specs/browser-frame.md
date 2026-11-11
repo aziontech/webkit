@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-11
-checksum: d9fa13dff1e064e4854002c044d0b5546ac15e0fed3a6291891b154f1fc72d51
+checksum: 0a43d0cd353c8ac10debd23d86fbe4facdd652b6a5fde4df4b65dd373c861947
 ---
 
 # BrowserFrame — Component Spec
@@ -177,6 +177,14 @@ Resizing itself is not animated — the size follows the pointer or key press im
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-muted)` on `var(--bg-placeholder)` over `var(--bg-surface)` for the address and on `var(--bg-surface)` for the readout; the handle grips at rest `var(--border-strong)` meet 3:1 against `var(--bg-canvas)` as non-text controls.
 - `motion-reduce:transition-none` on the handles' color transition; nothing else moves.
 - Touch target: the edge handles' hit areas are 24px deep and run the frame's full width or height, and the corner handle is 24×24 — a justified deviation from 40×40: a deeper strip would cover more of the content's edge, and 24px meets WCAG 2.5.8.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: the width handle grows with `ArrowRight` and shrinks with `ArrowLeft` in reading order, swapped under `dir="rtl"` (`logicalArrowKey`).
+- Pointer: the width drag delta is inverted under `rtl`.
+- User data: the address bar renders `dir="ltr"`: a URL always reads left to right.
 
 ## Stories (Storybook)
 

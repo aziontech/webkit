@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: dffe6e94e4778720987e52a9d078566f766e666a52b541b9d9dac0e1fee297dd
+checksum: ba0338c93e447a24059be04949f531ad249113ad51a4be89dd9f6aebb4828e3c
 created: 2026-08-22
-last_updated: 2026-08-28
+last_updated: 2026-11-11
 ---
 
 # DocPrompt — Component Spec
@@ -140,6 +140,13 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons) — the prompt is `--text-default`, not the muted body ink, because the prompt IS the payload and everything around it is chrome
 - `motion-reduce:transition-none` on both animated states; the disclosure move is skipped rather than shortened
 - Touch target ≥40×40 px on both controls (both are `size="small"` webkit controls, which meet the floor)
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Edge fades: the horizontal fades of a `line` prompt pair each physical gradient with its mirror (`bg-gradient-to-r rtl:bg-gradient-to-l`), so the fade always darkens toward the clipped edge.
+- Keyboard: no horizontal arrow-key logic.
+- User data: the prompt text is code-like and keeps its own direction.
 
 ## Stories (Storybook)
 

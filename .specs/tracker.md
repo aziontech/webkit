@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
-checksum: d33bc6e9b2cae0a164aedf4f1088595e6eb39f5390e30d33362f4bb4e0cf342b
+last_updated: 2026-11-11
+checksum: 66f2908d55e371a06fe1a605c1da0b0a17f1a7ba2d4d048ad7bf12d9315e079d
 ---
 
 # Tracker — Component Spec
@@ -44,7 +44,7 @@ A status strip: one block per period — a day, an hour, a deployment — colore
 
 ```vue
 <script setup>
-import Tracker from '@aziontech/webkit/tracker'
+  import Tracker from '@aziontech/webkit/tracker'
 </script>
 
 <template>
@@ -65,11 +65,11 @@ import Tracker from '@aziontech/webkit/tracker'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `TrackerItem[]` | `[]` | false | One block per period, oldest first; each item is `{ id?: string; severity?: ChartStatus; label: string }`. No severity renders a neutral no-data block. |
-| `loading` | `boolean` | `false` | false | Renders a Skeleton strip in place of the blocks. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the strip. |
+| Prop        | Type            | Default | Required | JSDoc                                                                                                                                                   |
+| ----------- | --------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`     | `TrackerItem[]` | `[]`    | false    | One block per period, oldest first; each item is `{ id?: string; severity?: ChartStatus; label: string }`. No severity renders a neutral no-data block. |
+| `loading`   | `boolean`       | `false` | false    | Renders a Skeleton strip in place of the blocks.                                                                                                        |
+| `ariaLabel` | `string`        | `''`    | false    | Accessible name of the strip.                                                                                                                           |
 
 ## Events
 
@@ -89,26 +89,26 @@ _No slots._
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| active block change | blocks `transition-opacity duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance` | `motion-reduce:transition-none` |
-| readout follow | `transition-[translate,opacity] duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance` | `motion-reduce:transition-none` |
+| Trigger             | Animation / Transition                                                     | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------- | -------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| active block change | blocks `transition-opacity duration-fast-02 ease-productive-entrance`      | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
+| readout follow      | `transition-[translate,opacity] duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| blocks | `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-danger)`, `var(--chart-status-info)`, `var(--chart-series-other)` (no data) |
-| readout | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-border)`, `.text-label-md`, `var(--shape-elements)`, `var(--shadow-sm)`, `var(--container-3xs)` |
-| readout spacing | `var(--spacing-xs)`, `var(--spacing-sm)` |
-| strip | 32px tall, 2px gap, `var(--shape-elements)` on the outer corners |
-| ring | `var(--ring-color)` |
+| Region          | Token (DESIGN.md)                                                                                                                                                            |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| blocks          | `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-danger)`, `var(--chart-status-info)`, `var(--chart-series-other)` (no data)                |
+| readout         | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-border)`, `.text-label-md`, `var(--shape-elements)`, `var(--shadow-sm)`, `var(--container-3xs)` |
+| readout spacing | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                                                                     |
+| strip           | 32px tall, 2px gap, `var(--shape-elements)` on the outer corners                                                                                                             |
+| ring            | `var(--ring-color)`                                                                                                                                                          |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -118,6 +118,14 @@ _No slots._
 - Severity never rests on color alone: the label names the state.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1` on the strip.
 - Status colors clear 3:1 against the chart surfaces in both themes.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none.
+- Keyboard: `ArrowRight`/`ArrowLeft` move the active bar later/earlier, swapped under `dir="rtl"` (`logicalArrowKey`); the oldest bar sits at the start edge.
+- Pointer: the hovered bar is measured from the start edge (`rect.right - clientX` under `rtl`), and the readout is anchored with a physical `left: 0` plus the mirrored bar center.
+- User data: dates in the readout are printed by `Intl` in the active locale.
 
 ## Stories (Storybook)
 

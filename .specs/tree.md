@@ -3,7 +3,7 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: 17f16c92164e74bbcc1a43f62257d47dc6f8738d09e9cd11c9c581c7f0737ffd
+checksum: d30398b53f74a7c8f4c4c8e58cd33527d6d7a88036efd28853cfacce146ffdb6
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
@@ -187,6 +187,13 @@ Layout: each row is `min-h-8` (32px), full width of its group. The chevron and t
 - Contrast ≥4.5:1 for label and description on the canvas, the hover fill and `var(--bg-selected)` in both themes; disabled text follows the disabled-token exemption.
 - `motion-reduce:transition-none` on the chevron and selection transitions; `motion-reduce:before:transition-none` on the hover layer.
 - Touch target: rows are 32px tall and full width (the same deviation as `bar-list`), justified by row density in file trees; the whole row is the activation target and the chevron box extends to the row height.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the expand caret mirrors (`rtl:-scale-x-100`) and rotates the other way when open (`rtl:data-[state=open]:-rotate-90`).
+- Keyboard: `ArrowRight` expands a node or moves to its first child and `ArrowLeft` collapses it or moves to the parent, swapped under `dir="rtl"` (`logicalArrowKey`).
+- User data: node labels are text; file names and IDs in another script keep their own direction.
 
 ## Stories (Storybook)
 

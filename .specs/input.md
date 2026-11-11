@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 7b9f8672938d0f16f589b84bcf3eaa8f74d606c6d6a2f1fb3430a141bebfada8
+checksum: 67f6006de75038de65ba6d8cf4abe95c39c1747a74e15cdca345fbe540e583e4
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -144,6 +144,13 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.
 - Touch target ≥40×40 px on `size="large"`; smaller sizes are intended for dense layouts where the wrapping label area extends the hit zone.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the icon slots are the consumer's and do not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: the `<input>` renders `dir="auto"`; a `dir` attribute overrides it.
 
 ## Stories (Storybook)
 

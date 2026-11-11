@@ -13,7 +13,14 @@ const modules = {
 
 const SCROLLS_BY_DESIGN: Record<string, string> = {}
 
-const WIDTHS = [320, 1280] as const
+const CASES = [
+  { name: '320px box', width: 320, rootFontSize: '' },
+  { name: '768px box', width: 768, rootFontSize: '' },
+  { name: '1280px box', width: 1280, rootFontSize: '' },
+  { name: '1920px box', width: 1920, rootFontSize: '' },
+  { name: '2560px box', width: 2560, rootFontSize: '' },
+  { name: '640px box at 200% zoom (root font size doubled)', width: 640, rootFontSize: '200%' }
+] as const
 
 function describeOverflow(root: HTMLElement): string {
   const limit = root.getBoundingClientRect().right + 1
@@ -64,6 +71,15 @@ describe('reflow harness', () => {
     expect(getComputedStyle(box.firstElementChild as HTMLElement).display).toBe('block')
   })
 
+  it('doubles the root font size for the zoom case', async () => {
+    document.documentElement.style.fontSize = '200%'
+    const host = await mountInBox({ template: '<p class="text-body-md">x</p>' }, 640)
+    const doubled = parseFloat(getComputedStyle(document.documentElement).fontSize)
+    document.documentElement.style.fontSize = ''
+    expect(doubled).toBe(32)
+    expect(host.firstElementChild).toBeTruthy()
+  })
+
   it('keeps the allowlist short and pointed at real files', () => {
     const files = Object.keys(modules).map((file) => file.replace('../../', ''))
     for (const file of Object.keys(SCROLLS_BY_DESIGN)) expect(files).toContain(file)
@@ -71,12 +87,16 @@ describe('reflow harness', () => {
   })
 })
 
-for (const width of WIDTHS) {
-  describe(`blocks and examples reflow in a ${width}px box`, () => {
+for (const { name, width, rootFontSize } of CASES) {
+  describe(`blocks and examples reflow in a ${name}`, () => {
     beforeEach(() => {
       vi.spyOn(console, 'warn').mockImplementation(() => {})
+      document.documentElement.style.fontSize = rootFontSize
     })
-    afterEach(() => vi.restoreAllMocks())
+    afterEach(() => {
+      document.documentElement.style.fontSize = ''
+      vi.restoreAllMocks()
+    })
 
     it.each(Object.keys(modules).map((file) => [file.replace('../../', '')]))(
       '%s',
@@ -85,9 +105,7 @@ for (const width of WIDTHS) {
         const host = await mountInBox(mod.default, width)
         const overflow = host.scrollWidth - host.clientWidth
         if (overflow > 1 && !(file in SCROLLS_BY_DESIGN)) {
-          expect.fail(
-            `${file} overflows its ${width}px box by ${overflow}px: ${describeOverflow(host)}`
-          )
+          expect.fail(`${file} overflows its ${name} by ${overflow}px: ${describeOverflow(host)}`)
         }
       }
     )

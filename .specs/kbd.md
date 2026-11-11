@@ -4,16 +4,16 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 937de0e4f81428f68256ec5b4ad02a7f450efdc9358328c518bd8373713ba957
+checksum: de260a2225461c502f060161c9e01cf8dcfc9bde7c050041700901f1f4b83785
 created: 2026-07-23
-last_updated: 2026-07-24
+last_updated: 2026-11-11
 ---
 
 # Kbd — Component Spec
 
 ## Purpose
 
-Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, Ctrl elsewhere), so consumers never hardcode platform symbols. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`).
+Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, the catalog's `Ctrl` elsewhere), and named keys (`keyName`) print their localized name, so consumers never hardcode platform symbols or English key names. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`).
 
 ## When to use
 
@@ -34,6 +34,7 @@ Kbd renders keyboard input — a single key or a shortcut combination — as a c
 
 - Keep the default slot to a single key or glyph (`K`, `7`, `Enter`, `Esc`, `/`); avoid lowercase words or sentences.
 - Pass modifiers as boolean props rather than hardcoding `⌘`/`⇧` so the glyph adapts to the OS.
+- Name a key with `key-name` (`<Kbd key-name="escape" />`) instead of typing `Esc` or `Enter`: the text comes from the locale catalog (`kbd.*`), so it follows `WebkitProvider` (`Espaço` in pt-BR, `Intro` in es) and a consumer renames it with `messages` (`{ kbd: { ctrl: 'Strg' } }`). The macOS symbols `⌘`, `⌃`, `⌥` and `⇧` are never translated.
 - Place surrounding punctuation outside the element, not inside the keycap.
 
 ## Usage
@@ -50,13 +51,14 @@ Kbd renders keyboard input — a single key or a shortcut combination — as a c
 
 ## Props
 
-| Prop    | Type                  | Default    | Required | JSDoc                                                                            |
-| ------- | --------------------- | ---------- | -------- | -------------------------------------------------------------------------------- |
-| `meta`  | `boolean`             | `false`    | false    | Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere).            |
-| `ctrl`  | `boolean`             | `false`    | false    | Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere).                 |
-| `shift` | `boolean`             | `false`    | false    | Prepend the Shift modifier glyph (⇧).                                            |
-| `alt`   | `boolean`             | `false`    | false    | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere).               |
-| `size`  | `'small' \| 'medium'` | `'medium'` | false    | Size token; `small` is a denser keycap for menus, command bars, and table cells. |
+| Prop      | Type                                                                                               | Default     | Required | JSDoc                                                                                                             |
+| --------- | -------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------- |
+| `meta`    | `boolean`                                                                                          | `false`     | false    | Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere).                                             |
+| `ctrl`    | `boolean`                                                                                          | `false`     | false    | Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere).                                                  |
+| `shift`   | `boolean`                                                                                          | `false`     | false    | Prepend the Shift modifier glyph (⇧).                                                                             |
+| `alt`     | `boolean`                                                                                          | `false`     | false    | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere).                                                |
+| `size`    | `'small' \| 'medium'`                                                                              | `'medium'`  | false    | Size token; `small` is a denser keycap for menus, command bars, and table cells.                                  |
+| `keyName` | `'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete'` | `undefined` | false    | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. |
 
 ## Events
 
@@ -104,6 +106,13 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` on `var(--bg-surface)` is theme-guaranteed in both light and dark.
 - `motion-reduce:*`: not applicable — Kbd is static (no motion).
 - Touch target: not applicable — Kbd is non-interactive.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: modifier symbols (`⌘`, `⌥`, `⇧`) never mirror.
+- Keyboard: no horizontal arrow-key logic.
+- Isolation: the keycap renders `dir="ltr"`, so a shortcut such as `Ctrl` `K` keeps its order inside right-to-left text; key names come from the locale catalog (`kbd.*`).
 
 ## Stories (Storybook)
 

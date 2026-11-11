@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: 629ffdb06378ee52c5e906a11c79d98c4159c534f5044fbe2d6b783ffdff5038
+checksum: 0af51fb7ff801e628f3f2c93e6838e447ee0453297cff3a04b735bdaab534c8d
 created: 2026-06-16
 last_updated: 2026-11-11
 ---
@@ -216,6 +216,13 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: each button is 28×28, a justified deviation from 44×44 — the design is a compact segmented strip sized to sit inside a table footer, and the buttons are butted with no gap, so there is no room to pad the hit area without breaking the strip.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the previous/next chevrons mirror (`rtl:-scale-x-100`).
+- Keyboard: in data-driven mode `ArrowRight`/`ArrowLeft` go to the next/previous page, swapped under `dir="rtl"` (`logicalArrowKey`).
+- User data: none.
 
 ## Stories (Storybook)
 

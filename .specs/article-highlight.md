@@ -6,8 +6,9 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-11
-checksum: a97d77fa2b8c62e11b184b8fa8f5eb024853de7dfdbd4693a649bba945e50746
+checksum: 8a91251df90527e4df76da8cb81e71780f264129745ff2b0deb28d31342b5468
 ---
+
 # ArticleHighlight — Component Spec
 
 ## Purpose
@@ -37,7 +38,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 
 ```vue
 <script setup>
-import ArticleHighlight from '@aziontech/webkit/article-highlight'
+  import ArticleHighlight from '@aziontech/webkit/article-highlight'
 </script>
 
 <template>
@@ -62,12 +63,12 @@ import ArticleHighlight from '@aziontech/webkit/article-highlight'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `items` | `ArticleHighlightItem[]` | `[]` | false | The highlight articles in wall order, the first selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`. |
-| `actionLabel` | `string` | `''` | false | Label of the button into the selected article; the button is omitted when empty. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the wall of titles. |
+| Prop          | Type                     | Default | Required | JSDoc                                                                                                                                                  |
+| ------------- | ------------------------ | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `anchor`      | `string`                 | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                         |
+| `items`       | `ArticleHighlightItem[]` | `[]`    | false    | The highlight articles in wall order, the first selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`. |
+| `actionLabel` | `string`                 | `''`    | false    | Label of the button into the selected article; the button is omitted when empty.                                                                       |
+| `ariaLabel`   | `string`                 | `''`    | false    | Accessible name of the wall of titles.                                                                                                                 |
 
 ## Events
 
@@ -86,28 +87,28 @@ import ArticleHighlight from '@aziontech/webkit/article-highlight'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover scale of the panel cover | `transition-[scale] duration-moderate-02 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
-| hover fill of the panel copy | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
-| selection fill of a wall title | `transition-colors duration-moderate-01 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
-| hover wash of a wall title | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` | inline (matches catalog) | `motion-reduce:before:transition-none` |
+| Trigger                        | Animation / Transition                                                              | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
+| ------------------------------ | ----------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
+| hover scale of the panel cover | `transition-[scale] duration-moderate-02 ease-productive-entrance`                  | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| hover fill of the panel copy   | `transition-colors duration-fast-02 ease-productive-entrance`                       | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| selection fill of a wall title | `transition-colors duration-moderate-01 ease-out`                                   | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| hover wash of a wall title     | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:before:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| panel and wall fill | `var(--bg-canvas)`, hover `var(--bg-surface-raised)` / `var(--bg-hover)`, selected `var(--bg-selected)` |
-| rules | `var(--border-default)` |
-| headline | `text-heading-lg`, wall titles `text-heading-xxs`, `var(--text-default)` |
-| overline, deck, read time | `text-overline-sm` / `text-body-md` / `text-body-sm`, `var(--text-muted)` |
-| focus ring | `var(--ring-color)` |
+| Region                    | Token (DESIGN.md)                                                                                       |
+| ------------------------- | ------------------------------------------------------------------------------------------------------- |
+| panel and wall fill       | `var(--bg-canvas)`, hover `var(--bg-surface-raised)` / `var(--bg-hover)`, selected `var(--bg-selected)` |
+| rules                     | `var(--border-default)`                                                                                 |
+| headline                  | `text-heading-lg`, wall titles `text-heading-xxs`, `var(--text-default)`                                |
+| overline, deck, read time | `text-overline-sm` / `text-body-md` / `text-body-sm`, `var(--text-muted)`                               |
+| focus ring                | `var(--ring-color)`                                                                                     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -117,6 +118,13 @@ import ArticleHighlight from '@aziontech/webkit/article-highlight'
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted` on the canvas.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — every wall title is a full-cell button.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the external-link arrow does not mirror.
+- Keyboard: `ArrowRight`/`ArrowLeft` move between the highlighted articles, swapped under `dir="rtl"` (`logicalArrowKey`).
+- User data: article titles in another script keep their own direction.
 
 ## Stories (Storybook)
 

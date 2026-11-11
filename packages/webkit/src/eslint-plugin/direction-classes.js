@@ -52,12 +52,37 @@ export function logicalClass(token) {
   return null
 }
 
-export function physicalDirectionClasses(classString) {
+const PHYSICAL_GRADIENT = /^(!?)bg-(gradient|linear)-to-(l|r|tl|tr|bl|br)(!?)$/
+const GRADIENT_MIRROR = { l: 'r', r: 'l', tl: 'tr', tr: 'tl', bl: 'br', br: 'bl' }
+const DIRECTION_VARIANT = /(?:^|:)(?:rtl|ltr):/
+
+export function mirroredGradient(token) {
+  const { variants, utility } = splitVariants(String(token || ''))
+  const match = utility.match(PHYSICAL_GRADIENT)
+  if (!match || DIRECTION_VARIANT.test(variants)) return null
+  const [, lead, kind, side, trail] = match
+  return `rtl:${variants}${lead}bg-${kind}-to-${GRADIENT_MIRROR[side]}${trail}`
+}
+
+function hasDirectionalGradient(tokens) {
+  return tokens.some((token) => {
+    const { variants, utility } = splitVariants(token)
+    return DIRECTION_VARIANT.test(variants) && PHYSICAL_GRADIENT.test(utility)
+  })
+}
+
+export function physicalDirectionClasses(classString, options = {}) {
   const text = String(classString || '')
   const centered = CENTERING_TRANSLATE.test(text)
+  const tokens = text.split(/\s+/).filter(Boolean)
+  const gradientsPaired = options.gradients === false || hasDirectionalGradient(tokens)
   const hits = []
-  for (const token of text.split(/\s+/)) {
-    if (!token) continue
+  for (const token of tokens) {
+    const mirror = gradientsPaired ? null : mirroredGradient(token)
+    if (mirror) {
+      hits.push({ cls: token, fix: `${token} ${mirror}` })
+      continue
+    }
     const fix = logicalClass(token)
     if (!fix) continue
     const { utility } = splitVariants(token)
@@ -67,9 +92,9 @@ export function physicalDirectionClasses(classString) {
   return hits
 }
 
-export function toLogicalClassString(classString) {
+export function toLogicalClassString(classString, options = {}) {
   const text = String(classString || '')
-  const hits = new Map(physicalDirectionClasses(text).map((h) => [h.cls, h.fix]))
+  const hits = new Map(physicalDirectionClasses(text, options).map((h) => [h.cls, h.fix]))
   if (!hits.size) return text
   return text.replace(/\S+/g, (token) => hits.get(token) ?? token)
 }

@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: beda1ed3cb1e89794d298f34ba213a9f4c128c2c0eaba7b75599e14efdfa1630
+checksum: 668db8e683c5dd158bc1e7d30d13695f240006d9ef1c7c4e697feb6d0324e8ef
 created: 2026-06-16
 last_updated: 2026-11-11
 ---
@@ -147,6 +147,13 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 - `motion-reduce:transition-none` on every transition-bearing class.
 - Touch target: the input fills the field's single fixed 40 px height. The visibility toggle is the 28×28 px `small` `IconButton` the Figma frame specifies — above WCAG 2.2 SC 2.5.8 Target Size (Minimum) at 24×24 px, and centred in the 40 px row so the practical vertical reach is the full field height. It is below the 44×44 px of SC 2.5.5 (AAA), which this AA-scoped spec does not claim.
 - The toggle button never submits the surrounding form (`type="button"`).
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the visibility toggle does not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: the `<input>` renders `dir="auto"`; a `dir` attribute overrides it.
 
 ## Stories (Storybook)
 

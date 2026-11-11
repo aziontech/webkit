@@ -7,10 +7,11 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
-checksum: 5b8184d8032f2b8b7d0ddb59fb16f70aac6340c048c5e0ec3cea229e73fa4304
+checksum: ceb85ec79c5922aee5a9c074c3b6181e07b4db0a78b4790929172deb71af2596
 created: 2026-06-23
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
+
 # Badge — Component Spec
 
 ## Purpose
@@ -41,21 +42,25 @@ Badge is a compact, non-interactive indicator that surfaces a numeric count or a
 
 ```vue
 <script setup>
-import Badge from '@aziontech/webkit/badge'
+  import Badge from '@aziontech/webkit/badge'
 </script>
 
 <template>
-  <Badge label="99" severity="primary" size="medium" />
+  <Badge
+    label="99"
+    severity="primary"
+    size="medium"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'default'` | `'primary'` | false | Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px. |
+| Prop       | Type                                                                          | Default     | Required | JSDoc                                                                                                                        |
+| ---------- | ----------------------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `label`    | `string`                                                                      | `''`        | false    | Fallback text when the default slot is empty.                                                                                |
+| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'default'` | `'primary'` | false    | Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface. |
+| `size`     | `'small' \| 'medium' \| 'large'`                                              | `'medium'`  | false    | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px.                                                         |
 
 ## Events
 
@@ -63,9 +68,9 @@ import Badge from '@aziontech/webkit/badge'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Main content; falls back to `label` when empty. |
+| Slot      | Scope | Notes                                           |
+| --------- | ----- | ----------------------------------------------- |
+| `default` | —     | Main content; falls back to `label` when empty. |
 
 ## States
 
@@ -80,19 +85,19 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region                     | Token (DESIGN.md)                                                   |
+| -------------------------- | ------------------------------------------------------------------- |
 | typography (medium, large) | `.text-label-md` + `leading-none` (Figma Typography/Label/md, 14px) |
-| typography (small) | `.text-label-sm` + `leading-none` (Figma Typography/Label/sm, 12px) |
-| spacing (medium, large) | `var(--spacing-xs)` horizontal padding |
-| spacing (small) | `var(--spacing-xxs)` horizontal padding |
-| shape (all severities) | `var(--shape-elements)` |
-| surface (primary) | `var(--primary)` / `var(--primary-contrast)` |
-| surface (secondary) | `var(--secondary)` / `var(--secondary-contrast)` |
-| surface (success) | `var(--success)` / `var(--success-contrast)` |
-| surface (warning) | `var(--warning)` / `var(--warning-contrast)` |
-| surface (danger) | `var(--danger)` / `var(--danger-contrast)` |
-| surface (default) | `var(--bg-surface)` / `var(--text-default)` |
+| typography (small)         | `.text-label-sm` + `leading-none` (Figma Typography/Label/sm, 12px) |
+| spacing (medium, large)    | `var(--spacing-xs)` horizontal padding                              |
+| spacing (small)            | `var(--spacing-xxs)` horizontal padding                             |
+| shape (all severities)     | `var(--shape-elements)`                                             |
+| surface (primary)          | `var(--primary)` / `var(--primary-contrast)`                        |
+| surface (secondary)        | `var(--secondary)` / `var(--secondary-contrast)`                    |
+| surface (success)          | `var(--success)` / `var(--success-contrast)`                        |
+| surface (warning)          | `var(--warning)` / `var(--warning-contrast)`                        |
+| surface (danger)           | `var(--danger)` / `var(--danger-contrast)`                          |
+| surface (default)          | `var(--bg-surface)` / `var(--text-default)`                         |
 
 ## Theme gaps
 
@@ -106,6 +111,13 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): every severity pairs a surface token with its matching `-contrast` (or `--text-default` for `default`), which the theme guarantees in both light and dark.
 - `motion-reduce:*`: not applicable — Badge is static (no motion).
 - Touch target: not applicable — Badge is non-interactive.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: no horizontal arrow-key logic.
+- Isolation: the label renders `dir="auto"`, so a count or value in another script keeps its own direction.
 
 ## Stories (Storybook)
 

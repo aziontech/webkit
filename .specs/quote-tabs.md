@@ -4,12 +4,12 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 4dc1acfb56afab9064985a62d67812ef859c166e67be0a6e42196e1d161b24f0
+checksum: 1e99387df55e820c79937580634c7810c6cd2cf07f08c9ef6db949dfb9e664fa
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
 created: 2026-09-30
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Quote Tabs — Component Spec
@@ -187,6 +187,14 @@ _No plain events — selection flows through `v-model`._
 - `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` on the travelling quotation (the zero duration is what lets the out-in swap finish at once instead of waiting out the leave), `motion-reduce:transition-none` on the card surface and `motion-reduce:before:transition-none` on its ghost layer; under reduced motion the band never advances on its own.
 - Pause (WCAG 2.2.2): the timer stops while the pointer rests on the band or keyboard focus is inside it, so a reader holds a quotation by pointing at it or reaching the band with `Tab`; `autoplay` off removes the movement entirely. The panel is not a live region, so a change the timer makes is never announced over the reader.
 - Touch target ≥40×40 px: each card is a full 3:2 cell of the wall, well above 40px on every breakpoint.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous quote, swapped under `dir="rtl"` (`logicalArrowKey`).
+- Motion: the panel slides in from the end edge when moving forward and from the start edge when moving back (`rtl:` flips the `translate-x`).
+- User data: quotes and names in another script keep their own direction.
 
 ## Stories (Storybook)
 

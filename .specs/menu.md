@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: f4c47d0fb84d11d335ec08f7c7787bc5822d436ec00a9383f49be9945390e24f
+checksum: 745f48097da5b0661e97d7760f191aed662272b263bd9a0d32c56ac12464e36e
 created: 2026-08-03
 last_updated: 2026-11-11
 ---
@@ -512,6 +512,14 @@ and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-elem
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state. The rail (`var(--border-default)`, ≈1.5:1) is exempt: it is decorative and carries no information the indentation does not, so 1.4.11 does not apply.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target — **justified deviation from ≥40×40 px.** Rows are 32 px tall, matching the Figma frame's `h-button-md` and the density a product navigation needs. Every target is full-row width (≥252 px), so all clear WCAG 2.5.8's 24×24 minimum. The Figma frame's 16×16 group toggle would have failed that minimum; it is moot here, because a group title is not a control at all.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: directional item icons mirror (`directionalIconClass`); the sub-trigger chevron and the `MenuBack` chevron mirror (`rtl:-scale-x-100`).
+- Keyboard: `ArrowRight` opens a submenu and `ArrowLeft` closes it (and goes back from a drilled-in panel), swapped under `dir="rtl"` (`logicalArrowKey`).
+- Motion: drill-in panels and pop-out submenus slide toward the end (`rtl:` variants flip every `translate-x`).
+- User data: none.
 
 ## Stories (Storybook)
 

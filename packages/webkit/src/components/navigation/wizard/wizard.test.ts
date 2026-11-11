@@ -1,9 +1,13 @@
+import '../../../test/reflow.css'
+
 import { userEvent } from '@storybook/test'
 import { render, within } from '@testing-library/vue'
-import { describe, expect, it, vi } from 'vitest'
+import { beforeAll, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
 import { defineComponent, nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import { useWizardContext } from './composables/use-wizard-context'
 import Wizard, { WizardStep } from './index'
 
@@ -48,6 +52,10 @@ const Flow = defineComponent({
   `
 })
 
+beforeAll(async () => {
+  await page.viewport(1280, 900)
+})
+
 const mount = async (props: Record<string, unknown> = {}) => {
   const view = render(Flow, { props })
   await nextTick()
@@ -82,7 +90,7 @@ describe('Wizard', () => {
       expect(root.getAttribute('data-active-step')).toBe('0')
       expect(railButtons(view)).toHaveLength(3)
       expect(headingOf(view).textContent?.trim()).toBe('Configure')
-      expect(view.getByText('Step 1 of 3')).toBeInTheDocument()
+      expect(within(view.getByRole('group')).getByText('Step 1 of 3')).toBeInTheDocument()
       expect(view.getByText('Name the resource and choose where it runs.')).toBeInTheDocument()
     })
 
@@ -133,7 +141,7 @@ describe('Wizard', () => {
       await userEvent.click(button(view, 'Next'))
       expect(rootOf(view).getAttribute('data-active-step')).toBe('1')
       expect(headingOf(view).textContent?.trim()).toBe('Settings')
-      expect(view.getByText('Step 2 of 3')).toBeInTheDocument()
+      expect(within(view.getByRole('group')).getByText('Step 2 of 3')).toBeInTheDocument()
 
       await userEvent.click(button(view, 'Previous'))
       expect(rootOf(view).getAttribute('data-active-step')).toBe('0')
@@ -361,6 +369,51 @@ describe('useWizardContext', () => {
 })
 
 describe('Wizard on devices', () => {
+  const inBox = (width: number, locale = 'en') =>
+    defineComponent({
+      components: { Flow, WebkitProvider },
+      setup: () => ({ width: `${width}px`, locale }),
+      template: `<WebkitProvider :locale="locale"><div :style="{ width }"><Flow /></div></WebkitProvider>`
+    })
+
+  const progressOf = (view: ReturnType<typeof render>) =>
+    view.getByTestId('navigation-wizard__progress')
+
+  it('shows a polite Step n of N line when the rail hides in a narrow box', async () => {
+    const view = render(inBox(400))
+    await nextTick()
+    await nextTick()
+    const progress = progressOf(view)
+
+    expect(progress.getAttribute('aria-live')).toBe('polite')
+    expect(progress.textContent?.trim()).toBe('Step 1 of 3')
+    expect(getComputedStyle(progress).display).not.toBe('none')
+    const counter = within(view.getByRole('group')).getByText('Step 1 of 3')
+    expect(getComputedStyle(counter).display).toBe('none')
+
+    await userEvent.click(view.getByRole('button', { name: 'Next' }))
+    await nextTick()
+    expect(progress.textContent?.trim()).toBe('Step 2 of 3')
+  })
+
+  it('hides the line when the rail is visible', async () => {
+    const view = render(inBox(1200))
+    await nextTick()
+    await nextTick()
+
+    expect(getComputedStyle(progressOf(view)).display).toBe('none')
+    const counter = within(view.getByRole('group')).getByText('Step 1 of 3')
+    expect(getComputedStyle(counter).display).not.toBe('none')
+  })
+
+  it('translates the line', async () => {
+    const view = render(inBox(400, 'pt-BR'))
+    await nextTick()
+    await nextTick()
+
+    expect(progressOf(view).textContent?.trim()).toBe('Etapa 1 de 3')
+  })
+
   it('hides the step rail when its own box is narrow, not the window', async () => {
     const view = await mount()
     const rail = view.getByRole('navigation').parentElement

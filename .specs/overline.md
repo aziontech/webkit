@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: 4098eed84442bc649147d69a777b4448dd615a38fa2a0eee79c3208e20edec96
+checksum: b60c559a66594694a47f7b60a7c124be8bf0781dd932ab2655cb9cfb48cda317
 created: 2026-11-10
 last_updated: 2026-11-11
 ---
@@ -41,7 +41,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 ## Best practices
 
-- Keep the label to one or two words: it is set uppercase and, with the default `single-line`, never wraps.
+- Keep the label to one or two words: it is set uppercase and, with the default `single-line`, stays on one line whenever it fits its container.
 - Turn `single-line` off only when the label can be longer than its container (narrow columns, translated copy); the label then wraps under `text-pretty`, which avoids a lone word on the last line.
 - Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is decorative and hidden from screen readers (`aria-hidden="true"`), so never put meaning in it.
 - Use `show-cursor` for one eyebrow per view at most; the blink stops under reduced motion.
@@ -65,11 +65,11 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 ## Props
 
-| Prop         | Type                          | Default | Required | JSDoc                                                             |
-| ------------ | ----------------------------- | ------- | -------- | ----------------------------------------------------------------- |
-| `singleLine` | `boolean`                     | `true`  | false    | Keeps the prefix and the label on one line (no wrapping).         |
-| `showCursor` | `boolean`                     | `false` | false    | Shows a blinking terminal-style cursor after the label.           |
-| `prefix`     | `'' \| '//' \| '<>' \| '</>'` | `''`    | false    | Preset prefix rendered before the label; empty renders no prefix. |
+| Prop         | Type                          | Default | Required | JSDoc                                                                                                           |
+| ------------ | ----------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------- |
+| `singleLine` | `boolean`                     | `true`  | false    | Keeps the prefix unbroken and the label on one line while it fits; a longer label wraps instead of overflowing. |
+| `showCursor` | `boolean`                     | `false` | false    | Shows a blinking terminal-style cursor after the label.                                                         |
+| `prefix`     | `'' \| '//' \| '<>' \| '</>'` | `''`    | false    | Preset prefix rendered before the label; empty renders no prefix.                                               |
 
 ## Events
 
@@ -86,10 +86,10 @@ Overline is the short uppercase label set above a headline to name the section, 
 - Static: no hover, focus, active or disabled states; the root is a non-interactive `div`.
 - Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`.
 - Cursor: a `span` after the label is rendered only when `showCursor` is set; the root drops its end padding (`pr-0`) while the cursor is shown and keeps `pr-(--spacing-xxs)` otherwise.
-- Wrapping: with `singleLine` (default) the prefix and the label carry `whitespace-nowrap`; with it off the label wraps with `text-pretty`.
+- Wrapping: with `singleLine` (default) the prefix carries `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Test ids: root `content-overline` (consumer `data-testid` wins).
-- Reflow: the root is capped at the width of its container, and below `sm` a `singleLine` label wraps instead of overflowing.
+- Reflow: the root is capped at the width of its container, and a label that does not fit wraps instead of overflowing at any width, at 200% zoom and with translated copy (no viewport breakpoint involved).
 
 ## Motion & Animations
 

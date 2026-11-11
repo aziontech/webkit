@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: a5866c169fa4ea1e627690f1f61a053fa3730a0ee91cd2ad2a7101b4e85b01d4
+checksum: 25ad6cb5f4266e3ef405828eac120e22512f3e9ba6122815a1fdf54bde89f2b0
 created: 2026-09-22
-last_updated: 2026-10-01
+last_updated: 2026-11-11
 ---
 
 # Media Split — Component Spec
@@ -108,26 +108,26 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## Props
 
-| Prop           | Type                     | Default        | Required | JSDoc                                                                                                                                                                                     |
-| -------------- | ------------------------ | -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`        | `string`                 | `—`            | true     | Headline of the band, rendered as its `h2`.                                                                                                                                               |
-| `description`  | `string`                 | `''`           | false    | Supporting paragraph under the headline; overridden by the default slot.                                                                                                                  |
-| `eyebrow`      | `string`                 | `''`           | false    | Short uppercase overline rendered above the headline.                                                                                                                                     |
-| `src`          | `string`                 | `''`           | false    | URL of the band's image; ignored when the `media` slot is filled.                                                                                                                         |
-| `alt`          | `string`                 | `''`           | false    | Alternative text describing what the image shows.                                                                                                                                         |
-| `kind`         | `MediaSplitKind`         | `'media-end'`  | false    | Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first.                                                  |
-| `orientation`  | `MediaSplitOrientation`  | `'horizontal'` | false    | Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width.                                                             |
-| `fill`         | `MediaSplitFill`         | `'canvas'`     | false    | The copy cell's fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. The media cell follows `mediaFill`.    |
-| `mediaFill`    | `MediaSplitFill`         | `'surface'`    | false    | The media cell's fill. `surface` sets the asset on its own plate, one step off the page; `canvas` lets the whole band sit on the page. |
-| `framed`       | `boolean`                | `false`        | false    | Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame. |
-| `divided`      | `boolean`                | `true`         | false    | Draw the seam between the copy and the media. Turn it off for a band whose two halves should read as one plate.                                                                           |
-| `headingLevel` | `MediaSplitHeadingLevel` | `2`            | false    | Level of the band's headline element. Drop it to `3` when the band is a sub-band of a section a `section-title` has already opened with its `h2`, so the document outline stays in order. |
-| `texture`      | `TextureMaterialKind`    | `'grid'`       | false    | Texture the media half is grounded with; `none` leaves the cell bare.                                                                                                                     |
-| `textureSize`  | `TextureMaterialSize`    | `'medium'`     | false    | Pitch of the ground's tiling — how far apart its cells sit.                                                                                                                               |
-| `textureFade`  | `TextureMaterialFade`    | `'vignette'`   | false    | How the ground fades out before the cell's edges.                                                                                                                                         |
-| `mediaPadded`  | `boolean`                | `false`        | false    | Inset the media from the cell's edges. An exported asset carries its own air and runs flush; a screenshot or a composed panel wants the inset.                                            |
-| `mediaHref`    | `string`                 | `''`           | false    | URL the band links to. With it set the media cell is one link named by the band's `title`, a click anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the hover state of its link actions. |
-| `align`        | `MediaSplitAlign`        | `'top'`        | false    | Where the copy sits down its cell. `top` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle. |
+| Prop           | Type                     | Default        | Required | JSDoc                                                                                                                                                                                                                                                         |
+| -------------- | ------------------------ | -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`        | `string`                 | `—`            | true     | Headline of the band, rendered as its `h2`.                                                                                                                                                                                                                   |
+| `description`  | `string`                 | `''`           | false    | Supporting paragraph under the headline; overridden by the default slot.                                                                                                                                                                                      |
+| `eyebrow`      | `string`                 | `''`           | false    | Short uppercase overline rendered above the headline.                                                                                                                                                                                                         |
+| `src`          | `string`                 | `''`           | false    | URL of the band's image; ignored when the `media` slot is filled.                                                                                                                                                                                             |
+| `alt`          | `string`                 | `''`           | false    | Alternative text describing what the image shows.                                                                                                                                                                                                             |
+| `kind`         | `MediaSplitKind`         | `'media-end'`  | false    | Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first.                                                                                                                      |
+| `orientation`  | `MediaSplitOrientation`  | `'horizontal'` | false    | Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width.                                                                                                                                 |
+| `fill`         | `MediaSplitFill`         | `'canvas'`     | false    | The copy cell's fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. The media cell follows `mediaFill`.                                                                                                               |
+| `mediaFill`    | `MediaSplitFill`         | `'surface'`    | false    | The media cell's fill. `surface` sets the asset on its own plate, one step off the page; `canvas` lets the whole band sit on the page.                                                                                                                        |
+| `framed`       | `boolean`                | `false`        | false    | Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame.                                                     |
+| `divided`      | `boolean`                | `true`         | false    | Draw the seam between the copy and the media. Turn it off for a band whose two halves should read as one plate.                                                                                                                                               |
+| `headingLevel` | `MediaSplitHeadingLevel` | `2`            | false    | Level of the band's headline element. Drop it to `3` when the band is a sub-band of a section a `section-title` has already opened with its `h2`, so the document outline stays in order.                                                                     |
+| `texture`      | `TextureMaterialKind`    | `'grid'`       | false    | Texture the media half is grounded with; `none` leaves the cell bare.                                                                                                                                                                                         |
+| `textureSize`  | `TextureMaterialSize`    | `'medium'`     | false    | Pitch of the ground's tiling — how far apart its cells sit.                                                                                                                                                                                                   |
+| `textureFade`  | `TextureMaterialFade`    | `'vignette'`   | false    | How the ground fades out before the cell's edges.                                                                                                                                                                                                             |
+| `mediaPadded`  | `boolean`                | `false`        | false    | Inset the media from the cell's edges. An exported asset carries its own air and runs flush; a screenshot or a composed panel wants the inset.                                                                                                                |
+| `mediaHref`    | `string`                 | `''`           | false    | URL the band links to. With it set the media cell is one link named by the band's `title`, a click anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the hover state of its link actions.                        |
+| `align`        | `MediaSplitAlign`        | `'top'`        | false    | Where the copy sits down its cell. `top` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle.                                  |
 | `size`         | `MediaSplitSize`         | `'medium'`     | false    | Type scale and air of the copy. `medium` sets the headline at heading-md for a band beside other content; `large` sets it at heading-xl with a larger description and pads the copy cell a step wider, for a band that carries only its headline and actions. |
 
 ## Events
@@ -136,11 +136,11 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                                                                                                                                                                                                                                                                                                                 |
-| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default` | —     | Description body; replaces the `description` prop when provided.                                                                                                                                                                                                                                                                                                                      |
-| `content` | —     | Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure.                                                                                                                                                                                                                                                            |
-| `media`   | —     | The band's media; replaces the image built from `src`.                                                                                                                                                                                                                                                                                                                                |
+| Slot      | Scope | Notes                                                                                                                                                                                                                                                        |
+| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `default` | —     | Description body; replaces the `description` prop when provided.                                                                                                                                                                                             |
+| `content` | —     | Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure.                                                                                                                                   |
+| `media`   | —     | The band's media; replaces the image built from `src`.                                                                                                                                                                                                       |
 | `actions` | —     | Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `kind="secondary"` for the action, `kind="outlined"` for a second beside it, `icon="pi pi-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
 
 ## States
@@ -164,8 +164,8 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## Motion & Animations
 
-| Trigger                                                      | Animation / Transition                                                                                                                                                                | Token                                                             | Reduced-motion fallback                                                                 |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Trigger                                                                   | Animation / Transition                                                                                                                                                                | Token                                                             | Reduced-motion fallback                                                                 |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | hover on a band, or `focus-visible` on a media cell, carrying `mediaHref` | the chevron affordance fades and slides in — `transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance`, `opacity-0 translate-x-1` to `opacity-100 translate-x-0` | `--transition-duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none` — the affordance still appears, it just does not travel |
 
 ## Tokens
@@ -203,6 +203,13 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `big-numbers`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the band is static.
 - Touch target — the band composes no control of its own; the small buttons its `actions` pattern calls for stand 28 px tall, which clears WCAG 2.2 AA 2.5.8 (24×24 px) but is under this package's own 40×40 px house floor.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the call-to-action chevron mirrors (`rtl:-scale-x-100`).
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
 
 ## Stories (Storybook)
 

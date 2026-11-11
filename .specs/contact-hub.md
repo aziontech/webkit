@@ -5,9 +5,10 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 2d8e39974295440e86995b3ab82a9defae99d770b64470a8cce56e9c3b935db0
+last_updated: 2026-11-11
+checksum: 512bf7ad72eccf642fcb4a7d57059bced878ecf3ed46e2277b35377094f2c2ab
 ---
+
 # ContactHub — Component Spec
 
 ## Purpose
@@ -38,7 +39,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 ```vue
 <script setup>
-import ContactHub from '@aziontech/webkit/contact-hub'
+  import ContactHub from '@aziontech/webkit/contact-hub'
 </script>
 
 <template>
@@ -66,10 +67,10 @@ import ContactHub from '@aziontech/webkit/contact-hub'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `lanes` | `ContactHubLane[]` | `[]` | false | The team lanes side by side, in order; each is `{ icon, title, description, action?, statusLink? }` where `action` is the lane's button and `statusLink` the system status link beside it. |
-| `channels` | `ContactHubChannel[]` | `[]` | false | The self-serve channels under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic. |
+| Prop       | Type                  | Default | Required | JSDoc                                                                                                                                                                                      |
+| ---------- | --------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `lanes`    | `ContactHubLane[]`    | `[]`    | false    | The team lanes side by side, in order; each is `{ icon, title, description, action?, statusLink? }` where `action` is the lane's button and `statusLink` the system status link beside it. |
+| `channels` | `ContactHubChannel[]` | `[]`    | false    | The self-serve channels under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic.                                                      |
 
 ## Events
 
@@ -87,26 +88,26 @@ import ContactHub from '@aziontech/webkit/contact-hub'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| status link hover | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger           | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ----------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| status link hover | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| lane heading | `.text-body-md`, `var(--text-muted)` |
-| lane description | `.text-heading-sm`, `var(--text-default)` |
-| lane glyph | `var(--primary)` |
-| status link | `var(--bg-surface)`, `var(--bg-surface-raised)`, `var(--border-default)`, `.text-button-lg` |
-| status dot | `var(--success-contrast)` |
-| frame rules and marks | `var(--border-default)` |
+| Region                | Token (DESIGN.md)                                                                           |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| lane heading          | `.text-body-md`, `var(--text-muted)`                                                        |
+| lane description      | `.text-heading-sm`, `var(--text-default)`                                                   |
+| lane glyph            | `var(--primary)`                                                                            |
+| status link           | `var(--bg-surface)`, `var(--bg-surface-raised)`, `var(--border-default)`, `.text-button-lg` |
+| status dot            | `var(--success-contrast)`                                                                   |
+| frame rules and marks | `var(--border-default)`                                                                     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -115,7 +116,8 @@ import ContactHub from '@aziontech/webkit/contact-hub'
 - ARIA: the band is an unnamed `<section>`; each lane heading and each channel is an `h2`, so the outline reads one entry per route. Glyphs and the status dot are `aria-hidden`. A link with `target: '_blank'` carries `rel="noopener noreferrer"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): lane heading `var(--text-muted)`, description `var(--text-default)`.
 - `motion-reduce:transition-none` on the status link's colour transition.
-- Touch target ≥40×40 px — the status link is `h-10`, buttons are large, channels are whole-cell links.
+- Touch target ≥40×40 px — the status link is at least `h-10` (`min-h-10`), buttons are large, channels are whole-cell links.
+- Reflow: the status link has `min-h-10` and wraps its label inside `max-w-full`, so it never overflows a narrow column or a 200% zoom.
 
 ## Stories (Storybook)
 
