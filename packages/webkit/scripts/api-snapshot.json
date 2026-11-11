@@ -397,6 +397,7 @@
     "card-grid-cell",
     "card-grid-root",
     "card-pricing",
+    "cards",
     "carousel",
     "carousel-item",
     "carousel-next",
@@ -434,6 +435,7 @@
     "closing-call-to-action-newsletter",
     "code-block",
     "code-split",
+    "collection-preferences",
     "column-navigation",
     "column-navigation-column",
     "column-navigation-item",
@@ -635,6 +637,7 @@
     "pricing-plans",
     "product-widget",
     "progress",
+    "property-filter",
     "quote",
     "quote-carousel",
     "quote-tabs",
@@ -737,6 +740,7 @@
     "tree",
     "use-case-links",
     "use-cases",
+    "use-collection",
     "use-controllable",
     "use-direction",
     "use-focus-trap",
@@ -805,6 +809,7 @@
     "platform/states/form-validation",
     "platform/states/page-wires",
     "platform/states/project-intake",
+    "platform/view/card-view",
     "platform/view/file-browser",
     "platform/view/query-editor",
     "platform/view/split-view",
@@ -980,7 +985,8 @@
       "otherLabel": null,
       "refetching": null,
       "series": null,
-      "tableView": null
+      "tableView": null,
+      "timeZone": null
     },
     "chart-root": {
       "ariaLabel": null,
@@ -1002,7 +1008,8 @@
       "otherLabel": null,
       "refetching": null,
       "series": null,
-      "tableView": null
+      "tableView": null,
+      "timeZone": null
     },
     "chart-card": {
       "ariaLabel": null,
@@ -1534,6 +1541,17 @@
     "kbd": {
       "alt": null,
       "ctrl": null,
+      "keyName": [
+        "alt",
+        "backspace",
+        "ctrl",
+        "delete",
+        "enter",
+        "escape",
+        "shift",
+        "space",
+        "tab"
+      ],
       "meta": null,
       "shift": null,
       "size": [
@@ -1618,9 +1636,15 @@
       "columns": null,
       "columnVisibility": null,
       "data": null,
+      "density": [
+        "comfortable",
+        "compact"
+      ],
       "enableRowSelection": null,
       "enableSorting": null,
+      "estimateRowHeight": null,
       "exportFilename": null,
+      "exportRows": null,
       "filterFields": null,
       "filters": null,
       "globalFilter": null,
@@ -1644,16 +1668,25 @@
       "selectOnRowClick": null,
       "sorting": null,
       "stackable": null,
-      "state": null
+      "state": null,
+      "striped": null,
+      "virtual": null,
+      "wrapLines": null
     },
     "table-root": {
       "bordered": null,
       "columns": null,
       "columnVisibility": null,
       "data": null,
+      "density": [
+        "comfortable",
+        "compact"
+      ],
       "enableRowSelection": null,
       "enableSorting": null,
+      "estimateRowHeight": null,
       "exportFilename": null,
+      "exportRows": null,
       "filterFields": null,
       "filters": null,
       "globalFilter": null,
@@ -1677,7 +1710,42 @@
       "selectOnRowClick": null,
       "sorting": null,
       "stackable": null,
-      "state": null
+      "state": null,
+      "striped": null,
+      "virtual": null,
+      "wrapLines": null
+    },
+    "property-filter": {
+      "ariaLabel": null,
+      "disabled": null,
+      "freeText": null,
+      "placeholder": null,
+      "properties": null,
+      "query": null,
+      "totalCount": null
+    },
+    "collection-preferences": {
+      "columns": null,
+      "container": [
+        "dialog",
+        "drawer"
+      ],
+      "disabled": null,
+      "pageSizeOptions": null,
+      "preferences": null,
+      "sections": null,
+      "title": null
+    },
+    "cards": {
+      "ariaLabel": null,
+      "items": null,
+      "loading": null,
+      "selectionMode": [
+        "multi",
+        "none",
+        "single"
+      ],
+      "trackBy": null
     },
     "pagination": {
       "ariaLabel": null,
@@ -2394,6 +2462,7 @@
     "save-bar": {
       "kind": [
         "docked",
+        "fade",
         "floating",
         "plain"
       ]

@@ -7,6 +7,7 @@ import Default from '../../../../examples/table/default.vue'
 import Empty from '../../../../examples/table/empty.vue'
 import WithCheckboxes from '../../../../examples/table/with-checkboxes.vue'
 import { useCollection } from '../../../composables/use-collection'
+import { expectNoA11yViolations } from '../../../test/axe'
 import Table from './index'
 import TableBody from './table-body/table-body.vue'
 import TableCaption from './table-caption/table-caption.vue'
@@ -136,11 +137,72 @@ describe('Table (composition + data-driven)', () => {
       expect(getByTestId('my-table__body')).toBeTruthy()
       expect(getByTestId('my-table__cell')).toBeTruthy()
     })
-    // NOTE: an axe pass on the composed tree is intentionally omitted — see the
-    // notes in the run summary. The component nests the ScrollArea viewport
-    // (a `div[tabindex]` with no ARIA role) directly inside `role="table"`,
-    // which axe flags as `aria-required-children` (critical). This is a real
-    // component defect, not a test artifact; the .vue is not edited here.
+
+    describe('accessibility — the table owns only its caption and row groups', () => {
+      it('keeps the toolbar, the focusable viewport and the footer outside role=table', () => {
+        const { getByRole, getByTestId } = render(Table, {
+          props: { data: rows, columns, paginated: true, pageSize: 2, 'aria-label': 'Domains' },
+          slots: { toolbar: '<button type="button">Refresh</button>', caption: 'Three domains' }
+        })
+
+        const table = getByRole('table', { name: 'Domains' })
+        expect(table).toBe(getByTestId('data-table__table'))
+        expect(getByTestId('data-table').hasAttribute('aria-label')).toBe(false)
+        expect(table.contains(getByTestId('data-table__viewport'))).toBe(false)
+        expect(table.contains(getByTestId('data-table__footer'))).toBe(false)
+        expect(table.contains(getByRole('button', { name: 'Refresh' }))).toBe(false)
+        expect(getByTestId('data-table__footer').getAttribute('role')).toBeNull()
+      })
+
+      it('is named by its caption unless the consumer names it', async () => {
+        // A composed caption registers while it mounts, after the table's
+        // first render; the data-driven caption names the table from the start.
+        const composed = render(CompositionTree)
+        const caption = composed.getByTestId('data-table__caption')
+        expect(caption.hasAttribute('role')).toBe(false)
+        expect(await composed.findByRole('table', { name: 'My caption' })).toBeTruthy()
+        composed.unmount()
+
+        const captioned = render(Table, {
+          props: { data: rows, columns },
+          slots: { caption: 'Three domains' }
+        })
+        expect(captioned.getByRole('table', { name: 'Three domains' })).toBeTruthy()
+        captioned.unmount()
+
+        const named = render(Table, {
+          props: { data: rows, columns, 'aria-label': 'Domains' },
+          slots: { caption: 'Three domains' }
+        })
+        expect(named.getByRole('table', { name: 'Domains' })).toBeTruthy()
+      })
+
+      it('has no a11y violations: composed, data-driven with toolbar, caption and pagination, and empty', async () => {
+        const composed = render(CompositionTree)
+        await expectNoA11yViolations(composed.container)
+        composed.unmount()
+
+        const narrow = render(
+          defineComponent({
+            components: { Table },
+            setup: () => ({ rows, columns }),
+            template: `
+            <div style="width: 240px">
+              <Table :data="rows" :columns="columns" paginated :page-size="2" aria-label="Domains">
+                <template #toolbar><button type="button">Refresh</button></template>
+                <template #caption>Three domains</template>
+              </Table>
+            </div>
+          `
+          })
+        )
+        await expectNoA11yViolations(narrow.container)
+        narrow.unmount()
+
+        const empty = render(Table, { props: { data: [], columns, 'aria-label': 'Domains' } })
+        await expectNoA11yViolations(empty.container)
+      })
+    })
   })
 
   describe('TableRow — selected state (composition)', () => {
@@ -694,7 +756,7 @@ describe('Table (composition + data-driven)', () => {
       const rendered = view.getAllByRole('row').length - 1
       expect(rendered).toBeGreaterThan(5)
       expect(rendered).toBeLessThan(60)
-      expect(view.getByTestId('data-table').getAttribute('aria-rowcount')).toBe('10001')
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('10001')
 
       const viewport = view.getByTestId('data-table__viewport')
       viewport.style.maxHeight = '480px'
@@ -736,7 +798,7 @@ describe('Table (composition + data-driven)', () => {
         { container: host }
       )
       expect(view.getAllByRole('row').length - 1).toBeLessThan(60)
-      expect(view.getByTestId('data-table').getAttribute('aria-rowcount')).toBe('10001')
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('10001')
 
       await fireEvent.click(view.getByLabelText('Select all rows'))
       await nextTick()
@@ -836,7 +898,7 @@ describe('Table (composition + data-driven)', () => {
       const view = render(Table, { props: { columns, data: many }, container: host })
       const rendered = () => view.getAllByRole('row').length - 1
       expect(rendered()).toBeLessThan(100)
-      expect(view.getByTestId('data-table').getAttribute('aria-rowcount')).toBe('1001')
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('1001')
       const gap = view.getByTestId('data-table__lazy-rows')
       expect(gap.offsetHeight).toBeGreaterThan(40 * 900)
       gap.scrollIntoView()
@@ -844,7 +906,7 @@ describe('Table (composition + data-driven)', () => {
       window.scrollTo(0, document.documentElement.scrollHeight)
       await waitFor(() => expect(view.getByText('row-999')).toBeTruthy(), { timeout: 4000 })
       await waitFor(() => expect(view.queryByTestId('data-table__lazy-rows')).toBeNull())
-      expect(view.getByTestId('data-table').hasAttribute('aria-rowcount')).toBe(false)
+      expect(view.getByTestId('data-table__table').hasAttribute('aria-rowcount')).toBe(false)
       window.scrollTo(0, 0)
     })
 

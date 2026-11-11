@@ -255,6 +255,25 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'data-table'
   )
 
+  const isAriaAttr = (name: string): boolean => name.startsWith('aria-')
+  const frameAttrs = computed<Record<string, unknown>>(() =>
+    Object.fromEntries(Object.entries(attrs).filter(([name]) => !isAriaAttr(name)))
+  )
+  const captionId = `${useId()}-caption`
+  const captions = ref<number>(0)
+  const registerCaption = (): (() => void) => {
+    captions.value += 1
+    return () => {
+      captions.value -= 1
+    }
+  }
+  const tableAttrs = computed<Record<string, unknown>>(() => {
+    const own = Object.fromEntries(Object.entries(attrs).filter(([name]) => isAriaAttr(name)))
+    const named = own['aria-label'] !== undefined || own['aria-labelledby'] !== undefined
+    const captioned = captions.value > 0 || (dataDriven.value && hasSlot('caption'))
+    return captioned && !named ? { ...own, 'aria-labelledby': captionId } : own
+  })
+
   const viewportHeight = computed<string>(() => props.maxHeight || (props.virtual ? '40rem' : ''))
   const viewportHeightVar = computed<Record<string, string> | undefined>(() =>
     viewportHeight.value ? { '--table-viewport-height': viewportHeight.value } : undefined
@@ -655,7 +674,9 @@
     editingFilter,
     editFilter,
     exportCsv,
-    reload
+    reload,
+    captionId,
+    registerCaption
   })
 
   defineExpose({ reload, clearFilters, exportCsv, getState, setState })
@@ -1184,15 +1205,12 @@
 <template>
   <div
     ref="rootEl"
-    v-bind="$attrs"
-    role="table"
+    v-bind="frameAttrs"
     :data-testid="testId"
     :data-border="bordered || null"
     :data-stacked="stacked || null"
     :data-density="density"
     :data-wrap="wrapLines || null"
-    :aria-busy="loading || undefined"
-    :aria-rowcount="windowed ? rowTotal + 1 : undefined"
     :style="viewportHeightVar"
     class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-xxs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
   >
@@ -1250,7 +1268,11 @@
       @scroll.passive="onViewportScroll"
     >
       <div
-        role="presentation"
+        v-bind="tableAttrs"
+        role="table"
+        :data-testid="`${testId}__table`"
+        :aria-busy="loading || undefined"
+        :aria-rowcount="windowed ? rowTotal + 1 : undefined"
         class="flex w-max min-w-full flex-col"
         :class="stacked ? 'w-full!' : undefined"
       >
@@ -1458,32 +1480,31 @@
               />
             </TableBody>
           </Transition>
-
-          <Transition
-            enter-active-class="transition-opacity duration-300 ease-out motion-reduce:transition-none"
-            enter-from-class="opacity-0"
-            enter-to-class="opacity-100"
-          >
-            <div
-              v-if="!loading && rowTotal === 0"
-              role="presentation"
-              :data-testid="`${testId}__empty`"
-              class="w-full"
-            >
-              <slot name="empty">
-                <EmptyState
-                  size="small"
-                  icon="pi pi-table"
-                  :title="t('table.emptyTitle')"
-                  :description="t('table.emptyDescription')"
-                />
-              </slot>
-            </div>
-          </Transition>
         </template>
 
         <slot v-else />
       </div>
+      <Transition
+        v-if="dataDriven"
+        enter-active-class="transition-opacity duration-300 ease-out motion-reduce:transition-none"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+      >
+        <div
+          v-if="!loading && rowTotal === 0"
+          :data-testid="`${testId}__empty`"
+          class="sticky start-0 w-full"
+        >
+          <slot name="empty">
+            <EmptyState
+              size="small"
+              icon="pi pi-table"
+              :title="t('table.emptyTitle')"
+              :description="t('table.emptyDescription')"
+            />
+          </slot>
+        </div>
+      </Transition>
     </ScrollArea>
 
     <TableFooter v-if="dataDriven && paginated">

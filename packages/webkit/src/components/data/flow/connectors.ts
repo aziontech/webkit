@@ -95,7 +95,7 @@ const readNode = (
 const readChild = (el: HTMLElement, base: Origin, rtl: boolean): FlowChild => {
   if (el.dataset['flowKind'] === 'parallel') {
     const branches = Array.from(
-      el.querySelectorAll<HTMLElement>(':scope > [data-flow-kind="node"]')
+      el.querySelectorAll<HTMLElement>(':scope > [role="list"] > [data-flow-kind="node"]')
     ).map((branch) => readNode(branch, base, rtl))
 
     return {

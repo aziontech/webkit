@@ -25,22 +25,24 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'data-flow'}__parallel`
   )
 
-  const rootClasses = computed(() =>
-    cn(
-      'flex flex-col gap-(--spacing-md) data-[align=start]:items-start data-[align=end]:items-end',
-      attrs.class as string | undefined
-    )
-  )
+  const rootClasses = computed(() => cn('flex flex-col', attrs.class as string | undefined))
 </script>
 
 <template>
   <div
-    role="group"
+    role="listitem"
     data-flow-kind="parallel"
     :data-align="align ?? 'start'"
     :data-testid="testId"
     :class="rootClasses"
   >
-    <slot />
+    <div
+      role="list"
+      :data-align="align ?? 'start'"
+      :data-testid="`${testId}-branches`"
+      class="flex w-full flex-col gap-(--spacing-md) data-[align=start]:items-start data-[align=end]:items-end"
+    >
+      <slot />
+    </div>
   </div>
 </template>

@@ -214,7 +214,7 @@ describe('Flow (composition compound)', () => {
   })
 
   describe('Flow.Parallel — flow-parallel.vue align prop', () => {
-    it('renders role=group with data-flow-kind=parallel and default align=start', () => {
+    it('renders a list item with data-flow-kind=parallel holding its branches in a nested list, default align=start', () => {
       const { getByTestId } = renderTree(`
         <Flow>
           <FlowParallel>
@@ -224,9 +224,13 @@ describe('Flow (composition compound)', () => {
         </Flow>
       `)
       const group = getByTestId('data-flow__parallel')
-      expect(group.getAttribute('role')).toBe('group')
+      expect(group.getAttribute('role')).toBe('listitem')
       expect(group.getAttribute('data-flow-kind')).toBe('parallel')
       expect(group.getAttribute('data-align')).toBe('start')
+      const branches = getByTestId('data-flow__parallel-branches')
+      expect(branches.parentElement).toBe(group)
+      expect(branches.getAttribute('role')).toBe('list')
+      expect(branches.querySelectorAll(':scope > [role="listitem"]').length).toBe(2)
     })
 
     it('reflects align=end onto data-align', () => {
@@ -357,7 +361,7 @@ describe('Flow (composition compound)', () => {
 
     it('renders the Parallel story with a parallel group between nodes', () => {
       const { getByTestId, getByText } = render(Parallel)
-      expect(getByTestId('data-flow__parallel').getAttribute('role')).toBe('group')
+      expect(getByTestId('data-flow__parallel').getAttribute('role')).toBe('listitem')
       expect(getByText('Branch A')).toBeTruthy()
       expect(getByText('Branch C')).toBeTruthy()
     })
@@ -390,6 +394,21 @@ describe('Flow (composition compound)', () => {
         <Flow>
           <FlowNode>Source</FlowNode>
           <FlowNode>Transform</FlowNode>
+          <FlowNode>Deliver</FlowNode>
+        </Flow>
+      `)
+      await expectNoA11yViolations(getByTestId('data-flow'))
+    })
+
+    it('has no violations for a flow with parallel branches', async () => {
+      // A parallel step is a list item that owns its branches as a nested list.
+      const { getByTestId } = renderTree(`
+        <Flow>
+          <FlowNode>Source</FlowNode>
+          <FlowParallel>
+            <FlowNode>Branch A</FlowNode>
+            <FlowNode>Branch B</FlowNode>
+          </FlowParallel>
           <FlowNode>Deliver</FlowNode>
         </Flow>
       `)
