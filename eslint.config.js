@@ -146,12 +146,5 @@ export default [
     files: ['**/*.vue'],
     plugins: { webkit: { rules: { 'no-physical-direction': noPhysicalDirection } } },
     rules: { 'webkit/no-physical-direction': 'error' }
-  },
-  {
-    files: [
-      '**/src/components/data/table/table-cell/table-cell.vue',
-      '**/src/components/data/table/table-head-cell/table-head-cell.vue'
-    ],
-    rules: { 'webkit/no-physical-direction': ['error', { gradients: false }] }
   }
 ]

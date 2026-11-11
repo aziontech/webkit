@@ -79,8 +79,8 @@ fresh reviewer, three returns stop the run. Exit condition: `approve`.
    imports only `@aziontech/webkit/*` subpaths and `@aziontech/icons`, follows
    `.claude/skills/ui-craft` "Start here", and stands alone (copy one file and it runs).
 2. `pnpm --filter @aziontech/webkit catalog:build` and
-   `node apps/storybook/scripts/gen-block-stories.mjs` (commit `catalog.json` and the generated
-   stories).
+   `node apps/storybook/scripts/gen-block-stories.mjs` (commit `catalog.json`, `catalog/` and the
+   generated stories).
 3. Exit condition: `node packages/webkit/scripts/check-naming.mjs` and
    `node packages/webkit/scripts/check-patterns.mjs` pass (the latter fails when `guidelines.md`
    is missing, a section is missing or empty, a building block names a component the primary SFC

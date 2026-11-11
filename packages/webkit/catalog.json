@@ -29861,6 +29861,7 @@
     "@aziontech/webkit/use-collection"
    ],
    "primary": "Default",
+   "guidelinesSummary": "The first-level index of one resource type, in cards. The user lands here from the sidebar to find a resource they recognise by its name and a few fields (its status, domain, region, traffic), narrow the list by those fields, open one, or select several and act on them together. One `useCollection` call holds the filter, the sort, the page, the selection across pages and the saved preferences, so the page is one heading over one band: the controls row, the cards and the pagination.",
    "variants": [
     {
      "name": "Empty",
@@ -30344,7 +30345,7 @@
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The first-level index of one resource type. The user lands here from the sidebar to find a resource among many, narrow the list by its attributes, scan its state at a glance and act on it: open it, deploy it, clone it, delete it, or create a new one. Search, filters, columns, refresh and export all act on the same table, so the page is one heading over one band.",
+   "guidelinesSummary": "The first-level index of one resource type, in rows. The user lands here from the sidebar to find a resource among many, narrow the list by its attributes, compare records column by column, and act on one: open it, deploy it, clone it, delete it, or create a new one. One `useCollection` call holds the filter, the sort, the page and the saved preferences, so the page is one heading over one band: the controls row and the table it narrows.",
    "variants": [
     {
      "name": "Empty",
