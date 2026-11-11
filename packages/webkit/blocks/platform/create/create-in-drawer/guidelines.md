@@ -60,6 +60,10 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 
 `PanelFooter` with one primary medium `Button`, alone on the right, labeled like the trigger, with `:loading` while the save is in flight.
 
+### K. Certificate import — `SettingsSection`, `Field`, `Button`, `PanelFooter` (optional)
+
+In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` picks Server certificate (certificate and private key) or Trusted CA (certificate only), and the section hint follows it. The certificate is a required `Field` with a code-font `Textarea` for the PEM text and an outlined Upload file `Button` beside its label that reads a .pem, .crt or .cer file into the same field and announces the file it loaded. As soon as the text holds a certificate, a details panel reads it in the browser: Issued to, Issued by, Valid from and Expires in a two-column `KeyValuePairs`, the expiry carrying a `StatusIndicator` (success with the days left, warning within 30 days with a line saying to renew it, danger once expired), and a note when intermediate certificates follow. Text that is not a PEM certificate, an expired certificate and a missing or malformed private key are errors under their fields, shown only after Save, with focus on the first. The private key's description says it is stored encrypted and never shown again. Save closes the drawer and raises a success toast with the expiry date.
+
 ## Do
 
 - Open on a blank form every time, or on the edited item's values, and clear every error on open.
@@ -106,6 +110,7 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 - ItemRows: Add Origin on the Origins page of the storefront resource, a large drawer whose sections are `Item` rows in flush cards, saved together by one Add Origin.
 - NestedDrawer: Add Rule on the storefront resource's Rules Engine, with an Origin select whose Create Origin option opens a second, medium drawer and selects the new origin back.
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.
+- Certificate: Create Certificate opened with shop.example.com pasted as a server certificate: the details panel reads Issued to shop.example.com, Issued by Example Test CA and the expiry with the days left; the private key is empty, so Save flags it.
 
 ## Related
 

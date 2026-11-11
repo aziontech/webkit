@@ -1,0 +1,66 @@
+{
+  "id": "platform/view/rules-list",
+  "name": "RulesList",
+  "title": "Templates/Platform/View/RulesList",
+  "surface": "product",
+  "summary": "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (stacking to cards when narrow) with Order, Name, Description, Status and Last modified. The Order cell carries a position `Input` (type a number and press Enter), a grip `IconButton` that drags the row or moves it with the up and down arrow keys, and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "rules list",
+    "rules engine list",
+    "reorder rules",
+    "rule order",
+    "drag and drop reorder",
+    "firewall rules",
+    "request and response phases",
+    "review changes",
+    "enable disable rule",
+    "lista de regras",
+    "ordem das regras",
+    "reordenar regras",
+    "regras do firewall",
+    "fases de requisição e resposta",
+    "lista de reglas",
+    "reordenar reglas"
+  ],
+  "skills": ["webkit-lists", "webkit-tables", "webkit-form", "webkit-errors"],
+  "primary": {
+    "name": "Application",
+    "file": "rules-list.vue"
+  },
+  "variants": [
+    {
+      "name": "Firewall",
+      "summary": "A firewall's rules: one Request phase, five rules and no locked rule, so every rule moves; the page says rules run until one refuses the request.",
+      "file": "variants/firewall.vue"
+    },
+    {
+      "name": "ReviewChanges",
+      "summary": "After two moves and one rule turned on: the SaveBar counts the changes and the Review changes dialog is open, listing Docs rewrite moving from 5 to 3 (and the rules it pushed down), Maintenance page turned on, and Security headers moving to the top of the Response phase.",
+      "file": "variants/review-changes.vue"
+    },
+    {
+      "name": "SaveFailed",
+      "summary": "The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; the next attempt saves and closes the dialog with the success toast.",
+      "file": "variants/save-failed.vue"
+    },
+    {
+      "name": "Searching",
+      "summary": "A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip.",
+      "file": "variants/searching.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "A firewall with no rules: the Request phase panel shows a small EmptyState with Add Rule instead of the table.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns.",
+      "file": "variants/loading.vue"
+    }
+  ]
+}

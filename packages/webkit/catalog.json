@@ -24504,7 +24504,15 @@
     "implantação",
     "create deployment settings",
     "deployment settings drawer",
-    "criar configuração de deploy"
+    "criar configuração de deploy",
+    "certificate",
+    "upload certificate",
+    "tls certificate",
+    "pem",
+    "certificate expiry",
+    "certificado",
+    "importar certificado",
+    "certificado tls"
    ],
    "skills": [
     "webkit-create-surface",
@@ -24540,6 +24548,7 @@
     "InputGroup",
     "Item",
     "Kbd",
+    "KeyValuePairs",
     "Label",
     "Link",
     "Menu",
@@ -24557,6 +24566,8 @@
     "Switch",
     "Textarea",
     "ThemeSwitcher",
+    "toast",
+    "ToggleGroup",
     "Tooltip"
    ],
    "imports": [
@@ -24588,6 +24599,7 @@
     "@aziontech/webkit/input-group",
     "@aziontech/webkit/item",
     "@aziontech/webkit/kbd",
+    "@aziontech/webkit/key-value-pairs",
     "@aziontech/webkit/label",
     "@aziontech/webkit/link",
     "@aziontech/webkit/menu",
@@ -24605,6 +24617,8 @@
     "@aziontech/webkit/switch",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Default",
@@ -24633,6 +24647,10 @@
     {
      "name": "DeploymentSettings",
      "summary": "The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of a Build and deployment settings panel. A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across services switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `SettingsSection`, `Drawer`, the `Panel` parts, `Field` with `Input`, `Textarea`, `RadioButton` and `Switch` choice cards, `Label`, `HelperText`, `Hint` and `Button`."
+    },
+    {
+     "name": "Certificate",
+     "summary": "Create Certificate: a Server certificate or Trusted CA `ToggleGroup`, a PEM `Textarea` with Upload file, a details panel read from the pasted certificate (issued to, issued by, valid from, and the expiry with a `StatusIndicator` that warns within 30 days and blocks an expired one) and, for a server certificate, the private key; opened with a sample certificate pasted and the key empty."
     }
    ],
    "file": "catalog/patterns/platform/create/create-in-drawer.json"
@@ -27471,7 +27489,15 @@
     "import .env",
     "colar .env",
     "importar variáveis",
-    "dotenv"
+    "dotenv",
+    "network list",
+    "ip list",
+    "asn list",
+    "country list",
+    "bulk paste",
+    "lista de rede",
+    "lista de ips",
+    "lista de red"
    ],
    "skills": [
     "webkit-lists",
@@ -27498,6 +27524,7 @@
     "DrawerTrigger",
     "DropdownMenu",
     "EmptyState",
+    "Field",
     "HelperText",
     "IconButton",
     "Input",
@@ -27513,6 +27540,7 @@
     "Switch",
     "TableRoot",
     "Textarea",
+    "toast",
     "ToggleGroup",
     "Tooltip",
     "use-collection"
@@ -27536,6 +27564,7 @@
     "@aziontech/webkit/drawer-trigger",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
@@ -27551,6 +27580,7 @@
     "@aziontech/webkit/switch",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/textarea",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-collection"
@@ -27565,6 +27595,10 @@
     {
      "name": "PasteEnv",
      "summary": "Create Variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env."
+    },
+    {
+     "name": "NetworkList",
+     "summary": "Create Network List opens a drawer with a Name, a type `ToggleGroup` (IP/CIDR, ASN, Countries) and the entries as an `AttributeEditor` of address and comment rows; Paste list holds a pasted list of nine lines whose report counts 7 entries, names the 2 lines that are not valid addresses and the line already in the list, and Add 7 entries appends them as rows where each invalid line shows its own error. Countries is a `MultiSelect`; Save checks every row and raises a success toast."
     }
    ],
    "file": "catalog/patterns/platform/edit/attribute-editor.json"
@@ -27956,7 +27990,7 @@
    "title": "Templates/Platform/Edit/RuleBuilder",
    "source": "blocks/platform/edit/rule-builder/rule-builder.vue",
    "surface": "product",
-   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are groups of variable, operator and argument rows, the variable picked from a suggestion list, added with And or Or and read as If / Or across groups; behaviors are a Then list whose argument field follows the behavior picked, from a searchable list filtered by phase. Groups, conditions and behaviors reorder by dragging the grip or with the arrow buttons. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule; a resource that only acts on requests opens the same drawer with a single Request phase (so no Phase section) and its own behaviors. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `ScrollArea`, `RadioButton` choice cards, `Card`, `Separator`, `Item`, `Switch`, `IconButton`, `Tooltip` and `Button`.",
+   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor; behaviors are a Then list whose argument field follows the behavior picked, from a searchable list filtered by phase. Behaviors reorder by dragging the grip or with the arrow buttons. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule; a resource that only acts on requests opens the same drawer with a single Request phase (so no Phase section) and its own behaviors. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioButton` choice cards, `Card`, `Item`, `Switch`, `IconButton`, `Tooltip` and `Button`.",
    "intents": [
     "rules engine",
     "rule form",
@@ -27975,8 +28009,10 @@
     "webkit-create-surface"
    ],
    "components": [
+    "AttributeEditor",
     "Button",
     "Card",
+    "Combobox",
     "Drawer",
     "DrawerClose",
     "DrawerContent",
@@ -27993,17 +28029,17 @@
     "PanelFooter",
     "PanelHeader",
     "RadioButton",
-    "ScrollArea",
     "Select",
-    "Separator",
     "SettingRow",
     "SettingsSection",
     "Switch",
     "Tooltip"
    ],
    "imports": [
+    "@aziontech/webkit/attribute-editor",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/combobox",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
@@ -28020,16 +28056,14 @@
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/radio-button",
-    "@aziontech/webkit/scroll-area",
     "@aziontech/webkit/select",
-    "@aziontech/webkit/separator",
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Default",
-   "guidelinesSummary": "A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match. The user composes If and Or groups of variable, operator and argument rows, picks behaviors that fit the phase, puts everything in order and saves, without leaving the resource's Rules tab.",
+   "guidelinesSummary": "A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match. The user composes groups of variable, operator and argument rows (every row in a group must match, any group is enough), picks behaviors that fit the phase, puts everything in order and saves, without leaving the resource's Rules tab.",
    "variants": [
     {
      "name": "Composed",
@@ -29123,6 +29157,118 @@
    ],
    "file": "catalog/patterns/platform/view/query-editor.json"
   },
+  "platform/view/rules-list": {
+   "name": "RulesList",
+   "title": "Templates/Platform/View/RulesList",
+   "source": "blocks/platform/view/rules-list/rules-list.vue",
+   "surface": "product",
+   "summary": "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (stacking to cards when narrow) with Order, Name, Description, Status and Last modified. The Order cell carries a position `Input` (type a number and press Enter), a grip `IconButton` that drags the row or moves it with the up and down arrow keys, and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`.",
+   "intents": [
+    "rules list",
+    "rules engine list",
+    "reorder rules",
+    "rule order",
+    "drag and drop reorder",
+    "firewall rules",
+    "request and response phases",
+    "review changes",
+    "enable disable rule",
+    "lista de regras",
+    "ordem das regras",
+    "reordenar regras",
+    "regras do firewall",
+    "fases de requisição e resposta",
+    "lista de reglas",
+    "reordenar reglas"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-form",
+    "webkit-errors"
+   ],
+   "components": [
+    "Accordion",
+    "Alert",
+    "Button",
+    "Card",
+    "Dialog",
+    "DialogClose",
+    "DialogContent",
+    "DialogDescription",
+    "DialogOverlay",
+    "DialogPortal",
+    "DialogTitle",
+    "EmptyState",
+    "IconButton",
+    "Input",
+    "PageHeader",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "SaveBar",
+    "Switch",
+    "TableRoot",
+    "Tag",
+    "toast",
+    "Tooltip"
+   ],
+   "imports": [
+    "@aziontech/webkit/accordion",
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/dialog",
+    "@aziontech/webkit/dialog-close",
+    "@aziontech/webkit/dialog-content",
+    "@aziontech/webkit/dialog-description",
+    "@aziontech/webkit/dialog-overlay",
+    "@aziontech/webkit/dialog-portal",
+    "@aziontech/webkit/dialog-title",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/save-bar",
+    "@aziontech/webkit/switch",
+    "@aziontech/webkit/table-root",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/tooltip"
+   ],
+   "primary": "Application",
+   "guidelinesSummary": "An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys or a typed position move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves.",
+   "variants": [
+    {
+     "name": "Firewall",
+     "summary": "A firewall's rules: one Request phase, five rules and no locked rule, so every rule moves; the page says rules run until one refuses the request."
+    },
+    {
+     "name": "ReviewChanges",
+     "summary": "After two moves and one rule turned on: the SaveBar counts the changes and the Review changes dialog is open, listing Docs rewrite moving from 5 to 3 (and the rules it pushed down), Maintenance page turned on, and Security headers moving to the top of the Response phase."
+    },
+    {
+     "name": "SaveFailed",
+     "summary": "The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; the next attempt saves and closes the dialog with the success toast."
+    },
+    {
+     "name": "Searching",
+     "summary": "A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip."
+    },
+    {
+     "name": "Empty",
+     "summary": "A firewall with no rules: the Request phase panel shows a small EmptyState with Add Rule instead of the table."
+    },
+    {
+     "name": "Loading",
+     "summary": "While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns."
+    }
+   ],
+   "file": "catalog/patterns/platform/view/rules-list.json"
+  },
   "platform/view/split-view": {
    "name": "SplitView",
    "title": "Templates/Platform/View/SplitView",
@@ -29450,6 +29596,107 @@
     }
    ],
    "file": "catalog/patterns/platform/view/table-view.json"
+  },
+  "platform/view/waf-tuning": {
+   "name": "WafTuning",
+   "title": "Templates/Platform/View/WafTuning",
+   "source": "blocks/platform/view/waf-tuning/waf-tuning.vue",
+   "surface": "product",
+   "summary": "The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `TableRoot` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, two shown and a `Tag` counting the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `TableRoot`, `Tag`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Textarea` and `Toaster`.",
+   "intents": [
+    "waf tuning",
+    "web application firewall",
+    "allow rules",
+    "false positives",
+    "attacks table",
+    "matched requests",
+    "waf allowed rules",
+    "threshold",
+    "ajuste do waf",
+    "falsos positivos",
+    "permitir regras",
+    "ajuste de waf",
+    "falsos positivos waf"
+   ],
+   "skills": [
+    "webkit-tables",
+    "webkit-lists",
+    "webkit-form",
+    "webkit-errors"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "Dialog",
+    "DialogClose",
+    "DialogContent",
+    "DialogDescription",
+    "DialogOverlay",
+    "DialogPortal",
+    "DialogTitle",
+    "EmptyState",
+    "Field",
+    "IconButton",
+    "Input",
+    "PageHeader",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "Select",
+    "TableRoot",
+    "Tag",
+    "Textarea",
+    "toast",
+    "Tooltip"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/dialog",
+    "@aziontech/webkit/dialog-close",
+    "@aziontech/webkit/dialog-content",
+    "@aziontech/webkit/dialog-description",
+    "@aziontech/webkit/dialog-overlay",
+    "@aziontech/webkit/dialog-portal",
+    "@aziontech/webkit/dialog-title",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/table-root",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/textarea",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/tooltip"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The Tuning tab of a WAF rule set. It shows the requests the rule set matched, grouped by the rule that matched them, with enough context (hits, top addresses, countries and paths) for the user to tell an attack from a false positive, and turns the legitimate ones into allowed rules with a recorded reason.",
+   "variants": [
+    {
+     "name": "Allow",
+     "summary": "Two rules checked and the Allow 2 rules dialog open: rule 1005 (SQL injection on 3 paths) and 1201 (Cross-site scripting on 3 paths), 6 allowed rules in all, and an empty Reason."
+    },
+    {
+     "name": "AllowFailed",
+     "summary": "The same dialog after the allowed rules could not be created: a danger Alert says nothing changed in the rule set, and the submit button reads Try again."
+    },
+    {
+     "name": "Empty",
+     "summary": "A rule set that has not matched any request: no threshold settings, and an EmptyState saying matches appear as traffic arrives."
+    },
+    {
+     "name": "Loading",
+     "summary": "While the matches load: the settings and actions are disabled and the table shows skeleton rows."
+    }
+   ],
+   "file": "catalog/patterns/platform/view/waf-tuning.json"
   },
   "shells/console": {
    "name": "Console",
