@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-11
-checksum: 03b4c2beca8139daa4bc0de1ac42bd8e08d0f07cbc60c39c1c0e96896a6b628f
+checksum: f43869045ae65e1617d9b9acc8d266fe4de18b273fe4f79c88d299a247c52d65
 ---
 
 # ComparePlans — Component Spec
@@ -106,6 +106,7 @@ The feature-by-feature matrix under the plan cards on Pricing: one column per pl
 - Visual states: `default`
 - The highlighted plan carries the accent bar and the secondary button; the others carry an outlined button
 - Below the large breakpoint only the picked plan's column shows (`data-folded` on the others); the picker opens on the highlighted plan, or the first
+- Below the large breakpoint the plan button's label wraps (auto height, at least 40 px) instead of widening the table, so the folded matrix fits a 320 px screen whatever the font metrics.
 - A group row (`group: true`) reads in the default text colour and draws a top rule unless it opens its band
 - Empty: when no plan has a name the band renders nothing but its root
 

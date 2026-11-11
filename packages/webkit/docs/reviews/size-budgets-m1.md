@@ -239,3 +239,38 @@ One new entry. `card` had no budget; measured 11.07 KB before the change (`cn` c
 | Entry | Budget before | Measured now | New budget | Why                                                        |
 | ----- | ------------- | ------------ | ---------- | ---------------------------------------------------------- |
 | card  | –             | 13.23        | 13.5       | New entry: integration kind adds `Tag` and `useTranslate`. |
+
+### M1.11 (full test pass)
+
+Three entries changed in M1.11, where the full browser run turned four skipped axe tests back on. `Table` put `role="table"` on its frame, so the focusable scroll viewport, the toolbar, the empty state and the footer controls were children of the table (`aria-required-children`, critical). `role="table"` now sits on the element that holds only the row groups; the consumer's ARIA attributes move to it, and `TableCaption` names it through `aria-labelledby` (axe does not accept `role="caption"` as an owned child). The attribute split was compacted once (about 0.04 KB back); the rest is the accessibility fix, so the bytes stay.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                     |
+| --------------- | ------------- | --------------- | ------------ | ---------- | -------------------------------------------------------- |
+| table-root      | 50            | 49.94           | 50.14        | 50.25      | Raised: the table role moves off the frame.              |
+| listing-browser | 64.65         | 64.58           | 64.76        | 64.85      | Raised: it ships `Table`, same change.                   |
+| listing-table   | 55.85         | 55.82           | 56.03        | 56.15      | Raised: it ships `Table` and `TableFooter`, same change. |
+
+Four more entries changed in M1.11, from the WebKit run. For `locale="ar"` Node and Chromium format numbers with Latin digits (the current CLDR default) and Safari with Arabic-Indic ones, so a page rendered on the server failed to hydrate in Safari. Every `Intl` formatter now receives `intlLocale(tag)`, which pins Latin digits unless the tag picks a numbering system (`ar-u-nu-arab`). The helper was compacted once; the calendar calls it at each of its date and period formatters.
+
+| Entry              | Budget before | Measured before | Measured now | New budget | Note                                                         |
+| ------------------ | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------ |
+| calendar-root      | 20.35         | 20.34           | 20.39        | 20.5       | Raised: its date and period formatters pin the digits.       |
+| doc-tooltip        | 6.25          | 6.20            | 6.25         | 6.35       | Raised: its `Link` label goes through the shared translator. |
+| article-index-blog | 21.7          | 21.66           | 21.73        | 21.85      | Raised: dates and counts through the shared formatters.      |
+| wizard-root        | 6.3           | 6.24            | 6.30         | 6.4        | Raised: its step counter goes through the shared translator. |
+
+Three more entries changed later in M1.11, from the WebKit reflow run. `Table` measured the content width of auto-fit columns one cell at a time (append a clone, read its width, remove it), forcing a full layout for every cell: 130 layouts on mount of `platform/view/split-view`, 4.4 s in WebKit and about 0.5 s in Chromium. The clones of every measured column are now appended together, read together and removed together, so an auto-fit costs one layout (WebKit: 4.7 s → 0.3 s after mount). The batch costs about 30 bytes gzipped; the clone styling was tried as a loop over an object and compressed worse.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                     |
+| --------------- | ------------- | --------------- | ------------ | ---------- | -------------------------------------------------------- |
+| table-root      | 50.25         | 50.14           | 50.27        | 50.35      | Raised: auto-fit columns measure in one layout.          |
+| listing-browser | 64.85         | 64.76           | 64.88        | 64.95      | Raised: it ships `Table`, same change.                   |
+| listing-table   | 56.15         | 56.03           | 56.17        | 56.25      | Raised: it ships `Table` and `TableFooter`, same change. |
+
+### M2 merge (M1.11 into the integrated line)
+
+The integrated values win for every entry both sides raised (`table-root` 51.9, `listing-browser` 66.95, `listing-table` 58, `wizard-root` 6.7): the integrated budgets already cover M1.11's batched auto-fit measuring and caption labelling, measured after the merge at 51.89, 66.87, 57.96 and 6.30 KB. One entry grew past its budget from the combination.
+
+| Entry      | Budget before | Measured now | New budget | Why                                                                                           |
+| ---------- | ------------- | ------------ | ---------- | --------------------------------------------------------------------------------------------- |
+| chart-card | 4.75          | 4.80         | 4.95       | Raised: M1.11's pointer-capture guard in the resize handle on top of the `Board.Item` bridge. |

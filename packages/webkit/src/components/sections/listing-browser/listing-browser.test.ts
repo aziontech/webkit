@@ -270,7 +270,7 @@ describe('ListingBrowser', () => {
     await expectNoA11yViolations(getByTestId(`${TESTID}__list`))
   })
 
-  it.skip('has no a11y violations in the table — blocked by Table nesting its focusable ScrollArea viewport directly under role=table (aria-required-children)', async () => {
+  it('has no a11y violations in the table', async () => {
     const { getByTestId } = band()
 
     await expectNoA11yViolations(getByTestId(`${TESTID}__table`))

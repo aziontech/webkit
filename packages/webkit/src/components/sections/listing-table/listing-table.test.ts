@@ -154,7 +154,7 @@ describe('ListingTable', () => {
     await expectNoA11yViolations(getByTestId('content-item-list').parentElement!)
   })
 
-  it.skip('has no a11y violations in the table — blocked by Table nesting its focusable ScrollArea viewport and the footer content directly under role=table and role=rowgroup (aria-required-children)', async () => {
+  it('has no a11y violations in the table and its footer action', async () => {
     const { container } = band()
 
     await expectNoA11yViolations(container)

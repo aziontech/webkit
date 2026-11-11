@@ -112,9 +112,12 @@ describe('HeroCopyOnTopArt', () => {
   })
 
   it('renders one column per level and one card per node, in order', () => {
-    const { getAllByRole, getAllByTestId } = band()
+    const { container, getAllByTestId } = band()
 
-    expect(getAllByRole('group')).toHaveLength(levels.length)
+    // One flow step per level: a list item holding its cards as a nested list.
+    expect(container.querySelectorAll('[role="listitem"][data-flow-kind="parallel"]')).toHaveLength(
+      levels.length
+    )
     expect(
       getAllByTestId(NODE_TESTID).map((node) => node.textContent?.includes('shop-prod'))
     ).toEqual([false, false, true, false])
@@ -138,7 +141,7 @@ describe('HeroCopyOnTopArt', () => {
   })
 
   it('skips a card without a title and a level left empty', () => {
-    const { getAllByRole, getAllByTestId } = band({
+    const { container, getAllByTestId } = band({
       levels: [
         ...levels,
         {
@@ -147,7 +150,7 @@ describe('HeroCopyOnTopArt', () => {
       ]
     })
 
-    expect(getAllByRole('group')).toHaveLength(levels.length)
+    expect(container.querySelectorAll('[data-flow-kind="parallel"]')).toHaveLength(levels.length)
     expect(getAllByTestId(NODE_TESTID)).toHaveLength(4)
   })
 
@@ -172,7 +175,7 @@ describe('HeroCopyOnTopArt', () => {
     await expectNoA11yViolations(container)
   })
 
-  it.skip('has no a11y violations with the scene: flow nests its parallel group between list and listitem (aria-required-children)', async () => {
+  it('has no a11y violations with the scene', async () => {
     const { container } = band()
 
     await expectNoA11yViolations(container)

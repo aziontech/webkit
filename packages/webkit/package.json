@@ -50,6 +50,8 @@
     "gates": "node scripts/gates.mjs",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:firefox": "BROWSER=firefox vitest run --config vitest.matrix.config.ts",
+    "test:webkit": "BROWSER=webkit vitest run --config vitest.matrix.config.ts",
     "test:ui": "vitest --ui --browser.headless=false",
     "test:watch": "vitest",
     "figma:parse": "figma connect parse",

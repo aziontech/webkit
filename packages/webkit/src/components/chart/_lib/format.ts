@@ -1,3 +1,4 @@
+import { intlLocale } from '../../../composables/use-locale/use-translate'
 import type { ChartLabel } from './types'
 
 const DEFAULT_LOCALE = 'en-US'
@@ -7,7 +8,7 @@ function numberFormat(locale: string, options: Intl.NumberFormatOptions): Intl.N
   const id = `n|${locale}|${JSON.stringify(options)}`
   let format = formatters.get(id) as Intl.NumberFormat | undefined
   if (!format) {
-    format = new Intl.NumberFormat(locale, options)
+    format = new Intl.NumberFormat(intlLocale(locale), options)
     formatters.set(id, format)
   }
   return format
@@ -17,7 +18,7 @@ function dateFormat(locale: string, options: Intl.DateTimeFormatOptions): Intl.D
   const id = `d|${locale}|${JSON.stringify(options)}`
   let format = formatters.get(id) as Intl.DateTimeFormat | undefined
   if (!format) {
-    format = new Intl.DateTimeFormat(locale, options)
+    format = new Intl.DateTimeFormat(intlLocale(locale), options)
     formatters.set(id, format)
   }
   return format

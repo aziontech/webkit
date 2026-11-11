@@ -151,7 +151,9 @@
   const startResize = (event: globalThis.PointerEvent, axis: ResizeAxis) => {
     if (event.button !== 0) return
     const handle = event.currentTarget as globalThis.HTMLElement
-    handle.setPointerCapture(event.pointerId)
+    try {
+      handle.setPointerCapture(event.pointerId)
+    } catch {}
     originX = event.clientX
     originY = event.clientY
     startWidth = displayedWidth.value

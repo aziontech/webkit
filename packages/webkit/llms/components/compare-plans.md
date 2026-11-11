@@ -46,6 +46,7 @@
 - Visual states: `default`
 - The highlighted plan carries the accent bar and the secondary button; the others carry an outlined button
 - Below the large breakpoint only the picked plan's column shows (`data-folded` on the others); the picker opens on the highlighted plan, or the first
+- Below the large breakpoint the plan button's label wraps (auto height, at least 40 px) instead of widening the table, so the folded matrix fits a 320 px screen whatever the font metrics.
 - A group row (`group: true`) reads in the default text colour and draws a top rule unless it opens its band
 - Empty: when no plan has a name the band renders nothing but its root
 

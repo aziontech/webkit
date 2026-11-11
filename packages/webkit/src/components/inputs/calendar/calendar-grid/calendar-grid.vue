@@ -2,7 +2,7 @@
   import { computed, inject, nextTick, ref, watch } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { intlLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import {
     getTabViewPanelTransitionStyle,
@@ -18,11 +18,11 @@
 
   const { t, locale } = useTranslate({ calendar: en.calendar })
   const monthLabel = computed(
-    () => new Intl.DateTimeFormat(locale.value, { month: 'long', year: 'numeric' })
+    () => new Intl.DateTimeFormat(intlLocale(locale.value), { month: 'long', year: 'numeric' })
   )
   const weekdayLabels = computed(() =>
     Array.from({ length: 7 }, (_, day) =>
-      new Intl.DateTimeFormat(locale.value, { weekday: 'narrow' }).format(
+      new Intl.DateTimeFormat(intlLocale(locale.value), { weekday: 'narrow' }).format(
         new Date(2023, 0, day + 1)
       )
     )

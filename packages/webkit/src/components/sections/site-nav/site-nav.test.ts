@@ -201,7 +201,7 @@ describe('SiteNav', () => {
     await expectNoA11yViolations(container)
   })
 
-  it.skip('has no a11y violations with menu entries: navigation-menu sets role=none items inside its role=list (aria-required-children)', async () => {
+  it('has no a11y violations with menu entries', async () => {
     const { container } = nav()
 
     await expectNoA11yViolations(container)

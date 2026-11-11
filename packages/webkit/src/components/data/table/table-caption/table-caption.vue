@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, inject, onBeforeUnmount, useAttrs } from 'vue'
 
   import { TableInjectionKey } from '../injection-key'
 
@@ -20,12 +20,18 @@
       (attrs['data-testid'] as string | undefined) ??
       (ctx ? `${ctx.testId}__caption` : 'data-table__caption')
   )
+
+  const id = computed<string | undefined>(
+    () => ctx?.captionId ?? (attrs['id'] as string | undefined)
+  )
+  const unregister = ctx?.registerCaption?.()
+  onBeforeUnmount(() => unregister?.())
 </script>
 
 <template>
   <div
     v-bind="$attrs"
-    role="caption"
+    :id="id"
     :data-testid="testId"
     class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
   >

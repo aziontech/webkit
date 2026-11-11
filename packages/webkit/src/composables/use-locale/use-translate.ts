@@ -33,6 +33,9 @@ export const LocaleInjectionKey: InjectionKey<LocaleContext> = Symbol('WebkitLoc
 
 export const DEFAULT_LOCALE = 'en'
 
+export const intlLocale = (tag: string): string =>
+  !tag || /-u-(\w+-)*nu-/.test(tag) ? tag : tag.replace(/-u-|$/, (u) => `-u-nu-latn${u && '-'}`)
+
 const formatters = new Map<string, unknown>()
 
 export function cached<T>(
@@ -71,9 +74,12 @@ export function createMessageHelpers(
   fallback: PartialMessages = {}
 ): MessageHelpers {
   const formatNumber = (value: number, options?: Intl.NumberFormatOptions): string =>
-    cached('number', locale(), options, () => new Intl.NumberFormat(locale(), options)).format(
-      value
-    )
+    cached(
+      'number',
+      locale(),
+      options,
+      () => new Intl.NumberFormat(intlLocale(locale()), options)
+    ).format(value)
 
   const fill = (template: string, params?: MessageParams): string =>
     params
