@@ -104,7 +104,7 @@ A stacked row with a five-row `Textarea` whose label, placeholder and guidance f
 
 - Add a Review step when the create has three or more steps or binds the resource to something; skip it for a one-step create.
 - Show values as they will be sent, with the property name under each, and never show secrets in clear.
-- Put Edit on each band, not on each value, and return the user to Review with Next after the edit.
+- Put Edit on each band, not on each value; after the edit, Next walks forward through the later steps, already filled, back to Review.
 - Say plainly when nothing will read the resource yet (unbound, or a module off) with a warning `Alert`, not a disabled create.
 
 ## Related
