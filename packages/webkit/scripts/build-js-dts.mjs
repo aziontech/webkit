@@ -33,6 +33,7 @@ export function buildDeclarations(files = runtimeJsFiles()) {
     allowJs: true,
     declaration: true,
     emitDeclarationOnly: true,
+    removeComments: true,
     skipLibCheck: true,
     target: ts.ScriptTarget.ESNext,
     module: ts.ModuleKind.ESNext,

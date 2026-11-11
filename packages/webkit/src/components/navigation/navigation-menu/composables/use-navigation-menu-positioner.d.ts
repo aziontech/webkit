@@ -1,17 +1,3 @@
-/**
- * @param {import('vue').MaybeRef<HTMLElement | null>} anchorRef
- * @param {import('vue').Ref<HTMLElement | null>} floatingRef
- * @param {import('vue').Ref<HTMLElement | null>} arrowRef
- * @param {import('vue').MaybeRefOrGetter<{
- *   side?: string
- *   align?: string
- *   sideOffset?: number
- *   alignOffset?: number
- *   arrowPadding?: number
- *   collisionPadding?: number | { x: number; y: number }
- * }>} options
- * @param {import('vue').MaybeRefOrGetter<{ width: number; height: number } | null>} [targetSize]
- */
 export function useNavigationMenuPositioner(anchorRef: import("vue").MaybeRef<HTMLElement | null>, floatingRef: import("vue").Ref<HTMLElement | null>, arrowRef: import("vue").Ref<HTMLElement | null>, options: import("vue").MaybeRefOrGetter<{
     side?: string;
     align?: string;

@@ -1,10 +1,6 @@
-/** @param {number} [frameCount] */
 export function waitForAnimationFrames(frameCount?: number): Promise<any>;
-/** @param {Element | null | undefined} element */
 export function waitForElementAnimations(element: Element | null | undefined): Promise<void>;
-/** @param {Element | null | undefined} element */
 export function waitForOpenTransition(element: Element | null | undefined): Promise<void>;
-/** @param {Element | null | undefined} element */
 export function waitForCloseTransition(element: Element | null | undefined): Promise<void>;
 export namespace navigationMenuTransitionClasses {
     let positioner: string;

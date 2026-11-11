@@ -1,7 +1,3 @@
-/**
- * @param {import('vue').Ref<HTMLElement | import('vue').ComponentPublicInstance | null>} containerRef
- * @param {ReturnType<import('./use-navigation-menu-context.js').useNavigationMenuRoot>} root
- */
 export function useNavigationMenuListHighlight(containerRef: import("vue").Ref<HTMLElement | import("vue").ComponentPublicInstance | null>, root: ReturnType<typeof import("./use-navigation-menu-context.js").useNavigationMenuRoot>): {
     selectorStyle: import("vue").ComputedRef<{
         left: string;
