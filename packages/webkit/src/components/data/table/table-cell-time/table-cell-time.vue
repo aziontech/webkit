@@ -30,6 +30,8 @@
   )
 
   const JUST_NOW_MS = 45_000
+  const MINUTE_MS = 60_000
+  const HOUR_MS = 60 * MINUTE_MS
 
   const attrs = useAttrs()
   const now = useMinuteClock()
@@ -48,7 +50,9 @@
   })
   const relative = computed<string>(() => {
     if (!date.value) return ''
-    if (Math.abs(date.value.getTime() - now.value) < JUST_NOW_MS) return t('tableCellTime.justNow')
+    const diff = date.value.getTime() - now.value
+    if (Math.abs(diff) < JUST_NOW_MS) return t('tableCellTime.justNow')
+    if (Math.abs(diff) < HOUR_MS) return formatRelativeTime(Math.round(diff / MINUTE_MS), 'minute')
     return formatRelativeTime(date.value)
   })
   const absolute = computed<string>(() =>

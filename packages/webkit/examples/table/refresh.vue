@@ -4,6 +4,7 @@
   import { onBeforeUnmount, ref, watch } from 'vue'
 
   const AUTO_REFRESH_MS = 30_000
+  const MINUTE = 60_000
   const STATES = ['Active', 'Pending', 'Active', 'Failed']
 
   const deploymentsAt = (round) =>
@@ -22,7 +23,7 @@
   ]
 
   const rows = ref(deploymentsAt(0))
-  const updatedAt = ref(new Date())
+  const updatedAt = ref(new Date(Math.floor(Date.now() / MINUTE) * MINUTE))
   const refreshing = ref(false)
   const autoRefresh = ref(false)
   let round = 0

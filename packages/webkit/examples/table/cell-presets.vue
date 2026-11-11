@@ -2,8 +2,9 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Table from '@aziontech/webkit/table'
 
-  const HOUR = 3_600_000
-  const now = Date.now()
+  const MINUTE = 60_000
+  const HOUR = 60 * MINUTE
+  const now = Math.floor(Date.now() / MINUTE) * MINUTE
 
   const statusSeverity = (status) =>
     ({ Active: 'success', Failed: 'danger', Pending: 'warning' })[status] ?? 'secondary'

@@ -123,6 +123,9 @@ describe('Table cell presets', () => {
     const view = render(TableCellTime, { props: { value: new Date() } })
     expect(view.container.querySelector('time')!.textContent).toContain('just now')
     cleanup()
+    const minutes = render(TableCellTime, { props: { value: new Date(Date.now() - 50_000) } })
+    expect(minutes.container.querySelector('time')!.textContent).toContain('1 minute ago')
+    cleanup()
     const empty = render(TableCellTime, { props: { value: 'not a date' } })
     expect(empty.getByText('—')).toBeTruthy()
   })
@@ -200,7 +203,7 @@ describe('Table cell presets', () => {
 
   it('the refresh example keeps its rows while refreshing and shows when it updated', async () => {
     const view = render(Refresh)
-    expect(view.container.querySelector('time')!.textContent).toContain('just now')
+    expect(view.container.querySelector('time')!.getAttribute('datetime')).toMatch(/:00\.000Z$/)
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
     expect(view.getByText('storefront')).toBeTruthy()
     await waitFor(() =>

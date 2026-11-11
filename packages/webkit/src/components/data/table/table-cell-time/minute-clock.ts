@@ -19,6 +19,7 @@ function unsubscribe(): void {
 }
 
 export function useMinuteClock(): Readonly<Ref<number>> {
+  if (subscribers === 0) now.value = Date.now()
   onMounted(subscribe)
   onBeforeUnmount(unsubscribe)
   return now
