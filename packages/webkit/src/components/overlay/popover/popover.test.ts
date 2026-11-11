@@ -24,7 +24,7 @@ const control = () =>
   document.body.querySelector<HTMLElement>('[data-testid="overlay-popover__trigger"] button')!
 
 /**
- * Realistic composed tree mirroring the Storybook Default: a trigger wrapping a
+ * Realistic composed tree mirroring the Default example: a trigger wrapping a
  * native <button> (the trigger span is a passthrough — the child owns focus and
  * keyboard activation), a header with title + close, a description, free body
  * text and a footer. Anatomy toggles let tests exercise the aria gating that
@@ -623,7 +623,7 @@ describe('Popover (compound / overlay)', () => {
 
   // ---- Story smoke: the composed Default story opens through the real compound -----
   it('renders the Default story open through the real compound', async () => {
-    // Drive `open` through the story args instead of clicking: the composeStories
+    // Drive `open` through the story args instead of clicking: the fixture's
     // mount glue re-renders the story right after mount, and a click landing on
     // the pre-settle instance is discarded with it (flaky). Controlled args are
     // race-free; the click path is covered by the direct compound tests above.

@@ -8,7 +8,7 @@ import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import Kbd from './kbd.vue'
 
 // Starter suite emitted by the scaffold — a FLOOR, not the ceiling. Expand per
-// .claude/rules/testing.md: reuse the Storybook story via composeStories once it
+// .claude/rules/testing.md: mount its example from examples/kbd once it
 // exists, and add assertions for every OS-aware modifier glyph combination.
 describe('Kbd', () => {
   it('renders and exposes the fallback data-testid', () => {

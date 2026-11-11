@@ -16,13 +16,10 @@ function files(dir, out = []) {
   return out
 }
 
-test('nothing in the package reads or imports from apps/ (Storybook is not a source of truth)', () => {
+test('nothing in the package reads or imports from apps/ (the package is the source of truth)', () => {
   const offenders = ['src', 'scripts', 'blocks', 'examples']
     .flatMap((d) => files(join(PKG, d)))
-    // check-authoring lints the Storybook sources and gates runs the block-stories check, both
-    // as repository governance; neither feeds an artifact.
-    .filter((f) => !/scripts\/(check-authoring|gates)\.mjs$/.test(f))
-    .filter((f) => /apps\/storybook|stories\/(templates|components)/.test(readFileSync(f, 'utf8')))
+    .filter((f) => /apps\/(storybook|docs|demos)\//.test(readFileSync(f, 'utf8')))
     .map((f) => relative(PKG, f))
   assert.deepEqual(offenders, [])
 })

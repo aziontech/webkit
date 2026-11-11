@@ -448,7 +448,7 @@ test('every exported component has purpose, when to use and when not to use', as
 
 test('getUsageExample prefers the real story example when there is one', () => {
   const res = getUsageExample(catalog, 'field')
-  assert.match(res.source, /^story /)
+  assert.match(res.source, /^example /)
   assert.match(res.sfc, /<template>/)
 })
 

@@ -251,8 +251,16 @@ export function planAdd(projectDir, webkit, catalog, id, opts = {}) {
   if (!block.ok) return { ok: false, errors: [block.message], suggestions: block.suggestions }
 
   const paths = targetPaths(projectDir, block, opts.dest)
+  const recorded = readManifest(projectDir).blocks[block.id]?.files || []
+  const keepPrimary =
+    Boolean(block.variant) &&
+    !opts.force &&
+    existsSync(join(projectDir, paths.primary)) &&
+    recorded.some((f) => f.path === paths.primary)
   const pieces = [
-    { path: paths.primary, file: block.meta.primary.file, variant: block.meta.primary.name },
+    ...(keepPrimary
+      ? []
+      : [{ path: paths.primary, file: block.meta.primary.file, variant: block.meta.primary.name }]),
     ...(block.variant
       ? [{ path: paths.variant, file: block.variant.file, variant: block.variant.name }]
       : [])
@@ -289,6 +297,11 @@ export function planAdd(projectDir, webkit, catalog, id, opts = {}) {
   const errors = []
   const warnings = []
   if (block.note) warnings.push(block.note)
+  if (keepPrimary) {
+    warnings.push(
+      `${paths.primary} was added before and is kept as it is: only the ${block.variant.name} variant is copied.`
+    )
+  }
   if (!webkit.installed) {
     warnings.push(
       `${PACKAGE_NAME} is not installed in this project: the block was taken from ${PACKAGE_NAME}@${webkit.version} (the CLI). Install it before building.`

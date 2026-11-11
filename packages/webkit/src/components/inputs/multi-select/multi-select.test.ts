@@ -132,8 +132,8 @@ describe('MultiSelect (composition / overlay)', () => {
   })
 
   // A transform on an ancestor of the Teleport target becomes the fixed panel's
-  // containing block, re-scaling its viewport top/left — Storybook's zoom control
-  // does exactly this to the preview body.
+  // containing block, re-scaling its viewport top/left — a zoomed preview container
+  // does exactly this.
   it('anchors the panel to the trigger when the Teleport target is scaled', async () => {
     const previousTransform = document.body.style.transform
     const previousOrigin = document.body.style.transformOrigin

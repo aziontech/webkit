@@ -56,11 +56,6 @@ export const GATES = [
     steps: [['node', 'scripts/check-tests.mjs']]
   },
   {
-    id: 'block-stories',
-    label: 'Block stories current',
-    steps: [['node', '../../apps/storybook/scripts/gen-block-stories.mjs', '--check']]
-  },
-  {
     id: 'hook-tests',
     label: 'Hook tests',
     steps: [['node', '../../.claude/hooks/__tests__/run.mjs']]

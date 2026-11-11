@@ -31,7 +31,6 @@ export const STANDARDS = [
     scope: 'webkit',
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
-      { surface: 'write-time', by: 'validate-story-source' },
       { surface: 'ci', by: 'check-authoring' }
     ]
   },
@@ -95,16 +94,6 @@ export const STANDARDS = [
       { surface: 'review', by: 'required-approval' }
     ],
     note: 'The rewritten output cannot be off-standard — blocked by the aggregate of the output checks (which the ratchet also runs in CI); review confirms nothing was inherited as-is.'
-  },
-  {
-    id: 'storybook-source',
-    kind: 'foundational',
-    scope: 'webkit',
-    enforce: [
-      { surface: 'write-time', by: 'validate-story-source' },
-      { surface: 'ci', by: 'check-authoring' }
-    ],
-    note: 'The ratchet runs the same story-source engine over apps/storybook/src in CI; the Storybook build also fails on non-compiling stories.'
   },
   {
     id: 'release-types',

@@ -1,4 +1,4 @@
-import { userEvent } from '@storybook/test'
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, onErrorCaptured, ref } from 'vue'

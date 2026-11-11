@@ -8,7 +8,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-*storybook.log
 
 node_modules
 dist
@@ -23,7 +22,6 @@ dist-ssr
 packages/theme/dist/v3/output.css
 coverage
 *.local
-storybook-static
 
 # Secrets — keep .env files local; commit .env.example only.
 .env
@@ -85,12 +83,10 @@ tmp
 # Vitest browser-mode attachments (failure artifacts, same nature as __screenshots__)
 packages/webkit/.vitest-attachments/
 
-# Visual regression (Storybook test-runner) — linux baselines are the CI
-# contract and ARE committed; other platforms and diff output are local-only.
-apps/storybook/.storybook/test-visual/__diff_output__/
-apps/storybook/.storybook/test-visual/__image_snapshots__/*
-!apps/storybook/.storybook/test-visual/__image_snapshots__/linux/
-apps/storybook/.storybook/test-visual/__image_snapshots__/darwin/
+# Visual regression (Playwright, apps/visual) — the baselines in apps/visual/baselines
+# are the CI contract and ARE committed; results and reports are local-only.
+apps/visual/test-results/
+apps/visual/playwright-report/
 
 # AI bundle copies made by packages/webkit's prepack (sources live in skills/, rules/, adapters/)
 packages/webkit/skills/

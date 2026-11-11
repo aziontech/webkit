@@ -136,7 +136,7 @@ async function main() {
       description:
         'Full API for one component: purpose, when to use / when not to use, props, events, ' +
         'slots, sub-components, structure, compound-root info, runnable examples taken from its ' +
-        'stories and the classes allowed on its tag. Returns fuzzy suggestions when the name is unknown.',
+        'examples and the classes allowed on its tag. Returns fuzzy suggestions when the name is unknown.',
       inputSchema: {
         name: z.string().describe('Component name (kebab-case), e.g. "button" or "table".')
       }
@@ -222,8 +222,8 @@ async function main() {
       title: 'Search webkit screen patterns',
       description:
         'Find the reviewed screen pattern for an intent ("login", "sign up", "account settings", ' +
-        '"delete dialog", "tela de login"). Patterns are whole screens generated from the webkit ' +
-        'stories: start every screen from one. Returns ranked ids with their intents, components, ' +
+        '"delete dialog", "tela de login"). Patterns are whole screens built from WebKit ' +
+        'blocks: start every screen from one. Returns ranked ids with their intents, components, ' +
         'skills, steps and `guidelinesSummary` (the job the screen serves). An empty query lists ' +
         'every pattern.',
       inputSchema: {

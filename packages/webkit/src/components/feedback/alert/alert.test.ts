@@ -184,7 +184,7 @@ describe('Alert', () => {
     // applied via the content region's descendant-anchor rules) is NOT asserted here:
     // this env loads no theme CSS and runs no Tailwind, so a computed-style check
     // would only read the browser's default anchor styling and pass either way.
-    // It is verified in Storybook (the WithLinks story) per src/test/setup.ts.
+    // It is verified by the styled visual suite (visual/) per src/test/setup.ts.
   })
 
   describe('action button', () => {

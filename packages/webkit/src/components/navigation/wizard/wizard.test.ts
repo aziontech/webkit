@@ -1,6 +1,6 @@
 import '../../../test/reflow.css'
 
-import { userEvent } from '@storybook/test'
+import userEvent from '@testing-library/user-event'
 import { render, within } from '@testing-library/vue'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { page } from 'vitest/browser'

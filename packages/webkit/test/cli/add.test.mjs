@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { checksum } from '../../src/cli/blocks.js'
@@ -46,6 +46,30 @@ test('add resolves a short name, copies the chosen variant and the guidelines si
     const guide = readFileSync(join(dir, 'src/views/CreateHub.guidelines.md'), 'utf8')
     assert.ok(!guide.startsWith('#'), 'the H1 heading is stripped')
     assert.ok(canonical('guidelines.md').endsWith(guide))
+    const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+    assert.deepEqual(
+      manifest.blocks[BLOCK].files.map((f) => f.variant),
+      ['Default', 'Connected']
+    )
+  } finally {
+    cleanup(dir)
+  }
+})
+
+test('add --variant after the primary was added keeps the primary copy and adds the variant', () => {
+  const dir = makeProject()
+  try {
+    assert.equal(cli(dir, 'add', BLOCK).code, 0)
+    const edited = canonical('create-hub.vue') + '<!-- mine -->\n'
+    writeFileSync(join(dir, 'src/views/CreateHub.vue'), edited)
+    const r = cli(dir, 'add', BLOCK, '--variant', 'connected')
+    assert.equal(r.code, 0, r.stderr)
+    assert.match(r.stderr, /src\/views\/CreateHub\.vue was added before and is kept/)
+    assert.equal(readFileSync(join(dir, 'src/views/CreateHub.vue'), 'utf8'), edited)
+    assert.equal(
+      readFileSync(join(dir, 'src/views/CreateHubConnected.vue'), 'utf8'),
+      canonical('variants/connected.vue')
+    )
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     assert.deepEqual(
       manifest.blocks[BLOCK].files.map((f) => f.variant),

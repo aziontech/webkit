@@ -31,8 +31,8 @@
 
   const BUCKETS = [
     {
-      id: 'webkit-storybook-dev',
-      name: 'webkit-storybook-dev',
+      id: 'webkit-docs-dev',
+      name: 'webkit-docs-dev',
       access: 'Public',
       objects: 128,
       size: '412.6 MB'

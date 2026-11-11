@@ -49,7 +49,6 @@ export default defineConfig({
       include: ['src/components/**/*.{vue,ts}'],
       exclude: [
         '**/*.test.{ts,js}',
-        '**/*.stories.*',
         '**/*.figma.ts',
         '**/index.ts',
         '**/injection-key.ts',

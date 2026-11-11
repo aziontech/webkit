@@ -68,7 +68,7 @@ async function main() {
       `Every webkit component ships a browser-mode functional suite next to its .vue\n` +
       `(.claude/rules/testing.md). Missing:\n` +
       `  ${relative(ROOT, testPath)}\n\n` +
-      `Reuse the story via composeStories, assert the functional surface (render,\n` +
+      `Mount the component (or its example), assert the functional surface (render,\n` +
       `props -> data-*, events, disabled/loading suppression, v-model, ARIA, and\n` +
       `a11y via expectNoA11yViolations), and run it in Vitest browser mode (never\n` +
       `jsdom). If this is a legacy component, add\n` +
