@@ -3,11 +3,12 @@ name: card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
+template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 74c2174324f2ed54c570bf917a5b1a0a410d4041def71b3e860e3796c879bc8d
+checksum: 34f9387ac78561d87321d353622cb4bc2aac3b712b0d8c9eec929feb9c3e43c0
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -23,6 +24,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 - Group related console content into one bordered surface with a title header, a body and an optional footer, such as a settings block, a summary or a form section.
 - Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the `content` slot.
 - A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.
+- A catalog tile for an integration, an extension or a plugin: set `kind="integration"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.
 
 ## When NOT to use
 
@@ -30,6 +32,8 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 - It is one tier of a pricing comparison → use `card-pricing`.
 - It is a framed cell or band of a marketing page → use `frame-box` or `card-grid`.
 - It is a single row of title, description, media and actions → use `item`.
+- It is one record of a resource list shown as cards, with selection and fields → use `cards` (with `useCollection`).
+- It is a template tile in a gallery with no vendor, badge or install state → keep `kind="default"` with a `content` slot (see `platform/view/template-browser`).
 
 ## Related
 
@@ -46,6 +50,10 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 - `header-action` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
 - Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
 - The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.
+- `kind="integration"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `action` slot; it sits above the stretched target and stays reachable on its own.
+- Keep the description to one or two sentences; the card clamps it to three lines.
+- Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
+- Integration cards sit under a section heading, so their title is an `h3`.
 
 ## Usage
 
@@ -78,25 +86,65 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 </template>
 ```
 
+### Integration kind
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+</script>
+
+<template>
+  <Card
+    kind="integration"
+    title="Request Signer"
+    vendor="Northwind Labs"
+    logo="pi pi-key"
+    description="Sign every request at the edge with a rotating key."
+    :badges="[{ label: 'Firewall' }]"
+    @select="openDetail"
+  >
+    <template #action>
+      <Button
+        label="Install"
+        kind="outlined"
+        size="small"
+      />
+    </template>
+  </Card>
+</template>
+```
+
 ## Props
 
-| Prop     | Type      | Default | Required | JSDoc                                                                                                                |
-| -------- | --------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
-| `title`  | `string`  | `''`    | false    | Heading rendered in the header when the `header` slot is empty.                                                      |
-| `padded` | `boolean` | `true`  | false    | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers. |
+| Prop          | Type                         | Default     | Required | JSDoc                                                                                                                                         |
+| ------------- | ---------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`       | `string`                     | `''`        | false    | Heading rendered in the header when the `header` slot is empty; with `kind="integration"`, the item name.                                     |
+| `padded`      | `boolean`                    | `true`      | false    | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers.                          |
+| `kind`        | `'default' \| 'integration'` | `'default'` | false    | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot. |
+| `logo`        | `string`                     | `''`        | false    | Integration kind: icon class for the logo mark. The `logo` slot takes an image instead.                                                       |
+| `vendor`      | `string`                     | `''`        | false    | Integration kind: who publishes the item, shown as "by {vendor}".                                                                             |
+| `description` | `string`                     | `''`        | false    | Integration kind: one or two sentences on what the item does.                                                                                 |
+| `badges`      | `CardBadge[]`                | `[]`        | false    | Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity defaults to `info`).                       |
+| `installed`   | `boolean`                    | `false`     | false    | Integration kind: shows the Installed tag.                                                                                                    |
+| `href`        | `string`                     | `''`        | false    | Integration kind: the title links here; without it the title is a button that emits `select`.                                                 |
 
 ## Events
 
-| _none_ | — | — |
+| Event    | Payload             | Notes                                                                      |
+| -------- | ------------------- | -------------------------------------------------------------------------- |
+| `select` | `event: MouseEvent` | Integration kind without `href`: the title (the whole tile) was activated. |
 
 ## Slots
 
-| Slot            | Scope | Notes                                                                      |
-| --------------- | ----- | -------------------------------------------------------------------------- |
-| `header`        | —     | Replaces the default header layout (title + header-action).                |
-| `header-action` | —     | Actions aligned to the end of the default header; visible on header hover. |
-| `content`       | —     | Main card body.                                                            |
-| `footer`        | —     | Footer actions or metadata; omitted when empty.                            |
+| Slot            | Scope | Notes                                                                                  |
+| --------------- | ----- | -------------------------------------------------------------------------------------- |
+| `header`        | —     | Replaces the default header layout (title + header-action).                            |
+| `header-action` | —     | Actions aligned to the end of the default header; visible on header hover.             |
+| `content`       | —     | Main card body; with `kind="integration"` it renders under the description.            |
+| `footer`        | —     | Footer actions or metadata; omitted when empty.                                        |
+| `logo`          | —     | Integration kind: replaces the logo mark, for an `img` with an empty `alt`.            |
+| `action`        | —     | Integration kind: one action at the end of the tile, above the stretched title target. |
 
 > There is no `default` slot — content goes through `content`.
 
@@ -105,12 +153,14 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Responsive: the content region is the `@container/card`, so `KeyValuePairs`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-action` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
+- Integration kind: `hover` shades the surface, `focus-visible` rings the whole tile (the ring sits on the stretched title target), `installed` adds the success Installed tag.
 
 ## Motion & Animations
 
 | Trigger              | Animation / Transition | Token  | Reduced-motion fallback         |
 | -------------------- | ---------------------- | ------ | ------------------------------- |
 | header action reveal | `transition-opacity`   | inline | `motion-reduce:transition-none` |
+| integration hover    | `transition-colors`    | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -138,12 +188,43 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 
+## Internationalization
+
+| Key              | English source | Override prop |
+| ---------------- | -------------- | ------------- |
+| `card.byVendor`  | by {vendor}    | —             |
+| `card.installed` | Installed      | —             |
+
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only; the logo sits at the start, the badges and the action at the end.
+- Icons: the logo is not mirrored.
+- Keyboard: no arrow-key navigation of its own.
+- User data: the vendor and the title render in `<bdi>`.
+
+## Responsive
+
+- Container queries: the content region is `@container/card`; the integration layout does not change with width, the description wraps and clamps to three lines.
+- Narrow (≤ 640 px or a narrow container): the badges wrap under the title row; the action stays at the end of its own row.
+- Touch: the whole tile is the target; the action is a regular `Button`.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 13.5 KB gzip for `./card` in `.size-limit.json`: 11.1 KB before the integration kind (`cn` carries `tailwind-merge`), plus `tag` and the translate helper.
+- Runtime budget: none: static.
+- Heavy parts: none.
+
 ## Stories (Storybook)
 
 - Default — title header + `content`
 - Header — an action rendered in the `header` slot, aligned to the end (justified: demonstrates the full-control header path)
 - Footer — `footer` region with actions (justified: the footer bar only renders when the slot is filled)
 - Flush — `padded=false` edge-to-edge content (mutually-exclusive boolean state of the `padded` prop)
+- Integration — `kind="integration"` with a vendor, a badge and an Install action (per `kind`)
+- Installed — `kind="integration"` with `installed` and a Configure action (justified: the installed state is the tile's second state)
 
 ## Constraints — DO NOT
 

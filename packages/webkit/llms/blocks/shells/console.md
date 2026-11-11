@@ -1,18 +1,18 @@
 # Console (`shells/console`)
 
-> The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; below `md` the rail becomes a Drawer opened from the hamburger that leads the wordmark. First-level lists, detail pages with their tabs and Home all render inside it. Built from `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd`, `Drawer` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.
+> The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; every state is framed by `AppLayout`, which measures its own width: below 768px it becomes compact, the rail moves into the layout's navigation drawer opened from the hamburger that leads the wordmark, and choosing an item closes it. First-level lists, detail pages with their tabs and Home all render inside it. Built from `AppLayout`, `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.
 
 - Surface: product
 - Source: `blocks/shells/console/console.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/console")`
-- Components: [Alert](../../components/alert.md), [AppLayout](../../components/app-layout.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [Dialog](../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [Drawer](../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [Menu](../../components/menu.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AppLayout](../../components/app-layout.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [Menu](../../components/menu.md), [PageTabs](../../components/page-tabs.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
 
-platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console; notifications panel; notifications drawer; notification center; central de notificações; painel de notificações; switch account; account switcher; organization switcher; change organization; trocar conta; trocar organização; selecionar conta
+platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console; notifications panel; notifications drawer; notification center; central de notificações; painel de notificações
 
-The application shell every signed-in page renders inside. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: a navigation rail on the left (wordmark, the ⌘K palette, the grouped navigation, the account menu) and a content zone on the right headed by one global header (search, Create, Agent, the avatar). Pages render only their own content in the zone; this block's page bodies are stand-ins for `platform/view/table-view` and `platform/detail/details-page`.
+The application shell every signed-in page renders inside, built on `AppLayout`. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: a navigation rail on the left (wordmark, the ⌘K palette, the grouped navigation, the account menu) and a content zone on the right headed by one global header (search, Create, Agent, the avatar). Pages render only their own content in the zone; this block's page bodies are stand-ins for `platform/view/table-view` and `platform/detail/details-page`.
 
 ## When to use
 
@@ -28,7 +28,7 @@ The application shell every signed-in page renders inside. The user browses and 
 
 ### A. Rail — `Sidebar` (required)
 
-Full height, `resizable` by its edge and `collapsible` from its foot, with labelled resize and collapse controls (`Resize sidebar`, `Collapse sidebar`, `Expand sidebar`). Header holds the wordmark and the palette, body the navigation, footer the account. Below `md` the same `Sidebar` renders inside the navigation drawer (block R).
+Full height, `resizable` by its edge and `collapsible` from its foot, with labelled resize and collapse controls (`Resize sidebar`, `Collapse sidebar`, `Expand sidebar`). Header holds the wordmark and the palette, body the navigation, footer the account. While compact the same `Sidebar` renders inside the `AppLayout` navigation drawer (block S).
 
 ### B. Wordmark — `Brand` (required)
 
@@ -56,7 +56,7 @@ Names every icon-only control: the account menu, the navigation trigger, the col
 
 ### H. Icon actions — `IconButton` (required)
 
-The account menu trigger, the navigation trigger below `md`, search below `--container-2xl` (the `@2xl:` container variant), Create and Agent below `md`, and the page toolbar (Refresh, Download CSV, Columns).
+The account menu trigger, the navigation trigger while compact, search below `--container-2xl` (the `@2xl:` container variant), Create and Agent while compact, and the page toolbar (Refresh, Download CSV, Columns).
 
 ### I. Theme — `ThemeSwitcher` (required)
 
@@ -64,7 +64,7 @@ Inside the account menu, labelled `Theme`.
 
 ### J. Buttons — `Button` (required)
 
-Upgrade to Pro (`secondary`) in the account menu; Create (`primary`) in the header from `md`; the page's own actions in the stand-in body.
+Upgrade to Pro (`secondary`) in the account menu; Create (`primary`) in the header while not compact; the page's own actions in the stand-in body.
 
 ### K. System status — `StatusIndicator` (required)
 
@@ -72,7 +72,7 @@ At the foot of the account menu: `All systems normal` with `success` severity; s
 
 ### L. Header — `GlobalHeader` (required)
 
-One header, inside the content zone (an `@container`), `aria-label="Console"`. The breadcrumb names the location on every level from `md`: one unlinked crumb on a first-level page, the module and the resource from the second level (see the DetailPage state).
+One header, inside the content zone (an `@container`), `aria-label="Console"`. The breadcrumb names the location on every level while not compact: one unlinked crumb on a first-level page, the module and the resource from the second level (see the DetailPage state).
 
 ### M. Shortcut — `Kbd` (required)
 
@@ -80,11 +80,11 @@ One header, inside the content zone (an `@container`), `aria-label="Console"`. T
 
 ### N. Agent — `ButtonHighlight` (required)
 
-The AI assistant entry in the header from `md`.
+The AI assistant entry in the header while not compact.
 
 ### O. Location — `Breadcrumb` (required)
 
-In the header from `md`: `Resources` alone on the ListPage, with no link; module, resource and the environment `Select` on the DetailPage. A tab is never a crumb.
+In the header while not compact: `Resources` alone on the ListPage, with no link; module, resource and the environment `Select` on the DetailPage. A tab is never a crumb.
 
 ### P. Search field — `Input` (stand-in body)
 
@@ -94,21 +94,13 @@ The sample list's search, with a leading icon and an `aria-label`. The ListPage 
 
 Flush (`:padded="false"`), holding the table; the card is the only border.
 
-### R. Mobile navigation — `Drawer` (required below md)
+### R. Frame — `AppLayout` (required)
 
-Opened from the header trigger, small. Selecting an item closes it.
+Every state renders inside one `AppLayout`: the rail in `#navigation`, the header in `#header`, the page in the default slot (which scrolls on its own), flash messages in `#notifications` and the notifications list in `#tools`. The layout measures its own width, not the viewport's, so the shell turns compact in a narrow host (a split view, an embedded preview) the same way it does on a phone.
 
-### S. Drawer layer — `DrawerPortal` (required below md)
+### S. Compact navigation — `AppLayout` navigation drawer (required below `compactBelow`)
 
-Mounts the drawer at the document root.
-
-### T. Drawer backdrop — `DrawerOverlay` (required below md)
-
-Dims the page behind the open drawer.
-
-### U. Drawer panel — `DrawerContent` (required below md)
-
-`aria-label="Navigation"`, holding the same rail with brand, `Menu` and account footer.
+While compact, `AppLayout` renders the same `Sidebar` inside its navigation drawer, named `Navigation`; the `#navigation` scope's `drawer` flag drops the rail-only resize and collapse controls there. The header scope's `compact` swaps the breadcrumb for the hamburger and wordmark and `openNavigation` opens the drawer. Choosing a `Menu` item calls `closeNavigation` from the `#navigation` scope, so the drawer closes on every navigation. No page composes its own `Drawer` for the rail.
 
 ## Do
 
@@ -142,10 +134,9 @@ Dims the page behind the open drawer.
 
 ## States
 
-- ListPage: a first-level list page in the content zone; the header carries the single unlinked `Resources` crumb and the page opens on its controls row.
-- DetailPage: a resource detail page; the breadcrumb reads module, resource, then an environment Select, and a full-bleed tab bar carries Overview, Deployments and Settings with the outlined Deploy action.
-- Notifications: the bell opens the notifications region beside the content (a drawer when narrow), with unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState once cleared; the failed deploy also shows as a flash Alert above the page. This state is built on `AppLayout` (rail in `#navigation`, header in `#header`, flash in `#notifications`, list in `#tools`), which measures its own width, so the rail and the list become drawers in a narrow host. The bell's `aria-label` carries the unread count and the `Badge` on it is hidden from assistive technology.
-- AccountSwitch: the header starts with the current account (square `Avatar` with its initials, the name, a chevron), `Switch account (Ctrl+O)` on its tooltip and `aria-keyshortcuts`; it and the shortcut open a large `Dialog` with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `Table.CellStatus`, ID and client ID as `Table.CellId`. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search.
+- ListPage: a first-level list page in the `AppLayout` default slot; the header carries the single unlinked `Resources` crumb and the page opens on its controls row.
+- DetailPage: a resource detail page in the same `AppLayout` frame. The breadcrumb reads module, resource, then the environment as a small `Select` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The default slot holds one `main` with a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`) that stays in view while the tab content scrolls under it.
+- Notifications: the bell opens the notifications region beside the content (a drawer when narrow), with unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState once cleared; the failed deploy also shows as a flash Alert above the page. The flash sits in `#notifications` and the list in `#tools`, so both the rail and the list become drawers in a narrow host. The bell's `aria-label` carries the unread count and the `Badge` on it is hidden from assistive technology.
 
 ## Related
 
@@ -156,9 +147,8 @@ Dims the page behind the open drawer.
 ## Variants
 
 - `ListPage` — primary (the code below)
-- `DetailPage` — A resource detail page: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it.
+- `DetailPage` — A resource detail page on `AppLayout`: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it.
 - `Notifications` — The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up.
-- `AccountSwitch` — The account switcher in the header (square Avatar, account name, Ctrl+O or ⌘O): a large Dialog with search over the organization, group and workspace tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.
 
 Each variant is the same screen in another state: `get_pattern("shells/console", { variant })`, or the file under `blocks/shells/console/variants/`.
 
@@ -166,6 +156,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
 
 ```vue
 <script setup>
+  import AppLayout from '@aziontech/webkit/app-layout'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -173,10 +164,6 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
-  import Drawer from '@aziontech/webkit/drawer'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -399,7 +386,6 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
   ]
 
   const activeId = ref('resources')
-  const navOpen = ref(false)
   const paletteOpen = ref(false)
   const paletteQuery = ref('')
   const theme = ref('system')
@@ -466,13 +452,9 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
     }
   ])
 
-  const onNavigate = (event, node) => {
+  const onNavigate = (event, node, closeNavigation) => {
     activeId.value = node.id
-  }
-
-  const onMobileNavigate = (event, node) => {
-    onNavigate(event, node)
-    navOpen.value = false
+    closeNavigation()
   }
 
   const onPaletteSelect = (event, value) => {
@@ -487,418 +469,437 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
 </script>
 
 <template>
-  <div class="relative flex h-dvh overflow-hidden bg-(--bg-canvas)">
-    <div class="hidden h-full [--sidebar-width:var(--container-2xs)] md:flex">
-      <Sidebar
-        v-model:width="railWidth"
-        v-model:collapsed="railCollapsed"
-        resizable
-        collapsible
-        aria-label="Main navigation"
-        collapse-aria-label="Collapse sidebar"
-        expand-aria-label="Expand sidebar"
-        resize-aria-label="Resize sidebar"
-      >
-        <template #header>
-          <div class="-m-(--spacing-md) flex flex-col">
-            <div
-              class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
-            >
-              <a
-                href="/home"
-                aria-label="Azion home"
-                class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+  <div class="h-dvh [--sidebar-width:var(--container-2xs)]">
+    <AppLayout>
+      <template #navigation="{ drawer, closeNavigation }">
+        <Sidebar
+          v-model:width="railWidth"
+          v-model:collapsed="railCollapsed"
+          :resizable="!drawer"
+          :collapsible="!drawer"
+          aria-label="Main navigation"
+          collapse-aria-label="Collapse sidebar"
+          expand-aria-label="Expand sidebar"
+          resize-aria-label="Resize sidebar"
+        >
+          <template #header>
+            <div class="-m-(--spacing-md) flex flex-col">
+              <div
+                class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
               >
-                <Brand
-                  kind="default"
-                  size="small"
-                />
-              </a>
-            </div>
-
-            <Command
-              v-model:open="paletteOpen"
-              @select="onPaletteSelect"
-            >
-              <Command.Input
-                placeholder="Search resources, pages and commands"
-                @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
-              />
-              <Command.List>
-                <Command.Group
-                  v-if="!paletteQuery"
-                  key="recents"
-                  heading="Recents"
+                <a
+                  href="/home"
+                  aria-label="Azion home"
+                  class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                 >
-                  <Command.Item
-                    v-for="row in recentRows"
-                    :key="row.key"
-                    :value="'res:' + row.key"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="row.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ row.name }}
-                    <template #suffix>
-                      <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
-                    </template>
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Separator
-                  v-if="!paletteQuery"
-                  key="recents-rule"
-                />
-
-                <Command.Group
-                  v-for="group in paletteGroups"
-                  :key="group.key"
-                  :heading="group.heading"
-                >
-                  <Command.Item
-                    v-for="item in group.items"
-                    :key="item.id"
-                    :value="'nav:' + item.id"
-                  >
-                    <template
-                      v-if="item.icon"
-                      #prefix
-                    >
-                      <i
-                        :class="item.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ item.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Separator key="commands-rule" />
-
-                <Command.Group heading="Actions">
-                  <Command.Item
-                    v-for="command in actionCommands"
-                    :key="command.id"
-                    :value="'cmd:' + command.id"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="command.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ command.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Group heading="Account">
-                  <Command.Item
-                    v-for="command in accountCommands"
-                    :key="command.id"
-                    :value="'cmd:' + command.id"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="command.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ command.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Empty>No resource, page or command matches your search.</Command.Empty>
-              </Command.List>
-            </Command>
-          </div>
-        </template>
-
-        <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
-          <Menu
-            :groups="navGroups"
-            :active-id="activeId"
-            role="presentation"
-            @navigate="onNavigate"
-          >
-            <Menu.Back />
-          </Menu>
-        </div>
-
-        <template #footer>
-          <div class="flex items-center gap-(--spacing-xs)">
-            <Avatar
-              label="alex@example.com"
-              size="small"
-              kind="square"
-            />
-            <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">alex</span>
-            <DropdownMenu placement="top-end">
-              <DropdownMenu.Trigger>
-                <Tooltip text="Account menu">
-                  <IconButton
-                    icon="pi pi-ellipsis-v"
-                    aria-label="Account menu"
-                    kind="outlined"
+                  <Brand
+                    kind="default"
                     size="small"
                   />
-                </Tooltip>
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <template #top>
-                  <div class="flex min-w-0 flex-col">
-                    <span class="truncate text-label-md text-(--text-default)">alex</span>
-                    <span class="truncate text-body-xs text-(--text-muted)">alex@example.com</span>
-                  </div>
-                </template>
-                <DropdownMenu.Option
-                  value="settings"
-                  label="Account settings"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-cog"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="personal-tokens"
-                  label="Personal tokens"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-key"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <div
-                  class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
-                >
-                  <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
-                    >Theme</span
+                </a>
+              </div>
+
+              <Command
+                v-model:open="paletteOpen"
+                @select="onPaletteSelect"
+              >
+                <Command.Input
+                  placeholder="Search resources, pages and commands"
+                  @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
+                />
+                <Command.List>
+                  <Command.Group
+                    v-if="!paletteQuery"
+                    key="recents"
+                    heading="Recents"
                   >
-                  <ThemeSwitcher
-                    v-model="theme"
-                    aria-label="Theme"
+                    <Command.Item
+                      v-for="row in recentRows"
+                      :key="row.key"
+                      :value="'res:' + row.key"
+                    >
+                      <template #prefix>
+                        <i
+                          :class="row.icon"
+                          aria-hidden="true"
+                        />
+                      </template>
+                      {{ row.name }}
+                      <template #suffix>
+                        <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
+                      </template>
+                    </Command.Item>
+                  </Command.Group>
+
+                  <Command.Separator
+                    v-if="!paletteQuery"
+                    key="recents-rule"
                   />
-                </div>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="home"
-                  label="Home page"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-home"
-                      aria-hidden="true"
+
+                  <Command.Group
+                    v-for="group in paletteGroups"
+                    :key="group.key"
+                    :heading="group.heading"
+                  >
+                    <Command.Item
+                      v-for="item in group.items"
+                      :key="item.id"
+                      :value="'nav:' + item.id"
+                    >
+                      <template
+                        v-if="item.icon"
+                        #prefix
+                      >
+                        <i
+                          :class="item.icon"
+                          aria-hidden="true"
+                        />
+                      </template>
+                      {{ item.label }}
+                    </Command.Item>
+                  </Command.Group>
+
+                  <Command.Separator key="commands-rule" />
+
+                  <Command.Group heading="Actions">
+                    <Command.Item
+                      v-for="command in actionCommands"
+                      :key="command.id"
+                      :value="'cmd:' + command.id"
+                    >
+                      <template #prefix>
+                        <i
+                          :class="command.icon"
+                          aria-hidden="true"
+                        />
+                      </template>
+                      {{ command.label }}
+                    </Command.Item>
+                  </Command.Group>
+
+                  <Command.Group heading="Account">
+                    <Command.Item
+                      v-for="command in accountCommands"
+                      :key="command.id"
+                      :value="'cmd:' + command.id"
+                    >
+                      <template #prefix>
+                        <i
+                          :class="command.icon"
+                          aria-hidden="true"
+                        />
+                      </template>
+                      {{ command.label }}
+                    </Command.Item>
+                  </Command.Group>
+
+                  <Command.Empty>No resource, page or command matches your search.</Command.Empty>
+                </Command.List>
+              </Command>
+            </div>
+          </template>
+
+          <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
+            <Menu
+              :groups="navGroups"
+              :active-id="activeId"
+              role="presentation"
+              @navigate="(event, node) => onNavigate(event, node, closeNavigation)"
+            >
+              <Menu.Back />
+            </Menu>
+          </div>
+
+          <template #footer>
+            <div class="flex items-center gap-(--spacing-xs)">
+              <Avatar
+                label="alex@example.com"
+                size="small"
+                kind="square"
+              />
+              <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">alex</span>
+              <DropdownMenu placement="top-end">
+                <DropdownMenu.Trigger>
+                  <Tooltip text="Account menu">
+                    <IconButton
+                      icon="pi pi-ellipsis-v"
+                      aria-label="Account menu"
+                      kind="outlined"
+                      size="small"
                     />
+                  </Tooltip>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <template #top>
+                    <div class="flex min-w-0 flex-col">
+                      <span class="truncate text-label-md text-(--text-default)">alex</span>
+                      <span class="truncate text-body-xs text-(--text-muted)"
+                        >alex@example.com</span
+                      >
+                    </div>
                   </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="changelog"
-                  label="Changelog"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-pencil"
-                      aria-hidden="true"
+                  <DropdownMenu.Option
+                    value="settings"
+                    label="Account settings"
+                  >
+                    <template #right>
+                      <i
+                        class="pi pi-cog"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </DropdownMenu.Option>
+                  <DropdownMenu.Option
+                    value="personal-tokens"
+                    label="Personal tokens"
+                  >
+                    <template #right>
+                      <i
+                        class="pi pi-key"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </DropdownMenu.Option>
+                </DropdownMenu.Group>
+                <DropdownMenu.Group>
+                  <div
+                    class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
+                  >
+                    <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
+                      >Theme</span
+                    >
+                    <ThemeSwitcher
+                      v-model="theme"
+                      aria-label="Theme"
                     />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="feedback"
-                  label="Feedback"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-comment"
-                      aria-hidden="true"
+                  </div>
+                </DropdownMenu.Group>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
+                    value="home"
+                    label="Home page"
+                  >
+                    <template #right>
+                      <i
+                        class="pi pi-home"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </DropdownMenu.Option>
+                  <DropdownMenu.Option
+                    value="changelog"
+                    label="Changelog"
+                  >
+                    <template #right>
+                      <i
+                        class="pi pi-pencil"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </DropdownMenu.Option>
+                  <DropdownMenu.Option
+                    value="feedback"
+                    label="Feedback"
+                  >
+                    <template #right>
+                      <i
+                        class="pi pi-comment"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </DropdownMenu.Option>
+                  <DropdownMenu.Option
+                    value="docs"
+                    label="Docs"
+                  >
+                    <template #right>
+                      <i
+                        class="pi pi-book"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </DropdownMenu.Option>
+                </DropdownMenu.Group>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
+                    value="logout"
+                    label="Log out"
+                  >
+                    <template #right>
+                      <i
+                        class="pi pi-sign-out"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </DropdownMenu.Option>
+                </DropdownMenu.Group>
+                <DropdownMenu.Group>
+                  <div
+                    class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
+                  >
+                    <Button
+                      label="Upgrade to Pro"
+                      kind="secondary"
+                      size="medium"
+                      class="w-full"
                     />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="docs"
-                  label="Docs"
+                    <div class="flex justify-center px-(--spacing-xs)">
+                      <StatusIndicator
+                        severity="success"
+                        label="All systems normal"
+                      />
+                    </div>
+                  </div>
+                </DropdownMenu.Group>
+              </DropdownMenu>
+            </div>
+          </template>
+        </Sidebar>
+      </template>
+
+      <template #header="{ compact, openNavigation }">
+        <div class="@container">
+          <GlobalHeader aria-label="Console">
+            <GlobalHeader.Left>
+              <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
+                <span
+                  v-if="compact"
+                  class="contents"
                 >
-                  <template #right>
-                    <i
-                      class="pi pi-book"
-                      aria-hidden="true"
+                  <Tooltip
+                    text="Open navigation"
+                    placement="bottom"
+                  >
+                    <IconButton
+                      icon="pi pi-bars"
+                      aria-label="Open navigation"
+                      kind="outlined"
+                      size="medium"
+                      @click="openNavigation"
                     />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="logout"
-                  label="Log out"
+                  </Tooltip>
+                </span>
+
+                <a
+                  v-if="compact"
+                  href="/home"
+                  aria-label="Azion home"
+                  class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                 >
-                  <template #right>
-                    <i
-                      class="pi pi-sign-out"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
-                  <Button
-                    label="Upgrade to Pro"
-                    kind="secondary"
-                    size="medium"
+                  <Brand
+                    kind="default"
+                    size="small"
+                  />
+                </a>
+
+                <div
+                  v-else
+                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
+                >
+                  <Breadcrumb
+                    :items="crumbs"
                     class="w-full"
                   />
-                  <div class="flex justify-center px-(--spacing-xs)">
-                    <StatusIndicator
-                      severity="success"
-                      label="All systems normal"
-                    />
-                  </div>
                 </div>
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </div>
-        </template>
-      </Sidebar>
-    </div>
+              </div>
+            </GlobalHeader.Left>
+            <GlobalHeader.Middle />
+            <GlobalHeader.Right>
+              <span class="contents @2xl:hidden">
+                <IconButton
+                  icon="pi pi-search"
+                  kind="outlined"
+                  size="medium"
+                  aria-label="Search"
+                  aria-keyshortcuts="Meta+K"
+                  @click="paletteOpen = true"
+                />
+              </span>
+              <button
+                type="button"
+                aria-label="Search"
+                aria-keyshortcuts="Meta+K"
+                class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @2xl:flex"
+                @click="paletteOpen = true"
+              >
+                <span
+                  class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
+                  aria-hidden="true"
+                >
+                  <i class="pi pi-search" />
+                </span>
+                <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-muted)"
+                  >Search</span
+                >
+                <Kbd
+                  meta
+                  size="small"
+                  class="shrink-0"
+                  >K</Kbd
+                >
+              </button>
 
-    <div class="flex min-w-0 flex-1 flex-col">
-      <div class="@container">
-        <GlobalHeader aria-label="Console">
-          <GlobalHeader.Left>
-            <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
-              <span class="contents md:hidden">
+              <span
+                v-if="compact"
+                class="contents"
+              >
                 <Tooltip
-                  text="Open navigation"
+                  text="Create"
                   placement="bottom"
                 >
                   <IconButton
-                    icon="pi pi-bars"
-                    aria-label="Open navigation"
+                    icon="pi pi-plus-circle"
+                    kind="primary"
+                    size="medium"
+                    aria-label="Create"
+                  />
+                </Tooltip>
+                <Tooltip
+                  text="Agent"
+                  placement="bottom"
+                >
+                  <IconButton
+                    icon="ai ai-ask-azion"
                     kind="outlined"
                     size="medium"
-                    @click="navOpen = true"
+                    aria-label="Agent"
                   />
                 </Tooltip>
               </span>
-
-              <a
-                href="/home"
-                aria-label="Azion home"
-                class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none md:hidden"
-              >
-                <Brand
-                  kind="default"
-                  size="small"
-                />
-              </a>
-
-              <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
-                <Breadcrumb
-                  :items="crumbs"
-                  class="w-full"
-                />
-              </div>
-            </div>
-          </GlobalHeader.Left>
-          <GlobalHeader.Middle />
-          <GlobalHeader.Right>
-            <span class="contents @2xl:hidden">
-              <IconButton
-                icon="pi pi-search"
-                kind="outlined"
-                size="medium"
-                aria-label="Search"
-                aria-keyshortcuts="Meta+K"
-                @click="paletteOpen = true"
-              />
-            </span>
-            <button
-              type="button"
-              aria-label="Search"
-              aria-keyshortcuts="Meta+K"
-              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @2xl:flex"
-              @click="paletteOpen = true"
-            >
               <span
-                class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
-                aria-hidden="true"
+                v-else
+                class="contents"
               >
-                <i class="pi pi-search" />
-              </span>
-              <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-muted)">Search</span>
-              <Kbd
-                meta
-                size="small"
-                class="shrink-0"
-                >K</Kbd
-              >
-            </button>
-
-            <span class="contents md:hidden">
-              <Tooltip
-                text="Create"
-                placement="bottom"
-              >
-                <IconButton
-                  icon="pi pi-plus-circle"
+                <Button
+                  label="Create"
                   kind="primary"
                   size="medium"
-                  aria-label="Create"
+                  icon="pi pi-plus-circle"
                 />
-              </Tooltip>
-              <Tooltip
-                text="Agent"
-                placement="bottom"
-              >
-                <IconButton
-                  icon="ai ai-ask-azion"
-                  kind="outlined"
+                <ButtonHighlight
+                  label="Agent"
                   size="medium"
-                  aria-label="Agent"
+                  icon="ai ai-ask-azion"
                 />
-              </Tooltip>
-            </span>
-            <span class="hidden md:contents">
-              <Button
-                label="Create"
-                kind="primary"
-                size="medium"
-                icon="pi pi-plus-circle"
-              />
-              <ButtonHighlight
-                label="Agent"
-                size="medium"
-                icon="ai ai-ask-azion"
-              />
-            </span>
+              </span>
 
-            <button
-              type="button"
-              aria-label="Account settings"
-              class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-            >
-              <Avatar
-                label="alex@example.com"
-                size="medium"
-                kind="square"
-              />
-            </button>
-          </GlobalHeader.Right>
-        </GlobalHeader>
-      </div>
+              <button
+                type="button"
+                aria-label="Account settings"
+                class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+              >
+                <Avatar
+                  label="alex@example.com"
+                  size="medium"
+                  kind="square"
+                />
+              </button>
+            </GlobalHeader.Right>
+          </GlobalHeader>
+        </div>
+      </template>
 
-      <div
-        class="min-h-0 flex-1 overflow-auto layout-boundary animate-page-enter motion-reduce:animate-none"
-      >
+      <div class="layout-boundary animate-page-enter motion-reduce:animate-none">
         <main class="layout-column flex min-h-full flex-col">
           <section class="flex min-w-0 flex-col gap-(--layout-section-gap)">
             <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -990,197 +991,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
           </section>
         </main>
       </div>
-    </div>
-
-    <Drawer
-      v-model:open="navOpen"
-      side="right"
-      size="small"
-    >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent aria-label="Navigation">
-          <Sidebar aria-label="Main navigation">
-            <template #header>
-              <div class="-m-(--spacing-md) flex flex-col">
-                <div
-                  class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
-                >
-                  <a
-                    href="/home"
-                    aria-label="Azion home"
-                    class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                  >
-                    <Brand
-                      kind="default"
-                      size="small"
-                    />
-                  </a>
-                </div>
-              </div>
-            </template>
-
-            <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
-              <Menu
-                :groups="navGroups"
-                :active-id="activeId"
-                role="presentation"
-                @navigate="onMobileNavigate"
-              >
-                <Menu.Back />
-              </Menu>
-            </div>
-
-            <template #footer>
-              <div class="flex items-center gap-(--spacing-xs)">
-                <Avatar
-                  label="alex@example.com"
-                  size="small"
-                  kind="square"
-                />
-                <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
-                  >alex</span
-                >
-                <DropdownMenu placement="top-end">
-                  <DropdownMenu.Trigger>
-                    <Tooltip text="Account menu">
-                      <IconButton
-                        icon="pi pi-ellipsis-v"
-                        aria-label="Account menu"
-                        kind="outlined"
-                        size="small"
-                      />
-                    </Tooltip>
-                  </DropdownMenu.Trigger>
-                  <DropdownMenu.Group>
-                    <template #top>
-                      <div class="flex min-w-0 flex-col">
-                        <span class="truncate text-label-md text-(--text-default)">alex</span>
-                        <span class="truncate text-body-xs text-(--text-muted)"
-                          >alex@example.com</span
-                        >
-                      </div>
-                    </template>
-                    <DropdownMenu.Option
-                      value="settings"
-                      label="Account settings"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-cog"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="personal-tokens"
-                      label="Personal tokens"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-key"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <div
-                      class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
-                    >
-                      <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
-                        >Theme</span
-                      >
-                      <ThemeSwitcher
-                        v-model="theme"
-                        aria-label="Theme"
-                      />
-                    </div>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Option
-                      value="home"
-                      label="Home page"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-home"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="changelog"
-                      label="Changelog"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-pencil"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="feedback"
-                      label="Feedback"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-comment"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="docs"
-                      label="Docs"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-book"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Option
-                      value="logout"
-                      label="Log out"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-sign-out"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <div
-                      class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
-                    >
-                      <Button
-                        label="Upgrade to Pro"
-                        kind="secondary"
-                        size="medium"
-                        class="w-full"
-                      />
-                      <div class="flex justify-center px-(--spacing-xs)">
-                        <StatusIndicator
-                          severity="success"
-                          label="All systems normal"
-                        />
-                      </div>
-                    </div>
-                  </DropdownMenu.Group>
-                </DropdownMenu>
-              </div>
-            </template>
-          </Sidebar>
-        </DrawerContent>
-      </DrawerPortal>
-    </Drawer>
+    </AppLayout>
   </div>
 </template>
 ```

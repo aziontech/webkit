@@ -23,7 +23,10 @@
     "summary before submit",
     "revisar",
     "etapa de revisão",
-    "revisão antes de criar"
+    "revisão antes de criar",
+    "review before create",
+    "summary step",
+    "revisar antes de criar"
   ],
   "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
   "steps": ["where-it-runs", "module", "settings"],
@@ -41,6 +44,11 @@
       "name": "ListSettings",
       "summary": "The last step of a list bound to acme-production: the Type as wide RadioButton choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Create access list in the footer. Leaving the list empty flags it and marks the step red on the rail.",
       "file": "variants/list-settings.vue"
+    },
+    {
+      "name": "Review",
+      "summary": "The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as, the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step, marked red on the rail.",
+      "file": "variants/review.vue"
     }
   ]
 }

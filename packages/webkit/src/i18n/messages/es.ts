@@ -171,6 +171,10 @@ export const es: Messages = {
     timezone: 'Zona horaria',
     localTimezone: 'Local'
   },
+  card: {
+    byVendor: 'por {vendor}',
+    installed: 'Instalado'
+  },
   cards: {
     label: 'Elementos',
     selectAll: 'Seleccionar todos los elementos',

@@ -78,12 +78,12 @@ describe('account/tokens', () => {
     })
     await fireEvent.click(buttonByText('Create', drawer))
     await waitFor(() => expect(drawer.textContent).toContain('This field is required.'))
-    await userEvent.type(view.getByLabelText('Name'), 'Local CLI')
+    await userEvent.type(view.getByLabelText(/^Name/), 'Local CLI')
     await fireEvent.click(buttonByText('Create', drawer))
     await waitFor(() =>
       expect(drawer.textContent).toContain('A token with this name already exists.')
     )
-    const name = view.getByLabelText('Name') as HTMLInputElement
+    const name = view.getByLabelText(/^Name/) as HTMLInputElement
     await userEvent.clear(name)
     await userEvent.type(name, 'Release bot')
     await fireEvent.click(buttonByText('Create', drawer))
@@ -142,8 +142,8 @@ describe('team-permissions#CreateTeam', () => {
     await fireEvent.click(buttonByText('Clear'))
     await fireEvent.click(buttonByText('Create'))
     expect(view.getByText('This field is required.')).toBeTruthy()
-    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText('Name')))
-    await userEvent.type(view.getByLabelText('Name'), 'Support')
+    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText(/^Name/)))
+    await userEvent.type(view.getByLabelText(/^Name/), 'Support')
     await fireEvent.click(buttonByText('Create'))
     expect(view.getByText('Select at least one permission.')).toBeTruthy()
     await expectNoA11yViolations(view.container)

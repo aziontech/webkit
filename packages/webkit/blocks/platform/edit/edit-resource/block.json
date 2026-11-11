@@ -49,7 +49,20 @@
     "excluir recurso",
     "alterado em outro lugar",
     "leave page guard",
-    "unsaved changes dialog"
+    "unsaved changes dialog",
+    "cache settings",
+    "cache policy",
+    "browser cache",
+    "edge cache",
+    "tiered cache",
+    "configurações de cache",
+    "protocol settings",
+    "https ports",
+    "http/3",
+    "tls version",
+    "mutual authentication",
+    "mtls",
+    "autenticação mútua"
   ],
   "skills": ["webkit-form", "webkit-errors", "webkit-layout", "webkit-ux-heuristics"],
   "primary": {
@@ -96,6 +109,16 @@
       "name": "DangerZone",
       "summary": "The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs.",
       "file": "variants/danger-zone.vue"
+    },
+    {
+      "name": "CacheSettings",
+      "summary": "One cache setting of an application at /applications/:id/cache-settings/:name, on the `AppLayout` console shell: General (the name rules pick it by), Browser cache and Edge cache (behavior `Select`, the maximum TTL `NumberInput` only while overriding, stale cache, large file optimization with its fragment size, tiered cache with its topology) and the collapsed Advanced cache key band (HTTP methods in a `MultiSelect`, query string and cookie behavior with their allowlist or denylist). Each dependent row is indented under its switch or behavior. An edge TTL under 60 seconds or an empty list marks the field invalid with its reason; Save deploys the application and reports through the async-submit toast with Edit and Redeploy.",
+      "file": "variants/cache-settings.vue"
+    },
+    {
+      "name": "Protocols",
+      "summary": "The protocol settings of a workload on the `AppLayout` console shell: Protocols (HTTP ports, HTTPS support with its ports, HTTP/3 support with its ports, minimum TLS version and cipher suite) and Mutual authentication (off and explained until HTTPS is on; then the Enforce or Permissive mode as `Field` choice cards, the trusted CA certificate picker, a searchable `Select` with expiry beside each certificate and Upload certificate at its foot, which opens a `Drawer` that validates the name and the PEM and picks the new certificate, and the revocation lists). HTTP/3 turns HTTPS on, turning HTTPS off turns HTTP/3 and mutual authentication off. Save checks that each protocol has a port and that mutual authentication has a CA, then deploys through the async-submit toast with Edit and Redeploy.",
+      "file": "variants/protocols.vue"
     }
   ]
 }

@@ -5338,7 +5338,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Heading rendered in the header when the `header` slot is empty."
+     "doc": "Heading rendered in the header when the `header` slot is empty; with `kind=\"integration\"`, the item name."
     },
     {
      "name": "padded",
@@ -5346,6 +5346,62 @@
      "default": "true",
      "required": "false",
      "doc": "Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers."
+    },
+    {
+     "name": "kind",
+     "type": "'default' | 'integration'",
+     "default": "'default'",
+     "required": "false",
+     "doc": "integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot."
+    },
+    {
+     "name": "logo",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: icon class for the logo mark. The `logo` slot takes an image instead."
+    },
+    {
+     "name": "vendor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: who publishes the item, shown as \"by {vendor}\"."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: one or two sentences on what the item does."
+    },
+    {
+     "name": "badges",
+     "type": "CardBadge[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity defaults to `info`)."
+    },
+    {
+     "name": "installed",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Integration kind: shows the Installed tag."
+    },
+    {
+     "name": "href",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Integration kind: the title links here; without it the title is a button that emits `select`."
+    }
+   ],
+   "events": [
+    {
+     "name": "select",
+     "payload": "event: MouseEvent",
+     "notes": "Integration kind without `href`: the title (the whole tile) was activated."
     }
    ],
    "slots": [
@@ -5362,12 +5418,22 @@
     {
      "name": "content",
      "scope": "—",
-     "notes": "Main card body."
+     "notes": "Main card body; with `kind=\"integration\"` it renders under the description."
     },
     {
      "name": "footer",
      "scope": "—",
      "notes": "Footer actions or metadata; omitted when empty."
+    },
+    {
+     "name": "logo",
+     "scope": "—",
+     "notes": "Integration kind: replaces the logo mark, for an `img` with an empty `alt`."
+    },
+    {
+     "name": "action",
+     "scope": "—",
+     "notes": "Integration kind: one action at the end of the tile, above the stretched title target."
     }
    ],
    "surface": "product",
@@ -6584,47 +6650,6 @@
    "surface": "product",
    "examplesFile": "catalog/examples/overflow-count.json",
    "docsFile": "catalog/components/overflow-count.json"
-  },
-  "payment-brand": {
-   "import": "@aziontech/webkit/payment-brand",
-   "target": "./src/components/content/payment-brand/payment-brand.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/payment-brand",
-   "category": "content",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "brand",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`…). Unknown values draw the generic card glyph."
-    },
-    {
-     "name": "size",
-     "type": "'small' | 'medium'",
-     "default": "'medium'",
-     "required": "false",
-     "doc": "Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms."
-    },
-    {
-     "name": "label",
-     "type": "string",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand."
-    },
-    {
-     "name": "decorative",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Hide the plate from assistive technology when the text next to it already names the brand."
-    }
-   ],
-   "surface": "product",
-   "examplesFile": "catalog/examples/payment-brand.json",
-   "docsFile": "catalog/components/payment-brand.json"
   },
   "key-value-pairs-root": {
    "import": "@aziontech/webkit/key-value-pairs-root",
@@ -11283,87 +11308,6 @@
    "examplesFile": "catalog/examples/label.json",
    "docsFile": "catalog/components/label.json"
   },
-  "otp-input": {
-   "import": "@aziontech/webkit/otp-input",
-   "target": "./src/components/inputs/otp-input/otp-input.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/otp-input",
-   "category": "inputs",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "modelValue",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "The code typed so far, without separators."
-    },
-    {
-     "name": "length",
-     "type": "number",
-     "default": "6",
-     "required": "false",
-     "doc": "How many characters the code has; one box each."
-    },
-    {
-     "name": "mode",
-     "type": "'numeric' | 'alphanumeric'",
-     "default": "'numeric'",
-     "required": "false",
-     "doc": "numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case."
-    },
-    {
-     "name": "group",
-     "type": "number",
-     "default": "0",
-     "required": "false",
-     "doc": "Draw a separator after every `group` boxes (`3` gives `123 – 456`). `0` draws none."
-    },
-    {
-     "name": "disabled",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Disables the field while a code is being checked."
-    },
-    {
-     "name": "invalid",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Danger borders on every box and `aria-invalid`; set after a rejected code."
-    },
-    {
-     "name": "required",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Native `required` and `aria-required`."
-    },
-    {
-     "name": "autofocus",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Focus the field on mount, for a screen whose only task is the code."
-    }
-   ],
-   "events": [
-    {
-     "name": "update:modelValue",
-     "payload": "string",
-     "notes": ""
-    },
-    {
-     "name": "complete",
-     "payload": "string",
-     "notes": ""
-    }
-   ],
-   "surface": "product",
-   "examplesFile": "catalog/examples/otp-input.json",
-   "docsFile": "catalog/components/otp-input.json"
-  },
   "password-input": {
    "import": "@aziontech/webkit/password-input",
    "target": "./src/components/inputs/password-input/password-input.vue",
@@ -13219,8 +13163,8 @@
     },
     {
      "name": "navigation",
-     "scope": "{ drawer: boolean }",
-     "notes": "The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact."
+     "scope": "{ drawer: boolean, closeNavigation: () => void }",
+     "notes": "The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. `closeNavigation` closes the drawer, e.g. after an item is chosen."
     },
     {
      "name": "header",
@@ -23919,80 +23863,6 @@
    "variants": [],
    "file": "catalog/patterns/headers/site-header.json"
   },
-  "platform/account/activity-history": {
-   "name": "ActivityHistory",
-   "title": "Templates/Platform/Account/ActivityHistory",
-   "source": "blocks/platform/account/activity-history/activity-history.vue",
-   "surface": "product",
-   "summary": "The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `Table` of events, newest first: Event, Category as `Table.CellStatus`, User, IP address with a `CopyButton`, and Date as `Table.CellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry.",
-   "intents": [
-    "activity history",
-    "audit log",
-    "audit trail",
-    "account activity",
-    "security log",
-    "who did what",
-    "user activity",
-    "event history",
-    "histórico de atividades",
-    "log de auditoria",
-    "trilha de auditoria",
-    "atividade da conta"
-   ],
-   "skills": [
-    "webkit-lists",
-    "webkit-tables",
-    "webkit-ui-states",
-    "webkit-microcopy"
-   ],
-   "components": [
-    "Alert",
-    "Button",
-    "Card",
-    "CollectionPreferences",
-    "CopyButton",
-    "DateRangePicker",
-    "EmptyState",
-    "IconButton",
-    "PageHeader",
-    "PropertyFilter",
-    "Table",
-    "Tooltip",
-    "use-collection"
-   ],
-   "imports": [
-    "@aziontech/webkit/alert",
-    "@aziontech/webkit/button",
-    "@aziontech/webkit/card",
-    "@aziontech/webkit/collection-preferences",
-    "@aziontech/webkit/copy-button",
-    "@aziontech/webkit/date-range-picker",
-    "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/icon-button",
-    "@aziontech/webkit/page-header",
-    "@aziontech/webkit/property-filter",
-    "@aziontech/webkit/table",
-    "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-collection"
-   ],
-   "primary": "Default",
-   "guidelinesSummary": "The account's audit log. An admin or a security reviewer answers \"who did this, from where, and when\": a token that was revoked, a role that changed, a sign-in that failed, a plan that was upgraded. They narrow the log by period, category, person and address, read the newest events first, copy an IP address into another tool, and export what they found.",
-   "variants": [
-    {
-     "name": "Empty",
-     "summary": "No event in the selected period (the last 15 minutes): the controls stay, and a flush EmptyState offers Show the last 30 days."
-    },
-    {
-     "name": "Loading",
-     "summary": "The first load: the controls and the table's loading rows."
-    },
-    {
-     "name": "Failed",
-     "summary": "The log did not load: a danger Alert with Retry replaces the table; Retry loads the events."
-    }
-   ],
-   "file": "catalog/patterns/platform/account/activity-history.json"
-  },
   "platform/account/change-plan-drawer": {
    "name": "ChangePlanDrawer",
    "title": "Templates/Platform/Account/ChangePlanDrawer",
@@ -24019,10 +23889,7 @@
     "purchase plan",
     "fazer upgrade",
     "assinar plano",
-    "finalizar compra",
-    "upgrade checkout",
-    "accept terms",
-    "checkout de upgrade"
+    "finalizar compra"
    ],
    "skills": [
     "webkit-microcopy",
@@ -24049,7 +23916,6 @@
     "PanelContent",
     "PanelFooter",
     "PanelHeader",
-    "PaymentBrand",
     "Select",
     "Separator",
     "toast",
@@ -24074,7 +23940,6 @@
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
-    "@aziontech/webkit/payment-brand",
     "@aziontech/webkit/select",
     "@aziontech/webkit/separator",
     "@aziontech/webkit/toast",
@@ -24082,12 +23947,7 @@
    ],
    "primary": "Default",
    "guidelinesSummary": "The drawer the Billing page opens from its Subscription Plan card. The user wants to compare tiers and move the account to one without leaving Billing: a Monthly or Yearly switch over the Free, Pro and Enterprise pricing cards, each with its features and one action. Continue with Pro stacks the Upgrade to Pro drawer on top (what is included, the charge, the payment method and the billing address, then Upgrade); Contact sales closes the drawer.",
-   "variants": [
-    {
-     "name": "Checkout",
-     "summary": "The Upgrade to Pro drawer opened at checkout: the charge with Due today and the renewal and tax note, the payment method, the billing address, and a required terms Checkbox with Terms of Service and Privacy Policy links; Upgrade without it marks the checkbox invalid and focuses it."
-    }
-   ],
+   "variants": [],
    "file": "catalog/patterns/platform/account/change-plan-drawer.json"
   },
   "platform/account/onboarding-form": {
@@ -24143,7 +24003,6 @@
     "PanelContent",
     "PanelFooter",
     "PanelHeader",
-    "PaymentBrand",
     "Progress",
     "RadioCards",
     "Select",
@@ -24174,7 +24033,6 @@
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
-    "@aziontech/webkit/payment-brand",
     "@aziontech/webkit/progress",
     "@aziontech/webkit/radio-cards",
     "@aziontech/webkit/select",
@@ -24202,7 +24060,7 @@
    "title": "Templates/Platform/Account/PaymentMethodCard",
    "source": "blocks/platform/account/payment-method-card/payment-method-card.vue",
    "surface": "product",
-   "summary": "The Payment method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert`, `Button` and `PaymentBrand` (the monochrome card-brand plate in theme tokens).",
+   "summary": "The Payment method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert` and `Button`; the Visa plate is an inline monochrome card-brand mark drawn in theme tokens (`--bg-surface`, `--border-default`, `--text-default`), since webkit ships no card-brand asset.",
    "intents": [
     "payment method",
     "credit card form",
@@ -24238,7 +24096,6 @@
     "Card",
     "Field",
     "Input",
-    "PaymentBrand",
     "Select"
    ],
    "imports": [
@@ -24247,7 +24104,6 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/field",
     "@aziontech/webkit/input",
-    "@aziontech/webkit/payment-brand",
     "@aziontech/webkit/select"
    ],
    "primary": "Default",
@@ -24332,228 +24188,6 @@
    "guidelinesSummary": "The profile page of a signed-in account, and the layout every account settings page follows. The user comes to check or change how the account is identified, billed and signed into: a small page heading over stacked sections, each a flush card of setting rows in the form column, with a save bar that rises once a saved field changes. Billing, credentials, users and teams keep the same column and swap the sections for their own cards or tables.",
    "variants": [],
    "file": "catalog/patterns/platform/account/profile.json"
-  },
-  "platform/account/team-permissions": {
-   "name": "TeamPermissions",
-   "title": "Templates/Platform/Account/TeamPermissions",
-   "source": "blocks/platform/account/team-permissions/team-permissions.vue",
-   "surface": "product",
-   "summary": "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`.",
-   "intents": [
-    "teams",
-    "teams and permissions",
-    "roles",
-    "roles and permissions",
-    "permission matrix",
-    "access control",
-    "rbac",
-    "create team",
-    "user groups",
-    "times e permissões",
-    "papéis e permissões",
-    "matriz de permissões",
-    "controle de acesso",
-    "criar time"
-   ],
-   "skills": [
-    "webkit-lists",
-    "webkit-tables",
-    "webkit-form",
-    "webkit-ui-states",
-    "webkit-microcopy"
-   ],
-   "components": [
-    "Alert",
-    "Avatar",
-    "Button",
-    "Card",
-    "Checkbox",
-    "ConfirmDialog",
-    "DropdownMenu",
-    "EmptyState",
-    "Field",
-    "IconButton",
-    "Input",
-    "PageHeader",
-    "SaveBar",
-    "SettingsSection",
-    "Switch",
-    "Table",
-    "Textarea",
-    "toast",
-    "Tooltip",
-    "use-collection"
-   ],
-   "imports": [
-    "@aziontech/webkit/alert",
-    "@aziontech/webkit/avatar",
-    "@aziontech/webkit/button",
-    "@aziontech/webkit/card",
-    "@aziontech/webkit/checkbox",
-    "@aziontech/webkit/confirm-dialog",
-    "@aziontech/webkit/dropdown-menu",
-    "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/field",
-    "@aziontech/webkit/icon-button",
-    "@aziontech/webkit/input",
-    "@aziontech/webkit/page-header",
-    "@aziontech/webkit/save-bar",
-    "@aziontech/webkit/settings-section",
-    "@aziontech/webkit/switch",
-    "@aziontech/webkit/table",
-    "@aziontech/webkit/textarea",
-    "@aziontech/webkit/toast",
-    "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-collection"
-   ],
-   "primary": "Default",
-   "guidelinesSummary": "Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model.",
-   "variants": [
-    {
-     "name": "CreateTeam",
-     "summary": "The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Save in a SaveBar; errors on the name field and above the matrix."
-    },
-    {
-     "name": "Empty",
-     "summary": "No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table."
-    },
-    {
-     "name": "Loading",
-     "summary": "The first load: the search row and the table's loading rows."
-    },
-    {
-     "name": "Failed",
-     "summary": "The teams did not load: a danger Alert with Retry replaces the table; Retry loads them."
-    }
-   ],
-   "file": "catalog/patterns/platform/account/team-permissions.json"
-  },
-  "platform/account/tokens": {
-   "name": "Tokens",
-   "title": "Templates/Platform/Account/Tokens",
-   "source": "blocks/platform/account/tokens/tokens.vue",
-   "surface": "product",
-   "summary": "The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, a search `Input` and Refresh over a `Table` of tokens (name with its description, `Table.CellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `Table.CellTime` for last use and creation, `Table.CellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast.",
-   "intents": [
-    "personal tokens",
-    "personal access tokens",
-    "api tokens",
-    "api keys",
-    "access tokens",
-    "create token",
-    "revoke token",
-    "copy token once",
-    "token expiration",
-    "tokens pessoais",
-    "token de acesso",
-    "chaves de api",
-    "criar token",
-    "revogar token"
-   ],
-   "skills": [
-    "webkit-lists",
-    "webkit-tables",
-    "webkit-form",
-    "webkit-ui-states",
-    "webkit-microcopy"
-   ],
-   "components": [
-    "Alert",
-    "Button",
-    "Card",
-    "ConfirmDialog",
-    "CopyButton",
-    "Dialog",
-    "DialogContent",
-    "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
-    "DialogTitle",
-    "Drawer",
-    "DrawerClose",
-    "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
-    "DrawerTitle",
-    "DropdownMenu",
-    "EmptyState",
-    "Field",
-    "HelperText",
-    "IconButton",
-    "Input",
-    "Label",
-    "PageHeader",
-    "PanelContent",
-    "PanelFooter",
-    "PanelHeader",
-    "PasswordInput",
-    "Select",
-    "SettingsSection",
-    "Table",
-    "Textarea",
-    "toast",
-    "Tooltip",
-    "use-collection"
-   ],
-   "imports": [
-    "@aziontech/webkit/alert",
-    "@aziontech/webkit/button",
-    "@aziontech/webkit/card",
-    "@aziontech/webkit/confirm-dialog",
-    "@aziontech/webkit/copy-button",
-    "@aziontech/webkit/dialog",
-    "@aziontech/webkit/dialog-content",
-    "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
-    "@aziontech/webkit/dialog-title",
-    "@aziontech/webkit/drawer",
-    "@aziontech/webkit/drawer-close",
-    "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
-    "@aziontech/webkit/drawer-title",
-    "@aziontech/webkit/dropdown-menu",
-    "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/field",
-    "@aziontech/webkit/helper-text",
-    "@aziontech/webkit/icon-button",
-    "@aziontech/webkit/input",
-    "@aziontech/webkit/label",
-    "@aziontech/webkit/page-header",
-    "@aziontech/webkit/panel-content",
-    "@aziontech/webkit/panel-footer",
-    "@aziontech/webkit/panel-header",
-    "@aziontech/webkit/password-input",
-    "@aziontech/webkit/select",
-    "@aziontech/webkit/settings-section",
-    "@aziontech/webkit/table",
-    "@aziontech/webkit/textarea",
-    "@aziontech/webkit/toast",
-    "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-collection"
-   ],
-   "primary": "Default",
-   "guidelinesSummary": "The Personal tokens page of the account settings. A person creates a token for a script, a CI job or the CLI, copies its secret the one time it is shown, sees which tokens are still alive and when each expires or was last used, and revokes one that leaked or is no longer needed. The secret never comes back: the list shows only the name, status and dates, and a lost secret means a new token.",
-   "variants": [
-    {
-     "name": "Empty",
-     "summary": "No token yet: the heading stays and a flush card with an EmptyState and Create Personal Token replaces the search row and the table."
-    },
-    {
-     "name": "Loading",
-     "summary": "The first load: the search row and the table shell with its loading rows, before the empty state can be decided."
-    },
-    {
-     "name": "Failed",
-     "summary": "The list could not load: a danger Alert with Retry in place of the table; Retry loads the tokens."
-    },
-    {
-     "name": "Created",
-     "summary": "Right after Create: the one-time reveal Dialog with the warning, the masked secret with show and copy, and a confirmation that the token was copied."
-    }
-   ],
-   "file": "catalog/patterns/platform/account/tokens.json"
   },
   "platform/ai/ai-action-approval": {
    "name": "AiActionApproval",
@@ -24839,20 +24473,7 @@
     "session expired",
     "auth errors",
     "sessão expirada",
-    "erro de login",
-    "mfa",
-    "multi-factor authentication",
-    "two-factor authentication",
-    "2fa",
-    "authenticator app",
-    "one-time code",
-    "verification code",
-    "totp",
-    "recovery code",
-    "autenticação em dois fatores",
-    "autenticação multifator",
-    "código de verificação",
-    "código de autenticação"
+    "erro de login"
    ],
    "skills": [
     "webkit-form",
@@ -24871,14 +24492,12 @@
     "Brand",
     "Button",
     "Card",
-    "CopyButton",
     "Field",
     "GlobalHeader",
     "HelperText",
     "IconButton",
     "Input",
     "Label",
-    "OtpInput",
     "PageHeader",
     "PasswordInput",
     "PasswordRequirements",
@@ -24891,14 +24510,12 @@
     "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/field",
     "@aziontech/webkit/global-header",
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/label",
-    "@aziontech/webkit/otp-input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/password-input",
     "@aziontech/webkit/password-requirements",
@@ -24940,14 +24557,6 @@
     {
      "name": "EmailAlreadyRegistered",
      "summary": "409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field."
-    },
-    {
-     "name": "MfaSetup",
-     "summary": "Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry."
-    },
-    {
-     "name": "MfaCode",
-     "summary": "The sign-in MFA challenge: an autofocused 6-digit OtpInput that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account."
     }
    ],
    "file": "catalog/patterns/platform/auth.json"
@@ -25636,7 +25245,10 @@
     "summary before submit",
     "revisar",
     "etapa de revisão",
-    "revisão antes de criar"
+    "revisão antes de criar",
+    "review before create",
+    "summary step",
+    "revisar antes de criar"
    ],
    "skills": [
     "webkit-create-surface",
@@ -25664,11 +25276,13 @@
     "PageHeader",
     "RadioButton",
     "SaveBar",
+    "SectionHeader",
     "SettingRow",
     "Stepper",
     "Switch",
     "Tag",
-    "Textarea"
+    "Textarea",
+    "toast"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -25686,11 +25300,13 @@
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/radio-button",
     "@aziontech/webkit/save-bar",
+    "@aziontech/webkit/section-header",
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/stepper",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/tag",
-    "@aziontech/webkit/textarea"
+    "@aziontech/webkit/textarea",
+    "@aziontech/webkit/toast"
    ],
    "primary": "WhereItRuns",
    "guidelinesSummary": "The page a first-level resource is created on one step at a time. The user first says where the resource runs, then answers each step's fields in order, and only reaches the create action on the last step. A rail on the left shows how far they are and lets them return to any step already reached; if the host they chose lacks a module the resource needs, a step is inserted that offers to turn it on, so nothing is created that would silently never be read.",
@@ -25702,6 +25318,10 @@
     {
      "name": "ListSettings",
      "summary": "The last step of a list bound to acme-production: the Type as wide RadioButton choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Create access list in the footer. Leaving the list empty flags it and marks the step red on the rail."
+    },
+    {
+     "name": "Review",
+     "summary": "The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as, the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step, marked red on the rail."
     }
    ],
    "file": "catalog/patterns/platform/create/multipage-create.json"
@@ -27464,7 +27084,7 @@
    "title": "Templates/Platform/Detail/DetailsPage",
    "source": "blocks/platform/detail/details-page/details-page.vue",
    "surface": "product",
-   "summary": "The Overview tab of a resource detail page: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview ends its breadcrumb on the environment picker and follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page sits in the same shell without tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Select`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `Flow`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`.",
+   "summary": "The Overview tab of a resource detail page: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview ends its breadcrumb on the environment picker and follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page sits in the same shell without tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The Application variant is a whole application page on the `AppLayout` shell with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Select`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `Flow`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`.",
    "intents": [
     "overview page",
     "resource overview",
@@ -27490,7 +27110,13 @@
     "visão geral",
     "details page",
     "resource details",
-    "página de detalhes"
+    "página de detalhes",
+    "application detail",
+    "application tabs",
+    "topology tab",
+    "deployment topology",
+    "detalhe da aplicação",
+    "topologia"
    ],
    "skills": [
     "webkit-layout",
@@ -27500,6 +27126,7 @@
    "components": [
     "Accordion",
     "Alert",
+    "AppLayout",
     "Avatar",
     "Brand",
     "Breadcrumb",
@@ -27512,6 +27139,7 @@
     "Drawer",
     "DrawerClose",
     "DrawerContent",
+    "DrawerDescription",
     "DrawerOverlay",
     "DrawerPortal",
     "DrawerTitle",
@@ -27545,12 +27173,15 @@
     "Tabs",
     "Tag",
     "ThemeSwitcher",
+    "toast",
     "ToggleGroup",
-    "Tooltip"
+    "Tooltip",
+    "TopologyDiagram"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
     "@aziontech/webkit/alert",
+    "@aziontech/webkit/app-layout",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb",
@@ -27563,6 +27194,7 @@
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-overlay",
     "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-title",
@@ -27596,8 +27228,10 @@
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/topology-diagram"
    ],
    "primary": "ResourceOverview",
    "guidelinesSummary": "The second-level page of one resource. The user arrives from a list row or a deploy flow to answer three questions about it: where it lives and whether it is serving, what it is made of, and what to do next. The page names the resource in the breadcrumb, splits its concerns into tabs, and opens the Overview tab on one summary card of facts, followed by whatever the resource needs next: Get started for a resource made from the CLI, the production checklist and topology for a service.",
@@ -27633,6 +27267,10 @@
     {
      "name": "DeploymentFailed",
      "summary": "A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment logs card with the Error status, open on the failed step with the rest skipped."
+    },
+    {
+     "name": "Application",
+     "summary": "An application on the `AppLayout` console shell with working tabs: Overview (the summary card with the live address, Visit and actions, the deployment, status, active version, framework, source and creation facts, and a band that sends settings changes to the active version), Versions and Deployments (a small `SectionHeader` over a `TableRoot` each), and Topology, where `TopologyDiagram` draws domain, workload, firewall, application and function instance. Binding or removing a firewall or function is staged: the tab row counts the changes in a warning `Tag`, Deploy opens a `Drawer` listing them, and the run reports through the async-submit toast with Edit (back to Topology) and Redeploy."
     }
    ],
    "file": "catalog/patterns/platform/detail/details-page.json"
@@ -27762,7 +27400,13 @@
     "records list",
     "zona dns",
     "registros dns",
-    "tabela de registros"
+    "tabela de registros",
+    "import zone file",
+    "zone file",
+    "bind import",
+    "import dns records",
+    "importar arquivo de zona",
+    "importar registros dns"
    ],
    "skills": [
     "webkit-tables",
@@ -27770,6 +27414,7 @@
     "webkit-navigation"
    ],
    "components": [
+    "Alert",
     "Avatar",
     "Badge",
     "Button",
@@ -27777,10 +27422,18 @@
     "Card",
     "Chip",
     "CopyButton",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerDescription",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
     "DropdownMenuGroup",
     "DropdownMenuOption",
     "DropdownMenuRoot",
     "DropdownMenuTrigger",
+    "FileDropzone",
     "HelperText",
     "IconButton",
     "Input",
@@ -27788,6 +27441,9 @@
     "ItemList",
     "PageHeader",
     "PageTabs",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
     "PopoverContent",
     "PopoverRoot",
     "PopoverTrigger",
@@ -27798,9 +27454,12 @@
     "TableRoot",
     "Tabs",
     "Tag",
+    "Textarea",
+    "toast",
     "Tooltip"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/badge",
     "@aziontech/webkit/button",
@@ -27808,10 +27467,18 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/chip",
     "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-description",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-option",
     "@aziontech/webkit/dropdown-menu-root",
     "@aziontech/webkit/dropdown-menu-trigger",
+    "@aziontech/webkit/file-dropzone",
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
@@ -27819,6 +27486,9 @@
     "@aziontech/webkit/item-list",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
     "@aziontech/webkit/popover-content",
     "@aziontech/webkit/popover-root",
     "@aziontech/webkit/popover-trigger",
@@ -27829,6 +27499,8 @@
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
+    "@aziontech/webkit/textarea",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip"
    ],
    "primary": "MainSettings",
@@ -27837,6 +27509,10 @@
     {
      "name": "Records",
      "summary": "The Records tab with the zone’s one A record, the ID column hidden by default."
+    },
+    {
+     "name": "ImportZoneFile",
+     "summary": "The Records tab with Import zone file open: a large `Drawer` that takes one BIND zone file from a `FileDropzone` (or Browse files) or pasted into a `Textarea`, parses it as it changes ($ORIGIN, $TTL with units, inherited names, quoted TXT) and previews every line in a `TableRoot` with its line number, name, type, value and a Ready, Skipped or Error `Tag`, the reason under the value. A polite status line counts ready, skipped and errors; errors raise a danger `Alert` saying the ready records still import. The SOA, the apex NS and unsupported types are skipped with their reason; a bad address or a missing value is an error. Import N records adds the ready ones to the table and reports through a toast that counts what was left out."
     }
    ],
    "file": "catalog/patterns/platform/detail/record-table.json"
@@ -27860,7 +27536,11 @@
     "revert version",
     "rollback version",
     "reverter versão",
-    "revertir versión"
+    "revertir versión",
+    "environment switcher",
+    "environment crumb",
+    "switch environment",
+    "seletor de ambiente"
    ],
    "skills": [
     "webkit-layout",
@@ -27959,6 +27639,10 @@
     {
      "name": "Revert",
      "summary": "An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed."
+    },
+    {
+     "name": "EnvironmentCrumb",
+     "summary": "The same version page reached from an environment: the breadcrumb reads Resources, the resource, then two `Select` crumbs. The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`."
     }
    ],
    "file": "catalog/patterns/platform/detail/version-detail.json"
@@ -28312,7 +27996,20 @@
     "excluir recurso",
     "alterado em outro lugar",
     "leave page guard",
-    "unsaved changes dialog"
+    "unsaved changes dialog",
+    "cache settings",
+    "cache policy",
+    "browser cache",
+    "edge cache",
+    "tiered cache",
+    "configurações de cache",
+    "protocol settings",
+    "https ports",
+    "http/3",
+    "tls version",
+    "mutual authentication",
+    "mtls",
+    "autenticação mútua"
    ],
    "skills": [
     "webkit-form",
@@ -28322,6 +28019,7 @@
    ],
    "components": [
     "Alert",
+    "AppLayout",
     "Avatar",
     "Brand",
     "Breadcrumb",
@@ -28334,9 +28032,12 @@
     "ConfirmDialog",
     "CopyButton",
     "Drawer",
+    "DrawerClose",
     "DrawerContent",
+    "DrawerDescription",
     "DrawerOverlay",
     "DrawerPortal",
+    "DrawerTitle",
     "DropdownMenu",
     "Field",
     "GlobalHeader",
@@ -28350,6 +28051,9 @@
     "NumberInput",
     "PageHeader",
     "PageTabs",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
     "PasswordInput",
     "RadioButton",
     "SaveBar",
@@ -28364,11 +28068,13 @@
     "Tag",
     "Textarea",
     "ThemeSwitcher",
+    "toast",
     "Tooltip",
     "use-unsaved-changes"
    ],
    "imports": [
     "@aziontech/webkit/alert",
+    "@aziontech/webkit/app-layout",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb",
@@ -28381,9 +28087,12 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-overlay",
     "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/field",
     "@aziontech/webkit/global-header",
@@ -28397,6 +28106,9 @@
     "@aziontech/webkit/number-input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
     "@aziontech/webkit/password-input",
     "@aziontech/webkit/radio-button",
     "@aziontech/webkit/save-bar",
@@ -28411,6 +28123,7 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-unsaved-changes"
    ],
@@ -28448,6 +28161,14 @@
     {
      "name": "DangerZone",
      "summary": "The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs."
+    },
+    {
+     "name": "CacheSettings",
+     "summary": "One cache setting of an application at /applications/:id/cache-settings/:name, on the `AppLayout` console shell: General (the name rules pick it by), Browser cache and Edge cache (behavior `Select`, the maximum TTL `NumberInput` only while overriding, stale cache, large file optimization with its fragment size, tiered cache with its topology) and the collapsed Advanced cache key band (HTTP methods in a `MultiSelect`, query string and cookie behavior with their allowlist or denylist). Each dependent row is indented under its switch or behavior. An edge TTL under 60 seconds or an empty list marks the field invalid with its reason; Save deploys the application and reports through the async-submit toast with Edit and Redeploy."
+    },
+    {
+     "name": "Protocols",
+     "summary": "The protocol settings of a workload on the `AppLayout` console shell: Protocols (HTTP ports, HTTPS support with its ports, HTTP/3 support with its ports, minimum TLS version and cipher suite) and Mutual authentication (off and explained until HTTPS is on; then the Enforce or Permissive mode as `Field` choice cards, the trusted CA certificate picker, a searchable `Select` with expiry beside each certificate and Upload certificate at its foot, which opens a `Drawer` that validates the name and the PEM and picks the new certificate, and the revocation lists). HTTP/3 turns HTTPS on, turning HTTPS off turns HTTP/3 and mutual authentication off. Save checks that each protocol has a port and that mutual authentication has a CA, then deploys through the async-submit toast with Edit and Redeploy."
     }
    ],
    "file": "catalog/patterns/platform/edit/edit-resource.json"
@@ -29465,6 +29186,119 @@
    ],
    "file": "catalog/patterns/platform/view/file-browser.json"
   },
+  "platform/view/marketplace": {
+   "name": "Marketplace",
+   "title": "Templates/Platform/View/Marketplace",
+   "source": "blocks/platform/view/marketplace/marketplace.vue",
+   "surface": "product",
+   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over `Tabs` for Integrations and Templates. The Integrations tab shows a Featured row of three integration cards while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card kind=\"integration\"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a medium right `Drawer`: name and publisher in the header, the description, `KeyValuePairs` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`platform/states/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. The Templates tab shows popular templates and links to the template browser. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons.",
+   "intents": [
+    "marketplace",
+    "integration catalog",
+    "integrations marketplace",
+    "install an integration",
+    "browse integrations",
+    "extensions catalog",
+    "plugin catalog",
+    "app store page",
+    "integration detail",
+    "installed integrations",
+    "configure integration",
+    "marketplace de integrações",
+    "catálogo de integrações",
+    "instalar integração",
+    "loja de extensões"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-form",
+    "webkit-errors",
+    "webkit-ui-states"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "DocProse",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "EmptyState",
+    "Field",
+    "KeyValuePairs",
+    "PageHeader",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "PropertyFilter",
+    "Select",
+    "Skeleton",
+    "Tabs",
+    "toast",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/doc-prose",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/tabs",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The page where people find something made by Azion or a partner and add it to what they run. Two kinds of item live here: integrations, installed into an existing application, and templates, which start a new project. People browse by need (\"block bots\", \"split traffic\"), compare by publisher and context, read what an integration does and what it may touch, then install it on one application and keep working while it installs. One `useCollection` call holds the search and the filters; one drawer holds the detail and the install; the install reports by toast wherever the person is.",
+   "variants": [
+    {
+     "name": "Templates",
+     "summary": "The Templates tab: popular templates as tiles that open in the template browser, with Browse all templates."
+    },
+    {
+     "name": "Detail",
+     "summary": "The detail drawer open on Request Signer: details, overview, permissions and the install form."
+    },
+    {
+     "name": "Installing",
+     "summary": "Install is running on storefront: the button shows loading, the field is disabled and the progress toast says it keeps running if the panel closes."
+    },
+    {
+     "name": "Installed",
+     "summary": "The install succeeded: the success Alert in the drawer, the Installed tag on the tile, Configure in the footer and the success toast with Configure and Open application."
+    },
+    {
+     "name": "InstallFailed",
+     "summary": "The install failed on checkout: the danger Alert with the reason and Reinstall, and the permanent failure toast with Edit and Reinstall."
+    },
+    {
+     "name": "NoMatch",
+     "summary": "A search that matches no integration: the Featured row hides, the token stays and a medium EmptyState offers Clear filters."
+    },
+    {
+     "name": "Loading",
+     "summary": "The catalog is loading: the filter is disabled and skeleton tiles hold the grid."
+    }
+   ],
+   "file": "catalog/patterns/platform/view/marketplace.json"
+  },
   "platform/view/query-editor": {
    "name": "QueryEditor",
    "title": "Templates/Platform/View/QueryEditor",
@@ -30064,6 +29898,100 @@
    ],
    "file": "catalog/patterns/platform/view/table-view.json"
   },
+  "platform/view/template-browser": {
+   "name": "TemplateBrowser",
+   "title": "Templates/Platform/View/TemplateBrowser",
+   "source": "blocks/platform/view/template-browser/template-browser.vue",
+   "surface": "product",
+   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card` with the framework mark, the name as a button that opens the preview, two lines of description and the framework `Tag`; the whole tile is the target. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `Tag`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`.",
+   "intents": [
+    "template browser",
+    "template gallery",
+    "template catalog",
+    "start from a template",
+    "browse templates",
+    "templates by framework",
+    "template preview",
+    "template readme",
+    "deploy a template",
+    "starter templates",
+    "galeria de templates",
+    "catálogo de templates",
+    "navegar templates",
+    "começar a partir de um template",
+    "pré-visualizar template"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-create-surface",
+    "webkit-ui-states"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "DocProse",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "EmptyState",
+    "KeyValuePairs",
+    "PageHeader",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "PropertyFilter",
+    "Skeleton",
+    "Tag",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/doc-prose",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The catalog of templates a person starts a project from. They arrive from the creation hub, the marketplace or a \"Start from a template\" link, already knowing roughly what they want (a framework, a kind of site, a small function) and needing to find it, check what it contains and start the deploy. The page is one heading over one band: a single search and filter control, then the templates grouped by category. A tile opens a preview drawer with the facts and the README, and the drawer's Deploy hands off to the deploy template flow, which owns the run and its outcome.",
+   "variants": [
+    {
+     "name": "Preview",
+     "summary": "The preview drawer open on Next.js Starter: details, the README and the Deploy entry into the deploy template flow."
+    },
+    {
+     "name": "NoMatch",
+     "summary": "A search that matches no template: the filter keeps the token and a medium EmptyState offers Clear filters."
+    },
+    {
+     "name": "Loading",
+     "summary": "The catalog is loading: the filter is disabled and two sections of skeleton tiles hold the layout."
+    },
+    {
+     "name": "Failed",
+     "summary": "The catalog failed to load: a danger Alert with Retry, and an EmptyState that points to Import from Git."
+    }
+   ],
+   "file": "catalog/patterns/platform/view/template-browser.json"
+  },
   "platform/view/waf-tuning": {
    "name": "WafTuning",
    "title": "Templates/Platform/View/WafTuning",
@@ -30170,7 +30098,7 @@
    "title": "Templates/Shells/Console",
    "source": "blocks/shells/console/console.vue",
    "surface": "product",
-   "summary": "The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; below `md` the rail becomes a Drawer opened from the hamburger that leads the wordmark. First-level lists, detail pages with their tabs and Home all render inside it. Built from `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd`, `Drawer` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.",
+   "summary": "The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; every state is framed by `AppLayout`, which measures its own width: below 768px it becomes compact, the rail moves into the layout's navigation drawer opened from the hamburger that leads the wordmark, and choosing an item closes it. First-level lists, detail pages with their tabs and Home all render inside it. Built from `AppLayout`, `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.",
    "intents": [
     "platform shell",
     "console shell",
@@ -30190,14 +30118,7 @@
     "notifications drawer",
     "notification center",
     "central de notificações",
-    "painel de notificações",
-    "switch account",
-    "account switcher",
-    "organization switcher",
-    "change organization",
-    "trocar conta",
-    "trocar organização",
-    "selecionar conta"
+    "painel de notificações"
    ],
    "skills": [
     "webkit-navigation",
@@ -30214,17 +30135,6 @@
     "ButtonHighlight",
     "Card",
     "Command",
-    "Dialog",
-    "DialogClose",
-    "DialogContent",
-    "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
-    "DialogTitle",
-    "Drawer",
-    "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "DropdownMenu",
     "EmptyState",
     "GlobalHeader",
@@ -30233,17 +30143,12 @@
     "Kbd",
     "Menu",
     "PageTabs",
-    "PanelContent",
-    "PanelFooter",
-    "PanelHeader",
     "Select",
     "Sidebar",
     "StatusIndicator",
-    "Table",
     "Tabs",
     "Tag",
     "ThemeSwitcher",
-    "toast",
     "Tooltip"
    ],
    "imports": [
@@ -30257,17 +30162,6 @@
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
     "@aziontech/webkit/command",
-    "@aziontech/webkit/dialog",
-    "@aziontech/webkit/dialog-close",
-    "@aziontech/webkit/dialog-content",
-    "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
-    "@aziontech/webkit/dialog-title",
-    "@aziontech/webkit/drawer",
-    "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/global-header",
@@ -30276,33 +30170,24 @@
     "@aziontech/webkit/kbd",
     "@aziontech/webkit/menu",
     "@aziontech/webkit/page-tabs",
-    "@aziontech/webkit/panel-content",
-    "@aziontech/webkit/panel-footer",
-    "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
     "@aziontech/webkit/sidebar",
     "@aziontech/webkit/status-indicator",
-    "@aziontech/webkit/table",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/theme-switcher",
-    "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip"
    ],
    "primary": "ListPage",
-   "guidelinesSummary": "The application shell every signed-in page renders inside. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: a navigation rail on the left (wordmark, the ⌘K palette, the grouped navigation, the account menu) and a content zone on the right headed by one global header (search, Create, Agent, the avatar). Pages render only their own content in the zone; this block's page bodies are stand-ins for `platform/view/table-view` and `platform/detail/details-page`.",
+   "guidelinesSummary": "The application shell every signed-in page renders inside, built on `AppLayout`. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: a navigation rail on the left (wordmark, the ⌘K palette, the grouped navigation, the account menu) and a content zone on the right headed by one global header (search, Create, Agent, the avatar). Pages render only their own content in the zone; this block's page bodies are stand-ins for `platform/view/table-view` and `platform/detail/details-page`.",
    "variants": [
     {
      "name": "DetailPage",
-     "summary": "A resource detail page: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it."
+     "summary": "A resource detail page on `AppLayout`: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it."
     },
     {
      "name": "Notifications",
      "summary": "The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up."
-    },
-    {
-     "name": "AccountSwitch",
-     "summary": "The account switcher in the header (square Avatar, account name, Ctrl+O or ⌘O): a large Dialog with search over the organization, group and workspace tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer."
     }
    ],
    "file": "catalog/patterns/shells/console.json"

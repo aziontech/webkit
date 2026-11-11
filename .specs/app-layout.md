@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 2a4d1839a7974021e049eb9a82532033f411647e28bbbfd25199123c5af31721
+checksum: a862411c2b578d4c9609a84b00b8fd7a1e90d17fae79b6a43191a1162152cc17
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -47,7 +47,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
 ## Best practices
 
 - One `AppLayout` per page, at the root. Do not nest them.
-- Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer.
+- Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer; call `closeNavigation` from the scope when an item is chosen in the drawer.
 - Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.
 - Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.
 - Use the split panel for the selected item of a collection. Close it when the selection clears.
@@ -147,7 +147,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
 | Slot            | Scope                                                                                                     | Notes                                                                                                 |
 | --------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `default`       | —                                                                                                         | The page content (the consumer's `<main>`). Scrolls on its own.                                       |
-| `navigation`    | `{ drawer: boolean }`                                                                                     | The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. |
+| `navigation`    | `{ drawer: boolean, closeNavigation: () => void }`                                                        | The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. `closeNavigation` closes the drawer, e.g. after an item is chosen. |
 | `header`        | `{ compact: boolean, openNavigation: () => void, toggleNavigation: () => void, toggleTools: () => void }` | The global header, above content, tools and split panel.                                              |
 | `notifications` | —                                                                                                         | Flash messages (`Alert`) above the breadcrumbs and the content; stays in place while content scrolls. |
 | `breadcrumbs`   | —                                                                                                         | Breadcrumbs above the content, inside the scroll area.                                                |

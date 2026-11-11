@@ -153,7 +153,6 @@
 
                     <form
                       class="flex flex-col gap-(--spacing-lg)"
-                      :aria-label="codeField.label"
                       novalidate
                       @submit.prevent="verify"
                     >

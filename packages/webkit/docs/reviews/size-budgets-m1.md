@@ -231,3 +231,11 @@ Two new entries at measured plus about 0.2 KB, and three raises from the two new
 | webkit-provider    | 8.05          | 8.18         | 8.4        | Raised: the list-kit groups in the English catalog.                    |
 | locales-pt-BR      | 7.45          | 7.57         | 7.8        | Raised: the same groups in Portuguese.                                 |
 | locales-es         | 7.55          | 7.66         | 7.9        | Raised: the same groups in Spanish.                                    |
+
+### M2.9 WP marketplace
+
+One new entry. `card` had no budget; measured 11.07 KB before the change (`cn` carries `tailwind-merge`) and 13.23 KB with the integration kind (`Tag` and the translate helper). The two new strings (`card.byVendor`, `card.installed`) fit inside the current provider and locale budgets.
+
+| Entry | Budget before | Measured now | New budget | Why                                                        |
+| ----- | ------------- | ------------ | ---------- | ---------------------------------------------------------- |
+| card  | –             | 13.23        | 13.5       | New entry: integration kind adds `Tag` and `useTranslate`. |
