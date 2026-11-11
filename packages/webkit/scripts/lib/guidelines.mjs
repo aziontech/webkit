@@ -49,7 +49,7 @@ export function parseGuidelines(md) {
     .map((m) => ({
       letter: m[1],
       title: m[2].trim(),
-      components: [...m[3].matchAll(/`([A-Za-z_$][\w$.]*)`/g)].map((c) => c[1].split('.')[0])
+      components: [...m[3].matchAll(/`([A-Z][\w$.]*)`/g)].map((c) => c[1].split('.')[0])
     }))
   const states = (sections.States || [])
     .map((l) => l.match(/^\s*[-*]\s+(?:\*\*|`)?([A-Za-z][\w-]*)(?:\*\*|`)?\s*:/))
@@ -68,13 +68,26 @@ export function guidelinesSummary(md) {
   return parseGuidelines(md).purpose
 }
 
+function namedWebkitImports(sfc) {
+  const names = []
+  const re = /import\s+[^'"]*?\{([^}]*)\}\s*from\s+['"]@aziontech\/webkit\/[^'"]+['"]/g
+  for (const m of String(sfc).matchAll(re)) {
+    for (const part of m[1].split(',')) {
+      const local = part.trim().split(/\s+as\s+/).pop().trim()
+      if (/^[A-Z][a-z]/.test(local)) names.push(local)
+    }
+  }
+  return names
+}
+
 export function primaryComponents(sfc) {
   return [
-    ...new Set(
-      importsOf(sfc)
+    ...new Set([
+      ...importsOf(sfc)
         .map((i) => i.binding)
-        .filter((b) => b && /^[A-Z]/.test(b))
-    )
+        .filter((b) => b && /^[A-Z]/.test(b)),
+      ...namedWebkitImports(sfc)
+    ])
   ]
 }
 
@@ -98,7 +111,7 @@ export function checkGuidelines(id, pattern) {
       errors.push(
         `${file}: building block "${b.letter}. ${b.title}" should be lettered ${expected}`
       )
-    if (!b.components.length)
+    if (!b.components.length && imported.length)
       errors.push(`${file}: building block "${b.letter}. ${b.title}" names no \`Component\``)
     for (const c of b.components) {
       named.add(c)

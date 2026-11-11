@@ -321,3 +321,47 @@ test('every block outside guidelines-pending.json has guidelines that match its 
     assert.ok(p.guidelinesSummary, id)
   }
 })
+
+test('checkGuidelines counts named component imports, ignores lowercase tokens and constants, allows plain markup', () => {
+  const md = (blocks) =>
+    [
+      '# Thing',
+      'Purpose of the thing.',
+      '## When to use',
+      '- x',
+      '## When not to use',
+      '- y',
+      '## Building blocks',
+      ...blocks,
+      '## Do',
+      '- a',
+      "## Don't",
+      '- b',
+      '## Copy',
+      '- c',
+      '## Accessibility',
+      '- d',
+      '## States',
+      '- Default: always',
+      '## Related',
+      '- e'
+    ].join('\n')
+  const sfc =
+    "<script setup>\nimport Drawer from '@aziontech/webkit/drawer'\nimport { toast, Toaster, DEFAULT_THING } from '@aziontech/webkit/toast'\n</script>"
+  const ok = checkGuidelines('x/y', {
+    guidelines: md(['### A. Panel — `Drawer` (below `md`)', 'p', '### B. Notices — `Toaster`', 'n']),
+    sfc,
+    source: 'blocks/x/y/y.vue',
+    primary: 'Default',
+    variants: []
+  })
+  assert.deepEqual(ok, [])
+  const plain = checkGuidelines('x/z', {
+    guidelines: md(['### A. Drop target — plain `<div>` (required)', 'plain element']),
+    sfc: '<template><div /></template>',
+    source: 'blocks/x/z/z.vue',
+    primary: 'Default',
+    variants: []
+  })
+  assert.deepEqual(plain, [])
+})
