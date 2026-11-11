@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { formatLogLineText } from './composables/format-log-line-text'
@@ -56,7 +56,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ logView: en.logView })
+  const { t } = useTranslate({ logView: en.logView })
 
   const passthroughAttrs = computed(() => {
     const rest = { ...attrs }

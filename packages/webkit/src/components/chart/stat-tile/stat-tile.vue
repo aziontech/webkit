@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Tag, { type TagSeverity } from '../../content/tag/tag.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -55,7 +55,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t, locale } = useLocale({ statTile: en.statTile })
+  const { t, locale } = useTranslate({ statTile: en.statTile })
   const valueText = (value: number): string =>
     props.formatValue === formatCompact
       ? formatCompact(value, locale.value)

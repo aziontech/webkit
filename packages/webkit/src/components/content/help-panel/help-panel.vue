@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
 
@@ -28,7 +28,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ helpPanel: en.helpPanel })
+  const { t } = useTranslate({ helpPanel: en.helpPanel })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'content-help-panel'

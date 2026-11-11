@@ -2,7 +2,7 @@
   import { computed, inject, onScopeDispose, ref, useAttrs } from 'vue'
 
   import { useDirection } from '../../../../composables/use-direction'
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { ResizableInjectionKey, type ResizablePaneApi } from '../injection-key'
 
@@ -21,7 +21,7 @@
   })
 
   const attrs = useAttrs()
-  const { t } = useLocale({ resizable: en.resizable })
+  const { t } = useTranslate({ resizable: en.resizable })
   const ctx = inject(ResizableInjectionKey, null)
 
   const testId = computed<string>(

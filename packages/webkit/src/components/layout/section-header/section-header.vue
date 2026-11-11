@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
 
@@ -38,7 +38,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ sectionHeader: en.sectionHeader })
+  const { t } = useTranslate({ sectionHeader: en.sectionHeader })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'layout-section-header'

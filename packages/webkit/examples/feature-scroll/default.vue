@@ -56,7 +56,7 @@
         title: 'Gradual rollouts and instant rollback',
         description:
           'Send a share of traffic to a new version, promote it to every data center once it holds, or roll back to the last one without a redeploy.',
-        illustration: 'branches',
+        illustration: 'preview',
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',

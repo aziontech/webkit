@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: c3bc2c70c3261cc22cf8933810352d100ec61b98f7600241e7b5d0f7ee31d10a
+checksum: 937bcf18586705a8f850ef719d5ddbf24da74398eda7cda6a821121fc90c3d09
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -43,6 +43,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 - Give every panel item a stable `value` on `NavigationMenu.Item`; `v-model` and `default-value` refer to it, and an omitted value is auto-generated and cannot be controlled.
 - A top-level item with no panel is a `NavigationMenu.Trigger` with an `href`; inside panels use `NavigationMenu.Item` with `layout="entry"`, an `href`, an optional `description` and `close-on-click`.
 - Render the popup chain exactly once per root: `Portal` → `Positioner` → `Popup` → `Viewport`. Each `Content` is moved into the shared `Viewport`, so a missing chain renders no panel.
+- `Portal` teleports to `container` when set and to `body` otherwise, passing the selector through so the server renders the same chain the client hydrates.
 - Pin a wide panel to the page column with the positioner's `collision-padding`, not with override classes on the popup.
 - Set `aria-label` on the root (default `'Main'`) when the page has more than one navigation landmark.
 

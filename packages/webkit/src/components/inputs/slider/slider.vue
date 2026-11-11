@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useDirection } from '../../../composables/use-direction'
+  import { eventDirection } from '../../../composables/use-direction'
   import { useFieldControl } from '../../../composables/use-field-control'
 
   defineOptions({ name: 'Slider', inheritAttrs: false })
@@ -51,7 +51,6 @@
   const model = defineModel<number>({ default: 0 })
 
   const attrs = useAttrs()
-  const dir = useDirection()
 
   const {
     controlId,
@@ -154,7 +153,7 @@
       event.preventDefault()
       return
     }
-    if (isDisabled.value || dir.value !== 'rtl') return
+    if (isDisabled.value || eventDirection(event) !== 'rtl') return
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
     event.preventDefault()
     const delta = event.key === 'ArrowLeft' ? props.step : -props.step

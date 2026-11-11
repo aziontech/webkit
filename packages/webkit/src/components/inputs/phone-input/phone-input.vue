@@ -2,7 +2,7 @@
   import { computed, provide, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import { useSelectSearch } from '../../../composables/use-select-search'
   import * as en from '../../../i18n/messages/en'
   import { fieldContextKey } from '../field/injection-key'
@@ -91,7 +91,7 @@
   const country = defineModel<string>('country', { default: 'BR' })
 
   const attrs = useAttrs()
-  const { t } = useLocale({ phoneInput: en.phoneInput })
+  const { t } = useTranslate({ phoneInput: en.phoneInput })
   const generatedId = useId()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'phone-input')

@@ -32,4 +32,15 @@ describe('directional icons', () => {
     const selectors = [...styles.matchAll(/\.((?:pi|ai)-[a-z0-9-]+):dir\(rtl\)/g)].map((m) => m[1])
     expect(new Set(selectors)).toEqual(new Set(DIRECTIONAL_ICONS))
   })
+
+  it('matches exactly the listed icons', () => {
+    for (const icon of DIRECTIONAL_ICONS) {
+      expect(isDirectionalIcon(`pi ${icon}`)).toBe(true)
+      expect(isDirectionalIcon(`${icon}-x`)).toBe(false)
+      expect(isDirectionalIcon(`x${icon}`)).toBe(false)
+    }
+    for (const icon of ['pi-arrow-up-left', 'pi-caret-circle-left', 'pi-chevron-double-left']) {
+      expect(isDirectionalIcon(icon)).toBe(false)
+    }
+  })
 })

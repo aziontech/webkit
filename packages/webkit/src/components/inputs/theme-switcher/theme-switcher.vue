@@ -2,7 +2,7 @@
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
@@ -30,7 +30,7 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
-  const { t } = useLocale({ themeSwitcher: en.themeSwitcher })
+  const { t } = useTranslate({ themeSwitcher: en.themeSwitcher })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-theme-switcher'

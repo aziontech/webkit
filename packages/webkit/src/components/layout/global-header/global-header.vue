@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { GlobalHeaderInjectionKey } from './injection-key'
 
@@ -30,7 +30,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ globalHeader: en.globalHeader })
+  const { t } = useTranslate({ globalHeader: en.globalHeader })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'layout-global-header'

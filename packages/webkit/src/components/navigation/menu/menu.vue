@@ -13,7 +13,7 @@
   } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import {
@@ -65,7 +65,7 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
-  const { t } = useLocale({ menu: en.menu })
+  const { t } = useTranslate({ menu: en.menu })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu')
   const role = computed(() => (attrs['role'] as string | undefined) ?? 'navigation')

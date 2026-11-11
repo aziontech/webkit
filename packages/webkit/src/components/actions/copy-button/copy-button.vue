@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import type { IconButtonKind, IconButtonSize } from '../icon-button/icon-button.vue'
@@ -40,7 +40,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ copyButton: en.copyButton })
+  const { t } = useTranslate({ copyButton: en.copyButton })
 
   const copied = ref(false)
   let copiedTimeoutId: ReturnType<typeof setTimeout> | null = null

@@ -2,7 +2,7 @@
   import type { Column } from '@tanstack/vue-table'
   import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../../composables/use-placement'
   import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
@@ -30,7 +30,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ tableColumnSelector: en.tableColumnSelector })
+  const { t } = useTranslate({ tableColumnSelector: en.tableColumnSelector })
   const heading = computed(() => props.title || t('tableColumnSelector.title'))
   const ctx = inject(TableInjectionKey, null)
 

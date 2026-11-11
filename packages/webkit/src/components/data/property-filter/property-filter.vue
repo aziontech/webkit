@@ -11,7 +11,7 @@
     type PropertyFilterToken,
     tokenText
   } from '../../../composables/use-collection/property-filter'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
@@ -71,7 +71,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ propertyFilter: en.propertyFilter })
+  const { t } = useTranslate({ propertyFilter: en.propertyFilter })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'data-property-filter'

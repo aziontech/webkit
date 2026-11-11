@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { useWizardContext } from '../composables/use-wizard-context'
 
@@ -31,7 +31,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ wizard: en.wizard })
+  const { t } = useTranslate({ wizard: en.wizard })
   const context = useWizardContext()
 
   const id = Symbol('WizardStep')

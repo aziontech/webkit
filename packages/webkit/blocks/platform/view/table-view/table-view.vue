@@ -23,7 +23,6 @@
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
-  import { downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref, useId } from 'vue'
 
   const avatars = {
@@ -125,16 +124,8 @@
     }, 700)
   }
 
-  const exportCsv = () =>
-    downloadCsv(
-      'resources.csv',
-      toCsv({
-        columns: columns
-          .filter((column) => column.kind !== 'action')
-          .map((column) => ({ id: column.accessorKey, header: column.header })),
-        rows: matchingItems.value
-      })
-    )
+  const resourcesTable = ref(null)
+  const exportCsv = () => resourcesTable.value?.exportCsv({ filename: 'resources.csv' })
 
   const DOMAIN_PAGE = 10
   const WIRE_WIDTHS = ['92%', '74%', '86%', '68%', '90%', '78%', '84%', '70%', '88%', '76%']
@@ -309,6 +300,7 @@
             >
               <template #content>
                 <TableRoot
+                  ref="resourcesTable"
                   v-bind="tableProps"
                   :loading="loading || fetching"
                   enable-sorting

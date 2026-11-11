@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { type TabsContext, TabsInjectionKey, type TabsValue } from './injection-key'
@@ -44,7 +44,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ tabs: en.tabs })
+  const { t } = useTranslate({ tabs: en.tabs })
   const buttonRef = ref<HTMLElement | null>(null)
   const resolvedValue = computed(() => props.value ?? props.label)
 

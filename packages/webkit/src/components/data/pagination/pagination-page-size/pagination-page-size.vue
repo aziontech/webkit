@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { PaginationInjectionKey } from '../injection-key'
 
@@ -27,7 +27,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ pagination: en.pagination })
+  const { t } = useTranslate({ pagination: en.pagination })
   const ctx = inject(PaginationInjectionKey, null)
 
   const testId = computed<string>(

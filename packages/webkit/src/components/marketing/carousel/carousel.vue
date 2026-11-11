@@ -2,8 +2,8 @@
   import { useEventListener, useResizeObserver } from '@vueuse/core'
   import { computed, onMounted, provide, type Ref, ref, shallowReadonly, useAttrs } from 'vue'
 
-  import { useDirection } from '../../../composables/use-direction'
-  import { useLocale } from '../../../composables/use-locale'
+  import { resolveDirection } from '../../../composables/use-direction'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { CarouselInjectionKey } from './injection-key'
 
@@ -29,10 +29,9 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ carousel: en.carousel })
+  const { t } = useTranslate({ carousel: en.carousel })
 
   const track = ref<globalThis.HTMLUListElement | null>(null)
-  const dir = useDirection(track)
   const scrolled = ref(0)
   const visibleWidth = ref(0)
   const contentWidth = ref(0)
@@ -79,7 +78,7 @@
   function step(direction: 1 | -1) {
     const element = track.value
     if (!element) return
-    const sign = dir.value === 'rtl' ? -direction : direction
+    const sign = resolveDirection(element) === 'rtl' ? -direction : direction
     element.scrollBy({ left: sign * slideStep(element), behavior: 'smooth' })
   }
 

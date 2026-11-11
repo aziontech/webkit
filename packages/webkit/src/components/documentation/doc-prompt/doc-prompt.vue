@@ -10,7 +10,7 @@
     useSlots
   } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
@@ -44,7 +44,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ docPrompt: en.docPrompt })
+  const { t } = useTranslate({ docPrompt: en.docPrompt })
   const slots = useSlots()
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-prompt')

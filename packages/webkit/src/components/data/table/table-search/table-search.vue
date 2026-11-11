@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Input from '../../../inputs/input/input.vue'
   import { TableInjectionKey } from '../injection-key'
@@ -22,7 +22,7 @@
   )
 
   const attrs = useAttrs()
-  const { t } = useLocale({ tableSearch: en.tableSearch })
+  const { t } = useTranslate({ tableSearch: en.tableSearch })
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(

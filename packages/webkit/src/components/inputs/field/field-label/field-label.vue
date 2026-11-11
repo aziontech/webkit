@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Hint from '../../hint/hint.vue'
   import { fieldContextKey } from '../injection-key'
@@ -26,7 +26,7 @@
 
   const field = inject(fieldContextKey, null)
   const attrs = useAttrs()
-  const { t } = useLocale({ field: en.field })
+  const { t } = useTranslate({ field: en.field })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-field-label')
   const htmlFor = computed(() => (attrs['for'] as string | undefined) ?? field?.controlId)

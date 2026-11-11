@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, ref, useAttrs } from 'vue'
 
-  import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
-  import { useLocale } from '../../../../composables/use-locale'
+  import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { useChartCardContext } from '../composables/use-chart-card-context'
 
@@ -18,10 +18,9 @@
   })
 
   const attrs = useAttrs()
-  const { t } = useLocale({ chartCard: en.chartCard })
+  const { t } = useTranslate({ chartCard: en.chartCard })
   const ctx = useChartCardContext()
   const handleRef = ref<globalThis.HTMLElement | null>(null)
-  const dir = useDirection(handleRef)
 
   const HEIGHT_STEP = 24
 
@@ -74,7 +73,7 @@
 
   function onPointerMove(event: globalThis.PointerEvent) {
     if (!origin || event.pointerId !== origin.pointerId) return
-    const dx = (event.clientX - origin.x) * (dir.value === 'rtl' ? -1 : 1)
+    const dx = (event.clientX - origin.x) * (eventDirection(event) === 'rtl' ? -1 : 1)
     const dy = event.clientY - origin.y
     if (origin.columnWidth > 0) ctx.setSpan(origin.span + Math.round(dx / origin.columnWidth))
     ctx.setHeight(origin.height + dy)
@@ -96,7 +95,7 @@
       return
     }
     const current = () => ctx.height.value ?? ctx.measure().height
-    const key = logicalArrowKey(event.key, dir.value)
+    const key = logicalArrowKey(event.key, eventDirection(event))
     if (key === 'ArrowRight') ctx.setSpan(ctx.span.value + 1)
     else if (key === 'ArrowLeft') ctx.setSpan(ctx.span.value - 1)
     else if (event.key === 'ArrowDown') ctx.setHeight(current() + HEIGHT_STEP)

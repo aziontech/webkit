@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Stepper from '../stepper/stepper.vue'
@@ -46,7 +46,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ wizard: en.wizard })
+  const { t } = useTranslate({ wizard: en.wizard })
 
   const ids = ref<symbol[]>([])
   const metas = new Map<symbol, WizardStepMeta>()

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
 
   /**
@@ -42,7 +42,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ docPagination: en.docPagination })
+  const { t } = useTranslate({ docPagination: en.docPagination })
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-pagination')
 

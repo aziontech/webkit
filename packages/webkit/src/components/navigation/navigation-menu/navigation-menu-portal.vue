@@ -27,17 +27,7 @@
 
   const root = useNavigationMenuRoot()
 
-  const teleportTarget = computed(() => {
-    if (props.container && typeof props.container !== 'string') {
-      return props.container
-    }
-
-    if (typeof props.container === 'string' && typeof document !== 'undefined') {
-      return document.querySelector(props.container)
-    }
-
-    return typeof document !== 'undefined' ? document.body : null
-  })
+  const teleportTarget = computed(() => props.container ?? 'body')
 
   const shouldMount = computed(() => props.keepMounted || root.menuPopupMounted.value)
 
@@ -46,7 +36,7 @@
 
 <template>
   <Teleport
-    v-if="shouldMount && teleportTarget"
+    v-if="shouldMount"
     :to="teleportTarget"
   >
     <div

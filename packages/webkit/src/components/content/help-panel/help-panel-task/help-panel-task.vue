@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { useHelpPanelTutorialContext } from '../composables/use-help-panel-tutorial-context'
   import type { HelpPanelTaskStatus } from '../injection-key'
@@ -29,7 +29,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ helpPanel: en.helpPanel })
+  const { t } = useTranslate({ helpPanel: en.helpPanel })
   const context = useHelpPanelTutorialContext()
 
   const id = Symbol('HelpPanelTask')

@@ -14,7 +14,7 @@
     watch
   } from 'vue'
 
-  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../card-grid/card-grid.vue'
@@ -79,7 +79,6 @@
   }>()
 
   const attrs = useAttrs()
-  const dir = useDirection()
   const baseId = useId()
   const reducedMotion = usePreferredReducedMotion()
 
@@ -219,7 +218,7 @@
   }
 
   async function onKeydown(event: globalThis.KeyboardEvent): Promise<void> {
-    const key = logicalArrowKey(event.key, dir.value)
+    const key = logicalArrowKey(event.key, eventDirection(event))
     const next = targetOf(key)
     if (next === null) return
     event.preventDefault()

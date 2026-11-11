@@ -30,36 +30,14 @@ const UNIT_MS: Partial<Record<SpanUnit, number>> = {
 
 const SPAN_UNITS: SpanUnit[] = ['minute', 'hour', 'day', 'week', 'month', 'year']
 
-const ENGLISH_UNITS: [string, SpanUnit][] = [
-  ['m', 'minute'],
-  ['min', 'minute'],
-  ['mins', 'minute'],
-  ['minute', 'minute'],
-  ['minutes', 'minute'],
-  ['h', 'hour'],
-  ['hr', 'hour'],
-  ['hrs', 'hour'],
-  ['hour', 'hour'],
-  ['hours', 'hour'],
-  ['d', 'day'],
-  ['day', 'day'],
-  ['days', 'day'],
-  ['w', 'week'],
-  ['wk', 'week'],
-  ['wks', 'week'],
-  ['week', 'week'],
-  ['weeks', 'week'],
-  ['mo', 'month'],
-  ['mth', 'month'],
-  ['mths', 'month'],
-  ['month', 'month'],
-  ['months', 'month'],
-  ['y', 'year'],
-  ['yr', 'year'],
-  ['yrs', 'year'],
-  ['year', 'year'],
-  ['years', 'year']
-]
+const ENGLISH_UNITS: Record<SpanUnit, string> = {
+  minute: 'm min mins minute minutes',
+  hour: 'h hr hrs hour hours',
+  day: 'd day days',
+  week: 'w wk wks week weeks',
+  month: 'mo mth mths month months',
+  year: 'y yr yrs year years'
+}
 
 const KEYWORDS: [Keyword, number, Intl.RelativeTimeFormatUnit][] = [
   ['today', 0, 'day'],
@@ -138,7 +116,9 @@ function vocabularyFor(locale: string): Vocabulary {
     months: new Map(),
     order: ['month', 'day', 'year']
   }
-  for (const [word, unit] of ENGLISH_UNITS) addAll(vocabulary.units, word, unit)
+  for (const unit of SPAN_UNITS) {
+    for (const word of ENGLISH_UNITS[unit].split(' ')) addAll(vocabulary.units, word, unit)
+  }
   addAll(vocabulary.months, 'sept', 8)
   collect(vocabulary, 'en')
   if (locale !== 'en') collect(vocabulary, locale)

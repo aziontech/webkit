@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Tag from '../../content/tag/tag.vue'
   import Input from '../../inputs/input/input.vue'
@@ -19,7 +19,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ logView: en.logView })
+  const { t } = useTranslate({ logView: en.logView })
   const ctx = useLogViewContext()
 
   const testId = computed(

@@ -2,8 +2,8 @@
   import { useElementSize } from '@vueuse/core'
   import { computed, ref, useAttrs, useId } from 'vue'
 
-  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useLocale } from '../../../composables/use-locale'
+  import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import { useFrameDocument } from './composables/use-frame-document'
@@ -57,8 +57,7 @@
   }>()
 
   const attrs = useAttrs()
-  const dir = useDirection()
-  const { t } = useLocale({ browserFrame: en.browserFrame })
+  const { t } = useTranslate({ browserFrame: en.browserFrame })
   const sizerRef = ref<globalThis.HTMLElement | null>(null)
   const iframeRef = ref<globalThis.HTMLIFrameElement | null>(null)
   const { width: containerWidth } = useElementSize(sizerRef)
@@ -129,7 +128,7 @@
       Home: props.minWidth,
       End: props.maxWidth
     }
-    const next = targets[logicalArrowKey(event.key, dir.value)]
+    const next = targets[logicalArrowKey(event.key, eventDirection(event))]
     if (next === undefined) return
     event.preventDefault()
     width.value = clamp(next, props.minWidth, props.maxWidth)
@@ -167,7 +166,9 @@
     if (axis !== 'height') {
       const upper = container.value > 0 ? Math.min(container.value, props.maxWidth) : props.maxWidth
       width.value = clamp(
-        Math.round(startWidth + (event.clientX - originX) * (dir.value === 'rtl' ? -2 : 2)),
+        Math.round(
+          startWidth + (event.clientX - originX) * (eventDirection(event) === 'rtl' ? -2 : 2)
+        ),
         props.minWidth,
         upper
       )

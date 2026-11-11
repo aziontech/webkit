@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, ref, useAttrs, useId } from 'vue'
 
-  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import Button from '../../actions/button/button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
@@ -52,7 +52,6 @@
   })
 
   const attrs = useAttrs()
-  const dir = useDirection()
 
   const baseId = useId()
 
@@ -91,7 +90,7 @@
       Home: 0,
       End: props.items.length - 1
     }
-    const target = moves[logicalArrowKey(event.key, dir.value)]
+    const target = moves[logicalArrowKey(event.key, eventDirection(event))]
     if (target === undefined) return
     event.preventDefault()
     void focusTab(target)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { pickListContextKey } from '../injection-key'
 
@@ -16,7 +16,7 @@
   }
 
   const attrs = useAttrs()
-  const { t } = useLocale({ pickList: en.pickList })
+  const { t } = useTranslate({ pickList: en.pickList })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'pick-list-controls'

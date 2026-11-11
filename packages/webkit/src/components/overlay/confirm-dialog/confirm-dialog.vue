@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Dialog from '../dialog/dialog.vue'
@@ -72,7 +72,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ confirmDialog: en.confirmDialog })
+  const { t } = useTranslate({ confirmDialog: en.confirmDialog })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'overlay-confirm-dialog'

@@ -64,6 +64,17 @@ export interface CollectionFetchResult<T> {
   total: number
 }
 
+/** Which matches an export writes: every item that matches the filters, or every item. */
+export type CollectionExportScope = 'filtered' | 'all'
+
+/** What a server-mode `exportAll` receives: the current filters and sort, without paging. */
+export interface CollectionExportParams {
+  filteringText: string
+  filter: PropertyFilterQuery
+  sort: CollectionSort[]
+  scope: CollectionExportScope
+}
+
 /** Where the collection is: loading, failed, no items at all, no item matches the filters, or ready. */
 export type CollectionStatus = 'loading' | 'error' | 'empty' | 'no-match' | 'ready'
 
@@ -78,6 +89,8 @@ export interface UseCollectionOptions<
   items?: MaybeRefOrGetter<readonly T[]>
   /** Server mode: loads one page for the current filter, sort and page. */
   fetch?: (params: CollectionFetchParams) => Promise<CollectionFetchResult<T>>
+  /** Server mode: loads every item an export writes (`Table.Export`, `exportCsv()`, `exportItems`); without it the loaded page is exported. */
+  exportAll?: (params: CollectionExportParams) => Promise<T[]>
   /** Field that identifies an item (selection, row keys). */
   trackBy?: keyof T & string
   /** Columns bound to a Table; their order and visibility follow the preferences. */
@@ -133,6 +146,7 @@ export interface CollectionTableProps<T, C> {
   wrapLines: boolean
   striped: boolean
   density: CollectionDensity
+  exportRows: (scope: CollectionExportScope) => Promise<T[]> | T[]
   'onUpdate:sorting': (value: CollectionSort[]) => void
   'onUpdate:pagination': (value: { pageIndex: number; pageSize: number }) => void
   'onUpdate:rowSelection': (value: Record<string, boolean>) => void
@@ -210,6 +224,7 @@ export interface UseCollectionReturn<T, C> {
   setPreferences: (value: CollectionPreferencesValue) => void
   clearFilters: () => void
   refresh: () => Promise<void>
+  exportItems: (scope?: CollectionExportScope) => Promise<T[]>
   isSelected: (key: string) => boolean
   toggleSelection: (key: string, selected?: boolean) => void
   selectPage: (selected?: boolean) => void
@@ -325,17 +340,20 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     )
     if (!sorting.value.length) return filtered
     const comparators = options.sorting?.comparators ?? {}
+    const keys = sorting.value.map((sort) => ({
+      desc: sort.desc,
+      custom: comparators[sort.id],
+      field: fieldOf(sort.id)
+    }))
     return filtered.sort((a, b) => {
-      for (const sort of sorting.value) {
-        const custom = comparators[sort.id]
-        const field = fieldOf(sort.id)
+      for (const { desc, custom, field } of keys) {
         const result = custom
           ? custom(a, b)
           : compareValues(
               (a as Record<string, unknown>)[field],
               (b as Record<string, unknown>)[field]
             )
-        if (result !== 0) return sort.desc ? -result : result
+        if (result !== 0) return desc ? -result : result
       }
       return 0
     })
@@ -547,6 +565,24 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     }
   }
 
+  const exportItems = async (scope: CollectionExportScope = 'filtered'): Promise<T[]> => {
+    if (!serverMode) return scope === 'all' ? [...sourceItems.value] : [...matchingItems.value]
+    if (!options.exportAll) return [...serverItems.value]
+    return options.exportAll({
+      filteringText: filteringText.value,
+      filter: { tokens: [...query.value.tokens], operation: query.value.operation },
+      sort: [...sorting.value],
+      scope
+    })
+  }
+
+  const exportRows = (scope: CollectionExportScope): Promise<T[]> | T[] =>
+    serverMode
+      ? exportItems(scope)
+      : scope === 'all'
+        ? [...sourceItems.value]
+        : [...matchingItems.value]
+
   const url = resolveUrl(options.url as UseCollectionOptions<object>['url'])
   let applyingUrl = false
   const applyUrl = (): void => {
@@ -671,6 +707,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     wrapLines: preferences.value.wrapLines,
     striped: preferences.value.striped,
     density: preferences.value.density,
+    exportRows,
     'onUpdate:sorting': setSorting,
     'onUpdate:pagination': (value) => {
       if (value.pageSize !== pageSize.value && paginated) setPageSize(value.pageSize)
@@ -756,6 +793,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     setPreferences,
     clearFilters,
     refresh,
+    exportItems,
     isSelected,
     toggleSelection,
     selectPage,

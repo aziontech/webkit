@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
@@ -20,7 +20,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ logView: en.logView })
+  const { t } = useTranslate({ logView: en.logView })
   const ctx = useLogViewContext()
 
   const searchQuery = computed(() => ctx.search.value.trim())

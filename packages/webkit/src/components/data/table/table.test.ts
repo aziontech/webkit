@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
-import { defineComponent, h, ref } from 'vue'
+import { describe, expect, it, vi } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Composition from '../../../../examples/table/composition.vue'
 import Default from '../../../../examples/table/default.vue'
@@ -706,6 +706,99 @@ describe('Table (composition + data-driven)', () => {
       expect(Number(row.getAttribute('aria-rowindex'))).toBe(5002)
       expect(view.getAllByRole('row').length).toBeLessThan(60)
     })
+
+    it('measures rows of mixed heights and keeps the rows in view still while scrolling', async () => {
+      const long = 'wrapped text that runs over several lines '.repeat(6)
+      const mixed = Array.from({ length: 2000 }, (_, i) => ({
+        id: String(i),
+        name: `row-${i}`,
+        status: i % 3 === 0 ? long : 'Active'
+      }))
+      const host = document.createElement('div')
+      host.style.width = '640px'
+      document.body.appendChild(host)
+      const view = render(Table, {
+        props: { columns, data: mixed, virtual: true, wrapLines: true, maxHeight: '480px' },
+        container: host
+      })
+      const viewport = view.getByTestId('data-table__viewport')
+      viewport.style.maxHeight = '480px'
+      viewport.style.overflow = 'auto'
+      const frames = async (n = 3) => {
+        for (let i = 0; i < n; i++) await new Promise((r) => requestAnimationFrame(() => r(null)))
+        await nextTick()
+      }
+      const bodyRows = () =>
+        Array.from(viewport.querySelectorAll<HTMLElement>('[role="row"][aria-rowindex]'))
+      await frames()
+      const heights = new Set(bodyRows().map((row) => row.offsetHeight))
+      expect(heights.size).toBeGreaterThan(1)
+
+      viewport.scrollTop = 30_000
+      viewport.dispatchEvent(new Event('scroll'))
+      await frames(6)
+      const top = viewport.getBoundingClientRect().top
+      const anchor = bodyRows().find((row) => row.getBoundingClientRect().top >= top) as HTMLElement
+      const anchorIndex = anchor.getAttribute('aria-rowindex')
+      const before = anchor.getBoundingClientRect().top
+
+      viewport.scrollTop -= 400
+      viewport.dispatchEvent(new Event('scroll'))
+      await frames(6)
+      const same = bodyRows().find((row) => row.getAttribute('aria-rowindex') === anchorIndex)
+      expect(same).toBeTruthy()
+      expect(
+        Math.abs((same as HTMLElement).getBoundingClientRect().top - (before + 400))
+      ).toBeLessThan(2)
+      const rendered = bodyRows()
+      expect(rendered[0].getBoundingClientRect().top).toBeLessThanOrEqual(top)
+      expect(rendered.at(-1)?.getBoundingClientRect().bottom).toBeGreaterThanOrEqual(top + 480)
+
+      viewport.scrollTop = viewport.scrollHeight
+      viewport.dispatchEvent(new Event('scroll'))
+      await frames(8)
+      viewport.scrollTop = viewport.scrollHeight
+      viewport.dispatchEvent(new Event('scroll'))
+      await frames(4)
+      const last = bodyRows().at(-1) as HTMLElement
+      expect(last.getAttribute('aria-rowindex')).toBe('2001')
+      expect(last.getBoundingClientRect().bottom).toBeLessThanOrEqual(
+        viewport.getBoundingClientRect().bottom + 1
+      )
+    })
+  })
+
+  describe('long lists without virtual', () => {
+    const many = Array.from({ length: 1000 }, (_, i) => ({
+      id: String(i),
+      name: `row-${i}`,
+      status: 'Active'
+    }))
+
+    it('renders the first rows and mounts the rest as they near the viewport', async () => {
+      const host = document.createElement('div')
+      host.style.width = '1024px'
+      document.body.appendChild(host)
+      const view = render(Table, { props: { columns, data: many }, container: host })
+      const rendered = () => view.getAllByRole('row').length - 1
+      expect(rendered()).toBeLessThan(100)
+      expect(view.getByTestId('data-table').getAttribute('aria-rowcount')).toBe('1001')
+      const gap = view.getByTestId('data-table__lazy-rows')
+      expect(gap.offsetHeight).toBeGreaterThan(40 * 900)
+      gap.scrollIntoView()
+      await waitFor(() => expect(rendered()).toBeGreaterThan(100))
+      window.scrollTo(0, document.documentElement.scrollHeight)
+      await waitFor(() => expect(view.getByText('row-999')).toBeTruthy(), { timeout: 4000 })
+      await waitFor(() => expect(view.queryByTestId('data-table__lazy-rows')).toBeNull())
+      expect(view.getByTestId('data-table').hasAttribute('aria-rowcount')).toBe(false)
+      window.scrollTo(0, 0)
+    })
+
+    it('renders every row of a short list at once', () => {
+      const view = render(Table, { props: { columns, data: many.slice(0, 200) } })
+      expect(view.getAllByRole('row')).toHaveLength(201)
+      expect(view.queryByTestId('data-table__lazy-rows')).toBeNull()
+    })
   })
 
   describe('with useCollection', () => {
@@ -758,6 +851,101 @@ describe('Table (composition + data-driven)', () => {
       await fireEvent.click(view.getByRole('button', { name: 'Next page' }))
       await waitFor(() => expect(view.getByText('item-11')).toBeTruthy())
       expect(view.queryByText('item-01')).toBeNull()
+    })
+
+    const exportHarness = (mode: 'client' | 'server', onExport: (rows: unknown[]) => void) =>
+      defineComponent({
+        setup() {
+          const data = Array.from({ length: 30 }, (_, i) => ({
+            id: String(i + 1),
+            name: `item-${String(i + 1).padStart(2, '0')}`,
+            status: i % 2 ? 'Active' : 'Inactive'
+          }))
+          const matches = (text: string) => data.filter((item) => item.name.includes(text))
+          const collection = useCollection({
+            ...(mode === 'client'
+              ? { items: data }
+              : {
+                  fetch: async ({ page, pageSize, filteringText }) => {
+                    const found = matches(filteringText)
+                    return {
+                      items: found.slice((page - 1) * pageSize, page * pageSize),
+                      total: found.length
+                    }
+                  },
+                  exportAll: async ({ filteringText, scope }) =>
+                    scope === 'all' ? data : matches(filteringText)
+                }),
+            columns: [
+              { accessorKey: 'name', header: 'Name' },
+              { accessorKey: 'status', header: 'Status' }
+            ],
+            filtering: { debounce: 0 },
+            pagination: { pageSize: 10 }
+          })
+          collection.setFilteringText('1')
+          return () =>
+            h(
+              Table,
+              { ...collection.tableProps.value, onExport },
+              { toolbar: () => h(Table.Export) }
+            )
+        }
+      })
+
+    it.each(['client', 'server'] as const)(
+      'exports every match, not only the page, in %s mode',
+      async (mode) => {
+        const onExport = vi.fn()
+        const host = document.createElement('div')
+        host.style.width = '1024px'
+        document.body.appendChild(host)
+        const view = render(exportHarness(mode, onExport), { container: host })
+        await waitFor(() => expect(view.getByText('item-10')).toBeTruthy())
+        await fireEvent.click(view.getByTestId('data-table__export'))
+        await waitFor(() => expect(onExport).toHaveBeenCalled())
+        const exported = onExport.mock.calls[0][0] as { name: string }[]
+        expect(exported.map((row) => row.name)).toEqual([
+          'item-01',
+          ...Array.from({ length: 10 }, (_, i) => `item-1${i}`),
+          'item-21'
+        ])
+        expect(view.getAllByRole('row')).toHaveLength(11)
+      }
+    )
+  })
+
+  describe('export', () => {
+    it('downloads the rows the caller passes and the visible columns', async () => {
+      const created: string[] = []
+      const createObjectURL = vi
+        .spyOn(URL, 'createObjectURL')
+        .mockImplementation((blob: Blob | MediaSource) => {
+          void (blob as Blob).text().then((text) => created.push(text))
+          return 'blob:test'
+        })
+      const revoke = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
+      const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
+      const tableRef = ref<{ exportCsv: (o?: object) => Promise<void> } | null>(null)
+      render(
+        defineComponent({
+          setup: () => () =>
+            h(Table, {
+              ref: tableRef,
+              columns: [
+                { id: 'label', accessorKey: 'name', header: 'Name' },
+                { accessorKey: 'status', header: 'Status' }
+              ],
+              data: rows
+            })
+        })
+      )
+      await tableRef.value?.exportCsv({ rows: [{ id: '9', name: 'Zulu', status: 'Active' }] })
+      await waitFor(() => expect(created).toHaveLength(1))
+      expect(created[0]).toBe('Name,Status\r\nZulu,Active')
+      createObjectURL.mockRestore()
+      revoke.mockRestore()
+      click.mockRestore()
     })
   })
 })

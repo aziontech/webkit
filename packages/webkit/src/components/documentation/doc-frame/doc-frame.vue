@@ -4,7 +4,7 @@
   import { cloneVNode, computed, nextTick, ref, useAttrs, useSlots, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap/index.js'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { flattenSlot } from './flatten-slot'
 
@@ -42,7 +42,7 @@
 
   const slots = useSlots()
   const attrs = useAttrs()
-  const { t } = useLocale({ docFrame: en.docFrame })
+  const { t } = useTranslate({ docFrame: en.docFrame })
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-frame')
 

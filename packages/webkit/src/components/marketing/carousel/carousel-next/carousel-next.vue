@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { useCarouselContext } from '../composables/use-carousel-context'
 
@@ -21,7 +21,7 @@
 
   const context = useCarouselContext()
   const attrs = useAttrs()
-  const { t } = useLocale({ carousel: en.carousel })
+  const { t } = useTranslate({ carousel: en.carousel })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-carousel-next'

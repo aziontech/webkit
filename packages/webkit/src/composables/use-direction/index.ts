@@ -55,6 +55,13 @@ export function resolveDirection(el?: Element | null): Direction {
   return host.getAttribute('dir')?.toLowerCase() === 'rtl' ? 'rtl' : 'ltr'
 }
 
+export function eventDirection(event: Event): Direction {
+  const target = event.currentTarget
+  return resolveDirection(
+    typeof Element !== 'undefined' && target instanceof Element ? target : null
+  )
+}
+
 export function useDirection(target?: MaybeRefOrGetter<Target>): Readonly<Ref<Direction>> {
   const instance = getCurrentInstance()
   const direction = ref<Direction>('ltr')

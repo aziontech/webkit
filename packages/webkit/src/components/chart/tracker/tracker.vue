@@ -3,7 +3,7 @@
   import { computed, ref, useAttrs, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { categoryLayout, type ChartStatus, colorToken } from '../_lib'
@@ -37,7 +37,7 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
-  const { t } = useLocale({ tracker: en.tracker })
+  const { t } = useTranslate({ tracker: en.tracker })
   const stripRef = ref<globalThis.HTMLDivElement | null>(null)
   const { width: stripWidth } = useElementSize(stripRef)
 

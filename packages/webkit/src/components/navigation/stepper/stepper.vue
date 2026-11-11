@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import type { StepperStepHandle } from './injection-key'
   import { StepperInjectionKey } from './injection-key'
@@ -29,7 +29,7 @@
   const model = defineModel<string>({ default: '' })
 
   const attrs = useAttrs()
-  const { t } = useLocale({ stepper: en.stepper })
+  const { t } = useTranslate({ stepper: en.stepper })
 
   const steps = ref<symbol[]>([])
   const elements = new Map<symbol, HTMLElement>()

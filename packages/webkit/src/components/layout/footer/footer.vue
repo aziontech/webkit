@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import FrameBox from '../frame-box/frame-box.vue'
   import { FooterInjectionKey } from './injection-key'
@@ -42,7 +42,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ footer: en.footer })
+  const { t } = useTranslate({ footer: en.footer })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-footer')
 

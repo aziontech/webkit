@@ -327,7 +327,9 @@
     if (id === 'sidebar') railCollapsed.value = !railCollapsed.value
   }
 
-  const minutesAgo = (minutes) => new Date(Date.now() - minutes * 60 * 1000)
+  const referenceNow = new Date('2026-11-10T14:30:00').getTime()
+
+  const minutesAgo = (minutes) => new Date(referenceNow - minutes * 60 * 1000)
 
   const dayFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit' })
   const clockFormat = new Intl.DateTimeFormat('en-US', {
@@ -411,7 +413,7 @@
     return true
   }
 
-  const periodRange = (value, now = new Date()) => {
+  const periodRange = (value, now = new Date(referenceNow)) => {
     if (value && typeof value === 'object') {
       return { start: value.start ?? null, end: value.end ?? now }
     }
@@ -687,7 +689,7 @@
   }
 
   const eventBuckets = (list, range) => {
-    const end = (range?.end ?? new Date()).getTime()
+    const end = (range?.end ?? new Date(referenceNow)).getTime()
     const start = (range?.start ?? new Date(end - fullWindowMinutes * 60000)).getTime()
     const span = Math.max(1, end - start)
     const bars = bucketCountFor(span / 60000)

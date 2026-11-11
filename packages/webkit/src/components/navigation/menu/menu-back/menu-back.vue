@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { type ComponentPublicInstance, computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { cn } from '../../../../utils/cn'
   import { useMenuContext } from '../composables/use-menu-context'
@@ -26,7 +26,7 @@
 
   const ctx = useMenuContext()
   const attrs = useAttrs()
-  const { t } = useLocale({ menu: en.menu })
+  const { t } = useTranslate({ menu: en.menu })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-back'

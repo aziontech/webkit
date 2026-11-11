@@ -239,6 +239,24 @@ describe('useCollection — client mode', () => {
     expect(c.tableProps.value.columnVisibility).toEqual({ status: false })
     expect(c.preferencesProps.value.columns.map((col) => col.id)).toEqual(['name', 'status'])
   })
+
+  it('exports every match across pages, sorted, or every item', async () => {
+    const c = setup({ items: rows, pagination: { pageSize: 5 }, propertyFiltering: { properties } })
+    c.setQuery({
+      tokens: [{ propertyKey: 'status', operator: '=', value: 'Active' }],
+      operation: 'and'
+    })
+    c.setSorting([{ id: 'requests', desc: true }])
+    expect(c.items.value).toHaveLength(5)
+    const filtered = c.tableProps.value.exportRows('filtered') as Row[]
+    expect(filtered).toHaveLength(15)
+    expect(filtered.every((row) => row.status === 'Active')).toBe(true)
+    expect(filtered.map((row) => row.requests)).toEqual(
+      [...filtered.map((row) => row.requests)].sort((a, b) => b - a)
+    )
+    expect(c.tableProps.value.exportRows('all')).toHaveLength(23)
+    expect(await c.exportItems()).toEqual(filtered)
+  })
 })
 
 describe('useCollection — preferences', () => {
@@ -434,6 +452,25 @@ describe('useCollection — server mode', () => {
     expect(c.selectedCount.value).toBe(22)
     expect(c.tableProps.value.rowSelection['1']).toBeUndefined()
     expect(c.tableProps.value.rowSelection['2']).toBe(true)
+  })
+
+  it('exports through exportAll with the current filters, or the loaded page without it', async () => {
+    const { fetch } = server()
+    const exportAll = vi.fn(async () => rows)
+    const c = setup({ fetch, exportAll, pagination: { pageSize: 10 } })
+    await flush()
+    c.setSorting([{ id: 'name', desc: true }])
+    await flush()
+    expect(await c.tableProps.value.exportRows('filtered')).toHaveLength(23)
+    expect(exportAll).toHaveBeenCalledWith({
+      filteringText: '',
+      filter: { tokens: [], operation: 'and' },
+      sort: [{ id: 'name', desc: true }],
+      scope: 'filtered'
+    })
+    const plain = setup({ fetch, pagination: { pageSize: 10 } })
+    await flush()
+    expect(await plain.exportItems()).toHaveLength(10)
   })
 
   it('tells empty from no match on the server', async () => {
