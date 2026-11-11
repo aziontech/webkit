@@ -33,6 +33,8 @@ export interface MultiSelectContext {
   displayValue: ComputedRef<string>
   /** Whether the current selection is non-empty (drives data-filled). */
   filled: ComputedRef<boolean>
+  /** Records the visible label of an option so the trigger can show labels, not values. */
+  registerLabel: (value: unknown, label: string) => void
 }
 
 export const multiSelectContextKey: InjectionKey<MultiSelectContext> = Symbol('MultiSelectContext')

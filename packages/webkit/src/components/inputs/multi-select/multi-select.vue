@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, ref, toRef, useAttrs, useId } from 'vue'
+  import { computed, provide, ref, shallowReactive, toRef, useAttrs, useId } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { fieldContextKey } from '../field/injection-key'
@@ -106,11 +106,16 @@
 
   const filled = computed(() => currentArray().length > 0)
 
+  const labels = shallowReactive(new Map<unknown, string>())
+  const registerLabel = (value: unknown, label: string) => {
+    if (label && labels.get(value) !== label) labels.set(value, label)
+  }
+
   const displayValueComputed = computed((): string => {
     const current = currentArray()
     if (props.displayValue) return props.displayValue(current)
     if (current.length === 0) return ''
-    return current.join(', ')
+    return current.map((value) => labels.get(value) ?? String(value)).join(', ')
   })
 
   provide(multiSelectContextKey, {
@@ -132,7 +137,8 @@
     ariaLabelledby: computed(() => attrs['aria-labelledby'] as string | undefined),
     placeholder: computed(() => props.placeholder),
     displayValue: displayValueComputed,
-    filled
+    filled,
+    registerLabel
   })
 </script>
 

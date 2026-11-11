@@ -3,11 +3,11 @@ name: multi-select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: 66b1bd69922c13c7aecf31296fd01fb96c5c969b72e11d0e534e6e1b90127c39
+checksum: b573661353bf47d1d2791a388164094c4b2c96ee55d1011bcd35aafebecfd9bf
 created: 2026-06-25
 last_updated: 2026-11-11
 ---
@@ -86,7 +86,7 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 
 ## Sub-components
 
-- `multi-select-trigger/multi-select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label (comma-joined labels or count, see `displayValue`), and chevron-down. Mirrors `Input` size/state visuals.
+- `multi-select-trigger/multi-select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label (comma-joined option labels, or `displayValue`). Each option records its label text with the root when it mounts; on mount `MultiSelectContent` renders its options once inside a `hidden` container so the labels are known before the panel first opens, then drops it, and chevron-down. Mirrors `Input` size/state visuals.
 - `multi-select-content/multi-select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
 - `multi-select-group/multi-select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
 - `multi-select-option/multi-select-option.vue` — Selectable option row with a checkbox indicator (the `Checkbox` webkit component), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.

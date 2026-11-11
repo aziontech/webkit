@@ -331,7 +331,7 @@ describe('MultiSelect (composition / overlay)', () => {
     cleanupTeleported()
   })
 
-  it('shows placeholder when empty and joined values once options are selected', async () => {
+  it('shows placeholder when empty and joined labels once options are selected', async () => {
     const { getByTestId } = render(Harness, {
       props: { initial: [], open: true, placeholder: 'Pick options' }
     })
@@ -340,16 +340,23 @@ describe('MultiSelect (composition / overlay)', () => {
     expect(label.textContent?.trim()).toBe('Pick options')
     expect(getByTestId('multi-select-trigger').getAttribute('data-filled')).toBeNull()
 
-    // The default formatter joins selected values with a comma and flips data-filled.
     const options = listbox()!.querySelectorAll<HTMLElement>('[role="option"]')
-    await fireEvent.click(options[0]) // opt-1
-    await fireEvent.click(options[1]) // opt-2
+    await fireEvent.click(options[0])
+    await fireEvent.click(options[1])
 
-    expect(label.textContent).toContain('opt-1')
-    expect(label.textContent).toContain('opt-2')
+    expect(label.textContent?.trim()).toBe('Option 1, Option 2')
     expect(getByTestId('multi-select-trigger').getAttribute('data-filled')).toBe('true')
 
     cleanupTeleported()
+  })
+
+  it('names the selection by option labels before the panel first opens', async () => {
+    const { getByTestId } = render(Harness, { props: { initial: ['opt-2'], open: false } })
+    await nextTick()
+    await nextTick()
+    expect(getByTestId('multi-select-trigger__value').textContent?.trim()).toBe('Option 2')
+    expect(document.querySelector('[data-testid="multi-select-content__labels"]')).toBeNull()
+    expect(listbox()).toBeNull()
   })
 
   it('closes the panel on Escape fired inside the listbox', async () => {
