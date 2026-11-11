@@ -3,11 +3,11 @@ name: tabs
 category: navigation
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 2fe04f9687b08b2b68ad4dd194cddc7af709721b252d13a1c2158a8b7ca027d2
+checksum: bd981fde3e1b5a5d07a9238a117683a5296cf94be7104acec2b4f1633766cc29
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -23,6 +23,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 - A page or panel holds several peer views and only one is shown at a time (Overview / Settings / Logs on a resource page).
 - The tab row may outgrow its container — `Tabs.List` scrolls horizontally with edge fades instead of wrapping.
 - Tabs that the user can close: set `closable` on the item and remove it from your data on `@close`.
+- A tab whose form holds unsaved changes: set `dirty` on the item (bind it to `useUnsavedChanges().isDirty`) so the reader sees which section still needs a save.
 
 ## When NOT to use
 
@@ -41,6 +42,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 - Give each `Tabs.Item` and its `Tabs.Panel` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility.
 - Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.
 - `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
+- `dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - Use the item's `selected` prop only for a standalone `Tabs.Item` outside a root; inside a root the selection comes from the root's value.
 - Put spacing between the list and the panels on `Tabs.Content` (e.g. a top margin), not inside each panel.
 
@@ -82,7 +84,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 
 ## Sub-components
 
-- `tab-view-item.vue` — Public sub-component `tabs-item`.
+- `tab-view-item.vue` — Public sub-component `tabs-item`. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-contrast)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
 - `tab-view-list.vue` — Public sub-component `tabs-list`.
 - `tab-view-panel.vue` — Public sub-component `tabs-panel`.
 
@@ -112,6 +114,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values on panels: `active` | `inactive`
+- Dirty: `data-dirty` on a `Tabs.Item` with `dirty`; the dot is not the only cue for assistive tech (a hidden "Unsaved changes" joins the tab's name).
 - Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
 
 ## Motion & Animations
@@ -145,7 +148,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `ArrowRight`/`ArrowLeft` move to the next/previous enabled tab and wrap, swapped under `dir="rtl"` (`useDirection`); `Home`/`End` select the first/last; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state. The dirty dot is `var(--warning-contrast)` (≥3:1 on the canvas in both themes) and the tab's accessible name carries "Unsaved changes", so colour is never the only cue.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: the tab item is 32 px tall (`var(--size-8)`) — a justified deviation from 40×40 px matching the Figma tab-item size token, mitigated by the full label + padding being the hit area and by the tab list's own keyboard model.
 

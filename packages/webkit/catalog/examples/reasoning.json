@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Finished reasoning, collapsed under `Thought for 14 seconds`; expanding it shows the short trace with identifiers in code.",
+   "sfc": "<script setup>\n  import Reasoning from '@aziontech/webkit/reasoning'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <Reasoning :duration=\"14\">\n      <p>The reader asks why the cache hit ratio of storefront dropped this week.</p>\n      <p>\n        Checking the cache settings of <code>storefront</code>: query strings are part of the cache\n        key, and a campaign started on Monday adds <code>utm_source</code> to every link.\n      </p>\n      <p>Each campaign link is a new cache key, so most requests miss the cache.</p>\n    </Reasoning>\n  </div>\n</template>"
+  },
+  {
+   "name": "Streaming",
+   "summary": "Reasoning in progress: the label reads Thinking and pulses, the trace grows inside, and Skip thinking ends it early so the label shows how long it took.",
+   "sfc": "<script setup>\n  import Reasoning from '@aziontech/webkit/reasoning'\n  import { onBeforeUnmount, onMounted, ref } from 'vue'\n\n  const steps = [\n    'Reading the error rate of the workload over the last hour.',\n    'The 502 responses started at 14:05, when the origin certificate expired.',\n    'Checking whether a renewed certificate is already uploaded.'\n  ]\n\n  const shown = ref([])\n  const streaming = ref(true)\n  let timer\n\n  function stop() {\n    clearInterval(timer)\n    streaming.value = false\n  }\n\n  onMounted(() => {\n    timer = setInterval(() => {\n      if (shown.value.length < steps.length) shown.value = steps.slice(0, shown.value.length + 1)\n      else stop()\n    }, 1500)\n  })\n  onBeforeUnmount(() => clearInterval(timer))\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <Reasoning\n      :streaming=\"streaming\"\n      default-open\n      skippable\n      @skip=\"stop\"\n    >\n      <p\n        v-for=\"step in shown\"\n        :key=\"step\"\n      >\n        {{ step }}\n      </p>\n    </Reasoning>\n  </div>\n</template>"
+  }
+ ]
+}

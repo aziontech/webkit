@@ -2187,6 +2187,1104 @@
    "surface": "product",
    "examplesFile": "catalog/examples/overline.json"
   },
+  "action-confirmation": {
+   "import": "@aziontech/webkit/action-confirmation",
+   "target": "./src/components/ai/action-confirmation/action-confirmation.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/action-confirmation",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One or two sentences on what will happen and to what; backticks render as code."
+    },
+    {
+     "name": "state",
+     "type": "'pending' | 'approved' | 'denied' | 'expired'",
+     "default": "'pending'",
+     "required": "false",
+     "doc": "pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text."
+    },
+    {
+     "name": "kind",
+     "type": "'default' | 'danger'",
+     "default": "'default'",
+     "required": "false",
+     "doc": "danger` for an action that cannot be undone: the approve button turns destructive."
+    },
+    {
+     "name": "confirmationPhrase",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing."
+    },
+    {
+     "name": "approveLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`)."
+    },
+    {
+     "name": "denyLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the deny button. Empty uses the locale catalog (`Deny`)."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "A decision is being sent; both buttons are inert and Approve shows its loading state."
+    }
+   ],
+   "events": [
+    {
+     "name": "approve",
+     "payload": "—",
+     "notes": ""
+    },
+    {
+     "name": "deny",
+     "payload": "—",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "What exactly will run: a `CodeBlock`, or `KeyValuePairs` with parameters."
+    }
+   ],
+   "purpose": "A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValuePairs` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`kind=\"danger\"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.",
+   "useWhen": [
+    "One-time authorization of a consequential action proposed by an agent: a production deployment, a purge, a command.",
+    "An irreversible action (delete): add `confirmationPhrase`."
+   ],
+   "avoidWhen": [
+    "Tools already trusted for the session → record the call with `tool-call`, do not ask again.",
+    "A destructive action the reader started themselves in the UI → `confirm-dialog`.",
+    "A form → this card only approves or denies."
+   ],
+   "related": [
+    "tool-call` — the record of the call after it is approved (or `denied`).",
+    "confirm-dialog` — confirmation of the reader's own destructive action.",
+    "code-block`, `key-value-pairs` — what will run, in the body.",
+    "chat-message` — the assistant acknowledges the decision in the next message."
+   ],
+   "bestPractices": [
+    "Title is a question naming the action and target; put tool and command names in backticks (code).",
+    "Match the approve label to the title verb (`Deploy`, `Delete`) when it is not a generic tool call.",
+    "Never pre-focus or pre-select Approve for a risky action.",
+    "Do not leave a request pending forever: expire it (`state=\"expired\"`) and have the assistant say nothing ran.",
+    "After Deny, the assistant acknowledges in the conversation (\"Skipping that step.\")."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/action-confirmation.json"
+  },
+  "ai-loading": {
+   "import": "@aziontech/webkit/ai-loading",
+   "target": "./src/components/ai/ai-loading/ai-loading.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/ai-loading",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Visible loading text, `Generating <what>` or `Loading <what>`, with no end punctuation. Empty uses the locale catalog (`Generating a response`)."
+    },
+    {
+     "name": "kind",
+     "type": "'inline' | 'bar'",
+     "default": "'inline'",
+     "required": "false",
+     "doc": "inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear."
+    },
+    {
+     "name": "delay",
+     "type": "number",
+     "default": "1000",
+     "required": "false",
+     "doc": "Milliseconds to wait before showing anything, so a fast response never flickers a loading state."
+    }
+   ],
+   "purpose": "The loading state of a generative AI response (Cloudscape generative AI loading states and loading bar, AI Elements Loader): visible loading text — `Generating a response`, `Loading list of workloads` — paired with three pulsing dots (`inline`, for text) or an indeterminate bar (`bar`, where a table, list or code block is about to appear). It waits `delay` milliseconds before showing anything, so a response that arrives within a second never flickers a loading state.",
+   "useWhen": [
+    "Processing: the model has the prompt but has produced nothing yet (`ChatMessage` renders it for `state=\"pending\"`).",
+    "Generation of mixed content: a bar where a table or code block will appear while text streams."
+   ],
+   "avoidWhen": [
+    "Model reasoning with a trace → `reasoning`.",
+    "Loading a page or table of product data → `skeleton`, `spinner`, `progress`.",
+    "Determinate progress → `progress`."
+   ],
+   "related": [
+    "chat-message` — renders this while `pending`.",
+    "progress` — the indeterminate bar it draws.",
+    "reasoning` — thinking with a trace."
+   ],
+   "bestPractices": [
+    "Text says `[Generating|Loading] <what>` without end punctuation: `Generating a response`, `Loading list of workloads`.",
+    "Keep the default 1 s delay; set `delay` to 0 only when the owner already delayed.",
+    "Use the bar only for non-text content; stream text instead of loading it."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/ai-loading.json"
+  },
+  "artifact-preview": {
+   "import": "@aziontech/webkit/artifact-preview",
+   "target": "./src/components/ai/artifact-preview/artifact-preview.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/artifact-preview",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "File name or title of what was generated (`cache-rules.json`)."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One line on what it is or does."
+    },
+    {
+     "name": "meta",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Facts that help recognize it: size, rows, language (`2.4 KB · JSON`)."
+    },
+    {
+     "name": "icon",
+     "type": "string",
+     "default": "'pi pi-file'",
+     "required": "false",
+     "doc": "Icon class for the file type."
+    },
+    {
+     "name": "copyValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text the Copy control puts on the clipboard. Empty hides Copy."
+    },
+    {
+     "name": "downloadHref",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "URL of the file for the Download control. Empty hides Download."
+    },
+    {
+     "name": "openable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows Open, which emits `open` so the owner shows the full artifact in a side panel or page (a canvas preview)."
+    }
+   ],
+   "events": [
+    {
+     "name": "open",
+     "payload": "—",
+     "notes": ""
+    },
+    {
+     "name": "copy",
+     "payload": "string",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The inline preview; scrolls inside a 20 rem body."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Extra icon actions, placed before Copy and Download."
+    }
+   ],
+   "purpose": "A card for something the assistant generated — a file, a code snippet, a table, a configuration (Cloudscape artifact previews, AI Elements Artifact). The header names it (title, description, metadata such as size or format, a file-type icon) and carries its actions: Copy (when `copyValue` is set), Download (when `downloadHref` is set) and Open (when `openable`, emitting `open` so the owner shows the full artifact in a side panel — Cloudscape's canvas preview). The body holds a short inline preview (Cloudscape's inline preview): the first lines of code, the first rows of a table.",
+   "useWhen": [
+    "The assistant produced an artifact the reader may copy, download or open: a rules file, a CSV export, a command, a generated function."
+   ],
+   "avoidWhen": [
+    "Short code inside the prose of a response → fenced code in `StreamingResponse` (rendered as `CodeBlock`).",
+    "A resource that already exists in the product → link to its page; this card is for generated content.",
+    "Uploads the reader attached → `file-dropzone` items or chips in `PromptInput`'s attachments."
+   ],
+   "related": [
+    "code-block` — the usual inline preview body.",
+    "drawer` — where an `open` artifact is shown in full.",
+    "chat-message` — artifacts stack under the response, not inside its bubble."
+   ],
+   "bestPractices": [
+    "Stack artifacts below the message text, one card each; do not nest them in the bubble.",
+    "Keep artifact actions in the card and message actions in `ChatMessage.Actions`.",
+    "Express sizes in KB, MB or GB in `meta`.",
+    "Long or editable content opens (canvas); the inline body stays a preview."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/artifact-preview.json"
+  },
+  "chat-message": {
+   "import": "@aziontech/webkit/chat-message",
+   "target": "./src/components/ai/chat-message/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/chat-message-root",
+   "subcomponents": [
+    "@aziontech/webkit/chat-message-actions",
+    "@aziontech/webkit/chat-message-feedback"
+   ],
+   "category": "ai",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "from",
+     "type": "'user' | 'assistant' | 'system'",
+     "default": "'assistant'",
+     "required": "false",
+     "doc": "Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`)."
+    },
+    {
+     "name": "author",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
+    },
+    {
+     "name": "timestamp",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name."
+    },
+    {
+     "name": "state",
+     "type": "'pending' | 'streaming' | 'complete' | 'error'",
+     "default": "'complete'",
+     "required": "false",
+     "doc": "Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `complete` shows the actions, `error` shows the error line with Try again."
+    },
+    {
+     "name": "grouped",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn."
+    },
+    {
+     "name": "errorMessage",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Error text shown while `state` is `error`. Empty uses the locale catalog."
+    },
+    {
+     "name": "loadingLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Loading text shown while `state` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "retry",
+     "payload": "—",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`."
+    },
+    {
+     "name": "avatar",
+     "scope": "—",
+     "notes": "Replaces the default avatar (person glyph for the user, the assistant mark for the AI)."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `state` is `complete`."
+    }
+   ],
+   "purpose": "One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes on it (copy, regenerate, thumbs up / down). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `complete` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). User messages sit in a filled bubble; assistant messages are flat, full width, beside the assistant mark; system messages are a muted centered line. Alignment comes from the enclosing `Conversation`.",
+   "useWhen": [
+    "Every turn of a chat with the generative AI assistant: the person's prompt, the assistant's response, a system note (\"Conversation restarted\").",
+    "A response that must show its lifecycle (loading, streaming, failure) and its actions."
+   ],
+   "avoidWhen": [
+    "A generated block outside a conversation (a summary on a page) → `StreamingResponse` alone.",
+    "A notification or toast about the product → `alert` / `toast`.",
+    "A comment thread between people → not this component; it carries AI semantics (feedback thumbs, regenerate)."
+   ],
+   "related": [
+    "conversation` — the log that holds messages, sets alignment and announces finished ones.",
+    "streaming-response` — the safe Markdown renderer for assistant content.",
+    "reasoning`, `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.",
+    "copy-button`, `icon-button` — the actions composed into `ChatMessage.Actions`.",
+    "ai-loading` — what `pending` renders."
+   ],
+   "bestPractices": [
+    "Pass `state` from your request: `pending` until the first token, `streaming` while tokens arrive, then `complete` or `error`.",
+    "Keep actions to five or fewer, always visible (no hover-only): copy, regenerate, feedback.",
+    "Use `grouped` for a second message by the same author so stacked bubbles read as one turn (only the first shows the avatar).",
+    "Never put the feedback thumbs on non-AI content."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/chat-message.json"
+  },
+  "chat-message-root": {
+   "import": "@aziontech/webkit/chat-message-root",
+   "target": "./src/components/ai/chat-message/chat-message.vue",
+   "kind": "root",
+   "rootOf": "chat-message",
+   "treeShakeableImport": "@aziontech/webkit/chat-message-root",
+   "category": "ai",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "from",
+     "type": "'user' | 'assistant' | 'system'",
+     "default": "'assistant'",
+     "required": "false",
+     "doc": "Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`)."
+    },
+    {
+     "name": "author",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
+    },
+    {
+     "name": "timestamp",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name."
+    },
+    {
+     "name": "state",
+     "type": "'pending' | 'streaming' | 'complete' | 'error'",
+     "default": "'complete'",
+     "required": "false",
+     "doc": "Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `complete` shows the actions, `error` shows the error line with Try again."
+    },
+    {
+     "name": "grouped",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn."
+    },
+    {
+     "name": "errorMessage",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Error text shown while `state` is `error`. Empty uses the locale catalog."
+    },
+    {
+     "name": "loadingLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Loading text shown while `state` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "retry",
+     "payload": "—",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`."
+    },
+    {
+     "name": "avatar",
+     "scope": "—",
+     "notes": "Replaces the default avatar (person glyph for the user, the assistant mark for the AI)."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `state` is `complete`."
+    }
+   ],
+   "purpose": "One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes on it (copy, regenerate, thumbs up / down). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `complete` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). User messages sit in a filled bubble; assistant messages are flat, full width, beside the assistant mark; system messages are a muted centered line. Alignment comes from the enclosing `Conversation`.",
+   "useWhen": [
+    "Every turn of a chat with the generative AI assistant: the person's prompt, the assistant's response, a system note (\"Conversation restarted\").",
+    "A response that must show its lifecycle (loading, streaming, failure) and its actions."
+   ],
+   "avoidWhen": [
+    "A generated block outside a conversation (a summary on a page) → `StreamingResponse` alone.",
+    "A notification or toast about the product → `alert` / `toast`.",
+    "A comment thread between people → not this component; it carries AI semantics (feedback thumbs, regenerate)."
+   ],
+   "related": [
+    "conversation` — the log that holds messages, sets alignment and announces finished ones.",
+    "streaming-response` — the safe Markdown renderer for assistant content.",
+    "reasoning`, `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.",
+    "copy-button`, `icon-button` — the actions composed into `ChatMessage.Actions`.",
+    "ai-loading` — what `pending` renders."
+   ],
+   "bestPractices": [
+    "Pass `state` from your request: `pending` until the first token, `streaming` while tokens arrive, then `complete` or `error`.",
+    "Keep actions to five or fewer, always visible (no hover-only): copy, regenerate, feedback.",
+    "Use `grouped` for a second message by the same author so stacked bubbles read as one turn (only the first shows the avatar).",
+    "Never put the feedback thumbs on non-AI content."
+   ],
+   "surface": "product"
+  },
+  "chat-message-actions": {
+   "import": "@aziontech/webkit/chat-message-actions",
+   "target": "./src/components/ai/chat-message/chat-message-actions/chat-message-actions.vue",
+   "kind": "subcomponent",
+   "parent": "chat-message",
+   "treeShakeableImport": "@aziontech/webkit/chat-message-actions",
+   "surface": "product"
+  },
+  "chat-message-feedback": {
+   "import": "@aziontech/webkit/chat-message-feedback",
+   "target": "./src/components/ai/chat-message/chat-message-feedback/chat-message-feedback.vue",
+   "kind": "subcomponent",
+   "parent": "chat-message",
+   "treeShakeableImport": "@aziontech/webkit/chat-message-feedback",
+   "surface": "product"
+  },
+  "citation": {
+   "import": "@aziontech/webkit/citation",
+   "target": "./src/components/ai/citation/citation.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/citation",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "index",
+     "type": "number",
+     "default": "—",
+     "required": "true",
+     "doc": "1-based number of the source, in the order the response first cites it."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Title of the source, shown in the tooltip and read in the accessible name."
+    },
+    {
+     "name": "href",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it the number is plain text."
+    }
+   ],
+   "purpose": "An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL — with a tooltip naming the source and an accessible name of `Source 1: <title>`. `StreamingResponse` renders it for every `[n]`; use it directly when you build responses yourself.",
+   "useWhen": [
+    "A statement in a generated response that comes from a specific source."
+   ],
+   "avoidWhen": [
+    "A link the reader is meant to follow as part of the prose → a normal link.",
+    "Footnotes in documentation → `doc-prose` conventions."
+   ],
+   "related": [
+    "sources` — the list citations point at.",
+    "streaming-response` — renders citations from `[n]` in Markdown.",
+    "tooltip` — shows the source title."
+   ],
+   "bestPractices": [
+    "Number in order of first use: [1], [2], [3].",
+    "Give every citation a `title`; a bare number tells a screen reader nothing."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/citation.json"
+  },
+  "conversation": {
+   "import": "@aziontech/webkit/conversation",
+   "target": "./src/components/ai/conversation/conversation.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/conversation",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the message log. Empty uses the locale catalog (`Conversation`)."
+    },
+    {
+     "name": "alignment",
+     "type": "'split' | 'start'",
+     "default": "'split'",
+     "required": "false",
+     "doc": "split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card)."
+    }
+   ],
+   "purpose": "The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a \"Scroll to the latest message\" button brings them back. It is a `role=\"log\"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. It also sets where messages sit for the whole thread (`alignment`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).",
+   "useWhen": [
+    "Any surface where a person and the generative AI assistant exchange messages: the assistant page, the assistant drawer, an in-flow helper.",
+    "A transcript that grows while the reader watches it (streaming responses, tool calls appearing)."
+   ],
+   "avoidWhen": [
+    "A one-shot generated block on a page (a summary card, an explanation beside a chart) → render `StreamingResponse` in place.",
+    "A log of system events with timestamps and filtering → use `log-view`.",
+    "A list of past conversations → a `table` or `item` list; this is one thread."
+   ],
+   "related": [
+    "chat-message` — the item the log holds; announces itself through this component.",
+    "prompt-input` — the composer pinned under the log (outside it; only the log scrolls).",
+    "suggestion-group` — follow-up questions after the last response, or support prompts in the empty state.",
+    "empty-state` — what the panel shows before the first message (the block renders it instead of the log).",
+    "log-view` — machine logs, not conversations."
+   ],
+   "bestPractices": [
+    "Pin the prompt input under the conversation; only the log scrolls.",
+    "Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.",
+    "Use `alignment=\"start\"` in drawers and side panels, `split` on a full page.",
+    "Keep one conversation per surface; a second thread is a second page or a history list."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/conversation.json"
+  },
+  "prompt-input": {
+   "import": "@aziontech/webkit/prompt-input",
+   "target": "./src/components/ai/prompt-input/prompt-input.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/prompt-input",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "placeholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`)."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`)."
+    },
+    {
+     "name": "maxLength",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit."
+    },
+    {
+     "name": "minRows",
+     "type": "number",
+     "default": "1",
+     "required": "false",
+     "doc": "Rows shown while empty."
+    },
+    {
+     "name": "maxRows",
+     "type": "number",
+     "default": "6",
+     "required": "false",
+     "doc": "Rows the text area grows to before it scrolls."
+    },
+    {
+     "name": "state",
+     "type": "'ready' | 'submitted' | 'streaming'",
+     "default": "'ready'",
+     "required": "false",
+     "doc": "Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the text area, the submit control and every control in the slots' row."
+    }
+   ],
+   "events": [
+    {
+     "name": "submit",
+     "payload": "string",
+     "notes": ""
+    },
+    {
+     "name": "stop",
+     "payload": "—",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "attachments",
+     "scope": "—",
+     "notes": "Attached files or context chips, above the text."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Secondary controls at the inline start of the toolbar; inside a `fieldset` disabled with the input."
+    },
+    {
+     "name": "hint",
+     "scope": "—",
+     "notes": "Constraint text under the input; referenced by `aria-describedby`."
+    }
+   ],
+   "purpose": "The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated, a toolbar row for secondary controls (attach, mode), an attachments row above the text, an optional character limit with a counter, and constraint text under it (a disclaimer or the shortcuts it accepts). Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text, receives `submit` with the trimmed prompt, and clears it. While `state` is `submitted` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop.",
+   "useWhen": [
+    "The input of any conversation with the generative AI assistant.",
+    "A single \"Ask about this page\" box that opens a conversation."
+   ],
+   "avoidWhen": [
+    "A text field in a form → `textarea` inside `field`.",
+    "Search over a list → `input` with a search icon or `property-filter`.",
+    "A command palette → `command`."
+   ],
+   "related": [
+    "textarea` — the form control; this one has no visible label and submits on Enter.",
+    "conversation` — the log above it; only the log scrolls.",
+    "suggestion-group` — prompts the reader can send without typing.",
+    "file-dropzone`, `chip` — what attachment flows compose into the `attachments` slot."
+   ],
+   "bestPractices": [
+    "Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.",
+    "Put the disclaimer and the shortcuts in `hint`, not in the placeholder.",
+    "Set `state` from the request so Submit turns into Stop; wire `stop` to abort it.",
+    "Clear `v-model` in the `submit` handler and keep focus in the input.",
+    "Use `maxLength` only when the backend has a limit; the counter is the warning."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/prompt-input.json"
+  },
+  "reasoning": {
+   "import": "@aziontech/webkit/reasoning",
+   "target": "./src/components/ai/reasoning/reasoning.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/reasoning",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "streaming",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "The model is still reasoning: the label reads `Thinking` and pulses; when it turns false the label shows how long it took."
+    },
+    {
+     "name": "duration",
+     "type": "number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Controlled open state. Use with `v-model:open`."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled; collapsed is the default in a chat, where the response is the main content."
+    },
+    {
+     "name": "skippable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:open",
+     "payload": "boolean",
+     "notes": ""
+    },
+    {
+     "name": "skip",
+     "payload": "—",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The trace: short narration, steps, inline code. Kept as it was once thinking ends."
+    }
+   ],
+   "purpose": "Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is done, with the trace inside. Collapsed by default in a chat, where the response is the main content. The duration comes from the server (`duration`) or is measured from `streaming` turning on to turning off, rounded to whole seconds. An optional `Skip thinking` lets the reader ask for the response now.",
+   "useWhen": [
+    "The model performs extended reasoning before answering, and the trace helps the reader trust or check the response."
+   ],
+   "avoidWhen": [
+    "Ordinary loading with no reasoning → `ai-loading`.",
+    "Agent actions with side effects (calls, commands) → `tool-call` and `action-confirmation`.",
+    "Progressive steps of a long task → a `stepper` or a list of `tool-call`s."
+   ],
+   "related": [
+    "ai-loading` — loading without a trace.",
+    "tool-call` — what the agent did, rather than what it thought.",
+    "streaming-response` — renders a Markdown trace inside the slot."
+   ],
+   "bestPractices": [
+    "Keep it collapsed in chat; open it by default only where reasoning is the point (an editor, a review).",
+    "Never show secrets, token counts or system prompts in the trace.",
+    "Do not replace the label with trace text; the label stays `Thinking` until done.",
+    "Offer `skippable` only when the model can answer meaningfully without finishing."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/reasoning.json"
+  },
+  "sources": {
+   "import": "@aziontech/webkit/sources",
+   "target": "./src/components/ai/sources/sources.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/sources",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "AiSource[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The sources behind the response, in citation order; item `n` is what `[n]` points at."
+    },
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Heading of the disclosure. Empty uses the locale catalog (`3 sources`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Controlled open state. Use with `v-model:open`."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:open",
+     "payload": "boolean",
+     "notes": ""
+    }
+   ],
+   "purpose": "The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line description. Item `n` carries the id `<anchor>-source-<n>`, the target of the `[n]` citations `StreamingResponse` renders; following a citation opens the list and brings the item into view.",
+   "useWhen": [
+    "A response is grounded in documents, pages or records the reader may want to open or verify."
+   ],
+   "avoidWhen": [
+    "Related links that the response did not use → `help-panel` links or a plain list.",
+    "A single source → cite it inline with a link; a list of one is noise."
+   ],
+   "related": [
+    "citation` — the inline `[n]` that points here.",
+    "streaming-response` — renders the citations; share the `anchor`.",
+    "chat-message` — sources sit inside the assistant message, under the response."
+   ],
+   "bestPractices": [
+    "Order items as the response first cites them, so `[1]` is item 1.",
+    "Use the page title, not the URL, as the title; add the site or section as the description.",
+    "Keep the list collapsed by default; the inline citations are the primary path."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/sources.json"
+  },
+  "streaming-response": {
+   "import": "@aziontech/webkit/streaming-response",
+   "target": "./src/components/ai/streaming-response/streaming-response.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/streaming-response",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "content",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, relative and hash links survive."
+    },
+    {
+     "name": "streaming",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes."
+    },
+    {
+     "name": "sources",
+     "type": "AiSource[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name)."
+    },
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers."
+    }
+   ],
+   "purpose": "Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:` and `data:` links are dropped (only `http(s)`, `mailto`, relative and `#` links survive), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Numbered citations `[1]` become `Citation` references resolved against `sources`, linked to the `Sources` list under the response through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.",
+   "useWhen": [
+    "The content of every assistant `ChatMessage`.",
+    "Any generated text on a page (an explanation, a summary) that arrives token by token."
+   ],
+   "avoidWhen": [
+    "Authored documentation prose → `doc-prose`.",
+    "Code alone → `code-block`.",
+    "Trusted HTML from your own CMS → render it with your CMS pipeline; this component deliberately renders no HTML."
+   ],
+   "related": [
+    "chat-message` — the host of a response.",
+    "citation`, `sources` — inline references and the list they point at.",
+    "code-block` — what fenced code renders as.",
+    "ai-loading` — the loading text before the first token, or a bar where a table is coming."
+   ],
+   "bestPractices": [
+    "Pass the accumulated text on every chunk; the parser is cheap and the output is keyed by block.",
+    "Keep `streaming` true until the stream closes, then false (removes the caret, highlights an open fence).",
+    "Give the response and its `Sources` the same `anchor` so `[n]` links to item `n`.",
+    "Do not post-process model output into HTML; there is no HTML path."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/streaming-response.json"
+  },
+  "suggestion-group": {
+   "import": "@aziontech/webkit/suggestion-group",
+   "target": "./src/components/ai/suggestion-group/suggestion-group.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/suggestion-group",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "SuggestionItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Up to five prompts, most likely first."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the group. Empty uses the locale catalog (`Suggested prompts`)."
+    },
+    {
+     "name": "orientation",
+     "type": "'horizontal' | 'vertical'",
+     "default": "'horizontal'",
+     "required": "false",
+     "doc": "horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation)."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables every prompt, while a response is being generated."
+    }
+   ],
+   "events": [
+    {
+     "name": "select",
+     "payload": "SuggestionItem",
+     "notes": ""
+    }
+   ],
+   "purpose": "A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the item, and the owner either sends it or places it in the prompt input to edit.",
+   "useWhen": [
+    "The empty state of an assistant, to show what it can do (vertical, up to five).",
+    "After a broad response, to narrow it (horizontal chips, up to five, most likely first).",
+    "A follow-up question with predefined answers."
+   ],
+   "avoidWhen": [
+    "Navigation or filters → `tabs`, `toggle-group`, `property-filter`.",
+    "Choices that are a form value → `radio-group` / `radio-cards`.",
+    "More than five options → let the reader type; the prompt input stays available."
+   ],
+   "related": [
+    "prompt-input` — the open-ended alternative that must stay reachable.",
+    "empty-state` — hosts the vertical support prompts before the first message.",
+    "chip`, `button` — visual cousins; prompts are their own control because they send text."
+   ],
+   "bestPractices": [
+    "Five or fewer, ordered by likelihood.",
+    "Write prompts as the reader would ask them, under 72 characters, sentence case, no end punctuation needed for questions you send verbatim.",
+    "Disable the group while a response is generating.",
+    "Remove follow-ups once the reader sends anything else."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/suggestion-group.json"
+  },
+  "tool-call": {
+   "import": "@aziontech/webkit/tool-call",
+   "target": "./src/components/ai/tool-call/tool-call.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/tool-call",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "name",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "The tool or command identifier, shown in code font (`list_workloads`)."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "What the call does in the reader's words (`Listing your workloads`). Empty shows only the name."
+    },
+    {
+     "name": "state",
+     "type": "'pending' | 'running' | 'success' | 'error' | 'denied'",
+     "default": "'running'",
+     "required": "false",
+     "doc": "pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Controlled open state of the input and output details. Use with `v-model:open`."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled; details start collapsed."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:open",
+     "payload": "boolean",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "input",
+     "scope": "—",
+     "notes": "The parameters the tool is called with (`CodeBlock`, `KeyValuePairs`)."
+    },
+    {
+     "name": "output",
+     "scope": "—",
+     "notes": "What the tool returned, or the error it failed with."
+    }
+   ],
+   "purpose": "One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Running…`, `Completed`, `Failed`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ActionConfirmation`.",
+   "useWhen": [
+    "An agent calls a tool, an MCP server, an API or a CLI command during a response, and the reader should see what ran and what came back."
+   ],
+   "avoidWhen": [
+    "Asking the reader to allow a call → `action-confirmation` (then a `tool-call` records it).",
+    "The model's reasoning → `reasoning`.",
+    "A long-running job outside a chat → `progress` / `status-indicator` on the resource."
+   ],
+   "related": [
+    "action-confirmation` — the authorization step before a sensitive call.",
+    "status-indicator` — the status the row shows.",
+    "code-block`, `key-value-pairs` — what goes in the input and output slots."
+   ],
+   "bestPractices": [
+    "Name the tool exactly as it is (`list_workloads`) and describe it in plain words (`Listing your workloads`).",
+    "Collapse details by default; open them on error so the reader sees why.",
+    "Redact secrets from inputs and outputs."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/tool-call.json"
+  },
   "button": {
    "import": "@aziontech/webkit/button",
    "target": "./src/components/actions/button/button.vue",
@@ -5474,6 +6572,220 @@
    "kind": "subcomponent",
    "parent": "help-panel",
    "treeShakeableImport": "@aziontech/webkit/help-panel-task",
+   "surface": "product"
+  },
+  "hotspot": {
+   "import": "@aziontech/webkit/hotspot",
+   "target": "./src/components/content/hotspot/hotspot.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/hotspot",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "hotspotId",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "Matches the `hotspotId` of a tutorial step; the marker shows while that step's tutorial runs."
+    },
+    {
+     "name": "side",
+     "type": "'start' | 'end'",
+     "default": "'end'",
+     "required": "false",
+     "doc": "Which side of the wrapped control the marker sits on, in reading direction."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The real control the step is about."
+    }
+   ],
+   "purpose": "Marks a real control as a step of a tutorial. It wraps the control and, while a tutorial that names its `hotspotId` runs, draws a small marker beside it. The current step's marker pulses and opens the step in a popover: the step's title, `Step n of N` with the task's name, the instructions, and Previous / Next (Finish on the last step). Outside a running tutorial, or outside a `TutorialPanel.Provider`, it renders only the wrapped control, so hotspots can stay on a page for good.",
+   "useWhen": [
+    "A tutorial step is about one control on the page, and the reader should see where it is.",
+    "The page runs inside a `TutorialPanel.Provider` and offers guided tutorials from its help region."
+   ],
+   "avoidWhen": [
+    "A permanent tip on a control → use `hint` or `popover`.",
+    "A new feature announcement with no tutorial behind it → use `popover` or an `alert`.",
+    "Help text for a form field → use the field's `helper-text`."
+   ],
+   "related": [
+    "tutorial-panel` — the provider holds the steps a hotspot shows; the panel lists and runs the tutorials.",
+    "popover` — the overlay the current step opens in.",
+    "help-panel` — static help without a guided run."
+   ],
+   "bestPractices": [
+    "Wrap exactly the control the step is about; keep the marker beside it, not inside a long row.",
+    "Use `side=\"start\"` when the control sits at the end of a row and the marker would overflow.",
+    "One `hotspotId` per control and per page. The same id on two elements opens two popovers.",
+    "Keep step content short: the popover is a small surface over the real UI."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/hotspot.json"
+  },
+  "tutorial-panel": {
+   "import": "@aziontech/webkit/tutorial-panel",
+   "target": "./src/components/content/tutorial-panel/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/tutorial-panel-root",
+   "subcomponents": [
+    "@aziontech/webkit/tutorial-panel-provider"
+   ],
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The panel's heading. Empty uses the locale catalog (`Tutorials`)."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One line under the heading. Empty uses the locale catalog."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name for the panel's landmark. Empty uses the title."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders skeleton lines in place of the content while the tutorials load."
+    }
+   ],
+   "slots": [
+    {
+     "name": "completion",
+     "scope": "{ tutorial: Tutorial }",
+     "notes": "Extra content on the completion screen, such as a feedback link."
+    }
+   ],
+   "purpose": "The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`. The panel draws its views from `HelpPanel` parts (`Header`, `Tutorial`, `Task`), so a tutorial looks the same whether a product shows a static checklist with `HelpPanel.Tutorial` or a guided run with `TutorialPanel`. Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.",
+   "useWhen": [
+    "A reader learns a product task by doing it on the real screen, step by step, with the instructions pointing at the control they need next.",
+    "A product offers several tutorials in its help region and records which ones the reader finished.",
+    "A first-run or onboarding flow guides the reader through a real create and deploy, not a mock."
+   ],
+   "avoidWhen": [
+    "Static help beside the page, with no guided run → use `help-panel` (a `HelpPanel.Tutorial` checklist when the owner only reports progress).",
+    "A multi-step create flow whose steps are forms in one surface → use `wizard`.",
+    "Ordered steps the reader navigates inside a page → use `stepper`.",
+    "A single tip pinned to one control → use `popover` or `hint`.",
+    "An empty page that needs one call to action → use `empty-state`."
+   ],
+   "related": [
+    "hotspot` — the marker beside a real control; the current step opens from it. Every step names one by `hotspotId`.",
+    "help-panel` — the parts the panel draws with; use it alone for help without a guided run.",
+    "popover` — what a hotspot opens; the step's title, content and Previous / Next live in it.",
+    "drawer` — the host of the tools region on narrow screens; the panel goes inside it."
+   ],
+   "bestPractices": [
+    "Wrap the whole page in `TutorialPanel.Provider`, so the panel and every hotspot share one state.",
+    "Keep tutorials as data (`Tutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.",
+    "One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.",
+    "Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.",
+    "Set `completed` on a tutorial from what the product recorded (the `finish` event), not from a click.",
+    "Bind `v-model:active` and `v-model:step` and persist them when a tutorial must survive a navigation."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/tutorial-panel.json"
+  },
+  "tutorial-panel-root": {
+   "import": "@aziontech/webkit/tutorial-panel-root",
+   "target": "./src/components/content/tutorial-panel/tutorial-panel.vue",
+   "kind": "root",
+   "rootOf": "tutorial-panel",
+   "treeShakeableImport": "@aziontech/webkit/tutorial-panel-root",
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The panel's heading. Empty uses the locale catalog (`Tutorials`)."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One line under the heading. Empty uses the locale catalog."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name for the panel's landmark. Empty uses the title."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders skeleton lines in place of the content while the tutorials load."
+    }
+   ],
+   "slots": [
+    {
+     "name": "completion",
+     "scope": "{ tutorial: Tutorial }",
+     "notes": "Extra content on the completion screen, such as a feedback link."
+    }
+   ],
+   "purpose": "The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`. The panel draws its views from `HelpPanel` parts (`Header`, `Tutorial`, `Task`), so a tutorial looks the same whether a product shows a static checklist with `HelpPanel.Tutorial` or a guided run with `TutorialPanel`. Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.",
+   "useWhen": [
+    "A reader learns a product task by doing it on the real screen, step by step, with the instructions pointing at the control they need next.",
+    "A product offers several tutorials in its help region and records which ones the reader finished.",
+    "A first-run or onboarding flow guides the reader through a real create and deploy, not a mock."
+   ],
+   "avoidWhen": [
+    "Static help beside the page, with no guided run → use `help-panel` (a `HelpPanel.Tutorial` checklist when the owner only reports progress).",
+    "A multi-step create flow whose steps are forms in one surface → use `wizard`.",
+    "Ordered steps the reader navigates inside a page → use `stepper`.",
+    "A single tip pinned to one control → use `popover` or `hint`.",
+    "An empty page that needs one call to action → use `empty-state`."
+   ],
+   "related": [
+    "hotspot` — the marker beside a real control; the current step opens from it. Every step names one by `hotspotId`.",
+    "help-panel` — the parts the panel draws with; use it alone for help without a guided run.",
+    "popover` — what a hotspot opens; the step's title, content and Previous / Next live in it.",
+    "drawer` — the host of the tools region on narrow screens; the panel goes inside it."
+   ],
+   "bestPractices": [
+    "Wrap the whole page in `TutorialPanel.Provider`, so the panel and every hotspot share one state.",
+    "Keep tutorials as data (`Tutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.",
+    "One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.",
+    "Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.",
+    "Set `completed` on a tutorial from what the product recorded (the `finish` event), not from a click.",
+    "Bind `v-model:active` and `v-model:step` and persist them when a tutorial must survive a navigation."
+   ],
+   "surface": "product"
+  },
+  "tutorial-panel-provider": {
+   "import": "@aziontech/webkit/tutorial-panel-provider",
+   "target": "./src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue",
+   "kind": "subcomponent",
+   "parent": "tutorial-panel",
+   "treeShakeableImport": "@aziontech/webkit/tutorial-panel-provider",
    "surface": "product"
   },
   "hero-title": {
@@ -9950,6 +11262,103 @@
    "surface": "product",
    "examplesFile": "catalog/examples/empty-state.json"
   },
+  "error-boundary": {
+   "import": "@aziontech/webkit/error-boundary",
+   "target": "./src/components/feedback/error-boundary/error-boundary.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/error-boundary",
+   "category": "feedback",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Heading of the built-in fallback. Empty uses the locale catalog (`This section failed to load`)."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Sentence under the heading of the built-in fallback. Empty uses the locale catalog."
+    },
+    {
+     "name": "retryLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Label of the built-in Retry action. Empty uses the locale catalog (`Try again`)."
+    },
+    {
+     "name": "resetKey",
+     "type": "string | number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "When this value changes while the fallback shows, the region is mounted again (pass the route path or the record id)."
+    },
+    {
+     "name": "propagate",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "When true, the error keeps travelling to the parent boundaries and the app error handler after this boundary handles it."
+    }
+   ],
+   "events": [
+    {
+     "name": "error",
+     "payload": "ErrorBoundaryErrorEvent",
+     "notes": "Fires once per failure with `{ error, info }`: what was thrown and Vue's description of where. Report it from here."
+    },
+    {
+     "name": "retry",
+     "payload": "void",
+     "notes": "Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The region the boundary guards. Mounted again, from scratch, on every retry."
+    },
+    {
+     "name": "fallback",
+     "scope": "{ error: unknown, retry: () => void }",
+     "notes": "Replaces the built-in `Alert` while the region is failed. Call `retry` to mount it again."
+    }
+   ],
+   "purpose": "Guards one region of a page. When a component inside the region throws while it renders, sets up or runs a lifecycle hook, the boundary catches the error, reports it through its `error` event, and puts a recoverable message in the region's place: a danger `Alert` that says the section failed and offers **Try again**, which mounts the region again. The rest of the page keeps working. A `fallback` slot replaces the built-in message when the region needs a different shape (a card-sized `EmptyState`, for example).",
+   "useWhen": [
+    "A dashboard card, a side panel, a tab body or any region whose failure should not take the whole page down.",
+    "A region that renders data you do not control (a third-party widget, a chart fed by a remote response, a plugin).",
+    "Around each route's content inside the app shell, so a failing page leaves the navigation usable (pass the route path as `resetKey`).",
+    "When the app reports render errors to a monitoring service: the `error` event carries the error and where it was thrown."
+   ],
+   "avoidWhen": [
+    "A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `platform/states/form-error` and `skills/webkit-ui-states` describe.",
+    "A whole page that cannot be shown (missing route, no access, server failure) → use the `platform/states/not-found` block.",
+    "A field that failed validation → use `field` with its error message.",
+    "Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`."
+   ],
+   "related": [
+    "alert` — the built-in fallback; also what a failed request shows inside a region that rendered fine.",
+    "empty-state` — a common custom fallback for a card-sized region.",
+    "skeleton` — what the region shows while it loads; the boundary only covers the failed case.",
+    "toast` — reports the outcome of an action; never use it for a region that failed to render."
+   ],
+   "bestPractices": [
+    "Wrap regions, not the whole app. One boundary per card, panel or route body keeps the blast radius small.",
+    "Report every error: listen to `error` and send it to your monitoring service. The boundary stops the error from reaching the app error handler unless `propagate` is set.",
+    "Make Retry mean something. Listen to `retry` and reset the state that broke the region (refetch, clear the bad value) before it mounts again; a retry that renders the same bad data fails again.",
+    "Pass `resetKey` when the region shows different content for different keys (route path, record id), so moving on from a failed record clears the fallback.",
+    "Keep the fallback the size of the region. In a card, use a small `EmptyState`; in a page body, the built-in `Alert` is right."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/error-boundary.json"
+  },
   "status-indicator": {
    "import": "@aziontech/webkit/status-indicator",
    "target": "./src/components/feedback/status-indicator/status-indicator.vue",
@@ -13848,6 +15257,409 @@
    "surface": "marketing",
    "examplesFile": "catalog/examples/section-gap.json"
   },
+  "app-layout": {
+   "import": "@aziontech/webkit/app-layout",
+   "target": "./src/components/layout/app-layout/app-layout.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/app-layout",
+   "category": "layout",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "navigationOpen",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Whether the navigation region shows beside the content. Use with `v-model:navigation-open`. Not used while compact."
+    },
+    {
+     "name": "navigationLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`)."
+    },
+    {
+     "name": "toolsOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Whether the tools region (help) is open; while compact it drives the tools drawer. Use with `v-model:tools-open`."
+    },
+    {
+     "name": "toolsLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`)."
+    },
+    {
+     "name": "toolsWidth",
+     "type": "number",
+     "default": "320",
+     "required": "false",
+     "doc": "Width of the tools region in pixels while not compact."
+    },
+    {
+     "name": "splitPanelOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Whether the split panel is open. Use with `v-model:split-panel-open`."
+    },
+    {
+     "name": "splitPanelPosition",
+     "type": "'bottom' | 'side'",
+     "default": "'bottom'",
+     "required": "false",
+     "doc": "Where the split panel sits: under the content or beside it. Use with `v-model:split-panel-position`. Bottom while compact."
+    },
+    {
+     "name": "splitPanelSize",
+     "type": "number",
+     "default": "320",
+     "required": "false",
+     "doc": "Height (bottom) or width (side) of the split panel in pixels. Use with `v-model:split-panel-size`."
+    },
+    {
+     "name": "splitPanelTitle",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Title of the split panel, shown in its header. Empty uses the locale catalog (`Details`)."
+    },
+    {
+     "name": "storageKey",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "When set, the split panel size and position and the navigation and tools open state are kept in `localStorage` under it."
+    },
+    {
+     "name": "compactBelow",
+     "type": "number",
+     "default": "768",
+     "required": "false",
+     "doc": "Width of the layout itself, in pixels, under which navigation and tools become drawers and the split panel moves down."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:navigationOpen",
+     "payload": "boolean",
+     "notes": "v-model:navigation-open."
+    },
+    {
+     "name": "update:toolsOpen",
+     "payload": "boolean",
+     "notes": "v-model:tools-open."
+    },
+    {
+     "name": "update:splitPanelOpen",
+     "payload": "boolean",
+     "notes": "v-model:split-panel-open."
+    },
+    {
+     "name": "update:splitPanelPosition",
+     "payload": "'bottom' | 'side'",
+     "notes": "v-model:split-panel-position."
+    },
+    {
+     "name": "update:splitPanelSize",
+     "payload": "number",
+     "notes": "v-model:split-panel-size; on every step."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The page content (the consumer's `<main>`). Scrolls on its own."
+    },
+    {
+     "name": "navigation",
+     "scope": "{ drawer: boolean }",
+     "notes": "The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact."
+    },
+    {
+     "name": "header",
+     "scope": "{ compact: boolean, openNavigation: () => void, toggleNavigation: () => void, toggleTools: () => void }",
+     "notes": "The global header, above content, tools and split panel."
+    },
+    {
+     "name": "notifications",
+     "scope": "—",
+     "notes": "Flash messages (`Alert`) above the breadcrumbs and the content; stays in place while content scrolls."
+    },
+    {
+     "name": "breadcrumbs",
+     "scope": "—",
+     "notes": "Breadcrumbs above the content, inside the scroll area."
+    },
+    {
+     "name": "tools",
+     "scope": "—",
+     "notes": "The tools region's body, usually a `HelpPanel`."
+    },
+    {
+     "name": "split-panel",
+     "scope": "—",
+     "notes": "The split panel's body."
+    }
+   ],
+   "purpose": "The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shells/console` block) keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the frame to `AppLayout`.",
+   "useWhen": [
+    "A product shell needs a navigation rail, a global header and a scrolling content area that turn into a drawer-based layout on phones.",
+    "A page offers contextual help beside the work (`HelpPanel` in the tools region) that the reader opens and closes.",
+    "A list or table needs a resizable detail panel under it or beside it (the split panel), showing the selected item without leaving the page.",
+    "Page-level flash messages (`Alert`) must sit above the content and stay visible while the content scrolls."
+   ],
+   "avoidWhen": [
+    "A single resizable split inside a page, with no shell around it → use `resizable`.",
+    "A navigation rail on its own (resize, collapse, footer) → use `sidebar`; put it in the `navigation` slot.",
+    "A one-off overlay for a task (a create form, a detail preview) → use `drawer`.",
+    "Marketing and documentation pages → use the `shells/website` and `shells/documentation` blocks."
+   ],
+   "related": [
+    "sidebar` — the navigation rail that goes in the `navigation` slot; it owns its own width, resize and collapse.",
+    "global-header` — the bar that goes in the `header` slot.",
+    "help-panel` — the content of the tools region.",
+    "drawer` — what the navigation and tools regions become below `compactBelow`.",
+    "resizable` — a split between panes inside a page, without the shell.",
+    "alert` — the flash messages composed into the `notifications` slot."
+   ],
+   "bestPractices": [
+    "One `AppLayout` per page, at the root. Do not nest them.",
+    "Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer.",
+    "Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.",
+    "Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.",
+    "Use the split panel for the selected item of a collection. Close it when the selection clears.",
+    "Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.",
+    "Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/app-layout.json"
+  },
+  "board": {
+   "import": "@aziontech/webkit/board",
+   "target": "./src/components/layout/board/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/board-root",
+   "subcomponents": [
+    "@aziontech/webkit/board-item"
+   ],
+   "category": "layout",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "columns",
+     "type": "number",
+     "default": "12",
+     "required": "false",
+     "doc": "Columns of the grid in a wide container; one column below `@3xl`."
+    },
+    {
+     "name": "minSpan",
+     "type": "number",
+     "default": "3",
+     "required": "false",
+     "doc": "Fewest columns an item may span."
+    },
+    {
+     "name": "maxSpan",
+     "type": "number",
+     "default": "12",
+     "required": "false",
+     "doc": "Most columns an item may span; capped at `columns`."
+    },
+    {
+     "name": "minHeight",
+     "type": "number",
+     "default": "240",
+     "required": "false",
+     "doc": "Smallest height in pixels a resize allows."
+    },
+    {
+     "name": "maxHeight",
+     "type": "number",
+     "default": "960",
+     "required": "false",
+     "doc": "Largest height in pixels a resize allows."
+    },
+    {
+     "name": "editing",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the drag and resize handles of every card and lets the reader rearrange the board."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "item-move",
+     "payload": "{ id: string; from: number; to: number }",
+     "notes": "An item moved, by drop or by the keyboard; zero-based."
+    },
+    {
+     "name": "item-resize",
+     "payload": "{ id: string; span: number; height: number | undefined }",
+     "notes": "A resize ended (pointer up or a resize key on the corner)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "One `Board.Item` per layout entry, in layout order."
+    }
+   ],
+   "purpose": "A configurable dashboard grid: the reader arranges the cards. `Board` owns the layout, an array of `{ id, span, height? }` bound with `v-model:layout`, and lays one `Board.Item` per entry on a column grid that collapses to one column in a narrow container. While `editing`, the `ChartCard` inside each item shows its drag handle and resize corner, and those handles report to the board instead of to the page: drag a card onto another or press the arrow keys on its handle to reorder, drag its corner or press the arrow keys on it to resize. Every move and resize is clamped, written back to the layout and announced in a polite live region. Taken from Cloudscape's board and board item, on top of the existing `ChartCard` handles.",
+   "useWhen": [
+    "A dashboard whose reader chooses the order and the size of its cards, and the product keeps that layout as a preference.",
+    "A grid of cards that must be reorderable from the keyboard and announced to screen readers, not only by mouse."
+   ],
+   "avoidWhen": [
+    "A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `platform/dashboard/analytics-dashboard` block).",
+    "Two or three panes whose boundary the reader drags → use `resizable`.",
+    "Reordering the rows of a list or a table → use the table's reorderable rows or `pick-list`.",
+    "A grid of resources the reader selects, not arranges → use `cards`."
+   ],
+   "related": [
+    "chart-card` — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.",
+    "resizable` — split panes with a draggable divider, not a grid of cards.",
+    "cards` — a selectable collection of item cards with a fixed layout.",
+    "page-header` — the title over the board, with the Edit layout and Reset layout actions beside it."
+   ],
+   "bestPractices": [
+    "Keep the layout in the page and persist it wherever the product stores preferences; the board never stores it.",
+    "Offer an explicit Edit layout toggle (`aria-pressed`) and turn `editing` on with it, so handles do not crowd the read-only view.",
+    "Give every `Board.Item` a `label` (the card's title): it is the name the live region announces.",
+    "Offer Reset layout once the layout differs from the default.",
+    "Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/board.json"
+  },
+  "board-root": {
+   "import": "@aziontech/webkit/board-root",
+   "target": "./src/components/layout/board/board.vue",
+   "kind": "root",
+   "rootOf": "board",
+   "treeShakeableImport": "@aziontech/webkit/board-root",
+   "category": "layout",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "columns",
+     "type": "number",
+     "default": "12",
+     "required": "false",
+     "doc": "Columns of the grid in a wide container; one column below `@3xl`."
+    },
+    {
+     "name": "minSpan",
+     "type": "number",
+     "default": "3",
+     "required": "false",
+     "doc": "Fewest columns an item may span."
+    },
+    {
+     "name": "maxSpan",
+     "type": "number",
+     "default": "12",
+     "required": "false",
+     "doc": "Most columns an item may span; capped at `columns`."
+    },
+    {
+     "name": "minHeight",
+     "type": "number",
+     "default": "240",
+     "required": "false",
+     "doc": "Smallest height in pixels a resize allows."
+    },
+    {
+     "name": "maxHeight",
+     "type": "number",
+     "default": "960",
+     "required": "false",
+     "doc": "Largest height in pixels a resize allows."
+    },
+    {
+     "name": "editing",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the drag and resize handles of every card and lets the reader rearrange the board."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "item-move",
+     "payload": "{ id: string; from: number; to: number }",
+     "notes": "An item moved, by drop or by the keyboard; zero-based."
+    },
+    {
+     "name": "item-resize",
+     "payload": "{ id: string; span: number; height: number | undefined }",
+     "notes": "A resize ended (pointer up or a resize key on the corner)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "One `Board.Item` per layout entry, in layout order."
+    }
+   ],
+   "purpose": "A configurable dashboard grid: the reader arranges the cards. `Board` owns the layout, an array of `{ id, span, height? }` bound with `v-model:layout`, and lays one `Board.Item` per entry on a column grid that collapses to one column in a narrow container. While `editing`, the `ChartCard` inside each item shows its drag handle and resize corner, and those handles report to the board instead of to the page: drag a card onto another or press the arrow keys on its handle to reorder, drag its corner or press the arrow keys on it to resize. Every move and resize is clamped, written back to the layout and announced in a polite live region. Taken from Cloudscape's board and board item, on top of the existing `ChartCard` handles.",
+   "useWhen": [
+    "A dashboard whose reader chooses the order and the size of its cards, and the product keeps that layout as a preference.",
+    "A grid of cards that must be reorderable from the keyboard and announced to screen readers, not only by mouse."
+   ],
+   "avoidWhen": [
+    "A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `platform/dashboard/analytics-dashboard` block).",
+    "Two or three panes whose boundary the reader drags → use `resizable`.",
+    "Reordering the rows of a list or a table → use the table's reorderable rows or `pick-list`.",
+    "A grid of resources the reader selects, not arranges → use `cards`."
+   ],
+   "related": [
+    "chart-card` — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.",
+    "resizable` — split panes with a draggable divider, not a grid of cards.",
+    "cards` — a selectable collection of item cards with a fixed layout.",
+    "page-header` — the title over the board, with the Edit layout and Reset layout actions beside it."
+   ],
+   "bestPractices": [
+    "Keep the layout in the page and persist it wherever the product stores preferences; the board never stores it.",
+    "Offer an explicit Edit layout toggle (`aria-pressed`) and turn `editing` on with it, so handles do not crowd the read-only view.",
+    "Give every `Board.Item` a `label` (the card's title): it is the name the live region announces.",
+    "Offer Reset layout once the layout differs from the default.",
+    "Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable."
+   ],
+   "surface": "product"
+  },
+  "board-item": {
+   "import": "@aziontech/webkit/board-item",
+   "target": "./src/components/layout/board/board-item/board-item.vue",
+   "kind": "subcomponent",
+   "parent": "board",
+   "treeShakeableImport": "@aziontech/webkit/board-item",
+   "surface": "product"
+  },
   "resizable": {
    "import": "@aziontech/webkit/resizable",
    "target": "./src/components/layout/resizable/index.ts",
@@ -17327,7 +19139,8 @@
    "useWhen": [
     "A page or panel holds several peer views and only one is shown at a time (Overview / Settings / Logs on a resource page).",
     "The tab row may outgrow its container — `Tabs.List` scrolls horizontally with edge fades instead of wrapping.",
-    "Tabs that the user can close: set `closable` on the item and remove it from your data on `@close`."
+    "Tabs that the user can close: set `closable` on the item and remove it from your data on `@close`.",
+    "A tab whose form holds unsaved changes: set `dirty` on the item (bind it to `useUnsavedChanges().isDirty`) so the reader sees which section still needs a save."
    ],
    "avoidWhen": [
     "Several sections may need to be open at once, or the content should expand inline → use `accordion`.",
@@ -17343,6 +19156,7 @@
     "Give each `Tabs.Item` and its `Tabs.Panel` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility.",
     "Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.",
     "closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.",
+    "dirty` only marks the tab (a dot after the label, \"Unsaved changes\" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.",
     "Use the item's `selected` prop only for a standalone `Tabs.Item` outside a root; inside a root the selection comes from the root's value.",
     "Put spacing between the list and the panels on `Tabs.Content` (e.g. a top margin), not inside each panel."
    ],
@@ -25801,6 +27615,816 @@
    ],
    "surface": "marketing",
    "examplesFile": "catalog/examples/quote-tabs.json"
+  },
+  "use-unsaved-changes": {
+   "import": "@aziontech/webkit/use-unsaved-changes",
+   "target": "./src/composables/use-unsaved-changes/index.ts",
+   "kind": "composable",
+   "treeShakeableImport": "@aziontech/webkit/use-unsaved-changes"
+  },
+  "attribute-editor": {
+   "import": "@aziontech/webkit/attribute-editor",
+   "target": "./src/components/inputs/attribute-editor/attribute-editor.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/attribute-editor",
+   "category": "inputs",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "AttributeEditorItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Rows in list mode. Supports v-model:items."
+    },
+    {
+     "name": "groups",
+     "type": "AttributeEditorItem[][]",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups."
+    },
+    {
+     "name": "definition",
+     "type": "AttributeEditorColumn[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Columns of every row: key of the item field, label, placeholder, required."
+    },
+    {
+     "name": "errors",
+     "type": "AttributeEditorErrors",
+     "default": "[]",
+     "required": "false",
+     "doc": "Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none."
+    },
+    {
+     "name": "addButtonLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Label of the Add button. Empty uses the locale catalog."
+    },
+    {
+     "name": "removeButtonLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the Remove button, followed by the row number. Empty uses the locale catalog."
+    },
+    {
+     "name": "addGroupLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Label of the Add group button in grouped mode. Empty uses the locale catalog."
+    },
+    {
+     "name": "empty",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text shown when there are no rows. Empty uses the locale catalog."
+    },
+    {
+     "name": "limit",
+     "type": "number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced."
+    },
+    {
+     "name": "groupLimit",
+     "type": "number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Most groups allowed in grouped mode."
+    },
+    {
+     "name": "minItems",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Fewest rows kept; rows at the minimum lose their Remove button."
+    },
+    {
+     "name": "newItem",
+     "type": "() => AttributeEditorItem",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Builds a new row. Unset creates an item with an empty string per column key."
+    },
+    {
+     "name": "itemRemovable",
+     "type": "(item: AttributeEditorItem) => boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Hides Remove on the rows it returns false for. Unset makes every row removable."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables every control, Add and Remove."
+    },
+    {
+     "name": "addDisabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables Add only, for example until the last row is filled in."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list of rows."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:items",
+     "payload": "AttributeEditorItem[]",
+     "notes": "A row was added, removed or edited in list mode."
+    },
+    {
+     "name": "update:groups",
+     "payload": "AttributeEditorItem[][]",
+     "notes": "A row or group was added, removed or edited in grouped mode."
+    },
+    {
+     "name": "add",
+     "payload": "{ index: number; groupIndex?: number }",
+     "notes": "After a row is added; `groupIndex` only in grouped mode."
+    },
+    {
+     "name": "remove",
+     "payload": "{ index: number; item: AttributeEditorItem; groupIndex?: number }",
+     "notes": "After a row is removed."
+    }
+   ],
+   "slots": [
+    {
+     "name": "row",
+     "scope": "{ item, index, groupIndex, errors, update, remove, removable, removeLabel }",
+     "notes": "Replaces the whole row; the column header is not drawn."
+    },
+    {
+     "name": "row-actions",
+     "scope": "{ item, index, groupIndex, remove, removable, removeLabel }",
+     "notes": "Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it)."
+    },
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Replaces the empty text."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Extra buttons after Add (for example Upload or Paste .env)."
+    },
+    {
+     "name": "info",
+     "scope": "—",
+     "notes": "Extra help text under the buttons, after the limit text."
+    },
+    {
+     "name": "limit",
+     "scope": "{ count, limit, left }",
+     "notes": "Replaces the limit text in list mode (for example \"You can add 3 more tags.\")."
+    }
+   ],
+   "purpose": "An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`. It owns the row anatomy every hand-built editor repeats: a label per cell, one control per cell, a per-cell error under the field, Add and Remove, an item limit, the empty text, focus after add and remove, and a polite announcement of each change. A grouped mode lays rows out as AND groups joined by OR, the shape of rule criteria. It edits an array and validates nothing itself: the consumer passes `errors`.",
+   "useWhen": [
+    "Users add, edit and remove a variable number of pairs or tuples: environment variables, request headers, query arguments, labels, metadata.",
+    "Rule criteria: conditions inside a group must all match (and), groups are alternatives (or).",
+    "A bulk form where each row has the same two to four fields and a row-level error can occur."
+   ],
+   "avoidWhen": [
+    "Key and value tags with limits, reserved prefixes and removal of saved tags → use `tag-editor`, which is built on this component.",
+    "A fixed set of named settings on one resource → use `field` controls in a form.",
+    "Many records the user browses, filters and acts on → use `table` with row actions.",
+    "An ordered list of actions with drag and drop and per-type arguments → compose it by hand as in the `platform/edit/rule-builder` block."
+   ],
+   "related": [
+    "tag-editor` — key and value tags with limits and validation, on top of AttributeEditor.",
+    "field` — every cell is a `Field` with its label, control and error.",
+    "input` — the default control of a cell; any control can replace it through `cell-<key>`.",
+    "button`, `icon-button` — Add and Remove.",
+    "separator` — the \"or\" between groups in grouped mode.",
+    "platform/edit/rule-builder` (block) — its criteria editor is the grouped mode (AND rows inside a group, OR between groups); the block keeps its own markup until it moves onto this component."
+   ],
+   "bestPractices": [
+    "Keep two to four columns; more columns belong in a drawer per row.",
+    "Pass `errors` only after the first Save (rule of the form-error block), then keep them live while the user fixes the rows.",
+    "Use `minItems: 1` when the form needs at least one row, so the last row keeps its fields and loses its Remove.",
+    "Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.",
+    "Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.",
+    "Name the editor (`ariaLabel`) after what the rows are: \"Environment variables\", \"Request headers\"."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/attribute-editor.json"
+  },
+  "button-group": {
+   "import": "@aziontech/webkit/button-group",
+   "target": "./src/components/actions/button-group/button-group.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/button-group",
+   "category": "actions",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "ButtonGroupItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Actions, toggles and menus, in reading order."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "Accessible name of the toolbar."
+    },
+    {
+     "name": "kind",
+     "type": "'transparent' | 'outlined'",
+     "default": "'transparent'",
+     "required": "false",
+     "doc": "Visual variant of every button."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token of every button."
+    },
+    {
+     "name": "visibleCount",
+     "type": "number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Items shown as buttons; the rest go into the More actions menu. Unset shows every item."
+    },
+    {
+     "name": "overflowLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Label of the overflow button. Empty uses the locale catalog (`More actions`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "click",
+     "payload": "{ id: string }",
+     "notes": "An action or a menu option was chosen (from the bar or the overflow)."
+    },
+    {
+     "name": "toggle",
+     "payload": "{ id: string; pressed: boolean }",
+     "notes": "A toggle was activated; `pressed` is the new state to store."
+    }
+   ],
+   "purpose": "A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group. Each item is an icon button that names itself in a tooltip: a plain action, an on / off toggle, or a menu of options. Items past `visibleCount` collapse into one More actions menu. The toolbar is one tab stop with roving focus, so a row of six icons costs the keyboard user one Tab, not six.",
+   "useWhen": [
+    "A row of icon actions on one surface: Copy, Format, Wrap lines, Download above a code editor.",
+    "Compact actions in a panel header where labels would not fit, each explained by its tooltip.",
+    "A mix of actions and on / off view toggles (wrap lines, show whitespace) that sit together.",
+    "More actions than the space allows: keep the frequent ones visible and move the rest into the overflow menu with `visibleCount`."
+   ],
+   "avoidWhen": [
+    "A choice of exactly one option among several (view mode, period) → use `toggle-group`.",
+    "One primary action with related alternatives → use `split-button`.",
+    "A single icon action → use `icon-button` (with a `tooltip`).",
+    "Page or form actions with text labels (Save, Cancel, Create) → use `button`s laid out by the page.",
+    "A long list of commands or navigation → use `dropdown-menu`."
+   ],
+   "related": [
+    "icon-button` — every item renders one; ButtonGroup adds the toolbar role, roving focus and overflow.",
+    "toggle-group` — a radiogroup of mutually exclusive options; ButtonGroup toggles are independent (`aria-pressed`).",
+    "split-button` — one main action plus a menu, with a visible text label.",
+    "dropdown-menu` — the menu behind menu items and the More actions overflow.",
+    "tooltip` — the visible name of each icon.",
+    "code-editor` — the usual host of an editor toolbar (`toolbar` slot)."
+   ],
+   "bestPractices": [
+    "Give the toolbar an `aria-label` that names the surface (\"Editor actions\"), and every item a `label` that says what it does (\"Copy code\", not \"Copy\").",
+    "Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.",
+    "Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.",
+    "Set `loading` on an action while its request runs instead of disabling the whole group.",
+    "Use `kind=\"transparent\"` on a surface that already has a border (a panel header) and `outlined` on the canvas.",
+    "Do not mix text buttons into the group; a text action belongs beside it as its own `Button`."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/button-group.json"
+  },
+  "combobox": {
+   "import": "@aziontech/webkit/combobox",
+   "target": "./src/components/inputs/combobox/combobox.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/combobox",
+   "category": "inputs",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "options",
+     "type": "ComboboxOption[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Suggestions: `{ value, label?, description?, group?, disabled? }`."
+    },
+    {
+     "name": "placeholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Placeholder of the field."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name when no `Field` label names the field."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token, as `Input`: 28 / 32 / 40 px."
+    },
+    {
+     "name": "allowCustom",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Accepts a typed value that matches no option, offered as `Use \"…\"`."
+    },
+    {
+     "name": "filter",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Filters `options` by the typed text. Turn off when the server filters on `search`."
+    },
+    {
+     "name": "clearable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a clear button while the field has a value."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a spinner and the loading row while options are fetched."
+    },
+    {
+     "name": "emptyText",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the list when nothing matches. Empty uses the locale catalog."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the field."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the value without the list or editing."
+    },
+    {
+     "name": "required",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the field required (`aria-required`)."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the field invalid (`aria-invalid`, danger border)."
+    }
+   ],
+   "events": [
+    {
+     "name": "search",
+     "payload": "string",
+     "notes": "The typed text, on each keystroke while the list is open (server filters)."
+    },
+    {
+     "name": "create",
+     "payload": "string",
+     "notes": "A value that matches no option was committed (`allowCustom`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "option",
+     "scope": "{ option: ComboboxOption, active: boolean, selected: boolean }",
+     "notes": "Replaces the content of one option row."
+    }
+   ],
+   "purpose": "A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed. It holds one string value, after the design sample's `ComboboxInput` and the ARIA 1.2 combobox pattern. It differs from `Select`, whose value must be one of its options and whose trigger is a button, and from `Command`, which runs commands from a palette instead of filling a form field.",
+   "useWhen": [
+    "A form field whose usual values are known but a new one is valid: an environment variable name, a header, a path, a region tag, a branch.",
+    "A long option list the user would rather type than scroll, with the list as a reminder.",
+    "Options that come from the server as the user types (`search` event, `loading`, `filter: false`).",
+    "Suggestions grouped by origin (Recent, Suggested, System) in one field."
+   ],
+   "avoidWhen": [
+    "The value must be one of a short fixed list → use `select` (or `radio-group` for 2–5 visible choices).",
+    "Several values at once → use `multi-select`.",
+    "Searching and running commands or jumping to a page → use `command`.",
+    "Filtering a collection by properties → use `property-filter`.",
+    "Key/value pairs or tags → use `attribute-editor` or `tag-editor` (their key cells may hold a Combobox)."
+   ],
+   "related": [
+    "select` — closed list, button trigger, no free entry.",
+    "input` — the field Combobox is built on; use it alone when there are no suggestions.",
+    "field` — label, description and error around the Combobox; it reads id, invalid, disabled and required from it.",
+    "command` — palette of actions, not a form value.",
+    "property-filter` — token-based filtering with the same listbox look."
+   ],
+   "bestPractices": [
+    "Put the Combobox in a `Field` so it gets a visible label; use `ariaLabel` only where no label can be shown.",
+    "Keep `allowCustom` on only when a new value is genuinely valid; with it off, the field restores the last valid value when the typed text matches nothing.",
+    "Give options a `description` for what tells them apart (a scope, a count), not a second copy of the label.",
+    "For server data set `filter` to `false`, listen to `search` (debounce on your side), and drive `loading` from the request.",
+    "Validate the committed value (`update:modelValue`) in the form, not each keystroke; `search` is for suggestions only.",
+    "Use `group` when options come from distinct sources; keep group titles one or two words."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/combobox.json"
+  },
+  "code-editor": {
+   "import": "@aziontech/webkit/code-editor",
+   "target": "./src/components/code/code-editor/code-editor.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/code-editor",
+   "category": "code",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "language",
+     "type": "string",
+     "default": "'plaintext'",
+     "required": "false",
+     "doc": "Monaco language id (`javascript`, `typescript`, `json`, `sql`, `lua`, `yaml`…). The fallback ignores it."
+    },
+    {
+     "name": "loader",
+     "type": "() => Promise<CodeEditorMonaco>",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Loads Monaco lazily; without it the plain editor is the editor."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "The code can be read, selected and copied but not changed."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Locks the editor; it leaves the tab order."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Paints the danger border; also set by a surrounding `Field`."
+    },
+    {
+     "name": "diff",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows `original` beside the value as a side-by-side diff."
+    },
+    {
+     "name": "original",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The left side of the diff."
+    },
+    {
+     "name": "markers",
+     "type": "CodeEditorMarker[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Diagnostics shown on their lines and in the problems list."
+    },
+    {
+     "name": "height",
+     "type": "string",
+     "default": "'16rem'",
+     "required": "false",
+     "doc": "CSS height of the editing area."
+    },
+    {
+     "name": "fill",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Fills a flex column instead of using `height`."
+    },
+    {
+     "name": "lineNumbers",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Shows the line-number gutter."
+    },
+    {
+     "name": "path",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Model path for Monaco language services (`index.ts`, `args.json`)."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name when no `Field` label names it. Empty uses the locale catalog."
+    }
+   ],
+   "events": [
+    {
+     "name": "ready",
+     "payload": "unknown",
+     "notes": "Monaco mounted; the payload is the editor instance (for actions)."
+    },
+    {
+     "name": "load-error",
+     "payload": "unknown",
+     "notes": "The loader rejected; the plain editor stays."
+    }
+   ],
+   "slots": [
+    {
+     "name": "toolbar",
+     "scope": "—",
+     "notes": "A bar above the editing area: a document switch, the file name, a Format or Run action."
+    }
+   ],
+   "purpose": "An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (for example `() => import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.",
+   "useWhen": [
+    "Editing a function, a script, a SQL query, a JSON or YAML document inside the product.",
+    "Showing the change between two versions of code side by side (diff mode), for example before a deploy or a revert.",
+    "Code that the server validates: the diagnostics come back as `markers` and show on their lines and in a list.",
+    "A read-only view of code that still needs the editor's navigation (find, folding) once Monaco is loaded."
+   ],
+   "avoidWhen": [
+    "Showing a snippet to copy, with tabs and a file name → use `code-block`.",
+    "A one-line value such as a header, a regex or a path → use `input` inside a `field`.",
+    "Free prose or a description → use `textarea`.",
+    "A stream of log lines → use `log-view`.",
+    "A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both)."
+   ],
+   "related": [
+    "code-block` — read-only snippets with copy; same syntax colour tokens.",
+    "textarea` — plain multi-line text; the fallback editor is built in its spirit but keeps code typography and a gutter.",
+    "field` — wraps the editor with a label, a description and an error; the editor reads id, `aria-describedby`, invalid and disabled from it.",
+    "toggle-group` — the document switch (Code / Arguments) placed in the `toolbar` slot.",
+    "log-view` — output of a run next to the editor."
+   ],
+   "bestPractices": [
+    "Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.",
+    "Pass `loader` from the app (`() => import('monaco-editor')`) so Monaco is code-split and never part of the WebKit bundle; set up Monaco's workers in that module.",
+    "Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.",
+    "Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.",
+    "Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.",
+    "In diff mode, `original` is the left side and `v-model` the right side; keep the right side editable only when the change can still be edited."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/code-editor.json"
+  },
+  "tag-editor": {
+   "import": "@aziontech/webkit/tag-editor",
+   "target": "./src/components/inputs/tag-editor/tag-editor.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/tag-editor",
+   "category": "inputs",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "tags",
+     "type": "TagEditorTag[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Tags being edited. Saved tags carry `existing`; Remove marks them `markedForRemoval` until Undo. Supports v-model:tags."
+    },
+    {
+     "name": "keySuggestions",
+     "type": "string[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Keys offered while typing a key, for example the keys already used in the account."
+    },
+    {
+     "name": "valueSuggestions",
+     "type": "Record<string, string[]>",
+     "default": "{}",
+     "required": "false",
+     "doc": "Values offered per key while typing a value."
+    },
+    {
+     "name": "limit",
+     "type": "number",
+     "default": "50",
+     "required": "false",
+     "doc": "Most tags allowed; tags marked for removal do not count."
+    },
+    {
+     "name": "keyMaxLength",
+     "type": "number",
+     "default": "128",
+     "required": "false",
+     "doc": "Longest key allowed, in characters."
+    },
+    {
+     "name": "valueMaxLength",
+     "type": "number",
+     "default": "256",
+     "required": "false",
+     "doc": "Longest value allowed, in characters."
+    },
+    {
+     "name": "reservedPrefix",
+     "type": "string",
+     "default": "'azion:'",
+     "required": "false",
+     "doc": "Prefix reserved for the platform; keys may not start with it. Empty allows every prefix."
+    },
+    {
+     "name": "errors",
+     "type": "TagEditorErrors",
+     "default": "[]",
+     "required": "false",
+     "doc": "Server errors per row, aligned with `tags`; shown in place of the built-in checks."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables every control."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list of tags. Empty uses the locale catalog."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:tags",
+     "payload": "TagEditorTag[]",
+     "notes": "A tag was added, edited, removed, marked for removal or restored."
+    }
+   ],
+   "purpose": "Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`. It adds what tags need on top of the rows: key and value suggestions while typing, a tag limit (50 by default) that ignores tags marked for removal, the built-in key checks (required when the row has a value, unique, length, allowed characters, no reserved `azion:` prefix), and a removal that only marks a saved tag, with Undo, until the form is saved.",
+   "useWhen": [
+    "The Tags section of a create or settings form of any resource.",
+    "Labels used for cost allocation, ownership or search, where keys repeat across resources and suggestions help keep them consistent."
+   ],
+   "avoidWhen": [
+    "Environment variables, headers or any pairs without tag rules → use `attribute-editor`.",
+    "Showing tags read-only → use `tag` (or `key-value-pairs`).",
+    "Picking from a fixed list of labels → use `multi-select`."
+   ],
+   "related": [
+    "attribute-editor` — the rows, Add, Remove, limit text, focus and announcements underneath.",
+    "input` — key and value controls; suggestions come from a native `datalist`.",
+    "tag` — how the saved tags read outside the editor.",
+    "platform/states/form-error` — the rule for server errors passed through `errors`."
+   ],
+   "bestPractices": [
+    "Mark saved tags with `existing: true`: their key is read-only, and Remove marks them `markedForRemoval` (Undo puts them back) so the save request knows what to delete.",
+    "Call the exposed `validate()` on Save; it also flags empty keys, which are not flagged while typing.",
+    "Feed `keySuggestions` with the keys already used in the account so tags stay consistent.",
+    "Pass server errors per row through `errors`; they replace the built-in message of that cell.",
+    "Keep the default `limit` unless the backend has another one."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/tag-editor.json"
+  },
+  "schema-form": {
+   "import": "@aziontech/webkit/schema-form",
+   "target": "./src/components/inputs/schema-form/schema-form.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/schema-form",
+   "category": "inputs",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "schema",
+     "type": "SchemaFormSchema",
+     "default": "—",
+     "required": "true",
+     "doc": "JSON schema of an object (draft-07 subset); each property becomes a Field."
+    },
+    {
+     "name": "errors",
+     "type": "Record<string, string>",
+     "default": "{}",
+     "required": "false",
+     "doc": "Server or external messages by field path; a field shows its message until it is edited."
+    },
+    {
+     "name": "ui",
+     "type": "Record<string, SchemaFormUi>",
+     "default": "{}",
+     "required": "false",
+     "doc": "Presentation overrides by field path: widget, placeholder, hidden, and key order (`''` is the root)."
+    },
+    {
+     "name": "validateOn",
+     "type": "'blur' | 'submit'",
+     "default": "'blur'",
+     "required": "false",
+     "doc": "When fields first show their validation message: on leaving the field, or only after `validate()`."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables every field."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows every value without letting it change."
+    }
+   ],
+   "purpose": "A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend. It edits one value object through `v-model`, seeds the schema's defaults, validates the supported draft-07 keywords with built-in messages (on leaving a field, or only after `validate()`), and shows server messages passed by field path. It is for forms whose fields are data (a function's arguments, an integration's settings), not for forms a designer lays out by hand.",
+   "useWhen": [
+    "A function, template or integration declares its own arguments as a JSON schema and the console must ask for them.",
+    "The same settings form must follow a schema the server sends (fields added or removed without a release).",
+    "A form of typed values (text, choices, numbers, switches, lists) with constraints that already live in a schema."
+   ],
+   "avoidWhen": [
+    "A form with a fixed, designed layout (settings sections, create pages) → compose `field`, `input`, `select` and `switch` by hand (`platform/edit/edit-resource`, `platform/create/single-page-create`).",
+    "Rows of key/value pairs the user adds and removes → use `attribute-editor`.",
+    "Editing the schema itself, or raw JSON → use `code-editor`.",
+    "A single choice or value → use the control directly inside a `field`."
+   ],
+   "related": [
+    "field` — the wrapper every generated field uses; SchemaForm adds no field chrome of its own.",
+    "input`, `select`, `switch`, `textarea` — the controls it renders per type.",
+    "attribute-editor` — user-defined key/value rows, where SchemaForm renders a fixed set of keys.",
+    "code-editor` — the JSON view of the same value, when the user prefers to type it."
+   ],
+   "bestPractices": [
+    "Give every property a `title` and a one-sentence `description`; the key is only the fallback label.",
+    "Put limits in the schema (`minimum`, `maxLength`, `pattern`, `enum`) so the form checks them; say the rule in the `description` when it is a `pattern`, since the built-in message cannot name it.",
+    "Keep the default `validate-on=\"blur\"` for short forms; use `submit` when the form sits in a drawer or dialog with one Save.",
+    "Call `validate()` on submit and stop when it returns `valid: false`; it shows every message and focuses the first invalid field.",
+    "Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-error rule). Put a section-level failure in an `Alert` above the form, not in `errors`.",
+    "Use a `field:<path>` slot for a control the schema cannot express (`RadioCards`, a resource picker); the slot keeps the label, description and messages.",
+    "Do not rely on unsupported keywords (`$ref`, `oneOf`, `anyOf`, `allOf`, `if`/`then`, `const`, `format`, `uniqueItems`, `multipleOf`, `additionalProperties`): they are ignored, so validate them on the server."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/schema-form.json"
   }
  },
  "patterns": {
@@ -26359,6 +28983,243 @@
    "guidelinesSummary": "The profile page of a signed-in account, and the layout every account settings page follows. The user comes to check or change how the account is identified, billed and signed into: a small page heading over stacked sections, each a flush card of setting rows in the form column, with a save bar that rises once a saved field changes. Billing, credentials, users and teams keep the same column and swap the sections for their own cards or tables.",
    "variants": [],
    "file": "catalog/patterns/platform/account/profile.json"
+  },
+  "platform/ai/ai-action-approval": {
+   "name": "AiActionApproval",
+   "title": "Templates/Platform/AI/AiActionApproval",
+   "source": "blocks/platform/ai/ai-action-approval/ai-action-approval.vue",
+   "surface": "product",
+   "summary": "A user-authorized action inside a generative AI conversation: the reader asks the assistant to deploy, the assistant records the read-only call it made (`ToolCall`), explains in `StreamingResponse` and proposes the deployment as an `ActionConfirmation` card whose title names the command in code, whose body shows the exact command in a `CodeBlock`, and whose Deny and Deploy buttons decide. Approving turns the card into Approved and adds a running `ToolCall` that completes, followed by a `ChatMessage` that reports what changed with Copy (`CopyButton`); denying or letting the request expire records the outcome on the card and the assistant says nothing ran. The `PromptInput` shows Stop while the approved action runs. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ActionConfirmation`, `CodeBlock`, `CopyButton` and `PromptInput`.",
+   "intents": [
+    "ai action approval",
+    "approve ai action",
+    "user authorized action",
+    "agent asks permission",
+    "human in the loop",
+    "tool call approval",
+    "confirm agent command",
+    "allow tool",
+    "aprovar ação da ia",
+    "autorizar ação do agente",
+    "confirmar comando",
+    "aprobar acción de la ia"
+   ],
+   "skills": [
+    "webkit-genai",
+    "webkit-ui-states",
+    "webkit-errors"
+   ],
+   "components": [
+    "ActionConfirmation",
+    "ChatMessage",
+    "CodeBlock",
+    "Conversation",
+    "CopyButton",
+    "PromptInput",
+    "StreamingResponse",
+    "ToolCall"
+   ],
+   "imports": [
+    "@aziontech/webkit/action-confirmation",
+    "@aziontech/webkit/chat-message",
+    "@aziontech/webkit/code-block",
+    "@aziontech/webkit/conversation",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/prompt-input",
+    "@aziontech/webkit/streaming-response",
+    "@aziontech/webkit/tool-call"
+   ],
+   "primary": "Pending",
+   "guidelinesSummary": "The moment an assistant needs permission. The reader asked for something that changes their account — a deployment, a purge, a deletion — and the assistant stops before doing it: it says what it found, shows exactly what will run, and waits for Approve or Deny. The decision stays in the thread as text, and the assistant reports what happened next, so the conversation is also the record of what ran and who allowed it.",
+   "variants": [
+    {
+     "name": "Irreversible",
+     "summary": "The assistant proposes deleting a domain nobody uses: the card turns danger and Delete stays disabled until the reader types the domain name."
+    },
+    {
+     "name": "Approved",
+     "summary": "After Deploy: the card reads Approved, the deployment call completed, and the assistant reports the new build is live with the previous one kept for rollback."
+    },
+    {
+     "name": "Denied",
+     "summary": "After Deny: the card reads Denied, the deployment call is recorded as denied, and the assistant acknowledges that nothing was deployed."
+    },
+    {
+     "name": "Expired",
+     "summary": "Nobody decided in time: the card reads Request expired and the assistant says nothing was deployed."
+    }
+   ],
+   "file": "catalog/patterns/platform/ai/ai-action-approval.json"
+  },
+  "platform/ai/ai-chat": {
+   "name": "AiChat",
+   "title": "Templates/Platform/AI/AiChat",
+   "source": "blocks/platform/ai/ai-chat/ai-chat.vue",
+   "surface": "product",
+   "summary": "The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`.",
+   "intents": [
+    "ai chat",
+    "ai assistant",
+    "chatbot",
+    "copilot",
+    "chat with ai",
+    "generative ai chat",
+    "assistant page",
+    "ask ai",
+    "llm chat",
+    "conversational ui",
+    "prompt and response",
+    "streaming response",
+    "chat de ia",
+    "assistente de ia",
+    "assistente virtual",
+    "conversa com ia",
+    "chat con ia",
+    "asistente de ia"
+   ],
+   "skills": [
+    "webkit-genai",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Button",
+    "ChatMessage",
+    "Conversation",
+    "CopyButton",
+    "EmptyState",
+    "IconButton",
+    "PromptInput",
+    "Reasoning",
+    "Sources",
+    "StreamingResponse",
+    "SuggestionGroup",
+    "Tag"
+   ],
+   "imports": [
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/chat-message",
+    "@aziontech/webkit/conversation",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/prompt-input",
+    "@aziontech/webkit/reasoning",
+    "@aziontech/webkit/sources",
+    "@aziontech/webkit/streaming-response",
+    "@aziontech/webkit/suggestion-group",
+    "@aziontech/webkit/tag"
+   ],
+   "primary": "Empty",
+   "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `platform/ai/ai-chat-drawer`.",
+   "variants": [
+    {
+     "name": "Streaming",
+     "summary": "A response arriving: the reader asked why storefront returns 502 errors and the answer streams in with its caret, a table on the way, the region busy and Stop in the composer; when it ends the sources, actions and follow-up questions appear."
+    },
+    {
+     "name": "Error",
+     "summary": "A response that failed mid-stream: the partial text stays, the error line says the connection was interrupted and Try again regenerates the response in place."
+    },
+    {
+     "name": "LongThread",
+     "summary": "Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread."
+    }
+   ],
+   "file": "catalog/patterns/platform/ai/ai-chat.json"
+  },
+  "platform/ai/ai-chat-drawer": {
+   "name": "AiChatDrawer",
+   "title": "Templates/Platform/AI/AiChatDrawer",
+   "source": "blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue",
+   "surface": "product",
+   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Ask AI `Button`, a `Card` of `KeyValuePairs` with a `StatusIndicator`) behind a medium `Drawer` whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and `DrawerClose`. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`.",
+   "intents": [
+    "ai assistant drawer",
+    "ask ai about this page",
+    "contextual ai help",
+    "copilot panel",
+    "ai side panel",
+    "chat drawer",
+    "assistant over console page",
+    "ai help drawer",
+    "assistente de ia na gaveta",
+    "perguntar à ia",
+    "painel lateral de ia",
+    "asistente de ia en panel lateral"
+   ],
+   "skills": [
+    "webkit-genai",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Button",
+    "Card",
+    "ChatMessage",
+    "Conversation",
+    "CopyButton",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "EmptyState",
+    "IconButton",
+    "KeyValuePairs",
+    "PageHeader",
+    "PanelHeader",
+    "PromptInput",
+    "Reasoning",
+    "Sources",
+    "StatusIndicator",
+    "StreamingResponse",
+    "SuggestionGroup",
+    "Tag"
+   ],
+   "imports": [
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/chat-message",
+    "@aziontech/webkit/conversation",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/prompt-input",
+    "@aziontech/webkit/reasoning",
+    "@aziontech/webkit/sources",
+    "@aziontech/webkit/status-indicator",
+    "@aziontech/webkit/streaming-response",
+    "@aziontech/webkit/suggestion-group",
+    "@aziontech/webkit/tag"
+   ],
+   "primary": "Empty",
+   "guidelinesSummary": "The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page. The drawer carries the same conversation as the full assistant page, laid out for a narrow column: every message at the inline start, a shorter composer, and support prompts written about this resource.",
+   "variants": [
+    {
+     "name": "Streaming",
+     "summary": "The drawer open on a response streaming in about the 502 errors of the workload behind it, with the caret, Stop in the composer and the busy region."
+    },
+    {
+     "name": "Error",
+     "summary": "A response that failed mid-stream inside the drawer: the partial text, the error line and Try again."
+    },
+    {
+     "name": "LongThread",
+     "summary": "Six earlier turns about the workload in the narrow drawer: the log opens on the newest response and Scroll to the latest message returns after scrolling up."
+    }
+   ],
+   "file": "catalog/patterns/platform/ai/ai-chat-drawer.json"
   },
   "platform/auth": {
    "name": "Auth",
@@ -27812,13 +30673,15 @@
    "title": "Templates/Platform/Dashboard/ConfigurableDashboard",
    "source": "blocks/platform/dashboard/configurable-dashboard/configurable-dashboard.vue",
    "surface": "product",
-   "summary": "A configurable dashboard: the reader arranges the cards. An Edit layout Button turns on the ChartCard drag handle and resize corner on every card of a 12-column grid; a card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. The page owns the layout, an array of id, span and height bound with v-model:span and v-model:height, and the order, which it changes on drop or on the arrow keys of a focused drag handle, then puts focus back on the moved handle and announces the move in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `ChartCard` (with its drag handle and resize corner), `Chart`, `DonutChart`, `BarList`, `Hint`, `Tag` and `Button`.",
+   "summary": "A configurable dashboard: the reader arranges the cards. The page binds its layout, an array of id, span and height in order, to a Board with v-model:layout; an Edit layout Button turns on the board's editing, which shows the ChartCard drag handle and resize corner on every card. A card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels; the board is twelve columns wide from a 48rem container and one column below it. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. Drop a card on another or press the arrow keys on its handle to move it; the board puts focus back on the moved handle and announces every move and resize in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `Button`, `Board`, `ChartCard` (with its drag handle and resize corner), `Hint`, `Tag`, `DonutChart`, `BarList` and `Chart`.",
    "intents": [
     "configurable dashboard",
     "custom dashboard",
     "drag and drop dashboard",
     "resizable cards",
     "edit layout",
+    "board",
+    "dashboard grid",
     "dashboard builder",
     "painel configurável",
     "painel personalizado",
@@ -27832,6 +30695,7 @@
    "components": [
     "Alert",
     "BarList",
+    "Board",
     "Button",
     "Chart",
     "ChartCard",
@@ -27843,6 +30707,7 @@
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/bar-list",
+    "@aziontech/webkit/board",
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
@@ -27852,7 +30717,7 @@
     "@aziontech/webkit/tag"
    ],
    "primary": "Default",
-   "guidelinesSummary": "A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it is, and keep that layout. It serves readers who come back to the same page every day and care about different cards than the default puts first. The page owns the layout (an array of id, span and height) and the order; `ChartCard` provides the drag handle, the resize corner and their keyboard model.",
+   "guidelinesSummary": "A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it is, and keep that layout. It serves readers who come back to the same page every day and care about different cards than the default puts first. The page owns the layout (an array of id, span and height, in order) and binds it to `Board`, which moves, resizes, clamps and announces; the `ChartCard` inside each `Board.Item` provides the drag handle and the resize corner.",
    "variants": [
     {
      "name": "Editing",
@@ -29293,7 +32158,7 @@
    "title": "Templates/Platform/Edit/AttributeEditor",
    "source": "blocks/platform/edit/attribute-editor/attribute-editor.vue",
    "surface": "product",
-   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer each variable is entered as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `CopyButton`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.",
+   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `CopyButton`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`.",
    "intents": [
     "variables",
     "environment variables",
@@ -29312,7 +32177,13 @@
     ".env upload",
     "editor de chave e valor",
     "delete variable",
-    "clone variable"
+    "clone variable",
+    "paste .env",
+    "paste env file",
+    "import .env",
+    "colar .env",
+    "importar variáveis",
+    "dotenv"
    ],
    "skills": [
     "webkit-lists",
@@ -29322,6 +32193,7 @@
    ],
    "components": [
     "Alert",
+    "AttributeEditor",
     "Avatar",
     "Button",
     "Card",
@@ -29359,6 +32231,7 @@
    ],
    "imports": [
     "@aziontech/webkit/alert",
+    "@aziontech/webkit/attribute-editor",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
@@ -29399,7 +32272,11 @@
    "variants": [
     {
      "name": "Create",
-     "summary": "Closed until Create Variable opens it: one empty Key and Value pair, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Save flags the empty or malformed fields only after it is pressed."
+     "summary": "Closed until Create Variable opens it: one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed."
+    },
+    {
+     "name": "PasteEnv",
+     "summary": "Create Variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env."
     }
    ],
    "file": "catalog/patterns/platform/edit/attribute-editor.json"
@@ -29443,6 +32320,7 @@
     "Button",
     "ButtonHighlight",
     "Card",
+    "CodeEditor",
     "Command",
     "Drawer",
     "DrawerContent",
@@ -29485,6 +32363,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/code-editor",
     "@aziontech/webkit/command",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-content",
@@ -29543,7 +32422,7 @@
    "title": "Templates/Platform/Edit/EditResource",
    "source": "blocks/platform/edit/edit-resource/edit-resource.vue",
    "surface": "product",
-   "summary": "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `HelperText` and `Button`.",
+   "summary": "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.",
    "intents": [
     "settings page",
     "resource settings",
@@ -29564,7 +32443,19 @@
     "alterações não salvas",
     "salvar alterações",
     "edit resource",
-    "editar recurso"
+    "editar recurso",
+    "stale record",
+    "changed elsewhere",
+    "overwrite changes",
+    "conflict on save",
+    "danger zone",
+    "delete resource",
+    "type the name to confirm",
+    "zona de perigo",
+    "excluir recurso",
+    "alterado em outro lugar",
+    "leave page guard",
+    "unsaved changes dialog"
    ],
    "skills": [
     "webkit-form",
@@ -29582,6 +32473,7 @@
     "Card",
     "Command",
     "ConfirmDialog",
+    "CopyButton",
     "Drawer",
     "DrawerContent",
     "DrawerOverlay",
@@ -29611,7 +32503,8 @@
     "Tag",
     "Textarea",
     "ThemeSwitcher",
-    "Tooltip"
+    "Tooltip",
+    "use-unsaved-changes"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -29623,6 +32516,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/command",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-overlay",
@@ -29652,7 +32546,8 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/theme-switcher",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-unsaved-changes"
    ],
    "primary": "ProjectSettings",
    "guidelinesSummary": "The settings page of one existing resource. The user comes here to change how the resource is named, what it runs with and whether it is active, review the change, and commit it or throw it away. Every field sits in a labeled section of the form column, and one save band appears only once something has changed, so the page reads as the resource's current state until the user edits it.",
@@ -29671,11 +32566,19 @@
     },
     {
      "name": "UnsavedChanges",
-     "summary": "The policy Settings tab after Debug rules was switched on: the bar is up; Discard restores the record and the bar leaves, Save holds its loading state and then leaves."
+     "summary": "The policy Settings tab after Debug rules was switched on: the bar is up and the Settings tab carries the unsaved-changes dot. Discard restores the record and the bar leaves, Save holds its loading state and then leaves. Switching tabs while dirty asks first, through `useUnsavedChanges`: Keep editing, Discard changes, or Save changes and go."
     },
     {
      "name": "Saving",
      "summary": "While the save request is in flight: Save shows its loading state and Discard is disabled."
+    },
+    {
+     "name": "StaleRecord",
+     "summary": "The record was saved by someone else after the form opened, and the form holds edits: a warning `Alert` above the sections says it changed elsewhere, with Reload. Save asks before it overwrites (Go back / Overwrite and save); Reload replaces the edits with the saved values and the notice turns into Edits discarded with Undo."
+    },
+    {
+     "name": "DangerZone",
+     "summary": "The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs."
     }
    ],
    "file": "catalog/patterns/platform/edit/edit-resource.json"
@@ -30236,6 +33139,63 @@
     }
    ],
    "file": "catalog/patterns/platform/states/form-validation.json"
+  },
+  "platform/states/not-found": {
+   "name": "NotFound",
+   "title": "Templates/Platform/States/NotFound",
+   "source": "blocks/platform/states/not-found/not-found.vue",
+   "surface": "product",
+   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: a full-height canvas centring an EmptyState whose figure is the large 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Try again, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` figures.",
+   "intents": [
+    "404 page",
+    "not found page",
+    "page not found",
+    "403 forbidden page",
+    "access denied page",
+    "500 error page",
+    "server error page",
+    "error page",
+    "resource not found",
+    "página não encontrada",
+    "página de erro",
+    "acesso negado",
+    "erro 404",
+    "erro 500"
+   ],
+   "skills": [
+    "webkit-ui-states",
+    "webkit-errors",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Button",
+    "EmptyState",
+    "Error403",
+    "Error404"
+   ],
+   "imports": [
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/svg/error-403",
+    "@aziontech/webkit/svg/error-404"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words.",
+   "variants": [
+    {
+     "name": "Forbidden",
+     "summary": "403: the address exists but the user's role does not include it. The 403 numeral art, You don't have access to this page, what to do (ask an admin, or switch account), and Go to home with Switch account."
+    },
+    {
+     "name": "ServerError",
+     "summary": "500: the page failed on the server. A warning icon tile in place of the numeral art, Something went wrong on our side, the reassurance that nothing saved was lost, Try again (which reloads and shows its loading state), System status in a new tab, and the error reference to quote to support."
+    },
+    {
+     "name": "ResourceNotFound",
+     "summary": "Inside the console: the route is valid but the record is not (deleted, or a stale link). A bordered EmptyState in the content column names the resource and its ID, says why it may be missing, and offers Back to services."
+    }
+   ],
+   "file": "catalog/patterns/platform/states/not-found.json"
   },
   "platform/states/page-wires": {
    "name": "PageWires",
@@ -30924,14 +33884,22 @@
     "menu lateral",
     "console",
     "console layout",
-    "layout do console"
+    "layout do console",
+    "notifications panel",
+    "notifications drawer",
+    "notification center",
+    "central de notificações",
+    "painel de notificações"
    ],
    "skills": [
     "webkit-navigation",
     "webkit-layout"
    ],
    "components": [
+    "Alert",
+    "AppLayout",
     "Avatar",
+    "Badge",
     "Brand",
     "Breadcrumb",
     "Button",
@@ -30943,6 +33911,7 @@
     "DrawerOverlay",
     "DrawerPortal",
     "DropdownMenu",
+    "EmptyState",
     "GlobalHeader",
     "IconButton",
     "Input",
@@ -30958,7 +33927,10 @@
     "Tooltip"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/app-layout",
     "@aziontech/webkit/avatar",
+    "@aziontech/webkit/badge",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb",
     "@aziontech/webkit/button",
@@ -30970,6 +33942,7 @@
     "@aziontech/webkit/drawer-overlay",
     "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/empty-state",
     "@aziontech/webkit/global-header",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
@@ -30990,6 +33963,10 @@
     {
      "name": "DetailPage",
      "summary": "A resource detail page: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it."
+    },
+    {
+     "name": "Notifications",
+     "summary": "The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up."
     }
    ],
    "file": "catalog/patterns/shells/console.json"

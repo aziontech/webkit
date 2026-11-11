@@ -1,0 +1,201 @@
+{
+ "name": "app-layout",
+ "binding": "AppLayout",
+ "import": "@aziontech/webkit/app-layout",
+ "treeShakeableImport": "@aziontech/webkit/app-layout",
+ "category": "layout",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shells/console` block) keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the frame to `AppLayout`.",
+ "setup": null,
+ "useWhen": [
+  "A product shell needs a navigation rail, a global header and a scrolling content area that turn into a drawer-based layout on phones.",
+  "A page offers contextual help beside the work (`HelpPanel` in the tools region) that the reader opens and closes.",
+  "A list or table needs a resizable detail panel under it or beside it (the split panel), showing the selected item without leaving the page.",
+  "Page-level flash messages (`Alert`) must sit above the content and stay visible while the content scrolls."
+ ],
+ "avoidWhen": [
+  "A single resizable split inside a page, with no shell around it → use `resizable`.",
+  "A navigation rail on its own (resize, collapse, footer) → use `sidebar`; put it in the `navigation` slot.",
+  "A one-off overlay for a task (a create form, a detail preview) → use `drawer`.",
+  "Marketing and documentation pages → use the `shells/website` and `shells/documentation` blocks."
+ ],
+ "related": [
+  "sidebar` — the navigation rail that goes in the `navigation` slot; it owns its own width, resize and collapse.",
+  "global-header` — the bar that goes in the `header` slot.",
+  "help-panel` — the content of the tools region.",
+  "drawer` — what the navigation and tools regions become below `compactBelow`.",
+  "resizable` — a split between panes inside a page, without the shell.",
+  "alert` — the flash messages composed into the `notifications` slot."
+ ],
+ "bestPractices": [
+  "One `AppLayout` per page, at the root. Do not nest them.",
+  "Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer.",
+  "Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.",
+  "Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.",
+  "Use the split panel for the selected item of a collection. Close it when the selection clears.",
+  "Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.",
+  "Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background."
+ ],
+ "props": [
+  {
+   "name": "navigationOpen",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Whether the navigation region shows beside the content. Use with `v-model:navigation-open`. Not used while compact."
+  },
+  {
+   "name": "navigationLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`)."
+  },
+  {
+   "name": "toolsOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Whether the tools region (help) is open; while compact it drives the tools drawer. Use with `v-model:tools-open`."
+  },
+  {
+   "name": "toolsLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`)."
+  },
+  {
+   "name": "toolsWidth",
+   "type": "number",
+   "default": "320",
+   "required": "false",
+   "doc": "Width of the tools region in pixels while not compact."
+  },
+  {
+   "name": "splitPanelOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Whether the split panel is open. Use with `v-model:split-panel-open`."
+  },
+  {
+   "name": "splitPanelPosition",
+   "type": "'bottom' | 'side'",
+   "default": "'bottom'",
+   "required": "false",
+   "doc": "Where the split panel sits: under the content or beside it. Use with `v-model:split-panel-position`. Bottom while compact."
+  },
+  {
+   "name": "splitPanelSize",
+   "type": "number",
+   "default": "320",
+   "required": "false",
+   "doc": "Height (bottom) or width (side) of the split panel in pixels. Use with `v-model:split-panel-size`."
+  },
+  {
+   "name": "splitPanelTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the split panel, shown in its header. Empty uses the locale catalog (`Details`)."
+  },
+  {
+   "name": "storageKey",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "When set, the split panel size and position and the navigation and tools open state are kept in `localStorage` under it."
+  },
+  {
+   "name": "compactBelow",
+   "type": "number",
+   "default": "768",
+   "required": "false",
+   "doc": "Width of the layout itself, in pixels, under which navigation and tools become drawers and the split panel moves down."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:navigationOpen",
+   "payload": "boolean",
+   "notes": "v-model:navigation-open."
+  },
+  {
+   "name": "update:toolsOpen",
+   "payload": "boolean",
+   "notes": "v-model:tools-open."
+  },
+  {
+   "name": "update:splitPanelOpen",
+   "payload": "boolean",
+   "notes": "v-model:split-panel-open."
+  },
+  {
+   "name": "update:splitPanelPosition",
+   "payload": "'bottom' | 'side'",
+   "notes": "v-model:split-panel-position."
+  },
+  {
+   "name": "update:splitPanelSize",
+   "payload": "number",
+   "notes": "v-model:split-panel-size; on every step."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The page content (the consumer's `<main>`). Scrolls on its own."
+  },
+  {
+   "name": "navigation",
+   "scope": "{ drawer: boolean }",
+   "notes": "The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact."
+  },
+  {
+   "name": "header",
+   "scope": "{ compact: boolean, openNavigation: () => void, toggleNavigation: () => void, toggleTools: () => void }",
+   "notes": "The global header, above content, tools and split panel."
+  },
+  {
+   "name": "notifications",
+   "scope": "—",
+   "notes": "Flash messages (`Alert`) above the breadcrumbs and the content; stays in place while content scrolls."
+  },
+  {
+   "name": "breadcrumbs",
+   "scope": "—",
+   "notes": "Breadcrumbs above the content, inside the scroll area."
+  },
+  {
+   "name": "tools",
+   "scope": "—",
+   "notes": "The tools region's body, usually a `HelpPanel`."
+  },
+  {
+   "name": "split-panel",
+   "scope": "—",
+   "notes": "The split panel's body."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Alert from '@aziontech/webkit/alert'\n  import AppLayout from '@aziontech/webkit/app-layout'\n  import Breadcrumb from '@aziontech/webkit/breadcrumb'\n  import Button from '@aziontech/webkit/button'\n  import GlobalHeader from '@aziontech/webkit/global-header'\n  import HelpPanel from '@aziontech/webkit/help-panel'\n  import IconButton from '@aziontech/webkit/icon-button'\n  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'\n  import Link from '@aziontech/webkit/link'\n  import Menu from '@aziontech/webkit/menu'\n  import MenuGroup from '@aziontech/webkit/menu-group'\n  import MenuItem from '@aziontech/webkit/menu-item'\n  import PageHeader from '@aziontech/webkit/page-header'\n  import Sidebar from '@aziontech/webkit/sidebar'\n  import StatusIndicator from '@aziontech/webkit/status-indicator'\n  import { ref } from 'vue'\n\n  const toolsOpen = ref(true)\n  const splitPanelOpen = ref(true)\n  const notice = ref(true)\n\n  const crumbs = [{ label: 'Services', href: '#' }, { label: 'web-app-prod' }]\n</script>\n\n<template>\n  <div class=\"h-dvh\">\n    <AppLayout\n      v-model:tools-open=\"toolsOpen\"\n      v-model:split-panel-open=\"splitPanelOpen\"\n      split-panel-title=\"web-app-prod\"\n      tools-label=\"Help: Services\"\n    >\n      <template #navigation=\"{ drawer }\">\n        <Sidebar\n          aria-label=\"Main navigation\"\n          :resizable=\"!drawer\"\n          :collapsible=\"!drawer\"\n        >\n          <Menu role=\"presentation\">\n            <MenuGroup>\n              <MenuItem\n                label=\"Home\"\n                icon=\"ai ai-home\"\n                href=\"#\"\n              />\n              <MenuItem\n                label=\"Services\"\n                icon=\"ai ai-edge-application\"\n                href=\"#\"\n                selected\n              />\n              <MenuItem\n                label=\"Variables\"\n                icon=\"ai ai-variables\"\n                href=\"#\"\n              />\n            </MenuGroup>\n          </Menu>\n        </Sidebar>\n      </template>\n\n      <template #header=\"{ compact, openNavigation, toggleTools }\">\n        <GlobalHeader aria-label=\"Console\">\n          <GlobalHeader.Left class=\"justify-start!\">\n            <IconButton\n              v-if=\"compact\"\n              icon=\"pi pi-bars\"\n              aria-label=\"Open navigation\"\n              kind=\"outlined\"\n              size=\"medium\"\n              @click=\"openNavigation\"\n            />\n          </GlobalHeader.Left>\n          <GlobalHeader.Middle />\n          <GlobalHeader.Right>\n            <IconButton\n              icon=\"pi pi-question-circle\"\n              aria-label=\"Help\"\n              kind=\"outlined\"\n              size=\"medium\"\n              :aria-pressed=\"toolsOpen\"\n              @click=\"toggleTools\"\n            />\n          </GlobalHeader.Right>\n        </GlobalHeader>\n      </template>\n\n      <template #notifications>\n        <Alert\n          v-if=\"notice\"\n          severity=\"info\"\n          closable\n          @close=\"notice = false\"\n        >\n          Scheduled maintenance on Nov 20 from 02:00 to 03:00 UTC. Services keep serving traffic.\n        </Alert>\n      </template>\n\n      <template #breadcrumbs>\n        <Breadcrumb :items=\"crumbs\" />\n      </template>\n\n      <main class=\"flex flex-col gap-(--spacing-lg) p-(--spacing-md)\">\n        <PageHeader\n          title=\"web-app-prod\"\n          description=\"The service that answers shop.example.com.\"\n        />\n        <div class=\"flex flex-wrap gap-(--spacing-xs)\">\n          <Button\n            label=\"Show details\"\n            kind=\"outlined\"\n            size=\"medium\"\n            @click=\"splitPanelOpen = true\"\n          />\n        </div>\n      </main>\n\n      <template #split-panel>\n        <KeyValuePairs aria-label=\"Service details\">\n          <KeyValuePairs.Item label=\"Status\">\n            <StatusIndicator\n              severity=\"success\"\n              label=\"Active\"\n            />\n          </KeyValuePairs.Item>\n          <KeyValuePairs.Item label=\"Domain\">shop.example.com</KeyValuePairs.Item>\n          <KeyValuePairs.Item label=\"Last deploy\">Nov 10, 2026, 14:32</KeyValuePairs.Item>\n        </KeyValuePairs>\n      </template>\n\n      <template #tools>\n        <HelpPanel aria-label=\"Help: Services\">\n          <HelpPanel.Header\n            title=\"Services\"\n            description=\"Where your domains meet the code that answers them.\"\n          />\n          <HelpPanel.Section title=\"What is a service?\">\n            <p>A service binds one or more domains to the code and rules that answer them.</p>\n          </HelpPanel.Section>\n          <HelpPanel.Links>\n            <Link\n              label=\"Services documentation\"\n              href=\"https://example.com/docs\"\n              target=\"_blank\"\n            />\n          </HelpPanel.Links>\n        </HelpPanel>\n      </template>\n    </AppLayout>\n  </div>\n</template>"
+  },
+  {
+   "name": "SplitPanelSide",
+   "sfc": "<script setup>\n  import AppLayout from '@aziontech/webkit/app-layout'\n  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'\n  import PageHeader from '@aziontech/webkit/page-header'\n  import StatusIndicator from '@aziontech/webkit/status-indicator'\n  import { computed, ref } from 'vue'\n\n  const services = [\n    { id: 'web-app-prod', domain: 'shop.example.com', status: 'success', label: 'Active' },\n    { id: 'payments-api', domain: 'pay.example.com', status: 'success', label: 'Active' },\n    { id: 'status-page', domain: 'status.example.com', status: 'warning', label: 'Degraded' }\n  ]\n\n  const selectedId = ref('web-app-prod')\n  const selected = computed(() => services.find((service) => service.id === selectedId.value))\n  const splitPanelOpen = computed({\n    get: () => Boolean(selected.value),\n    set: (open) => {\n      if (!open) selectedId.value = ''\n    }\n  })\n</script>\n\n<template>\n  <AppLayout\n    v-model:split-panel-open=\"splitPanelOpen\"\n    split-panel-position=\"side\"\n    :split-panel-title=\"selected ? selected.id : ''\"\n    storage-key=\"example-services-layout\"\n    class=\"h-dvh\"\n  >\n    <main class=\"flex flex-col gap-(--spacing-lg) p-(--spacing-md)\">\n      <PageHeader\n        title=\"Services\"\n        description=\"Select a service to see its details beside the list.\"\n      />\n      <ul\n        aria-label=\"Services\"\n        class=\"m-0 flex list-none flex-col gap-(--spacing-xxs) p-0\"\n      >\n        <li\n          v-for=\"service in services\"\n          :key=\"service.id\"\n        >\n          <button\n            type=\"button\"\n            :aria-pressed=\"selectedId === service.id\"\n            class=\"flex w-full items-center justify-between gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) aria-pressed:border-(--accent) motion-reduce:transition-none\"\n            @click=\"selectedId = service.id\"\n          >\n            <span class=\"min-w-0 truncate\">{{ service.id }}</span>\n            <StatusIndicator\n              :severity=\"service.status\"\n              :label=\"service.label\"\n            />\n          </button>\n        </li>\n      </ul>\n    </main>\n\n    <template #split-panel>\n      <KeyValuePairs\n        v-if=\"selected\"\n        aria-label=\"Service details\"\n      >\n        <KeyValuePairs.Item label=\"Status\">\n          <StatusIndicator\n            :severity=\"selected.status\"\n            :label=\"selected.label\"\n          />\n        </KeyValuePairs.Item>\n        <KeyValuePairs.Item label=\"Domain\">{{ selected.domain }}</KeyValuePairs.Item>\n      </KeyValuePairs>\n    </template>\n  </AppLayout>\n</template>"
+  },
+  {
+   "name": "Compact",
+   "sfc": "<script setup>\n  import AppLayout from '@aziontech/webkit/app-layout'\n  import GlobalHeader from '@aziontech/webkit/global-header'\n  import HelpPanel from '@aziontech/webkit/help-panel'\n  import IconButton from '@aziontech/webkit/icon-button'\n  import Menu from '@aziontech/webkit/menu'\n  import MenuGroup from '@aziontech/webkit/menu-group'\n  import MenuItem from '@aziontech/webkit/menu-item'\n  import PageHeader from '@aziontech/webkit/page-header'\n  import Sidebar from '@aziontech/webkit/sidebar'\n</script>\n\n<template>\n  <div class=\"mx-auto h-dvh w-full max-w-(--container-xs) border-x border-(--border-default)\">\n    <AppLayout>\n      <template #navigation=\"{ drawer }\">\n        <Sidebar\n          aria-label=\"Main navigation\"\n          :resizable=\"!drawer\"\n          :collapsible=\"!drawer\"\n        >\n          <Menu role=\"presentation\">\n            <MenuGroup>\n              <MenuItem\n                label=\"Home\"\n                icon=\"ai ai-home\"\n                href=\"#\"\n                selected\n              />\n              <MenuItem\n                label=\"Services\"\n                icon=\"ai ai-edge-application\"\n                href=\"#\"\n              />\n            </MenuGroup>\n          </Menu>\n        </Sidebar>\n      </template>\n\n      <template #header=\"{ compact, openNavigation, toggleTools }\">\n        <GlobalHeader aria-label=\"Console\">\n          <GlobalHeader.Left class=\"justify-start!\">\n            <IconButton\n              v-if=\"compact\"\n              icon=\"pi pi-bars\"\n              aria-label=\"Open navigation\"\n              kind=\"outlined\"\n              size=\"medium\"\n              @click=\"openNavigation\"\n            />\n          </GlobalHeader.Left>\n          <GlobalHeader.Middle />\n          <GlobalHeader.Right>\n            <IconButton\n              icon=\"pi pi-question-circle\"\n              aria-label=\"Help\"\n              kind=\"outlined\"\n              size=\"medium\"\n              @click=\"toggleTools\"\n            />\n          </GlobalHeader.Right>\n        </GlobalHeader>\n      </template>\n\n      <main class=\"p-(--spacing-md)\">\n        <PageHeader\n          title=\"Home\"\n          description=\"On a narrow screen the navigation and the help open as drawers.\"\n        />\n      </main>\n\n      <template #tools>\n        <HelpPanel aria-label=\"Help: Home\">\n          <HelpPanel.Header\n            title=\"Home\"\n            description=\"A summary of what is running in this account.\"\n          />\n        </HelpPanel>\n      </template>\n    </AppLayout>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/app-layout.md"
+}

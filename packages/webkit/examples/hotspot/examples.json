@@ -1,0 +1,11 @@
+{
+  "component": "hotspot",
+  "title": "Components/Primitives/Content/Hotspot",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Two controls wrapped in hotspots while a tutorial runs: the current step's marker pulses and its popover is open, the other marker is static and opens its step on click.",
+      "file": "default.vue"
+    }
+  ]
+}

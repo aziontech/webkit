@@ -97,7 +97,7 @@ before any polish:
 - **Layout:** `/webkit-layout` (the page container system: measure, boundary, rhythm — a page never writes its own `mx-auto max-w-*`)
 - **Words:** `/webkit-microcopy` (Azion product copy: punctuation, sentence case, label vs message, one word per concept)
 - **Foundation:** `/webkit-baseline-ui` (tokens, typography hierarchy, spacing rhythm)
-- **Cross-cutting quality:** `/webkit-theming-dark-mode` · `/webkit-data-viz`
+- **Cross-cutting quality:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-genai` (chat, streamed responses, citations, feedback, actions the reader approves)
 - **Polish:** `/webkit-motion-polish` · `/webkit-impeccable-polish` (finish + earned delight)
 - **Verify + migrate:** `/webkit-ui-verify` (runtime axe + both themes + states) · `/webkit-ds-adoption`
 

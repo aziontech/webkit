@@ -69,7 +69,68 @@ Two entries changed for M1.10 row 51. `TriggerHost` now looks through a `Tooltip
 
 Two entries changed for M2.9 phase 1 (the PR #1169 port). `Item.List` now tells its rows they are list members, so each row renders `role="listitem"`, and an `asChild` row gets a `listitem` wrapper. This fixes axe's `aria-required-children` on every `Item.List`. Both sections render their rows through `Item.List`.
 
+| Entry                                                                                               | Budget before | Measured before | Measured now | New budget | Note                                                         |
+| --------------------------------------------------------------------------------------------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------ |
+| listing-browser                                                                                     | 64.65         | within budget   | 64.69        | 64.75      | Raised: `Item` list-member context and the listitem wrapper. |
+| listing-table                                                                                       | 55.85         | within budget   | 55.92        | 56         | Raised: same `Item` change.                                  |
+| Fifteen new entries for M2.4 (the generative-AI components in `src/components/ai/`). Each budget is |
+| the measured gzip size plus about 8 %, rounded up to a quarter KB. `streaming-response` carries     |
+| `CodeBlock` (26.75 KB on its own) for fenced code; `chat-message` carries `AiLoading`, `Avatar`,    |
+| `Button`, `IconButton` and `Tooltip`.                                                               |
+
+| Entry                 | Measured | Budget | Entry              | Measured | Budget |
+| --------------------- | -------- | ------ | ------------------ | -------- | ------ |
+| action-confirmation   | 10.09    | 11     | citation           | 5.51     | 6      |
+| ai-loading            | 2.24     | 2.5    | conversation       | 4.17     | 4.75   |
+| artifact-preview      | 8.89     | 9.75   | prompt-input       | 4.88     | 5.5    |
+| chat-message          | 22.11    | 24     | reasoning          | 4.08     | 4.5    |
+| chat-message-root     | 16.31    | 17.75  | sources            | 2.47     | 2.75   |
+| chat-message-actions  | 1.34     | 1.5    | streaming-response | 29.51    | 32     |
+| chat-message-feedback | 7.67     | 8.5    | suggestion-group   | 1.72     | 2      |
+| tool-call             | 3.07     | 3.5    |                    |          |        |
+
+The catalog budget in `test/mcp/catalog-split.test.mjs` went from 1.5 MB to 1.6 MB: the thirteen AI
+imports and three AI patterns add 58 KB (1,459,260 → 1,517,943 bytes), about 3 KB per component, the
+same as the existing entries. ROADMAP M2.10 row 2 moves the per-import prose out of `catalog.json`
+before M2.9 adds more.
+
+### M2 merge: webkit-provider 9.1 → 10.6 KB
+
+`WebkitProvider` ships the pt-BR and es catalogs. M2.4 added the strings of 12 generative-AI components to all three, so the provider grew to 10.49 KB. The raise is temporary: M2.10 lists loading the non-English catalogs on demand, which takes the provider back under its old budget.
+
 | Entry           | Budget before | Measured before | Measured now | New budget | Note                                                         |
 | --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------ |
 | listing-browser | 64.65         | within budget   | 64.69        | 64.75      | Raised: `Item` list-member context and the listitem wrapper. |
 | listing-table   | 55.85         | within budget   | 55.92        | 56         | Raised: same `Item` change.                                  |
+
+M2.9 work package editors. Seven new entries and one raise. `WebKitProvider` ships the three built-in locale catalogs, and the new components' strings (attribute editor, tag editor, button group, combobox, code editor, schema form, unsaved-changes dialog, tab dirty mark) are in all three, as the i18n rule requires; the bytes are copy, not code.
+
+| Entry               | Budget before | Measured before | Measured now | New budget | Note                                                                     |
+| ------------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------------------ |
+| webkit-provider     | 9.1           | within budget   | 11.71        | 11.8       | Raised: en, pt-BR and es strings of the editors work package.            |
+| attribute-editor    | –             | –               | 13.96        | 14.25      | New: rows, grouped mode, per-cell `Field`s, live announcements.          |
+| tag-editor          | –             | –               | 15.69        | 16         | New: built on `AttributeEditor`, with key rules and undo-remove.         |
+| button-group        | –             | –               | 12.90        | 13.25      | New: roving focus, toggles and overflow into `DropdownMenu`.             |
+| combobox            | –             | –               | 10.41        | 10.75      | New: listbox popup with groups, free entry and server search.            |
+| code-editor         | –             | –               | 7.80         | 8          | New: the plain editor only; Monaco is the consumer's lazy `loader`.      |
+| schema-form         | –             | –               | 30.64        | 31         | New: schema walk, draft-07 validation and the `Field` controls it draws. |
+| use-unsaved-changes | –             | –               | 1.60         | 1.75       | New composable.                                                          |
+
+### M2 merge (editors): webkit-provider → 13.3 KB
+
+Editors added the strings of seven components to the three built-in catalogs (13.16 KB). Still temporary: M2.10 row 10 moves pt-BR and es to opt-in locale entries and lowers this budget.
+Two entries changed and seven new entries were set for M2.9 WP app-layout. `ChartCard` now reads an enclosing `Board.Item` (span, height, drag and keyboard move go through the board), so the configurable dashboard is built on `Board`. `WebKitProvider` bundles the English catalog, which grew by the new `appLayout`, `board`, `errorBoundary`, `hotspot` and `tutorialPanel` groups. The new entries are set just above what they measure; `error-boundary` ships `Alert` and `Button` for its fallback.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                   |
+| --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------ |
+| chart-card      | 4.7           | within budget   | 4.71         | 4.75       | Raised: the `Board.Item` bridge.                       |
+| webkit-provider | 9.1           | within budget   | 10.21        | 10.25      | Raised: five new locale groups in the English catalog. |
+| app-layout      | new           | –               | 22.48        | 23         | New: regions, two drawers, split panel resize.         |
+| board           | new           | –               | 3.40         | 3.5        | New: `Board` and `Board.Item`.                         |
+| error-boundary  | new           | –               | 6.35         | 6.5        | New: fallback built from `Alert` and `Button`.         |
+| hotspot         | new           | –               | 11.10        | 11.25      | New: the marker on `Popover`.                          |
+| tutorial-panel  | new           | –               | 8.48         | 8.75       | New: the panel, its provider and the task list.        |
+
+### M2 merge (app-layout): webkit-provider → 14.4 KB
+
+Temporary, as above; closed by the opt-in locale entries (M2.10).

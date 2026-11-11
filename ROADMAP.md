@@ -325,13 +325,45 @@ MCP at `node_modules/@aziontech/webkit/llms/llms.txt`. The docs site (M2.3) serv
 
 ## M2.3 — Docs site
 
-Our own docs site that renders `examples/` and `blocks/` with the code beside, foundations included. Replaces Storybook for people.
+Done: `apps/docs` (`@aziontech/webkit-docs`, private), a Vite + Vue Router site prerendered with
+`vite-ssg` (one static HTML per route, hydrated) and built with WebKit itself (`GlobalHeader`,
+`Sidebar`, `Menu`, `Command` search on ⌘K, `DocPageHeader`, `DocProse`, `DocOnThisPage`,
+`CodeBlock`, `Table`, `ThemeSwitcher`), Rubik, light/dark, an RTL toggle and en / pt-BR / es through
+`WebkitProvider`. Pages come from the files: one per component from `catalog.json` (summary,
+import, when to use / not, props / events / slots, every example from `examples/*/examples.json`
+mounted live beside its Shiki-highlighted source, do / don't, accessibility and RTL from
+`.specs/`), one per block from `blocks/**/block.json` (every state in a resizable iframe with 375 /
+768 / 1280 / full widths, source, `guidelines.md`, `npx @aziontech/webkit add <id>`), and
+foundations (color, typography, spacing, radius, shadows, motion, z-index parsed from the theme's
+`globals.css`; getting started, languages, RTL, layout and devices, accessibility from the README and
+`rules/`). "Copy for AI" on every component and block; `packages/webkit/llms/` is served at
+`/llms/` (plus `/llms.txt`) and every component, block and foundation page links its `.md` as
+"View as Markdown". Marketing examples' `/marketing-components/…` URLs resolve to the package's
+`assets/*` exports. Use `pnpm docs:dev`,
+`docs:build`, `docs:preview`, `docs:smoke` (Playwright over every route, console errors and axe on a
+sample in both themes, WebKit findings already in `a11y-known.json` counted as known); how pages are generated and how to deploy statically is in
+`apps/docs/README.md`.
 
 ## M2.4 — Generative-AI components
 
-Chat, prompt input, streaming response, thinking and loading states, citations, follow-up
-questions, user-authorized actions, artifact previews — with blocks and guidelines, benchmarked on
-Cloudscape's generative-AI section and shadcn's AI Elements.
+Done: a new `ai` component category (`src/components/ai/`, registered in the hooks and the spec
+schema) with twelve spec-first components benchmarked on Cloudscape's generative-AI section and
+shadcn's AI Elements (the design sample has no AI design; the Console Kit `azion-ai-chat` module was
+read for the console's flow): `Conversation` (a `role="log"` with live behavior off that follows the
+newest message until the reader scrolls up, and announces each finished response once),
+`ChatMessage` with `ChatMessage.Actions` and `ChatMessage.Feedback` (user / assistant / system,
+pending → streaming → complete / error with Try again), `PromptInput` (auto-size, Enter vs
+Shift+Enter, IME-safe, Stop while generating, character limit, attachments / actions / hint slots),
+`StreamingResponse` (Markdown parsed to elements, never `v-html`; unsafe links dropped; tolerant of
+half-streamed Markdown; caret; numbered citations), `Reasoning`, `Sources`, `Citation`,
+`SuggestionGroup`, `ToolCall`, `ActionConfirmation` (approve / deny, typed confirmation for
+irreversible actions, outcome in text), `ArtifactPreview` and `AiLoading` (one-second delay, dots
+or bar). Built-in strings in en, pt-BR and es; 108 browser tests (axe, keyboard, RTL-safe markup,
+streaming, reduced-motion escapes, XSS). Examples in `examples/<name>/`; three blocks in
+`blocks/platform/ai/` — `ai-chat` (Empty, Streaming, Error, LongThread), `ai-chat-drawer` (the same
+over a resource page) and `ai-action-approval` (Pending, Irreversible, Approved, Denied, Expired) —
+with Cloudscape-depth guidelines; consumer skill `skills/webkit-genai`. Start from
+`get_pattern platform/ai/ai-chat`. Review: `packages/webkit/docs/reviews/ui-craft-m2-genai.md`.
 
 ## M2.5 — Demos and the end of Storybook
 
@@ -442,6 +474,9 @@ in parallel, one agent per component:
 **sql-storage**, **firewall-rules**, **workload-app**, **marketplace**, **account-org**,
 **site-sections** and **a11y**. M2.9 stays open until they land.
 
+**WP editors: Done** (2026-11-11). New components, each spec-first with tests, examples, export and size budget: `AttributeEditor` (rows, per-row errors, limit, grouped AND/OR mode; `@aziontech/webkit/attribute-editor`), `TagEditor` on it (saved tags marked for removal with Undo, reserved prefix, suggestions), `ButtonGroup` (toolbar with toggles and menu overflow, roving focus), `Combobox` (typeable select with free entry, groups, server search), `CodeEditor` (plain editor with gutter, markers, diff and read-only; Monaco through a `loader` prop, themed from the tokens, the plain editor as the SSR and no-JavaScript fallback), `SchemaForm` (JSON schema draft-07 subset to `Field`s with validation and `field:<path>` slots) and the composable `useUnsavedChanges` (dirty baseline, leave guard, `ConfirmDialog` props). `Tabs` items take `dirty`. Blocks: `platform/edit/attribute-editor` is rebuilt on `AttributeEditor` and has the `PasteEnv` variant; `edit-resource` has `StaleRecord` and `DangerZone`; `platform/edit/code-editor` uses `CodeEditor` for its code and schema documents. Review notes in `packages/webkit/docs/reviews/ui-craft-m2.md`; leftovers are M2.10 rows 7 and 8.
+**WP app-layout: Done** (2026-11-11). New components, each spec-first with tests, examples, export and size budget: `AppLayout` (`@aziontech/webkit/app-layout`: navigation, header, notifications, breadcrumbs, content, a split panel under or beside the content with a keyboard separator, and a tools or help region; it measures its own width, so below `compactBelow` navigation and tools become drawers; open state, size and position persist under `storageKey`), `Board` (`@aziontech/webkit/board`, `Board.Item`: a dashboard grid with `v-model:layout`, drag, keyboard move and resize, and polite announcements; `ChartCard` inside a `Board.Item` routes through it), `TutorialPanel` (`TutorialPanel.Provider` holds the running tutorial; the panel goes in the tools region) and `Hotspot` (step marker on `Popover`, static under reduced motion), and `ErrorBoundary` (catches a failed region, danger `Alert` with Try again, `error` event). Blocks: `platform/dashboard/configurable-dashboard` rebuilt on `Board`; new `platform/states/not-found` (404, Forbidden, ServerError, ResourceNotFound); new `shells/console#Notifications` on `AppLayout` (bell with unread count, notifications region, flash `Alert` with Edit and Redeploy). Review notes in `packages/webkit/docs/reviews/ui-craft-m2.md`.
+
 ## M2.10 — Leftovers of Milestone 2
 
 Everything M2.1–M2.9 does not finish lands here as a row (from, leftover, how it closes) and closes
@@ -455,6 +490,16 @@ before the branch is closed.
 | 4 | M2.9  | `packages/webkit/src/test/a11y-known.json` holds the axe findings from the harness's first run (blocks and examples, light, dark, and forced colors with reduced motion).                                                                                        | WP a11y fixes the components and deletes the entries. The harness fails on a fixed finding until its entry is deleted, so the file only shrinks. It closes when the file is `{}` per pass.                |
 | 5 | M2.9  | `.claude/docs/CONTAINERS.md` links into `apps/webkit-sample/src/...`, and `.claude/hooks/validate-references.mjs` keeps `@shared`, `@site`, `@hub`, `@console` and `@preview` aliases into it. The app is not on this branch, so the links are broken.           | Re-point the links to the WebKit SFCs listed in `m2.9-inventory.md` section 6, and remove the aliases.                                                                                                    |
 | 6 | M2.9  | The PR #1169 tokens (feedback fills and contrasts, light code syntax, black on the dark primary fill), the `Tag` primary fill and the `Link` hover underline change the screenshots.                                                                             | Regenerate the baselines with M2.11 row 0.3.                                                                                                                                                              |
+| 7 | M2.4  | `catalog.json` grew past its 1.5 MB budget with the 13 AI imports and 3 patterns (1.52 MB); the budget in `test/mcp/catalog-split.test.mjs` was raised to 1.6 MB, which M2.9's components will exceed                                                            | Move each import's prose (`purpose`, `useWhen`, `avoidWhen`, `related`, `bestPractices`) to `catalog/components/<name>.json` the way pattern SFCs moved to `catalog/patterns/`, then lower the budget again |
+| 8 | M2.4  | Benchmark parts not built: PromptInput shortcut menus and references (`/`, `@`, Cloudscape), response branches (AI Elements `Branch`), the thumbs-down reason dialog, the artifact canvas panel and a conversation-history list                                  | Build them as components in M2.9 when a console screen needs one (each is a new spec); until then the blocks compose `Drawer` for the canvas and leave history out                                          |
+| 9 | M2.4  | The AI blocks were checked with the browser suite and axe but not rendered with the theme (light and dark, 320 px, RTL), and the M1.3 usage check (`usage-check.mjs`) did not run (no `claude` CLI or key in the lane)                                           | Visual pass in M2.5 (Playwright over `examples/` and `blocks/`) and the usage check in M2.7 with the prompt "add an assistant to the workload page"                                                         |
+| 10 | M2.4 | `WebkitProvider` bundles the pt-BR and es catalogs, so every new component's strings grow it (10.49 KB after M2.4; budget raised 9.1 → 10.6 KB) | Load non-English catalogs on demand (dynamic import keyed by locale, SSR-safe), lower the budget back to ≤ 9 KB |
+| 11 | M2.9 editors | `platform/edit/rule-builder` still draws its criteria rows by hand; the inventory row says they become `AttributeEditor`'s grouped mode, which now exists (`grouped`, AND inside a group, OR between groups). | Rebuild the criteria section of the rule-builder primary and `Composed` variant on `AttributeEditor` with `grouped`, update its guidelines, rebuild the catalog and run the harness for the block. |
+| 12 | M2.9 editors | `CodeEditor`'s Monaco path is tested only against a structural fake; no example or block loads the real `monaco-editor` (WebKit does not depend on it), so workers, the token theme and the diff editor have not been seen in a real browser. | Add a docs-site example that passes `loader: () => import('monaco-editor')` with its workers, check it visually in light and dark, and decide on an optional `@aziontech/webkit/code-editor-monaco` entry (spec "Decisions and open questions"). |
+| 13 | M2.3  | Media that examples and blocks load by absolute path (`/media/…`, `/logos/…`, `/docs/…`) still lives in `apps/storybook/static`, and the `/marketing-components/…` → `@aziontech/webkit/assets/*` table is `apps/storybook/src/stories/_shared/site-assets.js`; the docs site reads both from Storybook | M2.5 moves the folder to `apps/docs/public` and the table next to the assets in `packages/webkit` when Storybook is removed, then points `STATIC_ASSETS` and `SITE_ASSETS` in `apps/docs/plugins/paths.ts` at them |
+| 14 | M2.3  | Rubik does not load from `fonts.azion.com`: `https://fonts.azion.com/rubik/Rubik-VariableFont_wght.ttf` answers 404, so every page falls back to the system font | Publish `apps/fonts/rubik/` to fonts.azion.com (owner: whoever deploys apps/fonts), or have the theme self-host it |
+| 15 | M2.3  | `apps/docs` has no `type-check` script: `vue-tsc` over it reports the kebab `aria-label` passed to `IconButton`'s required `ariaLabel` prop (the pattern WebKit's own examples use) and WebKit source `.js` presets without declarations (TS7016) | Make WebKit's required `ariaLabel` props accept the attribute form in types (or ship `.d.ts` for the presets), then add `type-check` to `apps/docs/package.json` and the root gates |
+| 16 | M2.9  | WP app-layout: only the `shells/console#Notifications` variant is built on `AppLayout`; the console primary (ListPage) and DetailPage still compose the rail, header and mobile `Drawer` by hand, as inventory row "App layout with tools, help, split panel and notifications regions" asks to rebuild. | Rebuild `console.vue` and `variants/detail-page.vue` on `AppLayout` (rail in `#navigation`, header in `#header`), drop their hand-written `Drawer`, update building blocks R–U in `guidelines.md`, and rerun the a11y, RTL and hydration harness for `shells/console`. |
 
 ## M2.11 — Close the branch and merge into `main`
 

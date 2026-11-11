@@ -1,0 +1,16 @@
+{
+  "component": "tool-call",
+  "title": "Components/Primitives/AI/ToolCall",
+  "examples": [
+    {
+      "name": "States",
+      "summary": "Every state of a tool call in the order an agent goes through them: waiting for authorization, running, completed, failed and denied, each with its status in text.",
+      "file": "states.vue"
+    },
+    {
+      "name": "WithDetails",
+      "summary": "A completed call whose input and output open under the row as code, and a failed call opened by default so the reader sees the error.",
+      "file": "with-details.vue"
+    }
+  ]
+}

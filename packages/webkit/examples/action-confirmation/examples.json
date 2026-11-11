@@ -1,0 +1,21 @@
+{
+  "component": "action-confirmation",
+  "title": "Components/Primitives/AI/ActionConfirmation",
+  "examples": [
+    {
+      "name": "Command",
+      "summary": "The agent asks to run a deployment command: the question names it in code, the body shows exactly what will run, and Deny or Deploy decide; the card then shows the outcome in text.",
+      "file": "command.vue"
+    },
+    {
+      "name": "Irreversible",
+      "summary": "A destructive request: the frame and the Delete button turn danger, and Delete stays disabled until the reader types the domain name.",
+      "file": "irreversible.vue"
+    },
+    {
+      "name": "Resolved",
+      "summary": "The three outcomes that stay in the thread after a decision: Approved, Denied and Request expired, each in text with its status dot.",
+      "file": "resolved.vue"
+    }
+  ]
+}

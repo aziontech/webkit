@@ -42,6 +42,18 @@ A setting the user cannot change here (a paid module, a module that is always on
 
 Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, the fieldset is disabled, Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record.
 
+### G. Leave guard — `Tabs`, `SaveBar` (optional)
+
+`useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Item` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/webkit-form`.
+
+### H. Changed elsewhere — `Button`, `SaveBar` (optional)
+
+When the record was saved by someone else after the form opened, a warning `Alert` sits between the heading and the first section: a bold "Changed elsewhere." lead, one sentence that says nothing was lost and what Save will do, and a secondary Reload button in its action slot. Save does not overwrite silently: it opens a `ConfirmDialog` (kind `primary`) with Go back and Overwrite and save. Reload swaps the edits for the saved values and the notice becomes an info `Alert` "Edits discarded." with Undo, which brings the edits back. The save bar's hint and Discard label follow the notice ("Saving overwrites the version saved elsewhere.", "Discard and reload"). This is the form-error rule (`platform/states/form-error`) applied to an edit: one message above the form, the recovery action on it.
+
+### I. Danger zone — `SettingsSection`, `Card`, `SettingRow`, `Button`, `Input` (optional)
+
+The last section, titled Danger zone with the hint "Actions that cannot be undone.", holds one compact `SettingRow` per irreversible action with a medium danger `Button` and a trash icon. The action opens a medium `ConfirmDialog`: a warning `Alert` that it cannot be reversed, one paragraph on what goes with it and a docs link, then "To confirm, type" the name in a code chip with a `CopyButton`, and an `Input` labelled by that sentence. The danger confirm button stays disabled until the typed name matches and shows its loading state while the request runs; Enter in the input confirms. See `platform/delete/delete-with-confirmation`.
+
 ## Do
 
 - Show the save bar only while the form differs from the saved record.
@@ -50,6 +62,11 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - Keep locked settings visible, disabled, with the reason and the way to unlock them.
 - Put destructive actions in a Danger zone section at the end, never in the save bar.
 - Check every field when Save is pressed and show errors only then; see `skills/webkit-errors`.
+- Mark the tab that holds unsaved changes with `dirty`, and ask before leaving it while dirty.
+- Offer Save changes in the leave dialog when the form can be saved from there; the user keeps their work without going back.
+- Say when the record changed elsewhere as soon as it is known, and ask before Save overwrites it.
+- Keep the edits on screen after a reload with an Undo, so a stale form never loses work silently.
+- Ask for the resource name before a delete, with a copy button beside the name.
 
 ## Don't
 
@@ -58,6 +75,10 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - Don't hide fields the user cannot change; lock them and say why.
 - Don't use `size="medium"` or larger for the Settings heading; the tab bar or breadcrumb already names the resource.
 - Don't add a Cancel button that leaves the page; Discard restores the record in place.
+- Don't rely on the dot alone: the dirty tab also says "Unsaved changes" to screen readers.
+- Don't overwrite a record that changed elsewhere without the overwrite confirmation.
+- Don't put Delete in the save bar, the page heading or a menu of the form; it lives in the Danger zone.
+- Don't enable the delete confirm button before the typed name matches.
 
 ## Copy
 
@@ -66,6 +87,9 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - **Row descriptions:** one sentence that says what the setting does, e.g. "When disabled, the project stops serving traffic."
 - **Save bar:** state what changed and when it applies, e.g. "Project settings changed." with the hint "Saving publishes them on the next deployment."; buttons "Discard" and "Save".
 - **Locked reason:** one sentence with the way out, e.g. "Contact sales to activate this module."
+- **Leave dialog:** "Unsaved changes", "This page has changes you haven't saved. If you leave now, they're discarded." (with Save: "Save them before you leave, or discard them and continue."); buttons "Keep editing", "Discard changes", "Save changes". These are the built-in `unsavedChanges` messages in en, pt-BR and es.
+- **Changed elsewhere:** "Changed elsewhere." + "This project was saved by someone else after you opened it. …"; button "Reload"; dialog "Overwrite changes made elsewhere?" with "Go back" and "Overwrite and save"; after a reload "Edits discarded." with "Undo".
+- **Danger zone:** section "Danger zone" with "Actions that cannot be undone."; row "Delete this project"; dialog "Delete project", "Once confirmed, this action can't be reversed.", "To confirm, type <name>"; buttons "Cancel" and "Delete project".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -75,6 +99,10 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - A disabled `Switch` keeps its `Tooltip`, so keyboard and pointer users can still read why it is locked.
 - External links open in a new tab with `rel="noopener noreferrer"` and an icon marked `aria-hidden="true"`.
 - The save bar enters after the form in reading order and its motion respects reduced motion.
+- The dirty tab mark is `aria-hidden`; a visually hidden "Unsaved changes" joins the tab's accessible name, and under forced colors the dot paints in `CanvasText`.
+- The leave dialog is a `ConfirmDialog`: focus moves into it, Escape and the close button count as Keep editing, and focus returns to the control that asked to leave.
+- The changed-elsewhere notice sits in a polite live region and takes focus after Reload so the change of values is announced; both its actions are real buttons.
+- The delete confirmation `Input` is labelled by the "To confirm, type …" sentence (`aria-labelledby`); the `CopyButton` has its own name ("Copy the project name") and announces Copied.
 
 ## States
 
@@ -84,6 +112,9 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; Save is loading and Discard is disabled.
+- StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
+- DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
+- UnsavedChanges (leave guard): the Settings tab carries the dirty dot, and switching tabs while dirty opens the Unsaved changes dialog.
 
 ## Related
 
@@ -93,3 +124,5 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - `platform/delete/delete-with-confirmation` — the dialog behind the Danger zone action.
 - `platform/settings/settings-form` — account settings that end with the same save band.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
+- `useUnsavedChanges` — the dirty baseline and leave guard behind the save bar, the tab mark and the leave dialog.
+- `platform/states/form-error` — the rule the changed-elsewhere notice follows.

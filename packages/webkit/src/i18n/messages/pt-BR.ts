@@ -1,13 +1,116 @@
 import type { Messages } from '../types'
 
 export const ptBR: Messages = {
+  actionConfirmation: {
+    approve: 'Aprovar',
+    deny: 'Negar',
+    approved: 'Aprovado',
+    denied: 'Negado',
+    expired: 'Pedido expirado',
+    confirmLabel: 'Digite {phrase} para confirmar'
+  },
+  aiLoading: {
+    generating: 'Gerando uma resposta'
+  },
+  artifactPreview: {
+    open: 'Abrir',
+    openLabel: 'Abrir {title}',
+    download: 'Baixar {title}',
+    copy: 'Copiar {title}'
+  },
+  chatMessage: {
+    user: 'Você',
+    assistant: 'Assistente de IA',
+    system: 'Sistema',
+    labelWithTime: '{author} às {time}',
+    actions: 'Ações da mensagem',
+    error: 'Não foi possível gerar a resposta.',
+    retry: 'Tentar novamente',
+    helpful: 'Útil',
+    notHelpful: 'Não foi útil',
+    feedback: 'Avaliação da resposta',
+    feedbackSubmitting: 'Enviando avaliação',
+    feedbackSubmitted: 'Avaliação enviada'
+  },
+  citation: {
+    label: 'Fonte {index}: {title}',
+    labelUntitled: 'Fonte {index}'
+  },
+  conversation: {
+    label: 'Conversa',
+    scrollToLatest: 'Ir para a última mensagem',
+    announcement: '{author}: {text}'
+  },
+  promptInput: {
+    label: 'Prompt',
+    placeholder: 'Faça uma pergunta',
+    submit: 'Enviar',
+    stop: 'Parar de gerar',
+    count: '{count}/{max}',
+    overLimit: '{count} caracteres acima do limite'
+  },
+  reasoning: {
+    thinking: 'Pensando',
+    thoughtBriefly: 'Pensou por alguns segundos',
+    skip: 'Pular raciocínio',
+    thought: {
+      one: 'Pensou por {count} segundo',
+      other: 'Pensou por {count} segundos'
+    }
+  },
+  sources: {
+    label: 'Fontes',
+    count: {
+      one: '{count} fonte',
+      other: '{count} fontes'
+    }
+  },
+  suggestionGroup: {
+    label: 'Prompts sugeridos'
+  },
+  toolCall: {
+    pending: 'Aguardando',
+    running: 'Executando',
+    success: 'Concluído',
+    error: 'Falhou',
+    denied: 'Negado',
+    input: 'Entrada',
+    output: 'Saída'
+  },
   alert: {
     close: 'Fechar mensagem'
+  },
+  appLayout: {
+    navigation: 'Navegação',
+    tools: 'Ajuda',
+    closeTools: 'Fechar ajuda',
+    splitPanel: 'Detalhes',
+    closeSplitPanel: 'Fechar painel',
+    resizeSplitPanel: 'Redimensionar painel',
+    showAtSide: 'Mostrar ao lado do conteúdo',
+    showAtBottom: 'Mostrar abaixo do conteúdo'
   },
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
     empty: 'Nenhum resultado encontrado.'
+  },
+  attributeEditor: {
+    add: 'Adicionar item',
+    remove: 'Remover item',
+    rowAction: '{label} {index}',
+    addGroup: 'Adicionar grupo OU',
+    empty: 'Nenhum item ainda.',
+    remaining: {
+      one: 'Você pode adicionar mais {count} item.',
+      other: 'Você pode adicionar mais {count} itens.'
+    },
+    limitReached: 'Você atingiu o limite de {limit} itens.',
+    added: 'Item {index} adicionado.',
+    removed: 'Item {index} removido.',
+    group: 'Grupo {index}',
+    and: 'e',
+    or: 'ou'
   },
   avatar: {
     fallbackLabel: 'Avatar do usuário',
@@ -15,6 +118,14 @@ export const ptBR: Messages = {
   },
   barList: {
     emptyTitle: 'Nenhum dado disponível'
+  },
+  board: {
+    label: 'Painel',
+    item: 'Item {position}',
+    moved: '{label} movido para a posição {position} de {total}.',
+    resized: '{label} redimensionado para {span} de {columns} colunas.',
+    resizedWithHeight:
+      '{label} redimensionado para {span} de {columns} colunas, {height} pixels de altura.'
   },
   breadcrumb: {
     label: 'Trilha de navegação',
@@ -27,6 +138,10 @@ export const ptBR: Messages = {
     resizeHeight: 'Redimensionar altura da pré-visualização',
     widthValue: '{value} pixels de largura',
     heightValue: '{value} pixels de altura'
+  },
+  buttonGroup: {
+    moreActions: 'Mais ações',
+    pressed: 'Ativado'
   },
   calendar: {
     placeholder: 'Selecione um período',
@@ -91,6 +206,24 @@ export const ptBR: Messages = {
   codeBlock: {
     copy: 'Copiar código'
   },
+  codeEditor: {
+    label: 'Editor de código',
+    original: 'Original',
+    modified: 'Modificado',
+    problems: 'Problemas',
+    problemCount: {
+      zero: 'Nenhum problema',
+      one: '{count} problema',
+      other: '{count} problemas'
+    },
+    line: 'Linha {line}',
+    error: 'Erro',
+    warning: 'Aviso',
+    info: 'Informação',
+    loading: 'Carregando o editor completo…',
+    loadFailed: 'O editor completo não carregou. Você pode continuar editando aqui.',
+    tabHint: 'Pressione Escape e depois Tab para sair do editor.'
+  },
   collectionPreferences: {
     trigger: 'Preferências',
     title: 'Preferências',
@@ -114,6 +247,17 @@ export const ptBR: Messages = {
     density: 'Densidade',
     comfortable: 'Confortável',
     compact: 'Compacta'
+  },
+  combobox: {
+    empty: 'Nenhum resultado',
+    loading: 'Carregando opções',
+    useValue: 'Usar "{value}"',
+    clear: 'Limpar',
+    suggestions: 'Sugestões',
+    count: {
+      one: '{count} opção',
+      other: '{count} opções'
+    }
   },
   command: {
     empty: 'Nenhum resultado encontrado.',
@@ -196,6 +340,12 @@ export const ptBR: Messages = {
   drawer: {
     close: 'Fechar'
   },
+  errorBoundary: {
+    title: 'Não foi possível carregar esta seção',
+    description:
+      'Algo deu errado ao exibir esta parte da página. O restante da página continua funcionando.',
+    retry: 'Tentar novamente'
+  },
   field: {
     required: '(Obrigatório)'
   },
@@ -220,6 +370,13 @@ export const ptBR: Messages = {
   heroForm: {
     search: 'Buscar',
     empty: 'Nenhum resultado encontrado.'
+  },
+  hotspot: {
+    label: 'Etapa do tutorial: {title}',
+    stepOf: 'Etapa {current} de {total}',
+    previous: 'Anterior',
+    next: 'Próxima',
+    finish: 'Concluir'
   },
   keyValuePairs: {
     notSet: 'Não definido'
@@ -346,6 +503,26 @@ export const ptBR: Messages = {
   resizable: {
     handle: 'Redimensionar painel'
   },
+  schemaForm: {
+    required: 'Este campo é obrigatório.',
+    minLength: 'Use pelo menos {min} caracteres.',
+    maxLength: 'Use no máximo {max} caracteres.',
+    pattern: 'Este valor não segue o formato esperado.',
+    minimum: 'Informe {min} ou mais.',
+    maximum: 'Informe {max} ou menos.',
+    number: 'Informe um número.',
+    integer: 'Informe um número inteiro.',
+    enum: 'Escolha uma das opções.',
+    minItems: 'Adicione pelo menos {min} valores.',
+    maxItems: 'Adicione no máximo {max} valores.',
+    listItem: 'Linha {line}: {message}',
+    json: 'Informe um JSON válido.',
+    selectPlaceholder: 'Selecione uma opção',
+    numberPlaceholder: 'Um número',
+    numberFrom: 'A partir de {min}',
+    listPlaceholder: 'Um valor por linha',
+    jsonPlaceholder: 'Um valor JSON'
+  },
   sectionHeader: {
     copyLink: 'Copiar link da seção {title}',
     linkCopied: 'Link copiado'
@@ -465,7 +642,31 @@ export const ptBR: Messages = {
     unsorted: 'Ordenar coluna'
   },
   tabs: {
-    close: 'Fechar aba'
+    close: 'Fechar aba',
+    unsaved: 'Alterações não salvas'
+  },
+  tagEditor: {
+    label: 'Tags',
+    key: 'Chave',
+    value: 'Valor',
+    keyPlaceholder: 'Digite a chave',
+    valuePlaceholder: 'Digite o valor',
+    add: 'Adicionar tag',
+    remove: 'Remover tag',
+    undo: 'Desfazer',
+    undoLabel: 'Desfazer a remoção da tag {index}',
+    markedForRemoval: 'Esta tag será removida quando você salvar.',
+    empty: 'Nenhuma tag associada ao recurso.',
+    remaining: {
+      one: 'Você pode adicionar mais {count} tag.',
+      other: 'Você pode adicionar mais {count} tags.'
+    },
+    limitReached: 'Você atingiu o limite de {limit} tags.',
+    keyRequired: 'Digite uma chave.',
+    keyDuplicate: 'Esta chave já é usada por outra tag.',
+    keyReserved: 'As chaves não podem começar com "{prefix}".',
+    keyInvalid: 'Use apenas letras, números, espaços e + - = . _ : / @.',
+    tooLong: 'Use até {max} caracteres.'
   },
   themeSwitcher: {
     label: 'Tema',
@@ -485,6 +686,31 @@ export const ptBR: Messages = {
   },
   tree: {
     emptyTitle: 'Nenhum item'
+  },
+  unsavedChanges: {
+    title: 'Alterações não salvas',
+    description:
+      'Esta página tem alterações que você não salvou. Se sair agora, elas serão descartadas.',
+    descriptionSavable:
+      'Esta página tem alterações que ainda não foram salvas. Salve-as antes de sair ou descarte-as e continue.',
+    keepEditing: 'Continuar editando',
+    discard: 'Descartar alterações',
+    save: 'Salvar alterações'
+  },
+  tutorialPanel: {
+    title: 'Tutoriais',
+    description: 'Aprenda o produto fazendo uma tarefa real, uma etapa por vez.',
+    listLabel: 'Tutoriais disponíveis',
+    empty: 'Nenhum tutorial ainda.',
+    start: 'Iniciar tutorial',
+    restart: 'Reiniciar tutorial',
+    exit: 'Sair do tutorial',
+    back: 'Voltar aos tutoriais',
+    completed: 'Concluído',
+    completedTitle: 'Tutorial concluído',
+    completedDescription: 'Você concluiu {title}.',
+    taskCount: { one: '{count} tarefa', other: '{count} tarefas' },
+    stepCount: { one: '{count} etapa', other: '{count} etapas' }
   },
   wizard: {
     stepOf: 'Etapa {step} de {total}',

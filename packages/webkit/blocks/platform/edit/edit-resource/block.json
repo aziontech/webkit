@@ -3,7 +3,7 @@
   "name": "EditResource",
   "title": "Templates/Platform/Edit/EditResource",
   "surface": "product",
-  "summary": "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `HelperText` and `Button`.",
+  "summary": "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -28,7 +28,19 @@
     "alterações não salvas",
     "salvar alterações",
     "edit resource",
-    "editar recurso"
+    "editar recurso",
+    "stale record",
+    "changed elsewhere",
+    "overwrite changes",
+    "conflict on save",
+    "danger zone",
+    "delete resource",
+    "type the name to confirm",
+    "zona de perigo",
+    "excluir recurso",
+    "alterado em outro lugar",
+    "leave page guard",
+    "unsaved changes dialog"
   ],
   "skills": ["webkit-form", "webkit-errors", "webkit-layout", "webkit-ux-heuristics"],
   "primary": {
@@ -53,13 +65,23 @@
     },
     {
       "name": "UnsavedChanges",
-      "summary": "The policy Settings tab after Debug rules was switched on: the bar is up; Discard restores the record and the bar leaves, Save holds its loading state and then leaves.",
+      "summary": "The policy Settings tab after Debug rules was switched on: the bar is up and the Settings tab carries the unsaved-changes dot. Discard restores the record and the bar leaves, Save holds its loading state and then leaves. Switching tabs while dirty asks first, through `useUnsavedChanges`: Keep editing, Discard changes, or Save changes and go.",
       "file": "variants/unsaved-changes.vue"
     },
     {
       "name": "Saving",
       "summary": "While the save request is in flight: Save shows its loading state and Discard is disabled.",
       "file": "variants/saving.vue"
+    },
+    {
+      "name": "StaleRecord",
+      "summary": "The record was saved by someone else after the form opened, and the form holds edits: a warning `Alert` above the sections says it changed elsewhere, with Reload. Save asks before it overwrites (Go back / Overwrite and save); Reload replaces the edits with the saved values and the notice turns into Edits discarded with Undo.",
+      "file": "variants/stale-record.vue"
+    },
+    {
+      "name": "DangerZone",
+      "summary": "The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs.",
+      "file": "variants/danger-zone.vue"
     }
   ]
 }

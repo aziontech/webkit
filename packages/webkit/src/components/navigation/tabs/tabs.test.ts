@@ -232,6 +232,20 @@ describe('Tabs (composition)', () => {
       // @click.stop on the close box stops propagation → the tab click is not emitted.
       expect(emitted().click).toBeUndefined()
     })
+    it('marks a dirty tab with a dot and a hidden "Unsaved changes"', async () => {
+      const { getByRole, getByTestId, queryByTestId, rerender } = render(TabsItem, {
+        props: { value: 'a', label: 'Alpha', dirty: true }
+      })
+
+      const tab = getByRole('tab')
+      expect(tab.hasAttribute('data-dirty')).toBe(true)
+      expect(getByTestId('navigation-tabs-item__dirty').getAttribute('aria-hidden')).toBe('true')
+      expect(tab.textContent).toContain('Unsaved changes')
+
+      await rerender({ dirty: false })
+      expect(queryByTestId('navigation-tabs-item__dirty')).toBeNull()
+      expect(tab.hasAttribute('data-dirty')).toBe(false)
+    })
   })
 
   describe('v-model round-trip and update:modelValue', () => {

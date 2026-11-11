@@ -1,0 +1,11 @@
+{
+  "component": "citation",
+  "title": "Components/Primitives/AI/Citation",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Two numbered references in a sentence: the first links to the source page and names it in a tooltip, the second points at item 2 of a Sources list on the same page.",
+      "file": "default.vue"
+    }
+  ]
+}

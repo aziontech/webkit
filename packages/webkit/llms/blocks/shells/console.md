@@ -5,12 +5,12 @@
 - Surface: product
 - Source: `blocks/shells/console/console.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/console")`
-- Components: [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [Drawer](../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../components/dropdown-menu.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [Menu](../../components/menu.md), [PageTabs](../../components/page-tabs.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AppLayout](../../components/app-layout.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [Drawer](../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [Menu](../../components/menu.md), [PageTabs](../../components/page-tabs.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
 
-platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console
+platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console; notifications panel; notifications drawer; notification center; central de notificações; painel de notificações
 
 The application shell every signed-in page renders inside. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: a navigation rail on the left (wordmark, the ⌘K palette, the grouped navigation, the account menu) and a content zone on the right headed by one global header (search, Create, Agent, the avatar). Pages render only their own content in the zone; this block's page bodies are stand-ins for `platform/view/table-view` and `platform/detail/details-page`.
 
@@ -122,6 +122,7 @@ Dims the page behind the open drawer.
 - Don't render the rail on create, edit or deploy pages.
 - Don't add page actions to the global header; they belong to the page's controls row or tab row.
 - Don't hide the avatar when the rail is collapsed or in the drawer.
+- Don't open the notifications region as a popover over the page; it is a region beside the content that the reader keeps open while working.
 
 ## Copy
 
@@ -137,11 +138,13 @@ Dims the page behind the open drawer.
 - ⌘K opens the palette and is announced with `aria-keyshortcuts="Meta+K"`; focus returns to the trigger on close.
 - The drawer traps focus while open and returns it to the navigation trigger.
 - Icon-only controls have both an `aria-label` and a tooltip.
+- The bell is a toggle (`aria-pressed`) and names the unread count; unread items carry a visually hidden `Unread:` prefix, not colour alone.
 
 ## States
 
 - ListPage: a first-level list page in the content zone; the header carries the single unlinked `Resources` crumb and the page opens on its controls row.
 - DetailPage: a resource detail page; the breadcrumb reads module, resource, then an environment Select, and a full-bleed tab bar carries Overview, Deployments and Settings with the outlined Deploy action.
+- Notifications: the bell opens the notifications region beside the content (a drawer when narrow), with unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState once cleared; the failed deploy also shows as a flash Alert above the page. This state is built on `AppLayout` (rail in `#navigation`, header in `#header`, flash in `#notifications`, list in `#tools`), which measures its own width, so the rail and the list become drawers in a narrow host. The bell's `aria-label` carries the unread count and the `Badge` on it is hidden from assistive technology.
 
 ## Related
 
@@ -153,6 +156,7 @@ Dims the page behind the open drawer.
 
 - `ListPage` — primary (the code below)
 - `DetailPage` — A resource detail page: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it.
+- `Notifications` — The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up.
 
 Each variant is the same screen in another state: `get_pattern("shells/console", { variant })`, or the file under `blocks/shells/console/variants/`.
 

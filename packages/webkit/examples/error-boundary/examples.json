@@ -1,0 +1,16 @@
+{
+  "component": "error-boundary",
+  "title": "Components/Primitives/Feedback/ErrorBoundary",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A card's list is wrapped in a boundary. Simulate a failure: the list is replaced by a danger Alert with Try again, the rest of the page keeps working, and the error event reports what was thrown.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Custom fallback",
+      "summary": "The fallback slot draws a small EmptyState in the card's place, sized to the region, with its own Try again bound to the slot's retry.",
+      "file": "custom-fallback.vue"
+    }
+  ]
+}

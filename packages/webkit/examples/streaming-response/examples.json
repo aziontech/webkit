@@ -1,0 +1,26 @@
+{
+  "component": "streaming-response",
+  "title": "Components/Primitives/AI/StreamingResponse",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A finished response in Markdown: a heading, bold and inline code, a numbered list, a table and a fenced code block rendered as a copyable CodeBlock.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Streaming",
+      "summary": "Tokens arriving: the text grows every few milliseconds with a blinking caret at the end, the region is busy, and the code fence stays plain until it closes. Replay restarts it.",
+      "file": "streaming.vue"
+    },
+    {
+      "name": "WithCitations",
+      "summary": "Numbered citations in the text resolve against the sources: each `[n]` shows the source title in a tooltip and links to item n of the Sources list under the response.",
+      "file": "with-citations.vue"
+    },
+    {
+      "name": "UnsafeInput",
+      "summary": "Model output carrying a script tag, an inline event handler and a javascript: link renders as plain text with the unsafe link dropped; nothing is injected as HTML.",
+      "file": "unsafe-input.vue"
+    }
+  ]
+}

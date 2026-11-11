@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -984,6 +984,37 @@ exists.`), wired by `aria-describedby`. After the reload clears the stale value 
    `preventScroll`. Every other entry is kept.
 
 Where each error renders, row by row, is `/webkit-errors`.
+
+### Unsaved changes — `useUnsavedChanges` (`platform/edit/edit-resource`)
+
+Every edit form keeps a saved baseline and asks before its edits are lost. Do not hand-roll
+`JSON.stringify` baselines or `beforeunload` listeners: use the composable.
+
+```js
+import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+import { onBeforeRouteLeave } from 'vue-router'
+
+const guard = useUnsavedChanges(() => form, {
+  onDiscard: (baseline) => Object.assign(form, baseline),
+  onSave: save
+})
+onBeforeRouteLeave(() => guard.confirmLeave())
+```
+
+- `isDirty` shows the `SaveBar` and the `dirty` mark on the section's `Tabs.Item`; `commit()` after a
+  successful save, `discard()` for the bar's Discard (a ref source is restored in place, a getter
+  source goes through `onDiscard`).
+- `confirmLeave()` resolves `true` at once while clean; while dirty it opens the dialog and resolves
+  with the user's choice. Use it in `onBeforeRouteLeave` and in the setter of a tab bar's `v-model`.
+- Render one `ConfirmDialog v-bind="guard.dialogProps"` with the `#actions` slot holding Keep editing
+  (`guard.keepEditing`), Discard changes (`guard.discardAndLeave`) and, when `onSave` is set, Save
+  changes (`guard.saveAndLeave`, `:loading="guard.dialogProps.loading"`); labels come from
+  `guard.labels` (built in for en, pt-BR and es).
+- The browser's own reload / close prompt runs while dirty; turn the guards off with
+  `enabled: false` while a successful save navigates away.
+- When the record was saved elsewhere after the form opened, follow `edit-resource#StaleRecord`: a
+  warning `Alert` above the form with Reload, and an overwrite `ConfirmDialog` before Save.
 
 ## Read-only vs disabled — a value the user cannot change
 
