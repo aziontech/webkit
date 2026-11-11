@@ -185,3 +185,30 @@ Scope: new `TopologyDiagram` (on `Flow`'s connector engine and anchors, no node-
 
 - Environment: a locked Strict environment, an Also deploys tag, the replace and multi-environment `Alert`s, and Projects impacted grouped per environment and reloaded on switch; the toast names the targets. Dependencies: the open disclosure shows a shared dependency, a not-versioned integration and one with no ready version that blocks Deploy; the first run fails and its toast offers Edit and Redeploy. Revert: an earlier version is read-only with a Viewing `Tag` and `aria-current` in history; the primary action opens a `ConfirmDialog` with the diff in words. No defect.
 - Finding: guidelines for `version-detail` section H named `ConfirmDialog` and `Toaster`, which only the variant imports. Fixed: the heading names `Button` and `Tag`, the prose keeps the dialog and toast.
+
+## WP firewall-rules
+
+Scope: new blocks `platform/view/rules-list` (Application primary; Firewall, ReviewChanges, SaveFailed, Searching, Empty, Loading) and `platform/view/waf-tuning` (Default; Allow, AllowFailed, Empty, Loading); new variants `attribute-editor#NetworkList` and `create-in-drawer#Certificate`; `platform/edit/rule-builder` criteria rebuilt on `AttributeEditor` grouped mode (M2.10 row 11). Sources: the design sample's `RulesEngine.vue`, `FirewallRulesEngine.vue` and `WafTuning.vue`; Console Kit's `order-dialog.vue` and `ReorderedRulesPreview.vue` (review before save), `ListWafRulesTuning.vue` and its allow dialog (reason required), and the network list and certificate form fields.
+
+### rules-list
+
+- Structure: phases are an `Accordion` (all open), one data-driven `TableRoot` per phase; order is behavior, so nothing applies until Review changes and Save. Moves are collected, counted in the `SaveBar` and listed per phase in the review `Dialog` (every rule whose position changes, and every rule turned on or off). States: loading (table skeleton), empty phase (`EmptyState` with Add Rule), search no-match (table `empty` slot), save failure (danger `Alert` in the dialog, Save again).
+- Keyboard and announcements: grip with Up and Down, Move up and Move down, and a typed position (Enter commits, Escape cancels); each move is announced in a polite `role="status"` that exists from the first render, and focus follows the moved rule to the same control (the grip when that control is now disabled). Disabled controls carry their reason in the name and tooltip. Covered by `src/test/rules-list-block.test.ts` (6 tests).
+- Finding: the first cut used a composed `Table` with fixed widths on `Table.Cell` and the drag state on `Table.Row` (77 consumer-lint overrides, and `webkit-tables` asks for data-driven tables). Fixed: `TableRoot` with `width` columns; each cell slot wraps its content in one element holding the rule id and drag state, and the panel delegates drag over and drop, so rows still stack as cards when narrow.
+- Finding: after a successful save the Review changes button unmounts with the `SaveBar`, and `Dialog` skips focus return to a detached element, so focus fell to `body`. Fixed: focus moves to the rules region (`tabindex="-1"`), asserted in the test.
+- Finding: footer buttons used `md:w-auto` and `PanelFooter` layout classes, and the search `Input` carried grow and basis. Fixed with wrappers, as the other WPs did.
+
+### waf-tuning
+
+- The threshold settings (Time range, Minimum hits with whole-number validation) apply as they change; the allow action names its count; the dialog says how many allowed rules will be created and requires a reason, validated only after Allow rules, with focus moved to it. Success clears the selection and moves focus to the results region; failure keeps the input with a danger `Alert`. Example addresses use the documentation ranges only.
+- Finding: same wrapper fixes as rules-list (`Field` widths, search, footer). Axe on the open dialog is clean (`src/test/firewall-drawers-block.test.ts`).
+
+### attribute-editor#NetworkList and create-in-drawer#Certificate
+
+- NetworkList: a pasted list keeps every new line as a row and shows each invalid line its own error in place (per-line validation), skips lines already in the list, keeps `#` comments as the row comment; typed rows are checked after Save only, and empty rows are ignored once one row is filled.
+- Certificate: the PEM is read in the browser (a small DER walk for subject, issuer and validity; no dependency), the expiry gets a `StatusIndicator` (30-day warning, expired blocks Save), the private key is never shown back. The sample PEM is a throwaway test certificate for `shop.example.com` issued by "Example Test CA"; no key is in the repo.
+- Finding: `PanelFooter class="justify-end"` is an override. Fixed with an inner wrapper. Finding: guidelines sections for variant-only parts must be lettered last and name only what the primary imports (check-patterns); moved and relabelled, the rest stays in prose.
+
+### rule-builder
+
+- Criteria are now `AttributeEditor` grouped (labels, Add condition, Add OR group, limits 10 and 5, Remove, focus, announcements, per-cell errors after Save), the variable a `Combobox` of the phase's variables. Decision: conditions no longer reorder (And and Or do not depend on order); the old mixed And/Or join inside one group is gone, since one level of Or over And is the model the guidelines already stated. Behaviors keep drag and arrow reorder.
