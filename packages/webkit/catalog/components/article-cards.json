@@ -1,0 +1,19 @@
+{
+ "purpose": "A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `kind` places the heading only: `left` at the start (an article's closing row), `centered` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.",
+ "useWhen": [
+  "To close a blog post with its related articles, or a success story with its related stories.",
+  "To show three stories as a landing-page band under a centred heading."
+ ],
+ "avoidWhen": [
+  "For the full, filterable list of articles → use `article-index-blog` or `article-index-resource-hub`.",
+  "For one featured article selected from a wall → use `article-highlight`."
+ ],
+ "related": [
+  "card-grid` — the frame grid the cards sit on.",
+  "article-highlight` — the blog's opening band."
+ ],
+ "bestPractices": [
+  "Give a card either `image` or `mark`; the mark is drawn only when there is no cover.",
+  "Keep the band to three cards so the frame row stays full."
+ ]
+}

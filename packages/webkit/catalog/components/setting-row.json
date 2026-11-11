@@ -1,0 +1,23 @@
+{
+ "purpose": "One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`level`).",
+ "useWhen": [
+  "Every row of a settings card: account settings, build settings, create pages, resource settings.",
+  "A field with a validation message under it (put the `HelperText` in the default slot after the control)."
+ ],
+ "avoidWhen": [
+  "A stand-alone form field with a visible label above it → use `field-text` and the other `field-*` components.",
+  "A read-only list of label and value pairs → use `key-value-pairs`.",
+  "A navigable list row → use `item` directly."
+ ],
+ "related": [
+  "settings-section` — the band the card of rows sits in.",
+  "item` — the row primitive it renders; place rows in an `Item.List` inside the card.",
+  "helper-text` — the required or invalid message under the control."
+ ],
+ "bestPractices": [
+  "The title is the label: give the control the same text as `aria-label`.",
+  "Pick `kind` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.",
+  "Show a validation message only after Save was pressed.",
+  "Use `level` only for a setting that applies when the row above it is on, and render it with `v-if` on that state."
+ ]
+}

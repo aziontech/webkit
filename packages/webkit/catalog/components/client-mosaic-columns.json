@@ -1,0 +1,17 @@
+{
+ "purpose": "Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case. It is a page section — the site places it from a `{ _id: 'client-mosaic-columns', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `logo-wall`.",
+ "useWhen": [
+  "When three stories deserve equal weight and their brands should colour the band."
+ ],
+ "avoidWhen": [
+  "For a mixed mosaic of stories and marks → use `client-mosaic`."
+ ],
+ "related": [
+  "client-mosaic` — the bento sibling.",
+  "logo-wall` — the single-mark wall each column's face is rendered with."
+ ],
+ "bestPractices": [
+  "Exactly three cells; the grid is three columns from the large breakpoint.",
+  "brand.base` and `brand.glow` are the client's colours and may be any CSS colour; set `brand.ink` to `'dark'` when the face is light enough that the link text must be dark."
+ ]
+}

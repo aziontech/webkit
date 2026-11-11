@@ -1,0 +1,23 @@
+{
+ "purpose": "Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<Input>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `R$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.",
+ "useWhen": [
+  "A text input that needs static prefix or suffix content inside the same border (`https://`, `.com`, a currency symbol).",
+  "An input joined to a control: a search field with a trailing `button`, an amount with a leading currency `select`."
+ ],
+ "avoidWhen": [
+  "A phone number with a dial code → use `phone-input`.",
+  "A single input with only a decorative icon → use `input` and its `iconLeft` / `iconRight` slots."
+ ],
+ "related": [
+  "field` — wrap the group in a `Field` for a label and description/error; `InputGroup.Input` takes the field's id, `aria-describedby` and state, and the root takes `invalid` / `disabled` / `required` from it.",
+  "phone-input` — input group with a dial-code select and a per-country mask.",
+  "input` — the single-field primitive with icon slots."
+ ],
+ "bestPractices": [
+  "Put static text and icons in `InputGroup.Addon`; place real controls (`button`, `select`) as direct children with no wrapper `div`.",
+  "Set the same `size` on the group and on its child controls so heights line up.",
+  "disabled`, `invalid`, and `required` style the group only; also set them on every child control they should affect. Inside a `Field`, put them on the `Field` instead: the root and `InputGroup.Input` both read them.",
+  "Use `InputGroup.Input` for the middle input: it is borderless, picks up the enclosing `Field`'s wiring, and spares the long raw-`<input>` class string.",
+  "The root is `role=\"group\"`; label the inner input itself, or give the group an `aria-label`."
+ ]
+}

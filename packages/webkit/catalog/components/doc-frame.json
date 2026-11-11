@@ -1,0 +1,23 @@
+{
+ "purpose": "The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset. Pass `src` and the frame decides from the extension whether it holds a still or a clip; compose the default slot when the framed thing is markup. A still opens full screen out of its own frame — the picture is the button — while a clip keeps its player controls and composed content has no source to open. The caption reads under the frame, centered, as part of the picture; the hint reads above it on the text's own left edge, as part of the sentence that led the reader here; each is a string prop for the plain case with a slot of the same name for rich content.",
+ "useWhen": [
+  "Any screenshot, diagram or screen recording inside documentation prose — every one of them, so the page's media all shares one border, radius and inset.",
+  "A composed panel or mock the page wants presented as a figure rather than as live UI: fill the default slot.",
+  "A clip that decorates a step (`autoplay`) or one the reader chooses to play (default, with controls)."
+ ],
+ "avoidWhen": [
+  "For an application-screen media block outside documentation prose — use `FrameBox` or compose the layout directly.",
+  "For an image that is itself a link or a card — a frame is a figure, not a navigation target.",
+  "For a gallery or carousel; the frame holds one piece of media at a time."
+ ],
+ "related": [
+  "DocProse` — the page contract around it. The frame marks itself `data-doc-block`, so it takes the block rung of the prose ladder, and its caption and hint arrive unclassed for the page to style.",
+  "DocCallout` — the other block-level interruption; a callout carries words, a frame carries media."
+ ],
+ "bestPractices": [
+  "Always pass `alt` for a still or a clip: it labels the media, names the zoom trigger, and titles the full-screen dialog.",
+  "Keep the caption to one line that belongs to the picture; a paragraph of context belongs in the prose above, or in `hint` when it leads directly into the frame.",
+  "Use the `caption` / `hint` slots only when the sentence needs markup (a link, a bold run, a code chip); the string props cover the plain case in one attribute.",
+  "Reach for `autoplay` only when the clip is decoration: it mutes, inlines and loops the clip and removes its controls, on the prop path and for a clip written by hand in the slot alike."
+ ]
+}

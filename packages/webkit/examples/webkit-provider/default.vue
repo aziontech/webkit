@@ -1,6 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import Pagination from '@aziontech/webkit/pagination'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { ref } from 'vue'
@@ -12,6 +13,7 @@
 <template>
   <WebkitProvider
     locale="pt-BR"
+    :catalogs="{ 'pt-BR': ptBR }"
     class="flex flex-col gap-(--spacing-md)"
   >
     <Pagination

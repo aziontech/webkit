@@ -1,0 +1,24 @@
+{
+ "purpose": "A ranked list of named values: each row is a tinted bar whose length is the value against the largest one, with the name inside the bar and the formatted value in a right-aligned column. It reads as a list, not a chart — no axes, no grid — so it suits top-N breakdowns inside a card, where a horizontal `chart` would spend its width on an axis gutter.",
+ "useWhen": [
+  "Top-N breakdowns inside a card: top paths, top countries, top user agents, top rules triggered.",
+  "A ranking where the name matters as much as the size, and names are long enough to need the bar's full width.",
+  "Rows that lead somewhere — a filtered view of that path or country — via `href` or `item-click`."
+ ],
+ "avoidWhen": [
+  "Several series per category, or values over time → use `chart`.",
+  "A share of a whole where the parts sum to 100% → use `donut-chart`.",
+  "One value against a limit (quota, usage) → use `progress`."
+ ],
+ "related": [
+  "chart` — horizontal bars with an axis, for comparing several series per category.",
+  "donut-chart` — the share view of the same breakdown when the parts sum to a whole.",
+  "chart-card` — the box a BarList sits in on a dashboard."
+ ],
+ "bestPractices": [
+  "Keep it to about ten rows; fold the tail into an \"Other\" row in the data rather than scrolling.",
+  "Leave `sort` on `descending` for rankings; use `none` only when the order itself carries meaning (pipeline steps, weekdays).",
+  "Pass the same `formatValue` as the chart beside it so a number reads the same in both.",
+  "Give interactive rows a destination the user expects — a filtered view of that item — not a detail drawer of the whole list."
+ ]
+}

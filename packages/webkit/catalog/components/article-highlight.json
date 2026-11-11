@@ -1,0 +1,18 @@
+{
+ "purpose": "The band that opens a blog under its hero. One article is shown large — its cover beside its overline, headline, deck, read time and a button into it — over a wall of the highlight articles that acts as its selector. The wall is a tablist and the large article its panel; selecting a title on the wall swaps the panel, and every article is drawn invisibly under the panel so the band keeps the height of its tallest article and never jumps. With four or more articles the wall runs four across. It is a page section — the site places it from a `{ _id: 'article-highlight', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid` and `button`; the selection is local state.",
+ "useWhen": [
+  "To open a blog or a resource page with its newest or most important articles."
+ ],
+ "avoidWhen": [
+  "For a closing row of related articles → use `article-cards`.",
+  "For the full list of articles → use `article-index-blog`."
+ ],
+ "related": [
+  "article-cards` — the closing row of related articles.",
+  "card-grid` — the frame grid the wall of titles sits on."
+ ],
+ "bestPractices": [
+  "Feature three or four articles; four fill the wall four across.",
+  "Give a `highlightImage` cropped for the panel when the cover does not read at that size."
+ ]
+}

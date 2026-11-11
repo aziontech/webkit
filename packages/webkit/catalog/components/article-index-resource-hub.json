@@ -1,0 +1,18 @@
+{
+ "purpose": "Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet (content type, category, industry) on one row that wraps when it runs out of room. Each resource is a row — its cover on the left, and on the right its overline, headline and a two-line deck centred in the row; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The facets combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input` and `button`; the facet selections and each dropdown's option search are local state.",
+ "useWhen": [
+  "For a resource hub that mixes content types (e-books, posts, comparisons, stories), filtered by facet."
+ ],
+ "avoidWhen": [
+  "For the blog's list filtered by a category picker and a search field, with bylines → use `article-index-blog`.",
+  "For the success-story library with a card grid → use `story-library`."
+ ],
+ "related": [
+  "article-index-blog` — the sibling listing with a category picker and a search field.",
+  "story-library` — the card-grid library with search and facets."
+ ],
+ "bestPractices": [
+  "Give every item a `facets` entry per facet `key` it can be filtered by; an item without one never matches a selection on that facet.",
+  "Keep each facet's `options` to values some item carries."
+ ]
+}

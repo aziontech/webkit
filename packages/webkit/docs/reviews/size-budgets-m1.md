@@ -119,3 +119,13 @@ M2.9 work package editors. Seven new entries and one raise. `WebKitProvider` shi
 ### M2 merge (editors): webkit-provider → 13.3 KB
 
 Editors added the strings of seven components to the three built-in catalogs (13.16 KB). Still temporary: M2.10 row 10 moves pt-BR and es to opt-in locale entries and lowers this budget.
+
+### M2.10: webkit-provider 13.3 → 6.3 KB, two locale entries
+
+`WebkitProvider` now ships only the English catalog. Portuguese and Spanish are opt-in entries (`@aziontech/webkit/locales/pt-BR`, `/locales/es`) that the app imports and passes through the provider's `catalogs` prop, so they are static imports and SSR stays deterministic. The budgets below are measured + ~0.2 KB. Each locale entry is pure copy and grows with every component's strings; that is the expected cost and no longer lands on apps that run in English only.
+
+| Entry           | Before (KB) | Measured (KB) | Budget (KB) | Why                                         |
+| --------------- | ----------- | ------------- | ----------- | ------------------------------------------- |
+| webkit-provider | 13.16       | 6.10          | 6.3         | Lowered: pt-BR and es left the provider.    |
+| locales-pt-BR   | –           | 5.44          | 5.65        | New: the Portuguese (Brazil) catalog alone. |
+| locales-es      | –           | 5.49          | 5.7         | New: the Spanish catalog alone.             |

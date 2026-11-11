@@ -1,0 +1,25 @@
+{
+ "purpose": "The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a \"Scroll to the latest message\" button brings them back. It is a `role=\"log\"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. It also sets where messages sit for the whole thread (`alignment`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).",
+ "useWhen": [
+  "Any surface where a person and the generative AI assistant exchange messages: the assistant page, the assistant drawer, an in-flow helper.",
+  "A transcript that grows while the reader watches it (streaming responses, tool calls appearing)."
+ ],
+ "avoidWhen": [
+  "A one-shot generated block on a page (a summary card, an explanation beside a chart) → render `StreamingResponse` in place.",
+  "A log of system events with timestamps and filtering → use `log-view`.",
+  "A list of past conversations → a `table` or `item` list; this is one thread."
+ ],
+ "related": [
+  "chat-message` — the item the log holds; announces itself through this component.",
+  "prompt-input` — the composer pinned under the log (outside it; only the log scrolls).",
+  "suggestion-group` — follow-up questions after the last response, or support prompts in the empty state.",
+  "empty-state` — what the panel shows before the first message (the block renders it instead of the log).",
+  "log-view` — machine logs, not conversations."
+ ],
+ "bestPractices": [
+  "Pin the prompt input under the conversation; only the log scrolls.",
+  "Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.",
+  "Use `alignment=\"start\"` in drawers and side panels, `split` on a full page.",
+  "Keep one conversation per surface; a second thread is a second page or a history list."
+ ]
+}

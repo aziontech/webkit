@@ -1,0 +1,19 @@
+{
+ "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene, an image or an illustration; with one action the whole band links to it, with two the band stays unlinked.",
+ "useWhen": [
+  "To make one point beside one picture and move on (a values statement, a single product claim)."
+ ],
+ "avoidWhen": [
+  "For several claims stacked one after the other → use `media-split-stack`.",
+  "For a claim beside a code sample → use `code-split`."
+ ],
+ "related": [
+  "media-split` — the band primitive the section is rendered with.",
+  "media-split-stack` — the stacked sibling for a run of claims."
+ ],
+ "bestPractices": [
+  "Give the band exactly one media: `scene`, `image` or `illustration`; when several are set the first of that order wins.",
+  "Use `size=\"large\"` for a band that carries only its headline and description.",
+  "Give an `image` its `width` and `height` so the page reserves its box before it loads."
+ ]
+}

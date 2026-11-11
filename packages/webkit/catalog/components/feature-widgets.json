@@ -1,0 +1,19 @@
+{
+ "purpose": "The \"three ways to start\" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is an illustration above a bold-led sentence and one affordance — a link button or a copy button that puts a prompt on the clipboard. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `bento-grid`, `illustration` and `button-highlight`.",
+ "useWhen": [
+  "To offer the same outcome through two or three entry points (agent, console, terminal), each with its own next step."
+ ],
+ "avoidWhen": [
+  "For reasons without an action per cell → use `feature-tiles`.",
+  "For a long argument per feature → use `feature-scroll`."
+ ],
+ "related": [
+  "bento-grid` — the grid the cells are laid in.",
+  "button-highlight` — the copy affordance a cell renders when it carries `copy`."
+ ],
+ "bestPractices": [
+  "Give each item exactly one of `action` (a link) or `copy` (text to put on the clipboard).",
+  "Keep `copy.text` self-contained; it is what the reader pastes into their agent.",
+  "Set `anchor` when a hero button scrolls to this band."
+ ]
+}

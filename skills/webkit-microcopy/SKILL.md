@@ -32,7 +32,7 @@ of 4) are not yours to write. They live in the message catalogs,
 `@aziontech/webkit/src/i18n/messages/en.ts` and `pt-BR.ts` (plus `es.ts`), and follow these rules in
 both languages: sentence case in English and in Portuguese, the same verb for the same action (Fechar,
 Remover, Copiar), `{name}` placeholders kept as they are. Mount `WebkitProvider` with the user's
-locale instead of passing translated labels to each component; override a catalog string with its
+locale (and the `pt-BR` or `es` catalog from `@aziontech/webkit/locales/<tag>` in `catalogs`) instead of passing translated labels to each component; override a catalog string with its
 `messages` prop only when the product glossary says so. Pass a label prop only to say something more
 specific than the catalog (`aria-label="Close deployment logs"`).
 

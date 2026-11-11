@@ -1,0 +1,23 @@
+{
+ "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover handled in CSS).",
+ "useWhen": [
+  "A standalone navigation link: a domain, a repository, a docs page, \"View all\".",
+  "An in-console navigation action (\"Add custom domain\") with `showIcon` set to false."
+ ],
+ "avoidWhen": [
+  "A link inside a sentence → use a plain anchor with the text-link class.",
+  "An action that changes something instead of navigating → use `button`.",
+  "A compact marketing CTA with a brand-colored icon inside a card → use `mini-button`."
+ ],
+ "related": [
+  "mini-button` — same anatomy in default text color with a brand-colored icon; `large` and `medium` only.",
+  "button` — set `href` when a link must look like a button.",
+  "breadcrumb` — a trail of links for hierarchical location."
+ ],
+ "bestPractices": [
+  "Always set `href` and a `label` that names the destination; the defaults (`'#'`, `'Learn more'`) are placeholders.",
+  "Keep the default `pi pi-external-link` icon for off-site targets with `target=\"_blank\"` (`rel=\"noopener noreferrer\"` is added for you); turn `showIcon` off for in-app destinations.",
+  "Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).",
+  "disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead."
+ ]
+}

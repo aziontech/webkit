@@ -1,0 +1,27 @@
+{
+ "purpose": "A scaled, inert picture of an Azion Console screen, for marketing bands that show the product. The consumer composes the screen's body from real webkit components at a fixed design width; the frame draws the console shell around it (the slim console bar, the side rail with breadcrumbs and actions, or the previous console's top bar) and scales the whole drawing to fit its host. Each piece of the body is a `ShellMockup.Part` that travels in on its own beat once the mockup scrolls into view, so the screen assembles itself instead of appearing all at once.",
+ "useWhen": [
+  "Showing a console screen or fragment on a marketing band: a hero, a media split, a feature tab, a widget grid cell.",
+  "Depicting a product workflow with real webkit controls instead of a screenshot, so the drawing follows the theme and stays sharp at any size.",
+  "Staggering the parts of a mock so they arrive in reading order when the band scrolls into view, and replaying that entrance each time a tab makes the mock active.",
+  "Drawing only a fragment of a screen (a list, a form row) floating on the band's own surface, with `kind=\"bare\"` and `chrome` off."
+ ],
+ "avoidWhen": [
+  "To show a real, working screen at a device size → use `browser-frame`; it renders live content in a true viewport, not a scaled picture.",
+  "For a static screenshot or clip in documentation → use `doc-frame`.",
+  "For an illustration scene → use `illustration`."
+ ],
+ "related": [
+  "browser-frame` — a live, resizable viewport for real screens; `shell-mockup` is an inert, scaled drawing of the console.",
+  "texture-material` — the texture the frame grounds itself with when `texture` is set.",
+  "frame-box` — the page's registration frame a mockup band is often placed inside."
+ ],
+ "bestPractices": [
+  "Compose the body at the design width (`width`, `mobileWidth`), not at the host's width; the frame scales the drawing, so sizes inside are design pixels.",
+  "Give the host a height (or an aspect ratio); the frame fills its host and derives its design height from it.",
+  "Number parts in reading order with `order`, starting at `0`; parts on the same beat land together.",
+  "Keep the mockup decorative: it is hidden from assistive technology unless `interactive` is set, so the band's own copy must say what the picture shows.",
+  "Set `active` from the host when several mockups share one slot (tabs), so only the visible one plays and it replays when it returns.",
+  "Tune a fade with the consumer-side custom properties `--mockup-fade-start` / `--mockup-fade-end` (or `--mockup-fade-edge` for `y`) and match its color to the host surface with `--mockup-fade-color`."
+ ]
+}

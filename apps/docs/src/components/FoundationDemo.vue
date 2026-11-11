@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { es } from '@aziontech/webkit/locales/es'
+  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import Pagination from '@aziontech/webkit/pagination'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
@@ -10,6 +12,7 @@
 
   defineProps<{ kind: 'locale' | 'direction' | 'devices' }>()
 
+  const catalogs = { 'pt-BR': ptBR, es }
   const locale = ref('pt-BR')
   const dir = ref<'ltr' | 'rtl'>('rtl')
   const page = ref(3)
@@ -42,6 +45,7 @@
     />
     <WebkitProvider
       :locale="kind === 'locale' ? locale : 'en'"
+      :catalogs="catalogs"
       :dir="kind === 'direction' ? dir : 'auto'"
       class="overflow-x-auto"
     >

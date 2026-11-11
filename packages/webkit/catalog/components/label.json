@@ -1,0 +1,24 @@
+{
+ "purpose": "Form-field label that pairs descriptive text with an optional required indicator and an optional hint. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word \"(Required)\" in muted text — replacing the older `Tag` badge for a lighter typographic signal. Setting `hint` appends a `Hint` glyph after the text, so a field name and its one-sentence explanation stay one component instead of a hand-built row.",
+ "useWhen": [
+  "Naming a bare input when you compose a field layout yourself.",
+  "Marking a field as required with the inline `* (Required)` indicator.",
+  "Attaching a one-sentence explanation to a field name with `hint`."
+ ],
+ "avoidWhen": [
+  "A standard text, password, select, or textarea field → use `field`, whose `Field.Label` targets the control and shows the Required marker for you.",
+  "Guidance, error, or required messages under the input → use `helper-text`.",
+  "An info glyph with no field name next to it → use `hint`."
+ ],
+ "related": [
+  "helper-text` — the line under the input; pairs with the label above it.",
+  "hint` — the glyph the `hint` prop renders; use it alone when there is no label.",
+  "field` — composes label, any control, and description/error with the wiring done."
+ ],
+ "bestPractices": [
+  "Always set `for` to the input's id (`inputId` on the bare inputs) so clicking the label focuses the control.",
+  "required` is visual only; also set `required` on the input so it carries `aria-required`.",
+  "Keep `hint` to one short sentence; it is revealed in a tooltip on hover or focus.",
+  "Pass the text through `label` or the default slot, not both; the slot wins."
+ ]
+}

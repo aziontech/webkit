@@ -1,4 +1,4 @@
-export { BUILT_IN_CATALOGS, en, es, ptBR } from '../../i18n/catalogs'
+export { BUILT_IN_CATALOGS, en } from '../../i18n/catalogs'
 export type {
   Direction,
   MessageKey,

@@ -1,0 +1,24 @@
+{
+ "purpose": "A word-sized chart: one series drawn as an area, a line or bars, with no axes, grid, legend or tooltip, filling the width of its container at a fixed height. It shows the shape of a recent history next to a number — in a stat tile, a table row or a ticker card — where a full `chart` would be too much.",
+ "useWhen": [
+  "The shape of a metric's recent history beside its current value: requests in the last hour, latency over the day.",
+  "Rows of comparable items, each with its own trend: one SparkChart per row of a list or table.",
+  "The trend inside a `stat-tile`, which draws its `trend` through this component."
+ ],
+ "avoidWhen": [
+  "The reader needs exact values, a time axis or several series → use `chart`.",
+  "A ranking across categories → use `bar-list`.",
+  "Up/down status over discrete periods → use `tracker`."
+ ],
+ "related": [
+  "stat-tile` — the KPI tile that renders its sparkline with SparkChart.",
+  "chart` — the full history with axes, tooltip and legend.",
+  "tracker` — a strip of status blocks rather than a measured shape."
+ ],
+ "bestPractices": [
+  "Pair it with the number it describes; a spark alone has no scale and says nothing exact.",
+  "Use the same buckets as the chart behind it, about twelve to thirty points.",
+  "Leave `fromZero` off for prices and latencies, where the shape matters more than the magnitude; turn it on for counts that are meaningful from zero.",
+  "Give it an `ariaLabel` only when it stands without a nearby number; otherwise keep it decorative."
+ ]
+}

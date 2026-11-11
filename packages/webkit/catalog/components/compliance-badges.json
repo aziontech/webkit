@@ -1,0 +1,16 @@
+{
+ "purpose": "The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a \"see more\" cell. It is a page section — the site places it from a `{ _id: 'compliance-badges', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split` and `card-grid`.",
+ "useWhen": [
+  "On security, enterprise or pricing pages, to list the certifications and link to the compliance page."
+ ],
+ "avoidWhen": [
+  "For client logos → use `logo-wall-quote` or `client-mosaic`."
+ ],
+ "related": [
+  "media-split` — the copy-beside-media band this section renders through."
+ ],
+ "bestPractices": [
+  "Four or five certifications plus the link cell fill two rows of three.",
+  "Give every badge an `alt` naming the certification; the pill repeats it for sighted readers."
+ ]
+}

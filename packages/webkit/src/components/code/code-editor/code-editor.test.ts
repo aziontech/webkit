@@ -6,8 +6,9 @@ import Default from '../../../../examples/code-editor/default.vue'
 import Diff from '../../../../examples/code-editor/diff.vue'
 import ReadOnly from '../../../../examples/code-editor/read-only.vue'
 import WithToolbar from '../../../../examples/code-editor/with-toolbar.vue'
-import { BUILT_IN_CATALOGS, provideLocale } from '../../../composables/use-locale'
+import { en, provideLocale } from '../../../composables/use-locale'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import Field from '../../inputs/field/field.vue'
 import FieldDescription from '../../inputs/field/field-description/field-description.vue'
 import FieldLabel from '../../inputs/field/field-label/field-label.vue'
@@ -283,7 +284,7 @@ describe('CodeEditor', () => {
     const view = render(
       defineComponent({
         setup() {
-          provideLocale({ locale: 'pt-BR', catalogs: BUILT_IN_CATALOGS })
+          provideLocale({ locale: 'pt-BR', catalogs: { en, ...LOCALES } })
           return () =>
             h(CodeEditor, {
               modelValue: 'a',

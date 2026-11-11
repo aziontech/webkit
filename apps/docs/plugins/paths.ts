@@ -84,6 +84,7 @@ export type CatalogEntry = {
   parent?: string
   subcomponents?: string[]
   examplesFile?: string
+  docsFile?: string
   [key: string]: unknown
 }
 
@@ -101,7 +102,13 @@ let catalogCache: { mtime: number; data: Catalog } | null = null
 export function readCatalog(): Catalog {
   const mtime = statSync(CATALOG).mtimeMs
   if (catalogCache?.mtime !== mtime) {
-    catalogCache = { mtime, data: JSON.parse(readFileSync(CATALOG, 'utf8')) as Catalog }
+    const data = JSON.parse(readFileSync(CATALOG, 'utf8')) as Catalog
+    for (const entry of Object.values(data.imports)) {
+      if (!entry.docsFile) continue
+      Object.assign(entry, JSON.parse(readFileSync(join(WEBKIT, entry.docsFile), 'utf8')))
+      delete entry.docsFile
+    }
+    catalogCache = { mtime, data }
   }
   return catalogCache.data
 }

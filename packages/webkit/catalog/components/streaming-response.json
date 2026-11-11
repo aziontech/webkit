@@ -1,0 +1,24 @@
+{
+ "purpose": "Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:` and `data:` links are dropped (only `http(s)`, `mailto`, relative and `#` links survive), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Numbered citations `[1]` become `Citation` references resolved against `sources`, linked to the `Sources` list under the response through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.",
+ "useWhen": [
+  "The content of every assistant `ChatMessage`.",
+  "Any generated text on a page (an explanation, a summary) that arrives token by token."
+ ],
+ "avoidWhen": [
+  "Authored documentation prose → `doc-prose`.",
+  "Code alone → `code-block`.",
+  "Trusted HTML from your own CMS → render it with your CMS pipeline; this component deliberately renders no HTML."
+ ],
+ "related": [
+  "chat-message` — the host of a response.",
+  "citation`, `sources` — inline references and the list they point at.",
+  "code-block` — what fenced code renders as.",
+  "ai-loading` — the loading text before the first token, or a bar where a table is coming."
+ ],
+ "bestPractices": [
+  "Pass the accumulated text on every chunk; the parser is cheap and the output is keyed by block.",
+  "Keep `streaming` true until the stream closes, then false (removes the caret, highlights an open fence).",
+  "Give the response and its `Sources` the same `anchor` so `[n]` links to item `n`.",
+  "Do not post-process model output into HTML; there is no HTML path."
+ ]
+}

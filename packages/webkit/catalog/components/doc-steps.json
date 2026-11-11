@@ -1,0 +1,21 @@
+{
+ "purpose": "The ordered walkthrough from the docs frame: a column of `DocStep` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.",
+ "useWhen": [
+  "A procedure the reader performs in order: install, link, deploy.",
+  "Any \"follow these steps\" band in documentation prose, however short."
+ ],
+ "avoidWhen": [
+  "For a wizard or form flow inside the application — that is the console's own stepper surface, not documentation chrome.",
+  "For an unordered list of options or features — order is the whole claim this component makes; a list that has none is a plain list or `DocItem` rows.",
+  "For a single instruction — one step is a sentence, not a walkthrough."
+ ],
+ "related": [
+  "DocStep` — the sibling root this numbers; a step registers with this context on mount and throws when rendered outside one.",
+  "DocProse` — the contract around it. The column marks itself `data-doc-block`, so it takes the block rung of the prose ladder."
+ ],
+ "bestPractices": [
+  "Start each step title with the verb; keep the how in the step's body.",
+  "Let the numbering be the document order — never encode a number into a title.",
+  "Give a step a body only when the heading alone does not carry it; the rail stretches to cover whatever the body holds."
+ ]
+}

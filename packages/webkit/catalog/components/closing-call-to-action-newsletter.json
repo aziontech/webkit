@@ -1,0 +1,19 @@
+{
+ "purpose": "The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatched closing frame. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-newsletter', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `overline`, `field`, `input`, `button` and `texture-material`. The block never sends: it validates the address locally (an empty field and a malformed address each show their message under the field) and on a valid submit emits `submit` with the event and `{ email }`; the site posts the address and reports the outcome back through `loading`, `submitted` and `error`, which the band renders with the messages from `form`.",
+ "useWhen": [
+  "To close the Blog or the Resource Hub on a newsletter subscription."
+ ],
+ "avoidWhen": [
+  "For a close on one or two link actions → use `closing-call-to-action`.",
+  "For a lead form with several fields → use `hero-form`."
+ ],
+ "related": [
+  "closing-call-to-action` — the closing band whose ask is a link action.",
+  "alert` — renders the success and failure messages."
+ ],
+ "bestPractices": [
+  "Set `loading` while the address is sent, then `submitted` or `error` with the outcome.",
+  "Keep `description` to one sentence; it is set as the large headline.",
+  "Write `form.invalidMessage` with an example address so the fix is obvious."
+ ]
+}

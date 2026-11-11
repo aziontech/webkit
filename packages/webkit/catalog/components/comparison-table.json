@@ -1,0 +1,19 @@
+{
+ "purpose": "The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor logo) stays pinned while the page scrolls. Each category opens with a heading row; each cell is a support glyph — full, partial or none — named by a tooltip and by screen-reader text, and a capability with a definition carries an info button that opens it in a popover. It is a page section — the site places it from a `{ _id: 'comparison-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `brand`, `popover`, `icon-button` and `tooltip`.",
+ "useWhen": [
+  "On a \"Azion vs X\" page, to lay one competitor against Azion across a few categories of capabilities."
+ ],
+ "avoidWhen": [
+  "To compare Azion's own plans → use `compare-plans`.",
+  "To compare support tiers → use `compare-support-tiers`."
+ ],
+ "related": [
+  "compare-plans` — the plan-by-plan matrix of Pricing.",
+  "tooltip` — names each support glyph on hover and focus."
+ ],
+ "bestPractices": [
+  "Give every row a `definition`; the info popover is where a reader learns what the capability means.",
+  "Ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme); with one file it shows in both, with none the name shows as text.",
+  "Keep `caption` equal to the title; it is the table's accessible name."
+ ]
+}

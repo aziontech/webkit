@@ -1,7 +1,9 @@
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 
+import { es } from '../../locales/es'
+import { ptBR } from '../../locales/pt-BR'
 import {
   BUILT_IN_CATALOGS,
   directionOf,
@@ -10,10 +12,11 @@ import {
   type MessageKey,
   pickCatalog,
   provideLocale,
-  ptBR,
   useLocale
 } from './index'
 import { useTranslate } from './use-translate'
+
+const ALL = { ...BUILT_IN_CATALOGS, 'pt-BR': ptBR, es }
 
 function probe(setupParent?: () => void) {
   let helpers: ReturnType<typeof useLocale> | null = null
@@ -100,9 +103,34 @@ describe('useLocale', () => {
     })
 
     it('reads Portuguese for pt-BR', () => {
-      const l = probe(() => provideLocale({ locale: 'pt-BR', catalogs: BUILT_IN_CATALOGS }))
+      const l = probe(() => provideLocale({ locale: 'pt-BR', catalogs: ALL }))
       expect(l.t('dialog.close')).toBe('Fechar')
       expect(l.t('wizard.stepOf', { step: 2, total: 4 })).toBe('Etapa 2 de 4')
+    })
+
+    it('ships only English built in: an unregistered es falls back to English with one dev warning', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      try {
+        expect(Object.keys(BUILT_IN_CATALOGS)).toEqual(['en'])
+        const l = probe(() => provideLocale({ locale: 'es-AR', catalogs: BUILT_IN_CATALOGS }))
+        expect(l.t('dialog.close')).toBe('Close')
+        probe(() => provideLocale({ locale: 'es-AR', catalogs: BUILT_IN_CATALOGS }))
+        expect(warn).toHaveBeenCalledTimes(1)
+        expect(String(warn.mock.calls[0]?.[0])).toContain('@aziontech/webkit/locales/es')
+      } finally {
+        warn.mockRestore()
+      }
+    })
+
+    it('does not warn for a locale WebKit ships no catalog for', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      try {
+        const l = probe(() => provideLocale({ locale: 'ja', catalogs: BUILT_IN_CATALOGS }))
+        expect(l.t('dialog.close')).toBe('Close')
+        expect(warn).not.toHaveBeenCalled()
+      } finally {
+        warn.mockRestore()
+      }
     })
   })
 
@@ -117,10 +145,10 @@ describe('useLocale', () => {
     })
 
     it('pickCatalog: exact tag, then language, then English', () => {
-      expect(pickCatalog('pt-BR', BUILT_IN_CATALOGS)).toBe(ptBR)
-      expect(pickCatalog('pt-pt', BUILT_IN_CATALOGS)).toBe(ptBR)
-      expect(pickCatalog('en-GB', BUILT_IN_CATALOGS)).toBe(en)
-      expect(pickCatalog('de', BUILT_IN_CATALOGS)).toBe(en)
+      expect(pickCatalog('pt-BR', ALL)).toBe(ptBR)
+      expect(pickCatalog('pt-pt', ALL)).toBe(ptBR)
+      expect(pickCatalog('en-GB', ALL)).toBe(en)
+      expect(pickCatalog('de', ALL)).toBe(en)
     })
 
     it('mergeMessages deep-merges one group without mutating the base', () => {
@@ -175,7 +203,7 @@ describe('useLocale', () => {
     })
 
     it('follows the provider', () => {
-      const { l } = lean(() => provideLocale({ locale: 'pt-BR', catalogs: BUILT_IN_CATALOGS }))
+      const { l } = lean(() => provideLocale({ locale: 'pt-BR', catalogs: ALL }))
       expect(l.locale.value).toBe('pt-BR')
       expect(l.t('wizard.stepOf', { step: 2, total: 4 })).toBe('Etapa 2 de 4')
     })
