@@ -165,14 +165,14 @@ screenshots with the real theme CSS. Specs and matrix:
 
 | Spec               | Pages                                                                                                                                                      | Modes                                                                                    |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `examples.spec.ts` | `/example?path=<dir>/<file>`, the first example of every component                                                                                  | light 1280, dark 1280, light 390                                                         |
+| `examples.spec.ts` | `/example?path=<dir>/<file>`, the first example of every component                                                                                         | light 1280, dark 1280, light 390                                                         |
 | `blocks.spec.ts`   | `/frame/<state>/<id>`, the primary state of every block; every state of `platform/ai/*`                                                                    | light 1280, dark 1280, dark 390; AI blocks light/dark at 320 and 1280 plus right to left |
 | `demos.spec.ts`    | every demo route, plus the flows end to end                                                                                                                | light 1280, dark 1280, dark 390; resource routes also right to left in pt-BR             |
 | `geometry.spec.ts` | styled geometry the unit layer cannot see (table presets, reorder mid-drag beside frozen columns, `OverflowCount` open, `OtpInput` at 320, account pieces) | per test                                                                                 |
 
 Determinism: a fixed clock (2026-11-10 12:00 UTC), `timezoneId: 'UTC'`, `locale: 'en-US'`,
 `reducedMotion: 'reduce'`, `animations: 'disabled'`, fonts awaited, and every request that is not
-to `localhost` aborted. `maxDiffPixelRatio: 0.01`.
+to `localhost` aborted; `streaming` states run on a fake clock advanced 1.5 s. `maxDiffPixels: 100`.
 
 Baselines (`apps/visual/baselines/`) are committed and valid only when rendered in
 `mcr.microsoft.com/playwright:v1.62.0-noble`, the image the CI job runs in. New examples, blocks

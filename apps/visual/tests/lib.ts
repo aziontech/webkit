@@ -20,9 +20,10 @@ export const label = (mode: Mode) =>
 
 export const NOW = new Date('2026-11-10T12:00:00Z')
 
-export async function prepare(page: Page, mode: Mode) {
+export async function prepare(page: Page, mode: Mode, { freeze = false } = {}) {
   await page.setViewportSize({ width: mode.width, height: mode.width < 600 ? 844 : 900 })
-  await page.clock.setFixedTime(NOW)
+  if (freeze) await page.clock.install({ time: NOW })
+  else await page.clock.setFixedTime(NOW)
   await page.route(
     (url) => url.hostname !== 'localhost',
     (route) => route.abort()
@@ -40,6 +41,12 @@ export async function prepare(page: Page, mode: Mode) {
     },
     { theme: mode.theme, dir: mode.dir ?? 'ltr', locale: mode.locale ?? 'en' }
   )
+}
+
+export async function advance(page: Page, ms: number) {
+  await page.waitForLoadState('networkidle')
+  await page.clock.runFor(ms)
+  await page.evaluate(() => document.fonts.ready)
 }
 
 export async function settle(page: Page) {
