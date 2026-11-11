@@ -73,7 +73,11 @@ function namedWebkitImports(sfc) {
   const re = /import\s+[^'"]*?\{([^}]*)\}\s*from\s+['"]@aziontech\/webkit\/[^'"]+['"]/g
   for (const m of String(sfc).matchAll(re)) {
     for (const part of m[1].split(',')) {
-      const local = part.trim().split(/\s+as\s+/).pop().trim()
+      const local = part
+        .trim()
+        .split(/\s+as\s+/)
+        .pop()
+        .trim()
       if (/^[A-Z][a-z]/.test(local)) names.push(local)
     }
   }

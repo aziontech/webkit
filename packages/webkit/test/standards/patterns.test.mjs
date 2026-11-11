@@ -396,7 +396,12 @@ test('checkGuidelines counts named component imports, ignores lowercase tokens a
   const sfc =
     "<script setup>\nimport Drawer from '@aziontech/webkit/drawer'\nimport { toast, Toaster, DEFAULT_THING } from '@aziontech/webkit/toast'\n</script>"
   const ok = checkGuidelines('x/y', {
-    guidelines: md(['### A. Panel — `Drawer` (below `md`)', 'p', '### B. Notices — `Toaster`', 'n']),
+    guidelines: md([
+      '### A. Panel — `Drawer` (below `md`)',
+      'p',
+      '### B. Notices — `Toaster`',
+      'n'
+    ]),
     sfc,
     source: 'blocks/x/y/y.vue',
     primary: 'Default',
