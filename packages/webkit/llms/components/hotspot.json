@@ -1,0 +1,65 @@
+{
+ "name": "hotspot",
+ "binding": "Hotspot",
+ "import": "@aziontech/webkit/hotspot",
+ "treeShakeableImport": "@aziontech/webkit/hotspot",
+ "category": "content",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Marks a real control as a step of a tutorial. It wraps the control and, while a tutorial that names its `hotspotId` runs, draws a small marker beside it. The current step's marker pulses and opens the step in a popover: the step's title, `Step n of N` with the task's name, the instructions, and Previous / Next (Finish on the last step). Outside a running tutorial, or outside a `TutorialPanel.Provider`, it renders only the wrapped control, so hotspots can stay on a page for good.",
+ "setup": null,
+ "useWhen": [
+  "A tutorial step is about one control on the page, and the reader should see where it is.",
+  "The page runs inside a `TutorialPanel.Provider` and offers guided tutorials from its help region."
+ ],
+ "avoidWhen": [
+  "A permanent tip on a control → use `hint` or `popover`.",
+  "A new feature announcement with no tutorial behind it → use `popover` or an `alert`.",
+  "Help text for a form field → use the field's `helper-text`."
+ ],
+ "related": [
+  "tutorial-panel` — the provider holds the steps a hotspot shows; the panel lists and runs the tutorials.",
+  "popover` — the overlay the current step opens in.",
+  "help-panel` — static help without a guided run."
+ ],
+ "bestPractices": [
+  "Wrap exactly the control the step is about; keep the marker beside it, not inside a long row.",
+  "Use `side=\"start\"` when the control sits at the end of a row and the marker would overflow.",
+  "One `hotspotId` per control and per page. The same id on two elements opens two popovers.",
+  "Keep step content short: the popover is a small surface over the real UI."
+ ],
+ "props": [
+  {
+   "name": "hotspotId",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "Matches the `hotspotId` of a tutorial step; the marker shows while that step's tutorial runs."
+  },
+  {
+   "name": "side",
+   "type": "'start' | 'end'",
+   "default": "'end'",
+   "required": "false",
+   "doc": "Which side of the wrapped control the marker sits on, in reading direction."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The real control the step is about."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Hotspot from '@aziontech/webkit/hotspot'\n  import TutorialPanel from '@aziontech/webkit/tutorial-panel'\n  import { ref } from 'vue'\n\n  const tutorials = [\n    {\n      id: 'publish',\n      title: 'Publish a change',\n      tasks: [\n        {\n          title: 'Review and deploy',\n          steps: [\n            {\n              title: 'Preview the change',\n              content: 'Open the preview to check the change before anyone else sees it.',\n              hotspotId: 'preview'\n            },\n            {\n              title: 'Deploy',\n              content: 'Select Deploy to send the change to production.',\n              hotspotId: 'deploy'\n            }\n          ]\n        }\n      ]\n    }\n  ]\n\n  const active = ref('publish')\n  const step = ref(0)\n</script>\n\n<template>\n  <TutorialPanel.Provider\n    v-model:active=\"active\"\n    v-model:step=\"step\"\n    :tutorials=\"tutorials\"\n  >\n    <div class=\"flex min-h-(--container-3xs) flex-wrap items-start gap-(--spacing-sm)\">\n      <Hotspot hotspot-id=\"preview\">\n        <Button\n          label=\"Preview\"\n          kind=\"outlined\"\n          size=\"medium\"\n        />\n      </Hotspot>\n      <Hotspot hotspot-id=\"deploy\">\n        <Button\n          label=\"Deploy\"\n          kind=\"primary\"\n          size=\"medium\"\n        />\n      </Hotspot>\n    </div>\n  </TutorialPanel.Provider>\n</template>"
+  }
+ ],
+ "docs": "components/hotspot.md"
+}

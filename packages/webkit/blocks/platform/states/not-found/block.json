@@ -1,0 +1,49 @@
+{
+  "id": "platform/states/not-found",
+  "name": "NotFound",
+  "title": "Templates/Platform/States/NotFound",
+  "surface": "product",
+  "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: a full-height canvas centring an EmptyState whose figure is the large 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Try again, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` figures.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "404 page",
+    "not found page",
+    "page not found",
+    "403 forbidden page",
+    "access denied page",
+    "500 error page",
+    "server error page",
+    "error page",
+    "resource not found",
+    "página não encontrada",
+    "página de erro",
+    "acesso negado",
+    "erro 404",
+    "erro 500"
+  ],
+  "skills": ["webkit-ui-states", "webkit-errors", "webkit-microcopy"],
+  "primary": {
+    "name": "Default",
+    "file": "not-found.vue"
+  },
+  "variants": [
+    {
+      "name": "Forbidden",
+      "summary": "403: the address exists but the user's role does not include it. The 403 numeral art, You don't have access to this page, what to do (ask an admin, or switch account), and Go to home with Switch account.",
+      "file": "variants/forbidden.vue"
+    },
+    {
+      "name": "ServerError",
+      "summary": "500: the page failed on the server. A warning icon tile in place of the numeral art, Something went wrong on our side, the reassurance that nothing saved was lost, Try again (which reloads and shows its loading state), System status in a new tab, and the error reference to quote to support.",
+      "file": "variants/server-error.vue"
+    },
+    {
+      "name": "ResourceNotFound",
+      "summary": "Inside the console: the route is valid but the record is not (deleted, or a stale link). A bordered EmptyState in the content column names the resource and its ID, says why it may be missing, and offers Back to services.",
+      "file": "variants/resource-not-found.vue"
+    }
+  ]
+}

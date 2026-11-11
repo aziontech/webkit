@@ -1,5 +1,10 @@
 [
   {
+    "name": "app-layout",
+    "path": "src/components/layout/app-layout/app-layout.vue",
+    "limit": "23 KB"
+  },
+  {
     "name": "browser-frame",
     "path": "src/components/content/browser-frame/browser-frame.vue",
     "limit": "12.1 KB"
@@ -679,7 +684,7 @@
   {
     "name": "chart-card",
     "path": "src/components/chart/chart-card/index.ts",
-    "limit": "4.7 KB"
+    "limit": "4.75 KB"
   },
   {
     "name": "chart-card-root",
@@ -695,6 +700,11 @@
     "name": "chart-card-resize-handle",
     "path": "src/components/chart/chart-card/chart-card-resize-handle/chart-card-resize-handle.vue",
     "limit": "2.45 KB"
+  },
+  {
+    "name": "board",
+    "path": "src/components/layout/board/index.ts",
+    "limit": "3.5 KB"
   },
   {
     "name": "bar-list",
@@ -715,6 +725,31 @@
     "name": "severity-tag",
     "path": "src/components/content/severity-tag/severity-tag.vue",
     "limit": "1.65 KB"
+  },
+  {
+    "name": "error-boundary",
+    "path": "src/components/feedback/error-boundary/error-boundary.vue",
+    "limit": "6.5 KB"
+  },
+  {
+    "name": "hotspot",
+    "path": "src/components/content/hotspot/hotspot.vue",
+    "limit": "11.25 KB"
+  },
+  {
+    "name": "tutorial-panel",
+    "path": "src/components/content/tutorial-panel/index.ts",
+    "limit": "8.75 KB"
+  },
+  {
+    "name": "tutorial-panel-root",
+    "path": "src/components/content/tutorial-panel/tutorial-panel.vue",
+    "limit": "8 KB"
+  },
+  {
+    "name": "tutorial-panel-provider",
+    "path": "src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue",
+    "limit": "1.1 KB"
   },
   {
     "name": "help-panel",
@@ -899,7 +934,7 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "13.3 KB"
+    "limit": "14.4 KB"
   },
   {
     "name": "phone-input",

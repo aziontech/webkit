@@ -6240,6 +6240,220 @@
    "treeShakeableImport": "@aziontech/webkit/help-panel-task",
    "surface": "product"
   },
+  "hotspot": {
+   "import": "@aziontech/webkit/hotspot",
+   "target": "./src/components/content/hotspot/hotspot.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/hotspot",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "hotspotId",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "Matches the `hotspotId` of a tutorial step; the marker shows while that step's tutorial runs."
+    },
+    {
+     "name": "side",
+     "type": "'start' | 'end'",
+     "default": "'end'",
+     "required": "false",
+     "doc": "Which side of the wrapped control the marker sits on, in reading direction."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The real control the step is about."
+    }
+   ],
+   "purpose": "Marks a real control as a step of a tutorial. It wraps the control and, while a tutorial that names its `hotspotId` runs, draws a small marker beside it. The current step's marker pulses and opens the step in a popover: the step's title, `Step n of N` with the task's name, the instructions, and Previous / Next (Finish on the last step). Outside a running tutorial, or outside a `TutorialPanel.Provider`, it renders only the wrapped control, so hotspots can stay on a page for good.",
+   "useWhen": [
+    "A tutorial step is about one control on the page, and the reader should see where it is.",
+    "The page runs inside a `TutorialPanel.Provider` and offers guided tutorials from its help region."
+   ],
+   "avoidWhen": [
+    "A permanent tip on a control → use `hint` or `popover`.",
+    "A new feature announcement with no tutorial behind it → use `popover` or an `alert`.",
+    "Help text for a form field → use the field's `helper-text`."
+   ],
+   "related": [
+    "tutorial-panel` — the provider holds the steps a hotspot shows; the panel lists and runs the tutorials.",
+    "popover` — the overlay the current step opens in.",
+    "help-panel` — static help without a guided run."
+   ],
+   "bestPractices": [
+    "Wrap exactly the control the step is about; keep the marker beside it, not inside a long row.",
+    "Use `side=\"start\"` when the control sits at the end of a row and the marker would overflow.",
+    "One `hotspotId` per control and per page. The same id on two elements opens two popovers.",
+    "Keep step content short: the popover is a small surface over the real UI."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/hotspot.json"
+  },
+  "tutorial-panel": {
+   "import": "@aziontech/webkit/tutorial-panel",
+   "target": "./src/components/content/tutorial-panel/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/tutorial-panel-root",
+   "subcomponents": [
+    "@aziontech/webkit/tutorial-panel-provider"
+   ],
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The panel's heading. Empty uses the locale catalog (`Tutorials`)."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One line under the heading. Empty uses the locale catalog."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name for the panel's landmark. Empty uses the title."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders skeleton lines in place of the content while the tutorials load."
+    }
+   ],
+   "slots": [
+    {
+     "name": "completion",
+     "scope": "{ tutorial: Tutorial }",
+     "notes": "Extra content on the completion screen, such as a feedback link."
+    }
+   ],
+   "purpose": "The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`. The panel draws its views from `HelpPanel` parts (`Header`, `Tutorial`, `Task`), so a tutorial looks the same whether a product shows a static checklist with `HelpPanel.Tutorial` or a guided run with `TutorialPanel`. Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.",
+   "useWhen": [
+    "A reader learns a product task by doing it on the real screen, step by step, with the instructions pointing at the control they need next.",
+    "A product offers several tutorials in its help region and records which ones the reader finished.",
+    "A first-run or onboarding flow guides the reader through a real create and deploy, not a mock."
+   ],
+   "avoidWhen": [
+    "Static help beside the page, with no guided run → use `help-panel` (a `HelpPanel.Tutorial` checklist when the owner only reports progress).",
+    "A multi-step create flow whose steps are forms in one surface → use `wizard`.",
+    "Ordered steps the reader navigates inside a page → use `stepper`.",
+    "A single tip pinned to one control → use `popover` or `hint`.",
+    "An empty page that needs one call to action → use `empty-state`."
+   ],
+   "related": [
+    "hotspot` — the marker beside a real control; the current step opens from it. Every step names one by `hotspotId`.",
+    "help-panel` — the parts the panel draws with; use it alone for help without a guided run.",
+    "popover` — what a hotspot opens; the step's title, content and Previous / Next live in it.",
+    "drawer` — the host of the tools region on narrow screens; the panel goes inside it."
+   ],
+   "bestPractices": [
+    "Wrap the whole page in `TutorialPanel.Provider`, so the panel and every hotspot share one state.",
+    "Keep tutorials as data (`Tutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.",
+    "One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.",
+    "Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.",
+    "Set `completed` on a tutorial from what the product recorded (the `finish` event), not from a click.",
+    "Bind `v-model:active` and `v-model:step` and persist them when a tutorial must survive a navigation."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/tutorial-panel.json"
+  },
+  "tutorial-panel-root": {
+   "import": "@aziontech/webkit/tutorial-panel-root",
+   "target": "./src/components/content/tutorial-panel/tutorial-panel.vue",
+   "kind": "root",
+   "rootOf": "tutorial-panel",
+   "treeShakeableImport": "@aziontech/webkit/tutorial-panel-root",
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The panel's heading. Empty uses the locale catalog (`Tutorials`)."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One line under the heading. Empty uses the locale catalog."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name for the panel's landmark. Empty uses the title."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders skeleton lines in place of the content while the tutorials load."
+    }
+   ],
+   "slots": [
+    {
+     "name": "completion",
+     "scope": "{ tutorial: Tutorial }",
+     "notes": "Extra content on the completion screen, such as a feedback link."
+    }
+   ],
+   "purpose": "The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`. The panel draws its views from `HelpPanel` parts (`Header`, `Tutorial`, `Task`), so a tutorial looks the same whether a product shows a static checklist with `HelpPanel.Tutorial` or a guided run with `TutorialPanel`. Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.",
+   "useWhen": [
+    "A reader learns a product task by doing it on the real screen, step by step, with the instructions pointing at the control they need next.",
+    "A product offers several tutorials in its help region and records which ones the reader finished.",
+    "A first-run or onboarding flow guides the reader through a real create and deploy, not a mock."
+   ],
+   "avoidWhen": [
+    "Static help beside the page, with no guided run → use `help-panel` (a `HelpPanel.Tutorial` checklist when the owner only reports progress).",
+    "A multi-step create flow whose steps are forms in one surface → use `wizard`.",
+    "Ordered steps the reader navigates inside a page → use `stepper`.",
+    "A single tip pinned to one control → use `popover` or `hint`.",
+    "An empty page that needs one call to action → use `empty-state`."
+   ],
+   "related": [
+    "hotspot` — the marker beside a real control; the current step opens from it. Every step names one by `hotspotId`.",
+    "help-panel` — the parts the panel draws with; use it alone for help without a guided run.",
+    "popover` — what a hotspot opens; the step's title, content and Previous / Next live in it.",
+    "drawer` — the host of the tools region on narrow screens; the panel goes inside it."
+   ],
+   "bestPractices": [
+    "Wrap the whole page in `TutorialPanel.Provider`, so the panel and every hotspot share one state.",
+    "Keep tutorials as data (`Tutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.",
+    "One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.",
+    "Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.",
+    "Set `completed` on a tutorial from what the product recorded (the `finish` event), not from a click.",
+    "Bind `v-model:active` and `v-model:step` and persist them when a tutorial must survive a navigation."
+   ],
+   "surface": "product"
+  },
+  "tutorial-panel-provider": {
+   "import": "@aziontech/webkit/tutorial-panel-provider",
+   "target": "./src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue",
+   "kind": "subcomponent",
+   "parent": "tutorial-panel",
+   "treeShakeableImport": "@aziontech/webkit/tutorial-panel-provider",
+   "surface": "product"
+  },
   "hero-title": {
    "import": "@aziontech/webkit/hero-title",
    "target": "./src/components/marketing/hero/hero-title/hero-title.vue",
@@ -10714,6 +10928,103 @@
    "surface": "product",
    "examplesFile": "catalog/examples/empty-state.json"
   },
+  "error-boundary": {
+   "import": "@aziontech/webkit/error-boundary",
+   "target": "./src/components/feedback/error-boundary/error-boundary.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/error-boundary",
+   "category": "feedback",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Heading of the built-in fallback. Empty uses the locale catalog (`This section failed to load`)."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Sentence under the heading of the built-in fallback. Empty uses the locale catalog."
+    },
+    {
+     "name": "retryLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Label of the built-in Retry action. Empty uses the locale catalog (`Try again`)."
+    },
+    {
+     "name": "resetKey",
+     "type": "string | number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "When this value changes while the fallback shows, the region is mounted again (pass the route path or the record id)."
+    },
+    {
+     "name": "propagate",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "When true, the error keeps travelling to the parent boundaries and the app error handler after this boundary handles it."
+    }
+   ],
+   "events": [
+    {
+     "name": "error",
+     "payload": "ErrorBoundaryErrorEvent",
+     "notes": "Fires once per failure with `{ error, info }`: what was thrown and Vue's description of where. Report it from here."
+    },
+    {
+     "name": "retry",
+     "payload": "void",
+     "notes": "Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The region the boundary guards. Mounted again, from scratch, on every retry."
+    },
+    {
+     "name": "fallback",
+     "scope": "{ error: unknown, retry: () => void }",
+     "notes": "Replaces the built-in `Alert` while the region is failed. Call `retry` to mount it again."
+    }
+   ],
+   "purpose": "Guards one region of a page. When a component inside the region throws while it renders, sets up or runs a lifecycle hook, the boundary catches the error, reports it through its `error` event, and puts a recoverable message in the region's place: a danger `Alert` that says the section failed and offers **Try again**, which mounts the region again. The rest of the page keeps working. A `fallback` slot replaces the built-in message when the region needs a different shape (a card-sized `EmptyState`, for example).",
+   "useWhen": [
+    "A dashboard card, a side panel, a tab body or any region whose failure should not take the whole page down.",
+    "A region that renders data you do not control (a third-party widget, a chart fed by a remote response, a plugin).",
+    "Around each route's content inside the app shell, so a failing page leaves the navigation usable (pass the route path as `resetKey`).",
+    "When the app reports render errors to a monitoring service: the `error` event carries the error and where it was thrown."
+   ],
+   "avoidWhen": [
+    "A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `platform/states/form-error` and `skills/webkit-ui-states` describe.",
+    "A whole page that cannot be shown (missing route, no access, server failure) → use the `platform/states/not-found` block.",
+    "A field that failed validation → use `field` with its error message.",
+    "Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`."
+   ],
+   "related": [
+    "alert` — the built-in fallback; also what a failed request shows inside a region that rendered fine.",
+    "empty-state` — a common custom fallback for a card-sized region.",
+    "skeleton` — what the region shows while it loads; the boundary only covers the failed case.",
+    "toast` — reports the outcome of an action; never use it for a region that failed to render."
+   ],
+   "bestPractices": [
+    "Wrap regions, not the whole app. One boundary per card, panel or route body keeps the blast radius small.",
+    "Report every error: listen to `error` and send it to your monitoring service. The boundary stops the error from reaching the app error handler unless `propagate` is set.",
+    "Make Retry mean something. Listen to `retry` and reset the state that broke the region (refetch, clear the bad value) before it mounts again; a retry that renders the same bad data fails again.",
+    "Pass `resetKey` when the region shows different content for different keys (route path, record id), so moving on from a failed record clears the fallback.",
+    "Keep the fallback the size of the region. In a card, use a small `EmptyState`; in a page body, the built-in `Alert` is right."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/error-boundary.json"
+  },
   "status-indicator": {
    "import": "@aziontech/webkit/status-indicator",
    "target": "./src/components/feedback/status-indicator/status-indicator.vue",
@@ -14611,6 +14922,409 @@
    ],
    "surface": "marketing",
    "examplesFile": "catalog/examples/section-gap.json"
+  },
+  "app-layout": {
+   "import": "@aziontech/webkit/app-layout",
+   "target": "./src/components/layout/app-layout/app-layout.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/app-layout",
+   "category": "layout",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "navigationOpen",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Whether the navigation region shows beside the content. Use with `v-model:navigation-open`. Not used while compact."
+    },
+    {
+     "name": "navigationLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`)."
+    },
+    {
+     "name": "toolsOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Whether the tools region (help) is open; while compact it drives the tools drawer. Use with `v-model:tools-open`."
+    },
+    {
+     "name": "toolsLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`)."
+    },
+    {
+     "name": "toolsWidth",
+     "type": "number",
+     "default": "320",
+     "required": "false",
+     "doc": "Width of the tools region in pixels while not compact."
+    },
+    {
+     "name": "splitPanelOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Whether the split panel is open. Use with `v-model:split-panel-open`."
+    },
+    {
+     "name": "splitPanelPosition",
+     "type": "'bottom' | 'side'",
+     "default": "'bottom'",
+     "required": "false",
+     "doc": "Where the split panel sits: under the content or beside it. Use with `v-model:split-panel-position`. Bottom while compact."
+    },
+    {
+     "name": "splitPanelSize",
+     "type": "number",
+     "default": "320",
+     "required": "false",
+     "doc": "Height (bottom) or width (side) of the split panel in pixels. Use with `v-model:split-panel-size`."
+    },
+    {
+     "name": "splitPanelTitle",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Title of the split panel, shown in its header. Empty uses the locale catalog (`Details`)."
+    },
+    {
+     "name": "storageKey",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "When set, the split panel size and position and the navigation and tools open state are kept in `localStorage` under it."
+    },
+    {
+     "name": "compactBelow",
+     "type": "number",
+     "default": "768",
+     "required": "false",
+     "doc": "Width of the layout itself, in pixels, under which navigation and tools become drawers and the split panel moves down."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:navigationOpen",
+     "payload": "boolean",
+     "notes": "v-model:navigation-open."
+    },
+    {
+     "name": "update:toolsOpen",
+     "payload": "boolean",
+     "notes": "v-model:tools-open."
+    },
+    {
+     "name": "update:splitPanelOpen",
+     "payload": "boolean",
+     "notes": "v-model:split-panel-open."
+    },
+    {
+     "name": "update:splitPanelPosition",
+     "payload": "'bottom' | 'side'",
+     "notes": "v-model:split-panel-position."
+    },
+    {
+     "name": "update:splitPanelSize",
+     "payload": "number",
+     "notes": "v-model:split-panel-size; on every step."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The page content (the consumer's `<main>`). Scrolls on its own."
+    },
+    {
+     "name": "navigation",
+     "scope": "{ drawer: boolean }",
+     "notes": "The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact."
+    },
+    {
+     "name": "header",
+     "scope": "{ compact: boolean, openNavigation: () => void, toggleNavigation: () => void, toggleTools: () => void }",
+     "notes": "The global header, above content, tools and split panel."
+    },
+    {
+     "name": "notifications",
+     "scope": "—",
+     "notes": "Flash messages (`Alert`) above the breadcrumbs and the content; stays in place while content scrolls."
+    },
+    {
+     "name": "breadcrumbs",
+     "scope": "—",
+     "notes": "Breadcrumbs above the content, inside the scroll area."
+    },
+    {
+     "name": "tools",
+     "scope": "—",
+     "notes": "The tools region's body, usually a `HelpPanel`."
+    },
+    {
+     "name": "split-panel",
+     "scope": "—",
+     "notes": "The split panel's body."
+    }
+   ],
+   "purpose": "The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shells/console` block) keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the frame to `AppLayout`.",
+   "useWhen": [
+    "A product shell needs a navigation rail, a global header and a scrolling content area that turn into a drawer-based layout on phones.",
+    "A page offers contextual help beside the work (`HelpPanel` in the tools region) that the reader opens and closes.",
+    "A list or table needs a resizable detail panel under it or beside it (the split panel), showing the selected item without leaving the page.",
+    "Page-level flash messages (`Alert`) must sit above the content and stay visible while the content scrolls."
+   ],
+   "avoidWhen": [
+    "A single resizable split inside a page, with no shell around it → use `resizable`.",
+    "A navigation rail on its own (resize, collapse, footer) → use `sidebar`; put it in the `navigation` slot.",
+    "A one-off overlay for a task (a create form, a detail preview) → use `drawer`.",
+    "Marketing and documentation pages → use the `shells/website` and `shells/documentation` blocks."
+   ],
+   "related": [
+    "sidebar` — the navigation rail that goes in the `navigation` slot; it owns its own width, resize and collapse.",
+    "global-header` — the bar that goes in the `header` slot.",
+    "help-panel` — the content of the tools region.",
+    "drawer` — what the navigation and tools regions become below `compactBelow`.",
+    "resizable` — a split between panes inside a page, without the shell.",
+    "alert` — the flash messages composed into the `notifications` slot."
+   ],
+   "bestPractices": [
+    "One `AppLayout` per page, at the root. Do not nest them.",
+    "Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer.",
+    "Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.",
+    "Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.",
+    "Use the split panel for the selected item of a collection. Close it when the selection clears.",
+    "Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.",
+    "Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/app-layout.json"
+  },
+  "board": {
+   "import": "@aziontech/webkit/board",
+   "target": "./src/components/layout/board/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/board-root",
+   "subcomponents": [
+    "@aziontech/webkit/board-item"
+   ],
+   "category": "layout",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "columns",
+     "type": "number",
+     "default": "12",
+     "required": "false",
+     "doc": "Columns of the grid in a wide container; one column below `@3xl`."
+    },
+    {
+     "name": "minSpan",
+     "type": "number",
+     "default": "3",
+     "required": "false",
+     "doc": "Fewest columns an item may span."
+    },
+    {
+     "name": "maxSpan",
+     "type": "number",
+     "default": "12",
+     "required": "false",
+     "doc": "Most columns an item may span; capped at `columns`."
+    },
+    {
+     "name": "minHeight",
+     "type": "number",
+     "default": "240",
+     "required": "false",
+     "doc": "Smallest height in pixels a resize allows."
+    },
+    {
+     "name": "maxHeight",
+     "type": "number",
+     "default": "960",
+     "required": "false",
+     "doc": "Largest height in pixels a resize allows."
+    },
+    {
+     "name": "editing",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the drag and resize handles of every card and lets the reader rearrange the board."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "item-move",
+     "payload": "{ id: string; from: number; to: number }",
+     "notes": "An item moved, by drop or by the keyboard; zero-based."
+    },
+    {
+     "name": "item-resize",
+     "payload": "{ id: string; span: number; height: number | undefined }",
+     "notes": "A resize ended (pointer up or a resize key on the corner)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "One `Board.Item` per layout entry, in layout order."
+    }
+   ],
+   "purpose": "A configurable dashboard grid: the reader arranges the cards. `Board` owns the layout, an array of `{ id, span, height? }` bound with `v-model:layout`, and lays one `Board.Item` per entry on a column grid that collapses to one column in a narrow container. While `editing`, the `ChartCard` inside each item shows its drag handle and resize corner, and those handles report to the board instead of to the page: drag a card onto another or press the arrow keys on its handle to reorder, drag its corner or press the arrow keys on it to resize. Every move and resize is clamped, written back to the layout and announced in a polite live region. Taken from Cloudscape's board and board item, on top of the existing `ChartCard` handles.",
+   "useWhen": [
+    "A dashboard whose reader chooses the order and the size of its cards, and the product keeps that layout as a preference.",
+    "A grid of cards that must be reorderable from the keyboard and announced to screen readers, not only by mouse."
+   ],
+   "avoidWhen": [
+    "A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `platform/dashboard/analytics-dashboard` block).",
+    "Two or three panes whose boundary the reader drags → use `resizable`.",
+    "Reordering the rows of a list or a table → use the table's reorderable rows or `pick-list`.",
+    "A grid of resources the reader selects, not arranges → use `cards`."
+   ],
+   "related": [
+    "chart-card` — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.",
+    "resizable` — split panes with a draggable divider, not a grid of cards.",
+    "cards` — a selectable collection of item cards with a fixed layout.",
+    "page-header` — the title over the board, with the Edit layout and Reset layout actions beside it."
+   ],
+   "bestPractices": [
+    "Keep the layout in the page and persist it wherever the product stores preferences; the board never stores it.",
+    "Offer an explicit Edit layout toggle (`aria-pressed`) and turn `editing` on with it, so handles do not crowd the read-only view.",
+    "Give every `Board.Item` a `label` (the card's title): it is the name the live region announces.",
+    "Offer Reset layout once the layout differs from the default.",
+    "Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/board.json"
+  },
+  "board-root": {
+   "import": "@aziontech/webkit/board-root",
+   "target": "./src/components/layout/board/board.vue",
+   "kind": "root",
+   "rootOf": "board",
+   "treeShakeableImport": "@aziontech/webkit/board-root",
+   "category": "layout",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "columns",
+     "type": "number",
+     "default": "12",
+     "required": "false",
+     "doc": "Columns of the grid in a wide container; one column below `@3xl`."
+    },
+    {
+     "name": "minSpan",
+     "type": "number",
+     "default": "3",
+     "required": "false",
+     "doc": "Fewest columns an item may span."
+    },
+    {
+     "name": "maxSpan",
+     "type": "number",
+     "default": "12",
+     "required": "false",
+     "doc": "Most columns an item may span; capped at `columns`."
+    },
+    {
+     "name": "minHeight",
+     "type": "number",
+     "default": "240",
+     "required": "false",
+     "doc": "Smallest height in pixels a resize allows."
+    },
+    {
+     "name": "maxHeight",
+     "type": "number",
+     "default": "960",
+     "required": "false",
+     "doc": "Largest height in pixels a resize allows."
+    },
+    {
+     "name": "editing",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the drag and resize handles of every card and lets the reader rearrange the board."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "item-move",
+     "payload": "{ id: string; from: number; to: number }",
+     "notes": "An item moved, by drop or by the keyboard; zero-based."
+    },
+    {
+     "name": "item-resize",
+     "payload": "{ id: string; span: number; height: number | undefined }",
+     "notes": "A resize ended (pointer up or a resize key on the corner)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "One `Board.Item` per layout entry, in layout order."
+    }
+   ],
+   "purpose": "A configurable dashboard grid: the reader arranges the cards. `Board` owns the layout, an array of `{ id, span, height? }` bound with `v-model:layout`, and lays one `Board.Item` per entry on a column grid that collapses to one column in a narrow container. While `editing`, the `ChartCard` inside each item shows its drag handle and resize corner, and those handles report to the board instead of to the page: drag a card onto another or press the arrow keys on its handle to reorder, drag its corner or press the arrow keys on it to resize. Every move and resize is clamped, written back to the layout and announced in a polite live region. Taken from Cloudscape's board and board item, on top of the existing `ChartCard` handles.",
+   "useWhen": [
+    "A dashboard whose reader chooses the order and the size of its cards, and the product keeps that layout as a preference.",
+    "A grid of cards that must be reorderable from the keyboard and announced to screen readers, not only by mouse."
+   ],
+   "avoidWhen": [
+    "A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `platform/dashboard/analytics-dashboard` block).",
+    "Two or three panes whose boundary the reader drags → use `resizable`.",
+    "Reordering the rows of a list or a table → use the table's reorderable rows or `pick-list`.",
+    "A grid of resources the reader selects, not arranges → use `cards`."
+   ],
+   "related": [
+    "chart-card` — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.",
+    "resizable` — split panes with a draggable divider, not a grid of cards.",
+    "cards` — a selectable collection of item cards with a fixed layout.",
+    "page-header` — the title over the board, with the Edit layout and Reset layout actions beside it."
+   ],
+   "bestPractices": [
+    "Keep the layout in the page and persist it wherever the product stores preferences; the board never stores it.",
+    "Offer an explicit Edit layout toggle (`aria-pressed`) and turn `editing` on with it, so handles do not crowd the read-only view.",
+    "Give every `Board.Item` a `label` (the card's title): it is the name the live region announces.",
+    "Offer Reset layout once the layout differs from the default.",
+    "Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable."
+   ],
+   "surface": "product"
+  },
+  "board-item": {
+   "import": "@aziontech/webkit/board-item",
+   "target": "./src/components/layout/board/board-item/board-item.vue",
+   "kind": "subcomponent",
+   "parent": "board",
+   "treeShakeableImport": "@aziontech/webkit/board-item",
+   "surface": "product"
   },
   "resizable": {
    "import": "@aziontech/webkit/resizable",
@@ -29625,13 +30339,15 @@
    "title": "Templates/Platform/Dashboard/ConfigurableDashboard",
    "source": "blocks/platform/dashboard/configurable-dashboard/configurable-dashboard.vue",
    "surface": "product",
-   "summary": "A configurable dashboard: the reader arranges the cards. An Edit layout Button turns on the ChartCard drag handle and resize corner on every card of a 12-column grid; a card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. The page owns the layout, an array of id, span and height bound with v-model:span and v-model:height, and the order, which it changes on drop or on the arrow keys of a focused drag handle, then puts focus back on the moved handle and announces the move in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `ChartCard` (with its drag handle and resize corner), `Chart`, `DonutChart`, `BarList`, `Hint`, `Tag` and `Button`.",
+   "summary": "A configurable dashboard: the reader arranges the cards. The page binds its layout, an array of id, span and height in order, to a Board with v-model:layout; an Edit layout Button turns on the board's editing, which shows the ChartCard drag handle and resize corner on every card. A card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels; the board is twelve columns wide from a 48rem container and one column below it. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. Drop a card on another or press the arrow keys on its handle to move it; the board puts focus back on the moved handle and announces every move and resize in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `Button`, `Board`, `ChartCard` (with its drag handle and resize corner), `Hint`, `Tag`, `DonutChart`, `BarList` and `Chart`.",
    "intents": [
     "configurable dashboard",
     "custom dashboard",
     "drag and drop dashboard",
     "resizable cards",
     "edit layout",
+    "board",
+    "dashboard grid",
     "dashboard builder",
     "painel configurável",
     "painel personalizado",
@@ -29645,6 +30361,7 @@
    "components": [
     "Alert",
     "BarList",
+    "Board",
     "Button",
     "Chart",
     "ChartCard",
@@ -29656,6 +30373,7 @@
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/bar-list",
+    "@aziontech/webkit/board",
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
@@ -29665,7 +30383,7 @@
     "@aziontech/webkit/tag"
    ],
    "primary": "Default",
-   "guidelinesSummary": "A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it is, and keep that layout. It serves readers who come back to the same page every day and care about different cards than the default puts first. The page owns the layout (an array of id, span and height) and the order; `ChartCard` provides the drag handle, the resize corner and their keyboard model.",
+   "guidelinesSummary": "A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it is, and keep that layout. It serves readers who come back to the same page every day and care about different cards than the default puts first. The page owns the layout (an array of id, span and height, in order) and binds it to `Board`, which moves, resizes, clamps and announces; the `ChartCard` inside each `Board.Item` provides the drag handle and the resize corner.",
    "variants": [
     {
      "name": "Editing",
@@ -32088,6 +32806,63 @@
    ],
    "file": "catalog/patterns/platform/states/form-validation.json"
   },
+  "platform/states/not-found": {
+   "name": "NotFound",
+   "title": "Templates/Platform/States/NotFound",
+   "source": "blocks/platform/states/not-found/not-found.vue",
+   "surface": "product",
+   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: a full-height canvas centring an EmptyState whose figure is the large 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Try again, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` figures.",
+   "intents": [
+    "404 page",
+    "not found page",
+    "page not found",
+    "403 forbidden page",
+    "access denied page",
+    "500 error page",
+    "server error page",
+    "error page",
+    "resource not found",
+    "página não encontrada",
+    "página de erro",
+    "acesso negado",
+    "erro 404",
+    "erro 500"
+   ],
+   "skills": [
+    "webkit-ui-states",
+    "webkit-errors",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Button",
+    "EmptyState",
+    "Error403",
+    "Error404"
+   ],
+   "imports": [
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/svg/error-403",
+    "@aziontech/webkit/svg/error-404"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words.",
+   "variants": [
+    {
+     "name": "Forbidden",
+     "summary": "403: the address exists but the user's role does not include it. The 403 numeral art, You don't have access to this page, what to do (ask an admin, or switch account), and Go to home with Switch account."
+    },
+    {
+     "name": "ServerError",
+     "summary": "500: the page failed on the server. A warning icon tile in place of the numeral art, Something went wrong on our side, the reassurance that nothing saved was lost, Try again (which reloads and shows its loading state), System status in a new tab, and the error reference to quote to support."
+    },
+    {
+     "name": "ResourceNotFound",
+     "summary": "Inside the console: the route is valid but the record is not (deleted, or a stale link). A bordered EmptyState in the content column names the resource and its ID, says why it may be missing, and offers Back to services."
+    }
+   ],
+   "file": "catalog/patterns/platform/states/not-found.json"
+  },
   "platform/states/page-wires": {
    "name": "PageWires",
    "title": "Templates/Platform/States/PageWires",
@@ -32773,14 +33548,22 @@
     "menu lateral",
     "console",
     "console layout",
-    "layout do console"
+    "layout do console",
+    "notifications panel",
+    "notifications drawer",
+    "notification center",
+    "central de notificações",
+    "painel de notificações"
    ],
    "skills": [
     "webkit-navigation",
     "webkit-layout"
    ],
    "components": [
+    "Alert",
+    "AppLayout",
     "Avatar",
+    "Badge",
     "Brand",
     "Breadcrumb",
     "Button",
@@ -32792,6 +33575,7 @@
     "DrawerOverlay",
     "DrawerPortal",
     "DropdownMenu",
+    "EmptyState",
     "GlobalHeader",
     "IconButton",
     "Input",
@@ -32807,7 +33591,10 @@
     "Tooltip"
    ],
    "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/app-layout",
     "@aziontech/webkit/avatar",
+    "@aziontech/webkit/badge",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb",
     "@aziontech/webkit/button",
@@ -32819,6 +33606,7 @@
     "@aziontech/webkit/drawer-overlay",
     "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/empty-state",
     "@aziontech/webkit/global-header",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
@@ -32839,6 +33627,10 @@
     {
      "name": "DetailPage",
      "summary": "A resource detail page: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it."
+    },
+    {
+     "name": "Notifications",
+     "summary": "The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up."
     }
    ],
    "file": "catalog/patterns/shells/console.json"

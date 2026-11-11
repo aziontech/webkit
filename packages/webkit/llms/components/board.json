@@ -1,0 +1,120 @@
+{
+ "name": "board",
+ "binding": "Board",
+ "import": "@aziontech/webkit/board",
+ "treeShakeableImport": "@aziontech/webkit/board-root",
+ "category": "layout",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/board-item"
+ ],
+ "purpose": "A configurable dashboard grid: the reader arranges the cards. `Board` owns the layout, an array of `{ id, span, height? }` bound with `v-model:layout`, and lays one `Board.Item` per entry on a column grid that collapses to one column in a narrow container. While `editing`, the `ChartCard` inside each item shows its drag handle and resize corner, and those handles report to the board instead of to the page: drag a card onto another or press the arrow keys on its handle to reorder, drag its corner or press the arrow keys on it to resize. Every move and resize is clamped, written back to the layout and announced in a polite live region. Taken from Cloudscape's board and board item, on top of the existing `ChartCard` handles.",
+ "setup": null,
+ "useWhen": [
+  "A dashboard whose reader chooses the order and the size of its cards, and the product keeps that layout as a preference.",
+  "A grid of cards that must be reorderable from the keyboard and announced to screen readers, not only by mouse."
+ ],
+ "avoidWhen": [
+  "A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `platform/dashboard/analytics-dashboard` block).",
+  "Two or three panes whose boundary the reader drags → use `resizable`.",
+  "Reordering the rows of a list or a table → use the table's reorderable rows or `pick-list`.",
+  "A grid of resources the reader selects, not arranges → use `cards`."
+ ],
+ "related": [
+  "chart-card` — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.",
+  "resizable` — split panes with a draggable divider, not a grid of cards.",
+  "cards` — a selectable collection of item cards with a fixed layout.",
+  "page-header` — the title over the board, with the Edit layout and Reset layout actions beside it."
+ ],
+ "bestPractices": [
+  "Keep the layout in the page and persist it wherever the product stores preferences; the board never stores it.",
+  "Offer an explicit Edit layout toggle (`aria-pressed`) and turn `editing` on with it, so handles do not crowd the read-only view.",
+  "Give every `Board.Item` a `label` (the card's title): it is the name the live region announces.",
+  "Offer Reset layout once the layout differs from the default.",
+  "Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable."
+ ],
+ "props": [
+  {
+   "name": "columns",
+   "type": "number",
+   "default": "12",
+   "required": "false",
+   "doc": "Columns of the grid in a wide container; one column below `@3xl`."
+  },
+  {
+   "name": "minSpan",
+   "type": "number",
+   "default": "3",
+   "required": "false",
+   "doc": "Fewest columns an item may span."
+  },
+  {
+   "name": "maxSpan",
+   "type": "number",
+   "default": "12",
+   "required": "false",
+   "doc": "Most columns an item may span; capped at `columns`."
+  },
+  {
+   "name": "minHeight",
+   "type": "number",
+   "default": "240",
+   "required": "false",
+   "doc": "Smallest height in pixels a resize allows."
+  },
+  {
+   "name": "maxHeight",
+   "type": "number",
+   "default": "960",
+   "required": "false",
+   "doc": "Largest height in pixels a resize allows."
+  },
+  {
+   "name": "editing",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the drag and resize handles of every card and lets the reader rearrange the board."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "item-move",
+   "payload": "{ id: string; from: number; to: number }",
+   "notes": "An item moved, by drop or by the keyboard; zero-based."
+  },
+  {
+   "name": "item-resize",
+   "payload": "{ id: string; span: number; height: number | undefined }",
+   "notes": "A resize ended (pointer up or a resize key on the corner)."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "One `Board.Item` per layout entry, in layout order."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Board from '@aziontech/webkit/board'\n  import ChartCard from '@aziontech/webkit/chart-card'\n  import StatTile from '@aziontech/webkit/stat-tile'\n  import { ref } from 'vue'\n\n  const tiles = {\n    requests: {\n      title: 'Requests',\n      value: 24910000,\n      unit: '',\n      delta: 4.2,\n      inverse: false,\n      trend: [1.9, 1.8, 1.9, 1.6, 1.8, 1.7, 2.2, 2.2, 2.3, 2.4, 2.5, 2.3]\n    },\n    bandwidth: {\n      title: 'Data transferred',\n      value: 1.2,\n      unit: 'TB',\n      delta: 1.8,\n      inverse: false,\n      trend: [7.5, 8.7, 8.9, 10.2, 10.5, 10.6, 10, 9.8, 10.4, 8.6, 7.4, 8]\n    },\n    errors: {\n      title: 'Error rate',\n      value: 0.41,\n      unit: '%',\n      delta: -0.3,\n      inverse: true,\n      trend: [0.5, 0.48, 0.52, 0.47, 0.45, 0.44, 0.46, 0.43, 0.42, 0.44, 0.41, 0.41]\n    },\n    latency: {\n      title: 'Response time p95',\n      value: 182,\n      unit: 'ms',\n      delta: -3.2,\n      inverse: true,\n      trend: [166, 167, 151, 172, 200, 191, 205, 208, 205, 182, 165, 175]\n    }\n  }\n\n  const layout = ref([\n    { id: 'requests', span: 6 },\n    { id: 'bandwidth', span: 6 },\n    { id: 'errors', span: 4 },\n    { id: 'latency', span: 8 }\n  ])\n</script>\n\n<template>\n  <Board v-model:layout=\"layout\">\n    <Board.Item\n      v-for=\"item in layout\"\n      :key=\"item.id\"\n      :item-id=\"item.id\"\n      :label=\"tiles[item.id].title\"\n    >\n      <ChartCard :aria-label=\"tiles[item.id].title\">\n        <ChartCard.Content>\n          <StatTile\n            :label=\"tiles[item.id].title\"\n            :value=\"tiles[item.id].value\"\n            :unit=\"tiles[item.id].unit\"\n            :delta=\"tiles[item.id].delta\"\n            delta-label=\"vs previous 24 hours\"\n            :inverse=\"tiles[item.id].inverse\"\n            :trend=\"tiles[item.id].trend\"\n          />\n        </ChartCard.Content>\n      </ChartCard>\n    </Board.Item>\n  </Board>\n</template>"
+  },
+  {
+   "name": "Editing",
+   "sfc": "<script setup>\n  import Board from '@aziontech/webkit/board'\n  import Button from '@aziontech/webkit/button'\n  import Chart from '@aziontech/webkit/chart'\n  import ChartCard from '@aziontech/webkit/chart-card'\n  import Tag from '@aziontech/webkit/tag'\n  import { computed, ref } from 'vue'\n\n  const labels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00']\n\n  const cards = {\n    requests: {\n      title: 'Requests',\n      series: [{ id: 'requests', name: 'Requests', values: [1820, 1640, 2210, 2480, 2390, 2050] }]\n    },\n    errors: {\n      title: 'Errors',\n      series: [{ id: 'errors', name: 'Errors', values: [42, 38, 61, 57, 49, 44] }]\n    },\n    latency: {\n      title: 'Response time',\n      series: [{ id: 'p95', name: 'p95', values: [166, 172, 205, 208, 182, 175] }]\n    }\n  }\n\n  const defaultLayout = [\n    { id: 'requests', span: 12 },\n    { id: 'errors', span: 6 },\n    { id: 'latency', span: 6 }\n  ]\n\n  const editing = ref(true)\n  const layout = ref(defaultLayout.map((item) => ({ ...item })))\n  const customized = computed(() => JSON.stringify(layout.value) !== JSON.stringify(defaultLayout))\n\n  const reset = () => {\n    layout.value = defaultLayout.map((item) => ({ ...item }))\n  }\n</script>\n\n<template>\n  <div class=\"flex w-full min-w-0 flex-col gap-(--spacing-md)\">\n    <div class=\"flex flex-wrap items-center justify-end gap-(--spacing-xs)\">\n      <Button\n        v-if=\"customized\"\n        label=\"Reset layout\"\n        kind=\"transparent\"\n        size=\"medium\"\n        icon=\"pi pi-replay\"\n        @click=\"reset\"\n      />\n      <Button\n        :label=\"editing ? 'Done' : 'Edit layout'\"\n        :kind=\"editing ? 'primary' : 'outlined'\"\n        size=\"medium\"\n        :icon=\"editing ? 'pi pi-check' : 'pi pi-th-large'\"\n        :aria-pressed=\"editing\"\n        @click=\"editing = !editing\"\n      />\n    </div>\n    <Board\n      v-model:layout=\"layout\"\n      :editing=\"editing\"\n      :min-span=\"4\"\n      :min-height=\"240\"\n      :max-height=\"560\"\n    >\n      <Board.Item\n        v-for=\"item in layout\"\n        :key=\"item.id\"\n        :item-id=\"item.id\"\n        :label=\"cards[item.id].title\"\n      >\n        <ChartCard>\n          <ChartCard.Header>\n            <ChartCard.DragHandle :aria-label=\"'Move ' + cards[item.id].title\" />\n            <ChartCard.Title>{{ cards[item.id].title }}</ChartCard.Title>\n            <ChartCard.Controls v-if=\"editing\">\n              <Tag\n                :label=\"item.span + '/12'\"\n                severity=\"secondary\"\n                size=\"small\"\n                icon=\"pi pi-arrows-h\"\n              />\n            </ChartCard.Controls>\n          </ChartCard.Header>\n          <ChartCard.Content>\n            <Chart\n              :series=\"cards[item.id].series\"\n              :labels=\"labels\"\n            >\n              <Chart.Grid />\n              <Chart.Axis kind=\"y\" />\n              <Chart.Axis kind=\"x\" />\n              <Chart.Line />\n              <Chart.Tooltip />\n            </Chart>\n          </ChartCard.Content>\n          <ChartCard.ResizeHandle :aria-label=\"'Resize ' + cards[item.id].title\" />\n        </ChartCard>\n      </Board.Item>\n    </Board>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/board.md"
+}

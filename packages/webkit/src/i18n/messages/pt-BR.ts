@@ -80,6 +80,16 @@ export const ptBR: Messages = {
   alert: {
     close: 'Fechar mensagem'
   },
+  appLayout: {
+    navigation: 'Navegação',
+    tools: 'Ajuda',
+    closeTools: 'Fechar ajuda',
+    splitPanel: 'Detalhes',
+    closeSplitPanel: 'Fechar painel',
+    resizeSplitPanel: 'Redimensionar painel',
+    showAtSide: 'Mostrar ao lado do conteúdo',
+    showAtBottom: 'Mostrar abaixo do conteúdo'
+  },
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
@@ -108,6 +118,14 @@ export const ptBR: Messages = {
   },
   barList: {
     emptyTitle: 'Nenhum dado disponível'
+  },
+  board: {
+    label: 'Painel',
+    item: 'Item {position}',
+    moved: '{label} movido para a posição {position} de {total}.',
+    resized: '{label} redimensionado para {span} de {columns} colunas.',
+    resizedWithHeight:
+      '{label} redimensionado para {span} de {columns} colunas, {height} pixels de altura.'
   },
   breadcrumb: {
     label: 'Trilha de navegação',
@@ -304,6 +322,12 @@ export const ptBR: Messages = {
   drawer: {
     close: 'Fechar'
   },
+  errorBoundary: {
+    title: 'Não foi possível carregar esta seção',
+    description:
+      'Algo deu errado ao exibir esta parte da página. O restante da página continua funcionando.',
+    retry: 'Tentar novamente'
+  },
   field: {
     required: '(Obrigatório)'
   },
@@ -328,6 +352,13 @@ export const ptBR: Messages = {
   heroForm: {
     search: 'Buscar',
     empty: 'Nenhum resultado encontrado.'
+  },
+  hotspot: {
+    label: 'Etapa do tutorial: {title}',
+    stepOf: 'Etapa {current} de {total}',
+    previous: 'Anterior',
+    next: 'Próxima',
+    finish: 'Concluir'
   },
   keyValuePairs: {
     notSet: 'Não definido'
@@ -647,6 +678,21 @@ export const ptBR: Messages = {
     keepEditing: 'Continuar editando',
     discard: 'Descartar alterações',
     save: 'Salvar alterações'
+  },
+  tutorialPanel: {
+    title: 'Tutoriais',
+    description: 'Aprenda o produto fazendo uma tarefa real, uma etapa por vez.',
+    listLabel: 'Tutoriais disponíveis',
+    empty: 'Nenhum tutorial ainda.',
+    start: 'Iniciar tutorial',
+    restart: 'Reiniciar tutorial',
+    exit: 'Sair do tutorial',
+    back: 'Voltar aos tutoriais',
+    completed: 'Concluído',
+    completedTitle: 'Tutorial concluído',
+    completedDescription: 'Você concluiu {title}.',
+    taskCount: { one: '{count} tarefa', other: '{count} tarefas' },
+    stepCount: { one: '{count} etapa', other: '{count} etapas' }
   },
   wizard: {
     stepOf: 'Etapa {step} de {total}',

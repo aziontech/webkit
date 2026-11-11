@@ -119,3 +119,18 @@ M2.9 work package editors. Seven new entries and one raise. `WebKitProvider` shi
 ### M2 merge (editors): webkit-provider → 13.3 KB
 
 Editors added the strings of seven components to the three built-in catalogs (13.16 KB). Still temporary: M2.10 row 10 moves pt-BR and es to opt-in locale entries and lowers this budget.
+Two entries changed and seven new entries were set for M2.9 WP app-layout. `ChartCard` now reads an enclosing `Board.Item` (span, height, drag and keyboard move go through the board), so the configurable dashboard is built on `Board`. `WebKitProvider` bundles the English catalog, which grew by the new `appLayout`, `board`, `errorBoundary`, `hotspot` and `tutorialPanel` groups. The new entries are set just above what they measure; `error-boundary` ships `Alert` and `Button` for its fallback.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                   |
+| --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------ |
+| chart-card      | 4.7           | within budget   | 4.71         | 4.75       | Raised: the `Board.Item` bridge.                       |
+| webkit-provider | 9.1           | within budget   | 10.21        | 10.25      | Raised: five new locale groups in the English catalog. |
+| app-layout      | new           | –               | 22.48        | 23         | New: regions, two drawers, split panel resize.         |
+| board           | new           | –               | 3.40         | 3.5        | New: `Board` and `Board.Item`.                         |
+| error-boundary  | new           | –               | 6.35         | 6.5        | New: fallback built from `Alert` and `Button`.         |
+| hotspot         | new           | –               | 11.10        | 11.25      | New: the marker on `Popover`.                          |
+| tutorial-panel  | new           | –               | 8.48         | 8.75       | New: the panel, its provider and the task list.        |
+
+### M2 merge (app-layout): webkit-provider → 14.4 KB
+
+Temporary, as above; closed by the opt-in locale entries (M2.10).

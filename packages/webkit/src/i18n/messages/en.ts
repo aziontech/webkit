@@ -2,6 +2,17 @@ export const alert = {
   close: 'Close message'
 } as const
 
+export const appLayout = {
+  navigation: 'Navigation',
+  tools: 'Help',
+  closeTools: 'Close help',
+  splitPanel: 'Details',
+  closeSplitPanel: 'Close panel',
+  resizeSplitPanel: 'Resize panel',
+  showAtSide: 'Show beside the content',
+  showAtBottom: 'Show under the content'
+} as const
+
 export const articleIndex = {
   search: 'Search',
   searchFacet: 'Search {facet}',
@@ -33,6 +44,14 @@ export const avatar = {
 
 export const barList = {
   emptyTitle: 'No data available'
+} as const
+
+export const board = {
+  label: 'Dashboard',
+  item: 'Item {position}',
+  moved: '{label} moved to position {position} of {total}.',
+  resized: '{label} resized to {span} of {columns} columns.',
+  resizedWithHeight: '{label} resized to {span} of {columns} columns, {height} pixels tall.'
 } as const
 
 export const breadcrumb = {
@@ -253,6 +272,13 @@ export const drawer = {
   close: 'Close'
 } as const
 
+export const errorBoundary = {
+  title: 'This section failed to load',
+  description:
+    'Something went wrong while showing this part of the page. The rest of the page still works.',
+  retry: 'Try again'
+} as const
+
 export const field = {
   required: '(Required)'
 } as const
@@ -282,6 +308,14 @@ export const helpPanel = {
 export const heroForm = {
   search: 'Search',
   empty: 'No results found.'
+} as const
+
+export const hotspot = {
+  label: 'Tutorial step: {title}',
+  stepOf: 'Step {current} of {total}',
+  previous: 'Previous',
+  next: 'Next',
+  finish: 'Finish'
 } as const
 
 export const keyValuePairs = {
@@ -649,6 +683,22 @@ export const unsavedChanges = {
   save: 'Save changes'
 } as const
 
+export const tutorialPanel = {
+  title: 'Tutorials',
+  description: 'Learn the product by doing a real task, one step at a time.',
+  listLabel: 'Available tutorials',
+  empty: 'No tutorials yet.',
+  start: 'Start tutorial',
+  restart: 'Restart tutorial',
+  exit: 'Exit tutorial',
+  back: 'Back to tutorials',
+  completed: 'Completed',
+  completedTitle: 'Tutorial complete',
+  completedDescription: 'You finished {title}.',
+  taskCount: { one: '{count} task', other: '{count} tasks' },
+  stepCount: { one: '{count} step', other: '{count} steps' }
+} as const
+
 export const wizard = {
   stepOf: 'Step {step} of {total}',
   optional: 'Optional',
@@ -749,11 +799,13 @@ export const en = {
   actionConfirmation,
   aiLoading,
   alert,
+  appLayout,
   articleIndex,
   artifactPreview,
   attributeEditor,
   avatar,
   barList,
+  board,
   breadcrumb,
   browserFrame,
   buttonGroup,
@@ -783,14 +835,16 @@ export const en = {
   docProse,
   donutChart,
   drawer,
+  errorBoundary,
   field,
   fileDropzone,
   footer,
   globalHeader,
   helpPanel,
   heroForm,
-  kbd,
+  hotspot,
   keyValuePairs,
+  kbd,
   label,
   link,
   logoWall,
@@ -841,5 +895,6 @@ export const en = {
   tracker,
   tree,
   unsavedChanges,
+  tutorialPanel,
   wizard
 }
