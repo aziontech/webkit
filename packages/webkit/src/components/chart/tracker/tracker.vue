@@ -143,7 +143,7 @@
         :data-moving="moving || null"
         aria-hidden="true"
         :style="{ translate: readout.translate }"
-        class="pointer-events-none absolute bottom-full left-0 mb-(--spacing-xs) w-max max-w-(--container-3xs) rounded-(--shape-elements) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) px-(--spacing-sm) py-(--spacing-xs) text-label-md text-(--chart-tooltip-text) opacity-0 shadow-(--shadow-sm) transition-opacity duration-fast-02 ease-productive-entrance data-[moving]:transition-[translate,opacity] data-[visible]:opacity-100 motion-reduce:transition-none motion-reduce:data-[moving]:transition-none"
+        class="pointer-events-none absolute bottom-full start-0 mb-(--spacing-xs) w-max max-w-(--container-3xs) rounded-(--shape-elements) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) px-(--spacing-sm) py-(--spacing-xs) text-label-md text-(--chart-tooltip-text) opacity-0 shadow-(--shadow-sm) transition-opacity duration-fast-02 ease-productive-entrance data-[moving]:transition-[translate,opacity] data-[visible]:opacity-100 motion-reduce:transition-none motion-reduce:data-[moving]:transition-none"
       >
         {{ readout.label }}
       </div>

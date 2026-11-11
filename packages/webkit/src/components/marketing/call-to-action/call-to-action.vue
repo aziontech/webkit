@@ -110,7 +110,7 @@
         </div>
 
         <div
-          class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-l"
+          class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-s"
         >
           <p
             v-if="hasDescription"

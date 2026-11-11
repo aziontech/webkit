@@ -364,7 +364,7 @@
                   :grow="column.grow ?? 1"
                   :align="column.align ?? 'start'"
                   :data-edge="edge(index)"
-                  class="data-[edge=end]:pr-(--spacing-xl)! data-[edge=start]:pl-(--spacing-xl)!"
+                  class="data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
                 >
                   <span class="text-overline-md text-(--text-muted)">{{ column.label }}</span>
                 </TableHeadCell>
@@ -381,7 +381,7 @@
               >
                 <TableCell
                   :grow="3"
-                  class="pl-(--spacing-xl)!"
+                  class="ps-(--spacing-xl)!"
                 >
                   <h3 class="m-0 text-overline-md text-(--text-default)">{{ entry.group }}</h3>
                 </TableCell>
@@ -398,7 +398,7 @@
                   :align="column.align ?? 'start'"
                   :principal="cellIndex === 0"
                   :data-edge="edge(cellIndex)"
-                  class="py-(--spacing-lg)! text-(--text-muted) data-[edge=end]:pr-(--spacing-xl)! data-[edge=start]:pl-(--spacing-xl)!"
+                  class="py-(--spacing-lg)! text-(--text-muted) data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
                 >
                   <a
                     v-if="cellIndex === 0"

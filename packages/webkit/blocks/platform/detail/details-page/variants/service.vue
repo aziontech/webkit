@@ -95,7 +95,7 @@
                 >
                   <span class="truncate">{{ domain }}</span>
                   <i
-                    class="pi pi-external-link ml-auto shrink-0 text-body-xs leading-none"
+                    class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
                     aria-hidden="true"
                   />
                 </a>
@@ -110,7 +110,7 @@
           </Popover>
         </div>
 
-        <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
             label="Visit"
             kind="secondary"
@@ -308,7 +308,7 @@
               </Accordion.Trigger>
 
               <div
-                class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:right-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pr-(--spacing-md) @lg/band:pb-0"
+                class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
               >
                 <Tag
                   label="Shared · 3 services"

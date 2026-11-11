@@ -296,7 +296,7 @@
                             <label
                               v-for="column in listedColumns"
                               :key="column.id"
-                              class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-left text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+                              class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
                               :class="
                                 column.locked
                                   ? 'cursor-default text-(--text-muted)'
@@ -311,7 +311,7 @@
                               <span class="min-w-0 truncate">{{ column.label }}</span>
                               <span
                                 v-if="column.locked"
-                                class="ml-auto shrink-0 text-label-xs text-(--text-muted)"
+                                class="ms-auto shrink-0 text-label-xs text-(--text-muted)"
                                 >Always shown</span
                               >
                             </label>

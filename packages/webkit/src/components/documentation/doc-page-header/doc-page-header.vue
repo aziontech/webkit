@@ -124,7 +124,7 @@
     <div
       v-if="updatedLabel || metaActions.length"
       :data-undated="updatedLabel ? null : ''"
-      class="flex flex-wrap items-center gap-(--spacing-xxs) data-[undated]:-ml-(--spacing-xs)"
+      class="flex flex-wrap items-center gap-(--spacing-xxs) data-[undated]:-ms-(--spacing-xs)"
     >
       <p
         v-if="updatedLabel"

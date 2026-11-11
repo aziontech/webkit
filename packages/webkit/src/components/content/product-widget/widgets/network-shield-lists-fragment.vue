@@ -61,7 +61,7 @@
                 </span>
                 <span class="text-body-xs text-(--text-muted)">{{ ROWS[index].id }}</span>
               </span>
-              <span class="ml-auto flex shrink-0 items-center">
+              <span class="ms-auto flex shrink-0 items-center">
                 <Tag
                   :label="ROWS[index].type"
                   severity="secondary"

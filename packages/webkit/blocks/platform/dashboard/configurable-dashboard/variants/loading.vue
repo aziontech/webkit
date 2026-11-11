@@ -265,7 +265,7 @@
         Drag a card by its handle to move it, or by its corner to resize it. Focus a handle to use
         the arrow keys.
       </p>
-      <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+      <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
         <Button
           v-if="customized"
           label="Reset layout"

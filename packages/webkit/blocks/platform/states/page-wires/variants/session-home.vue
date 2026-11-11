@@ -50,7 +50,7 @@
         />
       </div>
 
-      <div class="ml-auto flex items-center gap-(--spacing-xs)">
+      <div class="ms-auto flex items-center gap-(--spacing-xs)">
         <Skeleton
           width="5.5rem"
           height="2rem"
@@ -71,7 +71,7 @@
 
     <div class="flex min-h-0 flex-1">
       <div
-        class="hidden w-(--container-2xs) shrink-0 flex-col gap-(--spacing-lg) overflow-hidden border-r-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) p-(--spacing-sm) md:flex"
+        class="hidden w-(--container-2xs) shrink-0 flex-col gap-(--spacing-lg) overflow-hidden border-e-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) p-(--spacing-sm) md:flex"
       >
         <Skeleton height="2.5rem" />
 
@@ -132,7 +132,7 @@
                         <div
                           v-for="metric in 4"
                           :key="metric"
-                          class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) max-sm:nth-[n+2]:border-t sm:max-xl:[&:nth-child(n+3)]:border-t sm:[&:nth-child(even)]:border-l xl:[&:nth-child(n+2)]:border-l"
+                          class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) max-sm:nth-[n+2]:border-t sm:max-xl:[&:nth-child(n+3)]:border-t sm:[&:nth-child(even)]:border-s xl:[&:nth-child(n+2)]:border-s"
                         >
                           <Skeleton
                             width="60%"
@@ -158,7 +158,7 @@
                   <Card :padded="false">
                     <template #content>
                       <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
-                        <div class="flex items-center [&>*+*]:-ml-2">
+                        <div class="flex items-center [&>*+*]:-ms-2">
                           <Skeleton
                             v-for="mark in 4"
                             :key="mark"
@@ -219,7 +219,7 @@
                             class="flex h-(--size-5) flex-col justify-center"
                             :class="
                               panel === 1 || panel === 4
-                                ? 'pl-[calc(var(--size-4)+var(--spacing-xs))]'
+                                ? 'ps-[calc(var(--size-4)+var(--spacing-xs))]'
                                 : ''
                             "
                           >

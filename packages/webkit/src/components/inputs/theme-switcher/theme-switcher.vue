@@ -160,7 +160,7 @@
       aria-hidden="true"
       :data-testid="`${testId}__indicator`"
       :style="{ transform: `translate3d(${indicatorOffsetX}px, ${indicatorOffsetY}px, 0)` }"
-      class="pointer-events-none absolute left-0 top-0 z-0 h-5 w-7 rounded-full bg-(--bg-selected) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      class="pointer-events-none absolute start-0 top-0 z-0 h-5 w-7 rounded-full bg-(--bg-selected) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
     />
     <Tooltip
       v-for="(mode, index) in MODES"

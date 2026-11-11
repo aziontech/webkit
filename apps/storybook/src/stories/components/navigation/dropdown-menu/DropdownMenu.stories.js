@@ -305,7 +305,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[28rem] w-full border bo
     Each panel resolves to the best-fitting corner based on its position in the viewport.
   </p>
 
-  <div class="absolute top-(--spacing-md) left-(--spacing-md)">
+  <div class="absolute top-(--spacing-md) start-(--spacing-md)">
     <DropdownMenu placement="auto">
       <DropdownMenuTrigger>
         <Button kind="outlined" label="top-left trigger" />
@@ -317,7 +317,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[28rem] w-full border bo
     </DropdownMenu>
   </div>
 
-  <div class="absolute top-(--spacing-md) right-(--spacing-md)">
+  <div class="absolute top-(--spacing-md) end-(--spacing-md)">
     <DropdownMenu placement="auto">
       <DropdownMenuTrigger>
         <Button kind="outlined" label="top-right trigger" />
@@ -329,7 +329,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[28rem] w-full border bo
     </DropdownMenu>
   </div>
 
-  <div class="absolute bottom-(--spacing-md) left-(--spacing-md)">
+  <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
     <DropdownMenu placement="auto">
       <DropdownMenuTrigger>
         <Button kind="outlined" label="bottom-left trigger" />
@@ -341,7 +341,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[28rem] w-full border bo
     </DropdownMenu>
   </div>
 
-  <div class="absolute bottom-(--spacing-md) right-(--spacing-md)">
+  <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
     <DropdownMenu placement="auto">
       <DropdownMenuTrigger>
         <Button kind="outlined" label="bottom-right trigger" />

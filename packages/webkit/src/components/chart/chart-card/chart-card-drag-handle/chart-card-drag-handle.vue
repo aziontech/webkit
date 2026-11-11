@@ -44,7 +44,7 @@
     type="button"
     :aria-label="ariaLabel"
     :data-testid="testId"
-    class="-ml-(--spacing-xxs) inline-flex size-6 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing"
+    class="-ms-(--spacing-xxs) inline-flex size-6 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing"
     @pointerdown="ctx.armDrag()"
     @pointerup="ctx.disarmDrag()"
     @pointercancel="ctx.disarmDrag()"

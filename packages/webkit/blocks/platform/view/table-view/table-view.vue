@@ -431,7 +431,7 @@
                       >
                         <div
                           v-if="appliedCount"
-                          class="pointer-events-none absolute -top-2 -right-2 min-w-5"
+                          class="pointer-events-none absolute -top-2 -end-2 min-w-5"
                         >
                           <Badge
                             :label="String(appliedCount)"
@@ -540,7 +540,7 @@
                                     :key="field.id"
                                     type="button"
                                     data-filter-row
-                                    class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-left text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                    class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                                     :aria-expanded="false"
                                     @click="enter(field.id)"
                                   >
@@ -573,7 +573,7 @@
                                     :aria-checked="
                                       option.custom ? undefined : isPicked(option.value)
                                     "
-                                    class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-left text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                    class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                                     @click="pick(activeField, option)"
                                   >
                                     <Avatar
@@ -614,7 +614,7 @@
                               >
                                 <button
                                   type="button"
-                                  class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-left text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                  class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                                   @click="clearFilter(activeField)"
                                 >
                                   <i
@@ -708,7 +708,7 @@
                       <label
                         v-for="column in listedColumns"
                         :key="column.id"
-                        class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-left text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+                        class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
                         :class="
                           column.locked
                             ? 'cursor-default text-(--text-muted)'
@@ -723,7 +723,7 @@
                         <span class="min-w-0 truncate">{{ column.label }}</span>
                         <span
                           v-if="column.locked"
-                          class="ml-auto shrink-0 text-label-xs text-(--text-muted)"
+                          class="ms-auto shrink-0 text-label-xs text-(--text-muted)"
                           >Always shown</span
                         >
                       </label>
@@ -917,7 +917,7 @@
                             >
                               <span class="truncate">{{ domain }}</span>
                               <i
-                                class="pi pi-external-link ml-auto shrink-0 text-body-xs leading-none"
+                                class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
                                 aria-hidden="true"
                               />
                             </a>
@@ -965,7 +965,7 @@
                           </span>
                         </PopoverContent>
                       </PopoverRoot>
-                      <div class="shrink-0 ml-auto">
+                      <div class="shrink-0 ms-auto">
                         <CopyButton
                           kind="outlined"
                           :value="value"

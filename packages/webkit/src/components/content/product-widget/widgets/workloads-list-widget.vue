@@ -150,7 +150,7 @@
               />
             </template>
           </Input>
-          <span class="ml-auto inline-flex shrink-0">
+          <span class="ms-auto inline-flex shrink-0">
             <Button
               label="Create Workload"
               kind="outlined"

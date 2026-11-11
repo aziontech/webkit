@@ -450,7 +450,7 @@
 
                       <div
                         v-if="step === 'email'"
-                        class="absolute right-(--spacing-sm) top-0 -translate-y-1/2"
+                        class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
                       >
                         <Tag
                           label="Last used"

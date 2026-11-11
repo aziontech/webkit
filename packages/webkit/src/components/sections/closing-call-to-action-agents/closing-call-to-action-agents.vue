@@ -245,7 +245,7 @@
                           >{{ char }}</span
                         ></TransitionGroup
                       ><span
-                        class="ml-px inline-block h-4 w-1 animate-blink bg-(--accent) align-text-bottom motion-reduce:hidden"
+                        class="ms-px inline-block h-4 w-1 animate-blink bg-(--accent) align-text-bottom motion-reduce:hidden"
                     /></span>
                   </span>
                 </span>

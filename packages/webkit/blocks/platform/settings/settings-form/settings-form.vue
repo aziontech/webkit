@@ -557,7 +557,7 @@
                 <div
                   class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                 >
-                  <span class="flex-1 truncate text-left text-label-sm text-(--text-default)"
+                  <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
                     >Theme</span
                   >
                   <ThemeSwitcher
@@ -678,7 +678,7 @@
                 />
               </a>
 
-              <div class="-ml-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
+              <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
                 <Breadcrumb
                   :items="breadcrumb"
                   class="w-full"
@@ -702,7 +702,7 @@
               type="button"
               aria-label="Search"
               aria-keyshortcuts="Meta+K"
-              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-left text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
+              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
               @click="paletteOpen = true"
             >
               <span
@@ -1071,7 +1071,7 @@
                     <div
                       class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                     >
-                      <span class="flex-1 truncate text-left text-label-sm text-(--text-default)"
+                      <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
                         >Theme</span
                       >
                       <ThemeSwitcher

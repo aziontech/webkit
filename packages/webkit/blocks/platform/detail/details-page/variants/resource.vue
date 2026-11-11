@@ -45,7 +45,7 @@
           </div>
         </div>
 
-        <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
             label="Visit"
             kind="secondary"
@@ -258,7 +258,7 @@
           via the CLI.
         </p>
 
-        <div class="w-full shrink-0 @lg/band:ml-auto @lg/band:w-fit">
+        <div class="w-full shrink-0 @lg/band:ms-auto @lg/band:w-fit">
           <Button
             class="w-full"
             label="Documentation"

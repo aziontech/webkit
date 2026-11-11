@@ -145,7 +145,7 @@
               size="medium"
               icon="pi pi-filter"
             />
-            <span class="pointer-events-none absolute -top-2 -right-2 flex">
+            <span class="pointer-events-none absolute -top-2 -end-2 flex">
               <Badge
                 label="1"
                 severity="primary"
@@ -162,7 +162,7 @@
           >
             <div
               v-if="frame.open"
-              class="absolute top-full left-0 z-1 mt-1 flex min-w-(--container-3xs) flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) [--popup-origin:top_left]"
+              class="absolute top-full start-0 z-1 mt-1 flex min-w-(--container-3xs) flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) [--popup-origin:top_left]"
             >
               <div
                 class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"

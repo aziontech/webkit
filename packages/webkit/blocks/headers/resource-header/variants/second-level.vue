@@ -33,7 +33,7 @@
               size="small"
             />
           </a>
-          <div class="-ml-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
+          <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
             <Breadcrumb
               :items="crumbs"
               class="w-full"

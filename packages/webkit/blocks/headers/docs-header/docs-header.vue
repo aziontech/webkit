@@ -38,7 +38,7 @@
               </span>
             </a>
           </GlobalHeader.Brand>
-          <div class="shrink-0 ml-(--spacing-xs) hidden lg:flex">
+          <div class="shrink-0 ms-(--spacing-xs) hidden lg:flex">
             <NavigationMenu aria-label="Documentation sections">
               <NavigationMenu.List>
                 <NavigationMenu.Item

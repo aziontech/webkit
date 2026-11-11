@@ -105,7 +105,7 @@
               :key="copy"
               :data-duplicate="copy === 2 || null"
               :aria-hidden="copy === 2 ? 'true' : undefined"
-              class="m-0 flex shrink-0 list-none items-end gap-(--spacing-md) p-0 pr-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
+              class="m-0 flex shrink-0 list-none items-end gap-(--spacing-md) p-0 pe-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
             >
               <li
                 v-for="photo in photos"

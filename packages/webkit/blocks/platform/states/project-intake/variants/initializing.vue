@@ -58,7 +58,7 @@
               >
                 {{ file.path }}
               </span>
-              <span class="ml-auto shrink-0 text-label-sm tabular-nums text-(--text-muted)">{{
+              <span class="ms-auto shrink-0 text-label-sm tabular-nums text-(--text-muted)">{{
                 file.size
               }}</span>
             </li>

@@ -152,7 +152,7 @@ export const Overview = {
               <div class="mb-(--spacing-sm) flex flex-wrap items-baseline gap-(--spacing-sm)">
                 <span class="text-heading-xs text-(--text-default)">{{ container.type }}</span>
                 <code class="text-body-sm text-(--primary)">.{{ container.class }}</code>
-                <span class="ml-auto text-body-sm text-(--text-muted)">{{ container.width }}</span>
+                <span class="ms-auto text-body-sm text-(--text-muted)">{{ container.width }}</span>
               </div>
 
               <!-- The cap, drawn: the rail is the viewport, the bar is the measure. -->
@@ -219,7 +219,7 @@ export const Overview = {
                     :key="row.name"
                     class="border-b border-(--border-default)"
                   >
-                    <td class="py-(--spacing-xs) pr-(--spacing-md)">
+                    <td class="py-(--spacing-xs) pe-(--spacing-md)">
                       <code class="text-(--text-default)">{{ row.name }}</code>
                     </td>
                     <td class="py-(--spacing-xs) text-(--text-muted)">

@@ -251,7 +251,7 @@
   >
     <div
       :data-kind="kind"
-      class="absolute top-0 left-0 flex origin-top-left flex-col data-[kind=window]:bg-(--bg-canvas)"
+      class="absolute top-0 start-0 flex origin-top-left flex-col data-[kind=window]:bg-(--bg-canvas)"
       :style="frameStyle"
     >
       <TextureMaterial
@@ -281,7 +281,7 @@
           class="truncate text-label-sm text-(--text-muted)"
           >{{ title }}</span
         >
-        <span class="ml-auto inline-flex shrink-0 items-center">
+        <span class="ms-auto inline-flex shrink-0 items-center">
           <Avatar
             label="myemail@example.com"
             size="small"
@@ -306,7 +306,7 @@
           kind="default"
           size="small"
         />
-        <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
             label="Create"
             kind="primary"
@@ -344,7 +344,7 @@
           v-if="rail && shell === 'console'"
           inert
           aria-hidden="true"
-          class="hidden w-64 shrink-0 flex-col border-r border-(--border-default) md:flex"
+          class="hidden w-64 shrink-0 flex-col border-e border-(--border-default) md:flex"
         >
           <div class="flex h-14 shrink-0 items-center px-(--spacing-md)">
             <Brand
@@ -407,7 +407,7 @@
                 </li>
               </template>
             </ol>
-            <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+            <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
               <span
                 class="flex h-8 w-56 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm)"
               >

@@ -267,7 +267,7 @@
         :aria-controls="viewportId"
         :aria-label="widthHandleAriaLabel"
         :data-testid="`${testId}__width-handle`"
-        class="group/handle absolute inset-y-0 right-0 flex w-6 cursor-col-resize touch-none items-center justify-center rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+        class="group/handle absolute inset-y-0 end-0 flex w-6 cursor-col-resize touch-none items-center justify-center rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         @keydown="onWidthKeydown"
         @focus="focused = true"
         @blur="focused = false"
@@ -309,7 +309,7 @@
       <div
         aria-hidden="true"
         :data-testid="`${testId}__corner-handle`"
-        class="group/handle absolute right-0 bottom-0 z-1 flex size-6 cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-elements)"
+        class="group/handle absolute end-0 bottom-0 z-1 flex size-6 cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-elements)"
         @pointerdown="startResize($event, 'both')"
         @pointermove="moveResize"
         @pointerup="stopResize"

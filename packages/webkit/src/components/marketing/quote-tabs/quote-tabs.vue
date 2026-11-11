@@ -355,7 +355,7 @@
         aria-hidden="true"
         :data-testid="`${testId}__progress`"
         :style="{ width: `${progress}%` }"
-        class="absolute bottom-0 left-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
+        class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
       />
     </FrameBox>
 

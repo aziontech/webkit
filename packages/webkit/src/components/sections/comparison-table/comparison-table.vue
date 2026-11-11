@@ -136,7 +136,7 @@
         marks="all"
       >
         <table
-          class="w-full table-fixed border-separate border-spacing-0 text-left [--compare-head:3.5rem] sm:[--compare-head:5rem]"
+          class="w-full table-fixed border-separate border-spacing-0 text-start [--compare-head:3.5rem] sm:[--compare-head:5rem]"
         >
           <caption
             v-if="caption"
@@ -162,7 +162,7 @@
               <th
                 scope="col"
                 aria-label="Azion"
-                class="sticky top-14 z-20 border-b border-l border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
+                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
               >
                 <Brand
                   kind="default"
@@ -174,7 +174,7 @@
               <th
                 scope="col"
                 :aria-label="competitor.name"
-                class="sticky top-14 z-20 border-b border-l border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
+                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
               >
                 <template v-if="competitor.logo && competitor.logoLight">
                   <img
@@ -214,7 +214,7 @@
               <th
                 scope="colgroup"
                 colspan="3"
-                class="sticky top-[calc(3.5rem+var(--compare-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) py-(--spacing-sm) text-left font-normal"
+                class="sticky top-[calc(3.5rem+var(--compare-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) py-(--spacing-sm) text-start font-normal"
               >
                 <span class="text-overline-md text-(--primary)">{{ group.title }}</span>
               </th>
@@ -227,7 +227,7 @@
             >
               <th
                 scope="row"
-                class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-md) text-left align-middle text-label-md font-normal text-(--text-default) group-data-[last]/row:border-b-0"
+                class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-md) text-start align-middle text-label-md font-normal text-(--text-default) group-data-[last]/row:border-b-0"
               >
                 <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <span class="min-w-0 max-sm:truncate">{{ item.capability }}</span>
@@ -257,7 +257,7 @@
               <td
                 v-for="platform in platforms"
                 :key="platform"
-                class="border-b border-l border-(--border-default) px-(--spacing-xs) py-(--spacing-md) text-center align-middle group-data-[last]/row:border-b-0 sm:px-(--spacing-md)"
+                class="border-b border-s border-(--border-default) px-(--spacing-xs) py-(--spacing-md) text-center align-middle group-data-[last]/row:border-b-0 sm:px-(--spacing-md)"
               >
                 <Tooltip :text="labelOf(item[platform])">
                   <i

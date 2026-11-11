@@ -212,7 +212,7 @@
               >
                 <button
                   type="button"
-                  class="w-full text-left data-[selected]:bg-(--bg-selected)"
+                  class="w-full text-start data-[selected]:bg-(--bg-selected)"
                   :data-selected="option.value === projectPicker.chosen || null"
                   :aria-pressed="option.value === projectPicker.chosen"
                   @click="projectPicker.chosen = option.value"

@@ -174,7 +174,7 @@
                 :key="column.key"
                 :grow="column.grow"
                 :align="column.align"
-                class="data-[first]:pl-(--spacing-xl)! data-[last]:pr-(--spacing-xl)!"
+                class="data-[first]:ps-(--spacing-xl)! data-[last]:pe-(--spacing-xl)!"
                 :data-first="index === 0 || null"
                 :data-last="index === lastIndex || null"
               >
@@ -195,7 +195,7 @@
                 :grow="column.grow"
                 :align="column.align"
                 :principal="index === 0"
-                class="py-(--spacing-lg)! data-[first]:pl-(--spacing-xl)! data-[last]:pr-(--spacing-xl)! data-[value]:text-(--text-muted)"
+                class="py-(--spacing-lg)! data-[first]:ps-(--spacing-xl)! data-[last]:pe-(--spacing-xl)! data-[value]:text-(--text-muted)"
                 :data-first="index === 0 || null"
                 :data-last="index === lastIndex || null"
                 :data-value="index > 0 || null"

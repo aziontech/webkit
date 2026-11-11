@@ -174,24 +174,24 @@ export const Library = {
             description="The library is drawn once, in dark mode. Every colour a scene carries is repainted from an --illustration-* role of the theme, and each role aliases a global token — so one export follows light and dark, inside whatever [data-theme] subtree it renders. Colours that read the same in both themes (window controls, framework marks, the dot map, shadows) stay as drawn."
           />
           <div class="overflow-x-auto">
-            <table class="w-full border-collapse text-left">
+            <table class="w-full border-collapse text-start">
               <thead>
                 <tr class="border-b border-(--border-default)">
-                  <th class="text-label-sm text-(--text-muted) py-(--spacing-xs) pr-(--spacing-lg) font-normal">Role</th>
-                  <th class="text-label-sm text-(--text-muted) py-(--spacing-xs) pr-(--spacing-lg) font-normal">Aliases</th>
-                  <th class="text-label-sm text-(--text-muted) py-(--spacing-xs) pr-(--spacing-lg) font-normal">Light · Dark</th>
+                  <th class="text-label-sm text-(--text-muted) py-(--spacing-xs) pe-(--spacing-lg) font-normal">Role</th>
+                  <th class="text-label-sm text-(--text-muted) py-(--spacing-xs) pe-(--spacing-lg) font-normal">Aliases</th>
+                  <th class="text-label-sm text-(--text-muted) py-(--spacing-xs) pe-(--spacing-lg) font-normal">Light · Dark</th>
                   <th class="text-label-sm text-(--text-muted) py-(--spacing-xs) font-normal">Use</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="[role, alias, use] in COLOR_ROLES" :key="role" class="border-b border-(--border-muted)">
-                  <td class="py-(--spacing-xs) pr-(--spacing-lg) align-top">
+                  <td class="py-(--spacing-xs) pe-(--spacing-lg) align-top">
                     <code class="font-code text-code text-(--text-default)">--illustration-{{ role }}</code>
                   </td>
-                  <td class="py-(--spacing-xs) pr-(--spacing-lg) align-top">
+                  <td class="py-(--spacing-xs) pe-(--spacing-lg) align-top">
                     <code class="font-code text-code text-(--text-muted)">{{ alias }}</code>
                   </td>
-                  <td class="py-(--spacing-xs) pr-(--spacing-lg) align-top">
+                  <td class="py-(--spacing-xs) pe-(--spacing-lg) align-top">
                     <div class="flex gap-(--spacing-xxs)">
                       <span v-for="mode in ['light', 'dark']" :key="mode" :data-theme="mode" class="rounded-(--shape-elements) border border-(--border-default) bg-(--bg-canvas) p-(--spacing-xxs)">
                         <span class="block size-6 rounded-(--shape-elements)" :style="{ background: 'var(--illustration-' + role + ')' }" />

@@ -184,7 +184,7 @@
           :data-duplicate="copy > 1 || null"
           :aria-label="copy === 1 && ariaLabel ? ariaLabel : undefined"
           :aria-hidden="copy > 1 ? 'true' : undefined"
-          class="m-0 flex w-max shrink-0 list-none items-center p-0 data-[size=medium]:gap-(--spacing-4) data-[size=medium]:pr-(--spacing-4) data-[size=small]:gap-(--spacing-10) data-[size=small]:pr-(--spacing-10) md:data-[size=medium]:gap-(--spacing-8) md:data-[size=medium]:pr-(--spacing-8) data-[content=items]:data-[size]:gap-[max(var(--spacing-xxl),calc(var(--spacing-xl)*2))] data-[content=items]:data-[size]:pr-[max(var(--spacing-xxl),calc(var(--spacing-xl)*2))] motion-reduce:data-[content=items]:data-[size]:gap-(--spacing-md) motion-reduce:data-[content=items]:data-[size]:pr-0 motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
+          class="m-0 flex w-max shrink-0 list-none items-center p-0 data-[size=medium]:gap-(--spacing-4) data-[size=medium]:pe-(--spacing-4) data-[size=small]:gap-(--spacing-10) data-[size=small]:pe-(--spacing-10) md:data-[size=medium]:gap-(--spacing-8) md:data-[size=medium]:pe-(--spacing-8) data-[content=items]:data-[size]:gap-[max(var(--spacing-xxl),calc(var(--spacing-xl)*2))] data-[content=items]:data-[size]:pe-[max(var(--spacing-xxl),calc(var(--spacing-xl)*2))] motion-reduce:data-[content=items]:data-[size]:gap-(--spacing-md) motion-reduce:data-[content=items]:data-[size]:pe-0 motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
         >
           <li
             v-for="(item, index) in items"

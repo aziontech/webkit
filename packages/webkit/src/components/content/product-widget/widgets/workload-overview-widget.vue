@@ -176,7 +176,7 @@
         >
           <Tabs
             model-value="overview"
-            class="-ml-(--spacing-xs) min-w-0 flex-1"
+            class="-ms-(--spacing-xs) min-w-0 flex-1"
           >
             <Tabs.List>
               <Tabs.Item
@@ -314,7 +314,7 @@
                   />
                   <span class="text-label-md text-(--text-default)">Deployment Settings</span>
                   <span
-                    class="ml-auto inline-flex items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
+                    class="ms-auto inline-flex items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
                   >
                     Azion Default
                     <i
@@ -346,10 +346,10 @@
                         class="relative mt-5 h-px border-t border-dashed border-(--accent)"
                       >
                         <span
-                          class="absolute top-1/2 left-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                          class="absolute top-1/2 start-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
                         />
                         <span
-                          class="absolute top-1/2 right-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                          class="absolute top-1/2 end-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
                         />
                       </div>
                       <div
@@ -357,16 +357,16 @@
                         style="grid-column: 6; grid-row: 1"
                       >
                         <span
-                          class="absolute top-5 left-0 w-3/4 border-t border-dashed border-(--accent)"
+                          class="absolute top-5 start-0 w-3/4 border-t border-dashed border-(--accent)"
                         />
                         <span
-                          class="absolute top-5 bottom-0 left-3/4 border-l border-dashed border-(--accent)"
+                          class="absolute top-5 bottom-0 start-3/4 border-s border-dashed border-(--accent)"
                         />
                         <span
-                          class="absolute top-5 left-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                          class="absolute top-5 start-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
                         />
                         <span
-                          class="absolute top-5 right-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                          class="absolute top-5 end-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
                         />
                       </div>
                       <div
@@ -374,13 +374,13 @@
                         style="grid-column: 6; grid-row: 2"
                       >
                         <span
-                          class="absolute top-0 left-3/4 h-5 border-l border-dashed border-(--accent)"
+                          class="absolute top-0 start-3/4 h-5 border-s border-dashed border-(--accent)"
                         />
                         <span
-                          class="absolute top-5 right-0 left-3/4 border-t border-dashed border-(--accent)"
+                          class="absolute top-5 end-0 start-3/4 border-t border-dashed border-(--accent)"
                         />
                         <span
-                          class="absolute top-5 right-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                          class="absolute top-5 end-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
                         />
                       </div>
                       <div
@@ -388,7 +388,7 @@
                         style="grid-column: 8; grid-row: 1"
                       >
                         <span
-                          class="absolute top-1/2 left-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                          class="absolute top-1/2 start-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
                         />
                       </div>
                       <div
@@ -412,7 +412,7 @@
                             node.kind
                           }}</span>
                           <Tag
-                            class="ml-auto shrink-0"
+                            class="ms-auto shrink-0"
                             :severity="node.severity"
                             :label="node.status"
                             size="small"
@@ -437,7 +437,7 @@
                           </span>
                           <IconButton
                             v-if="node.status !== 'Live' && node.status !== 'Active'"
-                            class="ml-auto shrink-0"
+                            class="ms-auto shrink-0"
                             icon="pi pi-plus"
                             kind="outlined"
                             size="small"
@@ -462,7 +462,7 @@
       />
       <aside
         :data-open="tab === 'deploy' || null"
-        class="absolute inset-y-0 right-0 flex w-[47%] translate-x-full flex-col border-l border-(--border-default) bg-(--bg-surface) transition-[translate] duration-slow-01 ease-productive-entrance data-open:translate-x-0 motion-reduce:transition-none"
+        class="absolute inset-y-0 end-0 flex w-[47%] translate-x-full flex-col border-s border-(--border-default) bg-(--bg-surface) transition-[translate] duration-slow-01 ease-productive-entrance data-open:translate-x-0 motion-reduce:transition-none"
       >
         <div
           class="flex shrink-0 items-start gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
@@ -474,7 +474,7 @@
             </p>
           </div>
           <IconButton
-            class="ml-auto shrink-0"
+            class="ms-auto shrink-0"
             icon="pi pi-times"
             kind="outlined"
             size="small"
@@ -520,7 +520,7 @@
                   <span class="text-body-sm text-(--text-muted)">AWFBBZ1Q</span>
                 </span>
                 <span
-                  class="ml-auto flex h-8 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) text-label-sm text-(--text-default)"
+                  class="ms-auto flex h-8 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) text-label-sm text-(--text-default)"
                 >
                   Change Version
                   <i
@@ -534,7 +534,7 @@
               >
                 Dependencies
                 <i
-                  class="pi pi-chevron-down ml-auto text-(--text-muted)"
+                  class="pi pi-chevron-down ms-auto text-(--text-muted)"
                   aria-hidden="true"
                 />
               </div>
@@ -587,7 +587,7 @@
                   {{ environment.name }}
                   <Tag
                     v-if="environment.tag"
-                    class="ml-auto"
+                    class="ms-auto"
                     :label="environment.tag"
                     severity="info"
                     size="small"

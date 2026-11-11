@@ -72,8 +72,8 @@ export const navigationMenuBackdropClasses = [
 export const navigationMenuArrowClasses = [
   'absolute size-3 rotate-45 border border-solid border-(--border-default)',
   'bg-(--bg-surface-raised)',
-  'data-[side=bottom]:-top-1.5 data-[side=bottom]:border-b-0 data-[side=bottom]:border-r-0',
-  'data-[side=top]:-bottom-1.5 data-[side=top]:border-l-0 data-[side=top]:border-t-0'
+  'data-[side=bottom]:-top-1.5 data-[side=bottom]:border-b-0 data-[side=bottom]:border-e-0',
+  'data-[side=top]:-bottom-1.5 data-[side=top]:border-s-0 data-[side=top]:border-t-0'
 ]
 export const navigationMenuPositionerLayoutClasses = 'group/positioner fixed z-50'
 export const navigationMenuContentPaddingClasses = 'p-(--spacing-md)'

@@ -69,7 +69,7 @@
           <div class="flex items-center gap-(--spacing-sm)">
             <span class="text-label-sm text-(--text-default)">Traffic split</span>
             <Tag
-              class="ml-auto"
+              class="ms-auto"
               label="Rolling out"
               severity="info"
               size="small"

@@ -240,7 +240,7 @@
                 aria-hidden="true"
               />
             </div>
-            <div class="ml-auto flex shrink-0 items-center gap-(--spacing-sm)">
+            <div class="ms-auto flex shrink-0 items-center gap-(--spacing-sm)">
               <Button
                 type="button"
                 label="Cancel"

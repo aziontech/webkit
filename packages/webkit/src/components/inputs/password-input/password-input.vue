@@ -108,7 +108,7 @@
     :data-visible="visible || null"
     :class="[
       'group relative inline-flex items-center w-full h-10',
-      'gap-(--spacing-xs) pr-(--spacing-xs)',
+      'gap-(--spacing-xs) pe-(--spacing-xs)',
       'rounded-(--shape-elements)',
       'border border-(--border-default) bg-(--bg-surface) text-(--text-default)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
@@ -122,7 +122,7 @@
   >
     <span
       v-if="hasIconLeft"
-      class="inline-flex shrink-0 items-center justify-center pl-(--spacing-md) text-(--text-muted)"
+      class="inline-flex shrink-0 items-center justify-center ps-(--spacing-md) text-(--text-muted)"
       aria-hidden="true"
     >
       <slot name="iconLeft" />
@@ -142,7 +142,7 @@
       :aria-invalid="isInvalid || undefined"
       :aria-required="isRequired || undefined"
       :data-testid="testId"
-      class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent py-0 pr-0 pl-(--spacing-md) group-data-[has-icon-left]:pl-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
+      class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent py-0 pe-0 ps-(--spacing-md) group-data-[has-icon-left]:ps-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
       v-bind="passthroughAttrs"
       @input="handleInput"
     />

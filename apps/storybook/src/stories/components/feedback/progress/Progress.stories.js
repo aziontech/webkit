@@ -170,7 +170,7 @@ const SIMULATION_TEMPLATE = `<div class="flex w-[320px] flex-col gap-4">
   <div class="flex items-center gap-2">
     <Button label="Next" kind="primary" size="small" @click="advance" />
     <IconButton icon="pi pi-refresh" aria-label="Reset" size="small" kind="outlined" @click="reset" />
-    <span class="ml-auto">{{ value }}%</span>
+    <span class="ms-auto">{{ value }}%</span>
   </div>
 </div>`
 

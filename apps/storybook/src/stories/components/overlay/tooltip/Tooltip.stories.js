@@ -195,13 +195,13 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[28rem] w-full border bo
     </Tooltip>
   </div>
 
-  <div class="absolute left-(--spacing-md) top-1/2 -translate-y-1/2">
+  <div class="absolute start-(--spacing-md) top-1/2 -translate-y-1/2">
     <Tooltip text="auto placement" placement="auto" :default-open="true">
       <IconButton icon="pi pi-arrow-left" aria-label="left-edge trigger" kind="outlined" size="medium" />
     </Tooltip>
   </div>
 
-  <div class="absolute right-(--spacing-md) top-1/2 -translate-y-1/2">
+  <div class="absolute end-(--spacing-md) top-1/2 -translate-y-1/2">
     <Tooltip text="auto placement" placement="auto" :default-open="true">
       <IconButton icon="pi pi-arrow-right" aria-label="right-edge trigger" kind="outlined" size="medium" />
     </Tooltip>

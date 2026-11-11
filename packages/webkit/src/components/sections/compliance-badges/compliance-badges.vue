@@ -107,7 +107,7 @@
                   class="h-16 w-24 object-contain"
                 />
                 <span
-                  class="inline-flex h-7 items-center gap-(--spacing-xs) whitespace-nowrap rounded-full border border-(--border-muted) bg-(--bg-surface-raised) pr-(--spacing-sm) pl-(--spacing-xxs) text-overline-sm text-(--text-default)"
+                  class="inline-flex h-7 items-center gap-(--spacing-xs) whitespace-nowrap rounded-full border border-(--border-muted) bg-(--bg-surface-raised) pe-(--spacing-sm) ps-(--spacing-xxs) text-overline-sm text-(--text-default)"
                 >
                   <span
                     aria-hidden="true"

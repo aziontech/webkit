@@ -39,7 +39,7 @@
   >
     <div
       v-if="ctx.copyable.value && !ctx.loading.value"
-      class="absolute right-(--spacing-sm) top-(--spacing-sm) z-3"
+      class="absolute end-(--spacing-sm) top-(--spacing-sm) z-3"
       :data-testid="`${ctx.testId}__copy-anchor`"
     >
       <CopyButton
@@ -83,7 +83,7 @@
             :key="line.id"
             :data-testid="`${ctx.testId}__line`"
             :data-type="line.type"
-            class="text-label-code-sm relative flex gap-(--spacing-md) border-l-2 border-l-transparent px-(--spacing-md) py-(--spacing-xxs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-l-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[type=warning]:bg-(--warning) data-[type=warning]:hover:bg-(--warning) motion-reduce:transition-none motion-reduce:before:transition-none"
+            class="text-label-code-sm relative flex gap-(--spacing-md) border-s-2 border-s-transparent px-(--spacing-md) py-(--spacing-xxs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-s-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[type=warning]:bg-(--warning) data-[type=warning]:hover:bg-(--warning) motion-reduce:transition-none motion-reduce:before:transition-none"
           >
             <span
               :data-testid="`${ctx.testId}__line-time`"

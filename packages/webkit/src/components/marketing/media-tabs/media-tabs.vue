@@ -215,7 +215,7 @@
           v-for="(item, index) in tabs"
           :key="`${item.title}-${index}`"
           :data-active="isActive(index) || null"
-          class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-l-0 group-data-[position=right]/media-tabs:lg:[&>div]:data-[borders~=left]:border-l-0"
+          class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-s-0 group-data-[position=right]/media-tabs:lg:[&>div]:data-[borders~=left]:border-s-0"
           @pointerenter="point($event, index)"
         >
           <FrameBox
@@ -233,7 +233,7 @@
                 <button
                   type="button"
                   :aria-current="isActive(index) ? 'true' : undefined"
-                  class="m-0 cursor-pointer p-0 text-left after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+                  class="m-0 cursor-pointer p-0 text-start after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
                   @click="select($event, index)"
                   @focus="point($event, index)"
                 >
@@ -272,7 +272,7 @@
               aria-hidden="true"
               data-progress
               :style="{ width: `${progress}%` }"
-              class="absolute bottom-0 left-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
+              class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
             />
           </FrameBox>
         </li>

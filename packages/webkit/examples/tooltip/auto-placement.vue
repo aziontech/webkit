@@ -42,7 +42,7 @@
       </Tooltip>
     </div>
 
-    <div class="absolute left-(--spacing-md) top-1/2 -translate-y-1/2">
+    <div class="absolute start-(--spacing-md) top-1/2 -translate-y-1/2">
       <Tooltip
         text="auto placement"
         placement="auto"
@@ -57,7 +57,7 @@
       </Tooltip>
     </div>
 
-    <div class="absolute right-(--spacing-md) top-1/2 -translate-y-1/2">
+    <div class="absolute end-(--spacing-md) top-1/2 -translate-y-1/2">
       <Tooltip
         text="auto placement"
         placement="auto"

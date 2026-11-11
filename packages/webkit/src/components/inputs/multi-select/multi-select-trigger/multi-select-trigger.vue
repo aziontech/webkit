@@ -74,7 +74,7 @@
   >
     <slot name="iconLeft" />
     <span
-      class="flex-1 truncate text-left data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
+      class="flex-1 truncate text-start data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
       :data-filled="ctx.filled.value"
       :data-testid="`${testId}__value`"
     >

@@ -789,7 +789,7 @@
                 <div
                   class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                 >
-                  <span class="flex-1 truncate text-left text-label-sm text-(--text-default)"
+                  <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
                     >Theme</span
                   >
                   <ThemeSwitcher
@@ -910,7 +910,7 @@
                 />
               </a>
 
-              <div class="-ml-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
+              <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
                 <Breadcrumb class="w-full">
                   <Breadcrumb.List>
                     <template
@@ -1014,7 +1014,7 @@
               type="button"
               aria-label="Search"
               aria-keyshortcuts="Meta+K"
-              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-left text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
+              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
               @click="paletteOpen = true"
             >
               <span
@@ -1179,7 +1179,7 @@
                                 >
                                   <span class="truncate">{{ domain }}</span>
                                   <i
-                                    class="pi pi-external-link ml-auto shrink-0 text-body-xs leading-none"
+                                    class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
                                     aria-hidden="true"
                                   />
                                 </a>
@@ -1194,7 +1194,7 @@
                           </Popover>
                         </div>
 
-                        <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+                        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                           <Button
                             label="Visit"
                             kind="secondary"
@@ -1396,7 +1396,7 @@
                               </Accordion.Trigger>
 
                               <div
-                                class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:right-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pr-(--spacing-md) @lg/band:pb-0"
+                                class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
                               >
                                 <Tag
                                   label="Shared · 3 services"
@@ -1553,7 +1553,7 @@
                           <button
                             type="button"
                             :data-done="step.done || null"
-                            class="w-full rounded-none text-left transition-colors duration-fast-02 ease-productive-entrance data-done:bg-(--primary-mask) motion-reduce:transition-none"
+                            class="w-full rounded-none text-start transition-colors duration-fast-02 ease-productive-entrance data-done:bg-(--primary-mask) motion-reduce:transition-none"
                           >
                             <Item.Media>
                               <i
@@ -1711,7 +1711,7 @@
                                       :aria-expanded="Boolean(openNodes[node.key])"
                                       :aria-controls="`${node.key}-body`"
                                       :data-state="openNodes[node.key] ? 'open' : 'closed'"
-                                      class="group flex w-full items-center gap-(--spacing-xxs) rounded-t-(--shape-card) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs) text-left outline-none transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none"
+                                      class="group flex w-full items-center gap-(--spacing-xxs) rounded-t-(--shape-card) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs) text-start outline-none transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none"
                                       @click="openNodes[node.key] = !openNodes[node.key]"
                                     >
                                       <i
@@ -1722,7 +1722,7 @@
                                       <span class="truncate text-label-sm text-(--text-muted)">{{
                                         node.kind
                                       }}</span>
-                                      <div class="shrink-0 ml-auto">
+                                      <div class="shrink-0 ms-auto">
                                         <Tag
                                           :severity="node.severity"
                                           :label="node.status"
@@ -1776,7 +1776,7 @@
 
                                     <div
                                       v-if="node.bind || node.add"
-                                      class="ml-auto flex shrink-0 items-center"
+                                      class="ms-auto flex shrink-0 items-center"
                                     >
                                       <div
                                         v-if="node.bind"
@@ -2029,7 +2029,7 @@
                     <div
                       class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                     >
-                      <span class="flex-1 truncate text-left text-label-sm text-(--text-default)"
+                      <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
                         >Theme</span
                       >
                       <ThemeSwitcher

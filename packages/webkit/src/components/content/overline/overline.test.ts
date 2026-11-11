@@ -44,8 +44,8 @@ describe('Overline', () => {
     const { getByTestId } = render(Overline, { slots: { default: 'TOKENS' } })
     const root = getByTestId('content-overline')
     expect(root.className).toContain('gap-(--spacing-xxs)')
-    expect(root.className).toContain('pl-(--spacing-xxs)')
-    expect(root.className).toContain('pr-(--spacing-xxs)')
+    expect(root.className).toContain('ps-(--spacing-xxs)')
+    expect(root.className).toContain('pe-(--spacing-xxs)')
   })
 
   it('renders angle-bracket and closing-tag prefixes verbatim', () => {

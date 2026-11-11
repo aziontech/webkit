@@ -104,7 +104,7 @@
       <slot name="left" />
     </span>
 
-    <span class="flex-1 truncate text-left">
+    <span class="flex-1 truncate text-start">
       <slot>{{ label }}</slot>
     </span>
 

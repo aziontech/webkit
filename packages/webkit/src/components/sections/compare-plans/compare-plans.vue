@@ -146,7 +146,7 @@
       :divided="false"
       :padded="false"
     >
-      <table class="w-full table-auto border-separate border-spacing-0 text-left lg:table-fixed">
+      <table class="w-full table-auto border-separate border-spacing-0 text-start lg:table-fixed">
         <caption
           v-if="caption"
           class="sr-only"
@@ -188,7 +188,7 @@
               scope="col"
               :data-folded="plan.id !== visiblePlan || null"
               :data-highlighted="plan.highlighted || null"
-              class="sticky top-14 z-20 border-b border-l border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg) align-top font-normal max-lg:data-folded:hidden"
+              class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg) align-top font-normal max-lg:data-folded:hidden"
             >
               <span
                 v-if="plan.highlighted"
@@ -220,7 +220,7 @@
               scope="colgroup"
               :colspan="columns.length + 1"
               :data-ruled="sectionIndex > 0 || null"
-              class="border-b border-(--border-default) p-(--spacing-lg) pt-(--spacing-xl) text-left font-normal data-ruled:border-t"
+              class="border-b border-(--border-default) p-(--spacing-lg) pt-(--spacing-xl) text-start font-normal data-ruled:border-t"
             >
               <Overline
                 v-if="section.eyebrow"
@@ -247,7 +247,7 @@
           >
             <th
               scope="row"
-              class="border-(--border-default) px-(--spacing-lg) py-(--spacing-md) text-left align-middle text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t"
+              class="border-(--border-default) px-(--spacing-lg) py-(--spacing-md) text-start align-middle text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t"
             >
               <span>
                 <template v-if="row.hint">
@@ -256,7 +256,7 @@
                     >{{ labelTail(row.label)
                     }}<Hint
                       :text="row.hint"
-                      class="ml-(--spacing-xxs) align-middle"
+                      class="ms-(--spacing-xxs) align-middle"
                   /></span>
                 </template>
                 <template v-else>{{ row.label }}</template>
@@ -265,7 +265,7 @@
                   :label="row.tag"
                   severity="secondary"
                   size="small"
-                  class="ml-(--spacing-xs) align-middle"
+                  class="ms-(--spacing-xs) align-middle"
                 />
               </span>
             </th>
@@ -273,7 +273,7 @@
               v-for="{ plan, index } in columns"
               :key="plan.id"
               :data-folded="plan.id !== visiblePlan || null"
-              class="border-l border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t max-lg:data-folded:hidden"
+              class="border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t max-lg:data-folded:hidden"
             >
               <template v-if="isIncluded(row.values[index])">
                 <i

@@ -90,8 +90,8 @@ describe('FrameBox', () => {
   it.each([
     ['top', 'top-0'],
     ['bottom', 'bottom-0'],
-    ['left', 'left-0'],
-    ['right', 'right-0']
+    ['left', 'start-0'],
+    ['right', 'end-0']
   ] as const)('anchors the marks="%s" pair to its own edge', (marks, edgeClass) => {
     const { getByTestId } = render(FrameBox, { props: { marks } })
     const squares = [...getByTestId(TESTID).querySelectorAll('span[aria-hidden="true"]')]

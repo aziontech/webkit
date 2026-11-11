@@ -699,7 +699,7 @@
 
     <div class="flex min-h-0 flex-1">
       <aside
-        class="hidden h-full w-64 shrink-0 overflow-auto border-r border-(--border-default) px-(--spacing-md) py-(--layout-section-gap) md:block"
+        class="hidden h-full w-64 shrink-0 overflow-auto border-e border-(--border-default) px-(--spacing-md) py-(--layout-section-gap) md:block"
       >
         <div class="flex h-full">
           <Stepper
@@ -849,7 +849,7 @@
                                 >
                                   <button
                                     type="button"
-                                    class="w-full text-left data-[selected]:bg-(--bg-selected)"
+                                    class="w-full text-start data-[selected]:bg-(--bg-selected)"
                                     :data-selected="option.value === projectPicker.chosen || null"
                                     :aria-pressed="option.value === projectPicker.chosen"
                                     @click="projectPicker.chosen = option.value"
@@ -1449,7 +1449,7 @@
                                     >
                                       <button
                                         type="button"
-                                        class="w-full text-left data-[selected]:bg-(--bg-selected)"
+                                        class="w-full text-start data-[selected]:bg-(--bg-selected)"
                                         :data-selected="
                                           option.value === deploymentPicker.chosen || null
                                         "

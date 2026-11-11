@@ -94,7 +94,7 @@
           <button
             type="button"
             :data-done="step.done || null"
-            class="w-full rounded-none text-left transition-colors duration-fast-02 ease-productive-entrance data-done:bg-(--primary-mask) motion-reduce:transition-none"
+            class="w-full rounded-none text-start transition-colors duration-fast-02 ease-productive-entrance data-done:bg-(--primary-mask) motion-reduce:transition-none"
           >
             <Item.Media>
               <i

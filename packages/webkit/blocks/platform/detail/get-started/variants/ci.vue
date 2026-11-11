@@ -152,7 +152,7 @@ jobs:
         <span
           v-if="index > 0"
           aria-hidden="true"
-          class="absolute right-full top-9 hidden w-(--spacing-lg) border-t border-dashed border-(--border-default) @4xl:block"
+          class="absolute end-full top-9 hidden w-(--spacing-lg) border-t border-dashed border-(--border-default) @4xl:block"
         />
         <div class="flex min-w-0 flex-1">
           <Card

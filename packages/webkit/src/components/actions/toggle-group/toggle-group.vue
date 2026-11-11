@@ -113,7 +113,7 @@
   )
 
   const indicatorClasses = [
-    'pointer-events-none absolute left-0 top-0 z-0',
+    'pointer-events-none absolute start-0 top-0 z-0',
     'rounded-(--shape-button) bg-(--bg-selected)',
     'motion-reduce:transition-none'
   ]
@@ -135,7 +135,7 @@
       value === selectedValue.value
         ? 'bg-transparent text-(--text-default)'
         : 'bg-transparent text-(--text-muted)',
-      disabled && 'pr-(--spacing-xs)'
+      disabled && 'pe-(--spacing-xs)'
     )
 
   const resolveOptionElement = (

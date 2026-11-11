@@ -33,7 +33,7 @@
     class="border-b border-(--border-default)"
   >
     <div class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
-      <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
+      <div class="flex -ms-(--spacing-xs) min-w-0 flex-1">
         <TabsRoot
           v-model="value"
           :data-testid="`${testId}__tabs`"

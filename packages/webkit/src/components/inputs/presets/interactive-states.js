@@ -76,7 +76,7 @@ export const selectableBlockCardClasses = [
 
 export const listOptionItemClasses = [
   'relative flex w-full cursor-pointer items-center rounded-(--shape-button)',
-  'px-(--spacing-xs) py-(--spacing-xs) text-left text-label-md',
+  'px-(--spacing-xs) py-(--spacing-xs) text-start text-label-md',
   ...ghostLayerClasses,
   ...focusVisibleRingClasses,
   'focus-visible:before:opacity-100',

@@ -97,7 +97,7 @@
     :data-marks="marksAttr"
     :data-hatch="hatchAttr"
     :data-flush="flushAttr"
-    class="relative border-(--border-default) data-[borders~=bottom]:border-b data-[borders~=left]:border-l data-[borders~=right]:border-r data-[borders~=top]:border-t"
+    class="relative border-(--border-default) data-[borders~=bottom]:border-b data-[borders~=left]:border-s data-[borders~=right]:border-e data-[borders~=top]:border-t"
   >
     <div
       v-if="hatch"
@@ -108,22 +108,22 @@
     <span
       v-if="hasCorner('top-left')"
       aria-hidden="true"
-      :class="[MARK_CLASS, 'left-0 top-0']"
+      :class="[MARK_CLASS, 'start-0 top-0']"
     />
     <span
       v-if="hasCorner('top-right')"
       aria-hidden="true"
-      :class="[MARK_CLASS, 'right-0 top-0']"
+      :class="[MARK_CLASS, 'end-0 top-0']"
     />
     <span
       v-if="hasCorner('bottom-left')"
       aria-hidden="true"
-      :class="[MARK_CLASS, 'left-0 bottom-0']"
+      :class="[MARK_CLASS, 'start-0 bottom-0']"
     />
     <span
       v-if="hasCorner('bottom-right')"
       aria-hidden="true"
-      :class="[MARK_CLASS, 'right-0 bottom-0']"
+      :class="[MARK_CLASS, 'end-0 bottom-0']"
     />
 
     <div class="relative z-10 h-full">

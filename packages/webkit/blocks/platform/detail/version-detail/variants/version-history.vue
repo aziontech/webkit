@@ -736,7 +736,7 @@
                 <div
                   class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                 >
-                  <span class="flex-1 truncate text-left text-label-sm text-(--text-default)"
+                  <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
                     >Theme</span
                   >
                   <ThemeSwitcher
@@ -857,7 +857,7 @@
                 />
               </a>
 
-              <div class="-ml-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
+              <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
                 <Breadcrumb
                   :items="[]"
                   class="w-full"
@@ -972,7 +972,7 @@
               type="button"
               aria-label="Search"
               aria-keyshortcuts="Meta+K"
-              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-left text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
+              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
               @click="paletteOpen = true"
             >
               <span
@@ -1319,7 +1319,7 @@
                 @keydown.esc="historyCollapsed = true"
               >
                 <header
-                  class="flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) py-(--spacing-xs) pl-(--spacing-lg) pr-(--spacing-sm)"
+                  class="flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) py-(--spacing-xs) ps-(--spacing-lg) pe-(--spacing-sm)"
                 >
                   <h2
                     id="version-history-title"
@@ -1339,7 +1339,7 @@
                   <ol class="flex flex-col">
                     <li class="relative flex gap-(--spacing-sm) pb-(--spacing-lg)">
                       <span
-                        class="absolute bottom-0 left-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
+                        class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
                         aria-hidden="true"
                       />
                       <span
@@ -1362,7 +1362,7 @@
                           </span>
                           <span
                             v-if="!editing"
-                            class="ml-auto shrink-0"
+                            class="ms-auto shrink-0"
                           >
                             <IconButton
                               icon="pi pi-pencil"
@@ -1442,7 +1442,7 @@
 
                     <li class="relative flex flex-col pb-(--spacing-lg)">
                       <span
-                        class="absolute bottom-0 left-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
+                        class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
                         aria-hidden="true"
                       />
                       <p class="flex gap-(--spacing-sm)">
@@ -1467,12 +1467,12 @@
                     >
                       <span
                         v-if="index < earlier.slice(0, shown).length - 1"
-                        class="absolute bottom-0 left-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
+                        class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
                         aria-hidden="true"
                       />
                       <button
                         type="button"
-                        class="group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                        class="group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                       >
                         <span
                           class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
@@ -1633,7 +1633,7 @@
                     <div
                       class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                     >
-                      <span class="flex-1 truncate text-left text-label-sm text-(--text-default)"
+                      <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
                         >Theme</span
                       >
                       <ThemeSwitcher

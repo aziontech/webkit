@@ -124,7 +124,7 @@
                   />
                   <span class="truncate text-label-sm text-(--text-muted)">{{ node.eyebrow }}</span>
                   <Tag
-                    class="ml-auto shrink-0"
+                    class="ms-auto shrink-0"
                     :severity="node.severity"
                     :label="node.label"
                     size="small"

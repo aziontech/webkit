@@ -156,7 +156,7 @@
                 </template>
               </Input>
             </span>
-            <span class="ml-auto flex items-center gap-(--spacing-xs)">
+            <span class="ms-auto flex items-center gap-(--spacing-xs)">
               <IconButton
                 icon="pi pi-refresh"
                 kind="outlined"
@@ -185,7 +185,7 @@
                 class="flex items-stretch border-b border-(--border-default) bg-(--bg-surface-raised)"
               >
                 <span
-                  class="flex w-10 shrink-0 items-center justify-center border-r border-(--border-muted) py-(--spacing-xs)"
+                  class="flex w-10 shrink-0 items-center justify-center border-e border-(--border-muted) py-(--spacing-xs)"
                 >
                   <Checkbox
                     binary
@@ -196,7 +196,7 @@
                 <span
                   v-for="column in COLUMNS"
                   :key="column.name"
-                  class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-r border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+                  class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
                 >
                   <span class="truncate text-label-md text-(--text-default)">
                     {{ column.name }}
@@ -204,7 +204,7 @@
                   <span class="shrink-0 text-body-xs text-(--text-muted)">{{ column.type }}</span>
                   <i
                     v-if="column.primaryKey"
-                    class="pi pi-key ml-auto shrink-0 pl-(--spacing-xs) text-(--primary)"
+                    class="pi pi-key ms-auto shrink-0 ps-(--spacing-xs) text-(--primary)"
                     aria-label="Primary key"
                   />
                 </span>
@@ -216,7 +216,7 @@
                 class="flex items-stretch border-b border-(--border-muted)"
               >
                 <span
-                  class="flex w-10 shrink-0 items-center justify-center border-r border-(--border-muted) py-(--spacing-xs)"
+                  class="flex w-10 shrink-0 items-center justify-center border-e border-(--border-muted) py-(--spacing-xs)"
                 >
                   <Checkbox
                     binary
@@ -227,7 +227,7 @@
                 <span
                   v-for="column in COLUMNS"
                   :key="column.name"
-                  class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-r border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+                  class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
                 >
                   <span class="truncate text-label-md text-(--text-default)">
                     {{ cell(row, column.name) }}
@@ -247,7 +247,7 @@
                 >
                   <div class="flex items-stretch border-b border-(--border-muted) bg-(--bg-hover)">
                     <span
-                      class="flex w-10 shrink-0 items-center justify-center border-r border-(--border-muted) py-(--spacing-xs)"
+                      class="flex w-10 shrink-0 items-center justify-center border-e border-(--border-muted) py-(--spacing-xs)"
                     >
                       <Checkbox
                         binary
@@ -258,7 +258,7 @@
                     <span
                       v-for="column in COLUMNS"
                       :key="column.name"
-                      class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-r border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+                      class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
                     >
                       <span class="truncate text-label-md text-(--text-default)">
                         {{ cell(INSERTED, column.name) }}

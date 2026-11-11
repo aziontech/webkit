@@ -159,7 +159,7 @@ export const siteFooterMarkup = (kind) => `<div class="w-full border-t border-(-
         v-if="brandLeadsSocialRow"
         href="#"
         aria-label="Azion home"
-        class="${BRAND_LINK_CLASS} mr-(--spacing-xs)"
+        class="${BRAND_LINK_CLASS} me-(--spacing-xs)"
       >
         <Brand size="small" />
       </a>

@@ -78,7 +78,7 @@
         >
           <template #header>
             <h3 class="m-0 truncate text-heading-xs text-(--text-default)">Domains</h3>
-            <span class="ml-auto inline-flex shrink-0">
+            <span class="ms-auto inline-flex shrink-0">
               <Button
                 label="Add Domain"
                 kind="outlined"
@@ -105,7 +105,7 @@
                   <span class="truncate text-body-sm text-(--text-default)">{{ row.domain }}</span>
                   <span class="truncate text-label-sm text-(--text-muted)">{{ row.kind }}</span>
                 </span>
-                <span class="ml-auto hidden shrink-0 items-center gap-(--spacing-xs) md:flex">
+                <span class="ms-auto hidden shrink-0 items-center gap-(--spacing-xs) md:flex">
                   <Tag
                     :label="row.environment"
                     severity="secondary"
@@ -135,7 +135,7 @@
                     Require a client certificate verified against a Trusted CA.
                   </span>
                 </span>
-                <span class="ml-auto inline-flex shrink-0">
+                <span class="ms-auto inline-flex shrink-0">
                   <Switch
                     :model-value="true"
                     aria-label="Mutual authentication"

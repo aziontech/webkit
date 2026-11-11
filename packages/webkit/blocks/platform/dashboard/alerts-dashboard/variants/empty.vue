@@ -329,7 +329,7 @@
                   <SeverityTag :severity="level.id" />
                   <span class="flex items-baseline gap-(--spacing-xs) tabular-nums">
                     <span class="text-body-md text-(--text-default)">{{ level.count }}</span>
-                    <span class="w-10 text-right text-body-sm text-(--text-muted)"
+                    <span class="w-10 text-end text-body-sm text-(--text-muted)"
                       >{{ Math.round((level.count / openTotal) * 100) }}%</span
                     >
                   </span>
@@ -393,7 +393,7 @@
               </template>
               <template #cell-score="{ row }">
                 <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-                  <span class="w-8 shrink-0 text-right tabular-nums">{{ row.score }}</span>
+                  <span class="w-8 shrink-0 text-end tabular-nums">{{ row.score }}</span>
                   <SeverityTag
                     :severity="row.level"
                     size="small"

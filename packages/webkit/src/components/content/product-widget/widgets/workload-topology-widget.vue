@@ -130,7 +130,7 @@
             severity="success"
             size="small"
           />
-          <span class="ml-auto inline-flex shrink-0">
+          <span class="ms-auto inline-flex shrink-0">
             <Button
               label="Deploy"
               kind="outlined"
@@ -174,7 +174,7 @@
                 />
                 <span class="truncate text-label-sm text-(--text-muted)">{{ node.eyebrow }}</span>
                 <Tag
-                  class="ml-auto shrink-0"
+                  class="ms-auto shrink-0"
                   :label="node.label"
                   :severity="node.severity"
                   size="small"

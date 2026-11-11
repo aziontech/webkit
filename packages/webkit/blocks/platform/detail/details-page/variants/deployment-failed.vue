@@ -786,7 +786,7 @@
                 <div
                   class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                 >
-                  <span class="flex-1 truncate text-left text-label-sm text-(--text-default)"
+                  <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
                     >Theme</span
                   >
                   <ThemeSwitcher
@@ -907,7 +907,7 @@
                 />
               </a>
 
-              <div class="-ml-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
+              <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
                 <Breadcrumb
                   :items="breadcrumb"
                   class="w-full"
@@ -931,7 +931,7 @@
               type="button"
               aria-label="Search"
               aria-keyshortcuts="Meta+K"
-              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-left text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
+              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
               @click="paletteOpen = true"
             >
               <span
@@ -1272,7 +1272,7 @@
                         </Accordion.Trigger>
 
                         <div
-                          class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:right-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pr-(--spacing-md) @lg/band:pb-0"
+                          class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
                         >
                           <div class="pointer-events-auto">
                             <Tooltip text="Open Default in Build & Deployment settings">
@@ -1422,7 +1422,7 @@
                           </span>
                           <span
                             :data-state="step.status"
-                            class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-left data-[state=failed]:flex-wrap"
+                            class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"
                           >
                             <span
                               :data-state="step.status"
@@ -1443,7 +1443,7 @@
                               {{ step.description }}
                             </span>
                           </span>
-                          <span class="ml-auto flex shrink-0 items-center">
+                          <span class="ms-auto flex shrink-0 items-center">
                             <span
                               v-if="step.duration"
                               class="text-label-code-md text-(--text-muted)"
@@ -1588,7 +1588,7 @@
                     <div
                       class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                     >
-                      <span class="flex-1 truncate text-left text-label-sm text-(--text-default)"
+                      <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
                         >Theme</span
                       >
                       <ThemeSwitcher

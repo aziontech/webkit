@@ -160,7 +160,7 @@
                         </span>
                       </span>
                       <Tag
-                        class="ml-auto shrink-0"
+                        class="ms-auto shrink-0"
                         label="Deployed"
                         severity="success"
                         size="small"

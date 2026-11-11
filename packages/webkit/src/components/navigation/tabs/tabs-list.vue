@@ -57,7 +57,7 @@
   )
 
   const indicatorClasses = [
-    'pointer-events-none absolute left-0 top-0 z-0',
+    'pointer-events-none absolute start-0 top-0 z-0',
     'rounded-(--shape-button) bg-(--secondary-mask)',
     'border-(length:--border-width-default) border-(--border-muted)',
     'shadow-(--shadow-xs)',
@@ -152,7 +152,7 @@
         v-if="canScrollStart"
         :data-testid="`${testId}__fade-start`"
         aria-hidden="true"
-        class="pointer-events-none absolute inset-y-0 left-0 z-10 w-(--spacing-6) bg-gradient-to-r from-(--bg-canvas) to-transparent"
+        class="pointer-events-none absolute inset-y-0 start-0 z-10 w-(--spacing-6) bg-gradient-to-r from-(--bg-canvas) to-transparent"
       />
     </Transition>
     <Transition
@@ -163,7 +163,7 @@
         v-if="canScrollEnd"
         :data-testid="`${testId}__fade-end`"
         aria-hidden="true"
-        class="pointer-events-none absolute inset-y-0 right-0 z-10 w-(--spacing-6) bg-gradient-to-l from-(--bg-canvas) to-transparent"
+        class="pointer-events-none absolute inset-y-0 end-0 z-10 w-(--spacing-6) bg-gradient-to-l from-(--bg-canvas) to-transparent"
       />
     </Transition>
   </div>

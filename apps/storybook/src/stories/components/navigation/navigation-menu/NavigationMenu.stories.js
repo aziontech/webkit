@@ -248,7 +248,7 @@ const DEMO_TEMPLATE = `<div class="min-h-screen bg-(--bg-canvas) text-(--text-de
         </NavigationMenuItem>
       </NavigationMenuList>
 
-      <div class="ml-auto flex items-center gap-(--spacing-2)">
+      <div class="ms-auto flex items-center gap-(--spacing-2)">
         <NavigationMenuTrigger href="https://www.azion.com/pt-br/contato-vendas/">
           Contato
         </NavigationMenuTrigger>

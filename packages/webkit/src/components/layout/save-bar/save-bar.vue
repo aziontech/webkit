@@ -47,7 +47,7 @@
         <div
           v-if="$slots['default']"
           :data-testid="`${testId}__message`"
-          class="mr-auto flex min-w-0 items-start gap-(--spacing-xs)"
+          class="me-auto flex min-w-0 items-start gap-(--spacing-xs)"
         >
           <i
             class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
@@ -83,7 +83,7 @@
         </div>
         <div
           :data-testid="`${testId}__actions`"
-          class="flex flex-col-reverse gap-(--spacing-xs) lg:ml-auto lg:shrink-0 lg:flex-row lg:items-center lg:gap-(--spacing-sm)"
+          class="flex flex-col-reverse gap-(--spacing-xs) lg:ms-auto lg:shrink-0 lg:flex-row lg:items-center lg:gap-(--spacing-sm)"
         >
           <slot name="actions" />
         </div>

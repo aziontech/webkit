@@ -397,7 +397,7 @@
                   <div
                     v-for="link in pricingLinks"
                     :key="link.label"
-                    class="ml-(--spacing-xs) w-fit"
+                    class="ms-(--spacing-xs) w-fit"
                   >
                     <Link
                       :label="link.label"

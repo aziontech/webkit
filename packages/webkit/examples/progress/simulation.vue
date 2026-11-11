@@ -32,7 +32,7 @@
         kind="outlined"
         @click="reset"
       />
-      <span class="ml-auto">{{ value }}%</span>
+      <span class="ms-auto">{{ value }}%</span>
     </div>
   </div>
 </template>

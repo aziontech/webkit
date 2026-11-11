@@ -309,7 +309,7 @@
         {{ label }}
       </p>
 
-      <div class="ml-auto flex min-w-0 items-center gap-(--spacing-sm)">
+      <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
         <template v-if="!settled">
           <span class="shrink-0 text-label-sm text-(--text-default)">{{ progressLabel }}</span>
           <span
@@ -387,7 +387,7 @@
 
             <span
               :data-state="stepStatus(i)"
-              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-left data-[state=failed]:flex-wrap"
+              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"
             >
               <span
                 :data-state="stepStatus(i)"
@@ -409,7 +409,7 @@
               </span>
             </span>
 
-            <span class="ml-auto flex shrink-0 items-center">
+            <span class="ms-auto flex shrink-0 items-center">
               <span
                 v-if="durationLabel(i)"
                 class="text-label-code-md text-(--text-muted)"

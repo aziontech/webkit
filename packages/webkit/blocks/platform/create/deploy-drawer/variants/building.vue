@@ -516,7 +516,7 @@
                                     >
                                       <span class="truncate">{{ domain }}</span>
                                       <i
-                                        class="pi pi-external-link ml-auto shrink-0 text-body-xs leading-none"
+                                        class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
                                         aria-hidden="true"
                                       />
                                     </a>
@@ -621,7 +621,7 @@
                     </Field.Label>
                     <div
                       v-if="entry.tag"
-                      class="pointer-events-none absolute right-(--spacing-sm) top-(--spacing-sm)"
+                      class="pointer-events-none absolute end-(--spacing-sm) top-(--spacing-sm)"
                     >
                       <Tag
                         :label="entry.tag"
@@ -765,7 +765,7 @@
                                       >
                                         <span class="truncate">{{ domain }}</span>
                                         <i
-                                          class="pi pi-external-link ml-auto shrink-0 text-body-xs leading-none"
+                                          class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
                                           aria-hidden="true"
                                         />
                                       </a>

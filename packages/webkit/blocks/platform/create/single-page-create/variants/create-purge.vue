@@ -312,7 +312,7 @@
           <div
             class="layout-boundary-inline flex min-w-0 flex-1 items-center gap-(--spacing-sm) py-(--spacing-xs)"
           >
-            <div class="ml-auto flex shrink-0 items-center gap-(--spacing-sm)">
+            <div class="ms-auto flex shrink-0 items-center gap-(--spacing-sm)">
               <Button
                 type="button"
                 label="Cancel"

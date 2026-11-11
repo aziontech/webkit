@@ -22,7 +22,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)"
+    class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)"
   >
     <slot />
   </div>

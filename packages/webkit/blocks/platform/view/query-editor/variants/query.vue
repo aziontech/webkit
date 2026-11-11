@@ -912,7 +912,7 @@ LIMIT 3;`
                 <div
                   class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                 >
-                  <span class="flex-1 truncate text-left text-label-sm text-(--text-default)"
+                  <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
                     >Theme</span
                   >
                   <ThemeSwitcher
@@ -1033,7 +1033,7 @@ LIMIT 3;`
                 />
               </a>
 
-              <div class="-ml-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
+              <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
                 <Breadcrumb
                   :items="breadcrumb"
                   class="w-full"
@@ -1057,7 +1057,7 @@ LIMIT 3;`
               type="button"
               aria-label="Search"
               aria-keyshortcuts="Meta+K"
-              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-left text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
+              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
               @click="paletteOpen = true"
             >
               <span
@@ -1220,7 +1220,7 @@ LIMIT 3;`
                         :data-selected="
                           selectedTable && selectedTable.id === table.id ? true : null
                         "
-                        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-selected:bg-(--bg-hover) motion-reduce:transition-none"
+                        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-selected:bg-(--bg-hover) motion-reduce:transition-none"
                         @click="selectTable(table.id)"
                       >
                         <i
@@ -1358,7 +1358,7 @@ LIMIT 3;`
                         </template>
                       </Input>
                     </div>
-                    <div class="ml-auto flex items-center gap-(--spacing-xs)">
+                    <div class="ms-auto flex items-center gap-(--spacing-xs)">
                       <Button
                         label="Sort"
                         kind="outlined"
@@ -1387,7 +1387,7 @@ LIMIT 3;`
                       class="flex items-stretch border-b border-(--border-default) bg-(--bg-surface-raised)"
                     >
                       <div
-                        class="flex w-10 shrink-0 items-center justify-center border-r border-(--border-muted) py-(--spacing-xs)"
+                        class="flex w-10 shrink-0 items-center justify-center border-e border-(--border-muted) py-(--spacing-xs)"
                       >
                         <Checkbox
                           binary
@@ -1398,7 +1398,7 @@ LIMIT 3;`
                       <div
                         v-for="column in selectedTable.columns"
                         :key="column.id"
-                        class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-r border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+                        class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
                       >
                         <span class="truncate text-label-md text-(--text-default)">{{
                           column.name
@@ -1408,7 +1408,7 @@ LIMIT 3;`
                         }}</span>
                         <i
                           v-if="column.primaryKey"
-                          class="pi pi-key ml-auto shrink-0 pl-(--spacing-xs) text-(--primary)"
+                          class="pi pi-key ms-auto shrink-0 ps-(--spacing-xs) text-(--primary)"
                           aria-label="Primary key"
                         />
                       </div>
@@ -1430,7 +1430,7 @@ LIMIT 3;`
                       class="group flex items-stretch border-b border-(--border-muted) hover:bg-(--bg-hover)"
                     >
                       <div
-                        class="flex w-10 shrink-0 items-center justify-center border-r border-(--border-muted) py-(--spacing-xs)"
+                        class="flex w-10 shrink-0 items-center justify-center border-e border-(--border-muted) py-(--spacing-xs)"
                       >
                         <Checkbox
                           binary
@@ -1441,7 +1441,7 @@ LIMIT 3;`
                       <div
                         v-for="column in selectedTable.columns"
                         :key="column.id"
-                        class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-r border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+                        class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
                       >
                         <span
                           class="truncate text-label-md"
@@ -1524,8 +1524,8 @@ LIMIT 3;`
                         disabled
                       />
                     </Tooltip>
-                    <span class="ml-(--spacing-md)">100 rows</span>
-                    <span class="ml-auto"
+                    <span class="ms-(--spacing-md)">100 rows</span>
+                    <span class="ms-auto"
                       >{{ tableRows.length }} record{{ tableRows.length === 1 ? '' : 's' }}</span
                     >
                   </div>
@@ -1625,7 +1625,7 @@ LIMIT 3;`
                     >
                       <button
                         type="button"
-                        class="min-w-0 flex-1 truncate rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left font-code text-label-code-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                        class="min-w-0 flex-1 truncate rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start font-code text-label-code-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                         :title="oneLine(item.sql)"
                         @click="loadFromHistory(item)"
                       >
@@ -1691,7 +1691,7 @@ LIMIT 3;`
                   :loading="running"
                   @click="runQuery"
                 />
-                <div class="ml-auto flex items-center gap-(--spacing-xs)">
+                <div class="ms-auto flex items-center gap-(--spacing-xs)">
                   <Button
                     label="Prettify"
                     kind="outlined"
@@ -1728,7 +1728,7 @@ LIMIT 3;`
                   class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
                 >
                   <span class="shrink-0 text-heading-xxs text-(--text-default)"> Results </span>
-                  <div class="flex ml-(--spacing-sm) min-w-0 flex-1 md:max-w-(--container-sm)">
+                  <div class="flex ms-(--spacing-sm) min-w-0 flex-1 md:max-w-(--container-sm)">
                     <Input
                       v-model="resultSearch"
                       size="medium"
@@ -1745,7 +1745,7 @@ LIMIT 3;`
                       </template>
                     </Input>
                   </div>
-                  <div class="ml-auto flex items-center gap-(--spacing-xs)">
+                  <div class="ms-auto flex items-center gap-(--spacing-xs)">
                     <ToggleGroup
                       v-model="resultView"
                       :options="resultViewOptions"
@@ -1877,7 +1877,7 @@ LIMIT 3;`
                       v-for="template in filteredTemplates"
                       :key="template.id"
                       type="button"
-                      class="flex flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) text-left transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-primary) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+                      class="flex flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) text-start transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-primary) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
                       @click="chooseTemplate(template)"
                     >
                       <span class="flex items-center gap-(--spacing-xs)">
@@ -2006,7 +2006,7 @@ LIMIT 3;`
                     <div
                       class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                     >
-                      <span class="flex-1 truncate text-left text-label-sm text-(--text-default)"
+                      <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
                         >Theme</span
                       >
                       <ThemeSwitcher

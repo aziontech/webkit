@@ -77,7 +77,7 @@
     </div>
     <div
       v-if="$slots['trailing']"
-      class="-my-(--spacing-xxs) -mr-(--spacing-xs) flex shrink-0 items-center gap-(--spacing-xxs)"
+      class="-my-(--spacing-xxs) -me-(--spacing-xs) flex shrink-0 items-center gap-(--spacing-xxs)"
     >
       <slot name="trailing" />
     </div>

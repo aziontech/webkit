@@ -182,7 +182,7 @@
                 severity="primary"
                 size="small"
                 aria-hidden="true"
-                class="pointer-events-none absolute -top-2 -right-2 min-w-5"
+                class="pointer-events-none absolute -top-2 -end-2 min-w-5"
               />
             </span>
           </div>
@@ -227,7 +227,7 @@
                   class="min-h-(--size-44)"
                 >
                   <template #content>
-                    <div class="flex flex-col items-start gap-(--spacing-md) text-left">
+                    <div class="flex flex-col items-start gap-(--spacing-md) text-start">
                       <span
                         class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                       >

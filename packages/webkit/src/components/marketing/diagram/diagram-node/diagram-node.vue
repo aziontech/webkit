@@ -155,7 +155,7 @@
         :label="node.status.label"
         :severity="node.status.severity"
         size="small"
-        class="ml-auto shrink-0"
+        class="ms-auto shrink-0"
       />
     </span>
     <span

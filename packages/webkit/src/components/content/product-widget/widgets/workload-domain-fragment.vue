@@ -57,7 +57,7 @@
               <span class="truncate text-body-sm text-(--text-default)">
                 {{ ROWS[index].domain }}
               </span>
-              <span class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+              <span class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                 <Tag
                   :label="ROWS[index].certificate"
                   severity="success"

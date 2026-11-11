@@ -60,7 +60,7 @@
       v-if="readout"
       :data-moving="moving || null"
       :style="{ translate: `${readout.x}px ${readout.y}px` }"
-      class="absolute left-0 top-0 data-[moving]:transition-[translate] data-[moving]:duration-fast-02 data-[moving]:ease-productive-entrance motion-reduce:transition-none"
+      class="absolute start-0 top-0 data-[moving]:transition-[translate] data-[moving]:duration-fast-02 data-[moving]:ease-productive-entrance motion-reduce:transition-none"
     >
       <div
         :data-side="readout.side"

@@ -49,7 +49,7 @@
         />
       </div>
 
-      <div class="ml-auto flex items-center gap-(--spacing-xs)">
+      <div class="ms-auto flex items-center gap-(--spacing-xs)">
         <Skeleton
           width="5.5rem"
           height="2rem"
@@ -70,7 +70,7 @@
 
     <div class="flex min-h-0 flex-1">
       <div
-        class="hidden w-(--container-2xs) shrink-0 flex-col gap-(--spacing-lg) overflow-hidden border-r-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) p-(--spacing-sm) md:flex"
+        class="hidden w-(--container-2xs) shrink-0 flex-col gap-(--spacing-lg) overflow-hidden border-e-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) p-(--spacing-sm) md:flex"
       >
         <Skeleton height="2.5rem" />
 

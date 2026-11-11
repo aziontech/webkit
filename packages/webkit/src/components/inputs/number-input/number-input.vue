@@ -143,7 +143,7 @@
   >
     <span
       v-if="$slots['prefix']"
-      class="relative z-(--z-input-field) flex items-center pl-(--spacing-md) text-(--text-muted)"
+      class="relative z-(--z-input-field) flex items-center ps-(--spacing-md) text-(--text-muted)"
     >
       <slot name="prefix" />
     </span>
@@ -171,14 +171,14 @@
 
     <span
       v-if="$slots['suffix']"
-      class="relative z-(--z-input-field) flex items-center pr-(--spacing-md) text-(--text-muted)"
+      class="relative z-(--z-input-field) flex items-center pe-(--spacing-md) text-(--text-muted)"
     >
       <slot name="suffix" />
     </span>
 
     <span
       v-if="disabled"
-      class="relative z-(--z-input-field) flex items-center pr-(--spacing-md) text-(--text-disabled)"
+      class="relative z-(--z-input-field) flex items-center pe-(--spacing-md) text-(--text-disabled)"
       aria-hidden="true"
     >
       <i class="pi pi-lock text-label-sm leading-none" />
@@ -186,7 +186,7 @@
 
     <span
       v-if="showButtons"
-      class="relative z-(--z-input-field) flex h-full w-12 shrink-0 flex-col self-stretch border-l border-(--border-default)"
+      class="relative z-(--z-input-field) flex h-full w-12 shrink-0 flex-col self-stretch border-s border-(--border-default)"
     >
       <button
         type="button"

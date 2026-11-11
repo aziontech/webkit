@@ -72,11 +72,11 @@
   const arrowIcon = computed(() => (isInline.value ? 'pi pi-chevron-down' : 'pi pi-chevron-right'))
 
   const ROW_CLASS =
-    'relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xxs) pr-(--spacing-xxs)'
+    'relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xxs) pe-(--spacing-xxs)'
 
   const CONTROL_CLASS =
     'group relative flex h-8 shrink-0 items-center gap-(--spacing-xs) ' +
-    'rounded-(--shape-elements) pr-(--spacing-xs) py-(--spacing-xxs) text-left ' +
+    'rounded-(--shape-elements) pe-(--spacing-xs) py-(--spacing-xxs) text-start ' +
     'text-(--text-default) ' +
     "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
     "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance " +
@@ -117,7 +117,7 @@
   )
 
   const contentColumnClass = computed(() =>
-    showIcon.value ? 'pl-(--spacing-xxs)' : 'pl-(--spacing-sm)'
+    showIcon.value ? 'ps-(--spacing-xxs)' : 'ps-(--spacing-sm)'
   )
 
   const rowClass = computed(() => cn(ROW_CLASS, attrs.class as string | undefined))
@@ -207,7 +207,7 @@
         />
       </span>
       <span
-        class="min-w-0 flex-1 truncate text-left text-label-md"
+        class="min-w-0 flex-1 truncate text-start text-label-md"
         :data-testid="`${testId}__label`"
       >
         <slot>{{ label }}</slot>

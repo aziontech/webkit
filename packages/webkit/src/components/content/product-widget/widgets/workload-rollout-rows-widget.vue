@@ -120,7 +120,7 @@
         >
           <template #header>
             <h3 class="m-0 truncate text-heading-xs text-(--text-default)">Versions</h3>
-            <span class="ml-auto inline-flex shrink-0">
+            <span class="ms-auto inline-flex shrink-0">
               <Button
                 label="New Version"
                 kind="outlined"

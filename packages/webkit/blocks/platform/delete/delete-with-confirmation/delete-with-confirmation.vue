@@ -82,7 +82,7 @@
             <span class="truncate">{{ name }}</span>
             <i
               :class="copied ? 'pi pi-check' : 'pi pi-copy'"
-              class="ml-(--spacing-xxs) shrink-0 text-body-xs text-(--text-default)"
+              class="ms-(--spacing-xxs) shrink-0 text-body-xs text-(--text-default)"
               aria-hidden="true"
             />
             <span
@@ -91,7 +91,7 @@
             >
               <span class="min-w-0 overflow-hidden">
                 <span
-                  class="block whitespace-nowrap pl-(--spacing-xxs) text-body-xs text-(--text-default)"
+                  class="block whitespace-nowrap ps-(--spacing-xxs) text-body-xs text-(--text-default)"
                   >Copied</span
                 >
               </span>

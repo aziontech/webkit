@@ -125,7 +125,7 @@
           </NavigationMenu.Item>
         </NavigationMenu.List>
 
-        <div class="ml-auto flex items-center gap-(--spacing-2)">
+        <div class="ms-auto flex items-center gap-(--spacing-2)">
           <NavigationMenu.Trigger href="https://www.azion.com/pt-br/contato-vendas/">
             Contato
           </NavigationMenu.Trigger>

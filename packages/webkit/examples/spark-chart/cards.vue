@@ -20,10 +20,10 @@
           :values="[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]"
         />
       </div>
-      <span class="w-16 shrink-0 text-right text-label-md text-(--text-default) tabular-nums"
+      <span class="w-16 shrink-0 text-end text-label-md text-(--text-default) tabular-nums"
         >3.4M</span
       >
-      <span class="w-14 shrink-0 text-right text-label-sm text-(--success-contrast) tabular-nums"
+      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-contrast) tabular-nums"
         >+8.2%</span
       >
     </li>
@@ -41,10 +41,10 @@
           :values="[640, 610, 650, 580, 560, 590, 520, 500, 470, 480, 430, 410]"
         />
       </div>
-      <span class="w-16 shrink-0 text-right text-label-md text-(--text-default) tabular-nums"
+      <span class="w-16 shrink-0 text-end text-label-md text-(--text-default) tabular-nums"
         >48.2K</span
       >
-      <span class="w-14 shrink-0 text-right text-label-sm text-(--success-contrast) tabular-nums"
+      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-contrast) tabular-nums"
         >-12.4%</span
       >
     </li>
@@ -62,10 +62,10 @@
           :values="[91.2, 91.8, 92.4, 92.1, 93.0, 93.6, 94.1, 93.9, 94.8, 95.3, 95.8, 96.2]"
         />
       </div>
-      <span class="w-16 shrink-0 text-right text-label-md text-(--text-default) tabular-nums"
+      <span class="w-16 shrink-0 text-end text-label-md text-(--text-default) tabular-nums"
         >96.2%</span
       >
-      <span class="w-14 shrink-0 text-right text-label-sm text-(--success-contrast) tabular-nums"
+      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-contrast) tabular-nums"
         >+1.6%</span
       >
     </li>
@@ -81,10 +81,10 @@
           :values="[182, 176, 190, 171, 168, 160, 164, 152, 149, 141, 138, 132]"
         />
       </div>
-      <span class="w-16 shrink-0 text-right text-label-md text-(--text-default) tabular-nums"
+      <span class="w-16 shrink-0 text-end text-label-md text-(--text-default) tabular-nums"
         >132 ms</span
       >
-      <span class="w-14 shrink-0 text-right text-label-sm text-(--success-contrast) tabular-nums"
+      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-contrast) tabular-nums"
         >-4.3%</span
       >
     </li>

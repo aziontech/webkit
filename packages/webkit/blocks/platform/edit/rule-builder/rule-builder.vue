@@ -735,7 +735,7 @@
                             </div>
 
                             <div
-                              class="ml-(--spacing-xs) flex flex-col gap-(--spacing-sm) rounded-bl-(--shape-card) border-b-(length:--border-width-default) border-l-(length:--border-width-default) border-(--border-muted) pb-(--spacing-md) pl-(--spacing-md)"
+                              class="ms-(--spacing-xs) flex flex-col gap-(--spacing-sm) rounded-es-(--shape-card) border-b-(length:--border-width-default) border-s-(length:--border-width-default) border-(--border-muted) pb-(--spacing-md) ps-(--spacing-md)"
                             >
                               <div class="relative flex flex-col gap-(--spacing-sm)">
                                 <div
@@ -816,7 +816,7 @@
                                                   @mousedown.prevent="pickVariable(cond, option)"
                                                 >
                                                   <span
-                                                    class="min-w-0 flex-auto truncate text-left"
+                                                    class="min-w-0 flex-auto truncate text-start"
                                                     >{{ option.value }}</span
                                                   >
                                                 </div>

@@ -325,7 +325,7 @@
                                   :key="entry.id"
                                   type="button"
                                   :aria-current="entry.id === versionOf(row).id || undefined"
-                                  class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                  class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                                   @click="pickVersion(row, entry.id)"
                                 >
                                   <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
@@ -493,7 +493,7 @@
                                                 :aria-current="
                                                   entry.id === versionOf(dependency).id || undefined
                                                 "
-                                                class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                                class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                                                 @click="pickVersion(dependency, entry.id)"
                                               >
                                                 <span
@@ -609,7 +609,7 @@
                     </Field.Label>
                     <div
                       v-if="entry.tag"
-                      class="pointer-events-none absolute right-(--spacing-sm) top-(--spacing-sm)"
+                      class="pointer-events-none absolute end-(--spacing-sm) top-(--spacing-sm)"
                     >
                       <Tag
                         :label="entry.tag"

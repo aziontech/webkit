@@ -43,7 +43,7 @@
       {{ title }}
     </h3>
     <div
-      class="flex flex-col gap-(--spacing-sm) text-body-sm text-(--text-default) [&_ul]:list-disc [&_ul]:pl-(--spacing-lg) [&_ol]:list-decimal [&_ol]:pl-(--spacing-lg) [&_a]:text-link"
+      class="flex flex-col gap-(--spacing-sm) text-body-sm text-(--text-default) [&_ul]:list-disc [&_ul]:ps-(--spacing-lg) [&_ol]:list-decimal [&_ol]:ps-(--spacing-lg) [&_a]:text-link"
     >
       <slot />
     </div>

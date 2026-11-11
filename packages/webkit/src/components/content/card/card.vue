@@ -94,7 +94,7 @@
         </h2>
         <div
           v-if="hasHeaderActionSlot"
-          class="ml-auto opacity-0 transition-opacity motion-reduce:transition-none group-hover:opacity-100 group-focus-within:opacity-100"
+          class="ms-auto opacity-0 transition-opacity motion-reduce:transition-none group-hover:opacity-100 group-focus-within:opacity-100"
           :data-testid="`${testId}__header-action`"
         >
           <slot name="header-action" />

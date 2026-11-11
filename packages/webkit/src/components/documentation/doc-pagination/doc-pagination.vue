@@ -59,7 +59,7 @@
       class="group flex flex-col items-start gap-(--spacing-xxs) rounded-(--shape-elements) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
       @click="emit('navigate', $event, previous)"
     >
-      <span class="pl-5 text-label-sm text-(--text-muted)">{{ previousLabel }}</span>
+      <span class="ps-5 text-label-sm text-(--text-muted)">{{ previousLabel }}</span>
       <span class="flex items-center gap-(--spacing-xxs)">
         <i
           class="pi pi-chevron-left size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:-translate-x-0.5 motion-reduce:transition-none"
@@ -76,7 +76,7 @@
       class="group flex flex-col items-end gap-(--spacing-xxs) rounded-(--shape-elements) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
       @click="emit('navigate', $event, next)"
     >
-      <span class="pr-5 text-label-sm text-(--text-muted)">{{ nextLabel }}</span>
+      <span class="pe-5 text-label-sm text-(--text-muted)">{{ nextLabel }}</span>
       <span class="flex items-center gap-(--spacing-xxs)">
         <span class="text-label-md text-(--text-default)">{{ next.title }}</span>
         <i

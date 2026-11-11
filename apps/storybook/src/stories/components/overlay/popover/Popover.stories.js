@@ -265,7 +265,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[30rem] w-full border bo
     All triggers use placement="auto". Each panel resolves to the best-fitting corner based on its position in the viewport.
   </p>
 
-  <div class="absolute top-(--spacing-md) left-(--spacing-md)">
+  <div class="absolute top-(--spacing-md) start-(--spacing-md)">
     <Popover :open="true" placement="auto">
       <PopoverTrigger>
         <Button kind="secondary" label="top-left" />
@@ -280,7 +280,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[30rem] w-full border bo
     </Popover>
   </div>
 
-  <div class="absolute top-(--spacing-md) right-(--spacing-md)">
+  <div class="absolute top-(--spacing-md) end-(--spacing-md)">
     <Popover :open="true" placement="auto">
       <PopoverTrigger>
         <Button kind="secondary" label="top-right" />
@@ -295,7 +295,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[30rem] w-full border bo
     </Popover>
   </div>
 
-  <div class="absolute bottom-(--spacing-md) left-(--spacing-md)">
+  <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
     <Popover :open="true" placement="auto">
       <PopoverTrigger>
         <Button kind="secondary" label="bottom-left" />
@@ -310,7 +310,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[30rem] w-full border bo
     </Popover>
   </div>
 
-  <div class="absolute bottom-(--spacing-md) right-(--spacing-md)">
+  <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
     <Popover :open="true" placement="auto">
       <PopoverTrigger>
         <Button kind="secondary" label="bottom-right" />

@@ -199,7 +199,7 @@
       <div class="relative">
         <svg
           v-show="path"
-          class="pointer-events-none absolute top-0 left-0 overflow-visible"
+          class="pointer-events-none absolute top-0 start-0 overflow-visible"
           :width="railWidth"
           :height="height"
           aria-hidden="true"
@@ -233,7 +233,7 @@
 
         <ul
           ref="listRef"
-          class="relative m-0 flex list-none flex-col p-0 pl-[17px]"
+          class="relative m-0 flex list-none flex-col p-0 ps-[17px]"
           @pointerleave="handleListLeave"
         >
           <li
@@ -246,7 +246,7 @@
             "
             :data-depth="item.depth"
             :data-active="item.id === activeId || null"
-            class="flex data-[depth=3]:pl-(--spacing-xs)"
+            class="flex data-[depth=3]:ps-(--spacing-xs)"
             @pointerenter="moveHighlight(index)"
             @focusin="moveHighlight(index)"
           >

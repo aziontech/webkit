@@ -66,7 +66,7 @@
       <ItemContent>
         <div
           :data-level="level"
-          class="flex flex-col data-[level=1]:border-l data-[level=2]:border-l data-[level=1]:border-(--border-default) data-[level=2]:border-(--border-default) data-[level=1]:pl-(--spacing-md) data-[level=2]:pl-(--spacing-md) data-[level=2]:ml-(--spacing-md)"
+          class="flex flex-col data-[level=1]:border-s data-[level=2]:border-s data-[level=1]:border-(--border-default) data-[level=2]:border-(--border-default) data-[level=1]:ps-(--spacing-md) data-[level=2]:ps-(--spacing-md) data-[level=2]:ms-(--spacing-md)"
         >
           <ItemTitle :data-testid="`${testId}__title`">
             <slot name="title">{{ title }}</slot>

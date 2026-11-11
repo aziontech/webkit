@@ -33,8 +33,8 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex items-center gap-(--spacing-xxs) relative w-fit pl-(--spacing-xxs)"
-    :class="!showCursor ? 'pr-(--spacing-xxs)' : 'pr-0'"
+    class="flex items-center gap-(--spacing-xxs) relative w-fit ps-(--spacing-xxs)"
+    :class="!showCursor ? 'pe-(--spacing-xxs)' : 'pe-0'"
   >
     <span
       v-if="prefix"

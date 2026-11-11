@@ -16,7 +16,7 @@
       Each panel resolves to the best-fitting corner based on its position in the viewport.
     </p>
 
-    <div class="absolute top-(--spacing-md) left-(--spacing-md)">
+    <div class="absolute top-(--spacing-md) start-(--spacing-md)">
       <DropdownMenu placement="auto">
         <DropdownMenuTrigger>
           <Button
@@ -37,7 +37,7 @@
       </DropdownMenu>
     </div>
 
-    <div class="absolute top-(--spacing-md) right-(--spacing-md)">
+    <div class="absolute top-(--spacing-md) end-(--spacing-md)">
       <DropdownMenu placement="auto">
         <DropdownMenuTrigger>
           <Button
@@ -58,7 +58,7 @@
       </DropdownMenu>
     </div>
 
-    <div class="absolute bottom-(--spacing-md) left-(--spacing-md)">
+    <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
       <DropdownMenu placement="auto">
         <DropdownMenuTrigger>
           <Button
@@ -79,7 +79,7 @@
       </DropdownMenu>
     </div>
 
-    <div class="absolute bottom-(--spacing-md) right-(--spacing-md)">
+    <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
       <DropdownMenu placement="auto">
         <DropdownMenuTrigger>
           <Button

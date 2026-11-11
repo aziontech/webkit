@@ -184,7 +184,7 @@
             label="Review Changes"
             size="small"
           />
-          <span class="absolute -top-2 -right-2 flex">
+          <span class="absolute -top-2 -end-2 flex">
             <Badge
               :label="String(alteredCount)"
               severity="secondary"

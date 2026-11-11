@@ -130,11 +130,11 @@
   const rootClass = computed(() =>
     cn(
       'flex h-full min-h-0 w-full min-w-0 flex-col',
-      'border-r border-(--border-muted) bg-(--bg-surface)',
+      'border-e border-(--border-muted) bg-(--bg-surface)',
       railEnabled.value
         ? cn(
             'relative shrink-0 overflow-hidden',
-            'data-[collapsed]:border-r-0 has-[>div>input:checked]:border-r-0',
+            'data-[collapsed]:border-e-0 has-[>div>input:checked]:border-e-0',
             'w-(--sidebar-width) has-[>div>input:checked]:w-0',
             'min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-0 data-[resizing]:min-w-0 max-w-(--sidebar-max-width)',
             RAIL_MOTION_CLASS,
@@ -275,14 +275,14 @@
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__handle`"
-      class="group absolute inset-y-0 right-0 z-10 w-(--spacing-xs) cursor-col-resize touch-none outline-none"
+      class="group absolute inset-y-0 end-0 z-10 w-(--spacing-xs) cursor-col-resize touch-none outline-none"
       @pointerdown="startResize"
       @keydown.left.prevent="nudge(-SIDEBAR_NUDGE_STEP)"
       @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
       @dblclick="collapsed = true"
     >
       <span
-        class="pointer-events-none absolute inset-y-0 right-0 w-(--border-2) bg-(--accent) opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
+        class="pointer-events-none absolute inset-y-0 end-0 w-(--border-2) bg-(--accent) opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
       />
     </div>
   </aside>
@@ -298,7 +298,7 @@
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__expand`"
-      class="group absolute inset-y-0 left-0 z-20 w-(--size-6) hover:w-(--size-10) focus-within:w-(--size-10) transition-[width] duration-moderate-02 ease-expressive-exit hover:ease-expressive-entrance focus-within:ease-expressive-entrance motion-reduce:transition-none"
+      class="group absolute inset-y-0 start-0 z-20 w-(--size-6) hover:w-(--size-10) focus-within:w-(--size-10) transition-[width] duration-moderate-02 ease-expressive-exit hover:ease-expressive-entrance focus-within:ease-expressive-entrance motion-reduce:transition-none"
       @pointerenter="startPreview"
       @pointerleave="endPreview"
       @focusin="startPreview"
@@ -313,14 +313,14 @@
         :aria-valuenow="valueNow"
         :aria-valuemin="valueMin"
         :aria-valuemax="valueMax"
-        class="absolute inset-y-0 left-0 w-full cursor-col-resize touch-none outline-none"
+        class="absolute inset-y-0 start-0 w-full cursor-col-resize touch-none outline-none"
         @pointerdown="startResize"
         @click="tapToExpand"
         @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
       />
 
       <div
-        class="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] pl-(--spacing-xxs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
+        class="pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] ps-(--spacing-xxs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
       >
         <Tooltip
           :text="expandAriaLabel"

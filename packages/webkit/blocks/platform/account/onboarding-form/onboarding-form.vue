@@ -277,12 +277,12 @@
           </Card>
         </div>
 
-        <div class="lg:sticky lg:top-(--spacing-xl) lg:my-auto lg:-mr-(--spacing-xl)">
+        <div class="lg:sticky lg:top-(--spacing-xl) lg:my-auto lg:-me-(--spacing-xl)">
           <div
             class="relative hidden h-[calc(100dvh-12rem)] max-h-(--container-xl) min-h-(--container-sm) overflow-hidden mask-r-from-72% mask-b-from-80% lg:block"
           >
             <figure
-              class="pointer-events-none absolute inset-y-0 left-0 m-0 flex w-(--container-3xl) flex-col overflow-hidden rounded-(--shape-card) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) select-none"
+              class="pointer-events-none absolute inset-y-0 start-0 m-0 flex w-(--container-3xl) flex-col overflow-hidden rounded-(--shape-card) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) select-none"
               aria-hidden="true"
             >
               <div
@@ -321,7 +321,7 @@
                   </span>
                 </span>
 
-                <span class="ml-auto flex shrink-0 items-center gap-(--spacing-sm)">
+                <span class="ms-auto flex shrink-0 items-center gap-(--spacing-sm)">
                   <span
                     class="h-(--size-8) w-(--size-20) rounded-(--shape-button) bg-(--bg-placeholder)"
                   />
@@ -334,7 +334,7 @@
 
               <div class="flex min-h-0 flex-1">
                 <div
-                  class="flex w-(--size-60) shrink-0 flex-col gap-(--spacing-md) overflow-hidden border-r-(length:--border-width-default) border-(--border-muted) p-(--spacing-md)"
+                  class="flex w-(--size-60) shrink-0 flex-col gap-(--spacing-md) overflow-hidden border-e-(length:--border-width-default) border-(--border-muted) p-(--spacing-md)"
                 >
                   <span
                     class="h-(--size-9) w-full shrink-0 rounded-(--shape-button) bg-(--bg-placeholder)"

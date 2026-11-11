@@ -569,7 +569,7 @@
       >
         <span
           v-show="indicatorVisible"
-          class="pointer-events-none absolute inset-y-0 left-0 z-1 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm) motion-reduce:transition-none"
+          class="pointer-events-none absolute inset-y-0 start-0 z-1 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm) motion-reduce:transition-none"
           :style="[indicatorTransitionStyle, indicatorTransformStyle]"
           :data-testid="`${testId}__indicator`"
           aria-hidden="true"
@@ -644,7 +644,7 @@
     >
       <div
         v-if="copyable"
-        class="absolute right-(--spacing-sm) top-(--spacing-sm) z-2 data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2"
+        class="absolute end-(--spacing-sm) top-(--spacing-sm) z-2 data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2"
         :data-single-line="isSingleLine || null"
         :data-testid="`${testId}__copy-anchor`"
       >
@@ -711,7 +711,7 @@
                 {{ formatLineNumber(lineIndex + 1) }}
               </span>
               <code
-                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pr-(--spacing-sm) group-data-[copyable]/code-block:pr-11"
+                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pe-(--spacing-sm) group-data-[copyable]/code-block:pe-11"
                 :data-testid="`${testId}__line-content`"
               >
                 <span
@@ -726,7 +726,7 @@
                 v-if="getLineState(lineIndex + 1) !== 'default'"
                 :class="
                   cn(
-                    'pointer-events-none absolute bottom-0 left-0 top-0 z-2 w-[2px]',
+                    'pointer-events-none absolute bottom-0 start-0 top-0 z-2 w-[2px]',
                     'group-data-[state=added]:bg-(--success-border) group-data-[state=removed]:bg-(--danger-border) group-data-[state=highlighted]:bg-(--info-border)'
                   )
                 "

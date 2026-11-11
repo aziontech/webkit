@@ -78,7 +78,7 @@ export const DOCS_HEADER_MARKUP = `<GlobalHeader aria-label="Azion documentation
           </span>
         </a>
       </GlobalHeader.Brand>
-      <div class="shrink-0 ml-(--spacing-xs) hidden lg:flex">
+      <div class="shrink-0 ms-(--spacing-xs) hidden lg:flex">
         <NavigationMenu aria-label="Documentation sections">
           <NavigationMenu.List>
             <NavigationMenu.Item v-for="section in sections" :key="section">
@@ -313,5 +313,5 @@ const resourceHeader = (crumb) => `<GlobalHeader aria-label="Azion Console">
 export const RESOURCE_FIRST_LEVEL_MARKUP = resourceHeader('')
 
 export const RESOURCE_SECOND_LEVEL_MARKUP = resourceHeader(
-  '\n    <div class="-ml-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex"><Breadcrumb :items="crumbs" class="w-full" /></div>'
+  '\n    <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex"><Breadcrumb :items="crumbs" class="w-full" /></div>'
 )

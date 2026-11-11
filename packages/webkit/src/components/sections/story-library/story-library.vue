@@ -275,7 +275,7 @@
               :key="item.key"
               :data-last-row-sm="index >= lastRowFrom(2) || undefined"
               :data-last-row-lg="index >= lastRowFrom(3) || undefined"
-              class="border-b border-(--border-default) last:border-b-0 sm:border-r sm:max-lg:even:border-r-0 sm:max-lg:data-last-row-sm:border-b-0 lg:nth-[3n]:border-r-0 lg:data-last-row-lg:border-b-0"
+              class="border-b border-(--border-default) last:border-b-0 sm:border-e sm:max-lg:even:border-e-0 sm:max-lg:data-last-row-sm:border-b-0 lg:nth-[3n]:border-e-0 lg:data-last-row-lg:border-b-0"
             >
               <a
                 :href="item.href"

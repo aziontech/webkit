@@ -160,7 +160,7 @@
       borders="none"
       marks="all"
       :data-seam="hasItems || null"
-      class="min-w-0 bg-(--bg-canvas) lg:contain-size data-[seam]:max-lg:border-t data-[seam]:lg:border-l"
+      class="min-w-0 bg-(--bg-canvas) lg:contain-size data-[seam]:max-lg:border-t data-[seam]:lg:border-s"
     >
       <div class="flex h-full min-w-0 items-center p-(--spacing-xl) *:flex-1">
         <slot name="aside" />

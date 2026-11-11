@@ -223,7 +223,7 @@
                 </div>
               </div>
 
-              <span class="flex justify-between pl-(--spacing-xl)">
+              <span class="flex justify-between ps-(--spacing-xl)">
                 <span
                   v-for="time in TIMES"
                   :key="time"

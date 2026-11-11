@@ -166,7 +166,7 @@
           :type="row.tag === 'button' ? 'button' : undefined"
           :data-interactive="row.interactive || null"
           :data-testid="`${testId}__row`"
-          class="flex w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-elements) pe-(--spacing-xs) text-left text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 data-[interactive]:cursor-pointer data-[interactive]:hover:bg-(--bg-hover)"
+          class="flex w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-elements) pe-(--spacing-xs) text-start text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 data-[interactive]:cursor-pointer data-[interactive]:hover:bg-(--bg-hover)"
           @click="onRowClick($event, row.item, row.interactive)"
         >
           <span class="relative flex h-8 min-w-0 flex-1 items-center">
@@ -174,7 +174,7 @@
               aria-hidden="true"
               :data-testid="`${testId}__bar`"
               :style="{ width: row.width }"
-              class="absolute inset-y-0 left-0 rounded-(--shape-elements) bg-[color-mix(in_srgb,var(--bar-list-fill)_24%,transparent)] transition-[width] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+              class="absolute inset-y-0 start-0 rounded-(--shape-elements) bg-[color-mix(in_srgb,var(--bar-list-fill)_24%,transparent)] transition-[width] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
             />
             <span class="relative min-w-0 truncate px-(--spacing-xs) text-label-md">
               {{ row.item.name }}
@@ -183,7 +183,7 @@
           <span class="sr-only">, </span>
           <span
             :data-testid="`${testId}__value`"
-            class="shrink-0 text-right text-label-md tabular-nums"
+            class="shrink-0 text-end text-label-md tabular-nums"
           >
             {{ row.label }}
           </span>

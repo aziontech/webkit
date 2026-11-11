@@ -187,7 +187,7 @@
                   <span
                     v-for="item in ARRIVAL.body"
                     :key="item.key"
-                    class="mr-(--spacing-xs)"
+                    class="me-(--spacing-xs)"
                   >
                     <span class="bg-(--bg-surface-raised)">{{ item.key }}:</span>
                     {{ formatValue(item.value) }}
@@ -207,7 +207,7 @@
               <span
                 v-for="item in row.body"
                 :key="item.key"
-                class="mr-(--spacing-xs)"
+                class="me-(--spacing-xs)"
               >
                 <span class="bg-(--bg-surface-raised)">{{ item.key }}:</span>
                 {{ formatValue(item.value) }}

@@ -133,7 +133,7 @@
                 :loading="running"
               />
             </span>
-            <span class="ml-auto flex items-center gap-(--spacing-xs)">
+            <span class="ms-auto flex items-center gap-(--spacing-xs)">
               <Button
                 label="Prettify"
                 kind="outlined"
@@ -169,7 +169,7 @@
               class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
             >
               <span class="shrink-0 text-heading-xxs text-(--text-default)">Results</span>
-              <span class="ml-(--spacing-sm) flex min-w-0 flex-1">
+              <span class="ms-(--spacing-sm) flex min-w-0 flex-1">
                 <Input
                   model-value=""
                   size="medium"
@@ -185,7 +185,7 @@
                   </template>
                 </Input>
               </span>
-              <span class="ml-auto flex items-center gap-(--spacing-xs)">
+              <span class="ms-auto flex items-center gap-(--spacing-xs)">
                 <ToggleGroup
                   model-value="table"
                   :options="VIEWS"

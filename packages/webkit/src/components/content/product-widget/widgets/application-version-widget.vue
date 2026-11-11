@@ -356,7 +356,7 @@
                     </template>
                   </Input>
                 </div>
-                <span class="ml-auto inline-flex gap-(--spacing-xs)">
+                <span class="ms-auto inline-flex gap-(--spacing-xs)">
                   <IconButton
                     icon="pi pi-refresh"
                     kind="outlined"
@@ -508,7 +508,7 @@
               live.
             </span>
           </div>
-          <span class="ml-auto inline-flex shrink-0 items-center gap-(--spacing-sm)">
+          <span class="ms-auto inline-flex shrink-0 items-center gap-(--spacing-sm)">
             <Button
               label="New Version"
               kind="outlined"

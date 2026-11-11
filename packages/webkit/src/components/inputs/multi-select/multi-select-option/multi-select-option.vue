@@ -95,7 +95,7 @@
         :data-testid="`${testId}__icon`"
       />
     </span>
-    <span class="flex-1 truncate text-left">
+    <span class="flex-1 truncate text-start">
       <slot />
     </span>
     <slot

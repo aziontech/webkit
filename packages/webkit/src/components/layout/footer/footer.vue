@@ -109,7 +109,7 @@
               <slot name="brand" />
               <p
                 v-if="slots.tagline"
-                class="text-heading-xl text-(--text-default) md:text-right"
+                class="text-heading-xl text-(--text-default) md:text-end"
               >
                 <slot name="tagline" />
               </p>

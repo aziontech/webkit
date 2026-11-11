@@ -137,7 +137,7 @@
               </span>
             </a>
           </GlobalHeader.Brand>
-          <div class="shrink-0 ml-(--spacing-xs) hidden lg:flex">
+          <div class="shrink-0 ms-(--spacing-xs) hidden lg:flex">
             <NavigationMenu aria-label="Documentation sections">
               <NavigationMenu.List>
                 <NavigationMenu.Item
@@ -270,7 +270,7 @@
                     v-if="brandLeadsSocialRow"
                     href="#"
                     aria-label="Azion home"
-                    class="inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) mr-(--spacing-xs)"
+                    class="inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) me-(--spacing-xs)"
                   >
                     <Brand size="small" />
                   </a>
@@ -339,10 +339,10 @@
       </main>
 
       <aside
-        class="hidden w-(--container-3xs) shrink-0 flex-col gap-(--spacing-sm) border-l border-(--border-default) px-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg) xl:flex"
+        class="hidden w-(--container-3xs) shrink-0 flex-col gap-(--spacing-sm) border-s border-(--border-default) px-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg) xl:flex"
       >
         <p class="text-overline-sm uppercase text-(--text-muted)">On this page</p>
-        <ul class="flex flex-col border-l border-(--border-default)">
+        <ul class="flex flex-col border-s border-(--border-default)">
           <li
             v-for="item in outline"
             :key="item"

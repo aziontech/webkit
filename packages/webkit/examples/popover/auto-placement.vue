@@ -20,7 +20,7 @@
       position in the viewport.
     </p>
 
-    <div class="absolute top-(--spacing-md) left-(--spacing-md)">
+    <div class="absolute top-(--spacing-md) start-(--spacing-md)">
       <Popover
         :open="true"
         placement="auto"
@@ -41,7 +41,7 @@
       </Popover>
     </div>
 
-    <div class="absolute top-(--spacing-md) right-(--spacing-md)">
+    <div class="absolute top-(--spacing-md) end-(--spacing-md)">
       <Popover
         :open="true"
         placement="auto"
@@ -62,7 +62,7 @@
       </Popover>
     </div>
 
-    <div class="absolute bottom-(--spacing-md) left-(--spacing-md)">
+    <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
       <Popover
         :open="true"
         placement="auto"
@@ -83,7 +83,7 @@
       </Popover>
     </div>
 
-    <div class="absolute bottom-(--spacing-md) right-(--spacing-md)">
+    <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
       <Popover
         :open="true"
         placement="auto"

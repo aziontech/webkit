@@ -201,7 +201,7 @@
           :key="mark.value"
           :data-testid="`${testId}__tick`"
           :style="{ '--slider-mark': mark.fraction }"
-          class="absolute top-0 h-full w-px -translate-x-1/2 bg-(--slider-tick) left-[calc(var(--spacing)*2_+_(100%_-_var(--spacing)*4)*var(--slider-mark))]"
+          class="absolute top-0 h-full w-px -translate-x-1/2 bg-(--slider-tick) start-[calc(var(--spacing)*2_+_(100%_-_var(--spacing)*4)*var(--slider-mark))]"
         />
       </div>
       <div
@@ -214,7 +214,7 @@
           :data-testid="`${testId}__reference`"
           :data-align="reference.align"
           :style="{ '--slider-mark': reference.fraction }"
-          class="relative col-start-1 row-start-1 w-max whitespace-nowrap text-label-sm text-(--slider-label) left-[calc(var(--spacing)*2_+_(100%_-_var(--spacing)*4)*var(--slider-mark))] data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full"
+          class="relative col-start-1 row-start-1 w-max whitespace-nowrap text-label-sm text-(--slider-label) start-[calc(var(--spacing)*2_+_(100%_-_var(--spacing)*4)*var(--slider-mark))] data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full"
         >
           {{ reference.label }}
         </span>

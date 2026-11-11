@@ -34,7 +34,7 @@
                 <div
                   v-for="metric in 4"
                   :key="metric"
-                  class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) max-sm:nth-[n+2]:border-t sm:max-xl:[&:nth-child(n+3)]:border-t sm:[&:nth-child(even)]:border-l xl:[&:nth-child(n+2)]:border-l"
+                  class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) max-sm:nth-[n+2]:border-t sm:max-xl:[&:nth-child(n+3)]:border-t sm:[&:nth-child(even)]:border-s xl:[&:nth-child(n+2)]:border-s"
                 >
                   <Skeleton
                     width="60%"
@@ -60,7 +60,7 @@
           <Card :padded="false">
             <template #content>
               <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
-                <div class="flex items-center [&>*+*]:-ml-2">
+                <div class="flex items-center [&>*+*]:-ms-2">
                   <Skeleton
                     v-for="mark in 4"
                     :key="mark"
@@ -120,7 +120,7 @@
                   <div
                     class="flex h-(--size-5) flex-col justify-center"
                     :class="
-                      panel === 1 || panel === 4 ? 'pl-[calc(var(--size-4)+var(--spacing-xs))]' : ''
+                      panel === 1 || panel === 4 ? 'ps-[calc(var(--size-4)+var(--spacing-xs))]' : ''
                     "
                   >
                     <Skeleton

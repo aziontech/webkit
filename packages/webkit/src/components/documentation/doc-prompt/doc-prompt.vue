@@ -220,12 +220,12 @@
           />
           <div
             v-if="kind === 'line' && (overflow === 'start' || overflow === 'both')"
-            class="pointer-events-none absolute inset-y-0 left-0 w-(--spacing-lg) bg-gradient-to-r from-(--prompt-bg) to-transparent"
+            class="pointer-events-none absolute inset-y-0 start-0 w-(--spacing-lg) bg-gradient-to-r from-(--prompt-bg) to-transparent"
             aria-hidden="true"
           />
           <div
             v-if="kind === 'line' && (overflow === 'end' || overflow === 'both')"
-            class="pointer-events-none absolute inset-y-0 right-0 w-(--spacing-lg) bg-gradient-to-l from-(--prompt-bg) to-transparent"
+            class="pointer-events-none absolute inset-y-0 end-0 w-(--spacing-lg) bg-gradient-to-l from-(--prompt-bg) to-transparent"
             aria-hidden="true"
           />
         </div>

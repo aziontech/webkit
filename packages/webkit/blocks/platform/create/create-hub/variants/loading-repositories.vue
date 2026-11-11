@@ -717,7 +717,7 @@
                     aria-label="Start from Template results"
                     class="w-full"
                   >
-                    <div class="pb-(--spacing-xxs) pr-(--spacing-xxs)">
+                    <div class="pb-(--spacing-xxs) pe-(--spacing-xxs)">
                       <div class="flex flex-col gap-(--layout-section-gap)">
                         <section
                           v-for="section in sections"
@@ -791,7 +791,7 @@
                               >
                                 <template #content>
                                   <div
-                                    class="relative z-10 flex flex-col items-start gap-(--spacing-md) text-left"
+                                    class="relative z-10 flex flex-col items-start gap-(--spacing-md) text-start"
                                   >
                                     <span
                                       class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"

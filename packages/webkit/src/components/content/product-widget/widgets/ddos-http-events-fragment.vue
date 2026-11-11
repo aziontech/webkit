@@ -130,7 +130,7 @@
               size="small"
             />
             <span
-              class="ml-auto flex h-7 items-center rounded-(--shape-button) border border-(--border-default) px-(--spacing-sm) text-body-xs text-(--text-default)"
+              class="ms-auto flex h-7 items-center rounded-(--shape-button) border border-(--border-default) px-(--spacing-sm) text-body-xs text-(--text-default)"
             >
               1000 records found
             </span>
@@ -165,10 +165,10 @@
                     <span
                       v-for="field in summary(index)"
                       :key="field.key"
-                      class="mr-(--spacing-sm)"
+                      class="me-(--spacing-sm)"
                     >
                       <span class="bg-(--bg-surface-raised)">{{ field.key }}:</span>
-                      <span class="ml-(--spacing-xxs)">{{ field.value }}</span>
+                      <span class="ms-(--spacing-xxs)">{{ field.value }}</span>
                     </span>
                   </span>
                 </div>

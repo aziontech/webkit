@@ -118,7 +118,7 @@
 
     <span
       ref="labelRef"
-      class="flex-1 truncate text-left"
+      class="flex-1 truncate text-start"
     >
       <slot />
     </span>

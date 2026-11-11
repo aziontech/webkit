@@ -259,7 +259,7 @@
       class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
     >
       <p class="shrink-0 text-heading-xxs text-(--text-default)">Deployment Logs</p>
-      <div class="ml-auto flex min-w-0 items-center gap-(--spacing-sm)">
+      <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
         <Tag
           label="Completed"
           severity="success"
@@ -309,7 +309,7 @@
             </span>
             <span
               :data-state="step.status"
-              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-left data-[state=failed]:flex-wrap"
+              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"
             >
               <span
                 :data-state="step.status"
@@ -324,7 +324,7 @@
                 {{ step.description }}
               </span>
             </span>
-            <span class="ml-auto flex shrink-0 items-center">
+            <span class="ms-auto flex shrink-0 items-center">
               <span
                 v-if="step.duration"
                 class="text-label-code-md text-(--text-muted)"
