@@ -345,6 +345,7 @@
     "./helper-text": "./src/components/inputs/helper-text/helper-text.vue",
     "./hint": "./src/components/inputs/hint/hint.vue",
     "./label": "./src/components/inputs/label/label.vue",
+    "./otp-input": "./src/components/inputs/otp-input/otp-input.vue",
     "./password-input": "./src/components/inputs/password-input/password-input.vue",
     "./file-dropzone": "./src/components/inputs/file-dropzone/file-dropzone.vue",
     "./file-token-group": "./src/components/inputs/file-token-group/file-token-group.vue",

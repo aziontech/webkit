@@ -931,5 +931,8 @@ export const es: Messages = {
   },
   paymentBrand: {
     unknown: 'Tarjeta'
+  },
+  otpInput: {
+    label: 'Código de un solo uso'
   }
 }

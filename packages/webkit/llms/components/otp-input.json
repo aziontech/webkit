@@ -1,0 +1,121 @@
+{
+ "name": "otp-input",
+ "binding": "OtpInput",
+ "import": "@aziontech/webkit/otp-input",
+ "treeShakeableImport": "@aziontech/webkit/otp-input",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS. It looks like a row of boxes, one character each, but it is **one real text input** laid over the boxes, so the browser's one-time-code autofill (`autocomplete=\"one-time-code\"`), password managers, paste and screen readers all see a single field. Typing fills the next box (auto-advance), Backspace empties the last one, and a pasted code (`123 456`, `123-456`, with a line break) keeps only its valid characters and fills every box. When the last box fills it emits `complete`, so the screen can submit without a button press. It replaces the Console Kit's six `InputText`s with hand-written focus moves (`mfa-setup-block`, `mfa-authenticate-block`).",
+ "setup": null,
+ "useWhen": [
+  "Multi-factor authentication: set-up confirmation and sign-in challenge.",
+  "Verifying an email address or a phone number with a short code.",
+  "Any short, fixed-length code the user copies from somewhere else."
+ ],
+ "avoidWhen": [
+  "A password or a secret of free length → use `PasswordInput`.",
+  "A long token or API key → use `Input` with a copy affordance.",
+  "A number with a range → use `NumberInput`."
+ ],
+ "related": [
+  "field` — wrap it in a `Field` for the label, the description and the error; the label names the input.",
+  "password-input` — the other credential input of the auth screens.",
+  "input` — the plain text field it shares tokens with."
+ ],
+ "bestPractices": [
+  "Label it with what the code is and where it comes from: `Authentication code`, and a description `The 6-digit code from your authenticator app.",
+  "Submit on `complete` only when the code is the last thing to fill; keep a Verify button for keyboard users and for a failed attempt.",
+  "After a rejected code, mark it `invalid`, clear it, and keep focus in it.",
+  "Use `group=\"3\"` for codes people read aloud or copy from a phone; it draws a separator between groups and does not change the value."
+ ],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The code typed so far, without separators."
+  },
+  {
+   "name": "length",
+   "type": "number",
+   "default": "6",
+   "required": "false",
+   "doc": "How many characters the code has; one box each."
+  },
+  {
+   "name": "mode",
+   "type": "'numeric' | 'alphanumeric'",
+   "default": "'numeric'",
+   "required": "false",
+   "doc": "numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case."
+  },
+  {
+   "name": "group",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Draw a separator after every `group` boxes (`3` gives `123 – 456`). `0` draws none."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the field while a code is being checked."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Danger borders on every box and `aria-invalid`; set after a rejected code."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Native `required` and `aria-required`."
+  },
+  {
+   "name": "autofocus",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Focus the field on mount, for a screen whose only task is the code."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:modelValue",
+   "payload": "string",
+   "notes": ""
+  },
+  {
+   "name": "complete",
+   "payload": "string",
+   "notes": ""
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import OtpInput from '@aziontech/webkit/otp-input'\n  import { ref } from 'vue'\n\n  const code = ref('')\n  const entered = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <Field>\n      <Field.Label>Authentication code</Field.Label>\n      <OtpInput\n        v-model=\"code\"\n        name=\"code\"\n        @complete=\"(value) => (entered = value)\"\n      />\n      <Field.Description>The 6-digit code from your authenticator app.</Field.Description>\n    </Field>\n    <p\n      class=\"text-body-sm text-(--text-muted)\"\n      role=\"status\"\n    >\n      {{ entered ? `Code ${entered} entered.` : '' }}\n    </p>\n  </div>\n</template>"
+  },
+  {
+   "name": "Grouped",
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import OtpInput from '@aziontech/webkit/otp-input'\n  import { ref } from 'vue'\n\n  const code = ref('')\n  const recovery = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <Field>\n      <Field.Label>Verification code</Field.Label>\n      <OtpInput\n        v-model=\"code\"\n        :group=\"3\"\n      />\n      <Field.Description>We sent a 6-digit code to the email on the account.</Field.Description>\n    </Field>\n    <Field>\n      <Field.Label>Recovery code</Field.Label>\n      <OtpInput\n        v-model=\"recovery\"\n        mode=\"alphanumeric\"\n        :length=\"8\"\n        :group=\"4\"\n      />\n      <Field.Description\n        >One of the 8-character codes you saved when you set up MFA.</Field.Description\n      >\n    </Field>\n  </div>\n</template>"
+  },
+  {
+   "name": "States",
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import OtpInput from '@aziontech/webkit/otp-input'\n  import { ref } from 'vue'\n\n  const rejected = ref('')\n  const checking = ref('482913')\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <Field invalid>\n      <Field.Label>Authentication code</Field.Label>\n      <OtpInput v-model=\"rejected\" />\n      <Field.Description\n        >That code is not valid. Enter the current code from your app.</Field.Description\n      >\n    </Field>\n    <Field disabled>\n      <Field.Label>Authentication code</Field.Label>\n      <OtpInput v-model=\"checking\" />\n      <Field.Description>Checking the code.</Field.Description>\n    </Field>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/otp-input.md"
+}

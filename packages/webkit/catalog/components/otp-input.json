@@ -1,0 +1,24 @@
+{
+ "purpose": "The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS. It looks like a row of boxes, one character each, but it is **one real text input** laid over the boxes, so the browser's one-time-code autofill (`autocomplete=\"one-time-code\"`), password managers, paste and screen readers all see a single field. Typing fills the next box (auto-advance), Backspace empties the last one, and a pasted code (`123 456`, `123-456`, with a line break) keeps only its valid characters and fills every box. When the last box fills it emits `complete`, so the screen can submit without a button press. It replaces the Console Kit's six `InputText`s with hand-written focus moves (`mfa-setup-block`, `mfa-authenticate-block`).",
+ "useWhen": [
+  "Multi-factor authentication: set-up confirmation and sign-in challenge.",
+  "Verifying an email address or a phone number with a short code.",
+  "Any short, fixed-length code the user copies from somewhere else."
+ ],
+ "avoidWhen": [
+  "A password or a secret of free length → use `PasswordInput`.",
+  "A long token or API key → use `Input` with a copy affordance.",
+  "A number with a range → use `NumberInput`."
+ ],
+ "related": [
+  "field` — wrap it in a `Field` for the label, the description and the error; the label names the input.",
+  "password-input` — the other credential input of the auth screens.",
+  "input` — the plain text field it shares tokens with."
+ ],
+ "bestPractices": [
+  "Label it with what the code is and where it comes from: `Authentication code`, and a description `The 6-digit code from your authenticator app.",
+  "Submit on `complete` only when the code is the last thing to fill; keep a Verify button for keyboard users and for a failed attempt.",
+  "After a rejected code, mark it `invalid`, clear it, and keep focus in it.",
+  "Use `group=\"3\"` for codes people read aloud or copy from a phone; it draws a separator between groups and does not change the value."
+ ]
+}

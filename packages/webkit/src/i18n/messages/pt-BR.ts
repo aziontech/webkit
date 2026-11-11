@@ -932,5 +932,8 @@ export const ptBR: Messages = {
   },
   paymentBrand: {
     unknown: 'Cartão'
+  },
+  otpInput: {
+    label: 'Código de uso único'
   }
 }

@@ -1044,6 +1044,10 @@ export const paymentBrand = {
   unknown: 'Card'
 } as const
 
+export const otpInput = {
+  label: 'One-time code'
+} as const
+
 export const en = {
   actionConfirmation,
   aiLoading,
@@ -1163,5 +1167,6 @@ export const en = {
   unsavedChanges,
   tutorialPanel,
   wizard,
-  paymentBrand
+  paymentBrand,
+  otpInput
 }

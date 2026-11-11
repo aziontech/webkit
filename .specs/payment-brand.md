@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: d50ce3147e50f8170707815c02a7c592adcc511990a92da5d0b37f32f217ac29
+checksum: 4a3dce5b8171f095075a7db987a8076e50a1d02646d8156a5d1102cc752a694d
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -128,7 +128,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 2.5 KB gzip for `./payment-brand` in `.size-limit.json` (the five marks are inline paths).
+- Bundle budget: 4.05 KB gzip for `./payment-brand` in `.size-limit.json` (the five marks are inline paths; the catalog lookup brings `useTranslate`).
 - Runtime budget: one SVG per plate.
 - Heavy parts: none.
 

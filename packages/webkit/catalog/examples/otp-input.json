@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The 6-digit authenticator code in a `Field`: type, paste or autofill it; `complete` fires when the last box fills.",
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import OtpInput from '@aziontech/webkit/otp-input'\n  import { ref } from 'vue'\n\n  const code = ref('')\n  const entered = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <Field>\n      <Field.Label>Authentication code</Field.Label>\n      <OtpInput\n        v-model=\"code\"\n        name=\"code\"\n        @complete=\"(value) => (entered = value)\"\n      />\n      <Field.Description>The 6-digit code from your authenticator app.</Field.Description>\n    </Field>\n    <p\n      class=\"text-body-sm text-(--text-muted)\"\n      role=\"status\"\n    >\n      {{ entered ? `Code ${entered} entered.` : '' }}\n    </p>\n  </div>\n</template>"
+  },
+  {
+   "name": "Grouped",
+   "summary": "`group` draws a separator every 3 or 4 boxes without changing the value; `mode=\"alphanumeric\"` keeps letters and digits in upper case for an 8-character recovery code.",
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import OtpInput from '@aziontech/webkit/otp-input'\n  import { ref } from 'vue'\n\n  const code = ref('')\n  const recovery = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <Field>\n      <Field.Label>Verification code</Field.Label>\n      <OtpInput\n        v-model=\"code\"\n        :group=\"3\"\n      />\n      <Field.Description>We sent a 6-digit code to the email on the account.</Field.Description>\n    </Field>\n    <Field>\n      <Field.Label>Recovery code</Field.Label>\n      <OtpInput\n        v-model=\"recovery\"\n        mode=\"alphanumeric\"\n        :length=\"8\"\n        :group=\"4\"\n      />\n      <Field.Description\n        >One of the 8-character codes you saved when you set up MFA.</Field.Description\n      >\n    </Field>\n  </div>\n</template>"
+  },
+  {
+   "name": "States",
+   "summary": "Invalid after a rejected code (danger borders, `aria-invalid`, the reason in the description) and disabled while the code is checked.",
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import OtpInput from '@aziontech/webkit/otp-input'\n  import { ref } from 'vue'\n\n  const rejected = ref('')\n  const checking = ref('482913')\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <Field invalid>\n      <Field.Label>Authentication code</Field.Label>\n      <OtpInput v-model=\"rejected\" />\n      <Field.Description\n        >That code is not valid. Enter the current code from your app.</Field.Description\n      >\n    </Field>\n    <Field disabled>\n      <Field.Label>Authentication code</Field.Label>\n      <OtpInput v-model=\"checking\" />\n      <Field.Description>Checking the code.</Field.Description>\n    </Field>\n  </div>\n</template>"
+  }
+ ]
+}

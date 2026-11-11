@@ -11283,6 +11283,87 @@
    "examplesFile": "catalog/examples/label.json",
    "docsFile": "catalog/components/label.json"
   },
+  "otp-input": {
+   "import": "@aziontech/webkit/otp-input",
+   "target": "./src/components/inputs/otp-input/otp-input.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/otp-input",
+   "category": "inputs",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The code typed so far, without separators."
+    },
+    {
+     "name": "length",
+     "type": "number",
+     "default": "6",
+     "required": "false",
+     "doc": "How many characters the code has; one box each."
+    },
+    {
+     "name": "mode",
+     "type": "'numeric' | 'alphanumeric'",
+     "default": "'numeric'",
+     "required": "false",
+     "doc": "numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case."
+    },
+    {
+     "name": "group",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Draw a separator after every `group` boxes (`3` gives `123 – 456`). `0` draws none."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the field while a code is being checked."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Danger borders on every box and `aria-invalid`; set after a rejected code."
+    },
+    {
+     "name": "required",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Native `required` and `aria-required`."
+    },
+    {
+     "name": "autofocus",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Focus the field on mount, for a screen whose only task is the code."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:modelValue",
+     "payload": "string",
+     "notes": ""
+    },
+    {
+     "name": "complete",
+     "payload": "string",
+     "notes": ""
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/otp-input.json",
+   "docsFile": "catalog/components/otp-input.json"
+  },
   "password-input": {
    "import": "@aziontech/webkit/password-input",
    "target": "./src/components/inputs/password-input/password-input.vue",

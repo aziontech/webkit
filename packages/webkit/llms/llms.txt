@@ -228,6 +228,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Label](components/label.md): Form-field label that pairs descriptive text with an optional required indicator and an optional hint.
 - [MultiSelect](components/multi-select.md): Select control specialised for choosing many options from a list.
 - [NumberInput](components/number-input.md): Numeric input field with optional increment/decrement spinner buttons.
+- [OtpInput](components/otp-input.md): The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS.
 - [PasswordInput](components/password-input.md): Single-line password input for forms.
 - [PasswordRequirements](components/password-requirements.md): Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it.
 - [PhoneInput](components/phone-input.md): International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly…
