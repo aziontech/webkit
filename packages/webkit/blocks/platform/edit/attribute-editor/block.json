@@ -34,12 +34,7 @@
     "importar variáveis",
     "dotenv"
   ],
-  "skills": [
-    "webkit-lists",
-    "webkit-tables",
-    "webkit-form",
-    "webkit-create-surface"
-  ],
+  "skills": ["webkit-lists", "webkit-tables", "webkit-form", "webkit-create-surface"],
   "primary": {
     "name": "List",
     "file": "attribute-editor.vue"

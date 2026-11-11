@@ -73,3 +73,16 @@ Two entries changed for M2.9 phase 1 (the PR #1169 port). `Item.List` now tells 
 | --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------ |
 | listing-browser | 64.65         | within budget   | 64.69        | 64.75      | Raised: `Item` list-member context and the listitem wrapper. |
 | listing-table   | 55.85         | within budget   | 55.92        | 56         | Raised: same `Item` change.                                  |
+
+M2.9 work package editors. Seven new entries and one raise. `WebKitProvider` ships the three built-in locale catalogs, and the new components' strings (attribute editor, tag editor, button group, combobox, code editor, schema form, unsaved-changes dialog, tab dirty mark) are in all three, as the i18n rule requires; the bytes are copy, not code.
+
+| Entry               | Budget before | Measured before | Measured now | New budget | Note                                                                     |
+| ------------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------------------ |
+| webkit-provider     | 9.1           | within budget   | 11.71        | 11.8       | Raised: en, pt-BR and es strings of the editors work package.            |
+| attribute-editor    | –             | –               | 13.96        | 14.25      | New: rows, grouped mode, per-cell `Field`s, live announcements.          |
+| tag-editor          | –             | –               | 15.69        | 16         | New: built on `AttributeEditor`, with key rules and undo-remove.         |
+| button-group        | –             | –               | 12.90        | 13.25      | New: roving focus, toggles and overflow into `DropdownMenu`.             |
+| combobox            | –             | –               | 10.41        | 10.75      | New: listbox popup with groups, free entry and server search.            |
+| code-editor         | –             | –               | 7.80         | 8          | New: the plain editor only; Monaco is the consumer's lazy `loader`.      |
+| schema-form         | –             | –               | 30.64        | 31         | New: schema walk, draft-07 validation and the `Field` controls it draws. |
+| use-unsaved-changes | –             | –               | 1.60         | 1.75       | New composable.                                                          |

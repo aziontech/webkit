@@ -899,7 +899,7 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "9.1 KB"
+    "limit": "11.8 KB"
   },
   {
     "name": "phone-input",
@@ -930,16 +930,36 @@
   {
     "name": "attribute-editor",
     "path": "src/components/inputs/attribute-editor/attribute-editor.vue",
-    "limit": "20 KB"
+    "limit": "14.25 KB"
   },
   {
     "name": "code-editor",
     "path": "src/components/code/code-editor/code-editor.vue",
-    "limit": "9 KB"
+    "limit": "8 KB"
   },
   {
     "name": "button-group",
     "path": "src/components/actions/button-group/button-group.vue",
-    "limit": "30 KB"
+    "limit": "13.25 KB"
+  },
+  {
+    "name": "combobox",
+    "path": "src/components/inputs/combobox/combobox.vue",
+    "limit": "10.75 KB"
+  },
+  {
+    "name": "tag-editor",
+    "path": "src/components/inputs/tag-editor/tag-editor.vue",
+    "limit": "16 KB"
+  },
+  {
+    "name": "schema-form",
+    "path": "src/components/inputs/schema-form/schema-form.vue",
+    "limit": "31 KB"
+  },
+  {
+    "name": "use-unsaved-changes",
+    "path": "src/composables/use-unsaved-changes/index.ts",
+    "limit": "1.75 KB"
   }
 ]
