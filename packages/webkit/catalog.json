@@ -29551,6 +29551,100 @@
    ],
    "file": "catalog/patterns/platform/view/table-view.json"
   },
+  "platform/view/template-browser": {
+   "name": "TemplateBrowser",
+   "title": "Templates/Platform/View/TemplateBrowser",
+   "source": "blocks/platform/view/template-browser/template-browser.vue",
+   "surface": "product",
+   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card` with the framework mark, the name as a button that opens the preview, two lines of description and the framework `Tag`; the whole tile is the target. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `Tag`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`.",
+   "intents": [
+    "template browser",
+    "template gallery",
+    "template catalog",
+    "start from a template",
+    "browse templates",
+    "templates by framework",
+    "template preview",
+    "template readme",
+    "deploy a template",
+    "starter templates",
+    "galeria de templates",
+    "catálogo de templates",
+    "navegar templates",
+    "começar a partir de um template",
+    "pré-visualizar template"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-create-surface",
+    "webkit-ui-states"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "DocProse",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "EmptyState",
+    "KeyValuePairs",
+    "PageHeader",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "PropertyFilter",
+    "Skeleton",
+    "Tag",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/doc-prose",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The catalog of templates a person starts a project from. They arrive from the creation hub, the marketplace or a \"Start from a template\" link, already knowing roughly what they want (a framework, a kind of site, a small function) and needing to find it, check what it contains and start the deploy. The page is one heading over one band: a single search and filter control, then the templates grouped by category. A tile opens a preview drawer with the facts and the README, and the drawer's Deploy hands off to the deploy template flow, which owns the run and its outcome.",
+   "variants": [
+    {
+     "name": "Preview",
+     "summary": "The preview drawer open on Next.js Starter: details, the README and the Deploy entry into the deploy template flow."
+    },
+    {
+     "name": "NoMatch",
+     "summary": "A search that matches no template: the filter keeps the token and a medium EmptyState offers Clear filters."
+    },
+    {
+     "name": "Loading",
+     "summary": "The catalog is loading: the filter is disabled and two sections of skeleton tiles hold the layout."
+    },
+    {
+     "name": "Failed",
+     "summary": "The catalog failed to load: a danger Alert with Retry, and an EmptyState that points to Import from Git."
+    }
+   ],
+   "file": "catalog/patterns/platform/view/template-browser.json"
+  },
   "platform/view/waf-tuning": {
    "name": "WafTuning",
    "title": "Templates/Platform/View/WafTuning",
