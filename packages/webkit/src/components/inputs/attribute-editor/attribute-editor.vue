@@ -24,8 +24,7 @@
   export type AttributeEditorRowErrors = Record<string, string | undefined>
 
   export type AttributeEditorErrors =
-    | (AttributeEditorRowErrors | undefined)[]
-    | (AttributeEditorRowErrors | undefined)[][]
+    (AttributeEditorRowErrors | undefined)[] | (AttributeEditorRowErrors | undefined)[][]
 
   export type AttributeEditorSize = 'small' | 'medium' | 'large'
 
@@ -44,6 +43,15 @@
     groupIndex: number | undefined
     errors: AttributeEditorRowErrors
     update: (key: string, value: unknown) => void
+    remove: () => void
+    removable: boolean
+    removeLabel: string
+  }
+
+  export type AttributeEditorRowActionsScope = {
+    item: AttributeEditorItem
+    index: number
+    groupIndex: number | undefined
     remove: () => void
     removable: boolean
     removeLabel: string
@@ -85,6 +93,8 @@
     size?: AttributeEditorSize
     /** Disables every control, Add and Remove. */
     disabled?: boolean
+    /** Disables Add only, for example until the last row is filled in. */
+    addDisabled?: boolean
     /** Accessible name of the list of rows. */
     ariaLabel?: string
   }
@@ -105,6 +115,7 @@
     isItemRemovable: undefined,
     size: 'medium',
     disabled: false,
+    addDisabled: false,
     ariaLabel: ''
   })
 
@@ -121,6 +132,8 @@
       empty?(): unknown
       actions?(): unknown
       info?(): unknown
+      'row-actions'?(scope: AttributeEditorRowActionsScope): unknown
+      limit?(scope: { count: number; limit: number; left: number }): unknown
     } & Record<`cell-${string}`, (scope: AttributeEditorCellScope) => unknown>
   >()
 
@@ -171,7 +184,8 @@
     props.limit !== undefined && group.length >= props.limit
   const canAddGroup = computed(
     () =>
-      !props.disabled && (props.groupLimit === undefined || groupList.value.length < props.groupLimit)
+      !props.disabled &&
+      (props.groupLimit === undefined || groupList.value.length < props.groupLimit)
   )
   const limitText = (group: AttributeEditorItem[]) => {
     if (props.limit === undefined) return ''
@@ -286,7 +300,6 @@
     next[target][index] = changed
     commit(next)
   }
-
 </script>
 
 <template>
@@ -333,7 +346,9 @@
         >
           <div
             :role="grouped ? 'group' : undefined"
-            :aria-label="grouped ? t('attributeEditor.group', { index: groupIndex + 1 }) : undefined"
+            :aria-label="
+              grouped ? t('attributeEditor.group', { index: groupIndex + 1 }) : undefined
+            "
             class="flex min-w-0 flex-col gap-(--spacing-sm)"
           >
             <div
@@ -393,14 +408,16 @@
                       v-for="column in definition"
                       :key="column.key"
                       class="min-w-0"
-                      :invalid="Boolean(rowErrors(index, grouped ? groupIndex : undefined)[column.key])"
+                      :invalid="
+                        Boolean(rowErrors(index, grouped ? groupIndex : undefined)[column.key])
+                      "
                       :required="column.required"
                       :disabled="disabled"
                       :data-testid="`${testId}__cell`"
                     >
-                      <FieldLabel class="@md/attribute-editor:sr-only"
-                        >{{ column.label }}</FieldLabel
-                      >
+                      <FieldLabel class="@md/attribute-editor:sr-only">{{
+                        column.label
+                      }}</FieldLabel>
                       <slot
                         :name="`cell-${column.key}`"
                         :item="item"
@@ -429,28 +446,44 @@
                       </slot>
                       <FieldError
                         v-if="rowErrors(index, grouped ? groupIndex : undefined)[column.key]"
-                        >{{ rowErrors(index, grouped ? groupIndex : undefined)[column.key] }}</FieldError
+                        >{{
+                          rowErrors(index, grouped ? groupIndex : undefined)[column.key]
+                        }}</FieldError
                       >
                     </Field>
                     <div class="flex justify-end">
-                      <Tooltip
-                        v-if="removable(item)"
-                        :text="removeLabel(position(index, grouped ? groupIndex : undefined))"
+                      <slot
+                        name="row-actions"
+                        :item="item"
+                        :index="index"
+                        :group-index="grouped ? groupIndex : undefined"
+                        :remove="() => remove(index, grouped ? groupIndex : undefined)"
+                        :removable="removable(item)"
+                        :remove-label="
+                          removeLabel(position(index, grouped ? groupIndex : undefined))
+                        "
                       >
-                        <IconButton
-                          icon="pi pi-trash"
-                          kind="outlined"
-                          :size="size"
-                          :ariaLabel="removeLabel(position(index, grouped ? groupIndex : undefined))"
-                          :data-testid="`${testId}__remove`"
-                          @click="remove(index, grouped ? groupIndex : undefined)"
+                        <Tooltip
+                          v-if="removable(item)"
+                          :text="removeLabel(position(index, grouped ? groupIndex : undefined))"
+                        >
+                          <IconButton
+                            icon="pi pi-trash"
+                            kind="outlined"
+                            :size="size"
+                            :ariaLabel="
+                              removeLabel(position(index, grouped ? groupIndex : undefined))
+                            "
+                            :data-testid="`${testId}__remove`"
+                            @click="remove(index, grouped ? groupIndex : undefined)"
+                          />
+                        </Tooltip>
+                        <span
+                          v-else
+                          aria-hidden="true"
+                          class="hidden @md/attribute-editor:block group-data-[size=small]/attribute-editor:w-7 group-data-[size=medium]/attribute-editor:w-8 group-data-[size=large]/attribute-editor:w-10"
                         />
-                      </Tooltip>
-                      <span
-                        v-else
-                        aria-hidden="true"
-                        class="hidden @md/attribute-editor:block group-data-[size=small]/attribute-editor:w-7 group-data-[size=medium]/attribute-editor:w-8 group-data-[size=large]/attribute-editor:w-10"
-                      />
+                      </slot>
                     </div>
                   </div>
                 </slot>
@@ -467,7 +500,7 @@
               icon="pi pi-plus"
               kind="outlined"
               size="small"
-              :disabled="disabled || atLimit(group)"
+              :disabled="disabled || addDisabled || atLimit(group)"
               :data-testid="`${testId}__add`"
               @click="add(groupIndex)"
             />
@@ -485,17 +518,19 @@
       <div class="flex flex-wrap items-center gap-(--spacing-xs)">
         <Button
           v-if="!grouped"
+          key="add"
           ref="addRef"
           :label="addLabel"
           icon="pi pi-plus"
           kind="outlined"
           size="medium"
-          :disabled="disabled || atLimit(items)"
+          :disabled="disabled || addDisabled || atLimit(items)"
           :data-testid="`${testId}__add`"
           @click="add()"
         />
         <Button
           v-else
+          key="add-group"
           ref="addRef"
           :label="groupAddLabel"
           icon="pi pi-plus"
@@ -512,7 +547,13 @@
         class="m-0 text-body-sm text-(--text-muted)"
         :data-testid="`${testId}__limit`"
       >
-        {{ limitText(items) }}
+        <slot
+          name="limit"
+          :count="items.length"
+          :limit="limit ?? 0"
+          :left="Math.max((limit ?? 0) - items.length, 0)"
+          >{{ limitText(items) }}</slot
+        >
       </p>
       <slot name="info" />
     </div>

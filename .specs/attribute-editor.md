@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: pending
+checksum: 0891fc86ded0a84f22b8db7289283b042f6b648e24587099d41baa0e81293053
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -36,6 +36,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 - `input` — the default control of a cell; any control can replace it through `cell-<key>`.
 - `button`, `icon-button` — Add and Remove.
 - `separator` — the "or" between groups in grouped mode.
+- `platform/edit/rule-builder` (block) — its criteria editor is the grouped mode (AND rows inside a group, OR between groups); the block keeps its own markup until it moves onto this component.
 
 ## Best practices
 
@@ -77,45 +78,48 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 
 ## Props
 
-| Prop                | Type                                     | Default     | Required | JSDoc                                                                                                   |
-| ------------------- | ---------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `items`             | `AttributeEditorItem[]`                  | `[]`        | false    | Rows in list mode. Supports v-model:items.                                                              |
-| `groups`            | `AttributeEditorItem[][]`                | `undefined` | false    | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups. |
-| `definition`        | `AttributeEditorColumn[]`                | `[]`        | false    | Columns of every row: key of the item field, label, placeholder, required.                              |
-| `errors`            | `AttributeEditorErrors`                  | `[]`        | false    | Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none.             |
-| `addButtonLabel`    | `string`                                 | `''`        | false    | Label of the Add button. Empty uses the locale catalog.                                                 |
-| `removeButtonLabel` | `string`                                 | `''`        | false    | Accessible name of the Remove button, followed by the row number. Empty uses the locale catalog.        |
-| `addGroupLabel`     | `string`                                 | `''`        | false    | Label of the Add group button in grouped mode. Empty uses the locale catalog.                           |
-| `empty`             | `string`                                 | `''`        | false    | Text shown when there are no rows. Empty uses the locale catalog.                                       |
+| Prop                | Type                                     | Default     | Required | JSDoc                                                                                                        |
+| ------------------- | ---------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------ |
+| `items`             | `AttributeEditorItem[]`                  | `[]`        | false    | Rows in list mode. Supports v-model:items.                                                                   |
+| `groups`            | `AttributeEditorItem[][]`                | `undefined` | false    | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups.   |
+| `definition`        | `AttributeEditorColumn[]`                | `[]`        | false    | Columns of every row: key of the item field, label, placeholder, required.                                   |
+| `errors`            | `AttributeEditorErrors`                  | `[]`        | false    | Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none.                  |
+| `addButtonLabel`    | `string`                                 | `''`        | false    | Label of the Add button. Empty uses the locale catalog.                                                      |
+| `removeButtonLabel` | `string`                                 | `''`        | false    | Accessible name of the Remove button, followed by the row number. Empty uses the locale catalog.             |
+| `addGroupLabel`     | `string`                                 | `''`        | false    | Label of the Add group button in grouped mode. Empty uses the locale catalog.                                |
+| `empty`             | `string`                                 | `''`        | false    | Text shown when there are no rows. Empty uses the locale catalog.                                            |
 | `limit`             | `number`                                 | `undefined` | false    | Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced. |
-| `groupLimit`        | `number`                                 | `undefined` | false    | Most groups allowed in grouped mode.                                                                    |
-| `minItems`          | `number`                                 | `0`         | false    | Fewest rows kept; rows at the minimum lose their Remove button.                                         |
-| `newItem`           | `() => AttributeEditorItem`              | `undefined` | false    | Builds a new row. Unset creates an item with an empty string per column key.                            |
-| `isItemRemovable`   | `(item: AttributeEditorItem) => boolean` | `undefined` | false    | Hides Remove on the rows it returns false for. Unset makes every row removable.                         |
-| `size`              | `'small' \| 'medium' \| 'large'`         | `'medium'`  | false    | Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm.                         |
-| `disabled`          | `boolean`                                | `false`     | false    | Disables every control, Add and Remove.                                                                 |
-| `ariaLabel`         | `string`                                 | `''`        | false    | Accessible name of the list of rows.                                                                    |
+| `groupLimit`        | `number`                                 | `undefined` | false    | Most groups allowed in grouped mode.                                                                         |
+| `minItems`          | `number`                                 | `0`         | false    | Fewest rows kept; rows at the minimum lose their Remove button.                                              |
+| `newItem`           | `() => AttributeEditorItem`              | `undefined` | false    | Builds a new row. Unset creates an item with an empty string per column key.                                 |
+| `isItemRemovable`   | `(item: AttributeEditorItem) => boolean` | `undefined` | false    | Hides Remove on the rows it returns false for. Unset makes every row removable.                              |
+| `size`              | `'small' \| 'medium' \| 'large'`         | `'medium'`  | false    | Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm.                              |
+| `disabled`          | `boolean`                                | `false`     | false    | Disables every control, Add and Remove.                                                                      |
+| `addDisabled`       | `boolean`                                | `false`     | false    | Disables Add only, for example until the last row is filled in.                                              |
+| `ariaLabel`         | `string`                                 | `''`        | false    | Accessible name of the list of rows.                                                                         |
 
 Types: `AttributeEditorItem = Record<string, unknown>`; `AttributeEditorColumn = { key: string; label: string; placeholder?: string; required?: boolean }`; `AttributeEditorRowErrors = Record<string, string | undefined>`; `AttributeEditorErrors = (AttributeEditorRowErrors | undefined)[] | (AttributeEditorRowErrors | undefined)[][]`.
 
 ## Events
 
-| Event           | Payload                                                                   | Notes                                                        |
-| --------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `update:items`  | `AttributeEditorItem[]`                                                   | A row was added, removed or edited in list mode.             |
-| `update:groups` | `AttributeEditorItem[][]`                                                 | A row or group was added, removed or edited in grouped mode. |
-| `add`           | `{ index: number; groupIndex?: number }`                                  | After a row is added; `groupIndex` only in grouped mode.     |
-| `remove`        | `{ index: number; item: AttributeEditorItem; groupIndex?: number }`       | After a row is removed.                                      |
+| Event           | Payload                                                             | Notes                                                        |
+| --------------- | ------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `update:items`  | `AttributeEditorItem[]`                                             | A row was added, removed or edited in list mode.             |
+| `update:groups` | `AttributeEditorItem[][]`                                           | A row or group was added, removed or edited in grouped mode. |
+| `add`           | `{ index: number; groupIndex?: number }`                            | After a row is added; `groupIndex` only in grouped mode.     |
+| `remove`        | `{ index: number; item: AttributeEditorItem; groupIndex?: number }` | After a row is removed.                                      |
 
 ## Slots
 
-| Slot          | Scope                                                                                                                   | Notes                                                                                   |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `cell-<key>`  | `{ item, index, groupIndex, value, update, invalid }`                                                                   | Replaces the default `Input` of one column; the control sits inside the cell's `Field`. |
-| `row`         | `{ item, index, groupIndex, errors, update, remove, removable, removeLabel }`                                           | Replaces the whole row; the column header is not drawn.                                 |
-| `empty`       | —                                                                                                                       | Replaces the empty text.                                                                |
-| `actions`     | —                                                                                                                       | Extra buttons after Add (for example Upload or Paste .env).                             |
-| `info`        | —                                                                                                                       | Extra help text under the buttons, after the limit text.                                |
+| Slot          | Scope                                                                         | Notes                                                                                                                       |
+| ------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `cell-<key>`  | `{ item, index, groupIndex, value, update, invalid }`                         | Replaces the default `Input` of one column; the control sits inside the cell's `Field`.                                     |
+| `row`         | `{ item, index, groupIndex, errors, update, remove, removable, removeLabel }` | Replaces the whole row; the column header is not drawn.                                                                     |
+| `row-actions` | `{ item, index, groupIndex, remove, removable, removeLabel }`                 | Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it). |
+| `empty`       | —                                                                             | Replaces the empty text.                                                                                                    |
+| `actions`     | —                                                                             | Extra buttons after Add (for example Upload or Paste .env).                                                                 |
+| `info`        | —                                                                             | Extra help text under the buttons, after the limit text.                                                                    |
+| `limit`       | `{ count, limit, left }`                                                      | Replaces the limit text in list mode (for example "You can add 3 more tags.").                                              |
 
 ## States
 
@@ -131,13 +135,13 @@ Rows appear and leave without animation; the controls keep their own transitions
 
 ## Tokens
 
-| Region                           | Token (DESIGN.md)                                      |
-| -------------------------------- | ------------------------------------------------------ |
-| column header                    | `.text-label-sm`, `var(--text-default)`                |
-| empty text, limit text, joins    | `.text-body-sm`, `var(--text-muted)`                   |
-| row separator when stacked       | `var(--border-muted)`                                  |
-| group surface                    | `var(--bg-surface)`, `var(--border-muted)`, `var(--shape-card)` |
-| gaps                             | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)` |
+| Region                        | Token (DESIGN.md)                                               |
+| ----------------------------- | --------------------------------------------------------------- |
+| column header                 | `.text-label-sm`, `var(--text-default)`                         |
+| empty text, limit text, joins | `.text-body-sm`, `var(--text-muted)`                            |
+| row separator when stacked    | `var(--border-muted)`                                           |
+| group surface                 | `var(--bg-surface)`, `var(--border-muted)`, `var(--shape-card)` |
+| gaps                          | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)`   |
 
 ## Theme gaps
 
@@ -155,19 +159,19 @@ Rows appear and leave without animation; the controls keep their own transitions
 
 ## Internationalization
 
-| Key                              | English source                                 | Override prop       |
-| -------------------------------- | ---------------------------------------------- | ------------------- |
-| `attributeEditor.add`            | Add new item                                   | `addButtonLabel`    |
-| `attributeEditor.remove`         | Remove item                                    | `removeButtonLabel` |
-| `attributeEditor.rowAction`      | {label} {index}                                | —                   |
-| `attributeEditor.addGroup`       | Add OR group                                   | `addGroupLabel`     |
-| `attributeEditor.empty`          | No items yet.                                  | `empty`             |
-| `attributeEditor.remaining`      | You can add {count} more item(s) (plural)      | —                   |
-| `attributeEditor.limitReached`   | You have reached the limit of {limit} items.   | —                   |
-| `attributeEditor.added`          | Item {index} added.                            | —                   |
-| `attributeEditor.removed`        | Item {index} removed.                          | —                   |
-| `attributeEditor.group`          | Group {index}                                  | —                   |
-| `attributeEditor.and` / `or`     | and / or                                       | —                   |
+| Key                            | English source                               | Override prop       |
+| ------------------------------ | -------------------------------------------- | ------------------- |
+| `attributeEditor.add`          | Add new item                                 | `addButtonLabel`    |
+| `attributeEditor.remove`       | Remove item                                  | `removeButtonLabel` |
+| `attributeEditor.rowAction`    | {label} {index}                              | —                   |
+| `attributeEditor.addGroup`     | Add OR group                                 | `addGroupLabel`     |
+| `attributeEditor.empty`        | No items yet.                                | `empty`             |
+| `attributeEditor.remaining`    | You can add {count} more item(s) (plural)    | —                   |
+| `attributeEditor.limitReached` | You have reached the limit of {limit} items. | —                   |
+| `attributeEditor.added`        | Item {index} added.                          | —                   |
+| `attributeEditor.removed`      | Item {index} removed.                        | —                   |
+| `attributeEditor.group`        | Group {index}                                | —                   |
+| `attributeEditor.and` / `or`   | and / or                                     | —                   |
 
 - Formatting: the rows left go through the plural rules of the active locale.
 

@@ -50,7 +50,8 @@ export const browserFrame = {
 } as const
 
 export const buttonGroup = {
-  todo: 'todo'
+  moreActions: 'More actions',
+  pressed: 'On'
 } as const
 
 export const calendar = {
@@ -122,7 +123,22 @@ export const codeBlock = {
 } as const
 
 export const codeEditor = {
-  todo: 'todo'
+  label: 'Code editor',
+  original: 'Original',
+  modified: 'Modified',
+  problems: 'Problems',
+  problemCount: {
+    zero: 'No problems',
+    one: '{count} problem',
+    other: '{count} problems'
+  },
+  line: 'Line {line}',
+  error: 'Error',
+  warning: 'Warning',
+  info: 'Info',
+  loading: 'Loading the full editor…',
+  loadFailed: 'The full editor could not load. You can keep editing here.',
+  tabHint: 'Press Escape, then Tab, to leave the editor.'
 } as const
 
 export const collectionPreferences = {
@@ -151,7 +167,15 @@ export const collectionPreferences = {
 } as const
 
 export const combobox = {
-  todo: 'todo'
+  empty: 'No matches',
+  loading: 'Loading options',
+  useValue: 'Use "{value}"',
+  clear: 'Clear',
+  suggestions: 'Suggestions',
+  count: {
+    one: '{count} option',
+    other: '{count} options'
+  }
 } as const
 
 export const command = {
@@ -404,7 +428,24 @@ export const resizable = {
 } as const
 
 export const schemaForm = {
-  todo: 'todo'
+  required: 'This field is required.',
+  minLength: 'Use at least {min} characters.',
+  maxLength: 'Use at most {max} characters.',
+  pattern: "This value doesn't match the expected format.",
+  minimum: 'Enter {min} or more.',
+  maximum: 'Enter {max} or less.',
+  number: 'Enter a number.',
+  integer: 'Enter a whole number.',
+  enum: 'Choose one of the options.',
+  minItems: 'Add at least {min} values.',
+  maxItems: 'Add at most {max} values.',
+  listItem: 'Line {line}: {message}',
+  json: 'Enter valid JSON.',
+  selectPlaceholder: 'Select an option',
+  numberPlaceholder: 'A number',
+  numberFrom: 'From {min}',
+  listPlaceholder: 'One value per line',
+  jsonPlaceholder: 'A JSON value'
 } as const
 
 export const sectionHeader = {
@@ -551,7 +592,27 @@ export const tabs = {
 } as const
 
 export const tagEditor = {
-  todo: 'todo'
+  label: 'Tags',
+  key: 'Key',
+  value: 'Value',
+  keyPlaceholder: 'Enter key',
+  valuePlaceholder: 'Enter value',
+  add: 'Add new tag',
+  remove: 'Remove tag',
+  undo: 'Undo',
+  undoLabel: 'Undo removal of tag {index}',
+  markedForRemoval: 'This tag will be removed when you save.',
+  empty: 'No tags associated with the resource.',
+  remaining: {
+    one: 'You can add {count} more tag.',
+    other: 'You can add {count} more tags.'
+  },
+  limitReached: 'You have reached the limit of {limit} tags.',
+  keyRequired: 'Enter a key.',
+  keyDuplicate: 'This key is already used by another tag.',
+  keyReserved: 'Keys cannot start with "{prefix}".',
+  keyInvalid: 'Use letters, numbers, spaces and + - = . _ : / @ only.',
+  tooLong: 'Use {max} characters or fewer.'
 } as const
 
 export const themeSwitcher = {

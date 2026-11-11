@@ -46,7 +46,8 @@ export const ptBR: Messages = {
     heightValue: '{value} pixels de altura'
   },
   buttonGroup: {
-    todo: 'todo'
+    moreActions: 'Mais ações',
+    pressed: 'Ativado'
   },
   calendar: {
     placeholder: 'Selecione um período',
@@ -110,7 +111,22 @@ export const ptBR: Messages = {
     copy: 'Copiar código'
   },
   codeEditor: {
-    todo: 'todo'
+    label: 'Editor de código',
+    original: 'Original',
+    modified: 'Modificado',
+    problems: 'Problemas',
+    problemCount: {
+      zero: 'Nenhum problema',
+      one: '{count} problema',
+      other: '{count} problemas'
+    },
+    line: 'Linha {line}',
+    error: 'Erro',
+    warning: 'Aviso',
+    info: 'Informação',
+    loading: 'Carregando o editor completo…',
+    loadFailed: 'O editor completo não carregou. Você pode continuar editando aqui.',
+    tabHint: 'Pressione Escape e depois Tab para sair do editor.'
   },
   collectionPreferences: {
     trigger: 'Preferências',
@@ -137,7 +153,15 @@ export const ptBR: Messages = {
     compact: 'Compacta'
   },
   combobox: {
-    todo: 'todo'
+    empty: 'Nenhum resultado',
+    loading: 'Carregando opções',
+    useValue: 'Usar "{value}"',
+    clear: 'Limpar',
+    suggestions: 'Sugestões',
+    count: {
+      one: '{count} opção',
+      other: '{count} opções'
+    }
   },
   command: {
     empty: 'Nenhum resultado encontrado.',
@@ -355,7 +379,24 @@ export const ptBR: Messages = {
     handle: 'Redimensionar painel'
   },
   schemaForm: {
-    todo: 'todo'
+    required: 'Este campo é obrigatório.',
+    minLength: 'Use pelo menos {min} caracteres.',
+    maxLength: 'Use no máximo {max} caracteres.',
+    pattern: 'Este valor não segue o formato esperado.',
+    minimum: 'Informe {min} ou mais.',
+    maximum: 'Informe {max} ou menos.',
+    number: 'Informe um número.',
+    integer: 'Informe um número inteiro.',
+    enum: 'Escolha uma das opções.',
+    minItems: 'Adicione pelo menos {min} valores.',
+    maxItems: 'Adicione no máximo {max} valores.',
+    listItem: 'Linha {line}: {message}',
+    json: 'Informe um JSON válido.',
+    selectPlaceholder: 'Selecione uma opção',
+    numberPlaceholder: 'Um número',
+    numberFrom: 'A partir de {min}',
+    listPlaceholder: 'Um valor por linha',
+    jsonPlaceholder: 'Um valor JSON'
   },
   sectionHeader: {
     copyLink: 'Copiar link da seção {title}',
@@ -480,7 +521,27 @@ export const ptBR: Messages = {
     unsaved: 'Alterações não salvas'
   },
   tagEditor: {
-    todo: 'todo'
+    label: 'Tags',
+    key: 'Chave',
+    value: 'Valor',
+    keyPlaceholder: 'Digite a chave',
+    valuePlaceholder: 'Digite o valor',
+    add: 'Adicionar tag',
+    remove: 'Remover tag',
+    undo: 'Desfazer',
+    undoLabel: 'Desfazer a remoção da tag {index}',
+    markedForRemoval: 'Esta tag será removida quando você salvar.',
+    empty: 'Nenhuma tag associada ao recurso.',
+    remaining: {
+      one: 'Você pode adicionar mais {count} tag.',
+      other: 'Você pode adicionar mais {count} tags.'
+    },
+    limitReached: 'Você atingiu o limite de {limit} tags.',
+    keyRequired: 'Digite uma chave.',
+    keyDuplicate: 'Esta chave já é usada por outra tag.',
+    keyReserved: 'As chaves não podem começar com "{prefix}".',
+    keyInvalid: 'Use apenas letras, números, espaços e + - = . _ : / @.',
+    tooLong: 'Use até {max} caracteres.'
   },
   themeSwitcher: {
     label: 'Tema',

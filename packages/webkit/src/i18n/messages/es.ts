@@ -46,7 +46,8 @@ export const es: Messages = {
     heightValue: '{value} píxeles de alto'
   },
   buttonGroup: {
-    todo: 'todo'
+    moreActions: 'Más acciones',
+    pressed: 'Activado'
   },
   calendar: {
     placeholder: 'Selecciona un rango de fechas',
@@ -110,7 +111,22 @@ export const es: Messages = {
     copy: 'Copiar código'
   },
   codeEditor: {
-    todo: 'todo'
+    label: 'Editor de código',
+    original: 'Original',
+    modified: 'Modificado',
+    problems: 'Problemas',
+    problemCount: {
+      zero: 'Ningún problema',
+      one: '{count} problema',
+      other: '{count} problemas'
+    },
+    line: 'Línea {line}',
+    error: 'Error',
+    warning: 'Advertencia',
+    info: 'Información',
+    loading: 'Cargando el editor completo…',
+    loadFailed: 'El editor completo no se pudo cargar. Puedes seguir editando aquí.',
+    tabHint: 'Pulsa Escape y luego Tab para salir del editor.'
   },
   collectionPreferences: {
     trigger: 'Preferencias',
@@ -137,7 +153,15 @@ export const es: Messages = {
     compact: 'Compacta'
   },
   combobox: {
-    todo: 'todo'
+    empty: 'Sin resultados',
+    loading: 'Cargando opciones',
+    useValue: 'Usar "{value}"',
+    clear: 'Borrar',
+    suggestions: 'Sugerencias',
+    count: {
+      one: '{count} opción',
+      other: '{count} opciones'
+    }
   },
   command: {
     empty: 'No se encontraron resultados.',
@@ -355,7 +379,24 @@ export const es: Messages = {
     handle: 'Redimensionar panel'
   },
   schemaForm: {
-    todo: 'todo'
+    required: 'Este campo es obligatorio.',
+    minLength: 'Usa al menos {min} caracteres.',
+    maxLength: 'Usa como máximo {max} caracteres.',
+    pattern: 'Este valor no sigue el formato esperado.',
+    minimum: 'Ingresa {min} o más.',
+    maximum: 'Ingresa {max} o menos.',
+    number: 'Ingresa un número.',
+    integer: 'Ingresa un número entero.',
+    enum: 'Elige una de las opciones.',
+    minItems: 'Agrega al menos {min} valores.',
+    maxItems: 'Agrega como máximo {max} valores.',
+    listItem: 'Línea {line}: {message}',
+    json: 'Ingresa un JSON válido.',
+    selectPlaceholder: 'Selecciona una opción',
+    numberPlaceholder: 'Un número',
+    numberFrom: 'Desde {min}',
+    listPlaceholder: 'Un valor por línea',
+    jsonPlaceholder: 'Un valor JSON'
   },
   sectionHeader: {
     copyLink: 'Copiar enlace a la sección {title}',
@@ -480,7 +521,27 @@ export const es: Messages = {
     unsaved: 'Cambios sin guardar'
   },
   tagEditor: {
-    todo: 'todo'
+    label: 'Etiquetas',
+    key: 'Clave',
+    value: 'Valor',
+    keyPlaceholder: 'Ingresa la clave',
+    valuePlaceholder: 'Ingresa el valor',
+    add: 'Agregar etiqueta',
+    remove: 'Quitar etiqueta',
+    undo: 'Deshacer',
+    undoLabel: 'Deshacer la eliminación de la etiqueta {index}',
+    markedForRemoval: 'Esta etiqueta se eliminará cuando guardes.',
+    empty: 'No hay etiquetas asociadas al recurso.',
+    remaining: {
+      one: 'Puedes agregar {count} etiqueta más.',
+      other: 'Puedes agregar {count} etiquetas más.'
+    },
+    limitReached: 'Alcanzaste el límite de {limit} etiquetas.',
+    keyRequired: 'Ingresa una clave.',
+    keyDuplicate: 'Otra etiqueta ya usa esta clave.',
+    keyReserved: 'Las claves no pueden empezar con "{prefix}".',
+    keyInvalid: 'Usa solo letras, números, espacios y + - = . _ : / @.',
+    tooLong: 'Usa {max} caracteres o menos.'
   },
   themeSwitcher: {
     label: 'Tema',
