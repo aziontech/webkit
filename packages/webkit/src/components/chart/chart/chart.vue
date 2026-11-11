@@ -27,6 +27,7 @@
     hasAnyValue,
     isFiniteNumber,
     linearScale,
+    maxOf,
     niceTicks,
     normalizeSeries,
     stackedMax
@@ -142,6 +143,7 @@
   const LABEL_CHAR_WIDTH = 7
   const LABEL_GUTTER = 12
   const CATEGORY_LABEL_LIMIT = 160
+  const TWIN_ROW_LIMIT = 1000
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-chart')
   const summaryId = `${uid}-summary`
@@ -163,6 +165,16 @@
     Array.from({ length: count.value }, (_, index) => props.labels[index] ?? String(index + 1))
   )
 
+  const twinRows = computed(() => {
+    const total = labels.value.length
+    if (total <= TWIN_ROW_LIMIT) return labels.value.map((label, index) => ({ label, index }))
+    const step = (total - 1) / (TWIN_ROW_LIMIT - 1)
+    return Array.from({ length: TWIN_ROW_LIMIT }, (_, row) => {
+      const index = Math.round(row * step)
+      return { label: labels.value[index], index }
+    })
+  })
+
   const hasError = computed(() => props.error.length > 0)
   const isEmpty = computed(() => count.value === 0 || !hasAnyValue(series.value))
   const showMarks = computed(
@@ -183,14 +195,14 @@
 
   const dataMax = computed(() => {
     const registrations = markList.value
-    if (!registrations.length) return Math.max(0, ...finiteValues([]))
+    if (!registrations.length) return maxOf(finiteValues([]))
     return registrations.reduce((max, mark) => {
       const value = mark.stacked
         ? stackedMax(
             resolveSeries(mark.ids).map((entry) => entry.values),
             count.value
           )
-        : Math.max(0, ...finiteValues(mark.ids))
+        : maxOf(finiteValues(mark.ids))
       return Math.max(max, value)
     }, 0)
   })
@@ -209,7 +221,11 @@
       LABEL_GUTTER
     const categoryWidth = Math.min(
       CATEGORY_LABEL_LIMIT,
-      Math.max(1, ...labels.value.map((label) => labelText(label).length)) * LABEL_CHAR_WIDTH +
+      maxOf(
+        labels.value.map((label) => labelText(label).length),
+        1
+      ) *
+        LABEL_CHAR_WIDTH +
         LABEL_GUTTER
     )
     const labeled = markList.value.some((mark) => mark.labeled)
@@ -592,7 +608,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="(label, index) in labels"
+            v-for="{ label, index } in twinRows"
             :key="index"
           >
             <th scope="row">{{ labelText(label) }}</th>

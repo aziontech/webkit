@@ -1,5 +1,3 @@
-import flagSprite from '../../../images/country-flags.png'
-
 export interface Country {
   code: string
   dialCode: string
@@ -113,11 +111,22 @@ const FLAG_SPRITE_ROWS = [
   .join(' ')
   .split(' ')
 
-export function flagStyle(code: string): Record<string, string> | null {
+let flagSpriteRequest: Promise<string> | null = null
+
+export function loadFlagSprite(): Promise<string> {
+  flagSpriteRequest ??= import('../../../images/country-flags.png').then((m) => m.default)
+  return flagSpriteRequest
+}
+
+export function hasFlag(code: string): boolean {
+  return FLAG_SPRITE_ROWS.includes(code.toLowerCase())
+}
+
+export function flagStyle(code: string, sprite: string): Record<string, string> | null {
   const row = FLAG_SPRITE_ROWS.indexOf(code.toLowerCase()) + 1
   if (row === 0) return null
   return {
-    backgroundImage: `url(${flagSprite})`,
+    backgroundImage: sprite ? `url(${sprite})` : 'none',
     backgroundPosition: `0 ${(row / FLAG_SPRITE_ROWS.length) * 100}%`,
     backgroundSize: '100% auto'
   }

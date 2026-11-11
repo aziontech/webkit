@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "All four rules plus the corner registration squares. Toggle `hatch`, `marks` and `borders` to see the frame change.",
+   "sfc": "<script setup>\n  import FrameBox from '@aziontech/webkit/frame-box'\n</script>\n\n<template>\n  <FrameBox>\n    <div class=\"p-(--spacing-xl) text-center text-body-md text-(--text-muted)\">Framed content</div>\n  </FrameBox>\n</template>"
+  },
+  {
+   "name": "Borders",
+   "summary": "Every `borders` value side by side. `y` is the full-bleed band that keeps only the two dividing rules; `none` hands every edge over to a surrounding grid and contributes just the corner marks.",
+   "sfc": "<script setup>\n  import FrameBox from '@aziontech/webkit/frame-box'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <FrameBox borders=\"all\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">borders=\"all\"</div>\n    </FrameBox>\n    <FrameBox borders=\"x\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        borders=\"x\" — left and right\n      </div>\n    </FrameBox>\n    <FrameBox borders=\"y\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        borders=\"y\" — top and bottom\n      </div>\n    </FrameBox>\n    <FrameBox borders=\"top\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        borders=\"top\" — one side\n      </div>\n    </FrameBox>\n    <FrameBox :borders=\"['top', 'left']\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        :borders=\"['top', 'left']\" — an explicit list\n      </div>\n    </FrameBox>\n    <FrameBox borders=\"none\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        borders=\"none\"\n      </div>\n    </FrameBox>\n  </div>\n</template>"
+  },
+  {
+   "name": "Marks",
+   "summary": "Each pair of corner ticks is drawn independently. `top` and `bottom` are what a stack needs: the frame above keeps its `bottom` pair and the frame below asks for `bottom` only, so a shared junction carries one mark per corner instead of two a few pixels apart.",
+   "sfc": "<script setup>\n  import FrameBox from '@aziontech/webkit/frame-box'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <FrameBox marks=\"all\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">marks=\"all\"</div>\n    </FrameBox>\n    <FrameBox marks=\"top\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        marks=\"top\" — both top corners\n      </div>\n    </FrameBox>\n    <FrameBox marks=\"left\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        marks=\"left\" — both left corners\n      </div>\n    </FrameBox>\n    <FrameBox marks=\"top-right\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        marks=\"top-right\" — one corner\n      </div>\n    </FrameBox>\n    <FrameBox :marks=\"['top-left', 'bottom-right']\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        :marks=\"['top-left', 'bottom-right']\" — an explicit list\n      </div>\n    </FrameBox>\n    <FrameBox marks=\"none\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">marks=\"none\"</div>\n    </FrameBox>\n  </div>\n</template>"
+  }
+ ]
+}

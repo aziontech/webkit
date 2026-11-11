@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The compound composition form: the full pagination assembled by hand from the dot-notation sub-components — page-info text (`Pagination.Info`), Previous / numbers / overflow / Next (`Pagination.Button`), and a rows-per-page selector (`Pagination.PageSize`).",
+   "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n</script>\n\n<template>\n  <Pagination>\n    <template #info>\n      <Pagination.Info>Showing 1 to 10 of 20 entries</Pagination.Info>\n    </template>\n\n    <Pagination.Button\n      kind=\"previous\"\n      aria-label=\"Previous page\"\n      disabled\n    />\n    <Pagination.Button\n      kind=\"number\"\n      selected\n      >1</Pagination.Button\n    >\n    <Pagination.Button kind=\"number\">2</Pagination.Button>\n    <Pagination.Button kind=\"number\">3</Pagination.Button>\n    <Pagination.Button kind=\"more\" />\n    <Pagination.Button\n      kind=\"next\"\n      aria-label=\"Next page\"\n    />\n\n    <template #controls>\n      <Pagination.PageSize\n        :model-value=\"10\"\n        :options=\"[10, 25, 50, 100]\"\n      />\n    </template>\n  </Pagination>\n</template>"
+  },
+  {
+   "name": "Buttons",
+   "summary": "`Pagination.Button` kinds (previous / next / number / more) and states: default, selected (current page), and disabled. The buttons are butted into one segmented strip — the frame, border and end radii come from the `Pagination` root, so a consumer composes the buttons and nothing else.",
+   "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <Pagination aria-label=\"Pagination kinds\">\n      <Pagination.Button\n        kind=\"previous\"\n        aria-label=\"Previous page\"\n      />\n      <Pagination.Button kind=\"number\">1</Pagination.Button>\n      <Pagination.Button\n        kind=\"number\"\n        selected\n        >2</Pagination.Button\n      >\n      <Pagination.Button kind=\"more\" />\n      <Pagination.Button\n        kind=\"next\"\n        aria-label=\"Next page\"\n      />\n    </Pagination>\n    <Pagination aria-label=\"Pagination disabled states\">\n      <Pagination.Button\n        kind=\"previous\"\n        aria-label=\"Previous page\"\n        disabled\n      />\n      <Pagination.Button\n        kind=\"number\"\n        disabled\n        >1</Pagination.Button\n      >\n      <Pagination.Button\n        kind=\"next\"\n        aria-label=\"Next page\"\n        disabled\n      />\n    </Pagination>\n  </div>\n</template>"
+  },
+  {
+   "name": "DataDriven",
+   "summary": "Data-driven mode: pass `total` and bind `v-model:page` / `v-model:page-size`. The Pagination renders its own info text, windowed page numbers, overflow ellipsis, and the rows-per-page selector, emitting `update:page` / `update:pageSize`.",
+   "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n  import { ref } from 'vue'\n\n  const page = ref(1)\n  const pageSize = ref(10)\n</script>\n\n<template>\n  <Pagination\n    v-model:page=\"page\"\n    v-model:page-size=\"pageSize\"\n    :total=\"200\"\n    :page-size-options=\"[10, 25, 50, 100]\"\n    :sibling-count=\"1\"\n  />\n</template>"
+  }
+ ]
+}

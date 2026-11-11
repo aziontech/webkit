@@ -52,6 +52,19 @@ afterEach(() => {
 })
 
 describe('CodeBlock', () => {
+  it('mounts a long file in chunks and still copies the whole file', () => {
+    const code = Array.from({ length: 2000 }, (_, i) => `const v${i} = ${i}`).join('\n')
+    const view = render(CodeBlock, {
+      props: { tabs: [{ label: 'Long', value: 'long', language: 'javascript', code }] }
+    })
+    const mounted = view.getAllByTestId('code-code-block__line').length
+    expect(mounted).toBeGreaterThan(0)
+    expect(mounted).toBeLessThan(2000)
+    expect(view.getByTestId('code-code-block__lines').querySelectorAll('[data-chunk]').length).toBe(
+      Math.ceil((2000 - mounted) / 100)
+    )
+  })
+
   describe('rendering & testid', () => {
     it('renders with the default testid', () => {
       const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })

@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band as the SQL Database page places it: the product name as overline, the headline and lead in the title cell with a link out to the documentation, and four icon-led use cases filling the rest of the three-column frame. Edit the props in the Controls panel — a band with no items renders nothing at all.",
+   "sfc": "<script setup>\n  import UseCases from '@aziontech/webkit/use-cases'\n</script>\n\n<template>\n  <UseCases\n    eyebrow=\"SQL Database\"\n    title=\"What teams use SQL Database for\"\n    description=\"Teams use it to:\"\n    :primary-action=\"{ label: 'Docs', href: '/site/docs', trailing: true }\"\n    :items=\"[\n      {\n        icon: 'pi pi-comments',\n        title: 'RAG Applications',\n        description: 'Build topic-specific chatbots with the topic data stored in SQL Database.'\n      },\n      {\n        icon: 'pi pi-search',\n        title: 'Search Applications',\n        description: 'Power search with vector similarity queries on stored embeddings.'\n      },\n      {\n        icon: 'pi pi-sync',\n        title: 'AI Context Injection',\n        description: 'Give AI applications relevant context from vector embeddings.'\n      },\n      {\n        icon: 'pi pi-globe',\n        title: 'AI Workflows',\n        description: 'Pair stored embeddings with AI Inference to run RAG applications on Azion.'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ]
+}

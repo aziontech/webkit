@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A framed panel with its caption under it: the lead in the page's ink, the sentence in the muted one, both on the same line. The scene is an official `Illustration`, inset from the frame by the `padded` default. Type a URL into `src` in the Controls panel and the tile swaps the scene for a plain image; clear `description` and the caption is the lead alone, with the frame holding its height either way.",
+   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaTile from '@aziontech/webkit/media-tile'\n</script>\n\n<template>\n  <MediaTile\n    title=\"AI workloads.\"\n    description=\"Run tasks with reduced latency and higher concurrency, delivering faster, scalable results for all users.\"\n  >\n    <template #media>\n      <Illustration name=\"ai-applications\" />\n    </template>\n  </MediaTile>\n</template>"
+  },
+  {
+   "name": "Kinds",
+   "summary": "The two registers, each in the grid it belongs to. `frame` sits in `card-grid`'s `gap` register, where gutters keep every frame its own. `plain` sits in the `divider` register, where the grid draws every rule and the tile only has to fill its own background — a framed tile there would put a frame rule and a grid hairline a padding apart.",
+   "sfc": "<script setup>\n  import CardGrid from '@aziontech/webkit/card-grid'\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaTile from '@aziontech/webkit/media-tile'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-8\">\n    <CardGrid\n      kind=\"gap\"\n      :columns=\"2\"\n    >\n      <MediaTile\n        kind=\"frame\"\n        title=\"Framed.\"\n        description=\"The frame wraps the media alone, and the caption sits under it on the page column.\"\n      >\n        <template #media>\n          <Illustration name=\"ai-applications\" />\n        </template>\n      </MediaTile>\n      <MediaTile\n        kind=\"frame\"\n        title=\"One frame per tile.\"\n        description=\"The gutters of the gap register keep every frame its own, marks included.\"\n      >\n        <template #media>\n          <Illustration name=\"distributed-apis\" />\n        </template>\n      </MediaTile>\n    </CardGrid>\n    <CardGrid\n      kind=\"divider\"\n      :columns=\"2\"\n    >\n      <MediaTile\n        kind=\"plain\"\n        title=\"Plain.\"\n        description=\"No rules of its own: the tile is the cell, filled and inset, and the grid draws the seam.\"\n      >\n        <template #media>\n          <Illustration name=\"modern-frontends\" />\n        </template>\n      </MediaTile>\n      <MediaTile\n        kind=\"plain\"\n        title=\"One rule per seam.\"\n        description=\"The divider register rules every column, so a frame here would double each line.\"\n      >\n        <template #media>\n          <Illustration name=\"runtime\" />\n        </template>\n      </MediaTile>\n    </CardGrid>\n  </div>\n</template>"
+  },
+  {
+   "name": "Unpadded",
+   "summary": "The same tile with the inset off: the media runs to the frame's rules instead of sitting inside them. Reach for it only when the asset already carries its own air — a composed scene wants the inset, and a band mixing the two reads as a mistake.",
+   "sfc": "<script setup>\n  import Illustration from '@aziontech/webkit/illustration'\n  import MediaTile from '@aziontech/webkit/media-tile'\n</script>\n\n<template>\n  <MediaTile\n    title=\"AI workloads.\"\n    description=\"Run tasks with reduced latency and higher concurrency, delivering faster, scalable results for all users.\"\n    :padded=\"false\"\n  >\n    <template #media>\n      <Illustration name=\"ai-applications\" />\n    </template>\n  </MediaTile>\n</template>"
+  }
+ ]
+}

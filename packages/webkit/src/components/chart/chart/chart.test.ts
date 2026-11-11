@@ -372,6 +372,18 @@ describe('Chart', () => {
     expect(table.queryByTestId('chart-chart__plot')).toBeNull()
   })
 
+  it('samples the hidden twin to 1,000 rows above 1,000 categories and keeps both ends', () => {
+    const many = Array.from({ length: 5000 }, (_, index) => `t${index}`)
+    const values = many.map((_, index) => index)
+    const chart = mount({ labels: many, series: [{ id: 'a', name: 'A', values }] }, () => [
+      h(ChartLine)
+    ])
+    const rows = chart.getByTestId('chart-chart__twin').querySelectorAll('tbody tr')
+    expect(rows).toHaveLength(1000)
+    expect(rows[0]?.querySelector('th')?.textContent).toBe('t0')
+    expect(rows[999]?.querySelector('th')?.textContent).toBe('t4999')
+  })
+
   it('lays bars down the side when horizontal', async () => {
     const view = mount({ orientation: 'horizontal' }, () => [
       h(ChartAxis, { kind: 'y' }),

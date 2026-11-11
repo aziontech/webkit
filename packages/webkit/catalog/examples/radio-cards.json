@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Basic three-option grid with icons and descriptions.",
+   "sfc": "<script setup>\n  import RadioCards from '@aziontech/webkit/radio-cards'\n  import { ref } from 'vue'\n\n  const items = [\n    {\n      value: 'option1',\n      icon: 'pi pi-check',\n      label: 'Option One',\n      description: 'First option description'\n    },\n    {\n      value: 'option2',\n      icon: 'pi pi-times',\n      label: 'Option Two',\n      description: 'Second option description'\n    },\n    {\n      value: 'option3',\n      icon: 'pi pi-star',\n      label: 'Option Three',\n      description: 'Third option description'\n    }\n  ]\n  const selected = ref('option1')\n</script>\n\n<template>\n  <RadioCards\n    v-model=\"selected\"\n    :items=\"items\"\n  />\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "summary": "All options are non-interactive with disabled tokens applied.",
+   "sfc": "<script setup>\n  import RadioCards from '@aziontech/webkit/radio-cards'\n  import { ref } from 'vue'\n\n  const items = [\n    {\n      value: 'option1',\n      icon: 'pi pi-check',\n      label: 'Option One',\n      description: 'First option description'\n    },\n    {\n      value: 'option2',\n      icon: 'pi pi-times',\n      label: 'Option Two',\n      description: 'Second option description'\n    },\n    {\n      value: 'option3',\n      icon: 'pi pi-star',\n      label: 'Option Three',\n      description: 'Third option description'\n    }\n  ]\n  const selected = ref('option1')\n</script>\n\n<template>\n  <RadioCards\n    v-model=\"selected\"\n    :items=\"items\"\n    disabled\n  />\n</template>"
+  },
+  {
+   "name": "WithTag",
+   "summary": "Plan selection with Tag components in the tag slot.",
+   "sfc": "<script setup>\n  import RadioCards from '@aziontech/webkit/radio-cards'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const items = [\n    {\n      value: 'hobby',\n      icon: 'pi pi-sparkles',\n      label: 'Hobby',\n      description: 'For learning and small personal projects.',\n      ariaLabel: 'Hobby plan',\n      tag: 'Hobby Plan'\n    },\n    {\n      value: 'pro',\n      icon: 'pi pi-chart-line',\n      label: 'Pro',\n      description: 'For professional or commercial applications.',\n      ariaLabel: 'Pro plan',\n      tag: 'Pro Plan'\n    },\n    {\n      value: 'scale',\n      icon: 'pi pi-file-check',\n      label: 'Scale',\n      description: 'For businesses requiring advanced security and compliance.',\n      ariaLabel: 'Scale plan',\n      tag: 'Scale Plan'\n    }\n  ]\n  const selected = ref('hobby')\n</script>\n\n<template>\n  <RadioCards\n    v-model=\"selected\"\n    :items=\"items\"\n  >\n    <template #tag=\"{ item }\">\n      <Tag\n        :label=\"item.tag\"\n        severity=\"info\"\n      />\n    </template>\n  </RadioCards>\n</template>"
+  }
+ ]
+}

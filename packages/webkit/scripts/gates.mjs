@@ -10,10 +10,7 @@ export const GATES = [
   {
     id: 'catalog',
     label: 'Catalog in sync',
-    steps: [
-      ['node', 'scripts/build-catalog.mjs'],
-      ['git', 'diff', '--exit-code', '--stat', '--', 'catalog.json']
-    ]
+    steps: [['node', 'scripts/build-catalog.mjs', '--check']]
   },
   { id: 'naming', label: 'Naming', steps: [['node', 'scripts/check-naming.mjs']] },
   {

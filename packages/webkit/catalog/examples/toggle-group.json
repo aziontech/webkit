@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Five generic options with the first selected.",
+   "sfc": "<script setup>\n  import ToggleGroup from '@aziontech/webkit/toggle-group'\n  import { ref } from 'vue'\n\n  const options = [\n    { label: 'Label', value: 'option-1' },\n    { label: 'Label', value: 'option-2' },\n    { label: 'Label', value: 'option-3' },\n    { label: 'Label', value: 'option-4' },\n    { label: 'Label', value: 'option-5' }\n  ]\n\n  const selected = ref('option-1')\n</script>\n\n<template>\n  <ToggleGroup\n    v-model=\"selected\"\n    :options=\"options\"\n    aria-label=\"Segmented options\"\n  />\n</template>"
+  },
+  {
+   "name": "WithDisabledOption",
+   "summary": "Four options with one disabled segment showing the lock affordance.",
+   "sfc": "<script setup>\n  import ToggleGroup from '@aziontech/webkit/toggle-group'\n  import { ref } from 'vue'\n\n  const options = [\n    { label: 'Label', value: 'option-1' },\n    { label: 'Label', value: 'option-2', disabled: true },\n    { label: 'Label', value: 'option-3' },\n    { label: 'Label', value: 'option-4' }\n  ]\n\n  const selected = ref('option-1')\n</script>\n\n<template>\n  <ToggleGroup\n    v-model=\"selected\"\n    :options=\"options\"\n    aria-label=\"Segmented options\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three steps: 28px, 32px and 40px tall. Pick the one the row it sits in already uses — a group 6px off its neighbour reads as a rendering mistake.",
+   "sfc": "<script setup>\n  import ToggleGroup from '@aziontech/webkit/toggle-group'\n\n  const options = [\n    { label: 'Label', value: 'option-1' },\n    { label: 'Label', value: 'option-2' },\n    { label: 'Label', value: 'option-3' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-4\">\n    <ToggleGroup\n      :options=\"options\"\n      default-value=\"option-1\"\n      size=\"small\"\n      aria-label=\"Small\"\n    />\n    <ToggleGroup\n      :options=\"options\"\n      default-value=\"option-1\"\n      size=\"medium\"\n      aria-label=\"Medium\"\n    />\n    <ToggleGroup\n      :options=\"options\"\n      default-value=\"option-1\"\n      size=\"large\"\n      aria-label=\"Large\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

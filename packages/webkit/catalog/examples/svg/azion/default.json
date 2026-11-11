@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "DefaultLogo",
+   "summary": "The default horizontal Azion logo.",
+   "sfc": "<script setup>\n  import Default from '@aziontech/webkit/svg/azion/default'\n</script>\n\n<template>\n  <Default />\n</template>"
+  },
+  {
+   "name": "Variants",
+   "summary": "All logo variants side by side: default, full, and minimal.",
+   "sfc": "<script setup>\n  import Default from '@aziontech/webkit/svg/azion/default'\n  import Full from '@aziontech/webkit/svg/azion/full'\n  import Min from '@aziontech/webkit/svg/azion/min'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-8\">\n    <Default />\n    <Full />\n    <Min />\n  </div>\n</template>"
+  },
+  {
+   "name": "Illustrations",
+   "summary": "The \"Move to the Edge\" and \"Technologies\" brand illustrations.",
+   "sfc": "<script setup>\n  import MoveToTheEdge from '@aziontech/webkit/svg/azion/move-to-the-edge'\n  import Technologies from '@aziontech/webkit/svg/azion/technologies'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-8\">\n    <MoveToTheEdge />\n    <Technologies />\n  </div>\n</template>"
+  }
+ ]
+}

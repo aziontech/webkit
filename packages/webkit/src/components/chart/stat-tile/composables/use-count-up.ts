@@ -42,12 +42,13 @@ export function useCountUp(
   let frame = 0
 
   const stop = () => {
-    if (frame) globalThis.cancelAnimationFrame(frame)
+    if (frame) globalThis.cancelAnimationFrame?.(frame)
     frame = 0
   }
 
   const run = (to: number, from: number) => {
     stop()
+    if (typeof globalThis.requestAnimationFrame !== 'function') return
     if (reducedMotion.value === 'reduce' || duration <= 0 || from === to) {
       display.value = to
       return

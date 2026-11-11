@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, useAttrs } from 'vue'
 
+  import { maxOf } from '../../_lib'
   import { useChartContext } from '../composables/use-chart-context'
   import type { ChartAxisKind } from '../injection-key'
 
@@ -42,7 +43,7 @@
   }
 
   const widest = (texts: string[]) =>
-    Math.max(0, ...texts.map((text) => text.length)) * LABEL_CHAR_WIDTH + LABEL_SPACING
+    maxOf(texts.map((text) => text.length)) * LABEL_CHAR_WIDTH + LABEL_SPACING
 
   const fitEvery = (count: number, span: number, texts: string[]) => {
     if (count <= 1 || span <= 0) return 1

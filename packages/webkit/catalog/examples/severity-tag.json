@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "One tag at the default level, driven by the controls.",
+   "sfc": "<script setup>\n  import SeverityTag from '@aziontech/webkit/severity-tag'\n</script>\n\n<template>\n  <SeverityTag\n    severity=\"info\"\n    size=\"medium\"\n  />\n</template>"
+  },
+  {
+   "name": "Levels",
+   "summary": "Every level side by side, from critical to info.",
+   "sfc": "<script setup>\n  import SeverityTag from '@aziontech/webkit/severity-tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <SeverityTag severity=\"critical\" />\n    <SeverityTag severity=\"high\" />\n    <SeverityTag severity=\"medium\" />\n    <SeverityTag severity=\"low\" />\n    <SeverityTag severity=\"info\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Both sizes side by side at one level.",
+   "sfc": "<script setup>\n  import SeverityTag from '@aziontech/webkit/severity-tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <SeverityTag\n      severity=\"high\"\n      size=\"small\"\n    />\n    <SeverityTag\n      severity=\"high\"\n      size=\"medium\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

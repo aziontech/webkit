@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A header band over three peer points. The column titles are written in parallel grammar because they are read across, not down, and each description stays at one sentence so the grid does not stretch to a single long column. Edit `items` in the Controls panel to see the band grow or shrink — with `items` emptied the band renders its header and no grid at all.",
+   "sfc": "<script setup>\n  import ContentColumns from '@aziontech/webkit/content-columns'\n</script>\n\n<template>\n  <ContentColumns\n    eyebrow=\"How it works\"\n    title=\"Every request is handled at the edge.\"\n    description=\"One platform runs the routing, the code and the cache in the same place, so a request never leaves the network to be answered.\"\n    :columns=\"3\"\n    :items=\"[\n      { title: 'Routed', description: 'The request lands at the location closest to the user.' },\n      {\n        title: 'Executed',\n        description: 'Your code runs at that same location, with no region to warm up.'\n      },\n      { title: 'Cached', description: 'The response is held there, ready for the next request.' }\n    ]\"\n  />\n</template>"
+  },
+  {
+   "name": "Columns",
+   "summary": "Both `columns` values, one band under the other, each filled to its own count: two columns for a contrast, three for three peers. The grid only splits from the medium breakpoint up — narrow the canvas and both bands collapse to a single column in DOM order, so the points keep the order they were written in.",
+   "sfc": "<script setup>\n  import ContentColumns from '@aziontech/webkit/content-columns'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xxl)\">\n    <ContentColumns\n      eyebrow=\"Where it runs\"\n      title=\"Two places your code can live.\"\n      :columns=\"2\"\n      :items=\"[\n        {\n          title: 'At the edge',\n          description: 'Code runs in the location that answered the request.'\n        },\n        {\n          title: 'At the origin',\n          description: 'Code runs where your data is, reached only when the edge cannot answer.'\n        }\n      ]\"\n    />\n    <ContentColumns\n      eyebrow=\"What you get\"\n      title=\"Three properties every deployment inherits.\"\n      :columns=\"3\"\n      :items=\"[\n        { title: 'Distributed', description: 'Each deployment is live in every location at once.' },\n        {\n          title: 'Isolated',\n          description: 'Each request runs in its own sandbox, with no shared state.'\n        },\n        {\n          title: 'Observable',\n          description: 'Each request is logged with its latency, status and location.'\n        }\n      ]\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

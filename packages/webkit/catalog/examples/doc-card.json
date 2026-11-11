@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A linked card: glyph, title, copy, and the call-to-action row it closes on.",
+   "sfc": "<script setup>\n  import DocCard from '@aziontech/webkit/doc-card'\n</script>\n\n<template>\n  <DocCard\n    title=\"Edge Application\"\n    icon=\"pi pi-server\"\n    href=\"/docs/edge-application\"\n    link-label=\"Read the guide\"\n  >\n    Serve and cache your application at the edge, close to the people using it.\n  </DocCard>\n</template>"
+  },
+  {
+   "name": "Variants",
+   "summary": "The axes that change the anatomy: with and without an overline, an external destination, and a card with no `href` at all — whose root element is a block rather than an anchor.",
+   "sfc": "<script setup>\n  import DocCard from '@aziontech/webkit/doc-card'\n</script>\n\n<template>\n  <div class=\"grid gap-(--spacing-md) sm:grid-cols-2\">\n    <DocCard\n      title=\"Edge Application\"\n      icon=\"pi pi-server\"\n      href=\"/docs/edge-application\"\n      link-label=\"Read the guide\"\n    >\n      The plain shape: a glyph, a title, copy and a call to action.\n    </DocCard>\n    <DocCard\n      eyebrow=\"Azion CLI\"\n      title=\"Deploy from your terminal\"\n      icon=\"pi pi-desktop\"\n      href=\"/docs/cli\"\n    >\n      An overline says who or when, for a title that does not carry it.\n    </DocCard>\n    <DocCard\n      title=\"Community templates\"\n      href=\"https://github.com/aziontech\"\n      target=\"_blank\"\n      link-label=\"Browse on GitHub\"\n    >\n      A card that leaves the documentation trades the chevron for a diagonal arrow.\n    </DocCard>\n    <DocCard title=\"Not a destination\">\n      With no href the root is a plain block, so it is neither focusable nor announced as a link.\n    </DocCard>\n  </div>\n</template>"
+  }
+ ]
+}

@@ -92,6 +92,37 @@ const Harness = defineComponent({
 })
 
 describe('MultiSelect (composition / overlay)', () => {
+  it('mounts a 1,000-option list in chunks and mounts every option on the first arrow key', async () => {
+    cleanupTeleported()
+    render({
+      render: () =>
+        h(
+          MultiSelect,
+          { modelValue: [], defaultOpen: true },
+          {
+            default: () => [
+              h(MultiSelectTrigger, { 'aria-label': 'Options' }),
+              h(MultiSelectContent, null, {
+                default: () =>
+                  Array.from({ length: 1000 }, (_, i) =>
+                    h(MultiSelectOption, { key: i, value: i }, { default: () => `Option ${i}` })
+                  )
+              })
+            ]
+          }
+        )
+    })
+    await nextTick()
+    const options = () => listbox()?.querySelectorAll('[role="option"]').length ?? 0
+    expect(options()).toBeGreaterThan(0)
+    expect(options()).toBeLessThan(1000)
+    await fireEvent.keyDown(listbox() as HTMLElement, { key: 'ArrowDown' })
+    await nextTick()
+    await nextTick()
+    expect(options()).toBe(1000)
+    cleanupTeleported()
+  })
+
   it('exposes every sub-component on the compound root via dot-notation', () => {
     expect(MultiSelect.Trigger).toBe(MultiSelectTrigger)
     expect(MultiSelect.Content).toBe(MultiSelectContent)

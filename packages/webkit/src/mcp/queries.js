@@ -186,7 +186,7 @@ export function getComponent(catalog, name) {
     props: e.props ?? [],
     events: e.events ?? [],
     slots: e.slots ?? [],
-    examples: e.examples ?? [],
+    examples: catalog.examples(key),
     allowedClasses: allowedClassesFor(e)
   }
 }
@@ -774,7 +774,7 @@ export function getPattern(catalog, id, { variant } = {}) {
       message: `No pattern "${key}". Use search_patterns to find one by intent.`
     }
   }
-  const p = patterns[resolved]
+  const p = catalog.pattern(resolved)
   const isPrimary = variant === p.primary
   const chosen = variant && !isPrimary ? (p.variants || []).find((v) => v.name === variant) : null
   if (variant && !isPrimary && !chosen) {

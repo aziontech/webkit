@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The layer fills its nearest positioned ancestor, so the box it sits in is what gives it a size.",
+   "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"relative h-80 w-full overflow-hidden bg-(--bg-canvas)\">\n    <TextureMaterial\n      kind=\"dots\"\n      size=\"medium\"\n      fade=\"none\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Kinds",
+   "summary": "Five materials at their measured geometry. `dots` is the quiet default and `lines` the quietest — fine vertical rules whose transparency is the ink’s own, so each one stays solid edge to edge. `dither` ramps its density along an axis, and `pixelate` lights its grid from underneath with two crossing waves.",
+   "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2\">\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"dots\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"grid\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"lines\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"dither\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"pixelate\" />\n    </div>\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "One step either side of the measured pitch. A size scales the texture whole, so the cell keeps its proportion to the lattice.",
+   "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-3\">\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial size=\"small\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial size=\"medium\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial size=\"large\" />\n    </div>\n  </div>\n</template>"
+  }
+ ]
+}

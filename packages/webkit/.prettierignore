@@ -7,4 +7,5 @@ coverage
 storybook-static
 catalog.json
 scripts/api-snapshot.json
+/catalog/
 CHANGELOG.md

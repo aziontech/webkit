@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 17b8d7a51dca318a004540a0968fa0106be09b7b0b38dcda31b4361d02908e3f
+checksum: 48c2fc392c2cfd58af5d2d2a39d96ae3495d6d846f5a13ab8923d2b7737913ea
 created: 2026-05-26
 last_updated: 2026-11-11
 ---
@@ -134,6 +134,7 @@ LogView ships flat, individually importable sub-components (each from its own `@
 - `data-disabled` / `data-warnings-only` / `data-loading` / `data-border` on the LogView root
 - `loading` state: LogViewContent renders a centered spinner + `loadingLabel` in place of the log body
 - Log line `data-type` reflects `line.type`
+- Long logs: above 300 visible lines `LogViewContent` mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 10,000-line log mounts within its runtime budget. Search, warnings-only, the line count and copy work on every line, mounted or not.
 
 ## Motion & Animations
 

@@ -1,0 +1,17 @@
+{
+  "note": "Milliseconds, median of 5 runs in Vitest browser mode (Chromium), measured by src/test/performance.test.ts. Each budget is about 4x the median measured on a developer machine (50 ms floor) so CI stays stable; the test fails above it. mount = first render + layout; update = the change named in the scenario + layout.",
+  "scenarios": {
+    "chart-10k": { "mount": 640, "update": 320, "update_is": "replace both 10k-point series" },
+    "tree-5k": { "mount": 60, "update": 170, "update_is": "expand two folders of 99 nodes" },
+    "select-1k": { "mount": 50, "update": 260, "update_is": "open the list, then filter it" },
+    "multi-select-1k": { "mount": 50, "update": 480, "update_is": "open the list, then filter it" },
+    "donut-chart-500": { "mount": 50, "update": 50, "update_is": "replace the 500 slices" },
+    "bar-list-1k": { "mount": 240, "update": 160, "update_is": "replace the 1k rows" },
+    "log-view-10k": { "mount": 60, "update": 60, "update_is": "search the 10k lines" },
+    "code-block-5k-lines": {
+      "mount": 360,
+      "update": 370,
+      "update_is": "switch to the second 5k-line tab"
+    }
+  }
+}

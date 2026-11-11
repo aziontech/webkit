@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default primary icon button at large size.",
+   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <IconButton\n    kind=\"primary\"\n    size=\"large\"\n    icon=\"pi pi-plus\"\n    aria-label=\"Add\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "summary": "All kind variants side by side.",
+   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <IconButton\n      kind=\"primary\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"secondary\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"outlined\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"transparent\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"danger\"\n      icon=\"pi pi-trash\"\n      aria-label=\"Delete\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <IconButton\n      size=\"small\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      size=\"medium\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      size=\"large\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

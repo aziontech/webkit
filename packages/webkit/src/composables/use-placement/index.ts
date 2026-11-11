@@ -369,7 +369,7 @@ export function usePlacement({
       updatePosition()
       await nextTick()
       updatePosition()
-      globalThis.requestAnimationFrame(() => {
+      globalThis.requestAnimationFrame?.(() => {
         if (isOpen.value) anchored.value = true
       })
     },

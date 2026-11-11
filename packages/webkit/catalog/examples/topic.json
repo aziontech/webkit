@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A glyph, a headline and one sentence — the unit a claim grid repeats.",
+   "sfc": "<script setup>\n  import Topic from '@aziontech/webkit/topic'\n</script>\n\n<template>\n  <div class=\"relative\">\n    <Topic\n      icon=\"ai ai-edge-nodes\"\n      title=\"Consistent global speed\"\n      description=\"Serve content and run web apps across hundreds of locations with median latency under 30 ms. No infra to manage.\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "WithoutIcon",
+   "summary": "Without an icon the headline leads. Drop the glyph for a band whose claims are not glyph-led rather than reaching for one that says nothing.",
+   "sfc": "<script setup>\n  import Topic from '@aziontech/webkit/topic'\n</script>\n\n<template>\n  <Topic\n    title=\"Frontend and API logic together\"\n    description=\"Deploy your frontend and backend API as a single, simple project — in one deploy.\"\n  />\n</template>"
+  },
+  {
+   "name": "Linked",
+   "summary": "With an href the whole claim is the link and its headline closes on an arrow — so a band of claims carries no row of \"learn more\" buttons under it. The link covers the nearest positioned ancestor, so the cell it sits in is the hover and click target.",
+   "sfc": "<script setup>\n  import Topic from '@aziontech/webkit/topic'\n</script>\n\n<template>\n  <div class=\"relative\">\n    <Topic\n      icon=\"ai ai-tiered-cache\"\n      title=\"Accelerate API responses\"\n      description=\"Cache API responses on a distributed architecture to reduce latency and origin load.\"\n      href=\"/products/cache\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

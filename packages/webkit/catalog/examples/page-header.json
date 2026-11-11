@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "ListPage",
+   "summary": "A first-level list page: medium h1, one-line description, and the outlined Documentation and create actions on the right; on a phone they stack, each at full width.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PageHeader from '@aziontech/webkit/page-header'\n</script>\n\n<template>\n  <PageHeader\n    title=\"Resources\"\n    description=\"View and manage your resources.\"\n  >\n    <template #actions>\n      <Button\n        label=\"Documentation\"\n        icon=\"pi pi-book\"\n        kind=\"outlined\"\n        size=\"medium\"\n        href=\"https://example.com/docs/resources\"\n        target=\"_blank\"\n      />\n      <Button\n        label=\"Create Resource\"\n        icon=\"pi pi-plus\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n    </template>\n  </PageHeader>\n</template>"
+  },
+  {
+   "name": "SettingsPage",
+   "summary": "A settings sub-page or a detail tab: small title and description, no actions.",
+   "sfc": "<script setup>\n  import PageHeader from '@aziontech/webkit/page-header'\n</script>\n\n<template>\n  <PageHeader\n    title=\"Settings\"\n    description=\"Core configuration for this resource.\"\n    size=\"small\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three heading scales: large for a creation hub headline, medium for a first-level page, small for detail tabs and settings sub-pages.",
+   "sfc": "<script setup>\n  import PageHeader from '@aziontech/webkit/page-header'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <PageHeader\n      title=\"Start a new project\"\n      description=\"Start from a repository or use a framework template.\"\n      size=\"large\"\n    />\n    <PageHeader\n      title=\"Resources\"\n      description=\"View and manage your resources.\"\n    />\n    <PageHeader\n      title=\"Settings\"\n      description=\"Core configuration for this resource.\"\n      size=\"small\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

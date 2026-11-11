@@ -13,7 +13,7 @@
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
-  import { onBeforeUnmount, ref } from 'vue'
+  import { onBeforeUnmount, onMounted, ref } from 'vue'
 
   const sections = ['Reference', 'Guides', 'Dev tools']
   const pages = [
@@ -92,18 +92,21 @@
   const languages = ['EN', 'PT-BR', 'ES']
   const language = ref('EN')
 
-  const lgProbe = document.createElement('span')
-  lgProbe.className = 'hidden lg:block'
-  document.body.append(lgProbe)
-  const isLg = () => getComputedStyle(lgProbe).display !== 'none'
-  const brandLeadsSocialRow = ref(isLg())
+  const brandLeadsSocialRow = ref(false)
+  let lgProbe = null
   const syncBrand = () => {
-    brandLeadsSocialRow.value = isLg()
+    brandLeadsSocialRow.value = getComputedStyle(lgProbe).display !== 'none'
   }
-  window.addEventListener('resize', syncBrand)
+  onMounted(() => {
+    lgProbe = document.createElement('span')
+    lgProbe.className = 'hidden lg:block'
+    document.body.append(lgProbe)
+    syncBrand()
+    window.addEventListener('resize', syncBrand)
+  })
   onBeforeUnmount(() => {
     window.removeEventListener('resize', syncBrand)
-    lgProbe.remove()
+    lgProbe?.remove()
   })
 </script>
 

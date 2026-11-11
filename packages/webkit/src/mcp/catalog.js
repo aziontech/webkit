@@ -51,8 +51,21 @@ function levenshtein(a, b) {
   return prev[n]
 }
 
-function build(json) {
+function readPart(baseDir, file) {
+  if (!baseDir || !file) return null
+  try {
+    return JSON.parse(readFileSync(join(baseDir, file), 'utf-8'))
+  } catch (err) {
+    warnOnce(`failed to read ${file} next to the webkit catalog (${err.message}).`)
+    return null
+  }
+}
+
+function build(json, baseDir) {
   const imports = json.imports || {}
+  const patterns = json.patterns || {}
+  const patternCache = new Map()
+  const exampleCache = new Map()
   const subpaths = Object.keys(imports)
   const set = new Set(subpaths)
   const tokenRules = (json.tokenRules || []).map((r) => ({
@@ -76,10 +89,29 @@ function build(json) {
     aliases: json.aliases || {},
     subpaths,
     imports,
-    patterns: json.patterns || {},
+    patterns,
     patternAliases: json.patternAliases || {},
     has: (sub) => set.has(sub),
     getEntry: (sub) => imports[sub] || null,
+    pattern(id) {
+      const meta = patterns[id]
+      if (!meta) return null
+      if (!meta.file) return meta
+      if (!patternCache.has(id)) {
+        const { file, ...rest } = meta
+        patternCache.set(id, { ...rest, ...(readPart(baseDir, file) || {}) })
+      }
+      return patternCache.get(id)
+    },
+    examples(sub) {
+      const e = imports[sub]
+      if (!e) return []
+      if (!e.examplesFile) return e.examples || []
+      if (!exampleCache.has(sub)) {
+        exampleCache.set(sub, readPart(baseDir, e.examplesFile)?.examples || [])
+      }
+      return exampleCache.get(sub)
+    },
     nearestPublishedPrefix(sub) {
       if (!sub.includes('/')) return null
       const parts = sub.split('/')
@@ -120,6 +152,8 @@ function empty() {
     patternAliases: {},
     has: () => false,
     getEntry: () => null,
+    pattern: () => null,
+    examples: () => [],
     nearestPublishedPrefix: () => null,
     suggestSubpaths: () => []
   }
@@ -137,7 +171,7 @@ export function loadCatalog(cwd) {
     )
   } else {
     try {
-      value = build(JSON.parse(readFileSync(path, 'utf-8')))
+      value = build(JSON.parse(readFileSync(path, 'utf-8')), dirname(path))
     } catch (err) {
       value = empty()
       warnOnce(

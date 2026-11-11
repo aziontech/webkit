@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default primary button at large size.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <Button\n    kind=\"primary\"\n    size=\"large\"\n    label=\"Button\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "summary": "All kind variants side by side.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Button\n      kind=\"primary\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"secondary\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"outlined\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"transparent\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"danger\"\n      label=\"Button\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Button\n      size=\"small\"\n      label=\"Button\"\n    />\n    <Button\n      size=\"medium\"\n      label=\"Button\"\n    />\n    <Button\n      size=\"large\"\n      label=\"Button\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

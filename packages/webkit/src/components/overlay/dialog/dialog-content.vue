@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useEventListener, useScrollLock } from '@vueuse/core'
+  import { defaultDocument, useEventListener, useScrollLock } from '@vueuse/core'
   import { computed, inject, nextTick, ref, useAttrs, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
@@ -34,7 +34,7 @@
   const motionCtx = inject(DialogMotionInjectionKey)
   const motionState = computed(() => motionCtx?.motionState.value ?? 'closed')
   const isMobileOverlay = useOverlayMobile()
-  const isScrollLocked = useScrollLock(document.body)
+  const isScrollLocked = useScrollLock(defaultDocument?.body)
 
   watch(
     isOpen,
@@ -45,7 +45,7 @@
   )
   useFocusTrap(contentRef, isOpen)
 
-  useEventListener(document, 'keydown', (event) => {
+  useEventListener(defaultDocument, 'keydown', (event: globalThis.KeyboardEvent) => {
     if (!isOpen.value || event.key !== 'Escape' || event.defaultPrevented) return
     if (!ctx?.dismissible) return
     event.preventDefault()

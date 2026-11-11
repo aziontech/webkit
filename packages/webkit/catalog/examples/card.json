@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default card with a title header and body content in the `content` slot.",
+   "sfc": "<script setup>\n  import Card from '@aziontech/webkit/card'\n</script>\n\n<template>\n  <Card\n    title=\"Card Title\"\n    class=\"w-full max-w-[512px]\"\n  >\n    <template #content>\n      <p class=\"text-body-sm text-(--text-muted)\">\n        Card body content. Place forms, tables, or any markup in the content slot.\n      </p>\n    </template>\n  </Card>\n</template>"
+  },
+  {
+   "name": "Header",
+   "summary": "An action rendered through the `header` slot stays visible, aligned to the end of the header.",
+   "sfc": "<script setup>\n  import Card from '@aziontech/webkit/card'\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <Card class=\"w-full max-w-[512px]\">\n    <template #header>\n      <div class=\"flex items-center justify-between w-full\">\n        <h2 class=\"text-label-md text-(--text-default)\">Card Title</h2>\n        <IconButton\n          icon=\"pi pi-chevron-right\"\n          aria-label=\"Expand\"\n          kind=\"outlined\"\n          size=\"small\"\n        />\n      </div>\n    </template>\n    <template #content>\n      <p class=\"text-body-sm text-(--text-muted)\">\n        An action rendered in the header slot stays visible, aligned to the end of the header.\n      </p>\n    </template>\n  </Card>\n</template>"
+  },
+  {
+   "name": "Footer",
+   "summary": "Filling the `footer` slot renders the footer bar with actions or metadata.",
+   "sfc": "<script setup>\n  import Card from '@aziontech/webkit/card'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <Card\n    title=\"Card Title\"\n    class=\"w-full max-w-[512px]\"\n  >\n    <template #content>\n      <p class=\"text-body-sm text-(--text-muted)\">\n        The footer bar renders only when the footer slot is filled.\n      </p>\n    </template>\n    <template #footer>\n      <div class=\"flex w-full items-center justify-between gap-(--spacing-sm)\">\n        <span class=\"text-body-xs text-(--text-muted)\">\n          <a\n            href=\"/docs\"\n            class=\"text-link\"\n            >Check documentation:</a\n          >\n        </span>\n        <div class=\"flex gap-(--spacing-sm)\">\n          <Button\n            label=\"Cancel\"\n            kind=\"outlined\"\n            size=\"small\"\n          />\n          <Button\n            label=\"Save\"\n            kind=\"outlined\"\n            size=\"small\"\n          />\n        </div>\n      </div>\n    </template>\n  </Card>\n</template>"
+  }
+ ]
+}

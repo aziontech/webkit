@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Single thumb over 0–100 in steps of 1, bound with `v-model` and named with `aria-label`.",
+   "sfc": "<script setup>\n  import Slider from '@aziontech/webkit/slider'\n  import { ref } from 'vue'\n\n  const value = ref(40)\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xs)\">\n    <Slider\n      v-model=\"value\"\n      :min=\"0\"\n      :max=\"100\"\n      :step=\"1\"\n      aria-label=\"Alert threshold\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Ticks",
+   "summary": "A tick mark under every step. Ticks render only when the range has at most 21 positions.",
+   "sfc": "<script setup>\n  import Slider from '@aziontech/webkit/slider'\n  import { ref } from 'vue'\n\n  const value = ref(40)\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xs)\">\n    <Slider\n      v-model=\"value\"\n      :min=\"0\"\n      :max=\"100\"\n      :step=\"10\"\n      ticks\n      aria-label=\"Alert threshold\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "ReferenceValues",
+   "summary": "Labelled landmarks under the track. `unit` is appended to each label and to the announced value.",
+   "sfc": "<script setup>\n  import Slider from '@aziontech/webkit/slider'\n  import { ref } from 'vue'\n\n  const value = ref(40)\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xs)\">\n    <Slider\n      v-model=\"value\"\n      :min=\"0\"\n      :max=\"100\"\n      :step=\"1\"\n      :reference-values=\"[0, 25, 50, 75, 100]\"\n      unit=\"%\"\n      aria-label=\"Alert threshold\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

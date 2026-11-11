@@ -11,6 +11,7 @@
   } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useLocale } from '../../../composables/use-locale'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
@@ -170,6 +171,9 @@
     return highlightCode(activeTab.value.code, activeTab.value.language)
   })
 
+  const { split: splitLines, observe: observeLineChunk } = useLazyChunks({ rowHeight: 24 })
+  const lineChunks = computed(() => splitLines(highlightedLines.value))
+
   const getLineState = (lineNumber: number): CodeBlockLineState =>
     resolveLineState(lineNumber, activeLineChangeMap.value, activeTab.value?.highlightedLine)
 
@@ -199,15 +203,21 @@
       : codeBlockLineEnterMotion.offsetClass
   )
 
-  const getLineMotionClasses = (lineIndex: number) =>
-    cn(
-      lineMotionMode.value &&
-        'transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none',
-      lineMotionMode.value &&
-        (linesMotionReady.value && lineIndex < revealedLines.value
-          ? 'translate-x-0 opacity-100'
-          : cn(lineEnterOffsetClass.value, 'opacity-0'))
-    )
+  const lineMotion = computed(() => {
+    if (!lineMotionMode.value) return null
+    const motion =
+      'transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none'
+    return {
+      shown: cn(motion, 'translate-x-0 opacity-100'),
+      hidden: cn(motion, lineEnterOffsetClass.value, 'opacity-0')
+    }
+  })
+
+  const getLineMotionClasses = (lineIndex: number) => {
+    const motion = lineMotion.value
+    if (!motion) return ''
+    return linesMotionReady.value && lineIndex < revealedLines.value ? motion.shown : motion.hidden
+  }
 
   const getLineMotionStyle = (lineIndex: number) => {
     if (lineMotionMode.value === 'swap') {
@@ -686,63 +696,73 @@
             class="flex min-w-full w-max flex-col"
             :data-testid="`${testId}__lines`"
           >
-            <div
-              v-for="(lineTokens, lineIndex) in highlightedLines"
-              :key="`${activeTab.value}-${panelVersion}-${lineIndex}`"
-              :class="
-                cn(
-                  'group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm',
-                  'data-[state=added]:bg-(--success) data-[state=removed]:bg-(--danger) data-[state=highlighted]:bg-(--info)',
-                  getLineMotionClasses(lineIndex)
-                )
-              "
-              :style="getLineMotionStyle(lineIndex)"
-              :data-testid="`${testId}__line`"
-              :data-state="getLineState(lineIndex + 1)"
+            <template
+              v-for="chunk in lineChunks"
+              :key="chunk.index"
             >
-              <span
-                class="pointer-events-none absolute inset-0 z-0 bg-(--bg-hover) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-hover:opacity-100"
+              <div
+                v-if="!chunk.mounted"
+                :ref="(el) => observeLineChunk(el, chunk.index)"
+                :data-chunk="chunk.index"
                 aria-hidden="true"
+                class="shrink-0"
+                :style="{ height: `${chunk.estimatedHeight}px` }"
               />
-              <span
-                v-if="showDiffGutter"
-                class="relative z-1 w-2 shrink-0 text-center group-data-[state=added]:text-(--success-contrast) group-data-[state=removed]:text-(--danger-contrast)"
-                :data-testid="`${testId}__diff-marker`"
-                aria-hidden="true"
-              >
-                {{ getDiffMarker(getLineState(lineIndex + 1)) }}
-              </span>
-              <span
-                v-if="showLineNumbers"
-                class="relative z-1 w-4 shrink-0 text-center text-(--code-sintax-line-number)"
-                :data-testid="`${testId}__line-number`"
-              >
-                {{ formatLineNumber(lineIndex + 1) }}
-              </span>
-              <code
-                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pe-(--spacing-sm) group-data-[copyable]/code-block:pe-11"
-                :data-testid="`${testId}__line-content`"
-              >
-                <span
-                  v-for="(token, tokenIndex) in lineTokens"
-                  :key="tokenIndex"
-                  :class="getHighlightTokenClass(token.type)"
+              <template v-else>
+                <div
+                  v-for="(lineTokens, offset) in chunk.items"
+                  :key="`${activeTab.value}-${panelVersion}-${chunk.start + offset}`"
+                  class="group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm data-[state=added]:bg-(--success) data-[state=removed]:bg-(--danger) data-[state=highlighted]:bg-(--info)"
+                  :class="getLineMotionClasses(chunk.start + offset)"
+                  :style="getLineMotionStyle(chunk.start + offset)"
+                  :data-testid="`${testId}__line`"
+                  :data-state="getLineState(chunk.start + offset + 1)"
                 >
-                  {{ token.text }}
-                </span>
-              </code>
-              <span
-                v-if="getLineState(lineIndex + 1) !== 'default'"
-                :class="
-                  cn(
-                    'pointer-events-none absolute bottom-0 start-0 top-0 z-2 w-[2px]',
-                    'group-data-[state=added]:bg-(--success-border) group-data-[state=removed]:bg-(--danger-border) group-data-[state=highlighted]:bg-(--info-border)'
-                  )
-                "
-                aria-hidden="true"
-                :data-testid="`${testId}__line-indicator`"
-              />
-            </div>
+                  <span
+                    class="pointer-events-none absolute inset-0 z-0 bg-(--bg-hover) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-hover:opacity-100"
+                    aria-hidden="true"
+                  />
+                  <span
+                    v-if="showDiffGutter"
+                    class="relative z-1 w-2 shrink-0 text-center group-data-[state=added]:text-(--success-contrast) group-data-[state=removed]:text-(--danger-contrast)"
+                    :data-testid="`${testId}__diff-marker`"
+                    aria-hidden="true"
+                  >
+                    {{ getDiffMarker(getLineState(chunk.start + offset + 1)) }}
+                  </span>
+                  <span
+                    v-if="showLineNumbers"
+                    class="relative z-1 w-4 shrink-0 text-center text-(--code-sintax-line-number)"
+                    :data-testid="`${testId}__line-number`"
+                  >
+                    {{ formatLineNumber(chunk.start + offset + 1) }}
+                  </span>
+                  <code
+                    class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pe-(--spacing-sm) group-data-[copyable]/code-block:pe-11"
+                    :data-testid="`${testId}__line-content`"
+                  >
+                    <span
+                      v-for="(token, tokenIndex) in lineTokens"
+                      :key="tokenIndex"
+                      :class="getHighlightTokenClass(token.type)"
+                    >
+                      {{ token.text }}
+                    </span>
+                  </code>
+                  <span
+                    v-if="getLineState(chunk.start + offset + 1) !== 'default'"
+                    :class="
+                      cn(
+                        'pointer-events-none absolute bottom-0 start-0 top-0 z-2 w-[2px]',
+                        'group-data-[state=added]:bg-(--success-border) group-data-[state=removed]:bg-(--danger-border) group-data-[state=highlighted]:bg-(--info-border)'
+                      )
+                    "
+                    aria-hidden="true"
+                    :data-testid="`${testId}__line-indicator`"
+                  />
+                </div>
+              </template>
+            </template>
           </div>
         </div>
       </ScrollArea>

@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "For humans opens on two actions; For agents swaps in the copyable prompt and the agent docs. The typed word loops under both.",
+   "sfc": "<script setup>\n  import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'\n\n  const typedWords = ['Console', 'CLI', 'MCP server']\n\n  const audiences = [\n    {\n      value: 'humans',\n      label: 'For humans',\n      actions: [\n        {\n          label: 'Start for free',\n          href: '/signup',\n          kind: 'secondary',\n          trailing: true\n        },\n        {\n          label: 'Talk to a specialist',\n          href: '/site/contact',\n          kind: 'outlined',\n          trailing: true\n        }\n      ]\n    },\n    {\n      value: 'agents',\n      label: 'For agents',\n      copy: {\n        label: 'Copy prompt',\n        text: 'Connect Azion MCP: https://mcp.azion.com'\n      },\n      actions: [\n        {\n          label: 'Read the agent docs',\n          href: '/site/docs/agent-setup',\n          kind: 'outlined',\n          trailing: true\n        }\n      ]\n    }\n  ]\n</script>\n\n<template>\n  <ClosingCallToActionAgents\n    anchor=\"contact\"\n    title=\"Built by you, or your agents.\"\n    typed-lead=\"Drive one platform from the\"\n    :typed-words=\"typedWords\"\n    description=\"A person and an agent ship the same way.\"\n    audiences-aria-label=\"Audience\"\n    line-aria-label=\"Prompt\"\n    :audiences=\"audiences\"\n  />\n</template>"
+  }
+ ]
+}

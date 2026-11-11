@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The Blog close. Submit the field empty or with a malformed address to see its message; a valid address fires the `submit` action with `{ email }` and nothing is sent.",
+   "sfc": "<script setup>\n  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'\n\n  const form = {\n    placeholder: 'Your email',\n    submitLabel: 'Subscribe',\n    successMessage: 'Thanks for subscribing to the Azion newsletter',\n    errorMessage: 'We could not subscribe you. Try again.',\n    requiredMessage: 'Enter your email address.',\n    invalidMessage: 'Enter an email address like name@example.com.'\n  }\n\n  const onSubmit = (event, values) => {\n    console.log(event.type, values)\n  }\n</script>\n\n<template>\n  <ClosingCallToActionNewsletter\n    anchor=\"contact\"\n    eyebrow=\"Stay up to date\"\n    title=\"Subscribe to our newsletter\"\n    description=\"Product updates, event highlights, and industry insights, delivered to your inbox.\"\n    :form=\"form\"\n    @submit=\"onSubmit\"\n  />\n</template>"
+  },
+  {
+   "name": "Loading",
+   "summary": "While the site sends the address: the field is disabled and the button spins.",
+   "sfc": "<script setup>\n  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'\n\n  const form = {\n    placeholder: 'Your email',\n    submitLabel: 'Subscribe',\n    successMessage: 'Thanks for subscribing to the Azion newsletter',\n    errorMessage: 'We could not subscribe you. Try again.',\n    requiredMessage: 'Enter your email address.',\n    invalidMessage: 'Enter an email address like name@example.com.'\n  }\n\n  const onSubmit = (event, values) => {\n    console.log(event.type, values)\n  }\n</script>\n\n<template>\n  <ClosingCallToActionNewsletter\n    anchor=\"contact\"\n    eyebrow=\"Stay up to date\"\n    title=\"Subscribe to our newsletter\"\n    description=\"Product updates, event highlights, and industry insights, delivered to your inbox.\"\n    :form=\"form\"\n    :loading=\"true\"\n    @submit=\"onSubmit\"\n  />\n</template>"
+  },
+  {
+   "name": "Submitted",
+   "summary": "The site reported the address as sent: the form gives way to `form.successMessage`.",
+   "sfc": "<script setup>\n  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'\n\n  const form = {\n    placeholder: 'Your email',\n    submitLabel: 'Subscribe',\n    successMessage: 'Thanks for subscribing to the Azion newsletter',\n    errorMessage: 'We could not subscribe you. Try again.',\n    requiredMessage: 'Enter your email address.',\n    invalidMessage: 'Enter an email address like name@example.com.'\n  }\n\n  const onSubmit = (event, values) => {\n    console.log(event.type, values)\n  }\n</script>\n\n<template>\n  <ClosingCallToActionNewsletter\n    anchor=\"contact\"\n    eyebrow=\"Stay up to date\"\n    title=\"Subscribe to our newsletter\"\n    description=\"Product updates, event highlights, and industry insights, delivered to your inbox.\"\n    :form=\"form\"\n    :submitted=\"true\"\n    @submit=\"onSubmit\"\n  />\n</template>"
+  }
+ ]
+}

@@ -71,6 +71,7 @@
 
   const runEnterMotion = () => {
     motionReady.value = false
+    if (typeof globalThis.requestAnimationFrame !== 'function') return
     nextTick(() => {
       globalThis.requestAnimationFrame(() => {
         motionReady.value = true

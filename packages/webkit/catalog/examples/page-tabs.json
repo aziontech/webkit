@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The second-level navigation of a resource detail page: a full-bleed strip ruled at the bottom, its tabs at the page boundary inset.",
+   "sfc": "<script setup>\n  import PageTabs from '@aziontech/webkit/page-tabs'\n  import Tabs from '@aziontech/webkit/tabs'\n  import { ref } from 'vue'\n\n  const activeTab = ref('overview')\n  const tabs = [\n    { value: 'overview', label: 'Overview' },\n    { value: 'build', label: 'Build' },\n    { value: 'deployments', label: 'Deployments' },\n    { value: 'variables', label: 'Variables' },\n    { value: 'rules', label: 'Rules' },\n    { value: 'logs', label: 'Logs' },\n    { value: 'metrics', label: 'Metrics' },\n    { value: 'settings', label: 'Settings' }\n  ]\n</script>\n\n<template>\n  <PageTabs v-model=\"activeTab\">\n    <Tabs.Item\n      v-for=\"tab in tabs\"\n      :key=\"tab.value\"\n      :value=\"tab.value\"\n      :label=\"tab.label\"\n    />\n  </PageTabs>\n</template>"
+  },
+  {
+   "name": "WithActions",
+   "summary": "A service's detail tabs with the actions the resource owns on the right: the staged-changes Tag and the outlined medium Deploy button.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PageTabs from '@aziontech/webkit/page-tabs'\n  import Tabs from '@aziontech/webkit/tabs'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const activeTab = ref('overview')\n  const tabs = [\n    { value: 'overview', label: 'Overview' },\n    { value: 'deployments', label: 'Deployments' },\n    { value: 'settings', label: 'Settings' }\n  ]\n</script>\n\n<template>\n  <PageTabs v-model=\"activeTab\">\n    <Tabs.Item\n      v-for=\"tab in tabs\"\n      :key=\"tab.value\"\n      :value=\"tab.value\"\n      :label=\"tab.label\"\n    />\n    <template #actions>\n      <Tag\n        severity=\"warning\"\n        size=\"small\"\n        label=\"2 changes\"\n      />\n      <Button\n        label=\"Deploy\"\n        kind=\"outlined\"\n        size=\"medium\"\n        icon=\"pi pi-cloud-upload\"\n      />\n    </template>\n  </PageTabs>\n</template>"
+  }
+ ]
+}

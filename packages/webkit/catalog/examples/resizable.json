@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "One flexible pane and one sized pane, divided by a handle. Drag the edge, or focus it and use the arrow keys.",
+   "sfc": "<script setup>\n  import Resizable from '@aziontech/webkit/resizable'\n  import { ref } from 'vue'\n\n  const basis = ref(240)\n</script>\n\n<template>\n  <Resizable\n    orientation=\"horizontal\"\n    aria-label=\"Workspace\"\n    class=\"h-64\"\n  >\n    <Resizable.Pane aria-label=\"Document\"\n      >Flexible — no basis, so it takes what is left.</Resizable.Pane\n    >\n    <Resizable.Handle aria-label=\"Resize the panel\" />\n    <Resizable.Pane\n      v-model:basis=\"basis\"\n      :min=\"160\"\n      :max=\"480\"\n      aria-label=\"Panel\"\n      >Sized</Resizable.Pane\n    >\n  </Resizable>\n</template>"
+  },
+  {
+   "name": "Orientations",
+   "summary": "The axis is this component’s only variant. A horizontal group divides side-by-side panes with a vertical rail; a vertical group stacks them and the rail runs across.",
+   "sfc": "<script setup>\n  import Resizable from '@aziontech/webkit/resizable'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-2\">\n    <Resizable\n      orientation=\"horizontal\"\n      aria-label=\"Side by side\"\n      class=\"h-64 overflow-hidden rounded-(--shape-card) border border-(--border-default)\"\n    >\n      <Resizable.Pane aria-label=\"Editor\">Editor</Resizable.Pane>\n      <Resizable.Handle aria-label=\"Resize the preview\" />\n      <Resizable.Pane\n        :basis=\"200\"\n        :min=\"120\"\n        :max=\"400\"\n        aria-label=\"Preview\"\n        >Preview</Resizable.Pane\n      >\n    </Resizable>\n    <Resizable\n      orientation=\"vertical\"\n      aria-label=\"Stacked\"\n      class=\"h-64 overflow-hidden rounded-(--shape-card) border border-(--border-default)\"\n    >\n      <Resizable.Pane aria-label=\"Editor\">Editor</Resizable.Pane>\n      <Resizable.Handle aria-label=\"Resize the terminal\" />\n      <Resizable.Pane\n        :basis=\"96\"\n        :min=\"48\"\n        :max=\"200\"\n        aria-label=\"Terminal\"\n        >Terminal</Resizable.Pane\n      >\n    </Resizable>\n  </div>\n</template>"
+  },
+  {
+   "name": "Collapsed",
+   "summary": "A collapsible pane renders at zero length and stays mounted, so its content keeps its state. The control that brings it back lives OUTSIDE it — a control that only exists inside the thing it hides cannot reopen it.",
+   "sfc": "<script setup>\n  import Resizable from '@aziontech/webkit/resizable'\n  import { ref } from 'vue'\n\n  const collapsed = ref(true)\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <button\n      type=\"button\"\n      @click=\"collapsed = !collapsed\"\n    >\n      {{ collapsed ? 'Show' : 'Hide' }} the preview\n    </button>\n    <Resizable\n      aria-label=\"Workspace\"\n      class=\"h-64\"\n    >\n      <Resizable.Pane aria-label=\"Editor\">Editor</Resizable.Pane>\n      <Resizable.Handle aria-label=\"Resize the preview\" />\n      <Resizable.Pane\n        v-model:collapsed=\"collapsed\"\n        :basis=\"240\"\n        :min=\"160\"\n        collapsible\n        aria-label=\"Preview\"\n        >Preview</Resizable.Pane\n      >\n    </Resizable>\n  </div>\n</template>"
+  }
+ ]
+}

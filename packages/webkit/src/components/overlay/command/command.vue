@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useEventListener } from '@vueuse/core'
+  import { defaultWindow, useEventListener } from '@vueuse/core'
   import { computed, nextTick, provide, ref, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
@@ -206,7 +206,7 @@
     return true
   }
 
-  useEventListener(window, 'keydown', (event: globalThis.KeyboardEvent) => {
+  useEventListener(defaultWindow, 'keydown', (event: globalThis.KeyboardEvent) => {
     if (!matchesShortcut(event)) return
     event.preventDefault()
     setOpen(!isOpen.value)

@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Controlled theme switcher; defaults to the system mode. Click a segment and the highlight slides to it.",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'\n\n  const theme = ref('system')\n</script>\n\n<template>\n  <ThemeSwitcher v-model=\"theme\" />\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "summary": "The whole control is disabled and applies disabled tokens; no segment can be selected.",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'\n\n  const theme = ref('system')\n</script>\n\n<template>\n  <ThemeSwitcher\n    v-model=\"theme\"\n    disabled\n  />\n</template>"
+  }
+ ]
+}

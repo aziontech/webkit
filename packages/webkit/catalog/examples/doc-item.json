@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Three linked rows in the documented composition — a `FrameBox` holding an `ItemList`. The link wraps the name and stretches over the row, so the whole row is the hit area with one tab stop per entry, and the trailing chevron says it travels.",
+   "sfc": "<script setup>\n  import DocItem from '@aziontech/webkit/doc-item'\n  import FrameBox from '@aziontech/webkit/frame-box'\n  import ItemList from '@aziontech/webkit/item-list'\n</script>\n\n<template>\n  <FrameBox class=\"w-full bg-(--bg-surface)\">\n    <ItemList>\n      <DocItem\n        title=\"Edge Functions\"\n        icon=\"pi pi-code\"\n        href=\"#edge-functions\"\n      >\n        Build serverless applications on Azion's global network. Workloads integrate with functions\n        natively, through a binding.\n      </DocItem>\n      <DocItem\n        title=\"Edge SQL\"\n        icon=\"pi pi-database\"\n        href=\"#edge-sql\"\n      >\n        Store relational data across the network. A workload reads it from the location that served\n        the request.\n      </DocItem>\n      <DocItem\n        title=\"Edge Cache\"\n        icon=\"pi pi-bolt\"\n        href=\"#edge-cache\"\n      >\n        Decide what is cached, for how long, and by which key.\n      </DocItem>\n    </ItemList>\n  </FrameBox>\n</template>"
+  },
+  {
+   "name": "Variants",
+   "summary": "The axes that change the anatomy: an external destination (diagonal arrow, `rel=\"noreferrer\"`), an inert row with no `href` — whose title is plain text and whose trailing glyph region disappears — and a row with no glyph at all.",
+   "sfc": "<script setup>\n  import DocItem from '@aziontech/webkit/doc-item'\n  import FrameBox from '@aziontech/webkit/frame-box'\n  import ItemList from '@aziontech/webkit/item-list'\n</script>\n\n<template>\n  <FrameBox class=\"w-full bg-(--bg-surface)\">\n    <ItemList>\n      <DocItem\n        title=\"Community templates\"\n        icon=\"pi pi-github\"\n        href=\"https://github.com/aziontech\"\n        target=\"_blank\"\n      >\n        A row that leaves the documentation trades the chevron for a diagonal arrow.\n      </DocItem>\n      <DocItem\n        title=\"Rule\"\n        icon=\"pi pi-filter\"\n      >\n        With no href the row is inert — no hover, no anchor, no trailing arrow.\n      </DocItem>\n      <DocItem title=\"Binding\">\n        The glyph is optional too: a named connection from a function to the resource it reads.\n      </DocItem>\n    </ItemList>\n  </FrameBox>\n</template>"
+  }
+ ]
+}

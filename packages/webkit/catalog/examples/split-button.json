@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Primary split button at large size with a three-action menu.",
+   "sfc": "<script setup>\n  import SplitButton from '@aziontech/webkit/split-button'\n\n  const items = [\n    { label: 'Update', value: 'update', icon: 'pi pi-refresh' },\n    { label: 'Duplicate', value: 'duplicate', icon: 'pi pi-copy' },\n    { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }\n  ]\n</script>\n\n<template>\n  <SplitButton\n    kind=\"primary\"\n    size=\"large\"\n    label=\"Save\"\n    icon=\"pi pi-check\"\n    :model=\"items\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "summary": "All kind variants side by side.",
+   "sfc": "<script setup>\n  import SplitButton from '@aziontech/webkit/split-button'\n\n  const items = [\n    { label: 'Update', value: 'update', icon: 'pi pi-refresh' },\n    { label: 'Duplicate', value: 'duplicate', icon: 'pi pi-copy' },\n    { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <SplitButton\n      kind=\"primary\"\n      label=\"Primary\"\n      :model=\"items\"\n    />\n    <SplitButton\n      kind=\"secondary\"\n      label=\"Secondary\"\n      :model=\"items\"\n    />\n    <SplitButton\n      kind=\"outlined\"\n      label=\"Outlined\"\n      :model=\"items\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "sfc": "<script setup>\n  import SplitButton from '@aziontech/webkit/split-button'\n\n  const items = [\n    { label: 'Update', value: 'update', icon: 'pi pi-refresh' },\n    { label: 'Duplicate', value: 'duplicate', icon: 'pi pi-copy' },\n    { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <SplitButton\n      size=\"small\"\n      label=\"Small\"\n      :model=\"items\"\n    />\n    <SplitButton\n      size=\"medium\"\n      label=\"Medium\"\n      :model=\"items\"\n    />\n    <SplitButton\n      size=\"large\"\n      label=\"Large\"\n      :model=\"items\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

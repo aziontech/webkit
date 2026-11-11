@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: a3aeea71afcb714569a1d3b4def4d34d510dc7e00cfe7d724eae2974cbeccb32
+checksum: d1ff36f3f523b7eb6ca924a68872706460fd6f5cb61138e4006235586a2ccc60
 created: 2026-06-15
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Select — Component Spec
@@ -124,6 +124,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-mode` on the root: `single` | `multiple`
 - `data-selected` on `<SelectOption>` when the option's value is part of the current selection
+- Long lists: above 300 options the list mounts in chunks of 100 as they scroll near view (unmounted chunks keep their height, 32 px per option), so opening a 1,000-option list stays within its runtime budget. The first arrow, `Home` or `End` key in the list mounts every option before moving focus, so keyboard navigation always reaches every option.
 
 ## Motion & Animations
 

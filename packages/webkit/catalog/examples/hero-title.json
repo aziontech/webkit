@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Overline, `h1` and description, aligned to the start — the alignment that pairs with a backdrop weighted to one side.",
+   "sfc": "<script setup>\n  import HeroTitle from '@aziontech/webkit/hero-title'\n</script>\n\n<template>\n  <HeroTitle\n    eyebrow=\"Edge platform\"\n    eyebrow-prefix=\"//\"\n    title=\"Run it everywhere.\"\n    description=\"Ship applications, security and observability from one platform.\"\n  />\n</template>"
+  },
+  {
+   "name": "Highlight",
+   "summary": "The opening phrase painted in the brand accent. It is a `span` inside the same `h1`, so the accessible name is still the full sentence — only the paint differs.",
+   "sfc": "<script setup>\n  import HeroTitle from '@aziontech/webkit/hero-title'\n</script>\n\n<template>\n  <HeroTitle\n    eyebrow=\"Edge platform\"\n    eyebrow-prefix=\"//\"\n    highlight=\"Build anything.\"\n    title=\"Run it everywhere.\"\n    description=\"Ship applications, security and observability from one platform.\"\n  />\n</template>"
+  },
+  {
+   "name": "Centered",
+   "summary": "The whole block centered — for a hero whose backdrop is symmetric or that leads with one statement. The eyebrow carries a `//` prefix, set with `eyebrow-prefix`.",
+   "sfc": "<script setup>\n  import HeroTitle from '@aziontech/webkit/hero-title'\n</script>\n\n<template>\n  <HeroTitle\n    centered\n    eyebrow=\"Edge platform\"\n    eyebrow-prefix=\"//\"\n    highlight=\"Build anything.\"\n    title=\"Run it everywhere.\"\n    description=\"Ship applications, security and observability from one platform.\"\n  />\n</template>"
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default switch. Use the Controls panel to flip modelValue, kind, and focused.",
+   "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const modelValue = ref(false)\n</script>\n\n<template>\n  <Switch\n    v-model=\"modelValue\"\n    aria-label=\"Toggle setting\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "summary": "Both kind variants in off and on states. Privacy adds a lock (off) / lock-open (on) icon inside the handle.",
+   "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const defaultOff = ref(false)\n  const defaultOn = ref(true)\n  const privacyOff = ref(false)\n  const privacyOn = ref(true)\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-4)\">\n    <Switch\n      v-model=\"defaultOff\"\n      kind=\"default\"\n      aria-label=\"Default off\"\n    />\n    <Switch\n      v-model=\"defaultOn\"\n      kind=\"default\"\n      aria-label=\"Default on\"\n    />\n    <Switch\n      v-model=\"privacyOff\"\n      kind=\"privacy\"\n      aria-label=\"Privacy off\"\n    />\n    <Switch\n      v-model=\"privacyOn\"\n      kind=\"privacy\"\n      aria-label=\"Privacy on\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "summary": "Disabled in both positions. The lock reads the same either way — the disabled track and handle tokens win over the checked ones — and neither click nor Space/Enter emits.",
+   "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const lockedOff = ref(false)\n  const lockedOn = ref(true)\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-4)\">\n    <Switch\n      v-model=\"lockedOff\"\n      disabled\n      aria-label=\"Locked off\"\n    />\n    <Switch\n      v-model=\"lockedOn\"\n      disabled\n      aria-label=\"Locked on\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

@@ -124,6 +124,13 @@ import { defineAsyncComponent } from 'vue'
 const Dialog = defineAsyncComponent(() => import('@aziontech/webkit/dialog'))
 ```
 
+### Large data and server rendering
+
+- Pass the whole list: `Select`, `MultiSelect`, `LogView` and `CodeBlock` mount long lists (over 300 rows) in chunks as they scroll into view, and `Tree` renders collapsed children only when expanded. Do not page or slice the data yourself to make them fast.
+- `Chart` takes 10k points per series; its hidden data table keeps an even sample of 1,000 rows, so turn on `tableView` when people need every value on screen.
+- `PhoneInput` loads its flag sprite the first time the country list opens; the closed field costs no image download.
+- Every block and example renders on the server (`renderToString`). Keep `window` and `document` out of `setup` in your own screens: read them in `onMounted`.
+
 ### App entry (styles + icons)
 
 ```ts

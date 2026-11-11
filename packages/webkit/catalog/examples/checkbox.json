@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Binary control only — associate copy via an external label or a horizontal `Field`.",
+   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    binary\n    input-id=\"webkit-checkbox\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
+  },
+  {
+   "name": "Indeterminate",
+   "summary": "Tri-state visual. The parent owns the indeterminate logic (typical pattern: a \"select all\" header when some rows are selected). Sets `aria-checked=\"mixed\"` and the native input.indeterminate DOM property.",
+   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    binary\n    indeterminate\n    input-id=\"webkit-checkbox-indeterminate\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "summary": "Disabled checked and unchecked controls without label chrome.",
+   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(true)\n  const unchecked = ref(false)\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-4)\">\n    <Checkbox\n      v-model=\"checked\"\n      binary\n      disabled\n      input-id=\"webkit-checkbox-disabled-on\"\n      aria-label=\"Disabled checked\"\n    />\n    <Checkbox\n      v-model=\"unchecked\"\n      binary\n      disabled\n      input-id=\"webkit-checkbox-disabled-off\"\n      aria-label=\"Disabled unchecked\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

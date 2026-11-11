@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Five paths ranked by requests. Each bar runs against the largest value, so /home fills the row.",
+   "sfc": "<script setup>\n  import BarList from '@aziontech/webkit/bar-list'\n\n  const items = [\n    { name: '/home', value: 843 },\n    { name: '/documentation', value: 384 },\n    { name: '/blocks', value: 108 },\n    { name: '/imprint', value: 46 },\n    { name: '/cancellation', value: 3 }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <BarList\n      aria-label=\"Top paths\"\n      :items=\"items\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Interactive",
+   "summary": "Left: items carry an href, so each row is a link to that path filtered in analytics. Right: clickable renders rows as buttons that emit item-click with the event and the item.",
+   "sfc": "<script setup>\n  import BarList from '@aziontech/webkit/bar-list'\n  import { ref } from 'vue'\n\n  const items = [\n    { name: '/home', value: 843 },\n    { name: '/documentation', value: 384 },\n    { name: '/blocks', value: 108 },\n    { name: '/imprint', value: 46 },\n    { name: '/cancellation', value: 3 }\n  ]\n\n  const linkedItems = items.map((item) => ({\n    ...item,\n    href: `#/analytics?path=${item.name}`\n  }))\n\n  const selected = ref('none')\n\n  const onItemClick = (event, item) => {\n    selected.value = item.name\n  }\n</script>\n\n<template>\n  <div class=\"grid w-full grid-cols-1 gap-(--spacing-xl) md:grid-cols-2\">\n    <BarList\n      aria-label=\"Top paths, linked\"\n      :items=\"linkedItems\"\n    />\n    <div class=\"flex flex-col gap-(--spacing-sm)\">\n      <BarList\n        aria-label=\"Top paths\"\n        :items=\"items\"\n        clickable\n        @item-click=\"onItemClick\"\n      />\n      <p class=\"text-body-sm text-(--text-muted)\">Selected: {{ selected }}</p>\n    </div>\n  </div>\n</template>"
+  },
+  {
+   "name": "Loading",
+   "summary": "Skeleton rows of falling length hold the place of the list.",
+   "sfc": "<script setup>\n  import BarList from '@aziontech/webkit/bar-list'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <BarList\n      aria-label=\"Top paths\"\n      loading\n    />\n  </div>\n</template>"
+  }
+ ]
+}

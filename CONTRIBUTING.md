@@ -136,7 +136,7 @@ source and the generated files disagree. Nobody rewrites the AI files by hand.
 | Open a new spec                                             | The spec in `status: draft`, `template: 2`, only on your branch                              | —                                              | `spec-status` (G3): no draft lands on `main`; `spec-template:check` |
 | Release a version                                           | Nothing                                                                                      | The release, by release-please                 | —                                                                   |
 
-After any of these, run `pnpm --filter @aziontech/webkit catalog:build` and commit `catalog.json`.
+After any of these, run `pnpm --filter @aziontech/webkit catalog:build` and commit `catalog.json` and `catalog/`.
 A pattern's SFC must pass the consumer lint; legacy findings are frozen in
 `packages/webkit/scripts/patterns-lint-baseline.json` and can only go down
 (`pnpm --filter @aziontech/webkit run patterns:check --update` after fixing some).

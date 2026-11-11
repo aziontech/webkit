@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default small currency with prefix and billing-period suffix.",
+   "sfc": "<script setup>\n  import Currency from '@aziontech/webkit/currency'\n</script>\n\n<template>\n  <Currency\n    value=\"20\"\n    prefix=\"$\"\n    suffix=\"per month\"\n    size=\"small\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three steps of the ladder. `large` bottom-aligns the suffix against the figure; the smaller two centre it.",
+   "sfc": "<script setup>\n  import Currency from '@aziontech/webkit/currency'\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-6\">\n    <Currency\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"per month\"\n      size=\"small\"\n    />\n    <Currency\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"per month\"\n      size=\"medium\"\n    />\n    <Currency\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"per month\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}
