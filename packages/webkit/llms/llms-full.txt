@@ -2807,7 +2807,7 @@ The code of every state is in [blocks/platform/create/create-in-drawer.md](block
 - Surface: product
 - Source: `blocks/platform/create/deploy-drawer/deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-drawer")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [RadioButton](../../../components/radio-button.md), [Separator](../../../components/separator.md), [SettingsSection](../../../components/settings-section.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [RadioButton](../../../components/radio-button.md), [Separator](../../../components/separator.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -2870,6 +2870,13 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - List every project a shared Deployment Setting reaches before the user deploys, not after.
 - When no version is pinned, open as Build and deployment with a Building row, keep the other sections faded and `inert`, and disable Deploy until the build lands.
 - On a project, warn with an `Alert` above the environments when its Deployment Settings also publish elsewhere.
+- Keep an environment that Strict Deployment Settings lock visible but disabled, with a Strict tag and one sentence naming the settings and the service they keep bound.
+- Tag an environment Also deploys (warning) when the chosen environment's shared settings reach it, and say once, in a warning `Alert`, how many environments go live at once.
+- Say in an info `Alert` when the deploy replaces another service on the chosen project, naming both.
+- When a choice changes what the deploy reaches, reload that section in place: `Skeleton` rows, `aria-busy` on the region and one `role="status"` line; never clear the whole drawer.
+- Tag a dependency other services reference as Shared, name them in a `Tooltip`, and say once that a shared dependency deploys at one version.
+- When a dependency has no ready version, disable Deploy and say why in the footer, next to the button it disables.
+- After Deploy, follow `platform/states/async-submit`: the drawer closes and one toast per run turns from Deploying… into the outcome, with Edit (reopens the drawer with the same choices) and Redeploy.
 
 ## Don't
 
@@ -2878,6 +2885,8 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - Don't let Change version list hundreds of versions at once; search plus Load more.
 - Don't add a second commit such as Save as draft; one Deploy.
 - Don't print the shared-settings warning on each impacted row; it belongs once, above them.
+- Don't hide a locked environment, or let it be picked and fail at deploy time.
+- Don't offer View deployments in the outcome toast; it carries Edit and Redeploy.
 
 ## Copy
 
@@ -2888,6 +2897,8 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - **Environment descriptions:** one sentence on how it serves, e.g. "Live traffic. One version serves the domain, and deploying replaces it."
 - **Tags:** one or two words, e.g. "Ready", "Active", "Last used", "Selected", "New".
 - **In progress:** the progressive verb with `…`, e.g. "Building…".
+- **Run toast:** "Deploying web-app…" with "<version> to <environments>. It keeps running if you leave."; the outcome "web-app is live in Production." or "web-app wasn't deployed." with what failed and that nothing changed; actions "Edit" and "Redeploy".
+- **Locks and reach:** "<settings> is Strict, so <service> stays bound to <environment>."; "Also deploys"; "<settings> is shared, so it deploys at one version."
 - Follow `skills/webkit-microcopy`: Deploy, never publish or activate; sentence case; no em dash.
 
 ## Accessibility
@@ -2897,6 +2908,11 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - The version menu is a `role="menu"` moved with the arrow keys, each version a `menuitem` named by its version, author and age; the current one carries `aria-current`; search inputs have an `aria-label` that matches the placeholder.
 - Each impacted environment group has an `aria-label` with its count, e.g. "Projects impacted in Production (3)".
 - Faded sections during a build are `inert`, so keyboard users cannot reach controls that do nothing yet.
+- A section that reloads carries `aria-busy="true"` with its `Skeleton` rows `aria-hidden`, and a `role="status"` line reads Loading the projects this deployment reaches, or Loading dependencies.
+- A locked environment's radio is `disabled`; its reason is the card's description, so it is read with the choice.
+- The Shared tag sits in a focusable wrapper so its `Tooltip` opens from the keyboard, and its name already says who else references it.
+- A disabled Deploy is described by the footer line that explains why (`aria-describedby`).
+- Run progress and outcome reach screen readers through the toast region, so the user hears them from any page.
 - Glyphs in rows are decorative and carry `aria-hidden="true"`; tags give the state in words.
 
 ## States
@@ -2905,11 +2921,14 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - Building: no pinned version; titled Build and deployment with a Building row in place of Resources, the other sections faded and inert, Deploy disabled.
 - ServiceProjectFirst: the project-first flow; Resources, the Project card with the last used project and a Change popover, then every environment.
 - Project: deploying a project; its service and storage in Resources, Production and Preview, and a warning about other projects that share its storefront settings.
+- Environment: a locked Strict environment, an Also deploys tag, the replace and multi-environment `Alert`s, Projects impacted grouped per environment and reloaded on switch; the run ends in a success toast with Edit and Redeploy.
+- Dependencies: the open Dependencies disclosure with a Shared dependency, a not-versioned integration and a dependency with no ready version that blocks Deploy; changing the service version reloads the list. The first run fails and its toast offers Edit and Redeploy; Redeploy succeeds.
 
 ## Related
 
 - `platform/create/create-in-drawer` — the drawer that creates items rather than deploying.
 - `platform/create/deployment-flow` — the run a deploy streams once it starts.
+- `platform/states/async-submit` — the toast and outcome rule every deploy started here follows.
 - `platform/detail/deployment-logs` — the logs of a deploy after it ran.
 - `platform/detail/version-detail` — what a version contains before it is deployed.
 - `platform/create/resource-picker` — the Existing or New pattern the Project section follows.
@@ -2921,10 +2940,129 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - `Building` — Deploy without a pinned version: the drawer opens as Build and deployment, a Building row with the new version and its elapsed seconds stands in for the Resources card, and the Project, Environment and Projects impacted sections stay faded and inert, with Deploy disabled, until the build lands.
 - `ServiceProjectFirst` — The project-first flow: the same Resources card, a Project card with the last used project, its domain and a Change popover of the projects serving the service, then every environment as a radio block.
 - `Project` — Deploy on a project: the Resources card with the service it serves and its dependencies, then its storage, which is not versioned; Production and Preview below, with a warning that shared-storefront also publishes to project-05 and project-09.
+- `Environment` — The environment decision at its edges: Staging is locked by Strict Deployment Settings (a disabled choice card with a Strict tag and the reason), Preview is tagged Also deploys because Production's shared settings reach it, an info Alert says the deploy replaces legacy-web on the chosen project and a warning Alert says it goes live in two environments at once. Projects impacted are grouped per environment with a heading and a count, and switching environment reloads them with Skeleton rows, aria-busy and a status line. Deploy closes the drawer and reports through one toast that turns from Deploying… into the outcome with Edit and Redeploy.
+- `Dependencies` — The Dependencies disclosure open: each module and integration with its own version and Change version menu, auth-gateway tagged Shared with a Tooltip naming the services that also reference it and one info Alert saying a shared dependency deploys at one version, payments-api not versioned (a note instead of the menu), and geo-redirect with no ready version, which disables Deploy with the reason in the footer. Changing the service version reloads the dependencies with Skeleton rows, aria-busy and a status line; a second resource that references nothing says so. The first run fails and its toast carries Edit and Redeploy; Redeploy succeeds.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/deploy-drawer", { variant })`, or the file under `blocks/platform/create/deploy-drawer/variants/`.
 
 The code of every state is in [blocks/platform/create/deploy-drawer.md](blocks/platform/create/deploy-drawer.md) and `blocks/platform/create/deploy-drawer/deploy-drawer.vue`.
+
+---
+
+<!-- blocks/platform/create/deploy-progress-dialog.md -->
+
+# DeployProgressDialog (`platform/create/deploy-progress-dialog`)
+
+> The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, cannot be dismissed and keeps Close disabled; under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Activating <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button` and `Toaster`.
+
+- Surface: product
+- Source: `blocks/platform/create/deploy-progress-dialog/deploy-progress-dialog.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/create/deploy-progress-dialog")`
+- Components: [Button](../../../components/button.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [OutcomeMark](../../../components/outcome-mark.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
+- Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
+
+## Asked as
+
+deploy progress; deploy progress dialog; drop to deploy; deploy a folder; multi deploy progress; progresso do deploy; arrastar e implantar; progreso del despliegue
+
+The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The user dropped a folder (or started a deploy whose environment publishes through several Deployment Settings) and wants to see each one activate, know which failed and why, and retry only those.
+
+**The toast stays the standard.** Every deploy reports through one toast with Edit and Redeploy (`platform/states/async-submit`). This dialog is only for the drop-to-deploy path and for a deploy that fans out to several Deployment Settings; even there the outcome still reaches the user through the toast, so they can close the dialog and leave.
+
+## When to use
+
+- A folder dropped on a service deploys straight to an environment.
+- One deploy activates several Deployment Settings that can succeed or fail independently.
+
+## When not to use
+
+- A deploy of one service or project: use `platform/create/deploy-drawer`, which closes and reports through the toast.
+- A deploy with build steps and logs: use `platform/create/deployment-flow` and `platform/detail/deployment-logs`.
+- Reviewing what a multi-resource release reaches before it runs: use `platform/create/release-impact`.
+
+## Building blocks
+
+### A. Drop confirm — `Dialog`, `PanelHeader`, `DialogTitle`, `DialogClose`, `DialogDescription`, `Tag`, `PanelFooter`, `Button` (required on the drop path)
+
+Titled "New production deployment" (the environment in lower case). The service name with the environment as a secondary `Tag`, one sentence on what the files replace and how many Deployment Settings the environment publishes with, then the dropped folder: its file count and total size, and a scrollable list (focusable, named "Dropped files") of paths in code type with their sizes. Sizes go through `Intl.NumberFormat` with `style: 'unit'`. The footer has Cancel (transparent) and "Deploy to Production" (primary).
+
+### B. Progress frame — `Dialog`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeMark` (required)
+
+`size="medium"`, `dismissible` only once settled. The title counts: "Deploying 2 of 5…" while running, "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeMark` stands before the title: success when all deployed, warning when some failed.
+
+### C. Progress — `Progress` (required)
+
+The share of settled settings, named "Deploy progress", with "Activating <name>" under it while one runs.
+
+### D. Filter — `ToggleGroup` (required)
+
+Small, named "Filter deploys by status": All, Deploying n (running and queued), Failed n, Done n. An empty filter says so in one line.
+
+### E. Rows — `OutcomeMark`, `Spinner`, `Tag` (required)
+
+One bordered row per Deployment Setting: its name, the environments and projects it reaches, and, when it failed, the reason in danger text. A queued or running row leads with the settings glyph; a settled row leads with a small `OutcomeMark`. On the end side a `Spinner` while deploying and a status `Tag`: Queued, Deploying, Done, Failed.
+
+### F. Footer — `PanelFooter`, `Button` (required)
+
+Retry failed (outlined) appears only when the run settled with failures; Close (primary) is disabled while the run goes on.
+
+### G. Outcome toast — `Toaster` (required)
+
+One toast id for the run: `toast.loading` with "It keeps running if you leave." when it starts, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy**. Edit reopens the dialog on the failed rows; Redeploy runs every setting again. Never View deployments.
+
+## Do
+
+- Let each Deployment Setting settle on its own and keep the ones that succeeded live.
+- Say why a row failed on the row itself.
+- Offer Retry failed for the failed rows only.
+- Report the outcome through the toast as well, so the user can close the dialog.
+
+## Don't
+
+- Don't use this dialog for a single deploy; the toast is enough.
+- Don't let the dialog be dismissed while the run goes on, or the user loses the only view of it.
+- Don't roll back the settings that succeeded because another failed.
+
+## Copy
+
+- **Drop:** "New production deployment", "Dropped files", "Deploy to Production".
+- **Title:** "Deploying 2 of 5…", "Deployed 5 Deployment Settings", "Deployed 4 of 5 Deployment Settings".
+- **Tally:** "4 succeeded, 1 failed. Each Deployment Setting activates on its own, and the ones that succeeded stay live."
+- **Tags:** Queued, Deploying, Done, Failed. **Actions:** Retry failed, Close.
+- Follow `skills/webkit-microcopy`: sentence case, no em dash, the progressive verb with `…`.
+
+## Accessibility
+
+- The dialog traps focus and is named by its title and described by the tally.
+- The `Progress` bar is named; a `role="status"` line announces the outcome once settled.
+- `OutcomeMark` names its outcome; tags give the state in words, glyphs are `aria-hidden`.
+- The dropped files list is a focusable scroll region with an `aria-label`; paths are `dir="ltr"`.
+- Motion: the marks honour reduced motion and the `Spinner` stops under it.
+
+## States
+
+- Running: two settled, one deploying, two queued; advances to its outcome.
+- Drop: the confirm that starts a drop-to-deploy run.
+- PartialFailure: settled with one failure, Retry failed, error toast.
+- Succeeded: every setting deployed, success toast.
+
+## Related
+
+- `platform/states/async-submit` — the toast rule this block follows.
+- `platform/create/deploy-drawer` — the standard way to deploy.
+- `platform/create/release-impact` — what a release reaches, before it runs.
+- `OutcomeMark` — the settled mark.
+
+## Variants
+
+- `Running` — primary (the code below)
+- `Drop` — The drop-to-deploy confirm: New production deployment, the service with a Production `Tag`, what the files replace, and the dropped folder with its file count, total size and a scrollable list of paths with sizes formatted by `Intl.NumberFormat`. Cancel closes; Deploy to Production opens the progress dialog and starts the run.
+- `PartialFailure` — Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeMark`, staging-settings marked Failed with the reason, Retry failed beside Close, and an error toast with Edit (reopens the dialog on the failed rows) and Redeploy.
+- `Succeeded` — Every Deployment Setting deployed: a large animated success `OutcomeMark` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and a success toast with Edit and Redeploy.
+
+Each variant is the same screen in another state: `get_pattern("platform/create/deploy-progress-dialog", { variant })`, or the file under `blocks/platform/create/deploy-progress-dialog/variants/`.
+
+The code of every state is in [blocks/platform/create/deploy-progress-dialog.md](blocks/platform/create/deploy-progress-dialog.md) and `blocks/platform/create/deploy-progress-dialog/deploy-progress-dialog.vue`.
 
 ---
 
@@ -3540,6 +3678,137 @@ A `SettingsSection` titled Advanced, `collapsible`, `icon="pi pi-cog"`, closed b
 Each variant is the same screen in another state: `get_pattern("platform/create/provision-wizard", { variant })`, or the file under `blocks/platform/create/provision-wizard/variants/`.
 
 The code of every state is in [blocks/platform/create/provision-wizard.md](blocks/platform/create/provision-wizard.md) and `blocks/platform/create/provision-wizard/provision-wizard.vue`.
+
+---
+
+<!-- blocks/platform/create/release-impact.md -->
+
+# ReleaseImpact (`platform/create/release-impact`)
+
+> The Review and deploy page of a release that carries several resources at once. The left column holds one card per resource: its type and icon, a Required or Read-only `Tag` or an include `Switch` named by a `Tooltip`, the resource and a version `Select` that tracks the latest Ready version or pins one (each with a Current `Tag` and its age), an invalid line and Build a version when nothing is Ready, and a Dependencies box whose `Accordion` groups modules and integrations with counts, a Shared `Tag` with the resources that also reference it and one info `Alert` saying a shared dependency deploys at one version. The right column is the sticky Impact `Card`: a `ToggleGroup` switches a Tree (Deployment Settings, their environments and the projects they publish to, with rails and counts) and a Flow (the same as left-to-right cards), and its footer sums up what the release reaches. A sticky footer holds the hint, Cancel and Deploy release, which asks in a `ConfirmDialog` and then runs as an async action: one toast turns from Deploying release… into the outcome with Edit and Redeploy, and the page shows the outcome `Alert` with the same two actions. Built from `Card`, `Tag`, `Switch`, `Tooltip`, `Field`, `Select`, `Badge`, `Accordion`, `Alert`, `ToggleGroup`, `Skeleton`, `Spinner`, `Button`, `ConfirmDialog` and `Toaster`.
+
+- Surface: product
+- Source: `blocks/platform/create/release-impact/release-impact.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/create/release-impact")`
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Badge](../../../components/badge.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Field](../../../components/field.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [Spinner](../../../components/spinner.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`, `webkit-errors`
+
+## Asked as
+
+release impact; review and deploy; release composer; what a deploy changes; dependency versions; deployment impact; impacto do release; revisar e implantar; impacto del despliegue
+
+The Review and deploy page of a release that carries several resources at once: a service, the policy in front of it, its storage, its error page and every dependency they reference. The user is about to put all of it into traffic and needs to see, before deploying, which version of each resource goes out, which dependencies go with it, and every Deployment Setting, environment and project the release reaches. One Deploy release at the foot commits it, after one confirmation.
+
+## When to use
+
+- A release spans several resources that deploy together, each at its own version.
+- The release reaches projects through shared Deployment Settings, and the user must see how far it goes before it goes.
+- Dependencies are detected from the resources and may be shared between them.
+
+## When not to use
+
+- Deploying one service or project from its page: use `platform/create/deploy-drawer`, which is the default way to deploy.
+- Watching several Deployment Settings activate after a deploy started: use `platform/create/deploy-progress-dialog`.
+- Reading what a past deploy did: use `platform/detail/deployment-logs`.
+- Switching one resource back to an earlier version: use `platform/detail/version-detail` (Revert).
+
+## Building blocks
+
+### A. Page heading (required)
+
+An `h1` reading Review and deploy and one sentence on what the page is for. No breadcrumb of its own; the shell gives it.
+
+### B. Outcome — `Alert`, `Button` (required after a run)
+
+When a run ends, one `Alert` above the columns says how it ended: `severity="danger"` with what was refused and that nothing changed in traffic, or `severity="success"` with what serves now. Both carry **Edit** and **Redeploy** in the `action` slot, the same two actions as the toast.
+
+### C. Resource cards (required)
+
+One bordered card per resource, in the order of the request path (service, policy, storage, error page). The header has the type icon and label and, on the end side, a Required `Tag` (warning), a Read-only `Tag` with a lock when the release keeps the active version, or an include `Switch` named by `aria-label` and explained by a `Tooltip` ("Leave edge-policy out of this release"). A left-out resource collapses to one sentence saying what keeps serving.
+
+### D. Resource and version — `Field`, `Select`, `Tag` (required)
+
+Two `Field`s side by side from `sm` up: the resource (read-only box) and its version. The version `Select` offers Track latest Ready first (with "resolves at deploy") and a Pin a ready version group, each option with a Current `Tag` and its age. When the version tracks the latest, the `Field.Description` names the version it resolves to now. When nothing is Ready, the `Select` is disabled and `invalid`, `Field.Error` gives the reason, and a transparent Build a version `Button` links to its versions.
+
+### E. Dependencies — `Badge`, `Accordion`, `Alert`, `Tag`, `Tooltip`, `Select` (required when a resource references others)
+
+A box under the resource fields headed Dependencies with a count `Badge`. A `type="multiple"` `Accordion`, open by default, groups them by type (Modules, Integrations) with a count each. Each dependency has its own version `Select` labelled "Version of <name>" for screen readers. A dependency referenced by other resources carries a Shared `Tag` whose `Tooltip` names them, and its group opens with one info `Alert`: a shared dependency deploys at one version.
+
+### F. Impact — `Card`, `ToggleGroup`, `Spinner`, `Skeleton`, `Alert`, `Button` (required)
+
+The right column, sticky from `xl`. The `Card` header has the title Impact and, once ready, a small `ToggleGroup` named Impact view with Tree and Flow.
+
+- **Tree** — a nested list: each Deployment Setting with its domain count, its environments with their project count, and the projects with theirs. Rails are drawn with logical borders, so they mirror under RTL.
+- **Flow** — the same data left to right: the setting as a raised card, an arrow, then one card per environment listing its projects. It is plain lists and cards, not `Flow`: `Flow` still carries `aria-required-parent` and `aria-required-children` findings, and this view has nothing to connect beyond one level.
+- **Loading** — Computing impact… with a `Spinner` and three `Skeleton` lines; the region is `aria-busy` and a status line announces it.
+- **Unavailable** — a warning `Alert` saying the impact is unknown, how many settings are selected, and Retry. Deploying stays possible.
+- **Partial** — the list was truncated: a warning `Alert` above the tree.
+
+The `Card` footer sums the reach in one sentence: projects, environments and Deployment Settings.
+
+### G. Footer and commit — `Button`, `ConfirmDialog`, `Toaster` (required)
+
+A sticky bar: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`kind="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`platform/states/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments.
+
+## Do
+
+- Show every resource and dependency with the version that goes out, including the ones the user did not touch.
+- Say what tracking the latest Ready version resolves to now.
+- Block Deploy release only for something the user can fix here, and say what it is in the footer.
+- Keep Deploy possible when the impact cannot be computed; say the impact is unknown.
+- Report the outcome through the toast and the page `Alert`, both with Edit and Redeploy.
+
+## Don't
+
+- Don't hide shared dependencies; changing one changes it everywhere in the release.
+- Don't confirm twice: the page is the review, the `ConfirmDialog` is the only step before the run.
+- Don't keep the user on the page while it runs; the run reports wherever they are.
+- Don't draw the Flow view with `Flow` until its list semantics pass axe.
+
+## Copy
+
+- **Title:** "Review and deploy". **Commit:** "Deploy release"; in progress "Deploying…".
+- **Confirmation:** "Deploy this release?" and one sentence with the resources, versions and reach.
+- **Versions:** "Track latest Ready", "resolves at deploy", "Pin a ready version", tag "Current".
+- **Blockers:** "<name> has no Ready version, so the release cannot be deployed."
+- **Outcome:** "Release deployed." / "The release wasn't deployed." with the cause and that nothing changed in traffic.
+- Follow `skills/webkit-microcopy`: Deploy, never publish; sentence case; no em dash.
+
+## Accessibility
+
+- Each resource card is a `section` named by its type and resource; the Resources heading takes focus on Edit.
+- Every `Select` is labelled through its `Field` (visible for the resource, `sr-only` for dependencies).
+- The include `Switch` has an `aria-label`; its `Tooltip` repeats it for pointer users.
+- The Shared `Tag` sits in a focusable wrapper so its `Tooltip` opens from the keyboard.
+- The Impact region is `aria-busy` while loading and announces it in a `role="status"` line.
+- The `ConfirmDialog` traps focus and returns it to Deploy release.
+
+## States
+
+- Ready: every resource with a version, the impact computed, Tree view.
+- Loading: the impact being computed.
+- Unavailable: the impact could not be read; Retry lands on a truncated list.
+- MissingVersion: a resource without a Ready version blocks the deploy.
+- Failed: the last run was refused; Edit and Redeploy on the toast and the page `Alert`.
+
+## Related
+
+- `platform/create/deploy-drawer` — deploying one service or project.
+- `platform/create/deploy-progress-dialog` — several Deployment Settings activating after the deploy.
+- `platform/states/async-submit` — the toast rule every deploy follows.
+- `platform/detail/version-detail` — one version, its history and revert.
+
+## Variants
+
+- `Ready` — primary (the code below)
+- `Loading` — The impact is being computed: the Impact card shows Computing impact… with a `Spinner` and three `Skeleton` lines, is `aria-busy`, announces it through a status line, hides the view switch and the summary, and the footer says Computing impact… beside Deploy release.
+- `Unavailable` — The projects behind the Deployment Settings could not be read: a warning `Alert` says the impact is unknown and that the release can still deploy, the count of settings selected and Retry. Retry computes again and lands on a truncated list, shown with its own warning above the tree.
+- `MissingVersion` — edge-policy has no Ready version: its version `Select` is disabled and invalid with the reason under it, Build a version links to its versions, and Deploy release stays disabled with the reason in the footer. Switching edge-policy off the release clears the blocker.
+- `Failed` — The last run failed: the error toast and the danger `Alert` at the top say edge-policy was refused and nothing changed in traffic, each with Edit (back to the resources) and Redeploy. Redeploy runs again through the same toast and succeeds.
+
+Each variant is the same screen in another state: `get_pattern("platform/create/release-impact", { variant })`, or the file under `blocks/platform/create/release-impact/variants/`.
+
+The code of every state is in [blocks/platform/create/release-impact.md](blocks/platform/create/release-impact.md) and `blocks/platform/create/release-impact/release-impact.vue`.
 
 ---
 
@@ -6987,17 +7256,17 @@ The code of every state is in [blocks/platform/detail/record-table.md](blocks/pl
 
 # VersionDetail (`platform/detail/version-detail`)
 
-> One version of a resource, opened from its Versions tab: the platform shell whose last breadcrumb is a Select that switches between the resource versions, each with its state Tag, or creates a new one. Under it a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, the platform shell, `Breadcrumb`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.
+> One version of a resource, opened from its Versions tab: the platform shell whose last breadcrumb is a Select that switches between the resource versions, each with its state Tag, or creates a new one. Under it a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `ConfirmDialog`, `Toaster`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, the platform shell, `Breadcrumb`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.
 
 - Surface: product
 - Source: `blocks/platform/detail/version-detail/version-detail.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/version-detail")`
-- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [Resizable](../../../components/resizable.md), [ScrollArea](../../../components/scroll-area.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [SplitButton](../../../components/split-button.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [Resizable](../../../components/resizable.md), [ScrollArea](../../../components/scroll-area.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [SplitButton](../../../components/split-button.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
 
-version detail; resource version; draft version; version history; version switcher; versioned settings; detalhe da versão; histórico de versões; versão rascunho
+version detail; resource version; draft version; version history; version switcher; versioned settings; detalhe da versão; histórico de versões; versão rascunho; revert version; rollback version; reverter versão; revertir versión
 
 One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed.
 
@@ -7044,6 +7313,10 @@ A bar pinned to the bottom of the settings pane, aligned with the column above i
 
 The side pane titled "Version history", closed with an `IconButton`. It starts on the current version with its `Tag`, its description, its author `Avatar` and a pencil that edits the description in place through a `Field` with a `Textarea` and Cancel and Save `Button`s. Then the changes entry, empty until something is saved, then the five newest earlier versions and Show older for the rest.
 
+### H. Revert — `ConfirmDialog`, `Toaster` (optional, on an earlier Ready version)
+
+An earlier version opened from Version history keeps the page read-only and says Viewing an earlier version, with the entry in history marked by a Viewing `Tag` and `aria-current`. The version bar's primary action is Revert to <id>, the trigger of a `ConfirmDialog` with `kind="primary"` and `size="medium"`. Its body is the diff against the deployed version: a bordered list of the settings that change, each with its old and new value in words, a line with the rules added and removed, and a description saying that reverting deploys <id> to Production and that the deployed version stays in history. Confirm closes the dialog and starts the async-submit run: one toast id that turns from a loading toast ("Reverting to <id>…", "It keeps running if you leave.") into the outcome, which stays until closed and carries **Edit** and **Redeploy**, never View deployments. On success the version's `Tag` reads Deployed in the breadcrumb, the tab row and the history, and the bar offers Redeploy.
+
 ## Do
 
 - Keep one primary action on the page, in the version bar; the tabs share it.
@@ -7051,6 +7324,8 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 - Let the user switch versions from the breadcrumb without going back to the list.
 - Show the state in three places that agree: the breadcrumb option, the tab row tag and the version bar.
 - Keep the history pane collapsible and resizable so the settings keep their width when it is closed.
+- Show what a revert changes before it runs: the settings with old and new values, and the rules added and removed.
+- Report a revert like any deploy: one toast that turns into the outcome, with Edit and Redeploy.
 
 ## Don't
 
@@ -7059,13 +7334,17 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 - Don't name a tab in the breadcrumb.
 - Don't list every earlier version at once; show five and Show older.
 - Don't save a description edit without Cancel and Save buttons.
+- Don't revert without a confirmation, and don't make the diff depend on an arrow glyph or color alone.
+- Don't delete or hide the version a revert replaces; it stays in history.
+- Don't offer View deployments on the revert toast.
 
 ## Copy
 
 - **Version state tags:** one word, e.g. "Draft", "Deployed", "Ready", "Editable", "Read-only".
 - **Version bar:** one sentence on what the user can do, e.g. "This version is open for editing. Deploy it when ready." or "Viewing a deployed version".
 - **Save actions:** verb first, three words or fewer, e.g. "Save and deploy", "Save and build", "Save".
-- **Built version actions:** "Add Version", "Redeploy".
+- **Built version actions:** "Add Version", "Redeploy"; on an earlier version "Revert to <id>".
+- **Revert:** bar "Viewing an earlier version"; dialog title "Revert to <id>?", description "Reverting deploys <id> to Production in place of <deployed>. <deployed> stays in the version history, so you can redeploy it later."; diff heading "What changes against <deployed>"; toasts "Reverting to <id>…" then "<id> is deployed.", actions "Edit" and "Redeploy".
 - **Version picker:** search placeholder "Search versions", no-match line `No versions match "<query>".`, footer "Add Version".
 - **Setting rows:** a noun title and one sentence with a period, e.g. "Active" with "When disabled, the resource stops serving traffic."
 - **History:** "Current version", an empty changes line, e.g. "No changes yet. Each change you save shows up here.", description placeholder "What changed in this version?".
@@ -7078,12 +7357,14 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 - The version `Select` trigger is named "Switch version"; its search input is named "Search versions".
 - Every `Switch` and `Input` in a setting row has an `aria-label` that matches the row title.
 - A disabled control with a reason gets a `Tooltip` that the keyboard can reach.
+- The revert dialog traps focus, is named by its title and returns focus to Revert on close. Each changed setting carries a visually hidden sentence ("changes from On to Off"); the struck-through values and the arrow are `aria-hidden`. The toasts live in the `Toaster` region, and the bar's status line announces "Reverting to <id>…".
 - Icon-only buttons (Version actions, Close version history, Edit version info) have an `aria-label`; decorative icons are `aria-hidden`.
 
 ## States
 
 - Draft: the editable draft on its Settings tab, with the Editable tag and the Save and deploy split button in the version bar.
 - Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
+- Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
 - VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
 
 ## Related
@@ -7099,6 +7380,7 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 - `Draft` — primary (the code below)
 - `Deployed` — The deployed version, read-only: the creation date beside the Deployed Tag, the settings fieldset disabled, and the version bar reading Viewing a deployed version and Read-only with its description, Add Version and Redeploy.
 - `VersionHistory` — The draft with Version history open beside it: the current version with its description, author and the pencil that edits it in place, the empty changes entry, and the five newest earlier versions with Show older for the rest.
+- `Revert` — An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed.
 
 Each variant is the same screen in another state: `get_pattern("platform/detail/version-detail", { variant })`, or the file under `blocks/platform/detail/version-detail/variants/`.
 
@@ -14983,6 +15265,324 @@ Exports: `./shell-mockup` → `index.ts`, `./shell-mockup-root` → `shell-mocku
 
 ---
 
+<!-- components/topology-diagram.md -->
+
+# Topology Diagram
+
+> The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyNode`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
+
+- Import: `import TopologyDiagram from '@aziontech/webkit/topology-diagram'`
+- Category: data · Surface: product · Structure: monolithic
+- API as JSON: [topology-diagram.json](https://github.com/aziontech/webkit/blob/main/.specs/topology-diagram.json)
+
+## When to use
+
+- The topology tab of a project, service or workload: what serves its traffic, in order, and what is still unbound.
+- A review before a deploy where binding or removing a resource is staged on the diagram.
+
+## Do
+
+- Keep a column per depth and put the nodes that serve in parallel in the same column.
+- Mark a staged change `dashed` with a warning status and a message that says the deploy applies it.
+- Mark the last node of each branch `terminal` so no connector leaves it.
+- Give every unbound slot a message that says what happens without it.
+
+## Don’t
+
+- A sequence of steps or a pipeline without data cards → use `flow`.
+- A nested list of items with no flow between them → use `tree`.
+- A marketing architecture picture → use `diagram`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [flow](flow.md) — the connector engine and anchors this component reuses.
+- [tree](tree.md) — hierarchical data without connectors.
+- [dropdown-menu](dropdown-menu.md) — the bind control's menu.
+- platform/detail/details-page` — the page whose topology tab holds it.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `levels` | `TopologyLevel[]` | `[]` | false | Columns of the diagram, from the entry point to the last dependency. |
+| `loading` | `boolean` | `false` | false | Shows placeholder cards while the topology loads. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `update:expanded` | `string[]` | A node card opened or closed. |
+| `bind` | `[key: string, value: string]` | An existing option was picked in the bind control. |
+| `remove` | `[key: string]` | Remove was activated on a bound, removable node. |
+| `create` | `[key: string]` | Create was picked in the bind control. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `actions` | { node: TopologyNode } | Extra controls in a node's identity row, before the bind control. |
+| `empty` | — | Replaces the line shown when there are no levels. |
+
+## v-model
+
+- **`v-model:expanded`** — `string[]`, default `[]`. Keys of the open node cards; a header click toggles its key.
+
+## States
+
+- Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty.
+- Node card: `data-state` `open` | `closed`; `data-dashed` for a staged or unbound node.
+- Connectors: dashed, flowing; faded never (no disabled nodes).
+
+## Accessibility
+
+- Visible focus: header buttons `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`; the scroll area when it scrolls.
+- Keyboard map: `Tab` moves through header buttons, links, copy, bind and remove controls in reading order; `Enter`/`Space` on a header toggles its card; the bind menu follows `dropdown-menu` (arrows, `Enter`, `Esc`). The scroll area is focusable (`tabindex="0"`) only when it overflows, so arrow keys scroll it.
+- ARIA: the root is a `section` named by `ariaLabel`; columns are an `ol` of `li`, each with an optional visually hidden label; each header is a `button` with `aria-expanded` and `aria-controls`; the collapsed body is `inert`; connectors are `aria-hidden`; icon-only controls are named (`Bind Policy`, `Remove Policy`, `Copy Domains Custom domain`) and carry a `Tooltip`; loading announces once through a `role="status"` line.
+- The unbound dash is `aria-hidden`; the status tag says Not bound in words.
+- Contrast ≥4.5:1 from the semantic text tokens.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-auto`, `text-start`); the columns run from the inline start.
+- Connectors: the engine reads `direction` and mirrors the elbows; ports swap sides.
+- Icons: the chevron rotates vertically and is not mirrored; kind icons are not mirrored.
+- User data: field values carry `dir="auto"`.
+
+## Internationalization
+
+| Key                          | English source              | Override prop |
+| ---------------------------- | --------------------------- | ------------- |
+| `topologyDiagram.label`     | Deployment topology         | `ariaLabel`   |
+| `topologyDiagram.notBound`  | Not bound                   | node `status` |
+| `topologyDiagram.bind` / `change` / `remove` / `create` | Bind {kind} / Change {kind} / Remove {kind} / Create {kind} | — |
+| `topologyDiagram.existing`  | Existing                    | —             |
+| `topologyDiagram.noOptions` | No options yet.             | —             |
+| `topologyDiagram.copy`      | Copy {field}                | —             |
+| `topologyDiagram.empty`     | Nothing is connected yet.   | `empty` slot  |
+| `topologyDiagram.loading`   | Loading the topology        | —             |
+
+- Formatting: none; kinds, names, statuses and fields are data.
+
+## Responsive
+
+- Container queries: none; each column keeps `min-w-(--size-56)` and grows to share the width.
+- Narrow (≤ 640 px or a narrow container): the diagram scrolls inline in its own focusable area; the page does not.
+- Touch: header buttons are full-width rows; bind, remove and copy are small icon buttons with tooltips that also work on focus.
+- Reflow: the diagram is a two-dimensional figure, an accepted exception to 1.4.10 inside its own scroll area.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import TopologyDiagram from '@aziontech/webkit/topology-diagram'
+  import { ref } from 'vue'
+
+  const policies = [
+    { value: 'edge-guard', label: 'edge-guard' },
+    { value: 'strict-waf', label: 'strict-waf' }
+  ]
+  const errorPages = [{ value: 'maintenance', label: 'maintenance' }]
+
+  const levels = [
+    {
+      key: 'domains',
+      label: 'Domains',
+      nodes: [
+        {
+          key: 'domains',
+          kind: 'Domains',
+          icon: 'pi pi-globe',
+          name: 'shop.example.com',
+          status: '2 domains',
+          severity: 'info',
+          fields: [
+            {
+              label: 'Platform domain',
+              value: 'web-app-k3x9q2.example.net',
+              href: 'https://web-app-k3x9q2.example.net',
+              copyable: true
+            },
+            {
+              label: 'Custom domain',
+              value: 'shop.example.com',
+              href: 'https://shop.example.com',
+              copyable: true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      key: 'project',
+      label: 'Project',
+      nodes: [
+        {
+          key: 'project',
+          kind: 'Project',
+          icon: 'pi pi-folder',
+          name: 'web-app',
+          status: 'Live',
+          severity: 'success',
+          href: '#project',
+          fields: [
+            { label: 'ID', value: '1482736015', copyable: true },
+            { label: 'Environment', value: 'Production' }
+          ]
+        }
+      ]
+    },
+    {
+      key: 'policy',
+      label: 'Policy',
+      nodes: [
+        {
+          key: 'policy',
+          kind: 'Policy',
+          icon: 'pi pi-shield',
+          name: 'edge-guard',
+          status: 'Active',
+          severity: 'success',
+          href: '#policy',
+          bindable: true,
+          bindOptions: policies,
+          boundValue: 'edge-guard',
+          removable: true,
+          fields: [{ label: 'Rules', value: '12 rules, 3 rate limits' }]
+        }
+      ]
+    },
+    {
+      key: 'service',
+      label: 'Service',
+      nodes: [
+        {
+          key: 'service',
+          kind: 'Service',
+          icon: 'pi pi-server',
+          name: 'web-app',
+          status: 'Active',
+          severity: 'success',
+          href: '#service',
+          fields: [{ label: 'Version', value: 'AEO25I38' }]
+        },
+        {
+          key: 'error-page',
+          kind: 'Error page',
+          icon: 'pi pi-file',
+          terminal: true,
+          bindable: true,
+          bindOptions: errorPages,
+          message: 'Errors answer with the default page.'
+        }
+      ]
+    },
+    {
+      key: 'cache',
+      label: 'Cache rules',
+      nodes: [
+        {
+          key: 'cache-static',
+          kind: 'Cache rule',
+          icon: 'pi pi-bolt',
+          name: 'static-assets',
+          status: 'Active',
+          severity: 'success',
+          fields: [{ label: 'Lifetime', value: '30 days' }]
+        },
+        {
+          key: 'cache-api',
+          kind: 'Cache rule',
+          icon: 'pi pi-bolt',
+          name: 'api-bypass',
+          status: 'Active',
+          severity: 'success',
+          fields: [{ label: 'Lifetime', value: 'Bypass' }]
+        }
+      ]
+    },
+    {
+      key: 'integration',
+      label: 'Integration',
+      nodes: [
+        {
+          key: 'integration',
+          kind: 'Integration',
+          icon: 'pi pi-link',
+          name: 'web-app-origin',
+          status: 'Active',
+          severity: 'success',
+          message: 'Routes traffic from the service to its origin. It can be re-pointed but not removed.',
+          fields: [{ label: 'Origin', value: 'origin.example.com', copyable: true }]
+        }
+      ]
+    },
+    {
+      key: 'storage',
+      label: 'Storage',
+      nodes: [
+        {
+          key: 'storage',
+          kind: 'Storage',
+          icon: 'pi pi-inbox',
+          name: 'web-app-assets',
+          status: 'Private',
+          severity: 'neutral',
+          terminal: true,
+          fields: [{ label: 'Objects', value: '24 files, 1.2 MB' }]
+        }
+      ]
+    }
+  ]
+
+  const expanded = ref(['project'])
+  const event = ref('')
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-sm)">
+    <TopologyDiagram
+      v-model:expanded="expanded"
+      :levels="levels"
+      class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
+      @bind="(key, value) => (event = `Bind ${value} to ${key}.`)"
+      @remove="(key) => (event = `Remove ${key}.`)"
+      @create="(key) => (event = `Create a new ${key}.`)"
+    >
+      <template #actions="{ node }">
+        <Tooltip
+          v-if="node.key === 'domains'"
+          text="Add domain"
+        >
+          <IconButton
+            icon="pi pi-plus"
+            kind="outlined"
+            size="small"
+            aria-label="Add domain"
+            @click="event = 'Add a domain.'"
+          />
+        </Tooltip>
+      </template>
+    </TopologyDiagram>
+    <p
+      role="status"
+      class="text-body-sm text-(--text-muted)"
+    >
+      {{ event }}
+    </p>
+  </div>
+</template>
+```
+
+2 more example(s) in [components/topology-diagram.md](https://github.com/aziontech/webkit/blob/main/.specs/components/topology-diagram.md).
+
+---
+
 <!-- components/tree.md -->
 
 # Tree
@@ -16770,6 +17370,111 @@ Exports: `./shell-mockup` → `index.ts`, `./shell-mockup-root` → `shell-mocku
 ```
 
 2 more example(s) in [components/empty-state.md](https://github.com/aziontech/webkit/blob/main/.specs/components/empty-state.md).
+
+---
+
+<!-- components/outcome-mark.md -->
+
+# Outcome Mark
+
+> A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run). It replaces the design sample's `StateMark` and `SuccessMark`. With `animated` the disc scales in and the glyph draws itself when the mark appears and every time its severity changes, so an outcome screen or a finished row can mark the moment a run lands; under reduced motion it shows at once.
+
+- Import: `import OutcomeMark from '@aziontech/webkit/outcome-mark'`
+- Category: feedback · Surface: product · Structure: monolithic
+- API as JSON: [outcome-mark.json](https://github.com/aziontech/webkit/blob/main/.specs/outcome-mark.json)
+
+## When to use
+
+- At the head of an outcome screen (deploy succeeded or failed), at the large size, animated.
+- In a checklist or a list of steps, at the small size, to say a step is done or not set.
+- Beside a label that reports a finished run, when the run's state turns from running to an outcome.
+
+## Do
+
+- Pair the mark with words that say the same thing; the mark is not the only cue.
+- Animate only the mark that just changed; a list of animated marks on load is noise.
+- Give a specific `ariaLabel` (`Deployed`, `Done`) when the catalog name is too generic.
+
+## Don’t
+
+- A state that is still running → use `spinner` or `status-indicator` with `loading`.
+- A labelled status pill in a table cell → use `tag` or `status-indicator`.
+- A message with text and actions → use `alert` or `toast`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [status-indicator](status-indicator.md) — a coloured dot with a label, for live states.
+- [tag](tag.md) — a labelled pill for a state.
+- [toast](toast.md) — reports the outcome of an async action wherever the user is.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `severity` | `'success' \| 'danger' \| 'warning' \| 'neutral'` | `'success'` | false | The outcome the mark shows: a check, a cross, an exclamation or a dash. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token: 16, 20 or 48 px. |
+| `animated` | `boolean` | `false` | false | Scales the disc in and draws the glyph when it appears or its severity changes; static under reduced motion. |
+| `ariaLabel` | `string` | `''` | false | Accessible name. Empty uses the locale catalog name of the severity. |
+
+## States
+
+- `data-severity`: `success` | `danger` | `warning` | `neutral`; `data-size`: `small` | `medium` | `large`
+- `data-state`: `pending` (disc scaled down and transparent, glyph undrawn) | `settled`; a static mark is always `settled`
+- `data-animated` mirrors the `animated` prop
+
+## Accessibility
+
+- Not focusable; no keyboard map.
+- ARIA: the root `svg` is `role="img"` named by `ariaLabel` or the catalog name of the severity.
+- The shape of the glyph tells the outcomes apart without colour (WCAG 1.4.1); glyph against disc meets 3:1 (WCAG 1.4.11) in both themes.
+- Motion is decorative and skipped under `prefers-reduced-motion`.
+
+## Right-to-left
+
+- Layout: no layout of its own.
+- Icons: the check, cross, exclamation and dash are not mirrored.
+- Keyboard: none.
+- User data: none.
+
+## Internationalization
+
+| Key                    | English source  | Override prop |
+| ---------------------- | --------------- | ------------- |
+| `outcomeMark.success` | Succeeded       | `ariaLabel`   |
+| `outcomeMark.danger`  | Failed          | `ariaLabel`   |
+| `outcomeMark.warning` | Needs attention | `ariaLabel`   |
+| `outcomeMark.neutral` | Not set         | `ariaLabel`   |
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none: fixed size per `size`.
+- Narrow: unchanged.
+- Touch: not interactive.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import OutcomeMark from '@aziontech/webkit/outcome-mark'
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-(--spacing-lg)">
+    <OutcomeMark severity="success" />
+    <OutcomeMark severity="danger" />
+    <OutcomeMark severity="warning" />
+    <OutcomeMark severity="neutral" />
+  </div>
+</template>
+```
+
+2 more example(s) in [components/outcome-mark.md](https://github.com/aziontech/webkit/blob/main/.specs/components/outcome-mark.md).
 
 ---
 

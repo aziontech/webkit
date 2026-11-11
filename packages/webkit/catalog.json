@@ -8118,6 +8118,95 @@
    "surface": "product",
    "examplesFile": "catalog/examples/flow.json"
   },
+  "topology-diagram": {
+   "import": "@aziontech/webkit/topology-diagram",
+   "target": "./src/components/data/topology-diagram/topology-diagram.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/topology-diagram",
+   "category": "data",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "levels",
+     "type": "TopologyLevel[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Columns of the diagram, from the entry point to the last dependency."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows placeholder cards while the topology loads."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:expanded",
+     "payload": "string[]",
+     "notes": "A node card opened or closed."
+    },
+    {
+     "name": "bind",
+     "payload": "[key: string, value: string]",
+     "notes": "An existing option was picked in the bind control."
+    },
+    {
+     "name": "remove",
+     "payload": "[key: string]",
+     "notes": "Remove was activated on a bound, removable node."
+    },
+    {
+     "name": "create",
+     "payload": "[key: string]",
+     "notes": "Create was picked in the bind control."
+    }
+   ],
+   "slots": [
+    {
+     "name": "actions",
+     "scope": "{ node: TopologyNode }",
+     "notes": "Extra controls in a node's identity row, before the bind control."
+    },
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Replaces the line shown when there are no levels."
+    }
+   ],
+   "purpose": "The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyNode`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.",
+   "useWhen": [
+    "The topology tab of a project, service or workload: what serves its traffic, in order, and what is still unbound.",
+    "A review before a deploy where binding or removing a resource is staged on the diagram."
+   ],
+   "avoidWhen": [
+    "A sequence of steps or a pipeline without data cards → use `flow`.",
+    "A nested list of items with no flow between them → use `tree`.",
+    "A marketing architecture picture → use `diagram`."
+   ],
+   "related": [
+    "flow` — the connector engine and anchors this component reuses.",
+    "tree` — hierarchical data without connectors.",
+    "dropdown-menu` — the bind control's menu.",
+    "platform/detail/details-page` — the page whose topology tab holds it."
+   ],
+   "bestPractices": [
+    "Keep a column per depth and put the nodes that serve in parallel in the same column.",
+    "Mark a staged change `dashed` with a warning status and a message that says the deploy applies it.",
+    "Mark the last node of each branch `terminal` so no connector leaves it.",
+    "Give every unbound slot a message that says what happens without it."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/topology-diagram.json"
+  },
   "flow-root": {
    "import": "@aziontech/webkit/flow-root",
    "target": "./src/components/data/flow/flow.vue",
@@ -9938,6 +10027,67 @@
    ],
    "surface": "product",
    "examplesFile": "catalog/examples/skeleton.json"
+  },
+  "outcome-mark": {
+   "import": "@aziontech/webkit/outcome-mark",
+   "target": "./src/components/feedback/outcome-mark/outcome-mark.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/outcome-mark",
+   "category": "feedback",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "severity",
+     "type": "'success' | 'danger' | 'warning' | 'neutral'",
+     "default": "'success'",
+     "required": "false",
+     "doc": "The outcome the mark shows: a check, a cross, an exclamation or a dash."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token: 16, 20 or 48 px."
+    },
+    {
+     "name": "animated",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Scales the disc in and draws the glyph when it appears or its severity changes; static under reduced motion."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name. Empty uses the locale catalog name of the severity."
+    }
+   ],
+   "purpose": "A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run). It replaces the design sample's `StateMark` and `SuccessMark`. With `animated` the disc scales in and the glyph draws itself when the mark appears and every time its severity changes, so an outcome screen or a finished row can mark the moment a run lands; under reduced motion it shows at once.",
+   "useWhen": [
+    "At the head of an outcome screen (deploy succeeded or failed), at the large size, animated.",
+    "In a checklist or a list of steps, at the small size, to say a step is done or not set.",
+    "Beside a label that reports a finished run, when the run's state turns from running to an outcome."
+   ],
+   "avoidWhen": [
+    "A state that is still running → use `spinner` or `status-indicator` with `loading`.",
+    "A labelled status pill in a table cell → use `tag` or `status-indicator`.",
+    "A message with text and actions → use `alert` or `toast`."
+   ],
+   "related": [
+    "status-indicator` — a coloured dot with a label, for live states.",
+    "tag` — a labelled pill for a state.",
+    "toast` — reports the outcome of an async action wherever the user is."
+   ],
+   "bestPractices": [
+    "Pair the mark with words that say the same thing; the mark is not the only cue.",
+    "Animate only the mark that just changed; a list of animated marks on load is noise.",
+    "Give a specific `ariaLabel` (`Deployed`, `Done`) when the catalog name is too generic."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/outcome-mark.json"
   },
   "progress": {
    "import": "@aziontech/webkit/progress",
@@ -26471,8 +26621,10 @@
     "RadioButton",
     "Separator",
     "SettingsSection",
+    "Skeleton",
     "Spinner",
     "Tag",
+    "toast",
     "ToggleGroup",
     "Tooltip"
    ],
@@ -26500,8 +26652,10 @@
     "@aziontech/webkit/radio-button",
     "@aziontech/webkit/separator",
     "@aziontech/webkit/settings-section",
+    "@aziontech/webkit/skeleton",
     "@aziontech/webkit/spinner",
     "@aziontech/webkit/tag",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip"
    ],
@@ -26519,9 +26673,94 @@
     {
      "name": "Project",
      "summary": "Deploy on a project: the Resources card with the service it serves and its dependencies, then its storage, which is not versioned; Production and Preview below, with a warning that shared-storefront also publishes to project-05 and project-09."
+    },
+    {
+     "name": "Environment",
+     "summary": "The environment decision at its edges: Staging is locked by Strict Deployment Settings (a disabled choice card with a Strict tag and the reason), Preview is tagged Also deploys because Production's shared settings reach it, an info Alert says the deploy replaces legacy-web on the chosen project and a warning Alert says it goes live in two environments at once. Projects impacted are grouped per environment with a heading and a count, and switching environment reloads them with Skeleton rows, aria-busy and a status line. Deploy closes the drawer and reports through one toast that turns from Deploying… into the outcome with Edit and Redeploy."
+    },
+    {
+     "name": "Dependencies",
+     "summary": "The Dependencies disclosure open: each module and integration with its own version and Change version menu, auth-gateway tagged Shared with a Tooltip naming the services that also reference it and one info Alert saying a shared dependency deploys at one version, payments-api not versioned (a note instead of the menu), and geo-redirect with no ready version, which disables Deploy with the reason in the footer. Changing the service version reloads the dependencies with Skeleton rows, aria-busy and a status line; a second resource that references nothing says so. The first run fails and its toast carries Edit and Redeploy; Redeploy succeeds."
     }
    ],
    "file": "catalog/patterns/platform/create/deploy-drawer.json"
+  },
+  "platform/create/deploy-progress-dialog": {
+   "name": "DeployProgressDialog",
+   "title": "Templates/Platform/Create/DeployProgressDialog",
+   "source": "blocks/platform/create/deploy-progress-dialog/deploy-progress-dialog.vue",
+   "surface": "product",
+   "summary": "The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, cannot be dismissed and keeps Close disabled; under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Activating <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button` and `Toaster`.",
+   "intents": [
+    "deploy progress",
+    "deploy progress dialog",
+    "drop to deploy",
+    "deploy a folder",
+    "multi deploy progress",
+    "progresso do deploy",
+    "arrastar e implantar",
+    "progreso del despliegue"
+   ],
+   "skills": [
+    "webkit-ui-states",
+    "webkit-errors",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Button",
+    "Dialog",
+    "DialogClose",
+    "DialogContent",
+    "DialogDescription",
+    "DialogOverlay",
+    "DialogPortal",
+    "DialogTitle",
+    "OutcomeMark",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "Progress",
+    "Spinner",
+    "Tag",
+    "toast",
+    "ToggleGroup"
+   ],
+   "imports": [
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/dialog",
+    "@aziontech/webkit/dialog-close",
+    "@aziontech/webkit/dialog-content",
+    "@aziontech/webkit/dialog-description",
+    "@aziontech/webkit/dialog-overlay",
+    "@aziontech/webkit/dialog-portal",
+    "@aziontech/webkit/dialog-title",
+    "@aziontech/webkit/outcome-mark",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/progress",
+    "@aziontech/webkit/spinner",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/toggle-group"
+   ],
+   "primary": "Running",
+   "guidelinesSummary": "The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The user dropped a folder (or started a deploy whose environment publishes through several Deployment Settings) and wants to see each one activate, know which failed and why, and retry only those. **The toast stays the standard.** Every deploy reports through one toast with Edit and Redeploy (`platform/states/async-submit`). This dialog is only for the drop-to-deploy path and for a deploy that fans out to several Deployment Settings; even there the outcome still reaches the user through the toast, so they can close the dialog and leave.",
+   "variants": [
+    {
+     "name": "Drop",
+     "summary": "The drop-to-deploy confirm: New production deployment, the service with a Production `Tag`, what the files replace, and the dropped folder with its file count, total size and a scrollable list of paths with sizes formatted by `Intl.NumberFormat`. Cancel closes; Deploy to Production opens the progress dialog and starts the run."
+    },
+    {
+     "name": "PartialFailure",
+     "summary": "Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeMark`, staging-settings marked Failed with the reason, Retry failed beside Close, and an error toast with Edit (reopens the dialog on the failed rows) and Redeploy."
+    },
+    {
+     "name": "Succeeded",
+     "summary": "Every Deployment Setting deployed: a large animated success `OutcomeMark` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and a success toast with Edit and Redeploy."
+    }
+   ],
+   "file": "catalog/patterns/platform/create/deploy-progress-dialog.json"
   },
   "platform/create/deploy-success": {
    "name": "DeploySuccess",
@@ -26896,6 +27135,85 @@
     }
    ],
    "file": "catalog/patterns/platform/create/provision-wizard.json"
+  },
+  "platform/create/release-impact": {
+   "name": "ReleaseImpact",
+   "title": "Templates/Platform/Create/ReleaseImpact",
+   "source": "blocks/platform/create/release-impact/release-impact.vue",
+   "surface": "product",
+   "summary": "The Review and deploy page of a release that carries several resources at once. The left column holds one card per resource: its type and icon, a Required or Read-only `Tag` or an include `Switch` named by a `Tooltip`, the resource and a version `Select` that tracks the latest Ready version or pins one (each with a Current `Tag` and its age), an invalid line and Build a version when nothing is Ready, and a Dependencies box whose `Accordion` groups modules and integrations with counts, a Shared `Tag` with the resources that also reference it and one info `Alert` saying a shared dependency deploys at one version. The right column is the sticky Impact `Card`: a `ToggleGroup` switches a Tree (Deployment Settings, their environments and the projects they publish to, with rails and counts) and a Flow (the same as left-to-right cards), and its footer sums up what the release reaches. A sticky footer holds the hint, Cancel and Deploy release, which asks in a `ConfirmDialog` and then runs as an async action: one toast turns from Deploying release… into the outcome with Edit and Redeploy, and the page shows the outcome `Alert` with the same two actions. Built from `Card`, `Tag`, `Switch`, `Tooltip`, `Field`, `Select`, `Badge`, `Accordion`, `Alert`, `ToggleGroup`, `Skeleton`, `Spinner`, `Button`, `ConfirmDialog` and `Toaster`.",
+   "intents": [
+    "release impact",
+    "review and deploy",
+    "release composer",
+    "what a deploy changes",
+    "dependency versions",
+    "deployment impact",
+    "impacto do release",
+    "revisar e implantar",
+    "impacto del despliegue"
+   ],
+   "skills": [
+    "webkit-create-surface",
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-errors"
+   ],
+   "components": [
+    "Accordion",
+    "Alert",
+    "Badge",
+    "Button",
+    "Card",
+    "ConfirmDialog",
+    "Field",
+    "Select",
+    "Skeleton",
+    "Spinner",
+    "Switch",
+    "Tag",
+    "toast",
+    "ToggleGroup",
+    "Tooltip"
+   ],
+   "imports": [
+    "@aziontech/webkit/accordion",
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/badge",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/spinner",
+    "@aziontech/webkit/switch",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/toggle-group",
+    "@aziontech/webkit/tooltip"
+   ],
+   "primary": "Ready",
+   "guidelinesSummary": "The Review and deploy page of a release that carries several resources at once: a service, the policy in front of it, its storage, its error page and every dependency they reference. The user is about to put all of it into traffic and needs to see, before deploying, which version of each resource goes out, which dependencies go with it, and every Deployment Setting, environment and project the release reaches. One Deploy release at the foot commits it, after one confirmation.",
+   "variants": [
+    {
+     "name": "Loading",
+     "summary": "The impact is being computed: the Impact card shows Computing impact… with a `Spinner` and three `Skeleton` lines, is `aria-busy`, announces it through a status line, hides the view switch and the summary, and the footer says Computing impact… beside Deploy release."
+    },
+    {
+     "name": "Unavailable",
+     "summary": "The projects behind the Deployment Settings could not be read: a warning `Alert` says the impact is unknown and that the release can still deploy, the count of settings selected and Retry. Retry computes again and lands on a truncated list, shown with its own warning above the tree."
+    },
+    {
+     "name": "MissingVersion",
+     "summary": "edge-policy has no Ready version: its version `Select` is disabled and invalid with the reason under it, Build a version links to its versions, and Deploy release stays disabled with the reason in the footer. Switching edge-policy off the release clears the blocker."
+    },
+    {
+     "name": "Failed",
+     "summary": "The last run failed: the error toast and the danger `Alert` at the top say edge-policy was refused and nothing changed in traffic, each with Edit (back to the resources) and Redeploy. Redeploy runs again through the same toast and succeeds."
+    }
+   ],
+   "file": "catalog/patterns/platform/create/release-impact.json"
   },
   "platform/create/resource-picker": {
    "name": "ResourcePicker",
@@ -28849,7 +29167,7 @@
    "title": "Templates/Platform/Detail/VersionDetail",
    "source": "blocks/platform/detail/version-detail/version-detail.vue",
    "surface": "product",
-   "summary": "One version of a resource, opened from its Versions tab: the platform shell whose last breadcrumb is a Select that switches between the resource versions, each with its state Tag, or creates a new one. Under it a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, the platform shell, `Breadcrumb`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.",
+   "summary": "One version of a resource, opened from its Versions tab: the platform shell whose last breadcrumb is a Select that switches between the resource versions, each with its state Tag, or creates a new one. Under it a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `ConfirmDialog`, `Toaster`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, the platform shell, `Breadcrumb`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.",
    "intents": [
     "version detail",
     "resource version",
@@ -28859,7 +29177,11 @@
     "versioned settings",
     "detalhe da versão",
     "histórico de versões",
-    "versão rascunho"
+    "versão rascunho",
+    "revert version",
+    "rollback version",
+    "reverter versão",
+    "revertir versión"
    ],
    "skills": [
     "webkit-layout",
@@ -28874,6 +29196,7 @@
     "ButtonHighlight",
     "Card",
     "Command",
+    "ConfirmDialog",
     "Drawer",
     "DrawerContent",
     "DrawerOverlay",
@@ -28901,6 +29224,7 @@
     "Tag",
     "Textarea",
     "ThemeSwitcher",
+    "toast",
     "Tooltip"
    ],
    "imports": [
@@ -28911,6 +29235,7 @@
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
     "@aziontech/webkit/command",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-overlay",
@@ -28938,6 +29263,7 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Draft",
@@ -28950,6 +29276,10 @@
     {
      "name": "VersionHistory",
      "summary": "The draft with Version history open beside it: the current version with its description, author and the pencil that edits it in place, the empty changes entry, and the five newest earlier versions with Show older for the rest."
+    },
+    {
+     "name": "Revert",
+     "summary": "An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed."
     }
    ],
    "file": "catalog/patterns/platform/detail/version-detail.json"

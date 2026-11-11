@@ -37,11 +37,13 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CreateHub (platform/create/create-hub)](blocks/platform/create/create-hub.md): The Creation Center, where a new project starts.
 - [CreateInDrawer (platform/create/create-in-drawer)](blocks/platform/create/create-in-drawer.md): The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule.
 - [DeployDrawer (platform/create/deploy-drawer)](blocks/platform/create/deploy-drawer.md): The drawer a platform deploys from, opened by Deploy on a service or a project.
+- [DeployProgressDialog (platform/create/deploy-progress-dialog)](blocks/platform/create/deploy-progress-dialog.md): The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it.
 - [DeploySuccess (platform/create/deploy-success)](blocks/platform/create/deploy-success.md): The screen a create flow ends on.
 - [DeployTemplate (platform/create/deploy-template)](blocks/platform/create/deploy-template.md): A focused page, outside the console shell, where the user turns a template into a running project.
 - [DeploymentFlow (platform/create/deployment-flow)](blocks/platform/create/deployment-flow.md): The card a create flow hands its column to once the user has pressed Deploy.
 - [MultipageCreate (platform/create/multipage-create)](blocks/platform/create/multipage-create.md): The page a first-level resource is created on one step at a time.
 - [ProvisionWizard (platform/create/provision-wizard)](blocks/platform/create/provision-wizard.md): The two-step wizard that provisions a resource bound to another and puts it into traffic.
+- [ReleaseImpact (platform/create/release-impact)](blocks/platform/create/release-impact.md): The Review and deploy page of a release that carries several resources at once: a service, the policy in front of it, its storage, its error page and every dependency they reference.
 - [ResourcePicker (platform/create/resource-picker)](blocks/platform/create/resource-picker.md): The band a create flow uses when the resource being created needs another resource that may already exist.
 - [SinglePageCreate (platform/create/single-page-create)](blocks/platform/create/single-page-create.md): The page a first-level resource is created on when everything it needs fits on one screen.
 - [SourceWizard (platform/create/source-wizard)](blocks/platform/create/source-wizard.md): The wizard that starts a resource from code and deploys it.
@@ -145,6 +147,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [PickList](components/pick-list.md): Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them.
 - [PropertyFilter](components/property-filter.md): One field that filters a collection by properties and free text, after Cloudscape's property filter.
 - [Table](components/table.md): Composition primitives for building accessible, pixel-perfect data tables, in two modes.
+- [TopologyDiagram](components/topology-diagram.md): The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its…
 - [Tree](components/tree.md): A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron.
 
 ## Components: Documentation
@@ -168,6 +171,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [Alert](components/alert.md): Inline feedback banner that communicates status, alerts, or progress.
 - [EmptyState](components/empty-state.md): Centered placeholder shown when a resource list or section has no content yet.
+- [OutcomeMark](components/outcome-mark.md): A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run).
 - [Progress](components/progress.md): Communicates the progress of an ongoing task as a horizontal bar.
 - [Skeleton](components/skeleton.md): A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity.
 - [StatusIndicator](components/status-indicator.md): Communicates status, alerts, or progress to the user.

@@ -259,6 +259,12 @@ export const ptBR: Messages = {
     increment: 'Aumentar',
     decrement: 'Diminuir'
   },
+  outcomeMark: {
+    success: 'Concluído',
+    danger: 'Falhou',
+    warning: 'Requer atenção',
+    neutral: 'Não definido'
+  },
   pagination: {
     label: 'Paginação',
     info: 'Mostrando {start} a {end} de {total} registros',
@@ -460,6 +466,19 @@ export const ptBR: Messages = {
   },
   toggleGroup: {
     option: 'Opção {index}'
+  },
+  topologyDiagram: {
+    label: 'Topologia de implantação',
+    notBound: 'Não vinculado',
+    bind: 'Vincular {kind}',
+    change: 'Trocar {kind}',
+    remove: 'Remover {kind}',
+    create: 'Criar {kind}',
+    existing: 'Existentes',
+    noOptions: 'Nenhuma opção ainda.',
+    copy: 'Copiar {field}',
+    empty: 'Nada conectado ainda.',
+    loading: 'Carregando a topologia'
   },
   tracker: {
     noData: 'Sem dados',

@@ -926,5 +926,15 @@
     "name": "log-view-content",
     "path": "src/components/code/log-view/log-view-content.vue",
     "limit": "22.75 KB"
+  },
+  {
+    "name": "outcome-mark",
+    "path": "src/components/feedback/outcome-mark/outcome-mark.vue",
+    "limit": "3 KB"
+  },
+  {
+    "name": "topology-diagram",
+    "path": "src/components/data/topology-diagram/topology-diagram.vue",
+    "limit": "32 KB"
   }
 ]

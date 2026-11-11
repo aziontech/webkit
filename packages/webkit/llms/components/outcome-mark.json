@@ -1,0 +1,81 @@
+{
+ "name": "outcome-mark",
+ "binding": "OutcomeMark",
+ "import": "@aziontech/webkit/outcome-mark",
+ "treeShakeableImport": "@aziontech/webkit/outcome-mark",
+ "category": "feedback",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run). It replaces the design sample's `StateMark` and `SuccessMark`. With `animated` the disc scales in and the glyph draws itself when the mark appears and every time its severity changes, so an outcome screen or a finished row can mark the moment a run lands; under reduced motion it shows at once.",
+ "setup": null,
+ "useWhen": [
+  "At the head of an outcome screen (deploy succeeded or failed), at the large size, animated.",
+  "In a checklist or a list of steps, at the small size, to say a step is done or not set.",
+  "Beside a label that reports a finished run, when the run's state turns from running to an outcome."
+ ],
+ "avoidWhen": [
+  "A state that is still running → use `spinner` or `status-indicator` with `loading`.",
+  "A labelled status pill in a table cell → use `tag` or `status-indicator`.",
+  "A message with text and actions → use `alert` or `toast`."
+ ],
+ "related": [
+  "status-indicator` — a coloured dot with a label, for live states.",
+  "tag` — a labelled pill for a state.",
+  "toast` — reports the outcome of an async action wherever the user is."
+ ],
+ "bestPractices": [
+  "Pair the mark with words that say the same thing; the mark is not the only cue.",
+  "Animate only the mark that just changed; a list of animated marks on load is noise.",
+  "Give a specific `ariaLabel` (`Deployed`, `Done`) when the catalog name is too generic."
+ ],
+ "props": [
+  {
+   "name": "severity",
+   "type": "'success' | 'danger' | 'warning' | 'neutral'",
+   "default": "'success'",
+   "required": "false",
+   "doc": "The outcome the mark shows: a check, a cross, an exclamation or a dash."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token: 16, 20 or 48 px."
+  },
+  {
+   "name": "animated",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Scales the disc in and draws the glyph when it appears or its severity changes; static under reduced motion."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name. Empty uses the locale catalog name of the severity."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import OutcomeMark from '@aziontech/webkit/outcome-mark'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-lg)\">\n    <OutcomeMark severity=\"success\" />\n    <OutcomeMark severity=\"danger\" />\n    <OutcomeMark severity=\"warning\" />\n    <OutcomeMark severity=\"neutral\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import OutcomeMark from '@aziontech/webkit/outcome-mark'\n</script>\n\n<template>\n  <ul class=\"flex flex-col gap-(--spacing-md)\">\n    <li class=\"flex items-center gap-(--spacing-xs) text-body-sm text-(--text-default)\">\n      <OutcomeMark\n        size=\"small\"\n        aria-label=\"Done\"\n      />\n      Add a custom domain\n    </li>\n    <li class=\"flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)\">\n      <OutcomeMark aria-label=\"Deployed\" />\n      web-app is live in Production\n    </li>\n    <li class=\"flex flex-col items-start gap-(--spacing-sm)\">\n      <OutcomeMark\n        size=\"large\"\n        aria-label=\"Deployed\"\n      />\n      <span class=\"text-heading-sm text-(--text-default)\">Service deployed</span>\n    </li>\n  </ul>\n</template>"
+  },
+  {
+   "name": "Animated",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import OutcomeMark from '@aziontech/webkit/outcome-mark'\n  import { computed, ref } from 'vue'\n\n  const severity = ref('neutral')\n\n  const message = computed(\n    () =>\n      ({\n        neutral: 'web-app has not been deployed yet.',\n        success: 'web-app is live in Production.',\n        danger: \"web-app wasn't deployed. The routing rules were refused.\"\n      })[severity.value]\n  )\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-(--spacing-md)\">\n    <div class=\"flex items-center gap-(--spacing-sm)\">\n      <OutcomeMark\n        :severity=\"severity\"\n        size=\"large\"\n        animated\n      />\n      <p\n        class=\"text-body-sm text-(--text-default)\"\n        role=\"status\"\n      >\n        {{ message }}\n      </p>\n    </div>\n    <div class=\"flex flex-wrap gap-(--spacing-xs)\">\n      <Button\n        label=\"Finish with success\"\n        kind=\"outlined\"\n        size=\"small\"\n        @click=\"severity = 'success'\"\n      />\n      <Button\n        label=\"Finish with a failure\"\n        kind=\"outlined\"\n        size=\"small\"\n        @click=\"severity = 'danger'\"\n      />\n    </div>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/outcome-mark.md"
+}

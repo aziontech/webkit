@@ -1,16 +1,16 @@
 # VersionDetail (`platform/detail/version-detail`)
 
-> One version of a resource, opened from its Versions tab: the platform shell whose last breadcrumb is a Select that switches between the resource versions, each with its state Tag, or creates a new one. Under it a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, the platform shell, `Breadcrumb`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.
+> One version of a resource, opened from its Versions tab: the platform shell whose last breadcrumb is a Select that switches between the resource versions, each with its state Tag, or creates a new one. Under it a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `ConfirmDialog`, `Toaster`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, the platform shell, `Breadcrumb`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.
 
 - Surface: product
 - Source: `blocks/platform/detail/version-detail/version-detail.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/version-detail")`
-- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [Resizable](../../../components/resizable.md), [ScrollArea](../../../components/scroll-area.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [SplitButton](../../../components/split-button.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [Resizable](../../../components/resizable.md), [ScrollArea](../../../components/scroll-area.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [SplitButton](../../../components/split-button.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
 
-version detail; resource version; draft version; version history; version switcher; versioned settings; detalhe da versão; histórico de versões; versão rascunho
+version detail; resource version; draft version; version history; version switcher; versioned settings; detalhe da versão; histórico de versões; versão rascunho; revert version; rollback version; reverter versão; revertir versión
 
 One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed.
 
@@ -57,6 +57,10 @@ A bar pinned to the bottom of the settings pane, aligned with the column above i
 
 The side pane titled "Version history", closed with an `IconButton`. It starts on the current version with its `Tag`, its description, its author `Avatar` and a pencil that edits the description in place through a `Field` with a `Textarea` and Cancel and Save `Button`s. Then the changes entry, empty until something is saved, then the five newest earlier versions and Show older for the rest.
 
+### H. Revert — `ConfirmDialog`, `Toaster` (optional, on an earlier Ready version)
+
+An earlier version opened from Version history keeps the page read-only and says Viewing an earlier version, with the entry in history marked by a Viewing `Tag` and `aria-current`. The version bar's primary action is Revert to <id>, the trigger of a `ConfirmDialog` with `kind="primary"` and `size="medium"`. Its body is the diff against the deployed version: a bordered list of the settings that change, each with its old and new value in words, a line with the rules added and removed, and a description saying that reverting deploys <id> to Production and that the deployed version stays in history. Confirm closes the dialog and starts the async-submit run: one toast id that turns from a loading toast ("Reverting to <id>…", "It keeps running if you leave.") into the outcome, which stays until closed and carries **Edit** and **Redeploy**, never View deployments. On success the version's `Tag` reads Deployed in the breadcrumb, the tab row and the history, and the bar offers Redeploy.
+
 ## Do
 
 - Keep one primary action on the page, in the version bar; the tabs share it.
@@ -64,6 +68,8 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 - Let the user switch versions from the breadcrumb without going back to the list.
 - Show the state in three places that agree: the breadcrumb option, the tab row tag and the version bar.
 - Keep the history pane collapsible and resizable so the settings keep their width when it is closed.
+- Show what a revert changes before it runs: the settings with old and new values, and the rules added and removed.
+- Report a revert like any deploy: one toast that turns into the outcome, with Edit and Redeploy.
 
 ## Don't
 
@@ -72,13 +78,17 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 - Don't name a tab in the breadcrumb.
 - Don't list every earlier version at once; show five and Show older.
 - Don't save a description edit without Cancel and Save buttons.
+- Don't revert without a confirmation, and don't make the diff depend on an arrow glyph or color alone.
+- Don't delete or hide the version a revert replaces; it stays in history.
+- Don't offer View deployments on the revert toast.
 
 ## Copy
 
 - **Version state tags:** one word, e.g. "Draft", "Deployed", "Ready", "Editable", "Read-only".
 - **Version bar:** one sentence on what the user can do, e.g. "This version is open for editing. Deploy it when ready." or "Viewing a deployed version".
 - **Save actions:** verb first, three words or fewer, e.g. "Save and deploy", "Save and build", "Save".
-- **Built version actions:** "Add Version", "Redeploy".
+- **Built version actions:** "Add Version", "Redeploy"; on an earlier version "Revert to <id>".
+- **Revert:** bar "Viewing an earlier version"; dialog title "Revert to <id>?", description "Reverting deploys <id> to Production in place of <deployed>. <deployed> stays in the version history, so you can redeploy it later."; diff heading "What changes against <deployed>"; toasts "Reverting to <id>…" then "<id> is deployed.", actions "Edit" and "Redeploy".
 - **Version picker:** search placeholder "Search versions", no-match line `No versions match "<query>".`, footer "Add Version".
 - **Setting rows:** a noun title and one sentence with a period, e.g. "Active" with "When disabled, the resource stops serving traffic."
 - **History:** "Current version", an empty changes line, e.g. "No changes yet. Each change you save shows up here.", description placeholder "What changed in this version?".
@@ -91,12 +101,14 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 - The version `Select` trigger is named "Switch version"; its search input is named "Search versions".
 - Every `Switch` and `Input` in a setting row has an `aria-label` that matches the row title.
 - A disabled control with a reason gets a `Tooltip` that the keyboard can reach.
+- The revert dialog traps focus, is named by its title and returns focus to Revert on close. Each changed setting carries a visually hidden sentence ("changes from On to Off"); the struck-through values and the arrow are `aria-hidden`. The toasts live in the `Toaster` region, and the bar's status line announces "Reverting to <id>…".
 - Icon-only buttons (Version actions, Close version history, Edit version info) have an `aria-label`; decorative icons are `aria-hidden`.
 
 ## States
 
 - Draft: the editable draft on its Settings tab, with the Editable tag and the Save and deploy split button in the version bar.
 - Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
+- Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
 - VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
 
 ## Related
@@ -112,6 +124,7 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 - `Draft` — primary (the code below)
 - `Deployed` — The deployed version, read-only: the creation date beside the Deployed Tag, the settings fieldset disabled, and the version bar reading Viewing a deployed version and Read-only with its description, Add Version and Redeploy.
 - `VersionHistory` — The draft with Version history open beside it: the current version with its description, author and the pencil that edits it in place, the empty changes entry, and the five newest earlier versions with Show older for the rest.
+- `Revert` — An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed.
 
 Each variant is the same screen in another state: `get_pattern("platform/detail/version-detail", { variant })`, or the file under `blocks/platform/detail/version-detail/variants/`.
 

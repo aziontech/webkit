@@ -259,6 +259,12 @@ export const es: Messages = {
     increment: 'Aumentar',
     decrement: 'Disminuir'
   },
+  outcomeMark: {
+    success: 'Completado',
+    danger: 'Falló',
+    warning: 'Requiere atención',
+    neutral: 'Sin definir'
+  },
   pagination: {
     label: 'Paginación',
     info: 'Mostrando {start} a {end} de {total} registros',
@@ -460,6 +466,19 @@ export const es: Messages = {
   },
   toggleGroup: {
     option: 'Opción {index}'
+  },
+  topologyDiagram: {
+    label: 'Topología de despliegue',
+    notBound: 'Sin vincular',
+    bind: 'Vincular {kind}',
+    change: 'Cambiar {kind}',
+    remove: 'Quitar {kind}',
+    create: 'Crear {kind}',
+    existing: 'Existentes',
+    noOptions: 'Aún no hay opciones.',
+    copy: 'Copiar {field}',
+    empty: 'Aún no hay nada conectado.',
+    loading: 'Cargando la topología'
   },
   tracker: {
     noData: 'Sin datos',

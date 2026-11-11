@@ -1,0 +1,21 @@
+{
+  "component": "outcome-mark",
+  "title": "Components/Primitives/Feedback/OutcomeMark",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The four outcomes at the medium size: a check for success, a cross for danger, an exclamation for warning and a dash for neutral, each named by the locale catalog.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Small (16 px) for rows and checklists, medium (20 px) beside a label, large (48 px) at the head of an outcome screen.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Animated",
+      "summary": "`animated` scales the disc in and draws the glyph when the mark appears and every time its severity changes; under reduced motion it shows at once. Here a deploy finishes and the mark turns from neutral to success or danger.",
+      "file": "animated.vue"
+    }
+  ]
+}
