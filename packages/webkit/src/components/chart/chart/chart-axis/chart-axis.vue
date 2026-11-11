@@ -36,9 +36,18 @@
   const plot = computed(() => ctx.plot.value)
   const showsCategories = computed(() => (props.kind === 'x') === vertical.value)
 
+  const rtl = computed(() => ctx.rtl.value)
+  const room = computed(() =>
+    rtl.value ? ctx.size.value.width - plot.value.left - plot.value.width : plot.value.left
+  )
+  const sideX = computed(() =>
+    rtl.value ? plot.value.left + plot.value.width + LABEL_OFFSET : plot.value.left - LABEL_OFFSET
+  )
+  const sideAnchor = computed(() => (rtl.value ? 'start' : 'end'))
+
   const truncate = (text: string) => {
     if (vertical.value) return text
-    const limit = Math.max(4, Math.floor((plot.value.left - LABEL_GUTTER) / LABEL_CHAR_WIDTH))
+    const limit = Math.max(4, Math.floor((room.value - LABEL_GUTTER) / LABEL_CHAR_WIDTH))
     return text.length > limit ? `${text.slice(0, limit - 1)}…` : text
   }
 
@@ -50,10 +59,25 @@
     return Math.max(1, Math.ceil(widest(texts) / (span / (count - 1))))
   }
 
+  const spacedTicks = (texts: string[]) => {
+    const layout = ctx.category.value
+    const gap = Math.max(widest(texts), plot.value.width / Math.max(1, props.ticks))
+    const order = texts
+      .map((text, index) => ({ text, index, at: layout.position(index) }))
+      .sort((a, b) => a.at - b.at)
+    let previous = Number.NEGATIVE_INFINITY
+    return order.flatMap((tick) => {
+      if (tick.at - previous < gap) return []
+      previous = tick.at
+      return [{ key: tick.index, at: tick.at, anchor: 'middle' as const, text: tick.text }]
+    })
+  }
+
   const categoryTicks = computed(() => {
     const layout = ctx.category.value
     const total = ctx.labels.value.length
     const texts = ctx.labels.value.map((label) => truncate(ctx.formatLabel(label)))
+    if (vertical.value && ctx.labelScale.value === 'linear') return spacedTicks(texts)
     const every = vertical.value
       ? Math.max(
           Math.ceil(total / Math.max(1, props.ticks)),
@@ -65,8 +89,8 @@
       const at = layout.position(index)
       let anchor: 'start' | 'middle' | 'end' = 'middle'
       if (vertical.value && !layout.banded && total > 1) {
-        if (index === 0) anchor = 'start'
-        else if (index === total - 1) anchor = 'end'
+        if (index === 0) anchor = rtl.value ? 'end' : 'start'
+        else if (index === total - 1) anchor = rtl.value ? 'start' : 'end'
       }
       return [{ key: index, at, anchor, text }]
     })
@@ -95,6 +119,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     aria-hidden="true"
+    direction="ltr"
     :width="ctx.size.value.width"
     :height="ctx.size.value.height"
     class="pointer-events-none col-start-1 row-start-1 overflow-visible"
@@ -123,10 +148,10 @@
       <text
         v-for="tick in categoryTicks"
         :key="tick.key"
-        :x="vertical ? tick.at : plot.left - LABEL_OFFSET"
+        :x="vertical ? tick.at : sideX"
         :y="vertical ? plot.top + plot.height + LABEL_DROP : tick.at"
         :dy="vertical ? undefined : '0.32em'"
-        :text-anchor="vertical ? tick.anchor : 'end'"
+        :text-anchor="vertical ? tick.anchor : sideAnchor"
         fill="var(--chart-label)"
         class="text-label-sm"
       >
@@ -137,10 +162,10 @@
       <text
         v-for="tick in valueTicks"
         :key="tick.key"
-        :x="vertical ? plot.left - LABEL_OFFSET : tick.at"
+        :x="vertical ? sideX : tick.at"
         :y="vertical ? tick.at : plot.top + plot.height + LABEL_DROP"
         :dy="vertical ? '0.32em' : undefined"
-        :text-anchor="vertical ? 'end' : 'middle'"
+        :text-anchor="vertical ? sideAnchor : 'middle'"
         fill="var(--chart-label)"
         class="text-label-sm tabular-nums"
       >

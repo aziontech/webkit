@@ -667,6 +667,27 @@
     "limit": "1.5 KB"
   },
   {
+    "name": "chart-scatter",
+    "path": "src/components/chart/chart/chart-scatter/chart-scatter.vue",
+    "limit": "2 KB"
+  },
+  {
+    "name": "chart-brush",
+    "path": "src/components/chart/chart/chart-brush/chart-brush.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "gauge-chart",
+    "path": "src/components/chart/gauge-chart/gauge-chart.vue",
+    "limit": "10 KB"
+  },
+  {
+    "name": "map-chart",
+    "path": "src/components/chart/map-chart/map-chart.vue",
+    "limit": "16 KB",
+    "entryOnly": true
+  },
+  {
     "name": "donut-chart",
     "path": "src/components/chart/donut-chart/donut-chart.vue",
     "limit": "11.7 KB"

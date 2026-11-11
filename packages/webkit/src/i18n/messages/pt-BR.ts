@@ -74,7 +74,9 @@ export const ptBR: Messages = {
     roleDescription: 'gráfico',
     summary: '{series} séries em {points} pontos{range}.',
     summaryRange: ', de {from} a {to}',
-    otherSeries: 'Outros'
+    otherSeries: 'Outros',
+    rangeDraft: 'Selecionando de {from} a {to}',
+    rangeSelected: 'Selecionado de {from} a {to}'
   },
   chartCard: {
     resize: 'Redimensionar cartão',
@@ -174,6 +176,22 @@ export const ptBR: Messages = {
     share: 'Participação',
     roleDescription: 'gráfico',
     otherSeries: 'Outros'
+  },
+  gaugeChart: {
+    emptyTitle: 'Nenhum dado disponível',
+    valueWithStatus: '{value}, {status}',
+    range: 'Intervalo de {min} a {max}'
+  },
+  mapChart: {
+    emptyTitle: 'Nenhum dado disponível',
+    roleDescription: 'mapa',
+    name: 'Nome',
+    value: 'Valor',
+    summary: {
+      one: '{count} local no mapa, {total} no total.',
+      other: '{count} locais no mapa, {total} no total.'
+    },
+    legend: 'De {min} a {max}'
   },
   drawer: {
     close: 'Fechar'

@@ -91,3 +91,51 @@ export function maxOf(values: Iterable<number>, floor = 0): number {
   for (const value of values) if (value > max) max = value
   return max
 }
+
+export function labelValue(label: unknown): number | null {
+  if (label instanceof Date) return label.getTime()
+  return typeof label === 'number' && Number.isFinite(label) ? label : null
+}
+
+export function linearLayout(
+  values: ReadonlyArray<number | null>,
+  start: number,
+  length: number
+): CategoryLayout {
+  const finite = values.filter((value): value is number => value !== null)
+  const low = finite.length ? Math.min(...finite) : 0
+  const high = finite.length ? Math.max(...finite) : 1
+  const scale = linearScale([low, high === low ? low + 1 : high], [start, start + length])
+  const positions = values.map((value, index) =>
+    value === null ? start + (length * index) / Math.max(1, values.length - 1) : scale(value)
+  )
+  const step = values.length > 1 ? length / (values.length - 1) : length
+  return {
+    count: values.length,
+    banded: false,
+    step,
+    bandwidth: step,
+    position: (index) => positions[index] ?? start,
+    indexAt: (offset) => {
+      let best = 0
+      let distance = Number.POSITIVE_INFINITY
+      positions.forEach((position, index) => {
+        const gap = Math.abs(position - offset)
+        if (gap < distance) {
+          distance = gap
+          best = index
+        }
+      })
+      return best
+    }
+  }
+}
+
+export function mirrorLayout(layout: CategoryLayout, start: number, length: number): CategoryLayout {
+  const flip = (offset: number) => start + length - (offset - start)
+  return {
+    ...layout,
+    position: (index) => flip(layout.position(index)),
+    indexAt: (offset) => layout.indexAt(flip(offset))
+  }
+}

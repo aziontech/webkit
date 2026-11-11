@@ -9,7 +9,11 @@ export type ChartSeverity =
 
 export type ChartColor = ChartSlot | 'other' | ChartStatus | ChartSeverity
 
-export type ChartMarkKind = 'line' | 'area' | 'bar'
+export type ChartMarkKind = 'line' | 'area' | 'bar' | 'scatter'
+
+export type ChartLabelScale = 'category' | 'linear'
+
+export type ChartRange = readonly [number, number]
 
 export type ChartCurve = 'linear' | 'monotone'
 

@@ -74,7 +74,9 @@ export const es: Messages = {
     roleDescription: 'gráfico',
     summary: '{series} series en {points} puntos{range}.',
     summaryRange: ', de {from} a {to}',
-    otherSeries: 'Otros'
+    otherSeries: 'Otros',
+    rangeDraft: 'Seleccionando de {from} a {to}',
+    rangeSelected: 'Seleccionado de {from} a {to}'
   },
   chartCard: {
     resize: 'Redimensionar tarjeta',
@@ -174,6 +176,22 @@ export const es: Messages = {
     share: 'Proporción',
     roleDescription: 'gráfico',
     otherSeries: 'Otros'
+  },
+  gaugeChart: {
+    emptyTitle: 'No hay datos disponibles',
+    valueWithStatus: '{value}, {status}',
+    range: 'Rango de {min} a {max}'
+  },
+  mapChart: {
+    emptyTitle: 'No hay datos disponibles',
+    roleDescription: 'mapa',
+    name: 'Nombre',
+    value: 'Valor',
+    summary: {
+      one: '{count} lugar en el mapa, {total} en total.',
+      other: '{count} lugares en el mapa, {total} en total.'
+    },
+    legend: 'De {min} a {max}'
   },
   drawer: {
     close: 'Cerrar'

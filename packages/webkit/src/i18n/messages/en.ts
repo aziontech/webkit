@@ -80,7 +80,9 @@ export const chart = {
   roleDescription: 'chart',
   summary: '{series} series over {points} points{range}.',
   summaryRange: ', from {from} to {to}',
-  otherSeries: 'Other'
+  otherSeries: 'Other',
+  rangeDraft: 'Selecting from {from} to {to}',
+  rangeSelected: 'Selected from {from} to {to}'
 } as const
 
 export const chartCard = {
@@ -193,6 +195,24 @@ export const donutChart = {
   share: 'Share',
   roleDescription: 'chart',
   otherSeries: 'Other'
+} as const
+
+export const gaugeChart = {
+  emptyTitle: 'No data available',
+  valueWithStatus: '{value}, {status}',
+  range: 'Range {min} to {max}'
+} as const
+
+export const mapChart = {
+  emptyTitle: 'No data available',
+  roleDescription: 'map',
+  name: 'Name',
+  value: 'Value',
+  summary: {
+    one: '{count} place on the map, {total} in total.',
+    other: '{count} places on the map, {total} in total.'
+  },
+  legend: 'From {min} to {max}'
 } as const
 
 export const drawer = {
@@ -579,6 +599,7 @@ export const en = {
   field,
   fileDropzone,
   footer,
+  gaugeChart,
   globalHeader,
   helpPanel,
   heroForm,
@@ -588,6 +609,7 @@ export const en = {
   link,
   logoWall,
   logView,
+  mapChart,
   menu,
   miniButton,
   navigationMenu,
