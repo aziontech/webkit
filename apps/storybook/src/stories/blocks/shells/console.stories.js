@@ -6,6 +6,8 @@ import State1 from '../../../../../../packages/webkit/blocks/shells/console/vari
 import source1 from '../../../../../../packages/webkit/blocks/shells/console/variants/detail-page.vue?raw'
 import State2 from '../../../../../../packages/webkit/blocks/shells/console/variants/notifications.vue'
 import source2 from '../../../../../../packages/webkit/blocks/shells/console/variants/notifications.vue?raw'
+import State3 from '../../../../../../packages/webkit/blocks/shells/console/variants/account-switch.vue'
+import source3 from '../../../../../../packages/webkit/blocks/shells/console/variants/account-switch.vue?raw'
 
 export default {
   title: "Templates/Shells/Console",
@@ -14,7 +16,7 @@ export default {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
     docs: { canvas: { sourceState: 'shown' }, description: { component: "The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; every state is framed by `AppLayout`, which measures its own width: below 768px it becomes compact, the rail moves into the layout's navigation drawer opened from the hamburger that leads the wordmark, and choosing an item closes it. First-level lists, detail pages with their tabs and Home all render inside it. Built from `AppLayout`, `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates." } },
-    webkit: {"block":"shells/console","intents":["platform shell","console shell","app shell","sidebar layout","navigation rail","dashboard layout","admin layout","app layout with sidebar","estrutura do console","layout com menu lateral","menu lateral","console","console layout","layout do console","notifications panel","notifications drawer","notification center","central de notificações","painel de notificações"],"skills":["webkit-navigation","webkit-layout"],"primary":"ListPage"}
+    webkit: {"block":"shells/console","intents":["platform shell","console shell","app shell","sidebar layout","navigation rail","dashboard layout","admin layout","app layout with sidebar","estrutura do console","layout com menu lateral","menu lateral","console","console layout","layout do console","notifications panel","notifications drawer","notification center","central de notificações","painel de notificações","switch account","account switcher","organization switcher","change organization","trocar conta","trocar organização","selecionar conta"],"skills":["webkit-navigation","webkit-layout"],"primary":"ListPage"}
   }
 }
 
@@ -31,4 +33,9 @@ export const DetailPage = {
 export const Notifications = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up." }, source: { code: source2 } } }
+}
+
+export const AccountSwitch = {
+  render: () => ({ components: { Block: State3 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The account switcher in the header (square Avatar, account name, Ctrl+O or ⌘O): a large Dialog with search over the organization, group and workspace tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer." }, source: { code: source3 } } }
 }

@@ -932,5 +932,11 @@ export const es: Messages = {
     previous: 'Anterior',
     next: 'Siguiente',
     submit: 'Crear'
+  },
+  paymentBrand: {
+    unknown: 'Tarjeta'
+  },
+  otpInput: {
+    label: 'Código de un solo uso'
   }
 }

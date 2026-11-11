@@ -6651,6 +6651,47 @@
    "examplesFile": "catalog/examples/overflow-count.json",
    "docsFile": "catalog/components/overflow-count.json"
   },
+  "payment-brand": {
+   "import": "@aziontech/webkit/payment-brand",
+   "target": "./src/components/content/payment-brand/payment-brand.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/payment-brand",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "brand",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`…). Unknown values draw the generic card glyph."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand."
+    },
+    {
+     "name": "decorative",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Hide the plate from assistive technology when the text next to it already names the brand."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/payment-brand.json",
+   "docsFile": "catalog/components/payment-brand.json"
+  },
   "key-value-pairs-root": {
    "import": "@aziontech/webkit/key-value-pairs-root",
    "target": "./src/components/content/key-value-pairs/key-value-pairs.vue",
@@ -11307,6 +11348,75 @@
    "surface": "product",
    "examplesFile": "catalog/examples/label.json",
    "docsFile": "catalog/components/label.json"
+  },
+  "otp-input": {
+   "import": "@aziontech/webkit/otp-input",
+   "target": "./src/components/inputs/otp-input/otp-input.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/otp-input",
+   "category": "inputs",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "length",
+     "type": "number",
+     "default": "6",
+     "required": "false",
+     "doc": "How many characters the code has; one box each."
+    },
+    {
+     "name": "mode",
+     "type": "'numeric' | 'alphanumeric'",
+     "default": "'numeric'",
+     "required": "false",
+     "doc": "numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case."
+    },
+    {
+     "name": "group",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Draw a separator after every `group` boxes (`3` gives `123 – 456`). `0` draws none."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the field while a code is being checked."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Danger borders on every box and `aria-invalid`; set after a rejected code."
+    },
+    {
+     "name": "required",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Native `required` and `aria-required`."
+    },
+    {
+     "name": "autofocus",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Focus the field on mount, for a screen whose only task is the code."
+    }
+   ],
+   "events": [
+    {
+     "name": "complete",
+     "payload": "string",
+     "notes": ""
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/otp-input.json",
+   "docsFile": "catalog/components/otp-input.json"
   },
   "password-input": {
    "import": "@aziontech/webkit/password-input",
@@ -23863,6 +23973,80 @@
    "variants": [],
    "file": "catalog/patterns/headers/site-header.json"
   },
+  "platform/account/activity-history": {
+   "name": "ActivityHistory",
+   "title": "Templates/Platform/Account/ActivityHistory",
+   "source": "blocks/platform/account/activity-history/activity-history.vue",
+   "surface": "product",
+   "summary": "The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `Table` of events, newest first: Event, Category as `Table.CellStatus`, User, IP address with a `CopyButton`, and Date as `Table.CellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry.",
+   "intents": [
+    "activity history",
+    "audit log",
+    "audit trail",
+    "account activity",
+    "security log",
+    "who did what",
+    "user activity",
+    "event history",
+    "histórico de atividades",
+    "log de auditoria",
+    "trilha de auditoria",
+    "atividade da conta"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "CollectionPreferences",
+    "CopyButton",
+    "DateRangePicker",
+    "EmptyState",
+    "IconButton",
+    "PageHeader",
+    "PropertyFilter",
+    "Table",
+    "Tooltip",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/collection-preferences",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/date-range-picker",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/table",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The account's audit log. An admin or a security reviewer answers \"who did this, from where, and when\": a token that was revoked, a role that changed, a sign-in that failed, a plan that was upgraded. They narrow the log by period, category, person and address, read the newest events first, copy an IP address into another tool, and export what they found.",
+   "variants": [
+    {
+     "name": "Empty",
+     "summary": "No event in the selected period (the last 15 minutes): the controls stay, and a flush EmptyState offers Show the last 30 days."
+    },
+    {
+     "name": "Loading",
+     "summary": "The first load: the controls and the table's loading rows."
+    },
+    {
+     "name": "Failed",
+     "summary": "The log did not load: a danger Alert with Retry replaces the table; Retry loads the events."
+    }
+   ],
+   "file": "catalog/patterns/platform/account/activity-history.json"
+  },
   "platform/account/change-plan-drawer": {
    "name": "ChangePlanDrawer",
    "title": "Templates/Platform/Account/ChangePlanDrawer",
@@ -23889,7 +24073,10 @@
     "purchase plan",
     "fazer upgrade",
     "assinar plano",
-    "finalizar compra"
+    "finalizar compra",
+    "upgrade checkout",
+    "accept terms",
+    "checkout de upgrade"
    ],
    "skills": [
     "webkit-microcopy",
@@ -23916,6 +24103,7 @@
     "PanelContent",
     "PanelFooter",
     "PanelHeader",
+    "PaymentBrand",
     "Select",
     "Separator",
     "toast",
@@ -23940,6 +24128,7 @@
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/payment-brand",
     "@aziontech/webkit/select",
     "@aziontech/webkit/separator",
     "@aziontech/webkit/toast",
@@ -23947,7 +24136,12 @@
    ],
    "primary": "Default",
    "guidelinesSummary": "The drawer the Billing page opens from its Subscription Plan card. The user wants to compare tiers and move the account to one without leaving Billing: a Monthly or Yearly switch over the Free, Pro and Enterprise pricing cards, each with its features and one action. Continue with Pro stacks the Upgrade to Pro drawer on top (what is included, the charge, the payment method and the billing address, then Upgrade); Contact sales closes the drawer.",
-   "variants": [],
+   "variants": [
+    {
+     "name": "Checkout",
+     "summary": "The Upgrade to Pro drawer opened at checkout: the charge with Due today and the renewal and tax note, the payment method, the billing address, and a required terms Checkbox with Terms of Service and Privacy Policy links; Upgrade without it marks the checkbox invalid and focuses it."
+    }
+   ],
    "file": "catalog/patterns/platform/account/change-plan-drawer.json"
   },
   "platform/account/onboarding-form": {
@@ -24003,6 +24197,7 @@
     "PanelContent",
     "PanelFooter",
     "PanelHeader",
+    "PaymentBrand",
     "Progress",
     "RadioCards",
     "Select",
@@ -24033,6 +24228,7 @@
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/payment-brand",
     "@aziontech/webkit/progress",
     "@aziontech/webkit/radio-cards",
     "@aziontech/webkit/select",
@@ -24060,7 +24256,7 @@
    "title": "Templates/Platform/Account/PaymentMethodCard",
    "source": "blocks/platform/account/payment-method-card/payment-method-card.vue",
    "surface": "product",
-   "summary": "The Payment method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert` and `Button`; the Visa plate is an inline monochrome card-brand mark drawn in theme tokens (`--bg-surface`, `--border-default`, `--text-default`), since webkit ships no card-brand asset.",
+   "summary": "The Payment method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert`, `Button` and `PaymentBrand` (the monochrome card-brand plate in theme tokens).",
    "intents": [
     "payment method",
     "credit card form",
@@ -24096,6 +24292,7 @@
     "Card",
     "Field",
     "Input",
+    "PaymentBrand",
     "Select"
    ],
    "imports": [
@@ -24104,6 +24301,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/field",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/payment-brand",
     "@aziontech/webkit/select"
    ],
    "primary": "Default",
@@ -24188,6 +24386,228 @@
    "guidelinesSummary": "The profile page of a signed-in account, and the layout every account settings page follows. The user comes to check or change how the account is identified, billed and signed into: a small page heading over stacked sections, each a flush card of setting rows in the form column, with a save bar that rises once a saved field changes. Billing, credentials, users and teams keep the same column and swap the sections for their own cards or tables.",
    "variants": [],
    "file": "catalog/patterns/platform/account/profile.json"
+  },
+  "platform/account/team-permissions": {
+   "name": "TeamPermissions",
+   "title": "Templates/Platform/Account/TeamPermissions",
+   "source": "blocks/platform/account/team-permissions/team-permissions.vue",
+   "surface": "product",
+   "summary": "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`.",
+   "intents": [
+    "teams",
+    "teams and permissions",
+    "roles",
+    "roles and permissions",
+    "permission matrix",
+    "access control",
+    "rbac",
+    "create team",
+    "user groups",
+    "times e permissões",
+    "papéis e permissões",
+    "matriz de permissões",
+    "controle de acesso",
+    "criar time"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Avatar",
+    "Button",
+    "Card",
+    "Checkbox",
+    "ConfirmDialog",
+    "DropdownMenu",
+    "EmptyState",
+    "Field",
+    "IconButton",
+    "Input",
+    "PageHeader",
+    "SaveBar",
+    "SettingsSection",
+    "Switch",
+    "Table",
+    "Textarea",
+    "toast",
+    "Tooltip",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/checkbox",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/save-bar",
+    "@aziontech/webkit/settings-section",
+    "@aziontech/webkit/switch",
+    "@aziontech/webkit/table",
+    "@aziontech/webkit/textarea",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model.",
+   "variants": [
+    {
+     "name": "CreateTeam",
+     "summary": "The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Save in a SaveBar; errors on the name field and above the matrix."
+    },
+    {
+     "name": "Empty",
+     "summary": "No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table."
+    },
+    {
+     "name": "Loading",
+     "summary": "The first load: the search row and the table's loading rows."
+    },
+    {
+     "name": "Failed",
+     "summary": "The teams did not load: a danger Alert with Retry replaces the table; Retry loads them."
+    }
+   ],
+   "file": "catalog/patterns/platform/account/team-permissions.json"
+  },
+  "platform/account/tokens": {
+   "name": "Tokens",
+   "title": "Templates/Platform/Account/Tokens",
+   "source": "blocks/platform/account/tokens/tokens.vue",
+   "surface": "product",
+   "summary": "The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, a search `Input` and Refresh over a `Table` of tokens (name with its description, `Table.CellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `Table.CellTime` for last use and creation, `Table.CellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast.",
+   "intents": [
+    "personal tokens",
+    "personal access tokens",
+    "api tokens",
+    "api keys",
+    "access tokens",
+    "create token",
+    "revoke token",
+    "copy token once",
+    "token expiration",
+    "tokens pessoais",
+    "token de acesso",
+    "chaves de api",
+    "criar token",
+    "revogar token"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "ConfirmDialog",
+    "CopyButton",
+    "Dialog",
+    "DialogContent",
+    "DialogDescription",
+    "DialogOverlay",
+    "DialogPortal",
+    "DialogTitle",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "DropdownMenu",
+    "EmptyState",
+    "Field",
+    "HelperText",
+    "IconButton",
+    "Input",
+    "Label",
+    "PageHeader",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "PasswordInput",
+    "Select",
+    "SettingsSection",
+    "Table",
+    "Textarea",
+    "toast",
+    "Tooltip",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/dialog",
+    "@aziontech/webkit/dialog-content",
+    "@aziontech/webkit/dialog-description",
+    "@aziontech/webkit/dialog-overlay",
+    "@aziontech/webkit/dialog-portal",
+    "@aziontech/webkit/dialog-title",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/helper-text",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/label",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/password-input",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/settings-section",
+    "@aziontech/webkit/table",
+    "@aziontech/webkit/textarea",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The Personal tokens page of the account settings. A person creates a token for a script, a CI job or the CLI, copies its secret the one time it is shown, sees which tokens are still alive and when each expires or was last used, and revokes one that leaked or is no longer needed. The secret never comes back: the list shows only the name, status and dates, and a lost secret means a new token.",
+   "variants": [
+    {
+     "name": "Empty",
+     "summary": "No token yet: the heading stays and a flush card with an EmptyState and Create Personal Token replaces the search row and the table."
+    },
+    {
+     "name": "Loading",
+     "summary": "The first load: the search row and the table shell with its loading rows, before the empty state can be decided."
+    },
+    {
+     "name": "Failed",
+     "summary": "The list could not load: a danger Alert with Retry in place of the table; Retry loads the tokens."
+    },
+    {
+     "name": "Created",
+     "summary": "Right after Create: the one-time reveal Dialog with the warning, the masked secret with show and copy, and a confirmation that the token was copied."
+    }
+   ],
+   "file": "catalog/patterns/platform/account/tokens.json"
   },
   "platform/ai/ai-action-approval": {
    "name": "AiActionApproval",
@@ -24473,7 +24893,20 @@
     "session expired",
     "auth errors",
     "sessão expirada",
-    "erro de login"
+    "erro de login",
+    "mfa",
+    "multi-factor authentication",
+    "two-factor authentication",
+    "2fa",
+    "authenticator app",
+    "one-time code",
+    "verification code",
+    "totp",
+    "recovery code",
+    "autenticação em dois fatores",
+    "autenticação multifator",
+    "código de verificação",
+    "código de autenticação"
    ],
    "skills": [
     "webkit-form",
@@ -24492,12 +24925,14 @@
     "Brand",
     "Button",
     "Card",
+    "CopyButton",
     "Field",
     "GlobalHeader",
     "HelperText",
     "IconButton",
     "Input",
     "Label",
+    "OtpInput",
     "PageHeader",
     "PasswordInput",
     "PasswordRequirements",
@@ -24510,12 +24945,14 @@
     "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/field",
     "@aziontech/webkit/global-header",
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/label",
+    "@aziontech/webkit/otp-input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/password-input",
     "@aziontech/webkit/password-requirements",
@@ -24557,6 +24994,14 @@
     {
      "name": "EmailAlreadyRegistered",
      "summary": "409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field."
+    },
+    {
+     "name": "MfaSetup",
+     "summary": "Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry."
+    },
+    {
+     "name": "MfaCode",
+     "summary": "The sign-in MFA challenge: an autofocused 6-digit OtpInput that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account."
     }
    ],
    "file": "catalog/patterns/platform/auth.json"
@@ -30118,7 +30563,14 @@
     "notifications drawer",
     "notification center",
     "central de notificações",
-    "painel de notificações"
+    "painel de notificações",
+    "switch account",
+    "account switcher",
+    "organization switcher",
+    "change organization",
+    "trocar conta",
+    "trocar organização",
+    "selecionar conta"
    ],
    "skills": [
     "webkit-navigation",
@@ -30135,6 +30587,13 @@
     "ButtonHighlight",
     "Card",
     "Command",
+    "Dialog",
+    "DialogClose",
+    "DialogContent",
+    "DialogDescription",
+    "DialogOverlay",
+    "DialogPortal",
+    "DialogTitle",
     "DropdownMenu",
     "EmptyState",
     "GlobalHeader",
@@ -30143,12 +30602,17 @@
     "Kbd",
     "Menu",
     "PageTabs",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
     "Select",
     "Sidebar",
     "StatusIndicator",
+    "Table",
     "Tabs",
     "Tag",
     "ThemeSwitcher",
+    "toast",
     "Tooltip"
    ],
    "imports": [
@@ -30162,6 +30626,13 @@
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
     "@aziontech/webkit/command",
+    "@aziontech/webkit/dialog",
+    "@aziontech/webkit/dialog-close",
+    "@aziontech/webkit/dialog-content",
+    "@aziontech/webkit/dialog-description",
+    "@aziontech/webkit/dialog-overlay",
+    "@aziontech/webkit/dialog-portal",
+    "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/global-header",
@@ -30170,12 +30641,17 @@
     "@aziontech/webkit/kbd",
     "@aziontech/webkit/menu",
     "@aziontech/webkit/page-tabs",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
     "@aziontech/webkit/sidebar",
     "@aziontech/webkit/status-indicator",
+    "@aziontech/webkit/table",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip"
    ],
    "primary": "ListPage",
@@ -30188,6 +30664,10 @@
     {
      "name": "Notifications",
      "summary": "The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up."
+    },
+    {
+     "name": "AccountSwitch",
+     "summary": "The account switcher in the header (square Avatar, account name, Ctrl+O or ⌘O): a large Dialog with search over the organization, group and workspace tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer."
     }
    ],
    "file": "catalog/patterns/shells/console.json"

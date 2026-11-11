@@ -102,6 +102,10 @@ Cancel and Upgrade, side by side from `md`, full width below.
 
 Mounted once with the drawers. A failure no section owns (the payment service did not answer) is `toast.error` with Retry, and the drawer stays open with the entries kept; a successful upgrade closes both drawers and toasts `The account was upgraded to Pro.`
 
+### W. Card brand — `PaymentBrand` (required)
+
+The plate before the card on file in the Payment method section, named after the brand.
+
 ## Do
 
 - Disable every field and secondary action while the upgrade submits, and release the lock when it ends, on success and on failure.
@@ -135,6 +139,7 @@ Mounted once with the drawers. A failure no section owns (the payment service di
 ## States
 
 - Default: the plan drawer open on an account that is on Free, Yearly selected. In the upgrade drawer, a new card ending in 0002 is declined and one ending in 0119 makes the payment service fail, so both failure paths can be walked.
+- Checkout: the Upgrade to Pro drawer open on its own, as the checkout step: the charge card adds Due today and a note that taxes come from the billing address and the plan renews on the upgrade day; under the address a required `Checkbox` accepts the Terms of Service and the Privacy Policy (each a `Link` in a new tab). Upgrade without it shows `Accept the Terms of Service and the Privacy Policy to upgrade.` on the field and focuses the checkbox; the card and service failures work as in the primary.
 
 ## Related
 

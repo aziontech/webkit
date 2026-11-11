@@ -274,3 +274,15 @@ The integrated values win for every entry both sides raised (`table-root` 51.9, 
 | Entry      | Budget before | Measured now | New budget | Why                                                                                           |
 | ---------- | ------------- | ------------ | ---------- | --------------------------------------------------------------------------------------------- |
 | chart-card | 4.75          | 4.80         | 4.95       | Raised: M1.11's pointer-capture guard in the resize handle on top of the `Board.Item` bridge. |
+
+## M2.9 WP account-org
+
+`PaymentBrand` and `OtpInput` are new entries; both include `useTranslate` for their one catalog string. The `paymentBrand` and `otpInput` groups are one string each, so the provider and the two locale entries stay inside their list-kit budgets (measured after merging `feat/webkit-v6`). Budgets are measured + ~0.2 KB.
+
+| Entry           | Budget before | Measured now | New budget | Note                                                              |
+| --------------- | ------------- | ------------ | ---------- | ----------------------------------------------------------------- |
+| payment-brand   | new           | 3.82         | 4.05       | New: five inline monochrome marks and the generic card glyph.     |
+| otp-input       | new           | 2.99         | 3.2        | New: one input over the boxes, `useFieldControl`, `useTranslate`. |
+| webkit-provider | 8.4           | 8.25         | 8.4        | Unchanged: two one-string groups.                                 |
+| locales-pt-BR   | 7.8           | 7.64         | 7.8        | Unchanged.                                                        |
+| locales-es      | 7.9           | 7.73         | 7.9        | Unchanged.                                                        |

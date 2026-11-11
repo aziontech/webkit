@@ -29,10 +29,13 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Blocks: Platform
 
+- [ActivityHistory (platform/account/activity-history)](blocks/platform/account/activity-history.md): The account's audit log.
 - [ChangePlanDrawer (platform/account/change-plan-drawer)](blocks/platform/account/change-plan-drawer.md): The drawer the Billing page opens from its Subscription Plan card.
 - [OnboardingForm (platform/account/onboarding-form)](blocks/platform/account/onboarding-form.md): The `/signup/onboarding` screen, frame included.
 - [PaymentMethodCard (platform/account/payment-method-card)](blocks/platform/account/payment-method-card.md): The Payment method card of the Upgrade to Pro drawer.
 - [Profile (platform/account/profile)](blocks/platform/account/profile.md): The profile page of a signed-in account, and the layout every account settings page follows.
+- [TeamPermissions (platform/account/team-permissions)](blocks/platform/account/team-permissions.md): Who can do what in the account.
+- [Tokens (platform/account/tokens)](blocks/platform/account/tokens.md): The Personal tokens page of the account settings.
 - [AiActionApproval (platform/ai/ai-action-approval)](blocks/platform/ai/ai-action-approval.md): The moment an assistant needs permission.
 - [AiChat (platform/ai/ai-chat)](blocks/platform/ai/ai-chat.md): A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question.
 - [AiChatDrawer (platform/ai/ai-chat-drawer)](blocks/platform/ai/ai-chat-drawer.md): The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page.
@@ -164,6 +167,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent.
 - [OverflowCount](components/overflow-count.md): A small `+N` chip that stands for the items a slot cannot show, and opens a popover with the whole list.
 - [Overline](components/overline.md): Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow").
+- [PaymentBrand](components/payment-brand.md): The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB) drawn in theme tokens, so it reads in light, dark and forced colo…
 - [ProductWidget](components/product-widget.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside a `shell-mockup` frame, that marketing bands use to show the product.
 - [SeverityTag](components/severity-tag.md): SeverityTag labels an item with its place on an ordered severity scale: critical, high, medium, low or info.
 - [ShellMockup](components/shell-mockup.md): A scaled, inert picture of an Azion Console screen, for marketing bands that show the product.
@@ -229,6 +233,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Label](components/label.md): Form-field label that pairs descriptive text with an optional required indicator and an optional hint.
 - [MultiSelect](components/multi-select.md): Select control specialised for choosing many options from a list.
 - [NumberInput](components/number-input.md): Numeric input field with optional increment/decrement spinner buttons.
+- [OtpInput](components/otp-input.md): The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS.
 - [PasswordInput](components/password-input.md): Single-line password input for forms.
 - [PasswordRequirements](components/password-requirements.md): Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it.
 - [PhoneInput](components/phone-input.md): International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly…

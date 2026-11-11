@@ -1,0 +1,21 @@
+{
+  "component": "otp-input",
+  "title": "Components/Primitives/Inputs/OtpInput",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The 6-digit authenticator code in a `Field`: type, paste or autofill it; `complete` fires when the last box fills.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Grouped",
+      "summary": "`group` draws a separator every 3 or 4 boxes without changing the value; `mode=\"alphanumeric\"` keeps letters and digits in upper case for an 8-character recovery code.",
+      "file": "grouped.vue"
+    },
+    {
+      "name": "States",
+      "summary": "Invalid after a rejected code (danger borders, `aria-invalid`, the reason in the description) and disabled while the code is checked.",
+      "file": "states.vue"
+    }
+  ]
+}

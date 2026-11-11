@@ -29,6 +29,7 @@
 
 <template>
   <footer
+    role="none"
     :class="rootClasses"
     :data-testid="`${ctx?.testId}__footer`"
   >

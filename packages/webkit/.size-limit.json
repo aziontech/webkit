@@ -1134,6 +1134,16 @@
     "limit": "12.5 KB"
   },
   {
+    "name": "payment-brand",
+    "path": "src/components/content/payment-brand/payment-brand.vue",
+    "limit": "4.05 KB"
+  },
+  {
+    "name": "otp-input",
+    "path": "src/components/inputs/otp-input/otp-input.vue",
+    "limit": "3.2 KB"
+  },
+  {
     "name": "table-cell-status",
     "path": "src/components/data/table/table-cell-status/table-cell-status.vue",
     "limit": "3 KB"
