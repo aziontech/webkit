@@ -745,7 +745,7 @@
                                       size="small"
                                       :label="`${sharedDependency.name} is shared, so it deploys at one version. Changing it here changes it for ${listFormat(sharedDependency.sharedWith)} too.`"
                                     />
-                                    <Item.Group class="gap-(--spacing-sm)!">
+                                    <Item.Group>
                                       <Item
                                         v-for="dependency in dependenciesOf(row)"
                                         :key="dependency.key"

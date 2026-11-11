@@ -818,10 +818,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                 >
                                   {{ row.name }} references no other resources.
                                 </p>
-                                <Item.Group
-                                  v-else
-                                  class="gap-(--spacing-sm)!"
-                                >
+                                <Item.Group v-else>
                                   <Item
                                     v-for="dependency in row.dependencies"
                                     :key="dependency.key"
