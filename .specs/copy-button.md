@@ -4,10 +4,11 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: ee3da62e9e6a867c2ba839ea1429f5a91e2f4f60fa85f1f398b9893e40569e97
+checksum: c8eed6916ab3a262667cf35e3a6dfa82eb4bb5008afe3d997aaa58406dd66b10
 created: 2026-06-02
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
+
 # Copy Button — Component Spec
 
 ## Purpose
@@ -41,19 +42,19 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `value` | `string` | `—` | true | Text copied to the clipboard on activation. |
-| `ariaLabel` | `string` | `'Copy'` | false | Accessible name while idle. |
-| `copiedLabel` | `string` | `'Copied'` | false | Accessible name while the copied state is shown. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'transparent'` | false | Visual variant forwarded to `IconButton`. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'small'` | false | Size token forwarded to `IconButton`. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| Prop          | Type                                                                  | Default         | Required | JSDoc                                                                                      |
+| ------------- | --------------------------------------------------------------------- | --------------- | -------- | ------------------------------------------------------------------------------------------ |
+| `value`       | `string`                                                              | `—`             | true     | Text copied to the clipboard on activation.                                                |
+| `ariaLabel`   | `string`                                                              | `''`            | false    | Accessible name while idle. Empty uses the locale catalog (`Copy`).                        |
+| `copiedLabel` | `string`                                                              | `''`            | false    | Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`). |
+| `kind`        | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'transparent'` | false    | Visual variant forwarded to `IconButton`.                                                  |
+| `size`        | `'small' \| 'medium' \| 'large'`                                      | `'small'`       | false    | Size token forwarded to `IconButton`.                                                      |
+| `disabled`    | `boolean`                                                             | `false`         | false    | Disables interaction and applies disabled tokens.                                          |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event  | Payload  | Notes                                                             |
+| ------ | -------- | ----------------------------------------------------------------- |
 | `copy` | `string` | Emitted after a successful clipboard write with the copied value. |
 
 ## Slots
@@ -69,28 +70,28 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| hover / active and icon swap | inherited from `IconButton` (`before:transition-opacity before:duration-fast-02`, icon enter/leave transition) | `@aziontech/theme` semantic duration + curve | `motion-reduce:transition-none` |
-| tooltip open / close | popup scale-in / scale-out, owned by the composed `Tooltip` (see `.specs/tooltip.md`) | `semantic/animations.js` | reduced-motion fallback handled by `Tooltip` |
+| Trigger                      | Animation / Transition                                                                                         | Token                                        | Reduced-motion fallback                      |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
+| hover / active and icon swap | inherited from `IconButton` (`before:transition-opacity before:duration-fast-02`, icon enter/leave transition) | `@aziontech/theme` semantic duration + curve | `motion-reduce:transition-none`              |
+| tooltip open / close         | popup scale-in / scale-out, owned by the composed `Tooltip` (see `.specs/tooltip.md`)                          | `semantic/animations.js`                     | reduced-motion fallback handled by `Tooltip` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-button-lg |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region                 | Token (DESIGN.md)                                             |
+| ---------------------- | ------------------------------------------------------------- |
+| typography             | .text-button-lg                                               |
+| surface                | `var(--bg-surface)`                                           |
+| text                   | `var(--text-default)`                                         |
+| spacing                | `var(--spacing-3)`                                            |
+| shape                  | `var(--shape-elements)`                                       |
+| ring                   | `var(--ring-color)`                                           |
 | tooltip surface / text | `var(--bg-contrast)` / `var(--text-contrast)` (via `Tooltip`) |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -105,11 +106,14 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 ```vue
 <script setup>
-import CopyButton from '@aziontech/webkit/copy-button'
+  import CopyButton from '@aziontech/webkit/copy-button'
 </script>
 
 <template>
-  <CopyButton value="https://example.com/deploy/abc123" ariaLabel="Copy URL" />
+  <CopyButton
+    value="https://example.com/deploy/abc123"
+    ariaLabel="Copy URL"
+  />
 </template>
 ```
 

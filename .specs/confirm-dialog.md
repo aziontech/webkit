@@ -3,10 +3,10 @@ name: confirm-dialog
 category: overlay
 structure: monolithic
 status: implemented
-checksum: 93cc75f6019159edf752dc172b413edf10f3bcdbdd0497da355528841fdd6ad0
+checksum: 19868b56bb04687263cddaee84ef4d4ddc78aff5c68db3cc57f5fc48af748f6d
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # ConfirmDialog — Component Spec
@@ -71,16 +71,16 @@ A small confirmation dialog: a title with a close button, one sentence of descri
 
 ## Props
 
-| Prop           | Type                    | Default     | Required | JSDoc                                                                   |
-| -------------- | ----------------------- | ----------- | -------- | ----------------------------------------------------------------------- |
-| `title`        | `string`                | `—`         | true     | The question or the outcome, as the dialog title.                       |
-| `description`  | `string`                | `''`        | false    | One sentence that says what happens on confirm.                         |
-| `confirmLabel` | `string`                | `'Confirm'` | false    | Label of the confirm button.                                            |
-| `cancelLabel`  | `string`                | `'Cancel'`  | false    | Label of the cancel button.                                             |
-| `kind`         | `'danger' \| 'primary'` | `'danger'`  | false    | Kind of the confirm button.                                             |
-| `size`         | `'small' \| 'medium'`   | `'small'`   | false    | Width of the dialog.                                                    |
-| `loading`      | `boolean`               | `false`     | false    | Shows a spinner on the confirm button while the action runs.            |
-| `disabled`     | `boolean`               | `false`     | false    | Disables the confirm button, for a confirmation that needs input first. |
+| Prop           | Type                    | Default    | Required | JSDoc                                                                   |
+| -------------- | ----------------------- | ---------- | -------- | ----------------------------------------------------------------------- |
+| `title`        | `string`                | `—`        | true     | The question or the outcome, as the dialog title.                       |
+| `description`  | `string`                | `''`       | false    | One sentence that says what happens on confirm.                         |
+| `confirmLabel` | `string`                | `''`       | false    | Label of the confirm button. Empty uses the locale catalog (`Confirm`). |
+| `cancelLabel`  | `string`                | `''`       | false    | Label of the cancel button. Empty uses the locale catalog (`Cancel`).   |
+| `kind`         | `'danger' \| 'primary'` | `'danger'` | false    | Kind of the confirm button.                                             |
+| `size`         | `'small' \| 'medium'`   | `'small'`  | false    | Width of the dialog.                                                    |
+| `loading`      | `boolean`               | `false`    | false    | Shows a spinner on the confirm button while the action runs.            |
+| `disabled`     | `boolean`               | `false`    | false    | Disables the confirm button, for a confirmation that needs input first. |
 
 ## v-model
 

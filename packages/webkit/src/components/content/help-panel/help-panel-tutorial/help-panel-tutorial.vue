@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, provide, ref, useAttrs, useId, useSlots } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { hasRenderedContent } from '../../../../utils/rendered-content'
   import Tag from '../../tag/tag.vue'
   import type { HelpPanelTaskHandle, HelpPanelTaskStatus } from '../injection-key'
@@ -34,6 +36,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ helpPanel: en.helpPanel })
   const slots = useSlots()
   const headingId = useId()
 
@@ -118,7 +121,7 @@
         <Tag
           v-if="completed"
           :data-testid="`${testId}__completed`"
-          label="Completed"
+          :label="t('helpPanel.tutorialCompleted')"
           severity="success"
           size="small"
         />
@@ -134,7 +137,7 @@
         aria-live="polite"
         class="text-label-sm text-(--text-muted)"
       >
-        {{ complete }} of {{ total }} complete
+        {{ t('helpPanel.tutorialProgress', { complete, total }) }}
       </p>
     </div>
     <ol class="flex w-full flex-col gap-(--spacing-sm)">

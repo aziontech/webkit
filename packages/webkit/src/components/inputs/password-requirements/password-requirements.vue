@@ -2,6 +2,8 @@
   import { useElementSize } from '@vueuse/core'
   import { computed, ref, useAttrs, useId } from 'vue'
 
+  import { type MessageKey, useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { DEFAULT_PASSWORD_REQUIREMENTS, type PasswordRequirement } from './rules'
 
   defineOptions({
@@ -12,7 +14,7 @@
   interface Props {
     /** Rules rendered as chips, one per entry. Defaults to the built-in rule set; an empty array renders only the caption. */
     requirements?: PasswordRequirement[]
-    /** Caption that opens the row and names the group for assistive tech. */
+    /** Caption that opens the row and names the group for assistive tech. Empty uses the locale catalog (`Must contain:`). */
     title?: string
     /** Password every rule is evaluated against; pass the PasswordInput value. */
     value?: string
@@ -20,11 +22,12 @@
 
   const props = withDefaults(defineProps<Props>(), {
     requirements: () => DEFAULT_PASSWORD_REQUIREMENTS,
-    title: 'Must contain:',
+    title: '',
     value: ''
   })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ passwordRequirements: en.passwordRequirements })
   const titleId = `password-requirements-${useId()}`
 
   const testId = computed(
@@ -45,7 +48,11 @@
               : requirement.test
             ).test(props.value)
 
-      return { key: requirement.key || requirement.label, label: requirement.label, met }
+      const builtIn = DEFAULT_PASSWORD_REQUIREMENTS.includes(requirement) && requirement.key
+      const label = builtIn
+        ? t(`passwordRequirements.${requirement.key}` as MessageKey)
+        : requirement.label
+      return { key: requirement.key || requirement.label, label, met }
     })
   )
 </script>
@@ -68,7 +75,7 @@
         :data-testid="`${testId}__title`"
         class="shrink-0 leading-none text-label-sm text-(--text-default)"
       >
-        {{ title }}
+        {{ title || t('passwordRequirements.title') }}
       </span>
       <span
         v-for="requirement in evaluated"

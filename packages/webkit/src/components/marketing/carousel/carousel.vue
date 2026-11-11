@@ -3,6 +3,8 @@
   import { computed, onMounted, provide, type Ref, ref, shallowReadonly, useAttrs } from 'vue'
 
   import { useDirection } from '../../../composables/use-direction'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { CarouselInjectionKey } from './injection-key'
 
   defineOptions({
@@ -27,6 +29,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ carousel: en.carousel })
 
   const track = ref<globalThis.HTMLUListElement | null>(null)
   const dir = useDirection(track)
@@ -145,7 +148,7 @@
     :data-scrollable="canScroll || null"
     :data-can-scroll-prev="canScrollPrev || null"
     :data-can-scroll-next="canScrollNext || null"
-    aria-roledescription="carousel"
+    :aria-roledescription="t('carousel.roleDescription')"
     :aria-label="ariaLabel || undefined"
   >
     <div

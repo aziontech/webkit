@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import Separator from '../../../layout/separator/separator.vue'
 
   defineOptions({
@@ -9,12 +11,12 @@
   })
 
   interface Props {
-    /** The heading over the links. */
+    /** The heading over the links. Absent uses the locale catalog (`Learn more`); an empty string renders no heading. */
     title?: string
   }
 
-  withDefaults(defineProps<Props>(), {
-    title: 'Learn more'
+  const props = withDefaults(defineProps<Props>(), {
+    title: undefined
   })
 
   defineSlots<{
@@ -23,6 +25,8 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ helpPanel: en.helpPanel })
+  const heading = computed(() => props.title ?? t('helpPanel.learnMore'))
   const headingId = useId()
 
   const testId = computed<string>(
@@ -33,18 +37,18 @@
 <template>
   <section
     v-bind="$attrs"
-    :aria-labelledby="title ? headingId : undefined"
+    :aria-labelledby="heading ? headingId : undefined"
     :data-testid="testId"
     class="flex w-full flex-col gap-(--spacing-lg)"
   >
     <Separator />
     <div class="flex w-full flex-col gap-(--spacing-xs)">
       <h3
-        v-if="title"
+        v-if="heading"
         :id="headingId"
         class="text-heading-xxs text-(--text-default)"
       >
-        {{ title }}
+        {{ heading }}
       </h3>
       <div class="flex flex-col items-start gap-(--spacing-xxs)">
         <slot />

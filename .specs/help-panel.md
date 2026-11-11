@@ -3,7 +3,7 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: 17e3d864701c1047113b6cd239245648d34b1d54fee8534c91504953b883add5
+checksum: 7f3444beaba4277a7483a08c1e2f8801d174f5befc7ea4b1560c83989987b001
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
@@ -152,7 +152,7 @@ on unmount, so the consumer never counts tasks or numbers them by hand.
   - Slot: `default` — the section's prose: paragraphs, short lists, inline `text-link` anchors.
   - `data-testid` fallback: `content-help-panel-section`.
 - `help-panel-links/help-panel-links.vue` — The "Learn more" footer: a heading over a column of `Link` items the consumer composes. Renders a `<section aria-labelledby>` holding an `<h3>` and a vertical flex column of the slot, separated from the content above by a `Separator`.
-  - Props: `title?: string` (default `'Learn more'` — the heading over the links).
+  - Props: `title?: string` (default `undefined` — the heading over the links; absent uses the locale catalog, `Learn more` in English, and an empty string renders no heading).
   - Slot: `default` — `Link` items, one per destination.
   - `data-testid` fallback: `content-help-panel-links`.
 - `help-panel-tutorial/help-panel-tutorial.vue` — Tutorial mode: a title, a description, a progress line derived from the registered tasks ("2 of 3 complete"), the ordered task list, and an action row. Renders a `<section aria-labelledby>` holding an `<h3>`, the description, the progress line, an `<ol>` wrapping the default slot, and the `actions` slot. Provides the tutorial context (the task registry and the derived counts) to its `HelpPanel.Task` children.
@@ -208,10 +208,10 @@ inside the package): `skeleton` (root, `loading`), `divider` (`Links`), `tag` (`
 
 ## Props
 
-| Prop        | Type      | Default  | Required | JSDoc                                                                                      |
-| ----------- | --------- | -------- | -------- | ------------------------------------------------------------------------------------------ |
-| `ariaLabel` | `string`  | `'Help'` | false    | Accessible name for the complementary landmark the panel renders.                          |
-| `loading`   | `boolean` | `false`  | false    | Renders skeleton lines in place of the content while the help topic loads; sets aria-busy. |
+| Prop        | Type      | Default | Required | JSDoc                                                                                                     |
+| ----------- | --------- | ------- | -------- | --------------------------------------------------------------------------------------------------------- |
+| `ariaLabel` | `string`  | `''`    | false    | Accessible name for the complementary landmark the panel renders. Empty uses the locale catalog (`Help`). |
+| `loading`   | `boolean` | `false` | false    | Renders skeleton lines in place of the content while the help topic loads; sets aria-busy.                |
 
 ## Events
 

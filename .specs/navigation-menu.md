@@ -7,10 +7,11 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 730233d6811804433b37c373b876d1e205f505dd85e9a92f7792382a4e87c5ab
+checksum: b2aebf215b473c77d32f770559aa47710c2273f248eea6323492e6a56dd4cb29
 created: 2026-05-22
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
+
 # Navigation Menu — Component Spec
 
 ## Purpose
@@ -49,17 +50,24 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 
 ```vue
 <script setup>
-import NavigationMenu from '@aziontech/webkit/navigation-menu'
+  import NavigationMenu from '@aziontech/webkit/navigation-menu'
 </script>
 
 <template>
-  <NavigationMenu aria-label="Primary" :delay="50" :close-delay="300">
+  <NavigationMenu
+    aria-label="Primary"
+    :delay="50"
+    :close-delay="300"
+  >
     <NavigationMenu.List>
       <NavigationMenu.Item value="products">
         <NavigationMenu.Trigger>
           Products
           <NavigationMenu.Icon>
-            <i class="pi pi-chevron-down" aria-hidden="true" />
+            <i
+              class="pi pi-chevron-down"
+              aria-hidden="true"
+            />
           </NavigationMenu.Icon>
         </NavigationMenu.Trigger>
         <NavigationMenu.Content>
@@ -75,7 +83,12 @@ import NavigationMenu from '@aziontech/webkit/navigation-menu'
               </template>
               Functions
             </NavigationMenu.Item>
-            <NavigationMenu.Item layout="entry" href="/products" featured close-on-click>
+            <NavigationMenu.Item
+              layout="entry"
+              href="/products"
+              featured
+              close-on-click
+            >
               See all products
             </NavigationMenu.Item>
           </NavigationMenu.List>
@@ -88,7 +101,11 @@ import NavigationMenu from '@aziontech/webkit/navigation-menu'
 
     <NavigationMenu.Portal>
       <NavigationMenu.Backdrop />
-      <NavigationMenu.Positioner side="bottom" align="start" :side-offset="12">
+      <NavigationMenu.Positioner
+        side="bottom"
+        align="start"
+        :side-offset="12"
+      >
         <NavigationMenu.Popup>
           <NavigationMenu.Arrow />
           <NavigationMenu.Viewport />
@@ -116,32 +133,32 @@ import NavigationMenu from '@aziontech/webkit/navigation-menu'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `defaultValue` | `NavigationMenuValue` | `null` | false | Uncontrolled initial open item value. |
-| `delay` | `number` | `50` | false | Hover-open delay in milliseconds. |
-| `closeDelay` | `number` | `300` | false | Hover-close delay in milliseconds. |
-| `orientation` | `NavigationMenuOrientation` | `'horizontal'` | false | Menu orientation. |
-| `ariaLabel` | `string` | `'Main'` | false | Accessible name for the root navigation landmark. |
-| `as` | `string \| object` | `'nav'` | false | Polymorphic root element. |
+| Prop           | Type                        | Default        | Required | JSDoc                                                                                     |
+| -------------- | --------------------------- | -------------- | -------- | ----------------------------------------------------------------------------------------- |
+| `defaultValue` | `NavigationMenuValue`       | `null`         | false    | Uncontrolled initial open item value.                                                     |
+| `delay`        | `number`                    | `50`           | false    | Hover-open delay in milliseconds.                                                         |
+| `closeDelay`   | `number`                    | `300`          | false    | Hover-close delay in milliseconds.                                                        |
+| `orientation`  | `NavigationMenuOrientation` | `'horizontal'` | false    | Menu orientation.                                                                         |
+| `ariaLabel`    | `string`                    | `''`           | false    | Accessible name for the root navigation landmark. Empty uses the locale catalog (`Main`). |
+| `as`           | `string \| object`          | `'nav'`        | false    | Polymorphic root element.                                                                 |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-| --- | --- | --- | --- | --- |
+| Model     | Type                               | Default     | Emits               | Notes                                                                                                                                                                                                                                       |
+| --------- | ---------------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model` | `NavigationMenuValue \| undefined` | `undefined` | `update:modelValue` | Open item via `defineModel`; `null` closes every panel. While unbound (`undefined`) the menu is uncontrolled and starts at `defaultValue`. The event carries a second argument, `eventDetails: unknown`, describing what caused the change. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `open-change-complete` | `open: boolean` | — |
+| Event                  | Payload         | Notes |
+| ---------------------- | --------------- | ----- |
+| `open-change-complete` | `open: boolean` | —     |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | — |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | —     |
 
 ## States
 
@@ -168,32 +185,32 @@ list must name those properties; naming `transform` does not cover them and the
 animation silently snaps. Only the positioner, whose placement is an inline
 `transform: translate3d(...)`, transitions `transform`.
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| trigger / entry hover, focus, press | `transition-colors` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| popup open / close | `transition-[opacity,scale]` — fade + `scale-95`, origin `--popup-origin` (the active trigger) | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| popup box morph between panels | `transition-[width,height]` driven by `--popup-width` / `--popup-height` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| positioner move between triggers | `transition-[transform]` (placement is a `translate3d`); suppressed on the first placement | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| panel content swap | `transition-[opacity,translate]`, directional 24px slide keyed on `data-activation-direction` | `duration-moderate-01` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| chevron icon | `transition-transform` (180° on open) | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| list sliding highlight | `transition-[left,top,width,height,opacity]` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| Trigger                             | Animation / Transition                                                                         | Token                                               | Reduced-motion fallback         |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------- |
+| trigger / entry hover, focus, press | `transition-colors`                                                                            | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| popup open / close                  | `transition-[opacity,scale]` — fade + `scale-95`, origin `--popup-origin` (the active trigger) | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| popup box morph between panels      | `transition-[width,height]` driven by `--popup-width` / `--popup-height`                       | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| positioner move between triggers    | `transition-[transform]` (placement is a `translate3d`); suppressed on the first placement     | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| panel content swap                  | `transition-[opacity,translate]`, directional 24px slide keyed on `data-activation-direction`  | `duration-moderate-01` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| chevron icon                        | `transition-transform` (180° on open)                                                          | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| list sliding highlight              | `transition-[left,top,width,height,opacity]`                                                   | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

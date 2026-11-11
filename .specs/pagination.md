@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: cdd592208ae52a3f6803c2809ed303ce0ae8567f389950ef028e80c55c0a1e51
+checksum: 629ffdb06378ee52c5e906a11c79d98c4159c534f5044fbe2d6b783ffdff5038
 created: 2026-06-16
 last_updated: 2026-11-11
 ---
@@ -143,7 +143,7 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
 | `pageSize`        | `number`   | `10`                | false    | Rows per page (data-driven mode). Supports `v-model:page-size`.                                   |
 | `pageSizeOptions` | `number[]` | `[10, 25, 50, 100]` | false    | Page-size options offered in the rows-per-page selector.                                          |
 | `siblingCount`    | `number`   | `1`                 | false    | Page numbers shown on each side of the current page before collapsing into an overflow ellipsis.  |
-| `ariaLabel`       | `string`   | `'Pagination'`      | false    | Accessible name for the navigation landmark.                                                      |
+| `ariaLabel`       | `string`   | `''`                | false    | Accessible name for the navigation landmark. Empty uses the locale catalog (`Pagination`).        |
 
 ## Events
 

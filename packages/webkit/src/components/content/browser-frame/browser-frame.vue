@@ -3,6 +3,8 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import { useFrameDocument } from './composables/use-frame-document'
 
@@ -23,11 +25,11 @@
     maxHeight?: number
     /** Accessible name of the viewport; when empty it falls back to `address`, then to `Preview`. */
     ariaLabel?: string
-    /** Accessible name of the address bar's copy button. */
+    /** Accessible name of the address bar's copy button. Empty uses the locale catalog (`Copy address`). */
     copyAriaLabel?: string
-    /** Accessible name of the right-edge width handle. */
+    /** Accessible name of the right-edge width handle. Empty uses the locale catalog (`Resize preview width`). */
     widthHandleAriaLabel?: string
-    /** Accessible name of the bottom-edge height handle. */
+    /** Accessible name of the bottom-edge height handle. Empty uses the locale catalog (`Resize preview height`). */
     heightHandleAriaLabel?: string
   }
 
@@ -38,9 +40,9 @@
     minHeight: 320,
     maxHeight: 1440,
     ariaLabel: '',
-    copyAriaLabel: 'Copy address',
-    widthHandleAriaLabel: 'Resize preview width',
-    heightHandleAriaLabel: 'Resize preview height'
+    copyAriaLabel: '',
+    widthHandleAriaLabel: '',
+    heightHandleAriaLabel: ''
   })
 
   /** Simulated viewport width in pixels; undefined fills the container. */
@@ -56,6 +58,7 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
+  const { t } = useLocale({ browserFrame: en.browserFrame })
   const sizerRef = ref<globalThis.HTMLElement | null>(null)
   const iframeRef = ref<globalThis.HTMLIFrameElement | null>(null)
   const { width: containerWidth } = useElementSize(sizerRef)
@@ -100,7 +103,7 @@
 
   const heightValueNow = computed(() => clamp(heightNow.value, props.minHeight, props.maxHeight))
 
-  const frameTitle = computed(() => props.ariaLabel || props.address || 'Preview')
+  const frameTitle = computed(() => props.ariaLabel || props.address || t('browserFrame.preview'))
 
   const addressHead = computed(() => props.address.slice(0, -12))
 
@@ -231,7 +234,7 @@
               :value="address"
               kind="transparent"
               size="small"
-              :ariaLabel="copyAriaLabel"
+              :ariaLabel="copyAriaLabel || t('browserFrame.copyAddress')"
               :data-testid="`${testId}__copy`"
             />
           </span>
@@ -266,9 +269,9 @@
         :aria-valuenow="widthValueNow"
         :aria-valuemin="minWidth"
         :aria-valuemax="maxWidth"
-        :aria-valuetext="`${widthValueNow} pixels wide`"
+        :aria-valuetext="t('browserFrame.widthValue', { value: String(widthValueNow) })"
         :aria-controls="viewportId"
-        :aria-label="widthHandleAriaLabel"
+        :aria-label="widthHandleAriaLabel || t('browserFrame.resizeWidth')"
         :data-testid="`${testId}__width-handle`"
         class="group/handle absolute inset-y-0 end-0 flex w-6 cursor-col-resize touch-none items-center justify-center rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         @keydown="onWidthKeydown"
@@ -291,9 +294,9 @@
         :aria-valuenow="heightValueNow"
         :aria-valuemin="minHeight"
         :aria-valuemax="maxHeight"
-        :aria-valuetext="`${heightValueNow} pixels tall`"
+        :aria-valuetext="t('browserFrame.heightValue', { value: String(heightValueNow) })"
         :aria-controls="viewportId"
-        :aria-label="heightHandleAriaLabel"
+        :aria-label="heightHandleAriaLabel || t('browserFrame.resizeHeight')"
         :data-testid="`${testId}__height-handle`"
         class="group/handle absolute inset-x-0 bottom-0 flex h-6 cursor-row-resize touch-none items-center justify-center rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         @keydown="onHeightKeydown"

@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
 
   defineOptions({
@@ -9,14 +11,14 @@
   })
 
   interface Props {
-    /** Accessible name for the complementary landmark the panel renders. */
+    /** Accessible name for the complementary landmark the panel renders. Empty uses the locale catalog (`Help`). */
     ariaLabel?: string
     /** Renders skeleton lines in place of the content while the help topic loads; sets aria-busy. */
     loading?: boolean
   }
 
   withDefaults(defineProps<Props>(), {
-    ariaLabel: 'Help',
+    ariaLabel: '',
     loading: false
   })
 
@@ -26,6 +28,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ helpPanel: en.helpPanel })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'content-help-panel'
@@ -35,7 +38,7 @@
 <template>
   <aside
     v-bind="$attrs"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || t('helpPanel.label')"
     :aria-busy="loading ? 'true' : undefined"
     :data-testid="testId"
     :data-loading="loading || null"

@@ -2,6 +2,8 @@
   import { computed, provide, useAttrs } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { PaginationInjectionKey } from './injection-key'
   import PaginationButton from './pagination-button/pagination-button.vue'
   import PaginationInfo from './pagination-info/pagination-info.vue'
@@ -25,7 +27,7 @@
     pageSizeOptions?: number[]
     /** Page numbers shown on each side of the current page before collapsing into an overflow ellipsis. */
     siblingCount?: number
-    /** Accessible name for the navigation landmark. */
+    /** Accessible name for the navigation landmark. Empty uses the locale catalog (`Pagination`). */
     ariaLabel?: string
   }
 
@@ -35,7 +37,7 @@
     pageSize: 10,
     pageSizeOptions: () => [10, 25, 50, 100],
     siblingCount: 1,
-    ariaLabel: 'Pagination'
+    ariaLabel: ''
   })
 
   const emit = defineEmits<{
@@ -51,6 +53,7 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
+  const { t } = useLocale({ pagination: en.pagination })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'data-pagination'
@@ -146,14 +149,14 @@
 <template>
   <nav
     v-bind="$attrs"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || t('pagination.label')"
     :data-testid="testId"
     class="@container/pagination flex w-full flex-wrap items-center justify-between gap-(--spacing-sm) text-(--text-default)"
   >
     <div class="flex min-w-0 items-center">
       <slot name="info">
         <PaginationInfo v-if="dataDriven">
-          Showing {{ rangeStart }} to {{ rangeEnd }} of {{ total }} entries
+          {{ t('pagination.info', { start: rangeStart, end: rangeEnd, total: total ?? 0 }) }}
         </PaginationInfo>
       </slot>
     </div>
@@ -165,7 +168,7 @@
         <template v-if="dataDriven">
           <PaginationButton
             kind="previous"
-            aria-label="Previous page"
+            :aria-label="t('pagination.previous')"
             :disabled="currentPage <= 1"
             @click="onPrevious"
           />
@@ -181,7 +184,7 @@
           </PaginationButton>
           <PaginationButton
             kind="next"
-            aria-label="Next page"
+            :aria-label="t('pagination.next')"
             :disabled="currentPage >= pageCount"
             @click="onNext"
           />

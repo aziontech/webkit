@@ -3,7 +3,7 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: approved
-checksum: 72bbe3a8d7433a44f114409ae3c1c630a4732de8b9cdfc4af20c258b93b97430
+checksum: 4f200bf9ecf2604887cd05c08d7605f2fdd4efd8c12779cd62a89069090ace27
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-11
@@ -63,22 +63,22 @@ A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per ser
 
 ## Props
 
-| Prop               | Type                             | Default               | Required | JSDoc                                                                                                                       |
-| ------------------ | -------------------------------- | --------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `series`           | `ChartSeries[]`                  | `[]`                  | false    | One slice per series; a slice is the sum of its values. The first six take the categorical slots, the rest fold into Other. |
-| `kind`             | `'donut' \| 'pie'`               | `'donut'`             | false    | Ring or solid disc.                                                                                                         |
-| `size`             | `'small' \| 'medium' \| 'large'` | `'medium'`            | false    | Diameter of the ring: 128, 176 or 240 pixels.                                                                               |
-| `cap`              | `number`                         | `6`                   | false    | Slices kept before the rest fold into Other.                                                                                |
-| `otherLabel`       | `string`                         | `'Other'`             | false    | Name of the folded slice.                                                                                                   |
-| `totalLabel`       | `string`                         | `'Total'`             | false    | Caption under the total in the center.                                                                                      |
-| `formatValue`      | `(value: number) => string`      | `formatCompact`       | false    | Formats the center value and legend values.                                                                                 |
-| `loading`          | `boolean`                        | `false`               | false    | Renders a circular Skeleton and suppresses interaction.                                                                     |
-| `refetching`       | `boolean`                        | `false`               | false    | Holds the previous render at reduced opacity while new data loads.                                                          |
-| `error`            | `string`                         | `''`                  | false    | Error message; when set, a danger Alert replaces the ring.                                                                  |
-| `emptyTitle`       | `string`                         | `'No data available'` | false    | Title of the empty state shown when every slice is zero.                                                                    |
-| `emptyDescription` | `string`                         | `''`                  | false    | Supporting line under the empty title: why the range is empty, or what to do next.                                          |
-| `tableView`        | `boolean`                        | `false`               | false    | Shows the data table in place of the ring. The table is always present for assistive tech.                                  |
-| `ariaLabel`        | `string`                         | `''`                  | false    | Accessible name of the chart.                                                                                               |
+| Prop               | Type                             | Default         | Required | JSDoc                                                                                                                       |
+| ------------------ | -------------------------------- | --------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `series`           | `ChartSeries[]`                  | `[]`            | false    | One slice per series; a slice is the sum of its values. The first six take the categorical slots, the rest fold into Other. |
+| `kind`             | `'donut' \| 'pie'`               | `'donut'`       | false    | Ring or solid disc.                                                                                                         |
+| `size`             | `'small' \| 'medium' \| 'large'` | `'medium'`      | false    | Diameter of the ring: 128, 176 or 240 pixels.                                                                               |
+| `cap`              | `number`                         | `6`             | false    | Slices kept before the rest fold into Other.                                                                                |
+| `otherLabel`       | `string`                         | `''`            | false    | Name of the folded slice. Empty uses the locale catalog (`Other`).                                                          |
+| `totalLabel`       | `string`                         | `''`            | false    | Caption under the total in the center. Empty uses the locale catalog (`Total`).                                             |
+| `formatValue`      | `(value: number) => string`      | `formatCompact` | false    | Formats the center value and legend values.                                                                                 |
+| `loading`          | `boolean`                        | `false`         | false    | Renders a circular Skeleton and suppresses interaction.                                                                     |
+| `refetching`       | `boolean`                        | `false`         | false    | Holds the previous render at reduced opacity while new data loads.                                                          |
+| `error`            | `string`                         | `''`            | false    | Error message; when set, a danger Alert replaces the ring.                                                                  |
+| `emptyTitle`       | `string`                         | `''`            | false    | Title of the empty state shown when every slice is zero. Empty uses the locale catalog (`No data available`).               |
+| `emptyDescription` | `string`                         | `''`            | false    | Supporting line under the empty title: why the range is empty, or what to do next.                                          |
+| `tableView`        | `boolean`                        | `false`         | false    | Shows the data table in place of the ring. The table is always present for assistive tech.                                  |
+| `ariaLabel`        | `string`                         | `''`            | false    | Accessible name of the chart.                                                                                               |
 
 ## v-model
 

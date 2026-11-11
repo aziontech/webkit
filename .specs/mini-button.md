@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3211-220
   node_id: 3211:220
-checksum: 23339548b9aa00b1b03c2a211881b3d1b8a0a69de8b663f49a861c3917db8d9c
+checksum: 5339c99be71775d87808244775268388692412f0846fb4408acbfdb0c747e6e9
 created: 2026-06-01
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Mini Button — Component Spec
@@ -59,15 +59,15 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 
 ## Props
 
-| Prop       | Type                  | Default                 | Required | JSDoc                                             |
-| ---------- | --------------------- | ----------------------- | -------- | ------------------------------------------------- |
-| `label`    | `string`              | `'Learn More'`          | false    | Visible label rendered inside the control.        |
-| `size`     | `'large' \| 'medium'` | `'large'`               | false    | Size token; affects height, gap, and typography.  |
-| `disabled` | `boolean`             | `false`                 | false    | Disables interaction and applies disabled tokens. |
-| `showIcon` | `boolean`             | `true`                  | false    | When true, renders the trailing icon.             |
-| `icon`     | `string`              | `'pi pi-external-link'` | false    | PrimeIcons class for the trailing icon.           |
-| `href`     | `string`              | `'#'`                   | false    | Destination URL for the anchor.                   |
-| `target`   | `'_blank' \| '_self'` | `'_self'`               | false    | Link target when navigating.                      |
+| Prop       | Type                  | Default                 | Required | JSDoc                                                                                    |
+| ---------- | --------------------- | ----------------------- | -------- | ---------------------------------------------------------------------------------------- |
+| `label`    | `string`              | `''`                    | false    | Visible label rendered inside the control. Empty uses the locale catalog (`Learn More`). |
+| `size`     | `'large' \| 'medium'` | `'large'`               | false    | Size token; affects height, gap, and typography.                                         |
+| `disabled` | `boolean`             | `false`                 | false    | Disables interaction and applies disabled tokens.                                        |
+| `showIcon` | `boolean`             | `true`                  | false    | When true, renders the trailing icon.                                                    |
+| `icon`     | `string`              | `'pi pi-external-link'` | false    | PrimeIcons class for the trailing icon.                                                  |
+| `href`     | `string`              | `'#'`                   | false    | Destination URL for the anchor.                                                          |
+| `target`   | `'_blank' \| '_self'` | `'_self'`               | false    | Link target when navigating.                                                             |
 
 ## Events
 

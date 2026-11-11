@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { useCommandMenuContext } from '../injection-key'
 
   defineOptions({
@@ -13,6 +15,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ command: en.command })
   const ctx = useCommandMenuContext()
 
   const testId = computed(
@@ -27,6 +30,6 @@
     :data-testid="testId"
     class="p-(--spacing-sm) text-label-sm text-(--text-muted)"
   >
-    <slot>No results found.</slot>
+    <slot>{{ t('command.empty') }}</slot>
   </div>
 </template>

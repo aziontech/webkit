@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 5f90d8ca88663312adfe8390950498a73c0c649206f23f28947e3e2cf00a1675
+checksum: 6e5ce66142dede7d738b6ac12e78cdd8f0bfc1dea2dc77bec9e52e335a99477e
 created: 2026-05-26
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Log View — Component Spec
@@ -48,22 +48,26 @@ Composition-based terminal log viewer for CI/deploy output. **LogView** is the r
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import LogView from '@aziontech/webkit/log-view'
-import LogViewHeader from '@aziontech/webkit/log-view-header'
-import LogViewContent from '@aziontech/webkit/log-view-content'
+  import { ref } from 'vue'
+  import LogView from '@aziontech/webkit/log-view'
+  import LogViewHeader from '@aziontech/webkit/log-view-header'
+  import LogViewContent from '@aziontech/webkit/log-view-content'
 
-const lines = [
-  { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },
-  { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },
-  { id: '3', time: '13:47:42', type: 'warning', message: 'Bundle larger than recommended' }
-]
-const search = ref('')
-const warningsOnly = ref(false)
+  const lines = [
+    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },
+    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },
+    { id: '3', time: '13:47:42', type: 'warning', message: 'Bundle larger than recommended' }
+  ]
+  const search = ref('')
+  const warningsOnly = ref(false)
 </script>
 
 <template>
-  <LogView :lines="lines" v-model:search="search" v-model:warnings-only="warningsOnly">
+  <LogView
+    :lines="lines"
+    v-model:search="search"
+    v-model:warnings-only="warningsOnly"
+  >
     <LogViewHeader />
     <LogViewContent />
   </LogView>
@@ -80,49 +84,49 @@ LogView ships flat, individually importable sub-components (each from its own `@
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `lines` | `LogViewLine[]` | `[]` | false | Log entries; filtered in LogViewContent by search and warnings-only. |
-| `bordered` | `boolean` | `true` | false | Draw the outer card border and corner radius around the log shell. On by default; set `:bordered="false"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected. |
-| `searchPlaceholder` | `string` | `'Find in Logs'` | false | Placeholder for the default header search field. |
-| `copyable` | `boolean` | `true` | false | Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent). |
-| `disabled` | `boolean` | `false` | false | Disables toolbar controls in LogViewHeader. |
-| `loading` | `boolean` | `false` | false | Replaces the LogViewContent log body with a centered spinner and label. |
-| `loadingLabel` | `string` | `'Loading...'` | false | Label shown beneath the spinner while `loading`. |
+| Prop                | Type            | Default | Required | JSDoc                                                                                                                                                                                                                                                               |
+| ------------------- | --------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lines`             | `LogViewLine[]` | `[]`    | false    | Log entries; filtered in LogViewContent by search and warnings-only.                                                                                                                                                                                                |
+| `bordered`          | `boolean`       | `true`  | false    | Draw the outer card border and corner radius around the log shell. On by default; set `:bordered="false"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected. |
+| `searchPlaceholder` | `string`        | `''`    | false    | Placeholder for the default header search field. Empty uses the locale catalog (`Find in Logs`).                                                                                                                                                                    |
+| `copyable`          | `boolean`       | `true`  | false    | Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent).                                                                                                                                                         |
+| `disabled`          | `boolean`       | `false` | false    | Disables toolbar controls in LogViewHeader.                                                                                                                                                                                                                         |
+| `loading`           | `boolean`       | `false` | false    | Replaces the LogViewContent log body with a centered spinner and label.                                                                                                                                                                                             |
+| `loadingLabel`      | `string`        | `''`    | false    | Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading...`).                                                                                                                                                                      |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model:search` | `string` | `''` | `update:search` | Two-way search query; filters LogViewContent and highlights matches. |
-| `v-model:warnings-only` | `boolean` | `false` | `update:warningsOnly` | When true, shows only lines whose `type` is `warning`. |
+| Model                   | Type      | Default | Emits                 | Notes                                                                |
+| ----------------------- | --------- | ------- | --------------------- | -------------------------------------------------------------------- |
+| `v-model:search`        | `string`  | `''`    | `update:search`       | Two-way search query; filters LogViewContent and highlights matches. |
+| `v-model:warnings-only` | `boolean` | `false` | `update:warningsOnly` | When true, shows only lines whose `type` is `warning`.               |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event  | Payload  | Notes                                                            |
+| ------ | -------- | ---------------------------------------------------------------- |
 | `copy` | `string` | Fires after a successful copy; payload is the copied plain text. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Sub-components (LogViewHeader, LogViewContent, LogViewFooter) composed in the desired order. |
+| Slot      | Scope | Notes                                                                                        |
+| --------- | ----- | -------------------------------------------------------------------------------------------- |
+| `default` | —     | Sub-components (LogViewHeader, LogViewContent, LogViewFooter) composed in the desired order. |
 
 ## Data types
 
 `LogViewLine` (exported from `injection-key.ts`):
 
-| Field | Type | Notes |
-|---|---|---|
-| `id` | `string` | Stable row key. |
-| `time` | `string` | Timestamp label. |
-| `type` | `'text' \| 'folder' \| 'framework-version' \| 'success' \| 'warning'` | Log line variant. |
-| `message` | `string` | Primary log text. |
-| `folderType` | `string` | Optional filename highlight for `folder`. |
-| `size` | `string` | Optional raw size for `folder`. |
-| `gzipSize` | `string` | Optional gzip size for `folder`. |
-| `suffix` | `string` | Optional highlight for `framework-version`. |
+| Field        | Type                                                                  | Notes                                       |
+| ------------ | --------------------------------------------------------------------- | ------------------------------------------- |
+| `id`         | `string`                                                              | Stable row key.                             |
+| `time`       | `string`                                                              | Timestamp label.                            |
+| `type`       | `'text' \| 'folder' \| 'framework-version' \| 'success' \| 'warning'` | Log line variant.                           |
+| `message`    | `string`                                                              | Primary log text.                           |
+| `folderType` | `string`                                                              | Optional filename highlight for `folder`.   |
+| `size`       | `string`                                                              | Optional raw size for `folder`.             |
+| `gzipSize`   | `string`                                                              | Optional gzip size for `folder`.            |
+| `suffix`     | `string`                                                              | Optional highlight for `framework-version`. |
 
 ## States
 
@@ -133,31 +137,31 @@ LogView ships flat, individually importable sub-components (each from its own `@
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| log line hover (LogViewContent) | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                         | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| log line hover (LogViewContent) | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (header label) | `.text-label-code-sm` |
-| typography (log lines) | `.text-label-code-sm` |
-| surface (header/footer) | `var(--bg-surface)` |
-| surface (log canvas) | `var(--bg-canvas)` |
-| surface (line hover) | `var(--bg-surface-raised)` |
-| text (default line) | `var(--text-default)` |
-| text (timestamp) | `var(--text-muted)` |
-| text (warning line) | `var(--warning-contrast)` |
-| text (success line) | `var(--success-contrast)` |
-| border (outer card, `bordered` prop) | `var(--border-muted)` |
-| shape (outer card, `bordered` prop) | `var(--shape-elements)` |
-| spacing (loading block, vertical) | `var(--spacing-xl)` |
-| ring | `var(--ring-color)` |
+| Region                               | Token (DESIGN.md)          |
+| ------------------------------------ | -------------------------- |
+| typography (header label)            | `.text-label-code-sm`      |
+| typography (log lines)               | `.text-label-code-sm`      |
+| surface (header/footer)              | `var(--bg-surface)`        |
+| surface (log canvas)                 | `var(--bg-canvas)`         |
+| surface (line hover)                 | `var(--bg-surface-raised)` |
+| text (default line)                  | `var(--text-default)`      |
+| text (timestamp)                     | `var(--text-muted)`        |
+| text (warning line)                  | `var(--warning-contrast)`  |
+| text (success line)                  | `var(--success-contrast)`  |
+| border (outer card, `bordered` prop) | `var(--border-muted)`      |
+| shape (outer card, `bordered` prop)  | `var(--shape-elements)`    |
+| spacing (loading block, vertical)    | `var(--spacing-xl)`        |
+| ring                                 | `var(--ring-color)`        |
 
 **The root sizes to its content, not to its parent.** It takes `h-fit` alongside `min-h-0`, so a
 short log occupies the height of the lines it has instead of stretching to fill a flex or grid
-parent and leaving the canvas empty below the last line. A host that *wants* the full height gives
+parent and leaving the canvas empty below the last line. A host that _wants_ the full height gives
 the root its own `class="h-full"` — that is the consumer's call to make, and `$attrs` carries it.
 
 The **loading** state has no lines to give it height, so it carries `py-(--spacing-xl)` of its
@@ -167,8 +171,8 @@ the height of a single row the moment the root stopped stretching.
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

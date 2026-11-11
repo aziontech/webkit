@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: e353034727fab40d918faaeb9056cd2c3949314a3c7033458392c7df937545b8
+checksum: 147e96dbd6c01907e9442c025469aaa7b71601f1ebd30e23ebacff951c4e3a62
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Sidebar — Component Spec
@@ -346,16 +346,16 @@ between them is the ring-offset surface below.
 
 ## Props
 
-| Prop                | Type      | Default              | Required | JSDoc                                                                                                          |
-| ------------------- | --------- | -------------------- | -------- | -------------------------------------------------------------------------------------------------------------- |
-| `ariaLabel`         | `string`  | `'Sidebar'`          | false    | Accessible name for the navigation landmark.                                                                   |
-| `resizable`         | `boolean` | `false`              | false    | Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail.                       |
-| `collapsible`       | `boolean` | `false`              | false    | Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back. |
-| `minWidthToken`     | `string`  | `'--container-3xs'`  | false    | Theme container token the sized width is clamped up to, read off the document at runtime.                      |
-| `maxWidthToken`     | `string`  | `'--container-sm'`   | false    | Theme container token the sized width is clamped down to, read off the document at runtime.                    |
-| `collapseAriaLabel` | `string`  | `'Collapse sidebar'` | false    | Accessible name for the collapse trigger.                                                                      |
-| `expandAriaLabel`   | `string`  | `'Expand sidebar'`   | false    | Accessible name for the control and the grab bar that bring a collapsed rail back.                             |
-| `resizeAriaLabel`   | `string`  | `'Resize sidebar'`   | false    | Accessible name for the drag handle separator.                                                                 |
+| Prop                | Type      | Default             | Required | JSDoc                                                                                                                                |
+| ------------------- | --------- | ------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ariaLabel`         | `string`  | `''`                | false    | Accessible name for the navigation landmark. Empty uses the locale catalog (`Sidebar`).                                              |
+| `resizable`         | `boolean` | `false`             | false    | Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail.                                             |
+| `collapsible`       | `boolean` | `false`             | false    | Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back.                       |
+| `minWidthToken`     | `string`  | `'--container-3xs'` | false    | Theme container token the sized width is clamped up to, read off the document at runtime.                                            |
+| `maxWidthToken`     | `string`  | `'--container-sm'`  | false    | Theme container token the sized width is clamped down to, read off the document at runtime.                                          |
+| `collapseAriaLabel` | `string`  | `''`                | false    | Accessible name for the collapse trigger. Empty uses the locale catalog (`Collapse sidebar`).                                        |
+| `expandAriaLabel`   | `string`  | `''`                | false    | Accessible name for the control and the grab bar that bring a collapsed rail back. Empty uses the locale catalog (`Expand sidebar`). |
+| `resizeAriaLabel`   | `string`  | `''`                | false    | Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`).                                     |
 
 The root also owns two models:
 

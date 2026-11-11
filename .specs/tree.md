@@ -3,10 +3,10 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: d64aa8f1c3d6858c3c901fb3b8150d844b1addfb59cabb2b8300d3a05fb46308
+checksum: 17f16c92164e74bbcc1a43f62257d47dc6f8738d09e9cd11c9c581c7f0737ffd
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Tree — Component Spec
@@ -48,28 +48,30 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import Tree from '@aziontech/webkit/tree'
+  import { ref } from 'vue'
+  import Tree from '@aziontech/webkit/tree'
 
-const expanded = ref(['assets'])
-const items = [
-  {
-    id: 'assets',
-    label: 'assets',
-    icon: 'pi pi-folder',
-    children: [
-      { id: 'assets/logo.svg', label: 'logo.svg', icon: 'pi pi-image', description: '4.2 KB' },
-      { id: 'assets/hero.webp', label: 'hero.webp', icon: 'pi pi-image', description: '182 KB' }
-    ]
-  },
-  {
-    id: 'src',
-    label: 'src',
-    icon: 'pi pi-folder',
-    children: [{ id: 'src/index.js', label: 'index.js', icon: 'pi pi-file', description: '1.1 KB' }]
-  },
-  { id: 'azion.config.js', label: 'azion.config.js', icon: 'pi pi-file', description: '612 B' }
-]
+  const expanded = ref(['assets'])
+  const items = [
+    {
+      id: 'assets',
+      label: 'assets',
+      icon: 'pi pi-folder',
+      children: [
+        { id: 'assets/logo.svg', label: 'logo.svg', icon: 'pi pi-image', description: '4.2 KB' },
+        { id: 'assets/hero.webp', label: 'hero.webp', icon: 'pi pi-image', description: '182 KB' }
+      ]
+    },
+    {
+      id: 'src',
+      label: 'src',
+      icon: 'pi pi-folder',
+      children: [
+        { id: 'src/index.js', label: 'index.js', icon: 'pi pi-file', description: '1.1 KB' }
+      ]
+    },
+    { id: 'azion.config.js', label: 'azion.config.js', icon: 'pi pi-file', description: '612 B' }
+  ]
 </script>
 
 <template>
@@ -83,37 +85,37 @@ const items = [
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `TreeItem[]` | `[]` | false | Nodes to render; each is `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[] }`. A node with a non-empty `children` array is a parent. |
-| `selectable` | `boolean` | `false` | false | Enables single selection: activating a node writes its id to `v-model:selected` and marks it `aria-selected`. |
-| `loading` | `boolean` | `false` | false | Renders Skeleton rows in place of the tree and sets `aria-busy`. |
-| `emptyTitle` | `string` | `'No items'` | false | Title of the default empty state shown when `items` is empty. |
-| `emptyDescription` | `string` | `''` | false | Supporting line under the empty title. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the tree. |
+| Prop               | Type         | Default | Required | JSDoc                                                                                                                                                                                           |
+| ------------------ | ------------ | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`            | `TreeItem[]` | `[]`    | false    | Nodes to render; each is `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[] }`. A node with a non-empty `children` array is a parent. |
+| `selectable`       | `boolean`    | `false` | false    | Enables single selection: activating a node writes its id to `v-model:selected` and marks it `aria-selected`.                                                                                   |
+| `loading`          | `boolean`    | `false` | false    | Renders Skeleton rows in place of the tree and sets `aria-busy`.                                                                                                                                |
+| `emptyTitle`       | `string`     | `''`    | false    | Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`).                                                                                       |
+| `emptyDescription` | `string`     | `''`    | false    | Supporting line under the empty title.                                                                                                                                                          |
+| `ariaLabel`        | `string`     | `''`    | false    | Accessible name of the tree.                                                                                                                                                                    |
 
 Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[] }`. `icon` is an icon class string (`pi pi-folder`, `ai ai-…`), the same convention `empty-state` uses.
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model:expanded` | `string[]` | `[]` | `update:expanded` | Ids of the expanded parents, via `defineModel<string[]>('expanded', { default: () => [] })`. Uncontrolled when unbound. Ids of leaves or of unknown nodes are ignored. Collapsing a parent removes only its own id: descendants keep theirs, so re-expanding restores the subtree as it was. Always emits a new array. |
-| `v-model:selected` | `string` | `''` | `update:selected` | Id of the selected node, via `defineModel<string>('selected', { default: '' })`. Written only while `selectable`; read only while `selectable` (otherwise no node is marked selected). `''` means nothing is selected. Emits only when the id changes. Single selection only; activating the selected node again does not clear it. |
+| Model              | Type       | Default | Emits             | Notes                                                                                                                                                                                                                                                                                                                               |
+| ------------------ | ---------- | ------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:expanded` | `string[]` | `[]`    | `update:expanded` | Ids of the expanded parents, via `defineModel<string[]>('expanded', { default: () => [] })`. Uncontrolled when unbound. Ids of leaves or of unknown nodes are ignored. Collapsing a parent removes only its own id: descendants keep theirs, so re-expanding restores the subtree as it was. Always emits a new array.              |
+| `v-model:selected` | `string`   | `''`    | `update:selected` | Id of the selected node, via `defineModel<string>('selected', { default: '' })`. Written only while `selectable`; read only while `selectable` (otherwise no node is marked selected). `''` means nothing is selected. Emits only when the id changes. Single selection only; activating the selected node again does not clear it. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event        | Payload                                                | Notes                                                                                                                                                                                                                                                                |
+| ------------ | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `item-click` | `(event: MouseEvent \| KeyboardEvent, item: TreeItem)` | A node activated: click on its row, or Enter / Space on the focused node. `item` is the consumer's own node object. Fires after `update:selected` when `selectable`. Not fired for a `disabled` node, nor for a click on the chevron or inside the `actions` region. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `item` | `{ item: TreeItem; level: number; expanded: boolean }` | Replaces the label region of every row (glyph + label + description). The fallback inside the slot renders `item.icon`, `item.label` and `item.description`. `level` is 1 for top-level nodes; `expanded` is false for leaves. The chevron, indentation, row states and the `actions` region stay owned by the tree. |
-| `actions` | `{ item: TreeItem; level: number }` | Trailing per-row controls, end-aligned in the row (e.g. an `IconButton` that opens a `dropdown`). Clicks and keys inside it do not activate the row nor move tree focus. No fallback; when unused, the region is not rendered. |
-| `empty` | — | Replaces the default empty state. The fallback inside the slot is `EmptyState` titled by `emptyTitle` with `emptyDescription`. |
+| Slot      | Scope                                                  | Notes                                                                                                                                                                                                                                                                                                                |
+| --------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `item`    | `{ item: TreeItem; level: number; expanded: boolean }` | Replaces the label region of every row (glyph + label + description). The fallback inside the slot renders `item.icon`, `item.label` and `item.description`. `level` is 1 for top-level nodes; `expanded` is false for leaves. The chevron, indentation, row states and the `actions` region stay owned by the tree. |
+| `actions` | `{ item: TreeItem; level: number }`                    | Trailing per-row controls, end-aligned in the row (e.g. an `IconButton` that opens a `dropdown`). Clicks and keys inside it do not activate the row nor move tree focus. No fallback; when unused, the region is not rendered.                                                                                       |
+| `empty`   | —                                                      | Replaces the default empty state. The fallback inside the slot is `EmptyState` titled by `emptyTitle` with `emptyDescription`.                                                                                                                                                                                       |
 
 ## States
 
@@ -130,39 +132,39 @@ Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: 
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| parent expand / collapse (chevron) | `transition-[rotate] duration-fast-02 ease-productive-entrance` + `data-[state=open]:rotate-90` on the chevron glyph | `fast-02` · `productive-entrance` | `motion-reduce:transition-none` |
-| row hover | ghost layer `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` + `hover:before:opacity-100` | `fast-02` · `productive-entrance` | `motion-reduce:before:transition-none` |
-| row selected change | `transition-colors duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance` | `motion-reduce:transition-none` |
+| Trigger                            | Animation / Transition                                                                                                       | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
+| parent expand / collapse (chevron) | `transition-[rotate] duration-fast-02 ease-productive-entrance` + `data-[state=open]:rotate-90` on the chevron glyph         | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none`        |
+| row hover                          | ghost layer `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` + `hover:before:opacity-100` | `fast-02` · `productive-entrance`                 | `motion-reduce:before:transition-none` |
+| row selected change                | `transition-colors duration-fast-02 ease-productive-entrance`                                                                | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none`        |
 
 The chevron transition names `rotate`, not `transform`: Tailwind v4 compiles `rotate-90` to the standalone `rotate` property (see `.claude/rules/styling.md` § Transitioning a transform). The children group appears and disappears instantly; no height reveal in v1 (see Open questions). The loading shimmer belongs to the composed `Skeleton`, which already suppresses it under reduced motion; Tree adds no animation for it.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| label | `.text-label-md`, `var(--text-default)` |
-| description | `.text-label-sm`, `var(--text-muted)` |
-| glyph (item icon) and chevron | `var(--text-muted)` |
-| disabled label, description, glyph | `var(--text-disabled)` |
-| row hover (ghost layer) | `var(--bg-hover)` |
-| row active (ghost layer) | `var(--bg-active)` |
-| row selected | `var(--bg-selected)` |
-| row shape | `var(--shape-elements)` |
-| row padding-x, gap between chevron / glyph / label | `var(--spacing-xs)` |
-| gap between label and description | `var(--spacing-xxs)` |
+| Region                                                            | Token (DESIGN.md)                          |
+| ----------------------------------------------------------------- | ------------------------------------------ |
+| label                                                             | `.text-label-md`, `var(--text-default)`    |
+| description                                                       | `.text-label-sm`, `var(--text-muted)`      |
+| glyph (item icon) and chevron                                     | `var(--text-muted)`                        |
+| disabled label, description, glyph                                | `var(--text-disabled)`                     |
+| row hover (ghost layer)                                           | `var(--bg-hover)`                          |
+| row active (ghost layer)                                          | `var(--bg-active)`                         |
+| row selected                                                      | `var(--bg-selected)`                       |
+| row shape                                                         | `var(--shape-elements)`                    |
+| row padding-x, gap between chevron / glyph / label                | `var(--spacing-xs)`                        |
+| gap between label and description                                 | `var(--spacing-xxs)`                       |
 | indentation per level (nested group margin-start + padding-start) | `var(--spacing-sm)` + `var(--spacing-xxs)` |
-| indent guide line (nested group border-start) | `var(--border-muted)` |
-| focus ring / ring offset | `var(--ring-color)` / `var(--bg-canvas)` |
+| indent guide line (nested group border-start)                     | `var(--border-muted)`                      |
+| focus ring / ring offset                                          | `var(--ring-color)` / `var(--bg-canvas)`   |
 
 Layout: each row is `min-h-8` (32px), full width of its group. The chevron and the glyph each sit in a 1rem box; a leaf reserves the chevron box empty so labels align across siblings. Each nested `role="group"` is indented by `ms-(--spacing-sm)` + `ps-(--spacing-xxs)`, which puts its hairline guide (`border-s`, `var(--border-muted)`) under the center of the parent's chevron and steps every level by 1rem; indentation accumulates through nesting, so no per-level arithmetic or inline style is needed. Label and description truncate with an ellipsis on one line.
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

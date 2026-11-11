@@ -11,6 +11,8 @@
   } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { getSegmentedButtonIndicatorTransitionStyle } from './presets/transitions'
 
@@ -52,6 +54,7 @@
   const model = defineModel<string | undefined>({ default: undefined })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ toggleGroup: en.toggleGroup })
   const rootRef = ref<HTMLElement | null>(null)
   const dir = useDirection(rootRef)
   const optionRefs = ref<HTMLElement[]>([])
@@ -74,7 +77,9 @@
         Boolean(option && typeof option === 'object')
       )
       .map((option, index) => ({
-        label: String(option.label ?? option.value ?? `Option ${index + 1}`),
+        label: String(
+          option.label ?? option.value ?? t('toggleGroup.option', { index: index + 1 })
+        ),
         value: String(option.value ?? option.label ?? index),
         disabled: Boolean(option.disabled)
       }))

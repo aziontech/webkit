@@ -2,21 +2,24 @@
   import { computed, useAttrs } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { useChartCardContext } from '../composables/use-chart-card-context'
   import type { ChartCardMoveDirection } from '../injection-key'
 
   defineOptions({ name: 'ChartCardDragHandle', inheritAttrs: false })
 
   interface Props {
-    /** Accessible name of the handle. */
+    /** Accessible name of the handle. Empty uses the locale catalog (`Move card`). */
     ariaLabel?: string
   }
 
   withDefaults(defineProps<Props>(), {
-    ariaLabel: 'Move card'
+    ariaLabel: ''
   })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ chartCard: en.chartCard })
   const ctx = useChartCardContext()
   const dir = useDirection()
 
@@ -44,7 +47,7 @@
     v-if="ctx.draggable.value"
     v-bind="$attrs"
     type="button"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || t('chartCard.move')"
     :data-testid="testId"
     class="-ms-(--spacing-xxs) inline-flex size-6 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing"
     @pointerdown="ctx.armDrag()"

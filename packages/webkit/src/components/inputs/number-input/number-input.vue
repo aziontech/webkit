@@ -2,6 +2,8 @@
   import { computed, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { PASSWORD_MANAGER_IGNORE } from '../../../utils/autofill'
 
   export type NumberInputSize = 'small' | 'medium' | 'large'
@@ -61,6 +63,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ numberInput: en.numberInput })
 
   const {
     controlId,
@@ -192,7 +195,7 @@
       <button
         type="button"
         tabindex="-1"
-        aria-label="Increment"
+        :aria-label="t('numberInput.increment')"
         :disabled="isDisabled || readonly"
         class="flex flex-1 items-center justify-center border-b border-(--border-default) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @click="handleIncrement"
@@ -205,7 +208,7 @@
       <button
         type="button"
         tabindex="-1"
-        aria-label="Decrement"
+        :aria-label="t('numberInput.decrement')"
         :disabled="isDisabled || readonly"
         class="flex flex-1 items-center justify-center text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @click="handleDecrement"

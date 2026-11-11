@@ -2,6 +2,8 @@
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
@@ -15,28 +17,29 @@
   interface Props {
     /** Disables the whole control and applies disabled tokens. */
     disabled?: boolean
-    /** Accessible name for the icon-only segmented group. */
+    /** Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`). */
     ariaLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     disabled: false,
-    ariaLabel: 'Theme'
+    ariaLabel: ''
   })
 
   const model = defineModel<ThemeSwitcherValue>({ default: 'system' })
 
   const attrs = useAttrs()
   const dir = useDirection()
+  const { t } = useLocale({ themeSwitcher: en.themeSwitcher })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-theme-switcher'
   )
 
   const MODES = [
-    { value: 'system', icon: 'pi pi-desktop', label: 'System' },
-    { value: 'dark', icon: 'pi pi-moon', label: 'Dark' },
-    { value: 'light', icon: 'pi pi-sun', label: 'Light' }
+    { value: 'system', icon: 'pi pi-desktop', key: 'themeSwitcher.system' },
+    { value: 'dark', icon: 'pi pi-moon', key: 'themeSwitcher.dark' },
+    { value: 'light', icon: 'pi pi-sun', key: 'themeSwitcher.light' }
   ] as const
 
   const rootRef = ref<globalThis.HTMLElement | null>(null)
@@ -151,7 +154,7 @@
     ref="rootRef"
     v-bind="$attrs"
     role="radiogroup"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || t('themeSwitcher.label')"
     :aria-disabled="disabled || undefined"
     :data-disabled="disabled || undefined"
     :data-testid="testId"
@@ -170,7 +173,7 @@
     <Tooltip
       v-for="(mode, index) in MODES"
       :key="mode.value"
-      :text="mode.label"
+      :text="t(mode.key)"
       placement="bottom"
     >
       <button
@@ -178,7 +181,7 @@
         type="button"
         role="radio"
         :aria-checked="mode.value === model"
-        :aria-label="mode.label"
+        :aria-label="t(mode.key)"
         :data-state="mode.value === model ? 'active' : 'inactive'"
         :tabindex="mode.value === model ? 0 : -1"
         :disabled="disabled"

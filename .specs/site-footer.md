@@ -5,9 +5,10 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: bec7eb932c25838565c15b94b8681c9eaa9ef92a2ce3214f53ed350bd8b4b7a7
+last_updated: 2026-11-11
+checksum: 5a1d0169a1d3c983b23e8050d84b77017e1c126df60120e670e465af6c6064ba
 ---
+
 # SiteFooter — Component Spec
 
 ## Purpose
@@ -38,7 +39,7 @@ The footer under every marketing page: the link columns, then the social row bes
 
 ```vue
 <script setup>
-import SiteFooter from '@aziontech/webkit/site-footer'
+  import SiteFooter from '@aziontech/webkit/site-footer'
 </script>
 
 <template>
@@ -46,7 +47,9 @@ import SiteFooter from '@aziontech/webkit/site-footer'
     kind="site"
     home="/"
     :columns="[{ title: 'Products', links: [{ label: 'Functions', href: '/products/functions' }] }]"
-    :socials="[{ icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }]"
+    :socials="[
+      { icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
+    ]"
     status-label="All Systems Operational"
     :languages="['EN', 'PT-BR', 'ES']"
   />
@@ -55,17 +58,17 @@ import SiteFooter from '@aziontech/webkit/site-footer'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `SiteFooterKind` | `'site'` | false | Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed. |
-| `ariaLabel` | `string` | `'Footer'` | false | Accessible name of the footer landmark. |
-| `home` | `string` | `''` | false | Destination of the Azion mark; the mark is not rendered when empty. |
-| `homeAriaLabel` | `string` | `'Azion home'` | false | Accessible name of the Azion mark link. |
-| `columns` | `SiteFooterColumn[]` | `[]` | false | The link columns, in order; each is `{ title, links }` where every link is `{ label, href }`. |
-| `socials` | `SiteFooterSocial[]` | `[]` | false | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab. |
-| `statusLabel` | `string` | `''` | false | Line of the system status indicator; the indicator is not rendered when empty. |
-| `languages` | `string[]` | `[]` | false | Options of the language select, as the reader sees them; the first one is selected. The select is not rendered when empty. |
-| `languageAriaLabel` | `string` | `'Language'` | false | Accessible name of the language select, also its placeholder. |
+| Prop                | Type                 | Default  | Required | JSDoc                                                                                                                                          |
+| ------------------- | -------------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`              | `SiteFooterKind`     | `'site'` | false    | Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed.                         |
+| `ariaLabel`         | `string`             | `''`     | false    | Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`).                                                              |
+| `home`              | `string`             | `''`     | false    | Destination of the Azion mark; the mark is not rendered when empty.                                                                            |
+| `homeAriaLabel`     | `string`             | `''`     | false    | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`).                                                          |
+| `columns`           | `SiteFooterColumn[]` | `[]`     | false    | The link columns, in order; each is `{ title, links }` where every link is `{ label, href }`.                                                  |
+| `socials`           | `SiteFooterSocial[]` | `[]`     | false    | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab. |
+| `statusLabel`       | `string`             | `''`     | false    | Line of the system status indicator; the indicator is not rendered when empty.                                                                 |
+| `languages`         | `string[]`           | `[]`     | false    | Options of the language select, as the reader sees them; the first one is selected. The select is not rendered when empty.                     |
+| `languageAriaLabel` | `string`             | `''`     | false    | Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`).                                      |
 
 ## Events
 
@@ -84,24 +87,24 @@ import SiteFooter from '@aziontech/webkit/site-footer'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| Azion mark hover | `transition-opacity duration-fast-02 ease-productive-entrance` | semantic | `motion-reduce:transition-none` |
+| Trigger          | Animation / Transition                                         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ---------------- | -------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| Azion mark hover | `transition-opacity duration-fast-02 ease-productive-entrance` | semantic                                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| top hairline | `var(--border-default)` |
-| language glyph | `var(--text-muted)` |
+| Region          | Token (DESIGN.md)       |
+| --------------- | ----------------------- |
+| top hairline    | `var(--border-default)` |
+| language glyph  | `var(--text-muted)`     |
 | mark link shape | `var(--shape-elements)` |
-| mark gap | `var(--spacing-xs)` |
+| mark gap        | `var(--spacing-xs)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

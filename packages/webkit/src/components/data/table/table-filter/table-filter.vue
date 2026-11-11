@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import { type MessageKey, useLocale } from '../../../../composables/use-locale'
   import { usePlacement } from '../../../../composables/use-placement'
+  import * as en from '../../../../i18n/messages/en'
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Input from '../../../inputs/input/input.vue'
@@ -21,12 +23,12 @@
     defineProps<{
       /** Field catalog for the built-in builder (falls back to the table's `filterFields`). */
       fields?: FilterField[]
-      /** Popover heading. */
+      /** Popover heading. Empty uses the locale catalog (`Filters`). */
       title?: string
     }>(),
     {
       fields: () => [],
-      title: 'Filters'
+      title: ''
     }
   )
 
@@ -49,6 +51,8 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ tableFilter: en.tableFilter })
+  const heading = computed(() => props.title || t('tableFilter.title'))
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
@@ -106,21 +110,21 @@
     boolean: ['eq'],
     date: ['eq', 'gt', 'lt', 'gte', 'lte']
   }
-  const OPERATOR_LABELS: Record<FilterOperator, string> = {
-    eq: 'is',
-    neq: 'is not',
-    contains: 'contains',
-    'not-contains': 'does not contain',
-    'starts-with': 'starts with',
-    'ends-with': 'ends with',
-    gt: 'greater than',
-    gte: 'at least',
-    lt: 'less than',
-    lte: 'at most',
-    in: 'in',
-    'not-in': 'not in',
-    'is-empty': 'is empty',
-    'is-not-empty': 'is not empty'
+  const OPERATOR_KEYS: Record<FilterOperator, MessageKey> = {
+    eq: 'tableFilter.eq',
+    neq: 'tableFilter.neq',
+    contains: 'tableFilter.contains',
+    'not-contains': 'tableFilter.notContains',
+    'starts-with': 'tableFilter.startsWith',
+    'ends-with': 'tableFilter.endsWith',
+    gt: 'tableFilter.gt',
+    gte: 'tableFilter.gte',
+    lt: 'tableFilter.lt',
+    lte: 'tableFilter.lte',
+    in: 'tableFilter.in',
+    'not-in': 'tableFilter.notIn',
+    'is-empty': 'tableFilter.isEmpty',
+    'is-not-empty': 'tableFilter.isNotEmpty'
   }
   const NO_VALUE_OPERATORS: FilterOperator[] = ['is-empty', 'is-not-empty']
 
@@ -141,7 +145,8 @@
     selectedField.value?.type === 'select' ? (selectedField.value.options ?? []) : []
   )
   const needsValue = computed<boolean>(() => !NO_VALUE_OPERATORS.includes(draftOperator.value))
-  const operatorLabel = (operator: FilterOperator): string => OPERATOR_LABELS[operator] ?? operator
+  const operatorLabel = (operator: FilterOperator): string =>
+    OPERATOR_KEYS[operator] ? t(OPERATOR_KEYS[operator]) : operator
 
   const filterKey = (filter: AppliedFilter): string =>
     `${filter.field}|${filter.operator}|${JSON.stringify(filter.value)}`
@@ -214,7 +219,7 @@
         <IconButton
           :data-testid="testId"
           icon="pi pi-filter"
-          :ariaLabel="title"
+          :ariaLabel="heading"
           kind="outlined"
           size="medium"
           :aria-expanded="open"
@@ -232,12 +237,12 @@
           v-if="open"
           ref="panelRef"
           role="dialog"
-          :aria-label="title"
+          :aria-label="heading"
           :data-testid="`${testId}__panel`"
           :style="panelStyle"
           class="flex min-w-(--container-2xs) max-w-(--container-xs) flex-col gap-(--spacing-sm) overflow-y-auto rounded-(--shape-card) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
         >
-          <p class="text-label-md text-(--text-default)">{{ title }}</p>
+          <p class="text-label-md text-(--text-default)">{{ heading }}</p>
 
           <slot
             :fields="fields"
@@ -250,7 +255,7 @@
               <select
                 v-model="draftField"
                 :data-testid="`${testId}__field`"
-                aria-label="Field"
+                :aria-label="t('tableFilter.field')"
                 class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
               >
                 <option
@@ -265,7 +270,7 @@
               <select
                 :value="draftOperator"
                 :data-testid="`${testId}__operator`"
-                aria-label="Operator"
+                :aria-label="t('tableFilter.operator')"
                 :disabled="!draftField"
                 class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:cursor-not-allowed disabled:opacity-60"
                 @change="
@@ -286,7 +291,7 @@
                 v-if="needsValue && valueOptions.length > 0"
                 v-model="draftValue"
                 :data-testid="`${testId}__value`"
-                aria-label="Value"
+                :aria-label="t('tableFilter.value')"
                 class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
               >
                 <option
@@ -301,11 +306,11 @@
                 v-else-if="needsValue"
                 v-model="draftValue"
                 :data-testid="`${testId}__value`"
-                placeholder="Value"
+                :placeholder="t('tableFilter.value')"
               />
 
               <Button
-                label="Apply filter"
+                :label="t('tableFilter.apply')"
                 size="small"
                 :disabled="!draftField"
                 @click="commit"

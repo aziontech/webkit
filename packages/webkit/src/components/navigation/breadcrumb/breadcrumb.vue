@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { directionalIconClass } from '../../../utils/directional-icons'
   import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
@@ -40,6 +42,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ breadcrumb: en.breadcrumb })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb'
@@ -90,7 +93,7 @@
   <nav
     v-bind="attrs"
     :class="cn('inline-flex w-full min-w-0 items-center', attrs.class as string | undefined)"
-    aria-label="Breadcrumb"
+    :aria-label="t('breadcrumb.label')"
     :data-testid="testId"
   >
     <template v-if="items.length">
@@ -153,7 +156,7 @@
                 @select="onOverflowSelect"
               >
                 <DropdownMenu.Trigger
-                  aria-label="Show pages in between"
+                  :aria-label="t('breadcrumb.showHidden')"
                   :data-testid="`${testId}__overflow-trigger`"
                   class="h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-(--spacing-xs) text-button-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none"
                 >

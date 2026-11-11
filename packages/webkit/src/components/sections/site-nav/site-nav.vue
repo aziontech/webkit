@@ -10,6 +10,8 @@
     watch
   } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
@@ -111,6 +113,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ siteNav: en.siteNav })
 
   const navOpen = ref(false)
   const navPath = ref<string[]>([])
@@ -196,14 +199,14 @@
           icon="pi pi-bars"
           kind="outlined"
           size="medium"
-          ariaLabel="Open navigation"
+          :ariaLabel="t('siteNav.open')"
           class="shrink-0 xl:hidden"
           @click="navOpen = true"
         />
         <GlobalHeaderBrand>
           <a
             :href="home"
-            aria-label="Azion home"
+            :aria-label="t('siteNav.home')"
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
           >
             <Brand
@@ -339,7 +342,7 @@
           icon="pi pi-search"
           kind="outlined"
           size="medium"
-          ariaLabel="Search"
+          :ariaLabel="t('siteNav.search')"
           class="shrink-0"
         />
       </GlobalHeaderRight>
@@ -354,7 +357,7 @@
         <DrawerOverlay />
         <DrawerContent>
           <PanelHeader class="hidden w-full md:flex">
-            <DrawerTitle>Menu</DrawerTitle>
+            <DrawerTitle>{{ t('siteNav.menu') }}</DrawerTitle>
             <DrawerClose />
           </PanelHeader>
 

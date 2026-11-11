@@ -12,6 +12,8 @@
     watch
   } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -52,7 +54,7 @@
     max?: number
     /** Series kept before the rest fold into Other. */
     cap?: number
-    /** Name of the folded series. */
+    /** Name of the folded series. Empty uses the locale catalog (`Other`). */
     otherLabel?: string
     /** Formats ticks, tooltip values and legend totals. */
     formatValue?: (value: number) => string
@@ -66,7 +68,7 @@
     refetching?: boolean
     /** Error message; when set, the plot renders a danger Alert instead of marks. */
     error?: string
-    /** Title of the empty state shown when no series has a value. */
+    /** Title of the empty state shown when no series has a value. Empty uses the locale catalog (`No data available`). */
     emptyTitle?: string
     /** Supporting line under the empty title: why the range is empty, or what to do next. */
     emptyDescription?: string
@@ -83,14 +85,14 @@
     min: 0,
     max: undefined,
     cap: 6,
-    otherLabel: 'Other',
+    otherLabel: '',
     formatValue: formatCompact,
     formatLabel: formatCategoryLabel,
     height: 240,
     loading: false,
     refetching: false,
     error: '',
-    emptyTitle: 'No data available',
+    emptyTitle: '',
     emptyDescription: '',
     tableView: false,
     ariaLabel: ''
@@ -116,6 +118,15 @@
   }>()
 
   const attrs = useAttrs()
+  const { t, locale } = useLocale({ chart: en.chart })
+  const valueText = (value: number): string =>
+    props.formatValue === formatCompact
+      ? formatCompact(value, locale.value)
+      : props.formatValue(value)
+  const labelText = (label: ChartLabel): string =>
+    props.formatLabel === formatCategoryLabel
+      ? formatCategoryLabel(label, locale.value)
+      : props.formatLabel(label)
   const card = inject(ChartCardInjectionKey, null)
   const uid = useId()
   const reducedMotion = usePreferredReducedMotion()
@@ -138,7 +149,10 @@
 
   const vertical = computed(() => props.orientation === 'vertical')
   const series = computed(() =>
-    normalizeSeries(props.series, { cap: props.cap, otherLabel: props.otherLabel })
+    normalizeSeries(props.series, {
+      cap: props.cap,
+      otherLabel: props.otherLabel || t('chart.otherSeries')
+    })
   )
   const hidden = computed<ReadonlySet<string>>(() => new Set(hiddenSeries.value))
   const visibleSeries = computed(() => series.value.filter((entry) => !hidden.value.has(entry.id)))
@@ -191,13 +205,11 @@
     const hasX = axisKinds.value.has('x')
     const hasY = axisKinds.value.has('y')
     const valueWidth =
-      Math.max(1, ...valueTicks.value.map((tick) => props.formatValue(tick).length)) *
-        LABEL_CHAR_WIDTH +
+      Math.max(1, ...valueTicks.value.map((tick) => valueText(tick).length)) * LABEL_CHAR_WIDTH +
       LABEL_GUTTER
     const categoryWidth = Math.min(
       CATEGORY_LABEL_LIMIT,
-      Math.max(1, ...labels.value.map((label) => props.formatLabel(label).length)) *
-        LABEL_CHAR_WIDTH +
+      Math.max(1, ...labels.value.map((label) => labelText(label).length)) * LABEL_CHAR_WIDTH +
         LABEL_GUTTER
     )
     const labeled = markList.value.some((mark) => mark.labeled)
@@ -248,9 +260,13 @@
     const last = labels.value[labels.value.length - 1]
     const range =
       first !== undefined && last !== undefined
-        ? `, from ${props.formatLabel(first)} to ${props.formatLabel(last)}`
+        ? t('chart.summaryRange', { from: labelText(first), to: labelText(last) })
         : ''
-    return `${visibleSeries.value.length} series over ${count.value} points${range}.`
+    return t('chart.summary', {
+      series: visibleSeries.value.length,
+      points: count.value,
+      range
+    })
   })
 
   const pointAt = (index: number): ChartPoint => ({
@@ -268,14 +284,14 @@
     const readings = visibleSeries.value
       .map((entry) => {
         const value = entry.values[index]
-        return `${entry.name} ${isFiniteNumber(value) ? props.formatValue(value) : 'no data'}`
+        return `${entry.name} ${isFiniteNumber(value) ? valueText(value) : t('chart.noData')}`
       })
       .join(', ')
-    return `${label === undefined ? '' : props.formatLabel(label)}: ${readings}`
+    return `${label === undefined ? '' : labelText(label)}: ${readings}`
   })
 
   const formatCell = (value: number | null | undefined) =>
-    isFiniteNumber(value) ? props.formatValue(value) : ''
+    isFiniteNumber(value) ? valueText(value) : ''
 
   function cancelEnter() {
     if (frame) globalThis.cancelAnimationFrame(frame)
@@ -395,8 +411,8 @@
     activeIndex,
     emphasized,
     entered,
-    formatValue: (value: number) => props.formatValue(value),
-    formatLabel: (label: ChartLabel) => props.formatLabel(label),
+    formatValue: (value: number) => valueText(value),
+    formatLabel: (label: ChartLabel) => labelText(label),
     resolveSeries,
     setActiveIndex,
     setEmphasized,
@@ -449,7 +465,7 @@
     >
       <slot name="empty">
         <EmptyState
-          :title="emptyTitle"
+          :title="emptyTitle || t('chart.emptyTitle')"
           :description="emptyDescription"
           :icon="vertical ? 'pi pi-chart-line' : 'pi pi-chart-bar'"
           size="small"
@@ -484,7 +500,7 @@
               scope="col"
               class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-start text-label-sm text-(--text-muted)"
             >
-              Label
+              {{ t('chart.label') }}
             </th>
             <th
               v-for="entry in visibleSeries"
@@ -505,7 +521,7 @@
               scope="row"
               class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) text-start text-body-sm"
             >
-              {{ formatLabel(label) }}
+              {{ labelText(label) }}
             </th>
             <td
               v-for="entry in visibleSeries"
@@ -522,7 +538,7 @@
       <div
         ref="stageRef"
         role="group"
-        aria-roledescription="chart"
+        :aria-roledescription="t('chart.roleDescription')"
         tabindex="0"
         :aria-label="accessibleName"
         :aria-labelledby="labelledBy"
@@ -564,7 +580,7 @@
         </caption>
         <thead>
           <tr>
-            <th scope="col">Label</th>
+            <th scope="col">{{ t('chart.label') }}</th>
             <th
               v-for="entry in visibleSeries"
               :key="entry.id"
@@ -579,7 +595,7 @@
             v-for="(label, index) in labels"
             :key="index"
           >
-            <th scope="row">{{ formatLabel(label) }}</th>
+            <th scope="row">{{ labelText(label) }}</th>
             <td
               v-for="entry in visibleSeries"
               :key="entry.id"

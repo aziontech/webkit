@@ -3,7 +3,7 @@ name: chart-card
 category: chart
 structure: composition
 status: approved
-checksum: 03541e4c38db19616dd8c218a466f4964107e19c35cc7cf03c4f10caaa523b42
+checksum: 03f63275a9ddf8d9aaa6f2965b1c085d07f13598354f77064ea8c9f601bc5491
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-11
@@ -107,7 +107,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
   - Events: _none_.
   - Slots: `default` — the consumer's tags, buttons and dropdown.
 - `chart-card-drag-handle/chart-card-drag-handle.vue` — a grip button that arms native drag on the card while pressed; arrow keys emit the root's `move`. Renders nothing unless the root is `draggable`.
-  - Props: `ariaLabel?: string` (default `'Move card'`).
+  - Props: `ariaLabel?: string` (default `''`; empty uses the locale catalog, `Move card` in English).
   - Events: _none_ (flows through the root's `move`, `drag-start`, `drag-end`).
   - Slots: _none_.
 - `chart-card-content/chart-card-content.vue` — the body; fills the remaining height.
@@ -119,7 +119,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
   - Events: _none_.
   - Slots: `default` — period, source, or a link.
 - `chart-card-resize-handle/chart-card-resize-handle.vue` — the corner grip that resizes the card: pointer drag with pointer capture, arrow keys from the keyboard. A `role="separator"` with `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` naming columns and height. Renders nothing unless the root is `resizable`.
-  - Props: `ariaLabel?: string` (default `'Resize card'`).
+  - Props: `ariaLabel?: string` (default `''`; empty uses the locale catalog, `Resize card` in English).
   - Events: _none_ (flows through the root's `update:span`, `update:height`, `resize-start`, `resize-end`).
   - Slots: _none_.
 

@@ -13,6 +13,8 @@
   } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import {
     type MenuGroupNode,
@@ -44,7 +46,7 @@
     groups: () => [],
     activeId: '',
     enterOnMount: false,
-    ariaLabel: 'Menu'
+    ariaLabel: ''
   })
 
   const emit = defineEmits<{
@@ -63,12 +65,15 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
+  const { t } = useLocale({ menu: en.menu })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu')
   const role = computed(() => (attrs['role'] as string | undefined) ?? 'navigation')
 
   const ariaLabelAttr = computed(() =>
-    role.value === 'presentation' || role.value === 'none' ? undefined : props.ariaLabel
+    role.value === 'presentation' || role.value === 'none'
+      ? undefined
+      : props.ariaLabel || t('menu.label')
   )
 
   const hasGroups = computed(() => props.groups.length > 0)

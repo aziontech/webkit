@@ -2,7 +2,9 @@
   import { computed, provide, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
+  import { useLocale } from '../../../composables/use-locale'
   import { useSelectSearch } from '../../../composables/use-select-search'
+  import * as en from '../../../i18n/messages/en'
   import { fieldContextKey } from '../field/injection-key'
   import Input from '../input/input.vue'
   import InputGroup from '../input-group/input-group.vue'
@@ -60,9 +62,9 @@
     invalid?: boolean
     /** HTML name for the internal input (form + vee-validate integration). */
     name?: string
-    /** Placeholder of the search box that filters the dial-code list. */
+    /** Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). */
     searchPlaceholder?: string
-    /** Shown in the dial-code list when no country matches the search. */
+    /** Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found`). */
     searchEmptyLabel?: string
   }
 
@@ -75,8 +77,8 @@
     required: false,
     invalid: false,
     name: '',
-    searchPlaceholder: 'Search country',
-    searchEmptyLabel: 'No country found'
+    searchPlaceholder: '',
+    searchEmptyLabel: ''
   })
 
   const emit = defineEmits<{
@@ -87,6 +89,7 @@
   const country = defineModel<string>('country', { default: 'BR' })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ phoneInput: en.phoneInput })
   const generatedId = useId()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'phone-input')
@@ -212,7 +215,7 @@
     >
       <SelectTrigger
         :id="triggerId"
-        aria-label="Country dial code"
+        :aria-label="t('phoneInput.dialCode')"
         @keydown="onTriggerKeydown"
       />
       <SelectContent
@@ -223,8 +226,8 @@
           <Input
             :id="searchId"
             v-model="query"
-            :placeholder="searchPlaceholder"
-            :aria-label="searchPlaceholder || 'Search country'"
+            :placeholder="searchPlaceholder || t('phoneInput.search')"
+            :aria-label="searchPlaceholder || t('phoneInput.search')"
             :aria-activedescendant="activeKey ? optionId(activeKey) : undefined"
             autocomplete="off"
             :data-testid="`${testId}__search`"
@@ -270,7 +273,7 @@
           :data-testid="`${testId}__search-empty`"
           class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
         >
-          {{ searchEmptyLabel }}
+          {{ searchEmptyLabel || t('phoneInput.empty') }}
         </p>
       </SelectContent>
     </Select>

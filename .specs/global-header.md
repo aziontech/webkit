@@ -7,10 +7,11 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: f7c22fa7131bcbd8dbf29ea5726e7d023c2de17d66e5aae368c26185003592c9
+checksum: f4f19a22e5b4e9f54ea2be59ea2d860fdabfe0f194bbe149ced5d272a39121ab
 created: 2026-05-23
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
+
 # Global Header — Component Spec
 
 ## Purpose
@@ -56,27 +57,42 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 
 ```vue
 <script setup>
-import Brand from '@aziontech/webkit/brand'
-import Button from '@aziontech/webkit/button'
-import GlobalHeader from '@aziontech/webkit/global-header'
-import IconButton from '@aziontech/webkit/icon-button'
+  import Brand from '@aziontech/webkit/brand'
+  import Button from '@aziontech/webkit/button'
+  import GlobalHeader from '@aziontech/webkit/global-header'
+  import IconButton from '@aziontech/webkit/icon-button'
 </script>
 
 <template>
   <GlobalHeader aria-label="Console header">
     <GlobalHeader.Container>
       <GlobalHeader.Left>
-        <IconButton icon="pi pi-bars" aria-label="Open navigation" kind="transparent" />
+        <IconButton
+          icon="pi pi-bars"
+          aria-label="Open navigation"
+          kind="transparent"
+        />
       </GlobalHeader.Left>
       <GlobalHeader.Brand>
-        <a href="/" aria-label="Azion home">
-          <Brand kind="default" size="small" />
+        <a
+          href="/"
+          aria-label="Azion home"
+        >
+          <Brand
+            kind="default"
+            size="small"
+          />
         </a>
       </GlobalHeader.Brand>
     </GlobalHeader.Container>
     <GlobalHeader.Middle />
     <GlobalHeader.Right>
-      <Button label="Create" kind="secondary" size="medium" icon="pi pi-plus-circle" />
+      <Button
+        label="Create"
+        kind="secondary"
+        size="medium"
+        icon="pi pi-plus-circle"
+      />
     </GlobalHeader.Right>
   </GlobalHeader>
 </template>
@@ -92,10 +108,10 @@ import IconButton from '@aziontech/webkit/icon-button'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `ariaLabel` | `string` | `'Global header'` | false | Accessible name for the header landmark. |
-| `kind` | `'content' \| 'site'` | `'content'` | false | Where the bar sits: `content` is the default — full bleed across whatever zone holds it, insetting its regions by the page boundary so the first region opens on the same vertical as the page content under or beside it; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site header measure and centres them, so they land on the bar's own column, one rung wider than the page frame under it. |
+| Prop        | Type                  | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ----------- | --------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel` | `string`              | `''`        | false    | Accessible name for the header landmark. Empty uses the locale catalog (`Global header`).                                                                                                                                                                                                                                                                                                                                                       |
+| `kind`      | `'content' \| 'site'` | `'content'` | false    | Where the bar sits: `content` is the default — full bleed across whatever zone holds it, insetting its regions by the page boundary so the first region opens on the same vertical as the page content under or beside it; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site header measure and centres them, so they land on the bar's own column, one rung wider than the page frame under it. |
 
 ## Events
 
@@ -103,11 +119,11 @@ import IconButton from '@aziontech/webkit/icon-button'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Root: compose `Container` (or `Left` + `Brand`), `Middle`/`Nav`, and `Right` sub-components. |
-| `default` | — | Each sub-component (incl. `Container`) exposes `default` for region content. |
-| `default` | — | `global-header-brand` exposes `default` for logo markup. |
+| Slot      | Scope | Notes                                                                                        |
+| --------- | ----- | -------------------------------------------------------------------------------------------- |
+| `default` | —     | Root: compose `Container` (or `Left` + `Brand`), `Middle`/`Nav`, and `Right` sub-components. |
+| `default` | —     | Each sub-component (incl. `Container`) exposes `default` for region content.                 |
+| `default` | —     | `global-header-brand` exposes `default` for logo markup.                                     |
 
 ## States
 
@@ -121,25 +137,25 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| shell height | `h-14` (56px) |
-| shell padding-x (`kind="content"`) | `var(--layout-boundary-inline)` |
-| shell padding-x (`kind="site"`) | `max(var(--layout-boundary-inline), calc((100% - var(--layout-measure-site-header)) / 2 + var(--layout-boundary-inline)))` |
-| shell region gap | `var(--spacing-md)` |
-| start cluster (container) gap | `var(--spacing-md)` |
-| start (left) region gap | `var(--spacing-xs)` |
-| end (right) region gap | `var(--spacing-sm)` |
-| brand logo height | `18px` |
-| surface | `var(--bg-surface)` |
-| border (bottom) | `var(--border-default)` |
-| ring (focus on children) | `var(--ring-color)` |
+| Region                             | Token (DESIGN.md)                                                                                                          |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| shell height                       | `h-14` (56px)                                                                                                              |
+| shell padding-x (`kind="content"`) | `var(--layout-boundary-inline)`                                                                                            |
+| shell padding-x (`kind="site"`)    | `max(var(--layout-boundary-inline), calc((100% - var(--layout-measure-site-header)) / 2 + var(--layout-boundary-inline)))` |
+| shell region gap                   | `var(--spacing-md)`                                                                                                        |
+| start cluster (container) gap      | `var(--spacing-md)`                                                                                                        |
+| start (left) region gap            | `var(--spacing-xs)`                                                                                                        |
+| end (right) region gap             | `var(--spacing-sm)`                                                                                                        |
+| brand logo height                  | `18px`                                                                                                                     |
+| surface                            | `var(--bg-surface)`                                                                                                        |
+| border (bottom)                    | `var(--border-default)`                                                                                                    |
+| ring (focus on children)           | `var(--ring-color)`                                                                                                        |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

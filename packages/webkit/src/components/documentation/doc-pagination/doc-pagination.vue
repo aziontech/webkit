@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
+
   /**
    * The previous / next pair closing a docs page. A side with no destination
    * leaves its half of the row empty, so the remaining link stays on its edge.
@@ -20,17 +23,17 @@
     previous?: DocPageLink | null
     /** The page after this one. */
     next?: DocPageLink | null
-    /** Eyebrow over the previous link. */
+    /** Eyebrow over the previous link. Empty uses the locale catalog (`Previous`). */
     previousLabel?: string
-    /** Eyebrow over the next link. */
+    /** Eyebrow over the next link. Empty uses the locale catalog (`Next`). */
     nextLabel?: string
   }
 
   withDefaults(defineProps<Props>(), {
     previous: null,
     next: null,
-    previousLabel: 'Previous',
-    nextLabel: 'Next'
+    previousLabel: '',
+    nextLabel: ''
   })
 
   const emit = defineEmits<{
@@ -39,10 +42,11 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ docPagination: en.docPagination })
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-pagination')
 
-  const ariaLabel = computed(() => (attrs['aria-label'] as string) ?? 'Page navigation')
+  const ariaLabel = computed(() => (attrs['aria-label'] as string) ?? t('docPagination.label'))
 </script>
 
 <template>
@@ -59,7 +63,9 @@
       class="group flex flex-col items-start gap-(--spacing-xxs) rounded-(--shape-elements) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
       @click="emit('navigate', $event, previous)"
     >
-      <span class="ps-5 text-label-sm text-(--text-muted)">{{ previousLabel }}</span>
+      <span class="ps-5 text-label-sm text-(--text-muted)">{{
+        previousLabel || t('docPagination.previous')
+      }}</span>
       <span class="flex items-center gap-(--spacing-xxs)">
         <i
           class="pi pi-chevron-left size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
@@ -76,7 +82,9 @@
       class="group flex flex-col items-end gap-(--spacing-xxs) rounded-(--shape-elements) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
       @click="emit('navigate', $event, next)"
     >
-      <span class="pe-5 text-label-sm text-(--text-muted)">{{ nextLabel }}</span>
+      <span class="pe-5 text-label-sm text-(--text-muted)">{{
+        nextLabel || t('docPagination.next')
+      }}</span>
       <span class="flex items-center gap-(--spacing-xxs)">
         <span class="text-label-md text-(--text-default)">{{ next.title }}</span>
         <i

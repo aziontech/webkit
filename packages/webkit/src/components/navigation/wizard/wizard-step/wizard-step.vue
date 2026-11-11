@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { useWizardContext } from '../composables/use-wizard-context'
 
   defineOptions({
@@ -29,6 +31,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ wizard: en.wizard })
   const context = useWizardContext()
 
   const id = Symbol('WizardStep')
@@ -82,7 +85,7 @@
           :id="counterId"
           class="text-overline-xs text-(--text-muted)"
         >
-          Step {{ index + 1 }} of {{ context.total.value }}
+          {{ t('wizard.stepOf', { step: index + 1, total: context.total.value }) }}
         </p>
         <div class="flex items-baseline gap-(--spacing-xs)">
           <h2
@@ -97,7 +100,7 @@
           <span
             v-if="optional"
             class="text-body-sm text-(--text-muted)"
-            >Optional</span
+            >{{ t('wizard.optional') }}</span
           >
         </div>
         <p

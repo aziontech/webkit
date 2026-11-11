@@ -10,13 +10,18 @@ import noPhysicalDirection from '../src/eslint-plugin/rules/no-physical-directio
 import { Linter } from 'eslint'
 import * as vueParser from 'vue-eslint-parser'
 import tsParser from '@typescript-eslint/parser'
+import {
+  appliesToBuiltInStrings,
+  scanBuiltInStrings,
+  STRING_MESSAGES
+} from './lib/built-in-strings.mjs'
 import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-compliance-checks.mjs'
 import {
   checks as storyChecks,
   STORY_RE
 } from '../../../.claude/hooks/_lib/story-source-checks.mjs'
 
-const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES }
+const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES, ...STRING_MESSAGES }
 const DIRECTION_DIRS = ['src/components', 'blocks', 'examples']
 const DETAILS = new Map()
 
@@ -82,6 +87,9 @@ function currentViolations() {
     }
     if (tokenChecksApply(rel)) {
       for (const id of scanTokens(content)) keys.push(`${rel}::token:${id}`)
+    }
+    if (appliesToBuiltInStrings(rel)) {
+      for (const id of scanBuiltInStrings(content)) keys.push(`${rel}::i18n:${id}`)
     }
     if (rel.endsWith('.vue')) {
       const result = collectSpecViolations(abs, ROOT, { requireSpec: true })
@@ -166,7 +174,7 @@ if (introduced.length) {
     } else if (id.startsWith('story:') || id.startsWith('direction:')) {
       console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(6)}`)
     } else {
-      console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^token:/, '')] ?? id}`)
+      console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^(token|i18n):/, '')] ?? id}`)
     }
   }
   console.error(

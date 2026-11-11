@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { defaultTimezones, formatTimezoneLabel, localTimezone } from '../format'
   import { CalendarInjectionKey } from '../injection-key'
 
@@ -8,6 +10,8 @@
     name: 'CalendarTimezone',
     inheritAttrs: false
   })
+
+  const { t } = useLocale({ calendar: en.calendar })
 
   const ctx = inject(CalendarInjectionKey, null)
 
@@ -32,7 +36,7 @@
     class="flex flex-col gap-(--spacing-xxs)"
     data-testid="input-calendar__timezone"
   >
-    <span class="text-label-sm text-(--text-muted)"> Timezone </span>
+    <span class="text-label-sm text-(--text-muted)"> {{ t('calendar.timezone') }} </span>
     <span class="relative inline-flex w-full items-center">
       <select
         :value="value"
@@ -46,7 +50,7 @@
           :key="zone"
           :value="zone"
         >
-          {{ formatTimezoneLabel(zone) }}
+          {{ formatTimezoneLabel(zone, t('calendar.localTimezone')) }}
         </option>
       </select>
       <i

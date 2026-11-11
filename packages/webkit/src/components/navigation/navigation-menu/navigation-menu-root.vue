@@ -2,6 +2,8 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import { useDirection } from '../../../composables/use-direction'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { provideNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
   import { useNavigationMenuRootState } from './composables/use-navigation-menu-root.js'
   import { getNavigationMenuRootClasses } from './presets/styles'
@@ -20,7 +22,7 @@
     closeDelay?: number
     /** Menu orientation. */
     orientation?: NavigationMenuOrientation
-    /** Accessible name for the root navigation landmark. */
+    /** Accessible name for the root navigation landmark. Empty uses the locale catalog (`Main`). */
     ariaLabel?: string
     /** Polymorphic root element. */
     as?: string | object
@@ -31,7 +33,7 @@
     delay: 50,
     closeDelay: 300,
     orientation: 'horizontal',
-    ariaLabel: 'Main',
+    ariaLabel: '',
     as: 'nav'
   })
 
@@ -44,6 +46,7 @@
   defineSlots<{ default(): unknown }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ navigationMenu: en.navigationMenu })
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu')
 
   const internalValue = ref(props.defaultValue)
@@ -83,7 +86,7 @@
     :is="props.as"
     :class="rootClasses"
     :data-testid="testId"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || t('navigationMenu.label')"
     :data-open="rootState.open.value ? '' : undefined"
     :data-orientation="orientation"
   >

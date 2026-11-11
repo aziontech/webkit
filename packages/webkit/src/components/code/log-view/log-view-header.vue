@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Tag from '../../content/tag/tag.vue'
   import Input from '../../inputs/input/input.vue'
   import { useLogViewContext } from './composables/use-log-view-context'
@@ -17,6 +19,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ logView: en.logView })
   const ctx = useLogViewContext()
 
   const testId = computed(
@@ -81,7 +84,7 @@
             :model-value="ctx.search.value"
             :placeholder="ctx.searchPlaceholder.value"
             :disabled="ctx.disabled.value"
-            aria-label="Search logs"
+            :aria-label="t('logView.search')"
             :data-testid="`${testId}__search`"
             @update:model-value="ctx.setSearch"
           >

@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import Kbd from '../../../content/kbd/kbd.vue'
   import Input from '../../../inputs/input/input.vue'
   import { useCommandMenuContext } from '../injection-key'
@@ -10,20 +12,22 @@
     inheritAttrs: false
   })
 
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
-      /** Input placeholder text. */
+      /** Input placeholder text. Empty uses the locale catalog (`Search Everything`). */
       placeholder?: string
       /** Accessible name for the search field. Falls back to the placeholder text. */
       ariaLabel?: string
     }>(),
     {
-      placeholder: 'Search Everything',
+      placeholder: '',
       ariaLabel: ''
     }
   )
 
   const attrs = useAttrs()
+  const { t } = useLocale({ command: en.command })
+  const placeholderText = computed(() => props.placeholder || t('command.placeholder'))
   const ctx = useCommandMenuContext()
   const fieldRef = ref<InstanceType<typeof Input> | null>(null)
 
@@ -52,8 +56,8 @@
       ref="fieldRef"
       v-bind="attrs"
       :model-value="ctx.query.value"
-      :placeholder="placeholder"
-      :aria-label="ariaLabel || placeholder"
+      :placeholder="placeholderText"
+      :aria-label="ariaLabel || placeholderText"
       size="large"
       role="combobox"
       autocomplete="off"

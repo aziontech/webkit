@@ -3,6 +3,8 @@
   import { usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -22,9 +24,9 @@
     size?: DonutChartSize
     /** Slices kept before the rest fold into Other. */
     cap?: number
-    /** Name of the folded slice. */
+    /** Name of the folded slice. Empty uses the locale catalog (`Other`). */
     otherLabel?: string
-    /** Caption under the total in the center. */
+    /** Caption under the total in the center. Empty uses the locale catalog (`Total`). */
     totalLabel?: string
     /** Formats the center value and legend values. */
     formatValue?: (value: number) => string
@@ -34,7 +36,7 @@
     refetching?: boolean
     /** Error message; when set, a danger Alert replaces the ring. */
     error?: string
-    /** Title of the empty state shown when every slice is zero. */
+    /** Title of the empty state shown when every slice is zero. Empty uses the locale catalog (`No data available`). */
     emptyTitle?: string
     /** Supporting line under the empty title: why the range is empty, or what to do next. */
     emptyDescription?: string
@@ -49,13 +51,13 @@
     kind: 'donut',
     size: 'medium',
     cap: 6,
-    otherLabel: 'Other',
-    totalLabel: 'Total',
+    otherLabel: '',
+    totalLabel: '',
     formatValue: formatCompact,
     loading: false,
     refetching: false,
     error: '',
-    emptyTitle: 'No data available',
+    emptyTitle: '',
     emptyDescription: '',
     tableView: false,
     ariaLabel: ''
@@ -81,6 +83,13 @@
   }>()
 
   const attrs = useAttrs()
+  const { t, locale } = useLocale({ donutChart: en.donutChart })
+  const valueText = (value: number): string =>
+    props.formatValue === formatCompact
+      ? formatCompact(value, locale.value)
+      : props.formatValue(value)
+  const shareText = (value: number, whole: number): string =>
+    formatShare(value, whole, locale.value)
   const uid = useId()
   const reducedMotion = usePreferredReducedMotion()
   const entered = ref(false)
@@ -95,7 +104,10 @@
   const summaryId = `${uid}-summary`
 
   const series = computed(() =>
-    normalizeSeries(props.series, { cap: props.cap, otherLabel: props.otherLabel })
+    normalizeSeries(props.series, {
+      cap: props.cap,
+      otherLabel: props.otherLabel || t('donutChart.otherSeries')
+    })
   )
   const hidden = computed<ReadonlySet<string>>(() => new Set(hiddenSeries.value))
   const visible = computed(() =>
@@ -133,13 +145,11 @@
     return index === null ? null : (slices.value[index]?.entry ?? null)
   })
 
-  const centerValue = computed(() =>
-    props.formatValue(active.value ? active.value.total : total.value)
-  )
+  const centerValue = computed(() => valueText(active.value ? active.value.total : total.value))
   const centerCaption = computed(() =>
     active.value
-      ? `${active.value.name}, ${formatShare(active.value.total, total.value)}`
-      : props.totalLabel
+      ? `${active.value.name}, ${shareText(active.value.total, total.value)}`
+      : props.totalLabel || t('donutChart.total')
   )
 
   const legend = computed(() =>
@@ -147,19 +157,19 @@
       id: entry.id,
       name: entry.name,
       color: entry.color,
-      value: props.formatValue(entry.total),
-      share: hidden.value.has(entry.id) ? '' : formatShare(entry.total, total.value),
+      value: valueText(entry.total),
+      share: hidden.value.has(entry.id) ? '' : shareText(entry.total, total.value),
       hidden: hidden.value.has(entry.id)
     }))
   )
 
-  const summary = computed(
-    () => `${visible.value.length} slices, ${props.formatValue(total.value)} in total.`
+  const summary = computed(() =>
+    t('donutChart.summary', { count: visible.value.length, total: valueText(total.value) })
   )
 
   const announcement = computed(() =>
     active.value
-      ? `${active.value.name}: ${props.formatValue(active.value.total)}, ${formatShare(active.value.total, total.value)}`
+      ? `${active.value.name}: ${valueText(active.value.total)}, ${shareText(active.value.total, total.value)}`
       : ''
   )
 
@@ -276,7 +286,7 @@
     >
       <slot name="empty">
         <EmptyState
-          :title="emptyTitle"
+          :title="emptyTitle || t('donutChart.emptyTitle')"
           :description="emptyDescription"
           icon="pi pi-chart-pie"
           size="small"
@@ -305,7 +315,7 @@
       <thead>
         <tr>
           <th
-            v-for="heading in ['Name', 'Value', 'Share']"
+            v-for="heading in [t('donutChart.name'), t('donutChart.value'), t('donutChart.share')]"
             :key="heading"
             scope="col"
             class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-start text-label-sm text-(--text-muted)"
@@ -341,7 +351,7 @@
     <template v-else>
       <div
         role="group"
-        aria-roledescription="chart"
+        :aria-roledescription="t('donutChart.roleDescription')"
         tabindex="0"
         :aria-label="ariaLabel || undefined"
         :aria-describedby="summaryId"
@@ -458,9 +468,9 @@
         </caption>
         <thead>
           <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Value</th>
-            <th scope="col">Share</th>
+            <th scope="col">{{ t('donutChart.name') }}</th>
+            <th scope="col">{{ t('donutChart.value') }}</th>
+            <th scope="col">{{ t('donutChart.share') }}</th>
           </tr>
         </thead>
         <tbody>

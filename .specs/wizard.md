@@ -3,7 +3,7 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: f1ef6992081cf3ecf03466f85e935d029752784c40aeb58378c7da8c62ae2192
+checksum: 1c466eb09599d2be2867e0aac7d7125b05c0049e8216266669686cabd12d49c8
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-11
@@ -215,11 +215,11 @@ folder only):
 
 ## Props
 
-| Prop          | Type      | Default    | Required | JSDoc                                                                                                                  |
-| ------------- | --------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `submitLabel` | `string`  | `'Create'` | false    | Label of the primary action on the last step, where Next becomes the submit action.                                    |
-| `loading`     | `boolean` | `false`    | false    | Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. |
-| `ariaLabel`   | `string`  | `''`       | false    | Accessible name for the wizard region. Name the task, for example Create edge application.                             |
+| Prop          | Type      | Default | Required | JSDoc                                                                                                                         |
+| ------------- | --------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `submitLabel` | `string`  | `''`    | false    | Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`). |
+| `loading`     | `boolean` | `false` | false    | Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled.        |
+| `ariaLabel`   | `string`  | `''`    | false    | Accessible name for the wizard region. Name the task, for example Create edge application.                                    |
 
 ## v-model
 

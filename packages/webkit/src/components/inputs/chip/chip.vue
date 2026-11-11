@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
   export type ChipKind = 'filled' | 'outlined' | 'dashed'
@@ -51,6 +53,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ chip: en.chip })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-chip')
 
@@ -58,7 +61,9 @@
 
   const active = computed(() => interactive.value && !props.disabled)
 
-  const removeLabel = computed(() => (props.label ? `Remove ${props.label}` : 'Remove'))
+  const removeLabel = computed(() =>
+    props.label ? t('chip.removeNamed', { label: props.label }) : t('chip.remove')
+  )
 
   function onRemove(event: MouseEvent) {
     if (props.disabled) {

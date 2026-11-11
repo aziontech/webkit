@@ -2,6 +2,8 @@
   import { computed, provide, ref, useAttrs } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { useTreeNavigation } from './composables/use-tree-navigation'
@@ -27,7 +29,7 @@
     selectable?: boolean
     /** Renders Skeleton rows in place of the tree and sets aria-busy. */
     loading?: boolean
-    /** Title of the default empty state shown when items is empty. */
+    /** Title of the default empty state shown when items is empty. Empty uses the locale catalog (`No items`). */
     emptyTitle?: string
     /** Supporting line under the empty title. */
     emptyDescription?: string
@@ -39,7 +41,7 @@
     items: () => [],
     selectable: false,
     loading: false,
-    emptyTitle: 'No items',
+    emptyTitle: '',
     emptyDescription: '',
     ariaLabel: ''
   })
@@ -66,6 +68,7 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
+  const { t } = useLocale({ tree: en.tree })
 
   const activeSelection = computed(() => (props.selectable ? selected.value : ''))
 
@@ -212,7 +215,7 @@
     <template v-else-if="isEmpty">
       <slot name="empty">
         <EmptyState
-          :title="emptyTitle"
+          :title="emptyTitle || t('tree.emptyTitle')"
           :description="emptyDescription"
         />
       </slot>

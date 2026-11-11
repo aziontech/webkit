@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Hint from '../hint/hint.vue'
 
   defineOptions({
@@ -28,6 +30,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ label: en.label })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-label')
 </script>
@@ -55,7 +58,7 @@
         class="text-(--primary)"
         >*</span
       >
-      (Required)
+      {{ t('label.required') }}
     </span>
     <Hint
       v-if="hint"

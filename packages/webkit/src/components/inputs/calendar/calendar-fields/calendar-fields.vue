@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, ref, useId, watch } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import Input from '../../input/input.vue'
   import { asRange, asSingle, formatDate, formatTime } from '../format'
   import { CalendarInjectionKey } from '../injection-key'
@@ -10,6 +12,8 @@
     name: 'CalendarFields',
     inheritAttrs: false
   })
+
+  const { t } = useLocale({ calendar: en.calendar })
 
   const ctx = inject(CalendarInjectionKey, null)
 
@@ -33,8 +37,12 @@
   const startDateId = useId()
   const endDateId = useId()
 
-  const startLabel = computed(() => (mode.value === 'range' ? 'Start' : 'Date'))
-  const startTimeLabel = computed(() => (mode.value === 'range' ? 'Start time' : 'Time'))
+  const startLabel = computed(() =>
+    mode.value === 'range' ? t('calendar.start') : t('calendar.date')
+  )
+  const startTimeLabel = computed(() =>
+    mode.value === 'range' ? t('calendar.startTime') : t('calendar.time')
+  )
 
   const syncFromDraft = () => {
     startDateText.value = startDate.value ? formatDate(startDate.value) : ''
@@ -150,7 +158,7 @@
         :for="endDateId"
         class="text-label-sm text-(--text-muted)"
       >
-        End
+        {{ t('calendar.end') }}
       </label>
       <div class="flex items-center gap-(--spacing-xs)">
         <div class="min-w-0 flex-1">
@@ -172,7 +180,7 @@
             :model-value="endTimeText"
             :size="size"
             :disabled="disabled"
-            aria-label="End time"
+            :aria-label="t('calendar.endTime')"
             placeholder="23:59"
             @update:model-value="endTimeText = $event"
             @change="commitTime('end', endTimeText)"

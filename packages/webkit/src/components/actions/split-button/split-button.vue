@@ -2,6 +2,8 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import { directionalIconClass } from '../../../utils/directional-icons'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import DropdownMenu from '../../navigation/dropdown-menu'
   import Button from '../button/button.vue'
   import IconButton from '../icon-button/icon-button.vue'
@@ -61,6 +63,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ splitButton: en.splitButton })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-split-button'
@@ -88,7 +91,9 @@
   }
 
   const toggleAriaLabel = computed(() =>
-    displayLabel.value ? `${displayLabel.value} — more actions` : 'More actions'
+    displayLabel.value
+      ? t('splitButton.moreActionsFor', { label: displayLabel.value })
+      : t('splitButton.moreActions')
   )
 
   function onPrimaryClick(event: MouseEvent) {

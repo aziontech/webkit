@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { TableInjectionKey } from '../injection-key'
 
@@ -28,6 +30,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ tableExport: en.tableExport })
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
@@ -49,7 +52,7 @@
       v-bind="$attrs"
       :data-testid="testId"
       icon="pi pi-download"
-      ariaLabel="Export CSV"
+      :ariaLabel="t('tableExport.label')"
       kind="outlined"
       size="medium"
       @click="onExport"

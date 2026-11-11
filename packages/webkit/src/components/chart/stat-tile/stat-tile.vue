@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Tag, { type TagSeverity } from '../../content/tag/tag.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Separator from '../../layout/separator/separator.vue'
@@ -53,6 +55,11 @@
   }>()
 
   const attrs = useAttrs()
+  const { t, locale } = useLocale({ statTile: en.statTile })
+  const valueText = (value: number): string =>
+    props.formatValue === formatCompact
+      ? formatCompact(value, locale.value)
+      : props.formatValue(value)
   const uid = useId()
   const { display } = useCountUp(() => props.value)
 
@@ -67,11 +74,11 @@
   const labelId = `${uid}-label`
 
   const hasValue = computed(() => isFiniteNumber(props.value))
-  const figure = computed(() => (display.value === null ? '–' : props.formatValue(display.value)))
+  const figure = computed(() => (display.value === null ? '–' : valueText(display.value)))
   const finalFigure = computed(() =>
     isFiniteNumber(props.value)
-      ? [props.formatValue(props.value), props.unit].filter(Boolean).join(' ')
-      : 'No value'
+      ? [valueText(props.value), props.unit].filter(Boolean).join(' ')
+      : t('statTile.noValue')
   )
 
   const trendKind = computed<StatTileTrend | null>(() => {
@@ -80,16 +87,16 @@
     return props.delta > 0 !== props.inverse ? 'good' : 'bad'
   })
   const deltaText = computed(() =>
-    isFiniteNumber(props.delta) ? formatSignedPercent(props.delta) : ''
+    isFiniteNumber(props.delta) ? formatSignedPercent(props.delta, 2, locale.value) : ''
   )
   const deltaIcon = computed(() => {
     if (!isFiniteNumber(props.delta) || trendKind.value === 'flat') return 'pi pi-minus'
     return props.delta > 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down'
   })
   const deltaMeaning = computed(() => {
-    if (trendKind.value === 'good') return 'better'
-    if (trendKind.value === 'bad') return 'worse'
-    return 'unchanged'
+    if (trendKind.value === 'good') return t('statTile.better')
+    if (trendKind.value === 'bad') return t('statTile.worse')
+    return t('statTile.unchanged')
   })
 
   const hasTrend = computed(() => props.trend.filter(isFiniteNumber).length > 1)
@@ -196,7 +203,7 @@
         severity="secondary"
         size="small"
         rounded
-        label="No data"
+        :label="t('statTile.noData')"
         class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2"
       />
     </div>

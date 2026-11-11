@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { buildRail, measureRail, RAIL_INDENT, RAIL_STROKE } from './toc-rail'
 
   /**
@@ -43,7 +45,7 @@
     items?: DocTocItem[]
     /** The id of the heading currently in view. */
     activeId?: string
-    /** The rail's own heading. */
+    /** The rail's own heading. Empty uses the locale catalog (`On this page`). */
     title?: string
     /** Complementary groups rendered below the outline, in order. */
     groups?: DocTocGroup[]
@@ -52,7 +54,7 @@
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
     activeId: '',
-    title: 'On this page',
+    title: '',
     groups: () => []
   })
 
@@ -62,6 +64,8 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ docOnThisPage: en.docOnThisPage })
+  const railTitle = computed(() => props.title || t('docOnThisPage.title'))
 
   const testId = computed(
     () => (attrs['data-testid'] as string) ?? 'documentation-doc-on-this-page'
@@ -186,14 +190,14 @@
     class="flex w-full flex-col gap-(--spacing-lg)"
   >
     <nav
-      :aria-label="title"
+      :aria-label="railTitle"
       class="flex flex-col gap-(--spacing-xs)"
     >
       <p
         data-toc-title
         class="m-0 text-overline-xs text-(--text-muted)"
       >
-        {{ title }}
+        {{ railTitle }}
       </p>
 
       <div class="relative">

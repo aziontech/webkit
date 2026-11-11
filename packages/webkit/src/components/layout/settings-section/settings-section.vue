@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Hint from '../../inputs/hint/hint.vue'
 
   defineOptions({
@@ -38,6 +40,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ settingsSection: en.settingsSection })
   const regionId = useId()
 
   const testId = computed(
@@ -69,7 +72,7 @@
         v-if="anchor"
         type="button"
         :data-testid="`${testId}__copy-link`"
-        :aria-label="`Copy link to the ${title} section`"
+        :aria-label="t('settingsSection.copyLink', { title })"
         class="absolute -start-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:static [@media(hover:none)]:order-last [@media(hover:none)]:opacity-100 motion-reduce:transition-none"
         @click="copyLink"
       >

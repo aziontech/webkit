@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Input from '../../inputs/input/input.vue'
@@ -111,6 +113,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useLocale({ storyLibrary: en.storyLibrary })
 
   const query = ref('')
 
@@ -229,8 +232,8 @@
                 <Input
                   :model-value="optionQuery[facet.key] ?? ''"
                   size="small"
-                  placeholder="Search"
-                  :aria-label="`Search ${facet.label.toLowerCase()}`"
+                  :placeholder="t('storyLibrary.search')"
+                  :aria-label="t('storyLibrary.searchFacet', { facet: facet.label.toLowerCase() })"
                   @update:model-value="setOptionQuery(facet.key, $event)"
                 >
                   <template #iconLeft>
@@ -253,7 +256,7 @@
                 role="status"
                 class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
               >
-                No results found
+                {{ t('storyLibrary.empty') }}
               </p>
             </SelectContent>
           </Select>

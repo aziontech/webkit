@@ -2,6 +2,8 @@
   import { useEventListener } from '@vueuse/core'
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { matchesAccept } from '../../../utils/file-accept'
 
   defineOptions({ name: 'FileDropzone', inheritAttrs: false })
@@ -12,7 +14,7 @@
   interface Props {
     /** Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. */
     kind?: FileDropzoneKind
-    /** Instruction shown under the icon. */
+    /** Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`). */
     title?: string
     /** Secondary line under the title, typically the accepted types and limits. Not rendered when empty. */
     description?: string
@@ -30,7 +32,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'inline',
-    title: 'Drop files to upload',
+    title: '',
     description: '',
     accept: '',
     multiple: true,
@@ -52,6 +54,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ fileDropzone: en.fileDropzone })
   const titleId = useId()
   const descriptionId = useId()
 
@@ -195,7 +198,7 @@
             :id="titleId"
             class="m-0 text-heading-xs text-(--text-default) group-data-[disabled]:text-(--text-disabled)"
           >
-            {{ title }}
+            {{ title || t('fileDropzone.title') }}
           </p>
           <p
             v-if="description"

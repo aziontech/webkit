@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs, useSlots } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import * as en from '../../../../i18n/messages/en'
   import { hasRenderedContent } from '../../../../utils/rendered-content'
   import Skeleton from '../../../feedback/skeleton/skeleton.vue'
   import { useKeyValuePairsContext } from '../composables/use-key-value-pairs-context'
@@ -25,6 +27,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ keyValuePairs: en.keyValuePairs })
   const slots = useSlots()
   const context = useKeyValuePairsContext()
 
@@ -56,7 +59,7 @@
           class="text-body-sm text-(--text-muted)"
           >—</span
         >
-        <span class="sr-only">Not set</span>
+        <span class="sr-only">{{ t('keyValuePairs.notSet') }}</span>
       </template>
     </dd>
   </div>

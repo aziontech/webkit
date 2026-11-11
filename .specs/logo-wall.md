@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 43a8f298a7148af9f0078b47ccf3ad078b2c3e233062a9db743ff86c48285e3a
+checksum: ca34d105c8de2ba33490f43488c1df71b8d73a9b50c3d7ea3d45dd9838c721aa
 created: 2026-09-22
-last_updated: 2026-10-01
+last_updated: 2026-11-11
 ---
 
 # Logo Wall — Component Spec
@@ -47,7 +47,7 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 - Give every mark a real `alt` — the company name. A linked cell is announced as `linkLabel`, then that name ("Read story, Magalu").
 - Set `ariaLabel` so the group announces its purpose ("Clients running on Azion") instead of reading as an unnamed region.
 - Link a mark with `href` only when there is somewhere worth going, such as a case study; a wall of links to nowhere costs a reader a tab stop per cell. In an app with a client-side router, handle `item-click`: call `event.preventDefault()` and push `item.href`.
-- Put one statement in `aside`, not a second grid. The band's argument is *many customers, one of them talking*; two things of equal weight leave a reader with neither.
+- Put one statement in `aside`, not a second grid. The band's argument is _many customers, one of them talking_; two things of equal weight leave a reader with neither.
 - Give the wall exactly six marks when `aside` is filled — two full rows of three squares beside the statement, and three rows of two between `lg` and `xl` — and a multiple of six when it is not, so the last row is never ragged.
 - Reach for `kind: 'rectangle'` when the band names nine customers beside `aside`: three rows of three 3:2 cells at the height of the six-square wall. Nine is the count the rectangle wall is drawn for; without `aside` it runs six to a row like the square wall.
 
@@ -55,8 +55,8 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 
 ```vue
 <script setup>
-import LogoWall from '@aziontech/webkit/logo-wall'
-import Quote from '@aziontech/webkit/quote'
+  import LogoWall from '@aziontech/webkit/logo-wall'
+  import Quote from '@aziontech/webkit/quote'
 </script>
 
 <template>
@@ -87,27 +87,27 @@ import Quote from '@aziontech/webkit/quote'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `LogoWallKind` | `'square'` | false | The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`. |
-| `items` | `LogoItem[]` | `[]` | false | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
-| `ariaLabel` | `string` | `''` | false | Accessible name for the group of marks, announced instead of an unnamed region. |
-| `linkLabel` | `string` | `'Read story'` | false | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. |
+| Prop        | Type           | Default    | Required | JSDoc                                                                                                                                                                                                                                                    |
+| ----------- | -------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`      | `LogoWallKind` | `'square'` | false    | The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`.                                                                                                             |
+| `items`     | `LogoItem[]`   | `[]`       | false    | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
+| `ariaLabel` | `string`       | `''`       | false    | Accessible name for the group of marks, announced instead of an unnamed region.                                                                                                                                                                          |
+| `linkLabel` | `string`       | `''`       | false    | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`).                                                                                                        |
 
 `LogoItem` is `{ src: string; alt: string; href?: string; shape?: LogoShape }`, `LogoShape` is `'wide' | 'compact'` (`wide` when omitted), and `LogoWallKind` is `'square' | 'rectangle'`. All three types are exported.
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event        | Payload                               | Notes                                                                                                                                                                                                   |
+| ------------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `item-click` | `(event: MouseEvent, item: LogoItem)` | Fired when a linked cell is activated; `item` is the matched `items` entry. The anchor still navigates unless the handler calls `event.preventDefault()`, which is how a client-side router takes over. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `aside` | — | Content set beside the wall from `lg` up, centred in a panel that never sets the band's height (keep it short enough to fit two rows of squares from `xl`), such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl` and framed with a registration mark in each corner; its child fills the panel's width. When it is empty the wall spans the full width. |
-| `mark` | `{ item: LogoItem; index: number }` | One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion. |
+| Slot    | Scope                               | Notes                                                                                                                                                                                                                                                                                                                                                                                |
+| ------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `aside` | —                                   | Content set beside the wall from `lg` up, centred in a panel that never sets the band's height (keep it short enough to fit two rows of squares from `xl`), such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl` and framed with a registration mark in each corner; its child fills the panel's width. When it is empty the wall spans the full width. |
+| `mark`  | `{ item: LogoItem; index: number }` | One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion.                                                                                            |
 
 ## States
 
@@ -121,32 +121,32 @@ import Quote from '@aziontech/webkit/quote'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover / focus on a linked cell — the wash | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:before:transition-none` |
-| hover / focus on a linked cell — the mark lift | `transition-[translate] duration-moderate-01 ease-productive-entrance` | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:transition-none` |
-| hover / focus on a linked cell — the label reveal | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance` | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:transition-none` |
+| Trigger                                           | Animation / Transition                                                                  | Token (see `.claude/docs/DESIGN.md` § Animations)   | Reduced-motion fallback                |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------------- |
+| hover / focus on a linked cell — the wash         | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:before:transition-none` |
+| hover / focus on a linked cell — the mark lift    | `transition-[translate] duration-moderate-01 ease-productive-entrance`                  | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:transition-none`        |
+| hover / focus on a linked cell — the label reveal | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance`          | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:transition-none`        |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| cell fill | `var(--bg-surface)` (via `card-grid` cell `surface`) |
-| cell rules + marks | `var(--border-default)` (via `card-grid` frame) |
-| hover wash | `var(--bg-hover)` |
-| mark lift | `var(--spacing-sm)` |
-| cell inline padding | `var(--spacing-md)` |
-| label | `text-overline-md`, `var(--text-default)` |
-| label ↔ mark gap | `var(--spacing-xs)` |
-| label ↔ arrow gap | `var(--spacing-xxs)` |
-| aside panel | `var(--bg-canvas)`, padded by `var(--spacing-xl)` |
-| ring | `var(--ring-color)` |
+| Region              | Token (DESIGN.md)                                    |
+| ------------------- | ---------------------------------------------------- |
+| cell fill           | `var(--bg-surface)` (via `card-grid` cell `surface`) |
+| cell rules + marks  | `var(--border-default)` (via `card-grid` frame)      |
+| hover wash          | `var(--bg-hover)`                                    |
+| mark lift           | `var(--spacing-sm)`                                  |
+| cell inline padding | `var(--spacing-md)`                                  |
+| label               | `text-overline-md`, `var(--text-default)`            |
+| label ↔ mark gap    | `var(--spacing-xs)`                                  |
+| label ↔ arrow gap   | `var(--spacing-xxs)`                                 |
+| aside panel         | `var(--bg-canvas)`, padded by `var(--spacing-xl)`    |
+| ring                | `var(--ring-color)`                                  |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -4,9 +4,9 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 74fce06c26427ad231eeec718bc3e8acdabf8999b34bd0f70bedca0271c26f76
+checksum: a140620ff790ed94a925c3b678dea3117a8c90333c6387e218ddbe7cbf5ee327
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Status Indicator — Component Spec
@@ -58,11 +58,11 @@ Communicates status, alerts, or progress to the user. Lives at `packages/webkit/
 
 ## Props
 
-| Prop       | Type                                                                 | Default     | Required | JSDoc                                        |
-| ---------- | -------------------------------------------------------------------- | ----------- | -------- | -------------------------------------------- |
-| `severity` | `'success' \| 'info' \| 'neutral' \| 'warning' \| 'alt' \| 'danger'` | `'success'` | false    | Severity token driving the status dot color. |
-| `loading`  | `boolean`                                                            | `false`     | false    | Shows loading state and disables activation. |
-| `label`    | `string`                                                             | `'Status'`  | false    | Visible label text.                          |
+| Prop       | Type                                                                 | Default     | Required | JSDoc                                                         |
+| ---------- | -------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------- |
+| `severity` | `'success' \| 'info' \| 'neutral' \| 'warning' \| 'alt' \| 'danger'` | `'success'` | false    | Severity token driving the status dot color.                  |
+| `loading`  | `boolean`                                                            | `false`     | false    | Shows loading state and disables activation.                  |
+| `label`    | `string`                                                             | `''`        | false    | Visible label text. Empty uses the locale catalog (`Status`). |
 
 ## Events
 

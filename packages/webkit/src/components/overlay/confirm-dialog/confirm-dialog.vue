@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Dialog from '../dialog/dialog.vue'
   import DialogClose from '../dialog/dialog-close.vue'
@@ -29,9 +31,9 @@
     title: string
     /** One sentence that says what happens on confirm. */
     description?: string
-    /** Label of the confirm button. */
+    /** Label of the confirm button. Empty uses the locale catalog (`Confirm`). */
     confirmLabel?: string
-    /** Label of the cancel button. */
+    /** Label of the cancel button. Empty uses the locale catalog (`Cancel`). */
     cancelLabel?: string
     /** Kind of the confirm button. */
     kind?: ConfirmDialogKind
@@ -45,8 +47,8 @@
 
   const props = withDefaults(defineProps<Props>(), {
     description: '',
-    confirmLabel: 'Confirm',
-    cancelLabel: 'Cancel',
+    confirmLabel: '',
+    cancelLabel: '',
     kind: 'danger',
     size: 'small',
     loading: false,
@@ -70,6 +72,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ confirmDialog: en.confirmDialog })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'overlay-confirm-dialog'
@@ -125,14 +128,14 @@
             >
               <Button
                 :data-testid="`${testId}__cancel`"
-                :label="cancelLabel"
+                :label="cancelLabel || t('confirmDialog.cancel')"
                 kind="transparent"
                 size="medium"
                 @click="cancel"
               />
               <Button
                 :data-testid="`${testId}__confirm`"
-                :label="confirmLabel"
+                :label="confirmLabel || t('confirmDialog.confirm')"
                 :kind="kind"
                 :loading="loading"
                 :disabled="disabled"

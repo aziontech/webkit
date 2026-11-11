@@ -4,13 +4,14 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 1de6b4b99aa20e4bf4196fc89409cec794ba4f7456db90299564a55c872edafd
+checksum: d617cbec72241872ba8e8d8080a1fd184fddfb3fe54019187bd0d9407365f226
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578
   node_id: 3548:578
 ---
+
 # Link — Component Spec
 
 ## Purpose
@@ -45,32 +46,41 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ```vue
 <script setup>
-import Link from '@aziontech/webkit/link'
+  import Link from '@aziontech/webkit/link'
 </script>
 
 <template>
-  <Link label="View documentation" href="https://www.azion.com/en/documentation/" target="_blank" />
-  <Link label="Add custom domain" href="/domains/create" size="medium" :show-icon="false" />
+  <Link
+    label="View documentation"
+    href="https://www.azion.com/en/documentation/"
+    target="_blank"
+  />
+  <Link
+    label="Add custom domain"
+    href="/domains/create"
+    size="medium"
+    :show-icon="false"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `'Learn More'` | false | Visible label rendered inside the link. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `showIcon` | `boolean` | `true` | false | When true, renders the trailing icon. |
-| `icon` | `string` | `'pi pi-external-link'` | false | PrimeIcons class for the trailing icon. |
-| `href` | `string` | `'#'` | false | Destination URL for the anchor. |
-| `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when navigating. |
+| Prop       | Type                             | Default                 | Required | JSDoc                                                                                             |
+| ---------- | -------------------------------- | ----------------------- | -------- | ------------------------------------------------------------------------------------------------- |
+| `label`    | `string`                         | `''`                    | false    | Visible label rendered inside the link. Empty uses the locale catalog (`Learn More`).             |
+| `size`     | `'small' \| 'medium' \| 'large'` | `'large'`               | false    | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
+| `disabled` | `boolean`                        | `false`                 | false    | Disables interaction and applies disabled tokens.                                                 |
+| `showIcon` | `boolean`                        | `true`                  | false    | When true, renders the trailing icon.                                                             |
+| `icon`     | `string`                         | `'pi pi-external-link'` | false    | PrimeIcons class for the trailing icon.                                                           |
+| `href`     | `string`                         | `'#'`                   | false    | Destination URL for the anchor.                                                                   |
+| `target`   | `'_blank' \| '_self'`            | `'_self'`               | false    | Link target when navigating.                                                                      |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `click` | `MouseEvent` | — |
+| Event   | Payload      | Notes |
+| ------- | ------------ | ----- |
+| `click` | `MouseEvent` | —     |
 
 ## Slots
 
@@ -83,26 +93,26 @@ import Link from '@aziontech/webkit/link'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger      | Animation / Transition                    | Token  | Reduced-motion fallback         |
+| ------------ | ----------------------------------------- | ------ | ------------------------------- |
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region     | Token (DESIGN.md)                 |
+| ---------- | --------------------------------- |
 | typography | .text-button-lg / .text-button-md |
-| surface | `var(--bg-surface-raised)` |
-| text | `var(--text-link)` |
-| spacing | `var(--spacing-xs)` |
-| shape | `var(--shape-button)` |
-| ring | `var(--ring-color)` |
+| surface    | `var(--bg-surface-raised)`        |
+| text       | `var(--text-link)`                |
+| spacing    | `var(--spacing-xs)`               |
+| shape      | `var(--shape-button)`             |
+| ring       | `var(--ring-color)`               |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

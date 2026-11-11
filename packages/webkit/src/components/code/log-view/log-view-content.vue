@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import Spinner from '../../utils/spinner/spinner.vue'
@@ -17,6 +19,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useLocale({ logView: en.logView })
   const ctx = useLogViewContext()
 
   const searchQuery = computed(() => ctx.search.value.trim())
@@ -46,8 +49,8 @@
         :value="ctx.copyText.value"
         kind="outlined"
         size="small"
-        ariaLabel="Copy logs"
-        copiedLabel="Copied logs"
+        :ariaLabel="t('logView.copy')"
+        :copiedLabel="t('logView.copied')"
         :disabled="!ctx.canCopy.value"
         :data-testid="`${ctx.testId}__copy`"
         @copy="ctx.emitCopy"
@@ -240,7 +243,7 @@
                     aria-hidden="true"
                     >|</span
                   >
-                  <span class="text-(--text-muted)">gzip:</span>
+                  <span class="text-(--text-muted)">{{ t('logView.gzip') }}</span>
                   <span>
                     <template
                       v-for="(segment, segmentIndex) in segmentsFor(line.gzipSize ?? '')"
@@ -267,7 +270,7 @@
         :data-testid="`${ctx.testId}__empty`"
         class="px-(--spacing-md) py-(--spacing-sm) text-label-code-sm text-(--text-muted)"
       >
-        <slot name="empty">No log lines match the current filters.</slot>
+        <slot name="empty">{{ t('logView.empty') }}</slot>
       </div>
     </ScrollArea>
   </div>

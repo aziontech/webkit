@@ -4,6 +4,8 @@
   import { cloneVNode, computed, nextTick, ref, useAttrs, useSlots, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap/index.js'
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import { flattenSlot } from './flatten-slot'
 
   defineOptions({ name: 'DocFrame', inheritAttrs: false })
@@ -40,6 +42,7 @@
 
   const slots = useSlots()
   const attrs = useAttrs()
+  const { t } = useLocale({ docFrame: en.docFrame })
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-frame')
 
@@ -173,7 +176,7 @@
         ref="triggerRef"
         type="button"
         :data-testid="`${testId}__zoom-trigger`"
-        :aria-label="alt ? `View full screen: ${alt}` : 'View image full screen'"
+        :aria-label="alt ? t('docFrame.zoomNamed', { alt }) : t('docFrame.zoom')"
         class="group relative block w-full cursor-zoom-in rounded-(--shape-elements) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
         @click="open"
       >
@@ -188,7 +191,7 @@
           class="pointer-events-none absolute top-(--spacing-xs) end-(--spacing-xs) inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-default) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
         >
           <i class="pi pi-search-plus text-body-xs"></i>
-          Full screen
+          {{ t('docFrame.fullScreen') }}
         </span>
       </button>
       <img
@@ -221,7 +224,7 @@
         aria-modal="true"
         data-state="open"
         :data-testid="`${testId}__zoom`"
-        :aria-label="alt || 'Image, full screen'"
+        :aria-label="alt || t('docFrame.zoomedImage')"
         class="fixed inset-0 z-1200 flex items-center justify-center p-(--spacing-lg) animate-fade-in motion-reduce:animate-none"
       >
         <div
@@ -233,11 +236,11 @@
         <button
           type="button"
           :data-testid="`${testId}__zoom-close`"
-          aria-label="Close full screen"
+          :aria-label="t('docFrame.closeFullScreen')"
           class="fixed top-(--spacing-lg) end-(--spacing-lg) cursor-pointer rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-label-md text-(--text-default) hover:bg-(--bg-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
           @click="close"
         >
-          Close
+          {{ t('docFrame.close') }}
         </button>
         <img
           ref="zoomImageRef"

@@ -4,9 +4,9 @@ category: navigation
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 8b7771472e2b54ee608388ddbe78bdeb837c8ebb68ee104ad52d86a0725ed4a9
+checksum: e17e5bcb739b17df7512a38ae057efd2ba3a49f7a28bdf90f5db3fe902d93f84
 created: 2026-09-22
-last_updated: 2026-09-22
+last_updated: 2026-11-11
 ---
 
 # Stepper — Component Spec
@@ -116,9 +116,9 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 ## Props
 
-| Prop        | Type     | Default   | Required | JSDoc                              |
-| ----------- | -------- | --------- | -------- | ---------------------------------- |
-| `ariaLabel` | `string` | `'Steps'` | false    | Accessible name for the step rail. |
+| Prop        | Type     | Default | Required | JSDoc                                                                       |
+| ----------- | -------- | ------- | -------- | --------------------------------------------------------------------------- |
+| `ariaLabel` | `string` | `''`    | false    | Accessible name for the step rail. Empty uses the locale catalog (`Steps`). |
 
 ## v-model
 
