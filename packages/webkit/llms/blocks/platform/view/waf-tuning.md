@@ -40,13 +40,13 @@ A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours,
 
 A flush `Card` with a data-driven `TableRoot`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells show two values and a small `Tag` with "+n". The `empty` slot is a small `EmptyState` naming the minimum and the range and saying how to widen them.
 
-### D. Allow dialog — `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
+### D. Allow dialog — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 
 A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says requests these rules matched on their paths will no longer be blocked and how many allowed rules will be created (one per rule and path); a list of the selected rules with their threat and path count; and a required Reason `Textarea` with a description saying it is kept with the allowed rules. "Enter why these requests are legitimate." shows under it only after Allow rules is pressed with it empty, and focus moves to it. Footer: Cancel and primary Allow rules, which shows its loading state; the dialog cannot be dismissed while it runs.
 
 ### E. Outcome — `Toaster`, `Alert` (required)
 
-Success closes the dialog, clears the selection and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `platform/states/form-error`).
+Success closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `platform/states/form-error`).
 
 ## Do
 
@@ -234,6 +234,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
   const formatHits = (value) => new Intl.NumberFormat('en-US').format(value)
 
   const tuningTable = ref(null)
+  const resultsEl = ref(null)
   const exportCsv = () => tuningTable.value?.exportCsv({ filename: 'waf-tuning.csv' })
 
   const refresh = () => {
@@ -279,6 +280,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
       const created = pathCount.value
       allowOpen.value = false
       selection.value = {}
+      setTimeout(() => resultsEl.value?.focus(), 0)
       toast.success(`${created} allowed ${created === 1 ? 'rule' : 'rules'} created.`, {
         description: 'Requests that match them are no longer blocked by this rule set.'
       })
@@ -315,62 +317,67 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
       </PageHeader>
 
       <section
-        class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-boundary-end)"
+        ref="resultsEl"
+        tabindex="-1"
+        class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-boundary-end) outline-none"
         aria-label="Matched requests"
       >
         <div
           v-if="INITIAL_ROWS.length"
           class="flex min-w-0 flex-wrap items-end gap-(--spacing-sm)"
         >
-          <Field class="w-full sm:w-48">
-            <Field.Label>Time range</Field.Label>
-            <Select
-              v-model="range"
+          <div class="w-full sm:w-48">
+            <Field>
+              <Field.Label>Time range</Field.Label>
+              <Select
+                v-model="range"
+                size="medium"
+                :display-value="rangeLabel"
+                :disabled="loading"
+              >
+                <Select.Trigger />
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in RANGES"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </Select.Option>
+                </Select.Content>
+              </Select>
+            </Field>
+          </div>
+          <div class="w-full sm:w-40">
+            <Field :invalid="thresholdInvalid">
+              <Field.Label>Minimum hits</Field.Label>
+              <Input
+                v-model="threshold"
+                size="medium"
+                inputmode="numeric"
+                autocomplete="off"
+                :disabled="loading"
+              />
+              <Field.Error v-if="thresholdInvalid">Use a whole number.</Field.Error>
+            </Field>
+          </div>
+          <div class="min-w-36 grow basis-(--container-2xs)">
+            <Input
+              v-model="search"
               size="medium"
-              :display-value="rangeLabel"
+              placeholder="Search by rule, IP, country or path"
+              aria-label="Search matched requests"
+              class="w-full"
               :disabled="loading"
             >
-              <Select.Trigger />
-              <Select.Content>
-                <Select.Option
-                  v-for="option in RANGES"
-                  :key="option.value"
-                  :value="option.value"
-                >
-                  {{ option.label }}
-                </Select.Option>
-              </Select.Content>
-            </Select>
-          </Field>
-          <Field
-            class="w-full sm:w-40"
-            :invalid="thresholdInvalid"
-          >
-            <Field.Label>Minimum hits</Field.Label>
-            <Input
-              v-model="threshold"
-              size="medium"
-              inputmode="numeric"
-              autocomplete="off"
-              :disabled="loading"
-            />
-            <Field.Error v-if="thresholdInvalid">Use a whole number.</Field.Error>
-          </Field>
-          <Input
-            v-model="search"
-            size="medium"
-            placeholder="Search by rule, IP, country or path"
-            aria-label="Search matched requests"
-            class="min-w-36 grow basis-(--container-2xs)"
-            :disabled="loading"
-          >
-            <template #iconLeft>
-              <i
-                class="pi pi-search"
-                aria-hidden="true"
-              />
-            </template>
-          </Input>
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </div>
           <Tooltip text="Refresh">
             <IconButton
               icon="pi pi-refresh"
@@ -526,23 +533,28 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
                 </div>
               </div>
             </PanelContent>
-            <PanelFooter class="flex-col md:flex-row md:justify-end">
-              <Button
-                class="w-full md:w-auto"
-                type="button"
-                label="Cancel"
-                kind="outlined"
-                :disabled="allowing"
-                @click="allowOpen = false"
-              />
-              <Button
-                class="w-full md:w-auto"
-                type="submit"
-                :label="allowFailed ? 'Try again' : 'Allow rules'"
-                kind="primary"
-                :loading="allowing"
-              />
-            </PanelFooter>
+            <PanelFooter
+              ><div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+                <div class="w-full md:w-fit">
+                  <Button
+                    class="w-full"
+                    type="button"
+                    label="Cancel"
+                    kind="outlined"
+                    :disabled="allowing"
+                    @click="allowOpen = false"
+                  />
+                </div>
+                <div class="w-full md:w-fit">
+                  <Button
+                    class="w-full"
+                    type="submit"
+                    :label="allowFailed ? 'Try again' : 'Allow rules'"
+                    kind="primary"
+                    :loading="allowing"
+                  />
+                </div></div
+            ></PanelFooter>
           </form>
         </DialogContent>
       </DialogPortal>

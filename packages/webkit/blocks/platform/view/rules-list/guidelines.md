@@ -28,21 +28,21 @@ A medium `Input` with a search icon, named "Search rules", matching name, descri
 
 A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, the arrow on the start side, one item per phase, all open by default. Each trigger is an `h2` reading "Request phase" with the rule count in muted tabular figures. A resource with a single phase keeps the same anatomy with one item.
 
-### D. Rules table — `Table`, `Table.Header`, `Table.Row`, `Table.HeadCell`, `Table.Cell`, `Tag`, `Switch` (required)
+### D. Rules table — `TableRoot`, `Tag`, `Switch` (required)
 
-A composed `Table` per phase: Order (fixed width), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen").
+A data-driven `TableRoot` per phase (`row-key="id"`, no sorting: order is the data's), so rows stack as cards in a narrow container: Order (200 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). Each cell slot wraps its content in one element carrying the rule id and the drag state, so the panel around the table handles drag over and drop for the whole phase and every cell of the target row draws the drop line.
 
 ### E. Order controls — `Input`, `IconButton`, `Tooltip` (required)
 
 In the Order cell, in this order: a small position `Input` (numeric, centered; Enter or blur moves the rule there, Escape cancels), a grip `IconButton` (`pi pi-bars`) that is the drag handle and moves the rule one place with the up and down arrow keys, and Move up and Move down `IconButton`s. Each control is named after its rule and phase, and its `Tooltip` repeats the action or, when it is disabled, the reason. Leading locked rules are pinned: their controls are disabled and nothing can move above them. After a move, focus returns to the same control on the moved rule (the grip when that control is now disabled), and a polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
 
-### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Toaster` (required)
+### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Toaster` (required)
 
-Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save shows its loading state and the dialog cannot be dismissed while saving. On success the dialog closes and a success toast says "Rule order saved." On failure the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again.
+Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save shows its loading state and the dialog cannot be dismissed while saving. On success the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again.
 
-### G. States — `Skeleton`, `EmptyState` (required)
+### G. States — `EmptyState` (required)
 
-Loading: triggers read Loading, the search is disabled and each table shows three skeleton rows shaped like its columns. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: one muted line, "No request rule matches “cache”."
+Loading: triggers read Loading, the search is disabled and each `TableRoot` shows its skeleton rows (`loading`). Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: one muted line in the table's `empty` slot, "No request rule matches “cache”."
 
 ## Do
 

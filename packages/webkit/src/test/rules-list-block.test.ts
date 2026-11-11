@@ -6,14 +6,12 @@ import ReviewChanges from '../../blocks/platform/view/rules-list/variants/review
 import Searching from '../../blocks/platform/view/rules-list/variants/searching.vue'
 
 const namesIn = (root: HTMLElement, phase: string) =>
-  Array.from(root.querySelectorAll(`[data-rule-id^="${phase}"] a`)).map((a) =>
+  Array.from(root.querySelectorAll(`[data-rule-cell^="${phase}"] a[data-rule-name]`)).map((a) =>
     a.textContent?.trim()
   )
 
 const requestNames = (root: HTMLElement) =>
-  Array.from(root.querySelectorAll('[data-rule-id^="re-"]'))
-    .filter((row) => !row.closest('[data-state="closed"]'))
-    .map((row) => row.querySelector('a')?.textContent?.trim())
+  Array.from(root.querySelectorAll('a[data-rule-name]')).map((a) => a.textContent?.trim())
 
 describe('platform/view/rules-list block', () => {
   it('moves a rule with the arrow keys on its grip, announces it and keeps focus on the moved rule', async () => {
@@ -104,6 +102,9 @@ describe('platform/view/rules-list block', () => {
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), {
       timeout: 3000
     })
+    await waitFor(() =>
+      expect(document.activeElement?.getAttribute('aria-label')).toBe('Rules by phase')
+    )
   })
 
   it('turns reordering off while a search narrows the list', async () => {

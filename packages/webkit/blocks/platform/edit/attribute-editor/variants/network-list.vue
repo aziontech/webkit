@@ -458,15 +458,16 @@
             </fieldset>
           </PanelContent>
 
-          <PanelFooter class="justify-end">
-            <Button
-              type="submit"
-              label="Save"
-              kind="primary"
-              size="medium"
-              :loading="submitting"
-            />
-          </PanelFooter>
+          <PanelFooter
+            ><div class="flex w-full justify-end">
+              <Button
+                type="submit"
+                label="Save"
+                kind="primary"
+                size="medium"
+                :loading="submitting"
+              /></div
+          ></PanelFooter>
         </form>
       </DrawerContent>
     </DrawerPortal>

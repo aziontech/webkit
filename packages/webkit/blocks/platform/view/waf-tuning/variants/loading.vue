@@ -123,6 +123,7 @@
   const formatHits = (value) => new Intl.NumberFormat('en-US').format(value)
 
   const tuningTable = ref(null)
+  const resultsEl = ref(null)
   const exportCsv = () => tuningTable.value?.exportCsv({ filename: 'waf-tuning.csv' })
 
   const refresh = () => {
@@ -168,6 +169,7 @@
       const created = pathCount.value
       allowOpen.value = false
       selection.value = {}
+      setTimeout(() => resultsEl.value?.focus(), 0)
       toast.success(`${created} allowed ${created === 1 ? 'rule' : 'rules'} created.`, {
         description: 'Requests that match them are no longer blocked by this rule set.'
       })
@@ -204,62 +206,67 @@
       </PageHeader>
 
       <section
-        class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-boundary-end)"
+        ref="resultsEl"
+        tabindex="-1"
+        class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-boundary-end) outline-none"
         aria-label="Matched requests"
       >
         <div
           v-if="INITIAL_ROWS.length"
           class="flex min-w-0 flex-wrap items-end gap-(--spacing-sm)"
         >
-          <Field class="w-full sm:w-48">
-            <Field.Label>Time range</Field.Label>
-            <Select
-              v-model="range"
+          <div class="w-full sm:w-48">
+            <Field>
+              <Field.Label>Time range</Field.Label>
+              <Select
+                v-model="range"
+                size="medium"
+                :display-value="rangeLabel"
+                :disabled="loading"
+              >
+                <Select.Trigger />
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in RANGES"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </Select.Option>
+                </Select.Content>
+              </Select>
+            </Field>
+          </div>
+          <div class="w-full sm:w-40">
+            <Field :invalid="thresholdInvalid">
+              <Field.Label>Minimum hits</Field.Label>
+              <Input
+                v-model="threshold"
+                size="medium"
+                inputmode="numeric"
+                autocomplete="off"
+                :disabled="loading"
+              />
+              <Field.Error v-if="thresholdInvalid">Use a whole number.</Field.Error>
+            </Field>
+          </div>
+          <div class="min-w-36 grow basis-(--container-2xs)">
+            <Input
+              v-model="search"
               size="medium"
-              :display-value="rangeLabel"
+              placeholder="Search by rule, IP, country or path"
+              aria-label="Search matched requests"
+              class="w-full"
               :disabled="loading"
             >
-              <Select.Trigger />
-              <Select.Content>
-                <Select.Option
-                  v-for="option in RANGES"
-                  :key="option.value"
-                  :value="option.value"
-                >
-                  {{ option.label }}
-                </Select.Option>
-              </Select.Content>
-            </Select>
-          </Field>
-          <Field
-            class="w-full sm:w-40"
-            :invalid="thresholdInvalid"
-          >
-            <Field.Label>Minimum hits</Field.Label>
-            <Input
-              v-model="threshold"
-              size="medium"
-              inputmode="numeric"
-              autocomplete="off"
-              :disabled="loading"
-            />
-            <Field.Error v-if="thresholdInvalid">Use a whole number.</Field.Error>
-          </Field>
-          <Input
-            v-model="search"
-            size="medium"
-            placeholder="Search by rule, IP, country or path"
-            aria-label="Search matched requests"
-            class="min-w-36 grow basis-(--container-2xs)"
-            :disabled="loading"
-          >
-            <template #iconLeft>
-              <i
-                class="pi pi-search"
-                aria-hidden="true"
-              />
-            </template>
-          </Input>
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </div>
           <Tooltip text="Refresh">
             <IconButton
               icon="pi pi-refresh"
@@ -415,23 +422,28 @@
                 </div>
               </div>
             </PanelContent>
-            <PanelFooter class="flex-col md:flex-row md:justify-end">
-              <Button
-                class="w-full md:w-auto"
-                type="button"
-                label="Cancel"
-                kind="outlined"
-                :disabled="allowing"
-                @click="allowOpen = false"
-              />
-              <Button
-                class="w-full md:w-auto"
-                type="submit"
-                :label="allowFailed ? 'Try again' : 'Allow rules'"
-                kind="primary"
-                :loading="allowing"
-              />
-            </PanelFooter>
+            <PanelFooter
+              ><div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+                <div class="w-full md:w-fit">
+                  <Button
+                    class="w-full"
+                    type="button"
+                    label="Cancel"
+                    kind="outlined"
+                    :disabled="allowing"
+                    @click="allowOpen = false"
+                  />
+                </div>
+                <div class="w-full md:w-fit">
+                  <Button
+                    class="w-full"
+                    type="submit"
+                    :label="allowFailed ? 'Try again' : 'Allow rules'"
+                    kind="primary"
+                    :loading="allowing"
+                  />
+                </div></div
+            ></PanelFooter>
           </form>
         </DialogContent>
       </DialogPortal>

@@ -18,9 +18,8 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -174,7 +173,7 @@
       return {
         ...phase,
         total: list.length,
-        rows: list.map((item, index) => ({ item, index })).filter(({ item }) => matches(item))
+        items: list.filter(matches)
       }
     })
   )
@@ -260,9 +259,6 @@
       if (row) event.dataTransfer.setDragImage(row, 16, 16)
     }
   }
-  const onDragEnter = (phase, index) => {
-    if (drag.phase === phase) drag.over = index
-  }
   const onDragEnd = () => {
     drag.phase = null
     drag.from = -1
@@ -277,6 +273,42 @@
   const isDragging = (phase, index) => drag.phase === phase && drag.from === index
   const isDropTarget = (phase, index) =>
     drag.phase === phase && drag.over === index && drag.from !== index && index >= pinned(phase)
+  const position = (phase, item) => rules[phase].indexOf(item)
+  const cellState = (phase, item) => {
+    const index = position(phase, item)
+    return {
+      'data-rule-cell': item.id,
+      'data-dragging': isDragging(phase, index) || null,
+      'data-drop': isDropTarget(phase, index) || null
+    }
+  }
+  const indexFromEvent = (phase, event) => {
+    const id = event.target?.closest?.('[data-rule-cell]')?.getAttribute('data-rule-cell')
+    return rules[phase].findIndex((item) => item.id === id)
+  }
+  const onPanelDragOver = (phase, event) => {
+    if (drag.phase !== phase) return
+    event.preventDefault()
+    const index = indexFromEvent(phase, event)
+    if (index >= 0) drag.over = index
+  }
+  const onPanelDrop = (phase, event) => {
+    if (drag.phase !== phase) return
+    event.preventDefault()
+    const index = indexFromEvent(phase, event)
+    if (index >= 0) onDrop(phase, index)
+    else onDragEnd()
+  }
+
+  const columns = [
+    { id: 'order', header: 'Order', width: 200, hideable: false },
+    { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
+    { accessorKey: 'description', header: 'Description', grow: 3 },
+    { id: 'status', header: 'Status', width: 152 },
+    { accessorKey: 'modified', header: 'Last modified', grow: 2 }
+  ]
+  const CELL_CLASS =
+    "relative flex w-full min-w-0 items-center gap-(--spacing-xxs) self-stretch transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-dragging:opacity-60 data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:top-0 data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
 
   const setActive = (item, value) => {
     item.active = value
@@ -340,6 +372,7 @@
       }
       saved.value = snapshot()
       reviewOpen.value = false
+      setTimeout(() => listEl.value?.focus(), 0)
       toast.success('Rule order saved.', {
         description: `The ${SUBJECT} runs its rules in the new order.`
       })
@@ -375,25 +408,28 @@
 
       <section
         ref="listEl"
-        class="layout-section-start flex min-w-0 flex-1 flex-col gap-(--layout-group-gap) pb-(--layout-boundary-end)"
+        tabindex="-1"
+        class="layout-section-start flex min-w-0 flex-1 flex-col gap-(--layout-group-gap) pb-(--layout-boundary-end) outline-none"
         aria-label="Rules by phase"
       >
         <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-sm)">
-          <Input
-            v-model="search"
-            size="medium"
-            placeholder="Search rules"
-            aria-label="Search rules"
-            class="min-w-36 grow basis-(--container-2xs)"
-            :disabled="loading"
-          >
-            <template #iconLeft>
-              <i
-                class="pi pi-search"
-                aria-hidden="true"
-              />
-            </template>
-          </Input>
+          <div class="min-w-36 grow basis-(--container-2xs)">
+            <Input
+              v-model="search"
+              size="medium"
+              placeholder="Search rules"
+              aria-label="Search rules"
+              class="w-full"
+              :disabled="loading"
+            >
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </div>
         </div>
 
         <Alert
@@ -426,196 +462,186 @@
                         loading
                           ? 'Loading'
                           : searching
-                            ? `${group.rows.length} of ${group.total}`
+                            ? `${group.items.length} of ${group.total}`
                             : `${group.total} ${group.total === 1 ? 'rule' : 'rules'}`
                       }}
                     </span>
                   </span>
                 </Accordion.Trigger>
                 <Accordion.Content>
-                  <Table v-if="loading || group.rows.length">
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.HeadCell class="w-48 flex-none!">Order</Table.HeadCell>
-                        <Table.HeadCell principal>Name</Table.HeadCell>
-                        <Table.HeadCell :grow="3">Description</Table.HeadCell>
-                        <Table.HeadCell class="w-36 flex-none!">Status</Table.HeadCell>
-                        <Table.HeadCell :grow="2">Last modified</Table.HeadCell>
-                      </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                      <template v-if="loading">
-                        <Table.Row
-                          v-for="n in 3"
-                          :key="`wire-${n}`"
+                  <div
+                    @dragover="onPanelDragOver(group.value, $event)"
+                    @drop="onPanelDrop(group.value, $event)"
+                  >
+                    <TableRoot
+                      v-if="loading || group.total"
+                      :data="loading ? [] : group.items"
+                      :columns="columns"
+                      row-key="id"
+                      :bordered="false"
+                      :loading="loading"
+                    >
+                      <template #cell-order="{ row }">
+                        <div
+                          v-bind="cellState(group.value, row)"
+                          :data-rule-id="row.id"
+                          :class="CELL_CLASS"
                         >
-                          <Table.Cell class="w-48 flex-none!">
-                            <Skeleton
-                              width="7rem"
-                              height="1.75rem"
-                            />
-                          </Table.Cell>
-                          <Table.Cell principal>
-                            <Skeleton width="70%" />
-                          </Table.Cell>
-                          <Table.Cell :grow="3">
-                            <Skeleton width="85%" />
-                          </Table.Cell>
-                          <Table.Cell class="w-36 flex-none!">
-                            <Skeleton width="4rem" />
-                          </Table.Cell>
-                          <Table.Cell :grow="2">
-                            <Skeleton width="60%" />
-                          </Table.Cell>
-                        </Table.Row>
-                      </template>
-                      <template v-else>
-                        <Table.Row
-                          v-for="{ item, index } in group.rows"
-                          :key="item.id"
-                          :data-rule-id="item.id"
-                          :data-dragging="isDragging(group.value, index) || null"
-                          :data-drop="isDropTarget(group.value, index) || null"
-                          class="relative transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-dragging:opacity-60 data-drop:shadow-[inset_0_2px_0_var(--accent)]"
-                          @dragenter.prevent="onDragEnter(group.value, index)"
-                          @dragover.prevent
-                          @drop.prevent="onDrop(group.value, index)"
-                        >
-                          <Table.Cell class="w-48 flex-none! gap-(--spacing-xxs)">
-                            <span
-                              class="w-14 shrink-0 [&_input]:text-center [&_input]:tabular-nums"
-                            >
-                              <Input
-                                :model-value="positionValue(item, index)"
-                                size="small"
-                                inputmode="numeric"
-                                autocomplete="off"
-                                data-control="position"
-                                :disabled="Boolean(lockReason(group.value, item))"
-                                :aria-label="
-                                  lockReason(group.value, item)
-                                    ? `Position ${index + 1} of ${group.total} in the ${group.label} phase. ${lockReason(group.value, item)}`
-                                    : `Position of ${item.name} in the ${group.label} phase. Type a number from ${pinned(group.value) + 1} to ${group.total} and press Enter to move it.`
-                                "
-                                @update:model-value="drafts[item.id] = $event"
-                                @focus="$event.target.select?.()"
-                                @keydown.enter.prevent="commitPosition(group.value, item)"
-                                @keydown.esc.prevent="cancelPosition(item)"
-                                @blur="commitPosition(group.value, item)"
-                              />
-                            </span>
-                            <Tooltip
-                              :text="
-                                lockReason(group.value, item) ||
-                                'Drag to reorder, or use the arrow keys'
+                          <span class="w-14 shrink-0 [&_input]:text-center [&_input]:tabular-nums">
+                            <Input
+                              :model-value="positionValue(row, position(group.value, row))"
+                              size="small"
+                              inputmode="numeric"
+                              autocomplete="off"
+                              data-control="position"
+                              :disabled="Boolean(lockReason(group.value, row))"
+                              :aria-label="
+                                lockReason(group.value, row)
+                                  ? `Position ${position(group.value, row) + 1} of ${group.total} in the ${group.label} phase. ${lockReason(group.value, row)}`
+                                  : `Position of ${row.name} in the ${group.label} phase. Type a number from ${pinned(group.value) + 1} to ${group.total} and press Enter to move it.`
                               "
-                            >
-                              <IconButton
-                                icon="pi pi-bars"
-                                kind="outlined"
-                                size="small"
-                                data-control="grip"
-                                :draggable="!lockReason(group.value, item)"
-                                :disabled="Boolean(lockReason(group.value, item))"
-                                :aria-label="
-                                  lockReason(group.value, item)
-                                    ? `${item.name} cannot be reordered. ${lockReason(group.value, item)}`
-                                    : `Reorder ${item.name}, position ${index + 1} of ${group.total} in the ${group.label} phase. Use the up and down arrow keys to move it.`
-                                "
-                                @dragstart="onDragStart(group.value, index, $event)"
-                                @dragend="onDragEnd"
-                                @keydown.up.prevent="step(group.value, index, -1, 'grip')"
-                                @keydown.down.prevent="step(group.value, index, 1, 'grip')"
-                              />
-                            </Tooltip>
-                            <Tooltip text="Move up">
-                              <IconButton
-                                icon="pi pi-chevron-up"
-                                kind="outlined"
-                                size="small"
-                                data-control="up"
-                                :aria-label="`Move ${item.name} up`"
-                                :disabled="!canMove(group.value, index, -1)"
-                                @click="step(group.value, index, -1, 'up')"
-                              />
-                            </Tooltip>
-                            <Tooltip text="Move down">
-                              <IconButton
-                                icon="pi pi-chevron-down"
-                                kind="outlined"
-                                size="small"
-                                data-control="down"
-                                :aria-label="`Move ${item.name} down`"
-                                :disabled="!canMove(group.value, index, 1)"
-                                @click="step(group.value, index, 1, 'down')"
-                              />
-                            </Tooltip>
-                          </Table.Cell>
-                          <Table.Cell principal>
-                            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                              <a
-                                :href="`#rule-${item.id}`"
-                                class="min-w-0 truncate rounded-(--shape-button) text-(--text-default) underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                                >{{ item.name }}</a
-                              >
-                              <Tag
-                                v-if="item.locked"
-                                label="Default"
-                                severity="secondary"
-                                size="small"
-                              />
-                            </span>
-                          </Table.Cell>
-                          <Table.Cell :grow="3">
-                            <span class="min-w-0 truncate text-(--text-muted)">{{
-                              item.description
-                            }}</span>
-                          </Table.Cell>
-                          <Table.Cell class="w-36 flex-none!">
-                            <label
-                              class="flex min-h-10 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
-                            >
-                              <Switch
-                                :model-value="item.active"
-                                :disabled="item.locked || saving"
-                                :aria-label="`Run ${item.name}`"
-                                @update:model-value="setActive(item, $event)"
-                              />
-                              <span aria-hidden="true">{{
-                                item.active ? 'Active' : 'Inactive'
-                              }}</span>
-                            </label>
-                          </Table.Cell>
-                          <Table.Cell :grow="2">
-                            <span class="min-w-0 truncate text-body-sm text-(--text-muted)"
-                              >{{ item.modified }} by {{ item.author }}</span
-                            >
-                          </Table.Cell>
-                        </Table.Row>
+                              @update:model-value="drafts[row.id] = $event"
+                              @focus="$event.target.select?.()"
+                              @keydown.enter.prevent="commitPosition(group.value, row)"
+                              @keydown.esc.prevent="cancelPosition(row)"
+                              @blur="commitPosition(group.value, row)"
+                            />
+                          </span>
+                          <Tooltip
+                            :text="
+                              lockReason(group.value, row) ||
+                              'Drag to reorder, or use the arrow keys'
+                            "
+                          >
+                            <IconButton
+                              icon="pi pi-bars"
+                              kind="outlined"
+                              size="small"
+                              data-control="grip"
+                              :draggable="!lockReason(group.value, row)"
+                              :disabled="Boolean(lockReason(group.value, row))"
+                              :aria-label="
+                                lockReason(group.value, row)
+                                  ? `${row.name} cannot be reordered. ${lockReason(group.value, row)}`
+                                  : `Reorder ${row.name}, position ${position(group.value, row) + 1} of ${group.total} in the ${group.label} phase. Use the up and down arrow keys to move it.`
+                              "
+                              @dragstart="
+                                onDragStart(group.value, position(group.value, row), $event)
+                              "
+                              @dragend="onDragEnd"
+                              @keydown.up.prevent="
+                                step(group.value, position(group.value, row), -1, 'grip')
+                              "
+                              @keydown.down.prevent="
+                                step(group.value, position(group.value, row), 1, 'grip')
+                              "
+                            />
+                          </Tooltip>
+                          <Tooltip text="Move up">
+                            <IconButton
+                              icon="pi pi-chevron-up"
+                              kind="outlined"
+                              size="small"
+                              data-control="up"
+                              :aria-label="`Move ${row.name} up`"
+                              :disabled="!canMove(group.value, position(group.value, row), -1)"
+                              @click="step(group.value, position(group.value, row), -1, 'up')"
+                            />
+                          </Tooltip>
+                          <Tooltip text="Move down">
+                            <IconButton
+                              icon="pi pi-chevron-down"
+                              kind="outlined"
+                              size="small"
+                              data-control="down"
+                              :aria-label="`Move ${row.name} down`"
+                              :disabled="!canMove(group.value, position(group.value, row), 1)"
+                              @click="step(group.value, position(group.value, row), 1, 'down')"
+                            />
+                          </Tooltip>
+                        </div>
                       </template>
-                    </Table.Body>
-                  </Table>
-                  <EmptyState
-                    v-else-if="!group.total"
-                    size="small"
-                    :title="`No ${group.label.toLowerCase()} rules yet`"
-                    :description="`Add a rule to act on every ${group.label.toLowerCase()} this ${SUBJECT} handles.`"
-                  >
-                    <template #actions>
-                      <Button
-                        label="Add Rule"
-                        icon="pi pi-plus"
-                        kind="outlined"
-                        size="medium"
-                      />
-                    </template>
-                  </EmptyState>
-                  <p
-                    v-else
-                    class="m-0 px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
-                  >
-                    No {{ group.label.toLowerCase() }} rule matches “{{ search.trim() }}”.
-                  </p>
+                      <template #cell-name="{ row }">
+                        <div
+                          v-bind="cellState(group.value, row)"
+                          :class="CELL_CLASS"
+                        >
+                          <a
+                            :href="`#rule-${row.id}`"
+                            data-rule-name
+                            class="min-w-0 truncate rounded-(--shape-button) text-(--text-default) underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                            >{{ row.name }}</a
+                          >
+                          <Tag
+                            v-if="row.locked"
+                            label="Default"
+                            severity="secondary"
+                            size="small"
+                          />
+                        </div>
+                      </template>
+                      <template #cell-description="{ row }">
+                        <div
+                          v-bind="cellState(group.value, row)"
+                          :class="CELL_CLASS"
+                        >
+                          <span class="min-w-0 truncate text-(--text-muted)">{{
+                            row.description
+                          }}</span>
+                        </div>
+                      </template>
+                      <template #cell-status="{ row }">
+                        <div
+                          v-bind="cellState(group.value, row)"
+                          :class="CELL_CLASS"
+                        >
+                          <label
+                            class="flex min-h-10 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
+                          >
+                            <Switch
+                              :model-value="row.active"
+                              :disabled="row.locked || saving"
+                              :aria-label="`Run ${row.name}`"
+                              @update:model-value="setActive(row, $event)"
+                            />
+                            <span aria-hidden="true">{{ row.active ? 'Active' : 'Inactive' }}</span>
+                          </label>
+                        </div>
+                      </template>
+                      <template #cell-modified="{ row }">
+                        <div
+                          v-bind="cellState(group.value, row)"
+                          :class="CELL_CLASS"
+                        >
+                          <span class="min-w-0 truncate text-body-sm text-(--text-muted)"
+                            >{{ row.modified }} by {{ row.author }}</span
+                          >
+                        </div>
+                      </template>
+                      <template #empty>
+                        <p
+                          class="m-0 px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+                        >
+                          No {{ group.label.toLowerCase() }} rule matches “{{ search.trim() }}”.
+                        </p>
+                      </template>
+                    </TableRoot>
+                    <EmptyState
+                      v-else
+                      size="small"
+                      :title="`No ${group.label.toLowerCase()} rules yet`"
+                      :description="`Add a rule to act on every ${group.label.toLowerCase()} this ${SUBJECT} handles.`"
+                    >
+                      <template #actions>
+                        <Button
+                          label="Add Rule"
+                          icon="pi pi-plus"
+                          kind="outlined"
+                          size="medium"
+                        />
+                      </template>
+                    </EmptyState>
+                  </div>
                 </Accordion.Content>
               </Accordion.Item>
             </Accordion>
@@ -705,23 +731,29 @@
               </section>
             </div>
           </PanelContent>
-          <PanelFooter class="flex-col md:flex-row md:justify-end">
-            <Button
-              class="w-full md:w-auto"
-              type="button"
-              label="Cancel"
-              kind="outlined"
-              :disabled="saving"
-              @click="reviewOpen = false"
-            />
-            <Button
-              class="w-full md:w-auto"
-              type="button"
-              :label="saveFailed ? 'Save again' : 'Save'"
-              kind="primary"
-              :loading="saving"
-              @click="save"
-            />
+          <PanelFooter>
+            <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+              <div class="w-full md:w-fit">
+                <Button
+                  class="w-full"
+                  type="button"
+                  label="Cancel"
+                  kind="outlined"
+                  :disabled="saving"
+                  @click="reviewOpen = false"
+                />
+              </div>
+              <div class="w-full md:w-fit">
+                <Button
+                  class="w-full"
+                  type="button"
+                  :label="saveFailed ? 'Save again' : 'Save'"
+                  kind="primary"
+                  :loading="saving"
+                  @click="save"
+                />
+              </div>
+            </div>
           </PanelFooter>
         </DialogContent>
       </DialogPortal>
