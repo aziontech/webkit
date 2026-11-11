@@ -12,7 +12,7 @@ import {
   highlighter,
   renderMarkdownFile
 } from './content.ts'
-import { CATALOG, LLMS, readCatalog, STATIC_ASSETS, THEME } from './paths.ts'
+import { CATALOG, LLMS, readCatalog, siteAssets, STATIC_ASSETS, THEME } from './paths.ts'
 
 const INDEX = 'virtual:docs-index'
 const TOKENS = 'virtual:docs-tokens'
@@ -103,8 +103,14 @@ export function docsPlugin(): Plugin {
       return null
     },
     configureServer(server) {
+      const assets = siteAssets()
       server.middlewares.use((req, res, next) => {
         const url = decodeURIComponent((req.url ?? '').split('?')[0])
+        if (assets[url]) {
+          res.setHeader('Content-Type', MIME[extname(url)] ?? 'application/octet-stream')
+          createReadStream(assets[url]).pipe(res)
+          return
+        }
         for (const { prefix, dir } of STATIC_DIRS) {
           if (!url.startsWith(prefix)) continue
           const file = normalize(join(dir, url.slice(prefix.length)))
@@ -120,6 +126,7 @@ export function docsPlugin(): Plugin {
       if (config.build.ssr) return
       const out = config.build.outDir
       if (existsSync(STATIC_ASSETS)) cpSync(STATIC_ASSETS, out, { recursive: true })
+      for (const [url, file] of Object.entries(siteAssets())) cpSync(file, join(out, url))
       if (existsSync(LLMS)) {
         cpSync(LLMS, join(out, 'llms'), { recursive: true })
         if (existsSync(join(LLMS, 'llms.txt')))

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useHead } from '@unhead/vue'
   import { type Component, computed, onBeforeUnmount, onMounted, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
@@ -21,6 +22,12 @@
       : undefined
   )
 
+  useHead({
+    title: computed(() =>
+      block.value && state.value ? `${block.value.title}: ${state.value.name} — WebKit` : 'WebKit'
+    )
+  })
+
   function onMessage(event: MessageEvent) {
     if (event.origin !== location.origin || event.data?.source !== 'webkit-docs') return
     if (event.data.theme === 'dark' || event.data.theme === 'light')
@@ -40,6 +47,7 @@
 
 <template>
   <div
+    :data-source="block && state ? `blocks/${block.dir}/${state.file}` : undefined"
     :class="[
       'min-h-screen w-full bg-(--bg-canvas)',
       block?.layout === 'fullscreen' ? '' : 'p-(--spacing-lg)'

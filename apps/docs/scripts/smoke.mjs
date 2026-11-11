@@ -1,4 +1,4 @@
-import { readdirSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -9,6 +9,18 @@ import { serve } from './serve.mjs'
 
 const DIST = resolve(dirname(fileURLToPath(import.meta.url)), '../dist')
 const AXE = createRequire(import.meta.url).resolve('axe-core/axe.min.js')
+const KNOWN_FILE = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  '../../../packages/webkit/src/test/a11y-known.json'
+)
+const KNOWN = existsSync(KNOWN_FILE) ? JSON.parse(readFileSync(KNOWN_FILE, 'utf8')) : {}
+const CHROME_KNOWN = [
+  {
+    rule: 'aria-required-children',
+    selector: '[role="table"]',
+    source: 'examples/table/default.vue'
+  }
+]
 const CONCURRENCY = Number(process.env.SMOKE_CONCURRENCY ?? 6)
 const AXE_EVERY = Number(process.env.SMOKE_AXE_EVERY ?? 8)
 
@@ -41,7 +53,7 @@ const context = await browser.newContext({ viewport: { width: 1440, height: 900 
 const failures = []
 const axeFailures = []
 let axeChecked = 0
-let knownPrimary = 0
+let knownWebkit = 0
 
 async function visit(route) {
   const page = await context.newPage()
@@ -65,38 +77,58 @@ async function visit(route) {
     if (!route.startsWith('/frame') && text < 20) errors.push('empty page')
     if (axeRoutes.has(route)) {
       await page.addScriptTag({ path: AXE })
-      const result = await page.evaluate(async () => {
-        const out = []
-        let known = 0
-        for (const theme of ['dark', 'light']) {
-          const root = document.documentElement
-          root.classList.remove('azion-dark', 'azion-light')
-          root.classList.add(`azion-${theme}`)
-          root.dataset.theme = theme
-          const run = await globalThis.axe.run(document, {
-            runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] }
-          })
-          for (const violation of run.violations) {
-            const nodes = violation.nodes.filter((node) => {
-              if (violation.id !== 'color-contrast' || theme !== 'dark') return true
-              const element = document.querySelector(node.target.join(' '))
-              const onPrimary = element?.closest('[class*="bg-(--primary)"]')
-              if (onPrimary) known++
-              return !onPrimary
+      const result = await page.evaluate(
+        async ({ known, chrome }) => {
+          const style = document.createElement('style')
+          style.textContent =
+            '*,*::before,*::after{transition:none!important;animation:none!important}'
+          document.head.append(style)
+          const out = []
+          let skipped = 0
+          for (const theme of ['dark', 'light']) {
+            const root = document.documentElement
+            root.classList.remove('azion-dark', 'azion-light')
+            root.classList.add(`azion-${theme}`)
+            root.dataset.theme = theme
+            await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)))
+            const listed = known[theme] ?? {}
+            const run = await globalThis.axe.run(document, {
+              runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] }
             })
-            if (!nodes.length) continue
-            out.push({
-              id: `${violation.id} [${theme}]`,
-              impact: violation.impact,
-              nodes: nodes.length,
-              target: nodes[0].target.join(' '),
-              summary: nodes[0].failureSummary?.split('\n').slice(1).join(' ')
-            })
+            for (const violation of run.violations) {
+              const nodes = violation.nodes.filter((node) => {
+                const element = document.querySelector(node.target.join(' '))
+                const host = element?.closest('[data-example], [data-source]')
+                const source = host?.dataset.example
+                  ? `examples/${host.dataset.example}`
+                  : host?.dataset.source
+                const isKnown =
+                  (source && listed[source]?.includes(violation.id)) ||
+                  chrome.some(
+                    (entry) =>
+                      entry.rule === violation.id &&
+                      element?.matches(entry.selector) &&
+                      listed[entry.source]?.includes(entry.rule)
+                  )
+                if (isKnown) skipped++
+                return !isKnown
+              })
+              if (!nodes.length) continue
+              out.push({
+                id: `${violation.id} [${theme}]`,
+                impact: violation.impact,
+                nodes: nodes.length,
+                target: nodes[0].target.join(' '),
+                summary: nodes[0].failureSummary?.split('\n').slice(1).join(' ')
+              })
+            }
           }
-        }
-        return { violations: out, known }
-      })
-      knownPrimary += result.known
+          style.remove()
+          return { violations: out, known: skipped }
+        },
+        { known: KNOWN, chrome: CHROME_KNOWN }
+      )
+      knownWebkit += result.known
       axeChecked++
       if (result.violations.length) axeFailures.push({ route, violations: result.violations })
     }
@@ -129,6 +161,6 @@ for (const failure of axeFailures) {
     )
 }
 console.log(
-  `\nRoutes: ${only.length}, console/page errors on ${failures.length}; axe (dark + light) on ${axeChecked}, violations on ${axeFailures.length}; known theme gap (white on --primary in dark, ROADMAP M2.10): ${knownPrimary} nodes`
+  `\nRoutes: ${only.length}, console/page errors on ${failures.length}; axe (dark + light) on ${axeChecked}, violations on ${axeFailures.length}; known WebKit findings listed in packages/webkit/src/test/a11y-known.json: ${knownWebkit} nodes`
 )
 process.exit(failures.length || axeFailures.length ? 1 : 0)
