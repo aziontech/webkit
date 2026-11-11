@@ -93,7 +93,6 @@ const fakeMonaco = () => {
 const textarea = (container: Element) =>
   container.querySelector<HTMLTextAreaElement>('[data-testid="code-code-editor__input"]')!
 
-
 const TOKENS = `:root{--bg-surface:#ffffff;--text-default:#171717;--border-default:#e5e5e5}:root[data-theme=dark]{--bg-surface:#0a0a0a;--text-default:#fafafa}`
 const withTokens = () => {
   const style = document.head.appendChild(document.createElement('style'))
