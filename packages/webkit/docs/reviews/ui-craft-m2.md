@@ -185,3 +185,34 @@ Scope: new `TopologyDiagram` (on `Flow`'s connector engine and anchors, no node-
 
 - Environment: a locked Strict environment, an Also deploys tag, the replace and multi-environment `Alert`s, and Projects impacted grouped per environment and reloaded on switch; the toast names the targets. Dependencies: the open disclosure shows a shared dependency, a not-versioned integration and one with no ready version that blocks Deploy; the first run fails and its toast offers Edit and Redeploy. Revert: an earlier version is read-only with a Viewing `Tag` and `aria-current` in history; the primary action opens a `ConfirmDialog` with the diff in words. No defect.
 - Finding: guidelines for `version-detail` section H named `ConfirmDialog` and `Toaster`, which only the variant imports. Fixed: the heading names `Button` and `Tag`, the prose keeps the dialog and toast.
+
+## WP sql-storage
+
+Scope: new `FileTokenGroup` (files picked for upload as removable tokens with size, date, progress, error and warning) and `UploadProgress` (floating transfer card for upload, move and delete); new block `platform/edit/schema-editor` (primary CreateTable plus AddColumn, InsertRow, ChangeType, TruncateTable, Failed); new variants `query-editor#TableData` and `#CreateDatabase`, `file-browser#Uploading` and `#MoveObject`. The query editor's SQL `Textarea` became `CodeEditor` (`language="sql"`, error markers on the failing line) and its hand-drawn row grid became a selectable, paged `TableRoot` in the primary and every variant. A mechanical pass over every new SFC and example found no raw colours, palette classes, physical direction utilities or raw pixel sizes, and every transition carries a `motion-reduce` escape. No storage or schema change is a deploy, so every outcome toast carries actions that fit the item (Open folder, Retry failed, Undo, Insert row, Add column, Change type, Change again, Insert another, Open database, Create Table), never View deployments, Edit or Redeploy; the guidelines say why.
+
+### FileTokenGroup
+
+- A named `ul` of tokens; each remove button is named `Remove <file>` and described by the token's error or warning line; removing moves focus to the next token, the previous one or the list. Errors and warnings are text with an icon, not colour alone. Show more is a real button with `aria-expanded`. File names sit in `<bdi>`. No defect.
+- Finding: `IconButton` received the kebab `aria-label`, which `vue-tsc` rejects against the required `ariaLabel` prop (M2.10 row 15). Fixed: `:ariaLabel`.
+
+### UploadProgress
+
+- A `section` region named File transfers; the header text is mirrored in one polite `role="status"`, so each finished file and the outcome are announced, not every percent. The overall bar is named by the header, each row bar by its file. Finished state swaps the operation glyph for an animated `OutcomeMark`; Close only appears then. Floating anchors with `end-*` and spans the width minus the gutters below 640 px. No defect.
+- Finding: same kebab `aria-label` on `IconButton`s, and `slots.actions` read through the index signature. Fixed.
+
+### schema-editor
+
+- Drawers follow create-in-drawer: a `form` named by its title, a disabled-while-saving `fieldset`, validation on submit only, `Field` for every label, description and error. The column grip is a real button that reorders with ArrowUp and ArrowDown and keeps focus on the moved row. Change type and Truncate show the SQL that will run in a read-only `CodeEditor`; Truncate asks for the table name. The server's name conflict follows the form-error rule (section `Alert` plus the field). No defect.
+- Finding: 36 consumer-lint `no-style-override` hits, `font-code` on webkit `Input`s. Fixed: removed; the code font stays on plain spans (column names, types, the type list).
+- Finding: the guidelines first named variant-only components in building-block headings. Fixed: headings name only primary imports.
+
+### query-editor#TableData, #CreateDatabase and the editor swap
+
+- TableData: header slots show name, type and a key on the primary key; `NULL` is muted italic; selection resets per table; the bulk Delete is a danger button that only appears with a selection and ends in a toast with Undo. CreateDatabase follows the sample's create page: one Name row, Advanced with Active, a save bar that says Unsaved changes, the name conflict on the field and Retry in a toast for a request that never arrived; focus returns to Name after a failed submit. No defect.
+- Finding: building blocks K and L were lettered before J and named variant-only components. Fixed: moved after J, headings name primary imports, the prose lists what the variant adds.
+
+### file-browser#Uploading and #MoveObject
+
+- Uploading: the dialog keeps refused files with the reason and leaves them out of the count on the primary button; the page drop overlay is `aria-hidden` because Add to files is the keyboard path; transfers never block the page; finished files land in the table one by one. MoveObject: the destination is a `Combobox` of folders that accepts a new path, validated on Move with the reason under the field. No defect.
+- Decision: the `Toaster` sits at `top-right` in both variants, because the floating transfer card holds the bottom inline-end corner.
+- Finding: Move stayed enabled with only folders or the `..` row selected and then did nothing. Fixed: disabled until a file is selected. Open: `TableRoot` cannot make single rows unselectable, so folders and `..` still take a checkbox (M2.10 row 24).

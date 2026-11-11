@@ -407,6 +407,59 @@ export const es: Messages = {
   fileDropzone: {
     title: 'Suelta archivos para subirlos'
   },
+  fileTokenGroup: {
+    label: 'Archivos',
+    remove: 'Quitar {name}',
+    uploading: 'Subiendo {name}',
+    modified: 'Modificado el {date}',
+    showMore: {
+      one: 'Mostrar {count} archivo más',
+      other: 'Mostrar {count} archivos más'
+    },
+    showFewer: 'Mostrar menos archivos'
+  },
+  uploadProgress: {
+    label: 'Transferencias de archivos',
+    uploading: {
+      one: 'Subiendo {done} de {count} archivo',
+      other: 'Subiendo {done} de {count} archivos'
+    },
+    moving: {
+      one: 'Moviendo {done} de {count} archivo',
+      other: 'Moviendo {done} de {count} archivos'
+    },
+    deleting: {
+      one: 'Eliminando {done} de {count} archivo',
+      other: 'Eliminando {done} de {count} archivos'
+    },
+    uploaded: {
+      one: '{count} archivo subido',
+      other: '{count} archivos subidos'
+    },
+    moved: {
+      one: '{count} archivo movido',
+      other: '{count} archivos movidos'
+    },
+    deleted: {
+      one: '{count} archivo eliminado',
+      other: '{count} archivos eliminados'
+    },
+    failed: {
+      one: '{count} falló',
+      other: '{count} fallaron'
+    },
+    queued: 'En espera',
+    done: 'Listo',
+    canceled: 'Cancelado',
+    cancelAll: 'Cancelar todo',
+    cancelItem: 'Cancelar {name}',
+    retryItem: 'Reintentar {name}',
+    retryFailed: 'Reintentar los fallidos',
+    close: 'Cerrar',
+    expand: 'Mostrar archivos',
+    collapse: 'Ocultar archivos',
+    itemProgress: 'Progreso de {name}'
+  },
   footer: {
     label: 'Pie de página'
   },

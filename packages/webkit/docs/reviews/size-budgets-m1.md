@@ -199,3 +199,15 @@ No new entries. Six small raises, all from accessibility fixes in shared parts t
 | listing-table    | 56            | 56.09        | 56.25      | `Table` grid role and attribute forwarding.                    |
 | hotspot          | 11.25         | 11.32        | 11.4       | Built on `Popover`, whose trigger goes through `TriggerHost`.  |
 | confirm-dialog   | 23.8          | 23.99        | 24.1       | `Dialog` focus return to the element focused before it opened. |
+
+### M2.9 WP sql-storage
+
+Two new entries at measured plus about 0.2 KB, and three raises from the two new string groups (`fileTokenGroup`, `uploadProgress`) in the locale catalogs.
+
+| Entry            | Budget before | Measured now | New budget | Why                                                                 |
+| ---------------- | ------------- | ------------ | ---------- | ------------------------------------------------------------------- |
+| file-token-group | –             | 6.77         | 7          | New: `IconButton`, `Button`, `Progress` and `useLocale` formatters. |
+| upload-progress  | –             | 8.03         | 8.25       | New: adds `OutcomeMark` to the same parts.                          |
+| webkit-provider  | 7.75          | 7.83         | 8.05       | Raised: the English catalog gained the two groups.                  |
+| locales-pt-BR    | 7.15          | 7.23         | 7.45       | Raised: the same groups in Portuguese.                              |
+| locales-es       | 7.25          | 7.32         | 7.55       | Raised: the same groups in Spanish.                                 |

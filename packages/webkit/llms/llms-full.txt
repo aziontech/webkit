@@ -8437,6 +8437,139 @@ The code of every state is in [blocks/platform/edit/rule-builder.md](blocks/plat
 
 ---
 
+<!-- blocks/platform/edit/schema-editor.md -->
+
+# SchemaEditor (`platform/edit/schema-editor`)
+
+> The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an ordered list of column rows (grip that reorders with the arrow keys, name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`, remove), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action.
+
+- Surface: product
+- Source: `blocks/platform/edit/schema-editor/schema-editor.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/edit/schema-editor")`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CodeEditor](../../../components/code-editor.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
+
+## Asked as
+
+schema editor; create table; add column; insert row; alter column; change column type; truncate table; table schema; database schema; column types; criar tabela; adicionar coluna; inserir linha; alterar coluna; esvaziar tabela; esquema do banco
+
+The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create Table, Add column, Insert and table menu buttons of `platform/view/query-editor`.
+
+## When to use
+
+- A SQL database's tables are created and changed from the console rather than only with SQL.
+- A table's columns, types and constraints are shown and edited one change at a time.
+- A row is added by hand to check a table, without writing an INSERT.
+
+## When not to use
+
+- Running SQL or reading query results: use `platform/view/query-editor`.
+- Rows of a resource that is not a database (variables, records): use `platform/edit/attribute-editor` or `platform/detail/record-table`.
+- A form that creates a resource in its own page: use `platform/create/single-page-create`.
+- A generic item created inside a resource: use `platform/create/create-in-drawer`.
+
+## Building blocks
+
+### A. Definition surface — `Card`, `TableRoot`, `Tag`, `Button`, `DropdownMenu`, `Tooltip`, `IconButton` (required)
+
+One `Card :padded="false"` around a `TableRoot :bordered="false"` named `Columns of <table>`. The toolbar slot holds the table glyph and name, a small secondary `Tag` with the row count, an outlined Add column `Button`, the primary Insert row `Button` and a Table actions `IconButton` (with its `Tooltip`) that opens a `DropdownMenu`: Create Table in the first group, Truncate table alone in the last. The rows are the columns: the name in the code font, the type as a secondary `Tag`, the constraints in muted text (`PRIMARY KEY, NOT NULL, DEFAULT now()`, or `None`), and a per-column `DropdownMenu` with Change type.
+
+### B. Create Table drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `SettingsSection`, `Alert`, `Field`, `Input` (required)
+
+A large right `Drawer` whose content is a `form` named Create Table. The `PanelHeader` holds the `DrawerTitle`, one muted sentence (the database and how to reorder) and `DrawerClose`. A `fieldset` disabled while the request runs holds two `SettingsSection`s. General has one `Field` with the table Name in the code font and why it cannot be renamed lightly. A rejection from the server goes above it as a danger `Alert` that says what happened and that the columns are kept, and on the field as its `Field.Error`, per `platform/states/form-error`.
+
+### C. Column rows — `Select`, `Checkbox`, `HelperText` (required)
+
+The Columns section is a list named Columns, one bordered row per column: a grip `button` that moves the row with ArrowUp and ArrowDown and keeps focus on it, the name `Input`, a type `Select` whose trigger shows the type's glyph (`#`, `T`, `{}`, `@`, `B`) and whose content has a Search types `Input` over the Data types group (value in the code font and a muted description), a default value `Input` (`NULL` placeholder), a Primary `Checkbox` with its visible label, and a Remove column `IconButton` (disabled on the last row). A duplicate name puts an invalid `HelperText` under its row; no named column puts one under the list. A full-width outlined Add column `Button` appends a row and focuses its name. About data types links out. New tables start with `id int8` as the primary key and `created_at timestamptz DEFAULT now()`.
+
+### D. Add column drawer — `Switch` (required)
+
+A medium drawer with the same header and footer recipe. Column has Name (invalid when empty or when the table already has it), Type (the same `Select`) and Default value (empty for NULL, or an expression such as `now()`). Constraints has Primary key and Not null as horizontal `Field`s with a `Switch`; Primary key turns Not null on and locks it.
+
+### E. Insert row drawer — `PanelFooter` (required)
+
+A medium drawer with one `Field` per column in table order: the label is the column name in the code font with its type at the end, the description says what an empty value does (`Generated by the database.`, `Empty uses the default, now().`, `Required.`, `Empty stores NULL.`). An integer primary key is disabled and generated. After Insert row is pressed, a NOT NULL column with no value and no default is invalid with `<column> cannot be NULL. Enter a value.` Every drawer's `PanelFooter` holds Cancel and the submit button (`:loading` while it runs).
+
+### F. Change type dialog — `ConfirmDialog`, `CodeEditor` (required)
+
+A large `ConfirmDialog` titled `Change the type of <column>`: a warning `Alert` (the table is rebuilt, every row is copied, it can't be undone, values that don't fit make it fail), the New type `Select` with the current type in its description, and the statements that will run (`BEGIN; CREATE TABLE …_new …; INSERT INTO …; DROP TABLE …; ALTER TABLE … RENAME TO …; COMMIT;`) in a read-only `CodeEditor` with `language="sql"`. The primary Change type is disabled until the type differs.
+
+### G. Truncate table dialog — `ConfirmDialog`, `CodeEditor`, `Input` (required)
+
+A medium `ConfirmDialog` titled `Truncate <table>`, following `platform/delete/delete-with-confirmation`: a warning `Alert`, one sentence with what goes (every row, with the count) and what stays (columns, types, constraints), the `TRUNCATE TABLE <table>;` statement in a read-only `CodeEditor` without line numbers, and a `Field` whose label asks to type the table name. The danger Truncate table button enables only when it matches.
+
+### H. Outcome toasts — `Toaster` (required)
+
+One `Toaster` at `bottom-right`, raised through `toast` with one id, so each change replaces the last toast. Schema changes are not deploys: each success names what changed and offers the next thing to do with the table, never Edit and Redeploy or View deployments. Create Table: `Table events created.` with Insert row and Add column. Add column: `Column phone added to customers.` with Change type. Insert row: `Row inserted into customers.` with Insert another. Change type: `email is now text.` with Change again. Truncate: `customers truncated. 3 rows removed.` with Insert row. A request that never reached the database is a danger toast with Retry that keeps the form.
+
+## Do
+
+- Validate on submit, then keep each error next to what caused it: the field, the column row or the list.
+- Keep the drawer open and its values intact when the server refuses; say so in the section `Alert`.
+- Show the SQL a destructive or rebuilding change will run before it runs.
+- Ask for the table name before truncating it.
+- Let the grip reorder columns from the keyboard, and keep focus on the moved row.
+- End every change with a toast whose action continues the work on the same table.
+
+## Don't
+
+- Don't validate column names on every keystroke; wait for the first submit.
+- Don't put a deploy action (Edit, Redeploy, View deployments) on a schema change.
+- Don't let a primary key be nullable; lock Not null while Primary key is on.
+- Don't drop rows on a type change silently; warn that values that don't fit make it fail.
+- Don't close the Create Table drawer on a server error.
+
+## Copy
+
+- **Titles:** `Create Table`, `Add column`, `Insert row`, `Change the type of <column>`, `Truncate <table>`.
+- **Buttons:** the title's verb and object: `Create Table`, `Add column`, `Insert row`, `Change type`, `Truncate table`; Cancel beside each.
+- **Errors:** `This field is required.`, `Start with a letter or an underscore; use letters, numbers and underscores.`, `Another column is also named email.`, `Add at least one named column.`, `customers already has a column named email.`, `email cannot be NULL. Enter a value.`
+- **Server rejection:** `The table wasn't created. A table named customers already exists in acme-store. Your columns are kept; pick another name and create it again.`
+- **Toasts:** as in building block H.
+- Follow `skills/webkit-microcopy`: sentence case except the product's object names (`Create Table`), no em dash, no "please", no exclamation marks.
+
+## Accessibility
+
+- Each drawer's content is a `form` named by its title; the `fieldset` carries a visually hidden `legend` and is disabled while the request runs.
+- `Field` wires every label, description and error to its control; column row controls without a visible label are named `Name of column 2`, `Type of column 2`, `Default value of column 2`.
+- The grip is a real `button` named `Reorder <column>. Use the up and down arrow keys.` with `aria-keyshortcuts`; reordering keeps focus on the moved grip.
+- Every icon-only button has an `aria-label` that matches its `Tooltip`; the per-column menu trigger names its column.
+- The read-only `CodeEditor`s are named (`Statements that will run`) and can be selected and copied.
+- Drawers and dialogs trap focus, close on Escape and return focus to the button that opened them.
+
+## States
+
+- CreateTable: the Create Table drawer open on a new table, with the default id and created_at columns.
+- AddColumn: the Add column drawer with phone as varchar.
+- InsertRow: the Insert row drawer after a submit with email empty, showing the NOT NULL error.
+- ChangeType: the Change type dialog for email with the statements that will run.
+- TruncateTable: the Truncate customers dialog waiting for the typed name.
+- Failed: Create Table refused by the server because customers already exists; Alert in General and the Name field invalid.
+
+## Related
+
+- `platform/view/query-editor` — the database page whose buttons open these drawers and dialogs.
+- `platform/create/create-in-drawer` — the drawer recipe these drawers follow.
+- `platform/delete/delete-with-confirmation` — the typed confirmation Truncate table follows.
+- `platform/states/form-error` — the rule for the server's name conflict.
+- `platform/states/async-submit` — the long-action rule; schema changes use item actions, not Edit and Redeploy.
+- `CodeEditor`, `Select`, `Field` — see `skills/webkit-form` and `skills/webkit-create-surface`.
+
+## Variants
+
+- `CreateTable` — primary (the code below)
+- `AddColumn` — The Add column drawer over the customers definition, filled with phone as varchar; Primary key and Not null switches below, with Not null locked on while Primary key is on.
+- `InsertRow` — The Insert row drawer for customers after Insert was pressed with email empty: one field per column in table order, id generated and disabled, created_at falling back to now(), and email invalid because it is NOT NULL.
+- `ChangeType` — The Change type dialog for email: a warning that the table is rebuilt, the New type select, and the BEGIN … COMMIT statements that will run in a read-only CodeEditor; Change type is disabled until the type differs.
+- `TruncateTable` — The Truncate customers dialog: a warning, the row count that goes, the TRUNCATE TABLE statement and a field that must match the table name before the danger button enables.
+- `Failed` — Create Table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were.
+
+Each variant is the same screen in another state: `get_pattern("platform/edit/schema-editor", { variant })`, or the file under `blocks/platform/edit/schema-editor/variants/`.
+
+The code of every state is in [blocks/platform/edit/schema-editor.md](blocks/platform/edit/schema-editor.md) and `blocks/platform/edit/schema-editor/schema-editor.vue`.
+
+---
+
 <!-- blocks/platform/settings/settings-form.md -->
 
 # SettingsForm (`platform/settings/settings-form`)
@@ -9678,12 +9811,12 @@ The code of every state is in [blocks/platform/view/card-view.md](blocks/platfor
 - Surface: product
 - Source: `blocks/platform/view/file-browser/file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/file-browser")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SplitButton](../../../components/split-button.md), [Switch](../../../components/switch.md), `TableRoot`, `TableSearch`, [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SplitButton](../../../components/split-button.md), [Switch](../../../components/switch.md), `TableRoot`, `TableSearch`, [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), [UploadProgress](../../../components/upload-progress.md)
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
 
-file browser; file manager; storage browser; bucket browser; object storage; folders and files; upload files; navegador de arquivos; gerenciador de arquivos; arquivos do bucket
+file browser; file manager; storage browser; bucket browser; object storage; folders and files; upload files; navegador de arquivos; gerenciador de arquivos; arquivos do bucket; upload progress; move files; move objects; drag and drop upload; enviar arquivos; mover arquivos
 
 The contents of one storage resource. The user opens a bucket to find a file, walk into a folder and back out, upload something or add a folder, and download or delete what is there. The table's toolbar is the whole page header, so the storage name, search, the folder path and Add to files all sit on the one surface the files live on.
 
@@ -9739,6 +9872,28 @@ The root's `select` event hands the option and the row to the page: Open enters 
 
 The table's `#empty` slot holds a medium `EmptyState` with one sentence and a secondary Add to files `SplitButton` with the same options as the toolbar's. Inside a folder the `..` row always remains, so the user can still go back up.
 
+### J. Upload — `SplitButton` (optional)
+
+Variant Uploading only; it adds `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FileDropzone` and `FileTokenGroup` to the page.
+
+Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload closes the dialog and starts the transfer; the dialog does not wait for it.
+
+A second `FileDropzone kind="overlay"` sits inside the `section` that holds the card (made `relative`), so dragging files anywhere over the page shows `Drop files to upload them to <folder>` over the listing; a drop uploads straight into the folder in view and refuses files over the limit with a danger toast.
+
+### K. Transfer card and outcome toast — `Button` (optional)
+
+Variants Uploading and MoveObject only; they add `UploadProgress` and the `Toaster` with `toast`.
+
+Every transfer (upload, move) runs in one floating `UploadProgress` at the inline-end bottom corner, so the person can keep browsing, change folder or open another resource while it runs. The header counts finished files over one overall bar (`Uploading 2 of 5 files`), each row carries its bar, Cancel while it runs or waits, Retry when it failed with the reason under the name. Files land in the table as each finishes, not at the end. Close appears when everything finished and returns focus to Add to files (or to the toolbar, after a move). At most two files upload at a time; the rest wait.
+
+When a transfer finishes the page reports it with a toast as well as the card, because the card may be collapsed or the person may be elsewhere. Its actions fit the files, never a deploy action: after a clean upload or move, `Open folder` (goes to the destination); after a partial upload, a danger toast `1 of 5 files weren't uploaded.` that says where the rest went and offers `Retry failed`. Storage objects are not deployed, so the async-submit Edit and Redeploy pair does not apply. The `Toaster` sits at `top-right` so it never covers the transfer card.
+
+### L. Selection and Move — `TableRoot`, `DropdownMenuOption` (optional)
+
+Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
+
+`enable-row-selection` with `v-model:row-selection` adds the checkbox column; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move). Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of every folder in the storage (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves.
+
 ## Do
 
 - Keep the storage name, search, path and Add to files inside the table toolbar, on the same surface as the rows.
@@ -9747,6 +9902,9 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 - Use one Add to files `SplitButton` for every way of adding content.
 - Put Delete last in the row menu, in its own group, and confirm it with `platform/delete/delete-with-confirmation`.
 - Give every icon-only control a `Tooltip` and an `aria-label` with the same words.
+- Keep refused files in the upload dialog with their reason, and leave them out of the upload count.
+- Run every transfer in the one floating `UploadProgress` card and let the person keep working.
+- End every transfer with a toast whose action fits the files: Open folder or Retry failed.
 
 ## Don't
 
@@ -9755,6 +9913,9 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 - Don't give the `..` row a row menu, a size or an author.
 - Don't let the table scroll the page sideways; narrow widths stack the rows.
 - Don't replace the toolbar with a full-page empty state when a folder is empty; only the table area changes.
+- Don't block the page with a modal progress dialog while files upload or move.
+- Don't offer View deployments, Edit or Redeploy after a storage transfer; nothing is deployed.
+- Don't drop a refused file silently, and don't send a file the dialog marked as refused.
 
 ## Copy
 
@@ -9765,6 +9926,10 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 - **Delete dialog:** title and confirm `Delete file` or `Delete folder`, consequence `The selected folder will be deleted, along with all its files.`, prompt `Type <name> to confirm.`
 - **Column headers:** short fragments, e.g. "Name", "Size", "Last modified".
 - **Empty folder:** title states the fact, e.g. "This folder is empty"; description is one sentence, e.g. "Upload files or create a folder to get started."
+- **Upload dialog:** title `Upload files`, primary `Upload file` or `Upload 3 files`, refusal `Larger than 300 MB, the limit per file`.
+- **Drop overlay:** `Drop files to upload them to <folder>`, description `Up to 300 MB per file.`
+- **Move dialog:** title `Move <name>` or `Move 2 files`, field `Destination folder`, placeholder `/ (storage root)`, errors `Use letters, numbers, dots, hyphens and slashes only.`, `A destination cannot go up with "..". Type the full path.`, `The files are already in this folder. Pick another one.`
+- **Toasts:** `5 files uploaded to acme-assets.` with Open folder; `1 of 5 files weren't uploaded.` with Retry failed; `2 files moved to logs/.` with Open folder.
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -9775,11 +9940,17 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 - Folder rows open on click and the Open option in the row menu gives the same action to keyboard users.
 - Focus order follows reading order: search, Refresh, Download CSV, Columns, path, Add to files, the rows.
 - The `Avatar` carries the author name as `alt`, repeated by its `Tooltip`.
+- The drop overlay is `aria-hidden`: dragging is a pointer path, and Add to files with Browse files is the keyboard path to the same upload.
+- `UploadProgress` is a region named File transfers with a polite status that announces each file finishing and the outcome; percentages are not announced. The toast repeats the outcome for people who collapsed the card.
+- In the upload dialog each refused file's reason is the `aria-describedby` of its Remove button, and removing a file moves focus to the next one.
+- The Move dialog's `Field` wires the label, description and error to the `Combobox`; the error is read when focus returns to it.
 
 ## States
 
 - Default: the storage root with folders first, then files, and the full toolbar.
 - InsideAFolder: inside a build folder the crumb gains the folder, a `..` row leads back up and files show glyph, size, editor and age.
+- Uploading: a transfer is running in the floating card; one file fails once and can be retried; the upload dialog and the page drop overlay add more.
+- MoveObject: two files selected inside a build folder with the Move dialog open; moving runs in the card and ends in a toast.
 
 ## Related
 
@@ -9787,12 +9958,16 @@ The table's `#empty` slot holds a medium `EmptyState` with one sentence and a se
 - `platform/delete/delete-with-confirmation` — the dialog behind Delete on a file or folder.
 - `platform/detail/details-page` — the storage resource's own details and settings.
 - `platform/detail/record-table` — records of a resource, not files.
+- `FileTokenGroup`, `FileDropzone` and `UploadProgress` — the upload pieces; see their component docs.
+- `platform/states/async-submit` — the rule for long actions; storage transfers follow it with item actions instead of Edit and Redeploy.
 - `TableRoot` — the data-driven table this page wraps; see `skills/webkit-tables` and `skills/webkit-lists`.
 
 ## Variants
 
 - `Default` — primary (the code below)
 - `InsideAFolder` — Inside a build folder: the crumb gains the folder, a .. row leads back up, and the files carry their glyph, size, editor and age.
+- `Uploading` — An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one.
+- `MoveObject` — Two files of a build folder are selected and the Move dialog is open: it names the files, their total size and the folder they leave, and the Destination folder `Combobox` offers every folder in the storage and accepts a new path. A path with characters outside printable ASCII, with `..`, or equal to the current folder is refused under the field. Move runs in the floating `UploadProgress` card (`operation="move"`) and ends in a toast with Open folder. Selecting rows shows a selection bar with Move, and every file's row menu has Move.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/file-browser", { variant })`, or the file under `blocks/platform/view/file-browser/variants/`.
 
@@ -9804,17 +9979,17 @@ The code of every state is in [blocks/platform/view/file-browser.md](blocks/plat
 
 # QueryEditor (`platform/view/query-editor`)
 
-> The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the editor, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`.
+> The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `TableRoot`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`.
 
 - Surface: product
 - Source: `blocks/platform/view/query-editor/query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/query-editor")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [PageTabs](../../../components/page-tabs.md), `PaginationRoot`, `PanelContent`, `PanelHeader`, [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PaginationRoot`, `PanelContent`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
 
-query editor; sql editor; run query; query results; sql query page; query history; sql code editor; código sql; editor de consultas; editor sql; executar consulta; sql database; database tables; database detail; table schema; data grid; sql templates; banco de dados; banco de dados sql; tabelas do banco
+query editor; sql editor; run query; query results; sql query page; query history; sql code editor; código sql; editor de consultas; editor sql; executar consulta; sql database; database tables; database detail; table schema; data grid; sql templates; banco de dados; banco de dados sql; tabelas do banco; create database; criar banco de dados; table rows; linhas da tabela
 
 The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use.
 
@@ -9850,9 +10025,9 @@ A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Its header
 
 A database with no tables replaces the pane with a `Card` holding an `EmptyState` (No tables yet) and a secondary Create Table `Button`. The side panel says the same thing in its own words; the tabs stay.
 
-### E. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `Checkbox` (required)
+### E. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `TableRoot` (required)
 
-The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. A header `Checkbox` selects all rows and each row has its own; the primary key column is marked, a Delete row `IconButton` sits on each row, and Previous page and Next page `IconButton`s page the data.
+The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `TableRoot` (`row-key="__k"`, `enable-row-selection`, `enable-sorting`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton`. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with Insert row and Import data from CSV; a filter that matches nothing says so with the filter text.
 
 ### F. Table definition — `Button`, `Card`, `TableRoot`, `Tag` (optional)
 
@@ -9862,9 +10037,9 @@ Definition shows a Columns heading with an Add column `Button`, over a flush `Ca
 
 On Editor the start `Sidebar` is named Query history, with a Search queries `Input` and one row per past query showing the statement on one line. Each row has a Query actions `DropdownMenu` with Run query and Delete query.
 
-### H. Editor — `Button`, `Textarea` (required)
+### H. Editor — `Button`, `CodeEditor` (required)
 
-A toolbar with the primary Run query `Button` (`:loading` while it runs) and outlined Prettify and Templates `Button`s, over a monospaced, vertically resizable `Textarea` named SQL editor. While a query runs the editor, Prettify and Templates are disabled.
+A toolbar with the primary Run query `Button` (`:loading` while it runs) and outlined Prettify and Templates `Button`s, over a `CodeEditor` (`language="sql"`, `path="query.sql"`, 14rem) named SQL editor. The plain editor ships by default; pass `loader` with `() => import('monaco-editor')` to get Monaco with SQL highlighting, themed from the tokens. While a query runs the editor is read-only and Prettify and Templates are disabled. A statement the database rejects puts an error marker on its line (`markers`) as well as the danger `Alert` in Results.
 
 ### I. Results — `Input`, `ToggleGroup`, `Tooltip`, `IconButton`, `TableRoot`, `Alert`, `EmptyState`, `PaginationRoot` (required)
 
@@ -9874,11 +10049,23 @@ A Results band with its own search `Input`, a `ToggleGroup` switching Table and 
 
 Templates opens a large right `Drawer` titled SQL quick templates with a one-line description, a Search templates `Input` and one card per snippet. Choosing a card loads its SQL into the editor and closes the drawer.
 
+### K. Bulk row delete — `Button` (optional)
+
+Variant TableData only; it adds the `Toaster` with `toast`.
+
+With rows selected, a danger `Delete 2 rows` `Button` joins the Data toolbar (`:loading` while it runs). Deleting rows is not a deploy: the outcome is a success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Never View deployments, Edit or Redeploy.
+
+### L. Create database page — `GlobalHeader`, `Breadcrumb`, `Input`, `Button` (optional)
+
+Variant CreateDatabase only; it is its own page and adds `PageHeader`, `SettingsSection`, `SettingRow`, `Item`, `HelperText`, `Switch`, `SaveBar` and the `Toaster` with `toast`.
+
+The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-error rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
+
 ## Do
 
 - Keep both tabs on the same layout: side panel to list, working pane to act.
 - Let the side panel resize and collapse, and keep its width when the user switches tabs.
-- Disable the editor and its toolbar while a query runs, and show Run query loading.
+- Make the editor read-only and disable its toolbar while a query runs, and show Run query loading.
 - Show the outcome of a run in the Results band: the rows, a success `Alert` with what ran, or a danger `Alert` with why it failed.
 - Offer JSON beside Table for results, so the raw shape is one click away.
 - Confirm Delete table with `platform/delete/delete-with-confirmation`.
@@ -9906,8 +10093,9 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 
 - One `main` landmark; the tabs are a real tab list, so arrow keys move between Tables and Editor.
 - Each side `Sidebar` is named (Tables, Query history) with its own collapse, expand and resize labels.
-- The editor `Textarea` has the `aria-label` "SQL editor"; its placeholder is never its only label.
-- Every icon-only button has an `aria-label` that matches its `Tooltip`; row checkboxes name their row, and the header checkbox reads "Select all rows".
+- The `CodeEditor` has the `aria-label` "SQL editor"; its markers are listed in its problems list as text, not by colour.
+- Every icon-only button has an `aria-label` that matches its `Tooltip`; the rows table is named `Rows of <table>` and its selection checkboxes come from `TableRoot`, named per row.
+- On Create Database, the Name error is the input's `aria-describedby` and focus returns to the input after a failed submit.
 - `ToggleGroup`s are named ("Table view", "Result view") and the pagination is named "Results pagination".
 - The templates drawer traps focus while open and closes on Escape.
 
@@ -9918,6 +10106,8 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 - EmptyDatabase: a database with no tables; the side panel says so and the pane shows the Create Table empty state.
 - Query: the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
 - Templates: the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer behind the Templates button.
+- TableData: the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the toolbar.
+- CreateDatabase: the create database page with its Name and Active fields; try `acme-store` for the name conflict and a name starting with `offline` for the failed request.
 - Failed: the selected table's rows did not load; the Data view shows a danger `Alert` that names the table and offers Retry.
 
 ## Related
@@ -9925,6 +10115,8 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 - `platform/view/table-view` — the database list this workspace is opened from.
 - `platform/delete/delete-with-confirmation` — the dialog behind Delete table.
 - `platform/edit/code-editor` — editing code that is not a query.
+- `platform/edit/schema-editor` — the Create Table, Add column, Add row, Alter column and Truncate table drawers and dialogs behind this page's buttons.
+- `platform/states/form-error` — the rule the Create Database name conflict follows.
 - `platform/detail/record-table` — records of a resource without SQL.
 - `TableRoot` — the definition and results tables; see `skills/webkit-tables` and `skills/webkit-layout`.
 
@@ -9936,6 +10128,8 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 - `Query` — The Editor tab after the Select all query ran: the query history in the side panel, the statement in the editor, and its three rows in the Results band, switchable to JSON.
 - `Templates` — The Editor tab before anything ran, with the Results band ready to execute; the Templates button opens the SQL quick templates drawer, and choosing a card loads its SQL into the editor.
 - `Failed` — The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry.
+- `TableData` — The events table in the Data view: 137 rows in a compact `TableRoot` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo.
+- `CreateDatabase` — The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, over a save bar with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/query-editor", { variant })`, or the file under `blocks/platform/view/query-editor/variants/`.
 
@@ -21701,6 +21895,205 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ---
 
+<!-- components/upload-progress.md -->
+
+# Upload Progress
+
+> A card that follows a file transfer to its end while the person keeps working: uploading files into a bucket, moving objects between folders or deleting them. Its header says what is happening and how far it got (`Uploading 2 of 5 files`) over one overall bar; below it each file has its own bar, its state and a Cancel or Retry button. When every file has finished the header turns into the outcome (`5 files uploaded`, or `4 files uploaded, 1 failed` with Retry failed) and the card can be closed. It floats at the inline-end bottom corner by default, so it survives route changes in the console shell. Taken from the Console Kit's object storage progress card, extended with the per-file list the design sample's bucket browser needs.
+
+- Import: `import UploadProgress from '@aziontech/webkit/upload-progress'`
+- Category: feedback · Surface: product · Structure: monolithic
+- API as JSON: [upload-progress.json](https://github.com/aziontech/webkit/blob/main/.specs/upload-progress.json)
+
+## When to use
+
+- A bucket upload that keeps running after the upload dialog closes.
+- A move or delete of many objects that takes more than a second or two.
+- Any batch of file transfers where the person should be able to cancel one file, or retry the ones that failed.
+
+## Do
+
+- Keep the card until the person closes it when anything failed; close it yourself a few seconds after a clean finish if you like.
+- Send `error` as the reason (`Connection lost`, `Larger than 300 MB`), not a status code.
+- Update `progress` no more than a few times a second; the bars animate between values.
+- Report the outcome with a toast only when the card is not in view (for example, after the person collapsed it and left the page).
+
+## Don’t
+
+- The files picked in a form before it is submitted → use `file-token-group`.
+- A single action with no per-file parts (a deploy, a build) → use the async-submit toast (`toast` with Edit and Redeploy).
+- Progress of a page load or a determinate step inside a form → use `progress`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [file-token-group](file-token-group.md) — the files picked for upload, before the transfer starts.
+- [progress](progress.md) — the bar used for the overall and per-file progress.
+- [toast](toast.md) — reports the outcome of a single async action.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `UploadProgressItem[]` | `[]` | false | The files in the transfer, in order, with their state and progress. |
+| `operation` | `'upload' \| 'move' \| 'delete'` | `'upload'` | false | What the transfer does; picks the header wording and the glyph. |
+| `title` | `string` | `''` | false | Overrides the header text. Empty builds it from the operation and the counts. |
+| `floating` | `boolean` | `true` | false | Fixes the card to the inline-end bottom corner of the viewport; false renders it in the flow. |
+| `cancelable` | `boolean` | `true` | false | Shows Cancel on running and waiting files and Cancel all in the header. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `cancel` | `id?: string` | Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer. |
+| `retry` | `id?: string` | Retry on one failed file (its `id`) or Retry failed (no `id`). |
+| `close` | `—` | Close was pressed; offered only once every file has finished. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `actions` | — | Buttons for the finished transfer beside Close (for example `Open folder`). Shown when done. |
+
+## v-model
+
+| Model               | Type      | Default | Emits              | Notes                                                     |
+| ------------------- | --------- | ------- | ------------------ | --------------------------------------------------------- |
+| `v-model:collapsed` | `boolean` | `false` | `update:collapsed` | Hides the file list and keeps the header and overall bar. |
+
+## States
+
+- Root `data-state`: `running` (some file queued or running) | `done` (all finished, none failed) | `failed` (all finished, at least one error).
+- Root `data-floating` when floating; `data-collapsed` when the list is hidden.
+- Row `data-status`: `queued` | `running` | `done` | `error` | `canceled`.
+
+## Accessibility
+
+- The card is a `section` named by the catalog (`File transfers`), a region landmark that screen-reader users can jump to.
+- The header text is mirrored in a visually hidden `role="status"` region (polite), so each file finishing and the final outcome are announced; percentages are not announced.
+- The overall bar is a `progressbar` named by the header text; each row bar is named `<file> progress`.
+- Keyboard map: Tab reaches the collapse toggle (`aria-expanded`, `aria-controls` the list), Cancel all or Retry failed and Close, then each row's Cancel or Retry. After Close the card unmounts in the parent; the parent returns focus to the control that started the transfer.
+- State is never colour alone: rows carry a status word (`Waiting`, `Done`, `Canceled`) or the error text, and an `OutcomeMark` in the header when finished.
+- Contrast: text ≥ 4.5:1 on `--bg-surface-raised` in both themes.
+
+## Right-to-left
+
+- Layout: logical utilities only; the floating card anchors at `end-*`, so it sits at the bottom left under rtl.
+- Icons: the chevron of the collapse toggle points up or down and is not mirrored; status glyphs are not mirrored.
+- Keyboard: Tab order follows the reading order.
+- User data: file names render in `<bdi>`.
+
+## Internationalization
+
+| Key                           | English source                                 | Override prop |
+| ----------------------------- | ---------------------------------------------- | ------------- |
+| `uploadProgress.label`        | File transfers                                 | —             |
+| `uploadProgress.uploading`    | `Uploading {done} of {count} file(s)` (plural) | `title`       |
+| `uploadProgress.moving`       | `Moving {done} of {count} file(s)` (plural)    | `title`       |
+| `uploadProgress.deleting`     | `Deleting {done} of {count} file(s)` (plural)  | `title`       |
+| `uploadProgress.uploaded`     | `{count} file(s) uploaded` (plural)            | `title`       |
+| `uploadProgress.moved`        | `{count} file(s) moved` (plural)               | `title`       |
+| `uploadProgress.deleted`      | `{count} file(s) deleted` (plural)             | `title`       |
+| `uploadProgress.failed`       | `{count} failed` (plural)                      | —             |
+| `uploadProgress.queued`       | Waiting                                        | —             |
+| `uploadProgress.done`         | Done                                           | —             |
+| `uploadProgress.canceled`     | Canceled                                       | —             |
+| `uploadProgress.cancelAll`    | Cancel all                                     | —             |
+| `uploadProgress.cancelItem`   | Cancel {name}                                  | —             |
+| `uploadProgress.retryItem`    | Retry {name}                                   | —             |
+| `uploadProgress.retryFailed`  | Retry failed                                   | —             |
+| `uploadProgress.close`        | Close                                          | —             |
+| `uploadProgress.expand`       | Show files                                     | —             |
+| `uploadProgress.collapse`     | Hide files                                     | —             |
+| `uploadProgress.itemProgress` | {name} progress                                | —             |
+
+- Formatting: sizes with `formatFileSize`, percentages with `formatNumber` (`style: 'percent'`), plural rules with `Intl.PluralRules`, all from `useLocale`.
+
+## Responsive
+
+- Container queries: none. Floating, the card is `--container-xs` wide and capped to the viewport minus the gutters; below 640 px it spans the viewport width minus the gutters.
+- Narrow: names truncate with an ellipsis and keep the full name in `title`; the list scrolls inside a capped height.
+- Touch: buttons are `IconButton` and `Button` small (32 px).
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import UploadProgress from '@aziontech/webkit/upload-progress'
+  import { onBeforeUnmount, ref } from 'vue'
+
+  const initial = () => [
+    { id: 'logo', name: 'logo.svg', size: 4210, status: 'done' },
+    { id: 'app', name: 'app.js', size: 248_320, status: 'running', progress: 64 },
+    { id: 'styles', name: 'styles.css', size: 52_100, status: 'running' },
+    { id: 'hero', name: 'hero.webp', size: 1_482_000, status: 'queued' }
+  ]
+
+  const items = ref(initial())
+  let timer = 0
+
+  const tick = () => {
+    let started = false
+    items.value = items.value.map((item) => {
+      if (item.status === 'running') {
+        const progress = Math.min(100, (item.progress ?? 0) + 18)
+        return progress >= 100 ? { ...item, status: 'done', progress } : { ...item, progress }
+      }
+      if (item.status === 'queued' && !started) {
+        started = true
+        return { ...item, status: 'running', progress: 0 }
+      }
+      return item
+    })
+    if (items.value.every((item) => item.status !== 'running' && item.status !== 'queued')) {
+      clearInterval(timer)
+    }
+  }
+
+  const start = () => {
+    clearInterval(timer)
+    items.value = initial()
+    timer = setInterval(tick, 600)
+  }
+
+  const cancel = (id) => {
+    items.value = items.value.map((item) =>
+      (id === undefined || item.id === id) &&
+      (item.status === 'running' || item.status === 'queued')
+        ? { ...item, status: 'canceled' }
+        : item
+    )
+  }
+
+  onBeforeUnmount(() => clearInterval(timer))
+</script>
+
+<template>
+  <div class="flex w-full max-w-(--container-xs) flex-col items-start gap-(--spacing-sm)">
+    <Button
+      label="Start upload"
+      kind="secondary"
+      size="medium"
+      icon="pi pi-upload"
+      @click="start"
+    />
+    <UploadProgress
+      :items="items"
+      :floating="false"
+      @cancel="cancel"
+    />
+  </div>
+</template>
+```
+
+2 more example(s) in [components/upload-progress.md](https://github.com/aziontech/webkit/blob/main/.specs/components/upload-progress.md).
+
+---
+
 <!-- components/attribute-editor.md -->
 
 # Attribute Editor
@@ -22836,6 +23229,176 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 ```
 
 2 more example(s) in [components/file-dropzone.md](https://github.com/aziontech/webkit/blob/main/.specs/components/file-dropzone.md).
+
+---
+
+<!-- components/file-token-group.md -->
+
+# File Token Group
+
+> The files a person picked for upload, shown as removable tokens before or while they upload: each token names the file with a glyph for its type, its size and, when asked, its last-modified date, carries a progress bar while it uploads and its own error or warning line when it cannot be sent. It pairs with `file-dropzone` (which receives the files) and with a Browse files button: the product keeps the list, the group renders it and reports which token was removed. Taken from Cloudscape's file token group; the Console Kit and the design sample list files by hand.
+
+- Import: `import FileTokenGroup from '@aziontech/webkit/file-token-group'`
+- Category: inputs · Surface: product · Structure: monolithic
+- API as JSON: [file-token-group.json](https://github.com/aziontech/webkit/blob/main/.specs/file-token-group.json)
+
+## When to use
+
+- Under a `FileDropzone` or a Browse files button in a form, to show what will be uploaded and let the person drop a file before submitting.
+- In an upload dialog, to show each file's progress and the files that were refused (too large, wrong type) with the reason.
+- Read-only, in a review step, to list the attachments that will be sent.
+
+## Do
+
+- Keep the refused files in the list with their error, so the person sees why and can remove them; do not drop them silently.
+- Write each error as the reason and the limit (`Larger than 300 MB`), not as a code.
+- Use `limit` when more than five files are common, so the form below stays in view.
+- Remove the file from your list on `dismiss`; the group moves focus to the next token for you.
+
+## Don’t
+
+- A running transfer that should follow the person around the console → use `upload-progress`.
+- Files already stored in a bucket or a repository → use `table` (the file browser block).
+- Free-text tags or labels → use `tag-editor` or `chip`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [file-dropzone](file-dropzone.md) — receives dropped files; the group lists them.
+- [upload-progress](upload-progress.md) — the floating card for transfers that keep running after the dialog closes.
+- [chip](chip.md) — a removable label without file details.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `FileTokenGroupItem[]` | `[]` | false | The files, in order; each with its optional upload state, error and warning. |
+| `alignment` | `'vertical' \| 'horizontal'` | `'vertical'` | false | Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. |
+| `limit` | `number` | `0` | false | Shows this many tokens and a Show more toggle for the rest. 0 shows them all. |
+| `showFileSize` | `boolean` | `true` | false | Shows the size beside the name, formatted for the locale. |
+| `showFileLastModified` | `boolean` | `false` | false | Shows the last-modified date, formatted for the locale. |
+| `readonly` | `boolean` | `false` | false | Hides the remove buttons; the list is for reading only. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Files`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `dismiss` | `index: number, item: FileTokenGroupItem` | The remove button of the token at `index` was pressed. The parent removes it from `items`. |
+
+## States
+
+- Root `data-alignment`: `vertical` | `horizontal`; `data-readonly` when read-only.
+- Token `data-status`: `idle` | `loading` | `warning` | `error` (error wins over warning, both over loading).
+- Show more toggle: `aria-expanded` `true` | `false`.
+
+## Accessibility
+
+- The root is a `ul` (`role="list"`) named by `ariaLabel` or the catalog; each token is a `li`.
+- Each remove button is an `IconButton` named `Remove <file name>`; its `aria-describedby` points at the token's error or warning line, so the reason is read with it.
+- Keyboard map: Tab reaches each remove button and the Show more toggle in order; Enter or Space removes. After a removal focus moves to the remove button now at the same index, else the previous one, else the list itself (`tabindex="-1"`).
+- An error or warning is shown as text with an icon, never by colour alone (WCAG 1.4.1); the uploading bar is a `progressbar` named `Uploading <file name>`.
+- Contrast: name and meta ≥ 4.5:1 on `--bg-surface` in both themes; the danger border ≥ 3:1.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-auto`, `ps-`, `text-start`); the remove button sits at the inline end.
+- Icons: file glyphs and the cross are not mirrored.
+- Keyboard: Tab order follows the reading order.
+- User data: file names render in `<bdi>` so a Latin name keeps its order inside rtl text.
+
+## Internationalization
+
+| Key                        | English source                                                | Override prop |
+| -------------------------- | ------------------------------------------------------------- | ------------- |
+| `fileTokenGroup.label`     | Files                                                         | `ariaLabel`   |
+| `fileTokenGroup.remove`    | Remove {name}                                                 | —             |
+| `fileTokenGroup.uploading` | Uploading {name}                                              | —             |
+| `fileTokenGroup.modified`  | Modified {date}                                               | —             |
+| `fileTokenGroup.showMore`  | `Show {count} more file` / `Show {count} more files` (plural) | —             |
+| `fileTokenGroup.showFewer` | Show fewer files                                              | —             |
+
+- Formatting: sizes with `formatFileSize`, dates with `formatDate` (`dateStyle: 'medium'`), both from `useLocale`.
+
+## Responsive
+
+- Container queries: none; vertical tokens fill their container, horizontal tokens are at most `--container-3xs` wide and wrap.
+- Narrow: names truncate with an ellipsis and keep the full name in `title`.
+- Touch: the remove button is a small `IconButton` (32 px), 44 px hit area on `pointer: coarse` through the button.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import { ref } from 'vue'
+
+  const LIMIT = 300 * 1024 * 1024
+
+  const input = ref(null)
+  const items = ref([
+    { file: { name: 'logo.svg', size: 4210, type: 'image/svg+xml' } },
+    { file: { name: 'index.html', size: 18432, type: 'text/html' } },
+    { file: { name: 'site-backup.tar', size: 412_000_000 }, error: 'Larger than 300 MB' },
+    { file: { name: 'notes.txt', size: 0, type: 'text/plain' }, warning: 'This file is empty' }
+  ])
+
+  const toItem = (file) => ({
+    file,
+    error: file.size > LIMIT ? 'Larger than 300 MB' : undefined,
+    warning: file.size === 0 ? 'This file is empty' : undefined
+  })
+
+  const add = (files) => {
+    items.value = [...items.value, ...Array.from(files).map(toItem)]
+  }
+
+  const onPick = (event) => {
+    add(event.target.files ?? [])
+    event.target.value = ''
+  }
+
+  const remove = (index) => {
+    items.value = items.value.filter((_, position) => position !== index)
+  }
+</script>
+
+<template>
+  <div class="flex w-full max-w-(--container-md) flex-col gap-(--spacing-sm)">
+    <FileDropzone
+      description="Up to 300 MB per file."
+      @drop="(event, files) => add(files)"
+    >
+      <Button
+        label="Browse files"
+        kind="secondary"
+        size="medium"
+        @click="input?.click()"
+      />
+    </FileDropzone>
+    <input
+      ref="input"
+      type="file"
+      multiple
+      class="hidden"
+      aria-hidden="true"
+      tabindex="-1"
+      @change="onPick"
+    />
+    <FileTokenGroup
+      :items="items"
+      @dismiss="remove"
+    />
+  </div>
+</template>
+```
+
+2 more example(s) in [components/file-token-group.md](https://github.com/aziontech/webkit/blob/main/.specs/components/file-token-group.md).
 
 ---
 

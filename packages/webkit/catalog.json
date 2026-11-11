@@ -9790,6 +9790,78 @@
    "examplesFile": "catalog/examples/outcome-mark.json",
    "docsFile": "catalog/components/outcome-mark.json"
   },
+  "upload-progress": {
+   "import": "@aziontech/webkit/upload-progress",
+   "target": "./src/components/feedback/upload-progress/upload-progress.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/upload-progress",
+   "category": "feedback",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "UploadProgressItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The files in the transfer, in order, with their state and progress."
+    },
+    {
+     "name": "operation",
+     "type": "'upload' | 'move' | 'delete'",
+     "default": "'upload'",
+     "required": "false",
+     "doc": "What the transfer does; picks the header wording and the glyph."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Overrides the header text. Empty builds it from the operation and the counts."
+    },
+    {
+     "name": "floating",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Fixes the card to the inline-end bottom corner of the viewport; false renders it in the flow."
+    },
+    {
+     "name": "cancelable",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Shows Cancel on running and waiting files and Cancel all in the header."
+    }
+   ],
+   "events": [
+    {
+     "name": "cancel",
+     "payload": "id?: string",
+     "notes": "Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer."
+    },
+    {
+     "name": "retry",
+     "payload": "id?: string",
+     "notes": "Retry on one failed file (its `id`) or Retry failed (no `id`)."
+    },
+    {
+     "name": "close",
+     "payload": "—",
+     "notes": "Close was pressed; offered only once every file has finished."
+    }
+   ],
+   "slots": [
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Buttons for the finished transfer beside Close (for example `Open folder`). Shown when done."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/upload-progress.json",
+   "docsFile": "catalog/components/upload-progress.json"
+  },
   "progress": {
    "import": "@aziontech/webkit/progress",
    "target": "./src/components/feedback/progress/progress.vue",
@@ -11230,6 +11302,75 @@
    "surface": "product",
    "examplesFile": "catalog/examples/file-dropzone.json",
    "docsFile": "catalog/components/file-dropzone.json"
+  },
+  "file-token-group": {
+   "import": "@aziontech/webkit/file-token-group",
+   "target": "./src/components/inputs/file-token-group/file-token-group.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/file-token-group",
+   "category": "inputs",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "FileTokenGroupItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The files, in order; each with its optional upload state, error and warning."
+    },
+    {
+     "name": "alignment",
+     "type": "'vertical' | 'horizontal'",
+     "default": "'vertical'",
+     "required": "false",
+     "doc": "Vertical stacks full-width tokens; horizontal wraps compact tokens in rows."
+    },
+    {
+     "name": "limit",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Shows this many tokens and a Show more toggle for the rest. 0 shows them all."
+    },
+    {
+     "name": "showFileSize",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Shows the size beside the name, formatted for the locale."
+    },
+    {
+     "name": "showFileLastModified",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the last-modified date, formatted for the locale."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Hides the remove buttons; the list is for reading only."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog (`Files`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "dismiss",
+     "payload": "index: number, item: FileTokenGroupItem",
+     "notes": "The remove button of the token at `index` was pressed. The parent removes it from `items`."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/file-token-group.json",
+   "docsFile": "catalog/components/file-token-group.json"
   },
   "password-requirements": {
    "import": "@aziontech/webkit/password-requirements",
@@ -27785,6 +27926,121 @@
    ],
    "file": "catalog/patterns/platform/edit/rule-builder.json"
   },
+  "platform/edit/schema-editor": {
+   "name": "SchemaEditor",
+   "title": "Templates/Platform/Edit/SchemaEditor",
+   "source": "blocks/platform/edit/schema-editor/schema-editor.vue",
+   "surface": "product",
+   "summary": "The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an ordered list of column rows (grip that reorders with the arrow keys, name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`, remove), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action.",
+   "intents": [
+    "schema editor",
+    "create table",
+    "add column",
+    "insert row",
+    "alter column",
+    "change column type",
+    "truncate table",
+    "table schema",
+    "database schema",
+    "column types",
+    "criar tabela",
+    "adicionar coluna",
+    "inserir linha",
+    "alterar coluna",
+    "esvaziar tabela",
+    "esquema do banco"
+   ],
+   "skills": [
+    "webkit-form",
+    "webkit-create-surface",
+    "webkit-tables",
+    "webkit-errors",
+    "webkit-ui-states"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "Checkbox",
+    "CodeEditor",
+    "ConfirmDialog",
+    "Drawer",
+    "DrawerClose",
+    "DrawerContent",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
+    "DropdownMenu",
+    "Field",
+    "HelperText",
+    "IconButton",
+    "Input",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "Select",
+    "SettingsSection",
+    "Switch",
+    "TableRoot",
+    "Tag",
+    "toast",
+    "Tooltip"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/checkbox",
+    "@aziontech/webkit/code-editor",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-close",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/helper-text",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/settings-section",
+    "@aziontech/webkit/switch",
+    "@aziontech/webkit/table-root",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/tooltip"
+   ],
+   "primary": "CreateTable",
+   "guidelinesSummary": "The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create Table, Add column, Insert and table menu buttons of `platform/view/query-editor`.",
+   "variants": [
+    {
+     "name": "AddColumn",
+     "summary": "The Add column drawer over the customers definition, filled with phone as varchar; Primary key and Not null switches below, with Not null locked on while Primary key is on."
+    },
+    {
+     "name": "InsertRow",
+     "summary": "The Insert row drawer for customers after Insert was pressed with email empty: one field per column in table order, id generated and disabled, created_at falling back to now(), and email invalid because it is NOT NULL."
+    },
+    {
+     "name": "ChangeType",
+     "summary": "The Change type dialog for email: a warning that the table is rebuilt, the New type select, and the BEGIN … COMMIT statements that will run in a read-only CodeEditor; Change type is disabled until the type differs."
+    },
+    {
+     "name": "TruncateTable",
+     "summary": "The Truncate customers dialog: a warning, the row count that goes, the TRUNCATE TABLE statement and a field that must match the table name before the danger button enables."
+    },
+    {
+     "name": "Failed",
+     "summary": "Create Table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were."
+    }
+   ],
+   "file": "catalog/patterns/platform/edit/schema-editor.json"
+  },
   "platform/settings/settings-form": {
    "name": "SettingsForm",
    "title": "Templates/Platform/Settings/SettingsForm",
@@ -28489,7 +28745,13 @@
     "upload files",
     "navegador de arquivos",
     "gerenciador de arquivos",
-    "arquivos do bucket"
+    "arquivos do bucket",
+    "upload progress",
+    "move files",
+    "move objects",
+    "drag and drop upload",
+    "enviar arquivos",
+    "mover arquivos"
    ],
    "skills": [
     "webkit-tables",
@@ -28502,14 +28764,27 @@
     "Breadcrumb",
     "Button",
     "Card",
+    "Combobox",
     "ConfirmDialog",
+    "Dialog",
+    "DialogContent",
+    "DialogDescription",
+    "DialogOverlay",
+    "DialogPortal",
+    "DialogTitle",
     "DropdownMenuGroup",
     "DropdownMenuOption",
     "DropdownMenuRoot",
     "DropdownMenuTrigger",
     "EmptyState",
+    "Field",
+    "FileDropzone",
+    "FileTokenGroup",
     "IconButton",
     "Input",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
     "PopoverContent",
     "PopoverRoot",
     "PopoverTrigger",
@@ -28517,7 +28792,9 @@
     "Switch",
     "TableRoot",
     "TableSearch",
-    "Tooltip"
+    "toast",
+    "Tooltip",
+    "UploadProgress"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -28525,14 +28802,27 @@
     "@aziontech/webkit/breadcrumb",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/combobox",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/dialog",
+    "@aziontech/webkit/dialog-content",
+    "@aziontech/webkit/dialog-description",
+    "@aziontech/webkit/dialog-overlay",
+    "@aziontech/webkit/dialog-portal",
+    "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-option",
     "@aziontech/webkit/dropdown-menu-root",
     "@aziontech/webkit/dropdown-menu-trigger",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/file-dropzone",
+    "@aziontech/webkit/file-token-group",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
     "@aziontech/webkit/popover-content",
     "@aziontech/webkit/popover-root",
     "@aziontech/webkit/popover-trigger",
@@ -28540,7 +28830,9 @@
     "@aziontech/webkit/switch",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/table-search",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/upload-progress"
    ],
    "primary": "Default",
    "guidelinesSummary": "The contents of one storage resource. The user opens a bucket to find a file, walk into a folder and back out, upload something or add a folder, and download or delete what is there. The table's toolbar is the whole page header, so the storage name, search, the folder path and Add to files all sit on the one surface the files live on.",
@@ -28548,6 +28840,14 @@
     {
      "name": "InsideAFolder",
      "summary": "Inside a build folder: the crumb gains the folder, a .. row leads back up, and the files carry their glyph, size, editor and age."
+    },
+    {
+     "name": "Uploading",
+     "summary": "An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one."
+    },
+    {
+     "name": "MoveObject",
+     "summary": "Two files of a build folder are selected and the Move dialog is open: it names the files, their total size and the folder they leave, and the Destination folder `Combobox` offers every folder in the storage and accepts a new path. A path with characters outside printable ASCII, with `..`, or equal to the current folder is refused under the field. Move runs in the floating `UploadProgress` card (`operation=\"move\"`) and ends in a toast with Open folder. Selecting rows shows a selection bar with Move, and every file's row menu has Move."
     }
    ],
    "file": "catalog/patterns/platform/view/file-browser.json"
@@ -28557,7 +28857,7 @@
    "title": "Templates/Platform/View/QueryEditor",
    "source": "blocks/platform/view/query-editor/query-editor.vue",
    "surface": "product",
-   "summary": "The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the editor, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`.",
+   "summary": "The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `TableRoot`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`.",
    "intents": [
     "query editor",
     "sql editor",
@@ -28578,7 +28878,11 @@
     "sql templates",
     "banco de dados",
     "banco de dados sql",
-    "tabelas do banco"
+    "tabelas do banco",
+    "create database",
+    "criar banco de dados",
+    "table rows",
+    "linhas da tabela"
    ],
    "skills": [
     "webkit-layout",
@@ -28593,7 +28897,7 @@
     "Button",
     "ButtonHighlight",
     "Card",
-    "Checkbox",
+    "CodeEditor",
     "Command",
     "Drawer",
     "DrawerClose",
@@ -28604,21 +28908,28 @@
     "DropdownMenu",
     "EmptyState",
     "GlobalHeader",
+    "HelperText",
     "IconButton",
     "Input",
+    "Item",
     "Kbd",
     "Menu",
+    "PageHeader",
     "PageTabs",
     "PaginationRoot",
     "PanelContent",
     "PanelHeader",
+    "SaveBar",
+    "SettingRow",
+    "SettingsSection",
     "Sidebar",
     "StatusIndicator",
+    "Switch",
     "TableRoot",
     "Tabs",
     "Tag",
-    "Textarea",
     "ThemeSwitcher",
+    "toast",
     "ToggleGroup",
     "Tooltip"
    ],
@@ -28630,7 +28941,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/checkbox",
+    "@aziontech/webkit/code-editor",
     "@aziontech/webkit/command",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-close",
@@ -28641,21 +28952,28 @@
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/global-header",
+    "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/item",
     "@aziontech/webkit/kbd",
     "@aziontech/webkit/menu",
+    "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/pagination-root",
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/save-bar",
+    "@aziontech/webkit/setting-row",
+    "@aziontech/webkit/settings-section",
     "@aziontech/webkit/sidebar",
     "@aziontech/webkit/status-indicator",
+    "@aziontech/webkit/switch",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
-    "@aziontech/webkit/textarea",
     "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip"
    ],
@@ -28681,6 +28999,14 @@
     {
      "name": "Failed",
      "summary": "The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry."
+    },
+    {
+     "name": "TableData",
+     "summary": "The events table in the Data view: 137 rows in a compact `TableRoot` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo."
+    },
+    {
+     "name": "CreateDatabase",
+     "summary": "The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, over a save bar with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table."
     }
    ],
    "file": "catalog/patterns/platform/view/query-editor.json"

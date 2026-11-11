@@ -1,0 +1,111 @@
+{
+ "name": "upload-progress",
+ "binding": "UploadProgress",
+ "import": "@aziontech/webkit/upload-progress",
+ "treeShakeableImport": "@aziontech/webkit/upload-progress",
+ "category": "feedback",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A card that follows a file transfer to its end while the person keeps working: uploading files into a bucket, moving objects between folders or deleting them. Its header says what is happening and how far it got (`Uploading 2 of 5 files`) over one overall bar; below it each file has its own bar, its state and a Cancel or Retry button. When every file has finished the header turns into the outcome (`5 files uploaded`, or `4 files uploaded, 1 failed` with Retry failed) and the card can be closed. It floats at the inline-end bottom corner by default, so it survives route changes in the console shell. Taken from the Console Kit's object storage progress card, extended with the per-file list the design sample's bucket browser needs.",
+ "setup": null,
+ "useWhen": [
+  "A bucket upload that keeps running after the upload dialog closes.",
+  "A move or delete of many objects that takes more than a second or two.",
+  "Any batch of file transfers where the person should be able to cancel one file, or retry the ones that failed."
+ ],
+ "avoidWhen": [
+  "The files picked in a form before it is submitted → use `file-token-group`.",
+  "A single action with no per-file parts (a deploy, a build) → use the async-submit toast (`toast` with Edit and Redeploy).",
+  "Progress of a page load or a determinate step inside a form → use `progress`."
+ ],
+ "related": [
+  "file-token-group` — the files picked for upload, before the transfer starts.",
+  "progress` — the bar used for the overall and per-file progress.",
+  "toast` — reports the outcome of a single async action."
+ ],
+ "bestPractices": [
+  "Keep the card until the person closes it when anything failed; close it yourself a few seconds after a clean finish if you like.",
+  "Send `error` as the reason (`Connection lost`, `Larger than 300 MB`), not a status code.",
+  "Update `progress` no more than a few times a second; the bars animate between values.",
+  "Report the outcome with a toast only when the card is not in view (for example, after the person collapsed it and left the page)."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "UploadProgressItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The files in the transfer, in order, with their state and progress."
+  },
+  {
+   "name": "operation",
+   "type": "'upload' | 'move' | 'delete'",
+   "default": "'upload'",
+   "required": "false",
+   "doc": "What the transfer does; picks the header wording and the glyph."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overrides the header text. Empty builds it from the operation and the counts."
+  },
+  {
+   "name": "floating",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Fixes the card to the inline-end bottom corner of the viewport; false renders it in the flow."
+  },
+  {
+   "name": "cancelable",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows Cancel on running and waiting files and Cancel all in the header."
+  }
+ ],
+ "events": [
+  {
+   "name": "cancel",
+   "payload": "id?: string",
+   "notes": "Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer."
+  },
+  {
+   "name": "retry",
+   "payload": "id?: string",
+   "notes": "Retry on one failed file (its `id`) or Retry failed (no `id`)."
+  },
+  {
+   "name": "close",
+   "payload": "—",
+   "notes": "Close was pressed; offered only once every file has finished."
+  }
+ ],
+ "slots": [
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "Buttons for the finished transfer beside Close (for example `Open folder`). Shown when done."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import UploadProgress from '@aziontech/webkit/upload-progress'\n  import { onBeforeUnmount, ref } from 'vue'\n\n  const initial = () => [\n    { id: 'logo', name: 'logo.svg', size: 4210, status: 'done' },\n    { id: 'app', name: 'app.js', size: 248_320, status: 'running', progress: 64 },\n    { id: 'styles', name: 'styles.css', size: 52_100, status: 'running' },\n    { id: 'hero', name: 'hero.webp', size: 1_482_000, status: 'queued' }\n  ]\n\n  const items = ref(initial())\n  let timer = 0\n\n  const tick = () => {\n    let started = false\n    items.value = items.value.map((item) => {\n      if (item.status === 'running') {\n        const progress = Math.min(100, (item.progress ?? 0) + 18)\n        return progress >= 100 ? { ...item, status: 'done', progress } : { ...item, progress }\n      }\n      if (item.status === 'queued' && !started) {\n        started = true\n        return { ...item, status: 'running', progress: 0 }\n      }\n      return item\n    })\n    if (items.value.every((item) => item.status !== 'running' && item.status !== 'queued')) {\n      clearInterval(timer)\n    }\n  }\n\n  const start = () => {\n    clearInterval(timer)\n    items.value = initial()\n    timer = setInterval(tick, 600)\n  }\n\n  const cancel = (id) => {\n    items.value = items.value.map((item) =>\n      (id === undefined || item.id === id) &&\n      (item.status === 'running' || item.status === 'queued')\n        ? { ...item, status: 'canceled' }\n        : item\n    )\n  }\n\n  onBeforeUnmount(() => clearInterval(timer))\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-xs) flex-col items-start gap-(--spacing-sm)\">\n    <Button\n      label=\"Start upload\"\n      kind=\"secondary\"\n      size=\"medium\"\n      icon=\"pi pi-upload\"\n      @click=\"start\"\n    />\n    <UploadProgress\n      :items=\"items\"\n      :floating=\"false\"\n      @cancel=\"cancel\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Finished",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import UploadProgress from '@aziontech/webkit/upload-progress'\n\n  const items = [\n    { id: 'logo', name: 'logo.svg', size: 4210, status: 'done' },\n    { id: 'app', name: 'app.js', size: 248_320, status: 'done' },\n    { id: 'video', name: 'intro.mp4', size: 96_400_000, status: 'error', error: 'Connection lost' },\n    { id: 'styles', name: 'styles.css', size: 52_100, status: 'done' }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xs)\">\n    <UploadProgress\n      :items=\"items\"\n      :floating=\"false\"\n    >\n      <template #actions>\n        <Button\n          label=\"Open folder\"\n          kind=\"secondary\"\n          size=\"small\"\n        />\n      </template>\n    </UploadProgress>\n  </div>\n</template>"
+  },
+  {
+   "name": "Move",
+   "sfc": "<script setup>\n  import UploadProgress from '@aziontech/webkit/upload-progress'\n  import { ref } from 'vue'\n\n  const collapsed = ref(true)\n\n  const items = [\n    { id: 'a', name: 'reports/2026-10.csv', size: 18_200, status: 'done' },\n    { id: 'b', name: 'reports/2026-11.csv', size: 19_400, status: 'running', progress: 40 },\n    { id: 'c', name: 'reports/summary.pdf', size: 402_000, status: 'queued' }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xs)\">\n    <UploadProgress\n      v-model:collapsed=\"collapsed\"\n      :items=\"items\"\n      operation=\"move\"\n      :floating=\"false\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/upload-progress.md"
+}
