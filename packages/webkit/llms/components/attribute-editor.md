@@ -36,7 +36,7 @@
 - [input](input.md) — the default control of a cell; any control can replace it through `cell-<key>`.
 - [button](button.md), `icon-button` — Add and Remove.
 - [separator](separator.md) — the "or" between groups in grouped mode.
-- platform/edit/rule-builder` (block) — its criteria editor is the grouped mode (AND rows inside a group, OR between groups); the block keeps its own markup until it moves onto this component.
+- platform/edit/rule-builder` (block) — its criteria are this component in grouped mode (AND rows inside a group, OR between groups), with a `Combobox` variable cell.
 
 ## Props
 

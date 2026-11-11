@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 909ddfc9c34bb7009f15fbf4b480618d23a4a8c5bfc0a24cb37bb7cb472f06eb
+checksum: 8fec34a01be420e498dbc40b42920c2f83f9d511dec07737d1b85c650ec412b4
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -36,7 +36,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 - `input` — the default control of a cell; any control can replace it through `cell-<key>`.
 - `button`, `icon-button` — Add and Remove.
 - `separator` — the "or" between groups in grouped mode.
-- `platform/edit/rule-builder` (block) — its criteria editor is the grouped mode (AND rows inside a group, OR between groups); the block keeps its own markup until it moves onto this component.
+- `platform/edit/rule-builder` (block) — its criteria are this component in grouped mode (AND rows inside a group, OR between groups), with a `Combobox` variable cell.
 
 ## Best practices
 

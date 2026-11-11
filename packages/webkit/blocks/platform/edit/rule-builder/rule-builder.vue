@@ -1,6 +1,8 @@
 <script setup>
+  import AttributeEditor from '@aziontech/webkit/attribute-editor'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Combobox from '@aziontech/webkit/combobox'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -17,9 +19,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioButton from '@aziontech/webkit/radio-button'
-  import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
-  import Separator from '@aziontech/webkit/separator'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
@@ -42,8 +42,6 @@
       description: 'Configure the responses sent back to clients.'
     }
   ]
-  const phaseHint =
-    'When the rule runs. Request rules act on what arrives at the service; response rules act on what leaves it. The two are separate programs and never interleave.'
   const OPERATORS = [
     { value: 'is-equal', label: 'is equal' },
     { value: 'is-not-equal', label: 'is not equal' },
@@ -309,7 +307,6 @@
   const byValue = Object.fromEntries(catalog.map((behavior) => [behavior.value, behavior]))
   const operatorLabel = (value) => OPERATORS.find((o) => o.value === value)?.label ?? ''
   const takesArgument = (operator) => operator !== 'exists' && operator !== 'does-not-exist'
-  const operatorArgument = () => ({ kind: 'text' })
   const behaviorLabel = (value) => byValue[value]?.label ?? ''
   const behaviorArgument = (value) => byValue[value]?.argument ?? null
   const behaviorsFor = (phase) => catalog.filter((behavior) => behavior.phases.includes(phase))
@@ -335,20 +332,23 @@
 
   let nextId = 0
   const uid = () => (nextId += 1)
-  const newCondition = (join = null) => ({
+  const newCondition = () => ({
     id: uid(),
-    join,
     variable: '',
     operator: 'is-equal',
     argument: ''
   })
-  const newGroup = () => ({ id: uid(), conditions: [newCondition()] })
+  const criteriaColumns = [
+    { key: 'variable', label: 'Variable', required: true },
+    { key: 'operator', label: 'Operator' },
+    { key: 'argument', label: 'Argument' }
+  ]
   const newBehavior = () => ({ id: uid(), type: 'deliver' })
   const blankForm = () => ({
     name: '',
     description: '',
     phase: PHASES[0].value,
-    criteria: [newGroup()],
+    criteria: [[newCondition()]],
     behaviors: [newBehavior()],
     active: true
   })
@@ -359,10 +359,14 @@
           name: seed.name,
           description: seed.description,
           phase: seed.phase,
-          criteria: seed.criteria.map((group) => ({
-            id: uid(),
-            conditions: group.conditions.map((condition) => ({ ...condition, id: uid() }))
-          })),
+          criteria: seed.criteria.map((group) =>
+            group.conditions.map(({ variable, operator, argument }) => ({
+              id: uid(),
+              variable,
+              operator,
+              argument
+            }))
+          ),
           behaviors: seed.behaviors.map((behavior) => ({ ...behavior, id: uid() })),
           active: seed.status === 'Active'
         }
@@ -371,8 +375,14 @@
   const submitted = ref(false)
   const submitting = ref(false)
   const nameError = computed(() => submitted.value && !form.name.trim())
-  const totalConditions = computed(() =>
-    form.criteria.reduce((sum, group) => sum + group.conditions.length, 0)
+  const criteriaErrors = computed(() =>
+    submitted.value
+      ? form.criteria.map((group) =>
+          group.map((condition) =>
+            condition.variable.trim() ? {} : { variable: 'Enter the variable to compare.' }
+          )
+        )
+      : []
   )
 
   watch(
@@ -400,23 +410,6 @@
     if (!isOpen) behaviorQuery[id] = ''
   }
 
-  const variableOpen = ref(null)
-  const variableTyping = ref(false)
-  const variableMatches = (condition) => {
-    const query = variableTyping.value ? condition.variable.trim().toLowerCase() : ''
-    if (!query) return variablesForPhase.value
-    return variablesForPhase.value.filter((option) => option.value.toLowerCase().includes(query))
-  }
-  const openVariables = (condition) => {
-    variableTyping.value = false
-    variableOpen.value = condition.id
-  }
-  const pickVariable = (condition, option) => {
-    condition.variable = option.value
-    variableTyping.value = false
-    variableOpen.value = null
-  }
-
   const optionsFor = (source) => behaviorOptions(source, form.phase)
   const optionLabelIn = (source, value) =>
     optionsFor(source).find((option) => option.value === value)?.label ?? ''
@@ -431,12 +424,6 @@
     if (form.behaviors.length >= 10) return false
     return !isTerminalBehavior(form.behaviors[form.behaviors.length - 1]?.type)
   })
-  const canAddCriteria = computed(() => form.criteria.length < 5)
-  const canAddCondition = (group) => group.conditions.length < 10
-
-  const setConditionOperator = (condition, operator) => {
-    condition.operator = operator
-  }
 
   watch(
     () => form.phase,
@@ -456,25 +443,11 @@
     }
   )
 
-  const addCondition = (group, join) => group.conditions.push(newCondition(join))
-  const addCriteria = () => form.criteria.push(newGroup())
   const move = (list, index, direction) => {
     const target = index + direction
     if (target < 0 || target >= list.length) return
     const [moved] = list.splice(index, 1)
     list.splice(target, 0, moved)
-  }
-  const moveCriteria = (index, direction) => move(form.criteria, index, direction)
-  const removeCondition = (groupIndex, condIndex) => {
-    if (totalConditions.value <= 1) return
-    const group = form.criteria[groupIndex]
-    group.conditions.splice(condIndex, 1)
-    if (group.conditions.length === 0) form.criteria.splice(groupIndex, 1)
-    else if (condIndex === 0) group.conditions[0].join = null
-  }
-  const moveCondition = (groupIndex, condIndex, direction) => {
-    move(form.criteria[groupIndex].conditions, condIndex, direction)
-    form.criteria[groupIndex].conditions[0].join = null
   }
   const addBehavior = () => form.behaviors.push(newBehavior())
   const removeBehavior = (index) => {
@@ -510,20 +483,9 @@
     const [moved] = list.splice(from, 1)
     list.splice(to, 0, moved)
   }
-  const dropOnCondition = (groupIndex, index) => {
-    if (dnd.scope !== 'cond-' + groupIndex) return
-    reorder(form.criteria[groupIndex].conditions, dnd.from, index)
-    form.criteria[groupIndex].conditions[0].join = null
-    onDragEnd()
-  }
   const dropOnBehavior = (index) => {
     if (dnd.scope !== 'behavior') return
     reorder(form.behaviors, dnd.from, index)
-    onDragEnd()
-  }
-  const dropOnCriteria = (index) => {
-    if (dnd.scope !== 'criteria') return
-    reorder(form.criteria, dnd.from, index)
     onDragEnd()
   }
 
@@ -535,7 +497,7 @@
   }
   const isValid = () =>
     Boolean(form.name.trim()) &&
-    form.criteria.every((group) => group.conditions.every((c) => c.variable.trim())) &&
+    form.criteria.every((group) => group.every((condition) => condition.variable.trim())) &&
     form.behaviors.length > 0 &&
     form.behaviors.every(behaviorFilled)
   const formEl = ref(null)
@@ -679,343 +641,82 @@
 
               <SettingsSection
                 title="Criteria"
-                hint="The conditions that decide whether the rule runs."
+                hint="The conditions that decide whether the rule runs. Every condition in a group must match, and any one group is enough."
               >
-                <Card :padded="false">
-                  <template #content>
-                    <div>
-                      <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
-                        <div class="relative flex flex-col gap-(--spacing-lg)">
-                          <div
-                            v-for="(group, gIdx) in form.criteria"
-                            :key="group.id"
-                            data-drag-row
-                            :data-dragging="isDragging('criteria', gIdx) || null"
-                            :data-drop="isDropTarget('criteria', gIdx) || null"
-                            :class="['flex flex-col gap-(--spacing-sm)', dragRowClass]"
-                            @dragenter.prevent="onDragEnter('criteria', gIdx)"
-                            @dragover.prevent
-                            @drop="dropOnCriteria(gIdx)"
-                          >
-                            <div class="flex min-h-8 items-center gap-(--spacing-xs)">
-                              <span
-                                v-if="form.criteria.length > 1"
-                                role="button"
-                                tabindex="0"
-                                aria-label="Drag to reorder criteria, or use arrow keys"
-                                draggable="true"
-                                :class="[GRIP_CLASS, 'size-8']"
-                                @dragstart="onDragStart('criteria', gIdx, $event)"
-                                @dragend="onDragEnd"
-                                @keydown.up.prevent="moveCriteria(gIdx, -1)"
-                                @keydown.down.prevent="moveCriteria(gIdx, 1)"
-                              >
-                                <i
-                                  class="pi pi-bars"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                              <span class="text-overline-sm text-(--text-muted)">
-                                {{ gIdx === 0 ? 'If' : 'Or' }}
-                              </span>
-                              <span class="h-px flex-1 bg-(--border-default)" />
-                              <div
-                                v-if="form.criteria.length > 1"
-                                class="flex items-center gap-(--spacing-xxs)"
-                              >
-                                <Tooltip text="Move criteria up">
-                                  <IconButton
-                                    icon="pi pi-chevron-up"
-                                    kind="outlined"
-                                    size="small"
-                                    aria-label="Move criteria up"
-                                    :disabled="submitting || gIdx === 0"
-                                    @click="moveCriteria(gIdx, -1)"
-                                  />
-                                </Tooltip>
-                                <Tooltip text="Move criteria down">
-                                  <IconButton
-                                    icon="pi pi-chevron-down"
-                                    kind="outlined"
-                                    size="small"
-                                    aria-label="Move criteria down"
-                                    :disabled="submitting || gIdx === form.criteria.length - 1"
-                                    @click="moveCriteria(gIdx, 1)"
-                                  />
-                                </Tooltip>
-                              </div>
-                            </div>
-
-                            <div
-                              class="ms-(--spacing-xs) flex flex-col gap-(--spacing-sm) rounded-es-(--shape-card) border-b-(length:--border-width-default) border-s-(length:--border-width-default) border-(--border-muted) pb-(--spacing-md) ps-(--spacing-md)"
-                            >
-                              <div class="relative flex flex-col gap-(--spacing-sm)">
-                                <div
-                                  v-for="(cond, cIdx) in group.conditions"
-                                  :key="cond.id"
-                                  data-drag-row
-                                  :data-dragging="isDragging('cond-' + gIdx, cIdx) || null"
-                                  :data-drop="isDropTarget('cond-' + gIdx, cIdx) || null"
-                                  :class="['flex flex-col gap-(--spacing-xxs)', dragRowClass]"
-                                  @dragenter.prevent="onDragEnter('cond-' + gIdx, cIdx)"
-                                  @dragover.prevent
-                                  @drop="dropOnCondition(gIdx, cIdx)"
-                                >
-                                  <span
-                                    v-if="cIdx > 0"
-                                    class="text-label-sm text-(--text-muted)"
-                                  >
-                                    {{ cond.join === 'or' ? 'Or' : 'And' }}
-                                  </span>
-                                  <div
-                                    class="grid grid-cols-1 items-start gap-(--spacing-xs) sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto]"
-                                  >
-                                    <div class="relative w-full">
-                                      <div class="contents font-code">
-                                        <Input
-                                          v-model="cond.variable"
-                                          size="large"
-                                          placeholder="${uri}"
-                                          :disabled="submitting"
-                                          :required="submitted && !cond.variable.trim()"
-                                          class="w-full"
-                                          role="combobox"
-                                          autocomplete="off"
-                                          aria-autocomplete="list"
-                                          aria-label="Variable"
-                                          :aria-expanded="
-                                            variableOpen === cond.id && variablesForPhase.length > 0
-                                          "
-                                          :aria-controls="`rule-variables-${cond.id}`"
-                                          @focus="openVariables(cond)"
-                                          @input="variableTyping = true"
-                                          @blur="variableOpen = null"
-                                        >
-                                          <template #iconLeft>
-                                            <i
-                                              class="pi pi-search"
-                                              aria-hidden="true"
-                                            />
-                                          </template>
-                                        </Input>
-                                      </div>
-                                      <Transition
-                                        enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
-                                        leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
-                                      >
-                                        <div
-                                          v-if="
-                                            variableOpen === cond.id && variablesForPhase.length
-                                          "
-                                          :id="`rule-variables-${cond.id}`"
-                                          role="listbox"
-                                          class="absolute inset-x-0 top-full z-(--z-input-overlay) mt-1 flex max-h-(--size-80) flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs)"
-                                        >
-                                          <div class="flex max-h-60">
-                                            <ScrollArea class="w-full">
-                                              <div
-                                                class="flex flex-col items-stretch px-(--spacing-xxs) py-(--spacing-xs)"
-                                              >
-                                                <div
-                                                  v-for="option in variableMatches(cond)"
-                                                  :key="option.value"
-                                                  role="option"
-                                                  :aria-selected="cond.variable === option.value"
-                                                  :data-selected="
-                                                    cond.variable === option.value || null
-                                                  "
-                                                  class="flex h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) data-active:bg-(--bg-hover) data-selected:bg-(--bg-selected)"
-                                                  @mousedown.prevent="pickVariable(cond, option)"
-                                                >
-                                                  <span
-                                                    class="min-w-0 flex-auto truncate text-start"
-                                                    >{{ option.value }}</span
-                                                  >
-                                                </div>
-                                                <p
-                                                  v-if="!variableMatches(cond).length"
-                                                  class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
-                                                >
-                                                  No variable matches. Type the one you need.
-                                                </p>
-                                              </div>
-                                            </ScrollArea>
-                                          </div>
-                                        </div>
-                                      </Transition>
-                                    </div>
-
-                                    <Select
-                                      :model-value="cond.operator"
-                                      size="large"
-                                      class="w-full"
-                                      :disabled="submitting"
-                                      :display-value="operatorLabel"
-                                      @update:model-value="setConditionOperator(cond, $event)"
-                                    >
-                                      <Select.Trigger aria-label="Operator" />
-                                      <Select.Content>
-                                        <Select.Option
-                                          v-for="op in OPERATORS"
-                                          :key="op.value"
-                                          :value="op.value"
-                                        >
-                                          {{ op.label }}
-                                        </Select.Option>
-                                      </Select.Content>
-                                    </Select>
-
-                                    <Select
-                                      v-if="
-                                        takesArgument(cond.operator) &&
-                                        operatorArgument(cond.operator).kind === 'select'
-                                      "
-                                      v-model="cond.argument"
-                                      size="large"
-                                      class="w-full"
-                                      :disabled="submitting"
-                                      :placeholder="`Select a ${operatorArgument(cond.operator).label.toLowerCase()}`"
-                                      :display-value="
-                                        (value) =>
-                                          optionLabelIn(
-                                            operatorArgument(cond.operator).source,
-                                            value
-                                          )
-                                      "
-                                    >
-                                      <Select.Trigger
-                                        :aria-label="operatorArgument(cond.operator).label"
-                                      />
-                                      <Select.Content>
-                                        <Select.Option
-                                          v-for="option in optionsFor(
-                                            operatorArgument(cond.operator).source
-                                          )"
-                                          :key="option.value"
-                                          :value="option.value"
-                                        >
-                                          {{ option.label }}
-                                        </Select.Option>
-                                      </Select.Content>
-                                    </Select>
-                                    <Input
-                                      v-else-if="takesArgument(cond.operator)"
-                                      v-model="cond.argument"
-                                      size="large"
-                                      class="w-full"
-                                      aria-label="Argument"
-                                      :disabled="submitting"
-                                    />
-                                    <span v-else />
-
-                                    <div class="flex items-center gap-(--spacing-xxs)">
-                                      <span
-                                        v-if="group.conditions.length > 1"
-                                        role="button"
-                                        tabindex="0"
-                                        aria-label="Drag to reorder condition, or use arrow keys"
-                                        draggable="true"
-                                        :class="[GRIP_CLASS, 'size-10']"
-                                        @dragstart="onDragStart('cond-' + gIdx, cIdx, $event)"
-                                        @dragend="onDragEnd"
-                                        @keydown.up.prevent="moveCondition(gIdx, cIdx, -1)"
-                                        @keydown.down.prevent="moveCondition(gIdx, cIdx, 1)"
-                                      >
-                                        <i
-                                          class="pi pi-bars"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                      <Tooltip text="Move condition up">
-                                        <IconButton
-                                          icon="pi pi-chevron-up"
-                                          kind="outlined"
-                                          size="large"
-                                          aria-label="Move condition up"
-                                          :disabled="submitting || cIdx === 0"
-                                          @click="moveCondition(gIdx, cIdx, -1)"
-                                        />
-                                      </Tooltip>
-                                      <Tooltip text="Move condition down">
-                                        <IconButton
-                                          icon="pi pi-chevron-down"
-                                          kind="outlined"
-                                          size="large"
-                                          aria-label="Move condition down"
-                                          :disabled="
-                                            submitting || cIdx === group.conditions.length - 1
-                                          "
-                                          @click="moveCondition(gIdx, cIdx, 1)"
-                                        />
-                                      </Tooltip>
-                                      <Tooltip text="Remove condition">
-                                        <IconButton
-                                          icon="pi pi-trash"
-                                          kind="outlined"
-                                          size="large"
-                                          aria-label="Remove condition"
-                                          :disabled="submitting || totalConditions <= 1"
-                                          @click="removeCondition(gIdx, cIdx)"
-                                        />
-                                      </Tooltip>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="flex items-center gap-(--spacing-xs)">
-                                <Button
-                                  type="button"
-                                  label="And"
-                                  kind="outlined"
-                                  size="medium"
-                                  icon="pi pi-plus-circle"
-                                  :disabled="submitting || !canAddCondition(group)"
-                                  @click="addCondition(group, 'and')"
-                                />
-                                <Button
-                                  type="button"
-                                  label="Or"
-                                  kind="outlined"
-                                  size="medium"
-                                  icon="pi pi-plus-circle"
-                                  :disabled="submitting || !canAddCondition(group)"
-                                  @click="addCondition(group, 'or')"
-                                />
-                                <span
-                                  v-if="!canAddCondition(group)"
-                                  class="text-body-sm text-(--text-muted)"
-                                >
-                                  Each criteria holds up to 10 conditions.
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <Separator />
-
-                        <div class="flex flex-wrap items-center gap-(--spacing-sm)">
-                          <Button
-                            type="button"
-                            label="Add criteria"
-                            kind="outlined"
-                            size="medium"
-                            icon="pi pi-plus-circle"
-                            :disabled="submitting || !canAddCriteria"
-                            @click="addCriteria"
-                          />
-                          <span
-                            v-if="!canAddCriteria"
-                            class="text-body-sm text-(--text-muted)"
-                          >
-                            A rule holds up to 5 criteria.
-                          </span>
-                        </div>
-                      </div>
+                <AttributeEditor
+                  v-model:groups="form.criteria"
+                  :definition="criteriaColumns"
+                  :new-item="newCondition"
+                  :errors="criteriaErrors"
+                  :limit="10"
+                  :group-limit="5"
+                  :min-items="1"
+                  :disabled="submitting"
+                  size="large"
+                  add-button-label="Add condition"
+                  add-group-label="Add OR group"
+                  remove-button-label="Remove condition"
+                  aria-label="Criteria"
+                >
+                  <template #cell-variable="{ value, update, invalid }">
+                    <div class="contents font-code">
+                      <Combobox
+                        :model-value="value"
+                        :options="variablesForPhase"
+                        size="large"
+                        placeholder="${uri}"
+                        empty-text="No variable matches. Type the one you need."
+                        required
+                        :invalid="invalid"
+                        :disabled="submitting"
+                        @update:model-value="update"
+                      />
                     </div>
                   </template>
-                </Card>
+                  <template #cell-operator="{ value, update }">
+                    <Select
+                      :model-value="value"
+                      size="large"
+                      class="w-full"
+                      :disabled="submitting"
+                      :display-value="operatorLabel"
+                      @update:model-value="update"
+                    >
+                      <Select.Trigger />
+                      <Select.Content>
+                        <Select.Option
+                          v-for="op in OPERATORS"
+                          :key="op.value"
+                          :value="op.value"
+                        >
+                          {{ op.label }}
+                        </Select.Option>
+                      </Select.Content>
+                    </Select>
+                  </template>
+                  <template #cell-argument="{ item, value, update }">
+                    <Input
+                      v-if="takesArgument(item.operator)"
+                      key="argument"
+                      :model-value="value"
+                      size="large"
+                      class="w-full"
+                      autocomplete="off"
+                      :spellcheck="false"
+                      :disabled="submitting"
+                      @update:model-value="update"
+                    />
+                    <Input
+                      v-else
+                      key="no-argument"
+                      model-value=""
+                      size="large"
+                      class="w-full"
+                      placeholder="No argument"
+                      disabled
+                    />
+                  </template>
+                </AttributeEditor>
               </SettingsSection>
 
               <SettingsSection

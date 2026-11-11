@@ -27703,7 +27703,7 @@
    "title": "Templates/Platform/Edit/RuleBuilder",
    "source": "blocks/platform/edit/rule-builder/rule-builder.vue",
    "surface": "product",
-   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are groups of variable, operator and argument rows, the variable picked from a suggestion list, added with And or Or and read as If / Or across groups; behaviors are a Then list whose argument field follows the behavior picked, from a searchable list filtered by phase. Groups, conditions and behaviors reorder by dragging the grip or with the arrow buttons. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule; a resource that only acts on requests opens the same drawer with a single Request phase (so no Phase section) and its own behaviors. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `ScrollArea`, `RadioButton` choice cards, `Card`, `Separator`, `Item`, `Switch`, `IconButton`, `Tooltip` and `Button`.",
+   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor; behaviors are a Then list whose argument field follows the behavior picked, from a searchable list filtered by phase. Behaviors reorder by dragging the grip or with the arrow buttons. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule; a resource that only acts on requests opens the same drawer with a single Request phase (so no Phase section) and its own behaviors. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioButton` choice cards, `Card`, `Item`, `Switch`, `IconButton`, `Tooltip` and `Button`.",
    "intents": [
     "rules engine",
     "rule form",
@@ -27722,8 +27722,10 @@
     "webkit-create-surface"
    ],
    "components": [
+    "AttributeEditor",
     "Button",
     "Card",
+    "Combobox",
     "Drawer",
     "DrawerClose",
     "DrawerContent",
@@ -27740,17 +27742,17 @@
     "PanelFooter",
     "PanelHeader",
     "RadioButton",
-    "ScrollArea",
     "Select",
-    "Separator",
     "SettingRow",
     "SettingsSection",
     "Switch",
     "Tooltip"
    ],
    "imports": [
+    "@aziontech/webkit/attribute-editor",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/combobox",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
@@ -27767,16 +27769,14 @@
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/radio-button",
-    "@aziontech/webkit/scroll-area",
     "@aziontech/webkit/select",
-    "@aziontech/webkit/separator",
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Default",
-   "guidelinesSummary": "A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match. The user composes If and Or groups of variable, operator and argument rows, picks behaviors that fit the phase, puts everything in order and saves, without leaving the resource's Rules tab.",
+   "guidelinesSummary": "A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match. The user composes groups of variable, operator and argument rows (every row in a group must match, any group is enough), picks behaviors that fit the phase, puts everything in order and saves, without leaving the resource's Rules tab.",
    "variants": [
     {
      "name": "Composed",
