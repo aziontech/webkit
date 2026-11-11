@@ -294,6 +294,8 @@
   }
   const openMoveSelection = (selectedRows) =>
     openMove(selectedRows.map((row) => row.original ?? row))
+  const hasSelectedFiles = (selectedRows) =>
+    selectedRows.some((row) => (row.original ?? row).kind === 'file')
 
   const normalize = (raw) => {
     const path = raw.trim().replace(/\/+/g, '/').replace(/^\//, '')
@@ -548,6 +550,7 @@
                         icon="pi pi-arrow-right-arrow-left"
                         kind="outlined"
                         size="small"
+                        :disabled="!hasSelectedFiles(selectedRows)"
                         @click="openMoveSelection(selectedRows)"
                       />
                     </div>
