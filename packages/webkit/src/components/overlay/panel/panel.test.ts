@@ -1,6 +1,6 @@
-import { render } from '@testing-library/vue'
+import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, provide } from 'vue'
+import { defineComponent, h, nextTick, provide, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { DrawerPanelScrollInjectionKey } from '../drawer/injection-key'
@@ -147,6 +147,33 @@ describe('Panel', () => {
   it('renders the sizeAtMd (mobile bottom-sheet) shell', () => {
     const { getByTestId } = render(composed({ sizeAtMd: true, size: 'large' }))
     expect(getByTestId('overlay-panel').tagName).toBe('DIV')
+  })
+
+  it('makes an overflowing content region focusable only when nothing inside is', async () => {
+    const lines = ref(1)
+    const withButton = ref(false)
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(Panel, null, () =>
+            h(PanelContent, null, () => [
+              ...Array.from({ length: lines.value }, (_, i) => h('p', { key: i }, `Line ${i}`)),
+              withButton.value ? h('button', { type: 'button' }, 'Act') : null
+            ])
+          )
+      })
+    )
+    const content = view.getByTestId('overlay-panel__content')
+    content.style.height = '40px'
+    content.style.overflowY = 'auto'
+    await nextTick()
+    expect(content).not.toHaveAttribute('tabindex')
+
+    lines.value = 30
+    await waitFor(() => expect(content).toHaveAttribute('tabindex', '0'))
+
+    withButton.value = true
+    await waitFor(() => expect(content).not.toHaveAttribute('tabindex'))
   })
 
   it('has no accessibility violations on the composed tree', async () => {

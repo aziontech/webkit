@@ -735,14 +735,17 @@
                                   >
                                     {{ row.name }} references no other resources.
                                   </p>
-                                  <Item.Group v-else>
-                                    <div class="flex flex-col gap-(--spacing-sm)">
-                                      <Alert
-                                        v-if="sharedDependency"
-                                        severity="info"
-                                        size="small"
-                                        :label="`${sharedDependency.name} is shared, so it deploys at one version. Changing it here changes it for ${listFormat(sharedDependency.sharedWith)} too.`"
-                                      />
+                                  <div
+                                    v-else
+                                    class="flex flex-col gap-(--spacing-sm)"
+                                  >
+                                    <Alert
+                                      v-if="sharedDependency"
+                                      severity="info"
+                                      size="small"
+                                      :label="`${sharedDependency.name} is shared, so it deploys at one version. Changing it here changes it for ${listFormat(sharedDependency.sharedWith)} too.`"
+                                    />
+                                    <Item.Group class="gap-(--spacing-sm)!">
                                       <Item
                                         v-for="dependency in dependenciesOf(row)"
                                         :key="dependency.key"
@@ -901,8 +904,8 @@
                                           </DropdownMenu>
                                         </Item.Actions>
                                       </Item>
-                                    </div>
-                                  </Item.Group>
+                                    </Item.Group>
+                                  </div>
                                   <span
                                     class="sr-only"
                                     role="status"
