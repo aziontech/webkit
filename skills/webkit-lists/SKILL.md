@@ -185,6 +185,12 @@ signal }` and resolves `{ items, total }`; the composable tracks `loading` and `
 text (`filtering.debounce`, 300 ms), aborts the previous request through `signal` when a newer one
 starts, and ignores a late answer. The page passes the query straight to its API.
 
+**Export** — `tableProps` also binds `exportRows`, so `Table.Export` and the Table's `exportCsv()`
+write every match, not the one page the Table holds. In client mode that is the matching items; in
+server mode pass `exportAll` (it receives `{ filteringText, filter, sort, scope }` and resolves every
+item to write), or the export holds the loaded page only. `exportItems(scope?)` returns the same rows
+for a custom export. A Download CSV button outside the Table calls `tableRef.value.exportCsv()`.
+
 ```js
 const { tableProps } = useCollection({
   fetch: ({ filter, sort, page, pageSize, signal }) =>

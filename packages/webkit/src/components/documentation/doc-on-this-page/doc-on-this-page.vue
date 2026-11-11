@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { buildRail, measureRail, RAIL_INDENT, RAIL_STROKE } from './toc-rail'
 
@@ -64,7 +64,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ docOnThisPage: en.docOnThisPage })
+  const { t } = useTranslate({ docOnThisPage: en.docOnThisPage })
   const railTitle = computed(() => props.title || t('docOnThisPage.title'))
 
   const testId = computed(

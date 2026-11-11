@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Spinner from '../../../utils/spinner/spinner.vue'
   import { useStepperContext } from '../composables/use-stepper-context'
@@ -41,7 +41,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ stepper: en.stepper })
+  const { t } = useTranslate({ stepper: en.stepper })
   const context = useStepperContext()
 
   const id = Symbol('StepperStep')

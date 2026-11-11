@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, provide, ref, useAttrs, useSlots } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -53,7 +53,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ sidebar: en.sidebar })
+  const { t } = useTranslate({ sidebar: en.sidebar })
   const labels = computed(() => ({
     root: props.ariaLabel || t('sidebar.label'),
     collapse: props.collapseAriaLabel || t('sidebar.collapse'),

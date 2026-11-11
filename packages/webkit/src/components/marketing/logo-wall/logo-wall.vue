@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../card-grid/card-grid.vue'
@@ -61,7 +61,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ logoWall: en.logoWall })
+  const { t } = useTranslate({ logoWall: en.logoWall })
   const linkText = computed(() => props.linkLabel || t('logoWall.link'))
 
   const testId = computed(

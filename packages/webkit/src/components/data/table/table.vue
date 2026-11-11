@@ -22,6 +22,7 @@
     computed,
     getCurrentInstance,
     nextTick,
+    onBeforeUnmount,
     onMounted,
     provide,
     ref,
@@ -31,7 +32,8 @@
     watch
   } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { scrollParent } from '../../../composables/use-lazy-chunks'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { downloadCsv, toCsv } from '../../../utils/csv'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
@@ -156,6 +158,8 @@
       initialState?: Partial<TableStateSnapshot>
       /** Default filename for Table.Export and exportCsv(). */
       exportFilename?: string
+      /** Rows Table.Export and exportCsv() write for the `filtered` and `all` scopes in place of the rows the table holds; useCollection binds every match, not only the page. */
+      exportRows?: (scope: 'filtered' | 'all') => RowRecord[] | Promise<RowRecord[]>
       /** Data-driven mode: when the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of a horizontally scrolling grid. Set false to keep the grid at every width. */
       stackable?: boolean
       /** Data-driven mode: cell text wraps onto several lines instead of truncating. */
@@ -197,6 +201,7 @@
       state: undefined,
       initialState: undefined,
       exportFilename: 'export.csv',
+      exportRows: undefined,
       stackable: true,
       wrapLines: false,
       striped: false,
@@ -241,7 +246,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ table: en.table })
+  const { t } = useTranslate({ table: en.table })
 
   const slots = useSlots()
   const hasSlot = (name: string): boolean => Boolean((slots as Record<string, unknown>)[name])
@@ -520,21 +525,31 @@
     if (scope === 'page') return rows.value.map((row) => row.original)
     return table.getFilteredRowModel().rows.map((row) => row.original)
   }
-  const exportCsv = (options?: {
-    filename?: string
-    scope?: 'page' | 'filtered' | 'all'
-  }): void => {
-    const data = resolveExportRows(options?.scope ?? 'filtered')
+  const writeExport = (data: RowRecord[], filename?: string): void => {
     emit('export', data)
     if (hasExportListener()) return
     const columns = table
       .getVisibleLeafColumns()
       .filter((column) => metaOf(column).kind !== 'action')
       .map((column) => ({
-        id: column.id,
+        id: (column.columnDef as { accessorKey?: string }).accessorKey ?? column.id,
         header: typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id
       }))
-    downloadCsv(options?.filename || props.exportFilename, toCsv({ columns, rows: data }))
+    downloadCsv(filename || props.exportFilename, toCsv({ columns, rows: data }))
+  }
+  const exportCsv = (options?: {
+    filename?: string
+    scope?: 'page' | 'filtered' | 'all'
+    rows?: RowRecord[]
+  }): Promise<void> => {
+    const scope = options?.scope ?? 'filtered'
+    const source =
+      options?.rows ??
+      (scope !== 'page' && props.exportRows ? props.exportRows(scope) : resolveExportRows(scope))
+    if (source instanceof Promise)
+      return source.then((data) => writeExport(data, options?.filename))
+    writeExport(source, options?.filename)
+    return Promise.resolve()
   }
 
   const snapshot = (): TableStateSnapshot =>
@@ -788,37 +803,78 @@
   const selectAllId = `${useId()}-select-all`
 
   const viewportRef = ref<ComponentPublicInstance | null>(null)
+  const viewportEl = (): HTMLElement | undefined =>
+    viewportRef.value?.$el as HTMLElement | undefined
   const scrollTop = ref<number>(0)
   const viewportClientHeight = ref<number>(0)
-  const measuredRowHeight = ref<number>(0)
   const VIRTUAL_OVERSCAN = 8
   const virtualActive = computed<boolean>(
     () => props.virtual && dataDriven.value && !stacked.value && !props.loading
   )
-  const rowHeight = computed<number>(
-    () => measuredRowHeight.value || Math.max(1, props.estimateRowHeight)
+
+  const LAZY_THRESHOLD = 200
+  const LAZY_CHUNK = 50
+  const LAZY_MARGIN = 600
+  const lazyLimit = ref<number>(LAZY_CHUNK)
+  const lazyActive = computed<boolean>(
+    () =>
+      !virtualActive.value &&
+      dataDriven.value &&
+      !props.loading &&
+      rows.value.length > LAZY_THRESHOLD &&
+      lazyLimit.value < rows.value.length
   )
+
+  const rowHeights = new Map<string, number>()
+  const heightsVersion = ref<number>(0)
+  const measuredEstimate = ref<number>(0)
+  const rowHeight = computed<number>(
+    () => measuredEstimate.value || Math.max(1, props.estimateRowHeight)
+  )
+  const rowOffsets = computed<Float64Array>(() => {
+    void heightsVersion.value
+    const list = rows.value
+    const estimate = rowHeight.value
+    const offsets = new Float64Array(list.length + 1)
+    for (let i = 0; i < list.length; i++)
+      offsets[i + 1] = offsets[i] + (rowHeights.get(list[i].id) ?? estimate)
+    return offsets
+  })
+  const indexAt = (offsets: Float64Array, y: number): number => {
+    let lo = 0
+    let hi = offsets.length - 2
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1
+      if (offsets[mid] <= y) lo = mid
+      else hi = mid - 1
+    }
+    return Math.max(0, lo)
+  }
   const windowStart = computed<number>(() => {
     if (!virtualActive.value) return 0
-    const first = Math.max(0, Math.floor(scrollTop.value / rowHeight.value) - VIRTUAL_OVERSCAN)
+    const first = Math.max(0, indexAt(rowOffsets.value, scrollTop.value) - VIRTUAL_OVERSCAN)
     return first - (first % 2)
   })
   const windowEnd = computed<number>(() => {
+    if (lazyActive.value) return Math.min(rows.value.length, lazyLimit.value)
     if (!virtualActive.value) return rows.value.length
-    const visible = Math.ceil((viewportClientHeight.value || 640) / rowHeight.value)
-    return Math.min(rows.value.length, windowStart.value + visible + VIRTUAL_OVERSCAN * 2)
+    const bottom = scrollTop.value + (viewportClientHeight.value || 640)
+    const last = indexAt(rowOffsets.value, bottom) + 1
+    return Math.min(rows.value.length, Math.max(last, windowStart.value) + VIRTUAL_OVERSCAN)
   })
   const renderedRows = computed(() =>
-    virtualActive.value ? rows.value.slice(windowStart.value, windowEnd.value) : rows.value
+    virtualActive.value || lazyActive.value
+      ? rows.value.slice(windowStart.value, windowEnd.value)
+      : rows.value
   )
-  const virtualPadding = computed<Record<string, string> | undefined>(() =>
-    virtualActive.value
-      ? {
-          paddingBlockStart: `${windowStart.value * rowHeight.value}px`,
-          paddingBlockEnd: `${(rows.value.length - windowEnd.value) * rowHeight.value}px`
-        }
-      : undefined
-  )
+  const virtualPadding = computed<Record<string, string> | undefined>(() => {
+    if (!virtualActive.value) return undefined
+    const offsets = rowOffsets.value
+    return {
+      paddingBlockStart: `${offsets[windowStart.value]}px`,
+      paddingBlockEnd: `${offsets[rows.value.length] - offsets[windowEnd.value]}px`
+    }
+  })
   const visibleHeightOf = (el: HTMLElement): number =>
     Math.min(el.clientHeight, globalThis.innerHeight || el.clientHeight)
   const onViewportScroll = (event: Event): void => {
@@ -827,20 +883,117 @@
     scrollTop.value = el.scrollTop
     viewportClientHeight.value = visibleHeightOf(el)
   }
-  const measureRowHeight = (): void => {
-    const el = viewportRef.value?.$el as HTMLElement | undefined
-    if (!el || !virtualActive.value) return
-    viewportClientHeight.value = visibleHeightOf(el)
-    const row = el.querySelector<HTMLElement>('[role="rowgroup"]:not([data-frozen]) > [role="row"]')
-    const height = row?.offsetHeight ?? 0
-    if (height > 0 && Math.abs(height - measuredRowHeight.value) > 1)
-      measuredRowHeight.value = height
+
+  const rowIndexById = computed<Map<string, number>>(
+    () => new Map(rows.value.map((row, index) => [row.id, index]))
+  )
+  const trackedRows = new Map<string, HTMLElement>()
+  const trackedIds = new WeakMap<Element, string>()
+  let rowObserver: ResizeObserver | null = null
+  let heightsFrame = 0
+  const onRowsResized = (entries: ResizeObserverEntry[]): void => {
+    const el = viewportEl()
+    const anchor = el ? indexAt(rowOffsets.value, el.scrollTop) : 0
+    const estimate = rowHeight.value
+    let shift = 0
+    let changed = false
+    let firstSum = 0
+    let firstCount = 0
+    for (const entry of entries) {
+      const target = entry.target as HTMLElement
+      const id = trackedIds.get(target)
+      const height = target.offsetHeight
+      if (id === undefined || height <= 0) continue
+      const previous = rowHeights.get(id)
+      if (previous !== undefined && Math.abs(previous - height) < 0.5) continue
+      const index = rowIndexById.value.get(id)
+      if (index !== undefined && index < anchor) shift += height - (previous ?? estimate)
+      rowHeights.set(id, height)
+      firstSum += height
+      firstCount += 1
+      changed = true
+    }
+    if (!changed) return
+    const estimateNext = measuredEstimate.value || (firstCount ? firstSum / firstCount : 0)
+    if (!measuredEstimate.value) shift = 0
+    if (el && shift) el.scrollTop += shift
+    globalThis.cancelAnimationFrame(heightsFrame)
+    heightsFrame = globalThis.requestAnimationFrame(() => {
+      measuredEstimate.value = estimateNext
+      heightsVersion.value += 1
+      if (el) scrollTop.value = el.scrollTop
+    })
+  }
+  const trackRow = (instance: unknown, id: string): void => {
+    const el = (instance as ComponentPublicInstance | null)?.$el as HTMLElement | undefined
+    const previous = trackedRows.get(id)
+    if (previous && previous !== el) {
+      rowObserver?.unobserve(previous)
+      trackedRows.delete(id)
+    }
+    if (!el || !virtualActive.value || previous === el) return
+    if (!rowObserver) {
+      if (typeof ResizeObserver === 'undefined') return
+      rowObserver = new ResizeObserver(onRowsResized)
+    }
+    trackedRows.set(id, el)
+    trackedIds.set(el, id)
+    rowObserver.observe(el)
+  }
+  const resetRowHeights = (): void => {
+    rowHeights.clear()
+    measuredEstimate.value = 0
+    heightsVersion.value += 1
+    for (const el of trackedRows.values()) {
+      rowObserver?.unobserve(el)
+      rowObserver?.observe(el)
+    }
   }
   watch(
-    () => [virtualActive.value, renderedRows.value.length, props.density, props.wrapLines],
-    () => void nextTick(measureRowHeight),
+    () => [props.density, props.wrapLines, visibleColumnKey.value, resizeWidths.value],
+    resetRowHeights
+  )
+  watch(
+    () => [virtualActive.value, renderedRows.value.length],
+    () =>
+      void nextTick(() => {
+        const el = viewportEl()
+        if (el && virtualActive.value) viewportClientHeight.value = visibleHeightOf(el)
+      }),
     { flush: 'post' }
   )
+
+  const lazyGap = computed<number>(() =>
+    lazyActive.value ? (rows.value.length - windowEnd.value) * rowHeight.value : 0
+  )
+  const windowed = computed<boolean>(() => virtualActive.value || lazyActive.value)
+  const lazySentinel = ref<HTMLElement | null>(null)
+  let lazyObserver: IntersectionObserver | null = null
+  const onLazyIntersect = (entries: IntersectionObserverEntry[]): void => {
+    const entry = entries[entries.length - 1]
+    if (!entry?.isIntersecting) return
+    const rootBottom = entry.rootBounds?.bottom ?? globalThis.innerHeight
+    const reach = rootBottom + LAZY_MARGIN - entry.boundingClientRect.top
+    const extra = Math.max(LAZY_CHUNK, Math.ceil(reach / rowHeight.value) + LAZY_CHUNK / 2)
+    lazyLimit.value = Math.min(rows.value.length, lazyLimit.value + extra)
+  }
+  const observeSentinel = (): void => {
+    lazyObserver?.disconnect()
+    lazyObserver = null
+    const el = lazySentinel.value
+    if (!el || !lazyActive.value || typeof IntersectionObserver === 'undefined') return
+    lazyObserver = new IntersectionObserver(onLazyIntersect, {
+      root: scrollParent(el),
+      rootMargin: `${LAZY_MARGIN}px`
+    })
+    lazyObserver.observe(el)
+  }
+  watch([lazySentinel, lazyLimit, lazyActive], observeSentinel, { flush: 'post' })
+  onBeforeUnmount(() => {
+    lazyObserver?.disconnect()
+    rowObserver?.disconnect()
+    globalThis.cancelAnimationFrame(heightsFrame)
+  })
 
   const isStackedField = (column: ColumnLike): boolean => {
     const meta = metaOf(column)
@@ -850,6 +1003,42 @@
     const header = (column.columnDef as { header?: unknown }).header
     return metaOf(column).label ?? (typeof header === 'string' ? header : column.id)
   }
+
+  const STACKED_FIELD_CLASS =
+    'order-1 basis-full! min-h-8! justify-start! text-start! whitespace-normal static! before:hidden! after:hidden!'
+  const STACKED_CELL_CLASS = 'static! before:hidden! after:hidden!'
+  interface ColumnView {
+    kind: 'default' | 'action'
+    grow: 1 | 2 | 3
+    align: 'start' | 'center' | 'end'
+    frozen: 'start' | 'end' | undefined
+    style: Record<string, string> | undefined
+    stackedClass: string | undefined
+    stackedField: boolean
+  }
+  const columnViews = computed<Map<string, ColumnView>>(() => {
+    const views = new Map<string, ColumnView>()
+    for (const header of headers.value) {
+      const column = header.column
+      const meta = metaOf(column)
+      const stackedField = stacked.value && isStackedField(column)
+      views.set(column.id, {
+        kind: meta.kind ?? 'default',
+        grow: meta.grow ?? 1,
+        align: meta.align ?? 'start',
+        frozen: meta.frozen,
+        style: cellStyleOf(column),
+        stackedClass: stacked.value
+          ? stackedField
+            ? STACKED_FIELD_CLASS
+            : STACKED_CELL_CLASS
+          : undefined,
+        stackedField
+      })
+    }
+    return views
+  })
+  const viewOf = (id: string): ColumnView => columnViews.value.get(id) as ColumnView
 
   const measureAutoWidths = (): void => {
     const root = rootEl.value
@@ -893,7 +1082,8 @@
       props.columns,
       props.loading,
       props.enableRowSelection,
-      rows.value.map((row) => row.original),
+      props.data,
+      renderedRows.value.length,
       headers.value.map((header) => header.column.id).join('|'),
       stacked.value
     ],
@@ -962,7 +1152,7 @@
     :data-density="density"
     :data-wrap="wrapLines || null"
     :aria-busy="loading || undefined"
-    :aria-rowcount="virtualActive ? rows.length + 1 : undefined"
+    :aria-rowcount="windowed ? rows.length + 1 : undefined"
     :style="viewportHeightVar"
     class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-xxs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
   >
@@ -1119,21 +1309,15 @@
               <TableCell
                 v-for="header in headers"
                 :key="header.id"
-                :style="cellStyleOf(header.column)"
-                :grow="metaOf(header.column).grow ?? 1"
-                :align="metaOf(header.column).align ?? 'start'"
-                :frozen="metaOf(header.column).frozen"
-                :kind="metaOf(header.column).kind ?? 'default'"
-                :class="
-                  stacked
-                    ? isStackedField(header.column)
-                      ? 'order-1 basis-full! min-h-8! justify-start! text-start! whitespace-normal static! before:hidden! after:hidden!'
-                      : 'static! before:hidden! after:hidden!'
-                    : undefined
-                "
+                :style="viewOf(header.column.id).style"
+                :grow="viewOf(header.column.id).grow"
+                :align="viewOf(header.column.id).align"
+                :frozen="viewOf(header.column.id).frozen"
+                :kind="viewOf(header.column.id).kind"
+                :class="viewOf(header.column.id).stackedClass"
               >
                 <Skeleton
-                  v-if="metaOf(header.column).kind !== 'action'"
+                  v-if="viewOf(header.column.id).kind !== 'action'"
                   height="0.875rem"
                 />
               </TableCell>
@@ -1157,18 +1341,18 @@
               <TableRow
                 v-for="(row, index) in renderedRows"
                 :key="row.id"
+                :ref="virtualActive ? (el) => trackRow(el, row.id) : undefined"
                 v-memo="[
                   row.getIsSelected(),
                   row.original,
-                  resizeWidths,
-                  autoWidths,
-                  stacked,
+                  columnViews,
                   striped,
-                  visibleColumnKey,
+                  windowed,
+                  virtualActive,
                   windowStart + index
                 ]"
                 :selected="row.getIsSelected()"
-                :aria-rowindex="virtualActive ? windowStart + index + 2 : undefined"
+                :aria-rowindex="windowed ? windowStart + index + 2 : undefined"
                 :class="[
                   stacked
                     ? 'flex-wrap rounded-(--shape-elements) border! py-(--spacing-xxs)'
@@ -1195,21 +1379,15 @@
                 <TableCell
                   v-for="cell in row.getVisibleCells()"
                   :key="cell.id"
-                  :style="cellStyleOf(cell.column)"
-                  :grow="metaOf(cell.column).grow ?? 1"
-                  :align="metaOf(cell.column).align ?? 'start'"
-                  :frozen="metaOf(cell.column).frozen"
-                  :kind="metaOf(cell.column).kind ?? 'default'"
-                  :class="
-                    stacked
-                      ? isStackedField(cell.column)
-                        ? 'order-1 basis-full! min-h-8! justify-start! text-start! whitespace-normal static! before:hidden! after:hidden!'
-                        : 'static! before:hidden! after:hidden!'
-                      : undefined
-                  "
+                  :style="viewOf(cell.column.id).style"
+                  :grow="viewOf(cell.column.id).grow"
+                  :align="viewOf(cell.column.id).align"
+                  :frozen="viewOf(cell.column.id).frozen"
+                  :kind="viewOf(cell.column.id).kind"
+                  :class="viewOf(cell.column.id).stackedClass"
                 >
                   <span
-                    v-if="stacked && isStackedField(cell.column)"
+                    v-if="viewOf(cell.column.id).stackedField"
                     aria-hidden="true"
                     :data-testid="`${testId}__stacked-label`"
                     class="w-2/5 shrink-0 truncate text-label-sm text-(--text-muted)"
@@ -1228,6 +1406,14 @@
                   >
                 </TableCell>
               </TableRow>
+              <div
+                v-if="lazyActive"
+                ref="lazySentinel"
+                role="presentation"
+                aria-hidden="true"
+                :data-testid="`${testId}__lazy-rows`"
+                :style="{ height: `${lazyGap}px` }"
+              />
             </TableBody>
           </Transition>
 

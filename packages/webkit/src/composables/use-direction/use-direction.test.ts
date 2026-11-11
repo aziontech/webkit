@@ -2,7 +2,7 @@ import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, effectScope, h, nextTick, ref } from 'vue'
 
-import { logicalArrowKey, resolveDirection, useDirection } from './index'
+import { eventDirection, logicalArrowKey, resolveDirection, useDirection } from './index'
 
 const flush = async () => {
   await nextTick()
@@ -39,6 +39,21 @@ describe('resolveDirection', () => {
     expect(resolveDirection(null)).toBe('ltr')
     document.documentElement.setAttribute('dir', 'rtl')
     expect(resolveDirection(host())).toBe('rtl')
+  })
+})
+
+describe('eventDirection', () => {
+  it('reads the direction around the element handling the event', () => {
+    const outer = host('rtl')
+    const button = document.createElement('button')
+    outer.appendChild(button)
+    const seen: string[] = []
+    button.addEventListener('keydown', (event) => seen.push(eventDirection(event)))
+    button.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }))
+    outer.setAttribute('dir', 'ltr')
+    button.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }))
+    expect(seen).toEqual(['rtl', 'ltr'])
+    expect(eventDirection(new KeyboardEvent('keydown'))).toBe('ltr')
   })
 })
 

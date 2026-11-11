@@ -18,6 +18,8 @@ export { historyAdapter, routerAdapter } from './url'
 export type {
   CollectionCardsProps,
   CollectionColumn,
+  CollectionExportParams,
+  CollectionExportScope,
   CollectionFetchParams,
   CollectionFetchResult,
   CollectionPaginationProps,

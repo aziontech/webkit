@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs, useSlots } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
 
@@ -56,7 +56,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ passwordInput: en.passwordInput })
+  const { t } = useTranslate({ passwordInput: en.passwordInput })
 
   const {
     controlId,

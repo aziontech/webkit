@@ -9,7 +9,7 @@
   } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { cn } from '../../../../utils/cn'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
@@ -53,7 +53,7 @@
   const sub = useMenuSubContext()
   const attrs = useAttrs()
   const dir = useDirection()
-  const { t } = useLocale({ menu: en.menu })
+  const { t } = useTranslate({ menu: en.menu })
   const labelEl = shallowRef<globalThis.HTMLElement | null>(null)
   const arrowEl = shallowRef<ComponentPublicInstance | null>(null)
 

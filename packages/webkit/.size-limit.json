@@ -2,7 +2,7 @@
   {
     "name": "browser-frame",
     "path": "src/components/content/browser-frame/browser-frame.vue",
-    "limit": "12.75 KB"
+    "limit": "11.9 KB"
   },
   {
     "name": "button",
@@ -28,7 +28,7 @@
   {
     "name": "calendar-root",
     "path": "src/components/inputs/calendar/calendar.vue",
-    "limit": "19.75 KB"
+    "limit": "20.35 KB"
   },
   {
     "name": "table-root",
@@ -98,7 +98,7 @@
   {
     "name": "doc-callout",
     "path": "src/components/documentation/doc-callout/doc-callout.vue",
-    "limit": "6.75 KB"
+    "limit": "6.3 KB"
   },
   {
     "name": "doc-card",
@@ -138,12 +138,12 @@
   {
     "name": "doc-prompt",
     "path": "src/components/documentation/doc-prompt/doc-prompt.vue",
-    "limit": "10.25 KB"
+    "limit": "9.6 KB"
   },
   {
     "name": "doc-tooltip",
     "path": "src/components/documentation/doc-tooltip/doc-tooltip.vue",
-    "limit": "6.75 KB"
+    "limit": "6.25 KB"
   },
   {
     "name": "doc-pagination",
@@ -194,7 +194,7 @@
   {
     "name": "carousel-root",
     "path": "src/components/marketing/carousel/carousel.vue",
-    "limit": "4.5 KB"
+    "limit": "3.65 KB"
   },
   {
     "name": "banner",
@@ -294,12 +294,12 @@
   {
     "name": "shell-mockup",
     "path": "src/components/content/shell-mockup/index.ts",
-    "limit": "30.75 KB"
+    "limit": "30.45 KB"
   },
   {
     "name": "shell-mockup-root",
     "path": "src/components/content/shell-mockup/shell-mockup.vue",
-    "limit": "30.5 KB"
+    "limit": "30.15 KB"
   },
   {
     "name": "shell-mockup-part",
@@ -324,7 +324,7 @@
   {
     "name": "quote-tabs",
     "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
-    "limit": "21.5 KB",
+    "limit": "20.6 KB",
     "entryOnly": true
   },
   {
@@ -360,12 +360,12 @@
   {
     "name": "article-highlight",
     "path": "src/components/sections/article-highlight/article-highlight.vue",
-    "limit": "7.75 KB"
+    "limit": "7.2 KB"
   },
   {
     "name": "article-index-blog",
     "path": "src/components/sections/article-index-blog/article-index-blog.vue",
-    "limit": "22.25 KB"
+    "limit": "21.7 KB"
   },
   {
     "name": "article-index-resource-hub",
@@ -510,7 +510,7 @@
   {
     "name": "listing-browser",
     "path": "src/components/sections/listing-browser/listing-browser.vue",
-    "limit": "63 KB"
+    "limit": "64.25 KB"
   },
   {
     "name": "platform-directory",
@@ -579,7 +579,7 @@
   {
     "name": "listing-table",
     "path": "src/components/sections/listing-table/listing-table.vue",
-    "limit": "55 KB"
+    "limit": "55.65 KB"
   },
   {
     "name": "site-footer",
@@ -624,7 +624,7 @@
   {
     "name": "chart-root",
     "path": "src/components/chart/chart/chart.vue",
-    "limit": "13.75 KB"
+    "limit": "13.4 KB"
   },
   {
     "name": "chart-line",
@@ -669,7 +669,7 @@
   {
     "name": "donut-chart",
     "path": "src/components/chart/donut-chart/donut-chart.vue",
-    "limit": "12.25 KB"
+    "limit": "11.7 KB"
   },
   {
     "name": "stat-tile",
@@ -679,7 +679,7 @@
   {
     "name": "chart-card",
     "path": "src/components/chart/chart-card/index.ts",
-    "limit": "5.5 KB"
+    "limit": "4.7 KB"
   },
   {
     "name": "chart-card-root",
@@ -689,12 +689,12 @@
   {
     "name": "chart-card-drag-handle",
     "path": "src/components/chart/chart-card/chart-card-drag-handle/chart-card-drag-handle.vue",
-    "limit": "2.75 KB"
+    "limit": "1.9 KB"
   },
   {
     "name": "chart-card-resize-handle",
     "path": "src/components/chart/chart-card/chart-card-resize-handle/chart-card-resize-handle.vue",
-    "limit": "3.25 KB"
+    "limit": "2.45 KB"
   },
   {
     "name": "bar-list",
@@ -709,7 +709,7 @@
   {
     "name": "tracker",
     "path": "src/components/chart/tracker/tracker.vue",
-    "limit": "5.5 KB"
+    "limit": "5.1 KB"
   },
   {
     "name": "severity-tag",
@@ -774,7 +774,7 @@
   {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
-    "limit": "6.75 KB"
+    "limit": "5.9 KB"
   },
   {
     "name": "file-dropzone",
@@ -784,17 +784,17 @@
   {
     "name": "slider",
     "path": "src/components/inputs/slider/slider.vue",
-    "limit": "3.5 KB"
+    "limit": "3.05 KB"
   },
   {
     "name": "wizard",
     "path": "src/components/navigation/wizard/index.ts",
-    "limit": "7.25 KB"
+    "limit": "6.9 KB"
   },
   {
     "name": "wizard-root",
     "path": "src/components/navigation/wizard/wizard.vue",
-    "limit": "6.75 KB"
+    "limit": "6.3 KB"
   },
   {
     "name": "wizard-step",
@@ -869,7 +869,7 @@
   {
     "name": "section-header",
     "path": "src/components/layout/section-header/section-header.vue",
-    "limit": "8.5 KB"
+    "limit": "7.9 KB"
   },
   {
     "name": "settings-section",
@@ -899,7 +899,7 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "8 KB"
+    "limit": "9.1 KB"
   },
   {
     "name": "phone-input",

@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
-  import { useLocale } from '../../../../composables/use-locale'
+  import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { useChartCardContext } from '../composables/use-chart-card-context'
   import type { ChartCardMoveDirection } from '../injection-key'
@@ -19,9 +19,8 @@
   })
 
   const attrs = useAttrs()
-  const { t } = useLocale({ chartCard: en.chartCard })
+  const { t } = useTranslate({ chartCard: en.chartCard })
   const ctx = useChartCardContext()
-  const dir = useDirection()
 
   const DIRECTIONS: Record<string, ChartCardMoveDirection> = {
     ArrowUp: 'up',
@@ -35,7 +34,7 @@
   )
 
   function onKeydown(event: globalThis.KeyboardEvent) {
-    const direction = DIRECTIONS[logicalArrowKey(event.key, dir.value)]
+    const direction = DIRECTIONS[logicalArrowKey(event.key, eventDirection(event))]
     if (!direction) return
     event.preventDefault()
     ctx.move(event, direction)

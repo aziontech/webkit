@@ -29,9 +29,11 @@ export const DIRECTIONAL_ICONS: ReadonlySet<string> = new Set([
   'ai-arrow-right'
 ])
 
+const DIRECTIONAL_TOKEN =
+  /(?:^|\s)(?:(?:pi-(?:(?:chevron|arrow)(?:-circle)?|angle(?:-double)?|arrow-down|caret)|ai-(?:angle|chevron|arrow))-(?:left|right)|pi-(?:sign-in|sign-out|reply|undo))(?=\s|$)/
+
 export function isDirectionalIcon(icon?: string | null): boolean {
-  if (!icon) return false
-  return icon.split(/\s+/).some((token) => DIRECTIONAL_ICONS.has(token))
+  return Boolean(icon && DIRECTIONAL_TOKEN.test(icon))
 }
 
 export function directionalIconClass(icon?: string | null): string {

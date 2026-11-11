@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
   import TableSortButton from '../table-sort-button/table-sort-button.vue'
@@ -62,7 +62,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ tableHeadCell: en.tableHeadCell })
+  const { t } = useTranslate({ tableHeadCell: en.tableHeadCell })
   const ctx = inject(TableInjectionKey, null)
   const group = inject(TableRowGroupKey, { hoverable: false })
   const compact = computed<boolean>(() => group.compact === true)

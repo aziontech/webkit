@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { TableInjectionKey } from '../injection-key'
@@ -30,7 +30,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ tableExport: en.tableExport })
+  const { t } = useTranslate({ tableExport: en.tableExport })
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
@@ -40,7 +40,7 @@
   )
 
   const onExport = (): void =>
-    ctx?.exportCsv({ filename: props.filename || undefined, scope: props.scope })
+    void ctx?.exportCsv({ filename: props.filename || undefined, scope: props.scope })
 </script>
 
 <template>

@@ -2,7 +2,7 @@
   import { useEventListener } from '@vueuse/core'
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { matchesAccept } from '../../../utils/file-accept'
 
@@ -54,7 +54,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ fileDropzone: en.fileDropzone })
+  const { t } = useTranslate({ fileDropzone: en.fileDropzone })
   const titleId = useId()
   const descriptionId = useId()
 

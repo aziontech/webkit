@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
 
   defineOptions({ name: 'DocProse', inheritAttrs: false })
@@ -12,7 +12,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ docProse: en.docProse })
+  const { t } = useTranslate({ docProse: en.docProse })
 
   const proseRef = ref<HTMLElement | null>(null)
   const tipFor = ref<HTMLElement | null>(null)

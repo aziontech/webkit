@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
@@ -86,7 +86,7 @@
   })
 
   const attrs = useAttrs()
-  const { t } = useLocale({ comparisonTable: en.comparisonTable })
+  const { t } = useTranslate({ comparisonTable: en.comparisonTable })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-comparison-table'

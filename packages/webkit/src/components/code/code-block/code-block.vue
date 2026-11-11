@@ -12,7 +12,7 @@
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
@@ -99,7 +99,7 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
-  const { t } = useLocale({ codeBlock: en.codeBlock })
+  const { t } = useTranslate({ codeBlock: en.codeBlock })
   const tabListRef = ref<HTMLElement | null>(null)
   const tabRefs = ref<HTMLElement[]>([])
   const indicatorVisible = ref(false)

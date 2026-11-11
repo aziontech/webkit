@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { PASSWORD_MANAGER_IGNORE } from '../../../utils/autofill'
 
@@ -63,7 +63,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ numberInput: en.numberInput })
+  const { t } = useTranslate({ numberInput: en.numberInput })
 
   const {
     controlId,

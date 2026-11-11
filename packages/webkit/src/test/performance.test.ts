@@ -4,7 +4,7 @@
 // (window long lists, render collapsed children lazily), do not raise the number.
 import { cleanup, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
-import { type Component, h, nextTick, ref } from 'vue'
+import { type Component, defineComponent, h, nextTick, ref } from 'vue'
 
 import budgets from '../../perf-budgets.json'
 import BarList from '../components/chart/bar-list/bar-list.vue'
@@ -14,9 +14,11 @@ import CodeBlock from '../components/code/code-block/code-block.vue'
 import LogView from '../components/code/log-view/log-view.vue'
 import LogViewContent from '../components/code/log-view/log-view-content.vue'
 import LogViewHeader from '../components/code/log-view/log-view-header.vue'
+import Table from '../components/data/table/table.vue'
 import Tree from '../components/data/tree/tree.vue'
 import MultiSelect from '../components/inputs/multi-select'
 import Select from '../components/inputs/select'
+import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
 
 type Scenario = keyof typeof budgets.scenarios
 type Phase = 'mount' | 'update'
@@ -260,6 +262,49 @@ function codeBlockCase(): Case {
   }
 }
 
+function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter'): Case {
+  const statuses = ['Live', 'Inactive', 'Pending']
+  const items = Array.from({ length: n }, (_, i) => ({
+    id: String(i),
+    name: `resource-${String(i).padStart(5, '0')}`,
+    domain: `resource-${i}.example.com`,
+    status: statuses[i % 3],
+    owner: `owner-${i % 40}`,
+    requests: (i * 7919) % 100_000
+  }))
+  const columns = [
+    { accessorKey: 'name', header: 'Name', enableSorting: true },
+    { accessorKey: 'domain', header: 'Domain' },
+    { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'owner', header: 'Owner' },
+    { accessorKey: 'requests', header: 'Requests', enableSorting: true, align: 'end' as const }
+  ]
+  let collection: UseCollectionReturn<(typeof items)[number], (typeof columns)[number]> | null =
+    null
+  const Host = defineComponent({
+    setup() {
+      const current = useCollection({ items, columns, selection: {} })
+      collection = current
+      return () =>
+        h('div', { style: 'width:1024px' }, [
+          h(Table, {
+            ...current.tableProps.value,
+            virtual,
+            maxHeight: virtual ? '640px' : '',
+            stackable: false
+          })
+        ])
+    }
+  })
+  return {
+    mount: () => Host,
+    update: () => {
+      if (change === 'sort') collection?.setSorting([{ id: 'requests', desc: true }])
+      else collection?.setFilteringText('resource-0001')
+    }
+  }
+}
+
 describe('runtime budgets (perf-budgets.json)', () => {
   afterEach(() => cleanup())
 
@@ -286,5 +331,14 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('CodeBlock with a 5k-line file: mount and switch tab', async () => {
     check('code-block-5k-lines', await measure(codeBlockCase))
+  })
+  it('Table with 1k rows under useCollection: mount and sort', async () => {
+    check('table-1k', await measure(() => tableCase(1000, false, 'sort')))
+  })
+  it('Table with 10k virtual rows under useCollection: mount and sort', async () => {
+    check('table-10k-virtual', await measure(() => tableCase(10_000, true, 'sort')))
+  })
+  it('Table with 10k virtual rows under useCollection: filter', async () => {
+    check('table-10k-virtual-filter', await measure(() => tableCase(10_000, true, 'filter')))
   })
 })

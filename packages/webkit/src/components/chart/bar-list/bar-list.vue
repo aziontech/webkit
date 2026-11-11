@@ -2,7 +2,7 @@
   import { usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -61,7 +61,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t, locale } = useLocale({ barList: en.barList })
+  const { t, locale } = useTranslate({ barList: en.barList })
   const valueText = (value: number): string =>
     props.formatValue === formatCompact
       ? formatCompact(value, locale.value)

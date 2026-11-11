@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { directionalIconClass } from '../../../utils/directional-icons'
@@ -42,7 +42,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ breadcrumb: en.breadcrumb })
+  const { t } = useTranslate({ breadcrumb: en.breadcrumb })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb'

@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import { useDirection } from '../../../composables/use-direction'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { provideNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
   import { useNavigationMenuRootState } from './composables/use-navigation-menu-root.js'
@@ -46,7 +46,7 @@
   defineSlots<{ default(): unknown }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ navigationMenu: en.navigationMenu })
+  const { t } = useTranslate({ navigationMenu: en.navigationMenu })
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu')
 
   const internalValue = ref(props.defaultValue)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { inject } from 'vue'
 
   import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
 
@@ -24,22 +24,16 @@
     default(): unknown
   }>()
 
-  const attrs = useAttrs()
   const ctx = inject(TableInjectionKey, null)
   const group = inject(TableRowGroupKey, { hoverable: true })
-
-  const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__row` : 'data-table__row')
-  )
+  const fallbackTestId = ctx ? `${ctx.testId}__row` : 'data-table__row'
 </script>
 
 <template>
   <div
     v-bind="$attrs"
     role="row"
-    :data-testid="testId"
+    :data-testid="$attrs['data-testid'] ?? fallbackTestId"
     :data-state="selected ? 'selected' : 'unselected'"
     :data-selected="selected || null"
     :data-frozen="frozen || null"

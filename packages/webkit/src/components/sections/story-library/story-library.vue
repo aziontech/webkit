@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
@@ -113,7 +113,7 @@
   })
 
   const attrs = useAttrs()
-  const { t } = useLocale({ storyLibrary: en.storyLibrary })
+  const { t } = useTranslate({ storyLibrary: en.storyLibrary })
 
   const query = ref('')
 

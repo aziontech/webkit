@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { directionalIconClass } from '../../../utils/directional-icons'
 
@@ -45,7 +45,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ miniButton: en.miniButton })
+  const { t } = useTranslate({ miniButton: en.miniButton })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-mini-button'

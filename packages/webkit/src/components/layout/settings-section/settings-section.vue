@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Hint from '../../inputs/hint/hint.vue'
 
@@ -40,7 +40,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ settingsSection: en.settingsSection })
+  const { t } = useTranslate({ settingsSection: en.settingsSection })
   const regionId = useId()
 
   const testId = computed(

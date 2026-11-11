@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Separator from '../../../layout/separator/separator.vue'
 
@@ -25,7 +25,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ helpPanel: en.helpPanel })
+  const { t } = useTranslate({ helpPanel: en.helpPanel })
   const heading = computed(() => props.title ?? t('helpPanel.learnMore'))
   const headingId = useId()
 

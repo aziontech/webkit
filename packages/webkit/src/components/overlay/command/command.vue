@@ -3,7 +3,7 @@
   import { computed, nextTick, provide, ref, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Dialog from '../dialog/dialog.vue'
   import DialogContent from '../dialog/dialog-content.vue'
@@ -52,7 +52,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ command: en.command })
+  const { t } = useTranslate({ command: en.command })
   const uid = useId()
   const listId = `${uid}-list`
 

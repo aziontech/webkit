@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, provide, ref, useAttrs } from 'vue'
 
-  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useLocale } from '../../../composables/use-locale'
+  import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -67,8 +67,7 @@
   }>()
 
   const attrs = useAttrs()
-  const dir = useDirection()
-  const { t } = useLocale({ tree: en.tree })
+  const { t } = useTranslate({ tree: en.tree })
 
   const activeSelection = computed(() => (props.selectable ? selected.value : ''))
 
@@ -147,7 +146,7 @@
     const id = treeitemOf(event.target)
     if (!id) return
     const parent = navigation.isParent(id)
-    switch (logicalArrowKey(event.key, dir.value)) {
+    switch (logicalArrowKey(event.key, eventDirection(event))) {
       case 'ArrowDown':
         focusItem(navigation.sibling(id, 1))
         break

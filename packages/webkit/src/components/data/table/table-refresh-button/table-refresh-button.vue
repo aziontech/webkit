@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { TableInjectionKey } from '../injection-key'
@@ -22,7 +22,7 @@
   )
 
   const attrs = useAttrs()
-  const { t } = useLocale({ tableRefreshButton: en.tableRefreshButton })
+  const { t } = useTranslate({ tableRefreshButton: en.tableRefreshButton })
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(

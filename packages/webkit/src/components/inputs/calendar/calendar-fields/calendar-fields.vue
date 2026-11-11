@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, ref, useId, watch } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Input from '../../input/input.vue'
   import { asRange, asSingle, formatDate, formatTime } from '../format'
@@ -13,7 +13,7 @@
     inheritAttrs: false
   })
 
-  const { t, locale } = useLocale({ calendar: en.calendar })
+  const { t, locale } = useTranslate({ calendar: en.calendar })
 
   const ctx = inject(CalendarInjectionKey, null)
 

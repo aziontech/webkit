@@ -1,12 +1,4 @@
-import {
-  computed,
-  type ComputedRef,
-  inject,
-  type InjectionKey,
-  type MaybeRefOrGetter,
-  provide,
-  toValue
-} from 'vue'
+import { computed, type ComputedRef, type MaybeRefOrGetter, provide, toValue } from 'vue'
 
 import type {
   Direction,
@@ -16,19 +8,19 @@ import type {
   PartialMessages,
   PluralMessage
 } from '../../i18n/types'
+import {
+  cached,
+  createMessageHelpers,
+  DEFAULT_LOCALE,
+  type LocaleContext,
+  LocaleInjectionKey,
+  useLocaleContext
+} from './use-translate'
+
+export { DEFAULT_LOCALE, type LocaleContext, LocaleInjectionKey }
 
 /** The direction a provider asks for; `auto` derives it from the locale. */
 export type DirectionSetting = Direction | 'auto'
-
-/** What `WebkitProvider` hands down to every component below it. */
-export interface LocaleContext {
-  /** BCP 47 locale tag. */
-  locale: ComputedRef<string>
-  /** Resolved text direction. */
-  dir: ComputedRef<Direction>
-  /** The built-in catalog for the locale with the provider's overrides merged in. */
-  messages: ComputedRef<Messages>
-}
 
 /** Options accepted by `provideLocale`. */
 export interface ProvideLocaleOptions {
@@ -74,10 +66,6 @@ export interface UseLocaleReturn {
   plural: (count: number, forms: PluralForms, options?: Intl.PluralRulesOptions) => string
 }
 
-export const LocaleInjectionKey: InjectionKey<LocaleContext> = Symbol('WebkitLocale')
-
-export const DEFAULT_LOCALE = 'en'
-
 const RTL_LANGUAGES = new Set(['ar', 'he', 'fa', 'ur'])
 
 export function directionOf(locale: string): Direction {
@@ -106,27 +94,6 @@ export function mergeMessages(base: Messages, overrides?: PartialMessages): Mess
   return merged as Messages
 }
 
-function lookup(messages: PartialMessages, key: string): string | PluralMessage | undefined {
-  const [group, name] = key.split('.') as [string, string]
-  const bucket = (messages as unknown as Record<string, Record<string, unknown>>)[group]
-  const value = bucket?.[name]
-  if (typeof value === 'string') return value
-  if (value && typeof value === 'object' && 'other' in value) return value as PluralMessage
-  return undefined
-}
-
-const formatters = new Map<string, unknown>()
-
-function cached<T>(kind: string, locale: string, options: object | undefined, make: () => T): T {
-  const id = `${kind}|${locale}|${options ? JSON.stringify(options) : ''}`
-  let formatter = formatters.get(id) as T | undefined
-  if (!formatter) {
-    formatter = make()
-    formatters.set(id, formatter)
-  }
-  return formatter
-}
-
 const RELATIVE_STEPS: [Intl.RelativeTimeFormatUnit, number][] = [
   ['second', 60],
   ['minute', 60],
@@ -144,39 +111,10 @@ export function createTranslator(
   messages: () => PartialMessages,
   fallback: PartialMessages = {}
 ): Omit<UseLocaleReturn, 'locale' | 'dir'> {
-  const formatNumber = (value: number, options?: Intl.NumberFormatOptions): string =>
-    cached('number', locale(), options, () => new Intl.NumberFormat(locale(), options)).format(
-      value
-    )
-
-  const fill = (template: string, params?: MessageParams): string =>
-    params
-      ? template.replace(/\{(\w+)\}/g, (match, name: string) => {
-          const value = params[name]
-          if (value === undefined) return match
-          return typeof value === 'number' ? formatNumber(value) : value
-        })
-      : template
-
-  const selectForm = (
-    count: number,
-    forms: PluralForms,
-    options?: Intl.PluralRulesOptions
-  ): string => {
-    const rules = cached('plural', locale(), options, () => new Intl.PluralRules(locale(), options))
-    return (count === 0 && forms.zero) || forms[rules.select(count)] || forms.other
-  }
+  const { t, fill, selectForm, formatNumber } = createMessageHelpers(locale, messages, fallback)
 
   const plural = (count: number, forms: PluralForms, options?: Intl.PluralRulesOptions): string =>
     fill(selectForm(count, forms, options), { count })
-
-  const t = (key: MessageKey, params?: MessageParams): string => {
-    const value = lookup(messages(), key) ?? lookup(fallback, key)
-    if (value === undefined) return key
-    if (typeof value === 'string') return fill(value, params)
-    const count = Number(params?.['count'] ?? 0)
-    return fill(selectForm(count, value), { ...params, count })
-  }
 
   const formatDate = (
     value: Date | number | string,
@@ -243,9 +181,7 @@ export function provideLocale(options: ProvideLocaleOptions): LocaleContext {
 }
 
 export function useLocale(fallback: PartialMessages = {}): UseLocaleReturn {
-  const context = inject(LocaleInjectionKey, null)
-  const locale = computed(() => context?.locale.value ?? DEFAULT_LOCALE)
-  const dir = computed<Direction>(() => context?.dir.value ?? 'ltr')
+  const { context, locale, dir } = useLocaleContext()
   const helpers = createTranslator(
     () => locale.value,
     () => context?.messages.value ?? fallback,

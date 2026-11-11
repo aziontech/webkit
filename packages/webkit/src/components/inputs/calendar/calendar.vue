@@ -11,7 +11,7 @@
   } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
@@ -120,7 +120,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t, locale } = useLocale({ calendar: en.calendar })
+  const { t, locale } = useTranslate({ calendar: en.calendar })
   const placeholderText = computed(() => props.placeholder || t('calendar.placeholder'))
   const slots = useSlots()
 

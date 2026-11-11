@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, onUnmounted, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -66,7 +66,7 @@
   } as const
 
   const attrs = useAttrs()
-  const { t } = useLocale({ alert: en.alert })
+  const { t } = useTranslate({ alert: en.alert })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-alert')
 

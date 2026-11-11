@@ -3,7 +3,7 @@
   import { usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
@@ -83,7 +83,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t, locale } = useLocale({ donutChart: en.donutChart })
+  const { t, locale } = useTranslate({ donutChart: en.donutChart })
   const valueText = (value: number): string =>
     props.formatValue === formatCompact
       ? formatCompact(value, locale.value)

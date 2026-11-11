@@ -6,7 +6,7 @@
     CollectionDensity,
     CollectionPreferencesValue
   } from '../../../composables/use-collection/preferences'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -92,7 +92,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ collectionPreferences: en.collectionPreferences })
+  const { t } = useTranslate({ collectionPreferences: en.collectionPreferences })
   const uid = useId()
 
   const testId = computed<string>(

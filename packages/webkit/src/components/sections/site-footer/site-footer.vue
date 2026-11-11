@@ -2,7 +2,7 @@
   import { useMediaQuery } from '@vueuse/core'
   import { computed, ref, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
@@ -83,7 +83,7 @@
   })
 
   const attrs = useAttrs()
-  const { t } = useLocale({ siteFooter: en.siteFooter })
+  const { t } = useTranslate({ siteFooter: en.siteFooter })
 
   const wide = useMediaQuery('(min-width: 1024px)')
 

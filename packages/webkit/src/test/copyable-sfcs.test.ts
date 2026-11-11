@@ -10,7 +10,8 @@ const modules = {
   ...import.meta.glob<{ default: Component }>('../../examples/**/*.vue')
 }
 
-const UNDECLARED = /was accessed during render but is not defined|Failed to resolve component/
+const UNDECLARED =
+  /was accessed during render but is not defined|Failed to resolve component|no asset registered under name/
 
 describe('copyable SFCs (blocks and examples) run as pasted', () => {
   let warnings: string[] = []

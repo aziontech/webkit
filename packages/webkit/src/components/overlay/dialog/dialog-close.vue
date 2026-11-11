@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import { DialogInjectionKey } from './injection-key'
@@ -22,7 +22,7 @@
   )
 
   const attrs = useAttrs()
-  const { t } = useLocale({ dialog: en.dialog })
+  const { t } = useTranslate({ dialog: en.dialog })
   const ctx = inject(DialogInjectionKey)
 
   const handleClick = () => {

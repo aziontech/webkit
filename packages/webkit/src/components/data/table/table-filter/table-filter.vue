@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
-  import { type MessageKey, useLocale } from '../../../../composables/use-locale'
+  import type { MessageKey } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../../composables/use-placement'
   import * as en from '../../../../i18n/messages/en'
   import Button from '../../../actions/button/button.vue'
@@ -51,7 +52,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useLocale({ tableFilter: en.tableFilter })
+  const { t } = useTranslate({ tableFilter: en.tableFilter })
   const heading = computed(() => props.title || t('tableFilter.title'))
   const ctx = inject(TableInjectionKey, null)
 

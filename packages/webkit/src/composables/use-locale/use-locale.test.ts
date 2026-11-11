@@ -13,6 +13,7 @@ import {
   ptBR,
   useLocale
 } from './index'
+import { useTranslate } from './use-translate'
 
 function probe(setupParent?: () => void) {
   let helpers: ReturnType<typeof useLocale> | null = null
@@ -127,6 +128,56 @@ describe('useLocale', () => {
       expect(merged.pagination.next).toBe('Seguinte')
       expect(merged.pagination.previous).toBe('Página anterior')
       expect(ptBR.pagination.next).toBe('Próxima página')
+    })
+  })
+
+  describe('useTranslate', () => {
+    function lean(setupParent?: () => void) {
+      let helpers: ReturnType<typeof useTranslate> | null = null
+      let full: ReturnType<typeof useLocale> | null = null
+      const Child = defineComponent({
+        setup() {
+          helpers = useTranslate(en)
+          full = useLocale(en)
+          return () => h('span')
+        }
+      })
+      render(
+        defineComponent({
+          setup() {
+            setupParent?.()
+            return () => h(Child)
+          }
+        })
+      )
+      return {
+        l: helpers as unknown as ReturnType<typeof useTranslate>,
+        full: full as unknown as ReturnType<typeof useLocale>
+      }
+    }
+
+    it('reads, fills, formats and pluralizes like useLocale', () => {
+      const { l, full } = lean()
+      expect(l.locale.value).toBe('en')
+      expect(l.dir.value).toBe('ltr')
+      const cases: [MessageKey, Record<string, string | number>?][] = [
+        ['pagination.next'],
+        ['pagination.info', { start: 1, end: 10, total: 1200 }],
+        ['chip.removeNamed', { label: 'prod' }],
+        ['logView.lines', { count: 1 }],
+        ['logView.lines', { count: 4 }],
+        ['nope.missing' as MessageKey]
+      ]
+      for (const [key, params] of cases) expect(l.t(key, params)).toBe(full.t(key, params))
+      expect(l.t('pagination.info', { start: 1, end: 10, total: 1200 })).toBe(
+        'Showing 1 to 10 of 1,200 entries'
+      )
+    })
+
+    it('follows the provider', () => {
+      const { l } = lean(() => provideLocale({ locale: 'pt-BR', catalogs: BUILT_IN_CATALOGS }))
+      expect(l.locale.value).toBe('pt-BR')
+      expect(l.t('wizard.stepOf', { step: 2, total: 4 })).toBe('Etapa 2 de 4')
     })
   })
 })

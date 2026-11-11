@@ -2,7 +2,7 @@
   import { computed, provide, useAttrs } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { PaginationInjectionKey } from './injection-key'
   import PaginationButton from './pagination-button/pagination-button.vue'
@@ -53,7 +53,7 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
-  const { t } = useLocale({ pagination: en.pagination })
+  const { t } = useTranslate({ pagination: en.pagination })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'data-pagination'

@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, ref, watch } from 'vue'
 
-  import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
-  import { useLocale } from '../../../../composables/use-locale'
+  import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import {
     getTabViewPanelTransitionStyle,
@@ -16,7 +16,10 @@
     inheritAttrs: false
   })
 
-  const { t, locale, formatDate } = useLocale({ calendar: en.calendar })
+  const { t, locale } = useTranslate({ calendar: en.calendar })
+  const monthLabel = computed(
+    () => new Intl.DateTimeFormat(locale.value, { month: 'long', year: 'numeric' })
+  )
   const weekdayLabels = computed(() =>
     Array.from({ length: 7 }, (_, day) =>
       new Intl.DateTimeFormat(locale.value, { weekday: 'narrow' }).format(
@@ -199,7 +202,7 @@
       key: `${year}-${month}`,
       year,
       month,
-      label: formatDate(date, { month: 'long', year: 'numeric' }),
+      label: monthLabel.value.format(date),
       weeks: buildWeeks(year, month)
     }
   })
@@ -281,10 +284,8 @@
     focusActiveCell()
   }
 
-  const dir = useDirection()
-
   const onDayKeydown = (event: globalThis.KeyboardEvent, day: CalendarDay) => {
-    switch (logicalArrowKey(event.key, dir.value)) {
+    switch (logicalArrowKey(event.key, eventDirection(event))) {
       case 'ArrowLeft':
         event.preventDefault()
         moveFocus(day.time, -1)

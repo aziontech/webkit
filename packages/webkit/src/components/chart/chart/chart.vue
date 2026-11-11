@@ -12,7 +12,7 @@
     watch
   } from 'vue'
 
-  import { useLocale } from '../../../composables/use-locale'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
@@ -119,7 +119,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t, locale } = useLocale({ chart: en.chart })
+  const { t, locale } = useTranslate({ chart: en.chart })
   const valueText = (value: number): string =>
     props.formatValue === formatCompact
       ? formatCompact(value, locale.value)

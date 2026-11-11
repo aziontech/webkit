@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Kbd from '../../../content/kbd/kbd.vue'
   import Input from '../../../inputs/input/input.vue'
@@ -26,7 +26,7 @@
   )
 
   const attrs = useAttrs()
-  const { t } = useLocale({ command: en.command })
+  const { t } = useTranslate({ command: en.command })
   const placeholderText = computed(() => props.placeholder || t('command.placeholder'))
   const ctx = useCommandMenuContext()
   const fieldRef = ref<InstanceType<typeof Input> | null>(null)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useLocale } from '../../../../composables/use-locale'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { usePopoverContext } from '../injection-key'
@@ -12,7 +12,7 @@
   })
 
   const attrs = useAttrs()
-  const { t } = useLocale({ popover: en.popover })
+  const { t } = useTranslate({ popover: en.popover })
   const ctx = usePopoverContext()
 
   const testId = computed(
