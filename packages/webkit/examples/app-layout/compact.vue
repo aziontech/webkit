@@ -12,7 +12,7 @@
 
 <template>
   <div class="mx-auto h-dvh w-full max-w-(--container-xs) border-x border-(--border-default)">
-    <AppLayout class="h-full">
+    <AppLayout>
       <template #navigation="{ drawer }">
         <Sidebar
           aria-label="Main navigation"

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: d7a4df241cc30fd0eff2fcd604b85410e6a7ad6728f1acbafe5e6c0ec48b4634
+checksum: 96d7b6ae20fe0b70f0206da9399d55470e54d5c0c74215098db07e6734f9d782
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -88,12 +88,12 @@ _No events — moves go through the `TutorialPanel.Provider`, which emits `updat
 
 ## Motion & Animations
 
-| Trigger                    | Animation / Transition                                 | Token                                                    | Reduced-motion fallback                           |
-| -------------------------- | ------------------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------- |
-| current step, popover open | `animate-ping` on a ring behind the marker             | semantic (`ping`, attention ring)                        | `motion-reduce:animate-none` (static ring)        |
-| marker becomes current     | `transition-colors` on the dot                         | inline · `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`                   |
-| popover open / close       | owned by `Popover` (`animate-popup-scale-in` / `-out`) | component                                                | handled by `Popover`                              |
-| scroll to the marker       | `scrollIntoView` smooth                                | browser                                                  | `behavior: 'auto'` under `prefers-reduced-motion` |
+| Trigger                    | Animation / Transition                     | Token                                                    | Reduced-motion fallback                           |
+| -------------------------- | ------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------- |
+| current step, popover open | `animate-ping` on a ring behind the marker | semantic (`ping`, attention ring)                        | `motion-reduce:animate-none` (static ring)        |
+| marker becomes current     | `transition-colors` on the dot             | inline · `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`                   |
+| popover open / close       | owned by `Popover` (its scale in and out)  | component                                                | handled by `Popover`                              |
+| scroll to the marker       | `scrollIntoView` smooth                    | browser                                                  | `behavior: 'auto'` under `prefers-reduced-motion` |
 
 ## Tokens
 

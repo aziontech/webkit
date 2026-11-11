@@ -5,7 +5,7 @@ structure: composition
 status: approved
 spec_version: 1
 template: 2
-checksum: 104780d72d20150340a775f37df8dadacca43fc5ff4576b005dc6ecdb49eab72
+checksum: e18cd73a41fac44137e9e749d80b37864325c11e7aac07c7cd32284148272081
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -152,17 +152,16 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 ## v-model
 
-| Model    | Type                | Default | Notes                                                                                      |
-| -------- | ------------------- | ------- | ------------------------------------------------------------------------------------------ |
-| `layout` | `BoardLayoutItem[]` | `[]`    | Order, span and height of every item. The board emits a new array on every move or resize. |
+| Model            | Type                | Default | Emits           | Notes                                                                                      |
+| ---------------- | ------------------- | ------- | --------------- | ------------------------------------------------------------------------------------------ |
+| `v-model:layout` | `BoardLayoutItem[]` | `[]`    | `update:layout` | Order, span and height of every item. The board emits a new array on every move or resize. |
 
 ## Events
 
-| Event           | Payload                                                     | Notes                                                      |
-| --------------- | ----------------------------------------------------------- | ---------------------------------------------------------- |
-| `update:layout` | `BoardLayoutItem[]`                                         | v-model:layout.                                            |
-| `item-move`     | `{ id: string; from: number; to: number }`                  | An item moved, by drop or by the keyboard; zero-based.     |
-| `item-resize`   | `{ id: string; span: number; height: number \| undefined }` | A resize ended (pointer up or a resize key on the corner). |
+| Event         | Payload                                                     | Notes                                                      |
+| ------------- | ----------------------------------------------------------- | ---------------------------------------------------------- |
+| `item-move`   | `{ id: string; from: number; to: number }`                  | An item moved, by drop or by the keyboard; zero-based.     |
+| `item-resize` | `{ id: string; span: number; height: number \| undefined }` | A resize ended (pointer up or a resize key on the corner). |
 
 ## Slots
 

@@ -4598,23 +4598,23 @@ The code of every state is in [blocks/platform/dashboard/composition-dashboard.m
 
 # ConfigurableDashboard (`platform/dashboard/configurable-dashboard`)
 
-> A configurable dashboard: the reader arranges the cards. An Edit layout Button turns on the ChartCard drag handle and resize corner on every card of a 12-column grid; a card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. The page owns the layout, an array of id, span and height bound with v-model:span and v-model:height, and the order, which it changes on drop or on the arrow keys of a focused drag handle, then puts focus back on the moved handle and announces the move in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `ChartCard` (with its drag handle and resize corner), `Chart`, `DonutChart`, `BarList`, `Hint`, `Tag` and `Button`.
+> A configurable dashboard: the reader arranges the cards. The page binds its layout, an array of id, span and height in order, to a Board with v-model:layout; an Edit layout Button turns on the board's editing, which shows the ChartCard drag handle and resize corner on every card. A card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels; the board is twelve columns wide from a 48rem container and one column below it. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. Drop a card on another or press the arrow keys on its handle to move it; the board puts focus back on the moved handle and announces every move and resize in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `Button`, `Board`, `ChartCard` (with its drag handle and resize corner), `Hint`, `Tag`, `DonutChart`, `BarList` and `Chart`.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/configurable-dashboard/configurable-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/configurable-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Board](../../../components/board.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-layout`, `webkit-ui-states`
 
 ## Asked as
 
-configurable dashboard; custom dashboard; drag and drop dashboard; resizable cards; edit layout; dashboard builder; painel configurável; painel personalizado; reorganizar cards
+configurable dashboard; custom dashboard; drag and drop dashboard; resizable cards; edit layout; board; dashboard grid; dashboard builder; painel configurável; painel personalizado; reorganizar cards
 
 A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it
 is, and keep that layout. It serves readers who come back to the same page every day and care about
 different cards than the default puts first. The page owns the layout (an array of id, span and
-height) and the order; `ChartCard` provides the drag handle, the resize corner and their keyboard
-model.
+height, in order) and binds it to `Board`, which moves, resizes, clamps and announces; the
+`ChartCard` inside each `Board.Item` provides the drag handle and the resize corner.
 
 ## When to use
 
@@ -4644,44 +4644,52 @@ Title `Traffic overview` and one sentence on what the page shows, over the rest 
 the mode. `Reset layout` (transparent) appears only once the layout differs from the default. While
 editing, one line of help sits beside the buttons: how to drag, resize and use the keyboard.
 
-### C. Cards — `ChartCard` (required)
+### C. Grid — `Board` (required)
 
-Each card binds `v-model:span` and `v-model:height`, snaps to whole columns between 3 and 12 and to a
-height between 280 and 720 pixels, and turns on `draggable` and `resizable` only while editing. In edit
-mode the header shows `ChartCard.DragHandle` and the card shows `ChartCard.ResizeHandle`, each with an
-`aria-label` naming the card (`Move Requests over time`, `Resize Requests over time`). The header
-keeps only the title and its hint; no menus or toggles compete with the handles.
+`v-model:layout` binds the page's layout; `editing` follows the mode button. The bounds are set once
+on the board: whole columns between 3 and 12, a height between 280 and 720 pixels. One `Board.Item`
+per layout entry, keyed and labelled by the card title, so the board announces `Requests over time
+moved to position 2 of 6.` and `… resized to 6 of 12 columns.` and puts focus back on the moved
+handle. The board is twelve columns from a 48rem container and one column below it.
 
-### D. Card definitions — `Hint` (required)
+### D. Cards — `ChartCard` (required)
+
+Inside a `Board.Item` the card takes its span, height and bounds from the board and shows its handles
+only while the board is editing, so it carries no size props or drag events of its own. The header
+holds `ChartCard.DragHandle` and the card `ChartCard.ResizeHandle`, each with an `aria-label` naming
+the card (`Move Requests over time`, `Resize Requests over time`). The header keeps only the title and
+its hint; no menus or toggles compete with the handles.
+
+### E. Card definitions — `Hint` (required)
 
 One sentence beside each title that defines the metric.
 
-### E. Span while editing — `Tag` (required in edit mode)
+### F. Span while editing — `Tag` (required in edit mode)
 
 Shows the card's span (`6/12`) in the header controls while editing, so a resize has a visible result
 without counting grid lines.
 
-### F. Split cards — `DonutChart` (optional)
+### G. Split cards — `DonutChart` (optional)
 
 A share of a whole (for example requests by region). Renders its own loading and empty state inside
 the card.
 
-### G. Ranked cards — `BarList` (optional)
+### H. Ranked cards — `BarList` (optional)
 
 A ranked list sorted descending (top sources). Renders its own loading and empty state.
 
-### H. Time series cards — `Chart` (optional)
+### I. Time series cards — `Chart` (optional)
 
 Bars, area or line over time. All time series share one `active-index`, so hovering a moment moves the
 crosshair on every card. A legend with totals appears only when a card has more than one series.
 
 ## Do
 
-- Keep the layout as data (id, span, height, order) owned by the page, and persist it wherever the
-  product stores preferences.
-- After a keyboard move, return focus to the moved card's handle and announce the new position in the
-  polite live region (`Requests over time moved to position 2 of 6.`).
-- Announce a resize (`… resized to …`) and a reset (`Layout reset to the default.`).
+- Keep the layout as data (id, span, height, order) owned by the page, bind it to `Board`, and persist
+  it wherever the product stores preferences.
+- Give every `Board.Item` the card title as its `label`; it is what moves and resizes announce.
+- Announce a reset yourself in a polite live region (`Layout reset to the default.`); the board
+  announces only what it did.
 - Keep every card at its place and size in loading and empty states, so the reader can arrange it
   before data arrives.
 
@@ -4704,9 +4712,10 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 ## Accessibility
 
-- The drag handle moves a card with the arrow keys; the resize corner changes span with Left and Right and height with Up and Down.
+- The drag handle moves a card with the arrow keys; the resize corner changes span with Left and Right and height with Up and Down (`Board` handles both and mirrors them under right-to-left).
 - Focus returns to the moved card's handle after a reorder.
-- Every move, resize and reset is announced in an `aria-live="polite"` `sr-only` region.
+- `Board` announces every move and resize in its own polite live region; the page announces the reset in an `aria-live="polite"` `sr-only` region.
+- The board is a list named `Traffic overview cards`, one item per card.
 - `Edit layout` exposes its mode with `aria-pressed`.
 - Charts carry an `aria-label` equal to the card title.
 
@@ -4722,7 +4731,8 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 - `platform/dashboard/analytics-dashboard` — the static version of the same cards.
 - `platform/dashboard/data-dashboard` — a fixed dashboard when the order tells the story.
-- `ChartCard` — owns the drag and resize handles and their keyboard model.
+- `Board` — the grid component: layout model, bounds, reorder, resize and announcements.
+- `ChartCard` — the card inside each item, with the drag handle and resize corner.
 
 ## Variants
 
@@ -8408,6 +8418,114 @@ The code of every state is in [blocks/platform/states/form-validation.md](blocks
 
 ---
 
+<!-- blocks/platform/states/not-found.md -->
+
+# NotFound (`platform/states/not-found`)
+
+> The page an app renders when it cannot show the address the user asked for. The primary is the 404: a full-height canvas centring an EmptyState whose figure is the large 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Try again, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` figures.
+
+- Surface: product
+- Source: `blocks/platform/states/not-found/not-found.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/states/not-found")`
+- Components: [Button](../../../components/button.md), [EmptyState](../../../components/empty-state.md), `Error403`, `Error404`
+- Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
+
+## Asked as
+
+404 page; not found page; page not found; 403 forbidden page; access denied page; 500 error page; server error page; error page; resource not found; página não encontrada; página de erro; acesso negado; erro 404; erro 500
+
+The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words.
+
+## When to use
+
+- A route that matches nothing: the catch-all route of the app renders the primary.
+- A route the user's role does not include: render Forbidden instead of hiding the page silently or sending them to the home page.
+- A page whose server request failed as a whole (the data the page needs did not arrive and nothing on it can render): render ServerError.
+- A valid route whose record does not exist (a deleted service, a stale link with an old ID): render ResourceNotFound inside the console shell.
+
+## When not to use
+
+- One region of a page failed to render while the rest works: wrap the region in `ErrorBoundary`; it shows a danger `Alert` with Try again in the region's place.
+- A list with no items yet: use `platform/states/first-use`. A list whose filter matched nothing: use the no-match state of `platform/view/table-view`.
+- A form the server rejected: use `platform/states/form-error`.
+- A build or deploy that failed: use `platform/states/async-submit`; its toast and page `Alert` carry Edit and Redeploy.
+- The account itself could not load after sign-in: that is an auth screen; see `platform/auth`.
+
+## Building blocks
+
+### A. Figure — `Error404` (`@aziontech/webkit/svg/error-404`)
+
+The large numeral art in the `EmptyState` icon slot, 192 px wide on phones and 256 px from `sm`. It is decorative: the `EmptyState` icon wrapper is `aria-hidden`, and the hidden `h1` names the code. Forbidden uses `Error403`. ServerError and ResourceNotFound use the `EmptyState` icon tile (`pi pi-exclamation-triangle`, `pi pi-search`) because no numeral art exists for them.
+
+### B. Message — `EmptyState` (required)
+
+The title says what happened in the user's words (`Page not found`, `You don't have access to this page`); the description says why it may have happened and what to do next, in one or two sentences. Full-page variants centre it on the canvas, at most `--container-md` wide; ResourceNotFound uses `bordered` inside the content column, since the shell is still around it.
+
+### C. Actions — `Button` (required)
+
+Two at most, side by side, wrapping on narrow screens. The way out is primary (`Go to home`, `Try again`, `Back to services`); the help is outlined (`Docs`, `Switch account`, `System status`). Links that leave the app open in a new tab (`target="_blank"`).
+
+## Do
+
+- Render the block on the address the user asked for; do not redirect to `/404`, so reloading tries the real address again and the browser history stays honest.
+- Answer with the matching HTTP status when the server renders the page (404, 403, 500), so crawlers and monitoring see it.
+- Keep the shell (navigation, header) around ResourceNotFound and around a 403 inside the console, so the user can move on without the back button.
+- Give a 500 an error reference the user can quote to support, and log the same reference on the server.
+- On 403, say who can grant access (an account admin) and offer the switch when the user belongs to more than one account.
+
+## Don't
+
+- Don't blame the user (`You typed a wrong URL`) or show a stack trace, a raw status line or an exception message.
+- Don't hide a 403 behind a 404 inside the product: a user who followed a link from a teammate needs to know to ask for access. Use 404 for a 403 only where revealing that the page exists would leak information.
+- Don't add a search box, a sitemap or a list of popular pages; two actions are enough.
+- Don't auto-redirect after a countdown; the user decides where to go.
+- Don't put the error code in the visible title; the figure already shows it.
+
+## Copy
+
+- **Title:** what happened, sentence case, no code: `Page not found`, `You don't have access to this page`, `Something went wrong on our side`, `Service 4821 not found`.
+- **Description:** why, and what to do: `There is nothing deployed at this address. Check the URL or head back to the start.` On a 500, reassure: `Nothing you saved was lost.`
+- **Primary action:** where it goes: `Go to home`, `Back to services`; or what it does: `Try again`.
+- **Secondary action:** `Docs`, `Switch account`, `System status`.
+- **Reference:** `Error reference: req_7f3c91ab`, in monospace, wrapped in `<bdi>` so it keeps its order in right-to-left pages.
+
+## Accessibility
+
+- Each variant has exactly one `h1` (visually hidden) naming the error code, so the page has a heading and the code is announced even though the figure is decorative.
+- The full-page variants are the `main` landmark; ResourceNotFound sits in the shell's content column and renders its own `main` only as a stand-alone page.
+- The figure is `aria-hidden` (inside the `EmptyState` icon wrapper); never put the only statement of the error in the art.
+- The `EmptyState` is `role="status"`, so a client-side route change to this page is announced.
+- Try again shows the `Button` loading state while the page reloads; the button keeps its label.
+- Buttons that open a new tab carry an icon; do not rely on colour.
+
+## States
+
+- Default: 404, the 404 numeral art, Page not found, Go to home and Docs.
+- Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
+- ServerError: 500, the warning icon tile, Something went wrong on our side, Try again, System status and the error reference.
+- ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.
+
+## Related
+
+- `shells/console` — the shell that frames ResourceNotFound and a 403 inside the product.
+- `platform/states/first-use` — an empty list, which is not an error.
+- `platform/states/form-error` — a server rejection scoped to a form section.
+- `platform/states/async-submit` — the outcome of a build or deploy, with Edit and Redeploy.
+- `platform/auth` — the sign-in screens, including the account that could not load.
+
+## Variants
+
+- `Default` — primary (the code below)
+- `Forbidden` — 403: the address exists but the user's role does not include it. The 403 numeral art, You don't have access to this page, what to do (ask an admin, or switch account), and Go to home with Switch account.
+- `ServerError` — 500: the page failed on the server. A warning icon tile in place of the numeral art, Something went wrong on our side, the reassurance that nothing saved was lost, Try again (which reloads and shows its loading state), System status in a new tab, and the error reference to quote to support.
+- `ResourceNotFound` — Inside the console: the route is valid but the record is not (deleted, or a stale link). A bordered EmptyState in the content column names the resource and its ID, says why it may be missing, and offers Back to services.
+
+Each variant is the same screen in another state: `get_pattern("platform/states/not-found", { variant })`, or the file under `blocks/platform/states/not-found/variants/`.
+
+The code of every state is in [blocks/platform/states/not-found.md](blocks/platform/states/not-found.md) and `blocks/platform/states/not-found/not-found.vue`.
+
+---
+
 <!-- blocks/platform/states/page-wires.md -->
 
 # PageWires (`platform/states/page-wires`)
@@ -9316,12 +9434,12 @@ The code of every state is in [blocks/platform/view/table-view.md](blocks/platfo
 - Surface: product
 - Source: `blocks/shells/console/console.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/console")`
-- Components: [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [Drawer](../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../components/dropdown-menu.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [Menu](../../components/menu.md), [PageTabs](../../components/page-tabs.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AppLayout](../../components/app-layout.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [Drawer](../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [Menu](../../components/menu.md), [PageTabs](../../components/page-tabs.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
 
-platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console
+platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console; notifications panel; notifications drawer; notification center; central de notificações; painel de notificações
 
 The application shell every signed-in page renders inside. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: a navigation rail on the left (wordmark, the ⌘K palette, the grouped navigation, the account menu) and a content zone on the right headed by one global header (search, Create, Agent, the avatar). Pages render only their own content in the zone; this block's page bodies are stand-ins for `platform/view/table-view` and `platform/detail/details-page`.
 
@@ -9433,6 +9551,7 @@ Dims the page behind the open drawer.
 - Don't render the rail on create, edit or deploy pages.
 - Don't add page actions to the global header; they belong to the page's controls row or tab row.
 - Don't hide the avatar when the rail is collapsed or in the drawer.
+- Don't open the notifications region as a popover over the page; it is a region beside the content that the reader keeps open while working.
 
 ## Copy
 
@@ -9448,11 +9567,13 @@ Dims the page behind the open drawer.
 - ⌘K opens the palette and is announced with `aria-keyshortcuts="Meta+K"`; focus returns to the trigger on close.
 - The drawer traps focus while open and returns it to the navigation trigger.
 - Icon-only controls have both an `aria-label` and a tooltip.
+- The bell is a toggle (`aria-pressed`) and names the unread count; unread items carry a visually hidden `Unread:` prefix, not colour alone.
 
 ## States
 
 - ListPage: a first-level list page in the content zone; the header carries the single unlinked `Resources` crumb and the page opens on its controls row.
 - DetailPage: a resource detail page; the breadcrumb reads module, resource, then an environment Select, and a full-bleed tab bar carries Overview, Deployments and Settings with the outlined Deploy action.
+- Notifications: the bell opens the notifications region beside the content (a drawer when narrow), with unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState once cleared; the failed deploy also shows as a flash Alert above the page. This state is built on `AppLayout` (rail in `#navigation`, header in `#header`, flash in `#notifications`, list in `#tools`), which measures its own width, so the rail and the list become drawers in a narrow host. The bell's `aria-label` carries the unread count and the `Badge` on it is hidden from assistive technology.
 
 ## Related
 
@@ -9464,6 +9585,7 @@ Dims the page behind the open drawer.
 
 - `ListPage` — primary (the code below)
 - `DetailPage` — A resource detail page: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it.
+- `Notifications` — The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up.
 
 Each variant is the same screen in another state: `get_pattern("shells/console", { variant })`, or the file under `blocks/shells/console/variants/`.
 
@@ -12686,6 +12808,162 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 
 ---
 
+<!-- components/hotspot.md -->
+
+# Hotspot
+
+> Marks a real control as a step of a tutorial. It wraps the control and, while a tutorial that names its `hotspotId` runs, draws a small marker beside it. The current step's marker pulses and opens the step in a popover: the step's title, `Step n of N` with the task's name, the instructions, and Previous / Next (Finish on the last step). Outside a running tutorial, or outside a `TutorialPanel.Provider`, it renders only the wrapped control, so hotspots can stay on a page for good.
+
+- Import: `import Hotspot from '@aziontech/webkit/hotspot'`
+- Category: content · Surface: product · Structure: monolithic
+- API as JSON: [hotspot.json](https://github.com/aziontech/webkit/blob/main/.specs/hotspot.json)
+
+## When to use
+
+- A tutorial step is about one control on the page, and the reader should see where it is.
+- The page runs inside a `TutorialPanel.Provider` and offers guided tutorials from its help region.
+
+## Do
+
+- Wrap exactly the control the step is about; keep the marker beside it, not inside a long row.
+- Use `side="start"` when the control sits at the end of a row and the marker would overflow.
+- One `hotspotId` per control and per page. The same id on two elements opens two popovers.
+- Keep step content short: the popover is a small surface over the real UI.
+
+## Don’t
+
+- A permanent tip on a control → use `hint` or `popover`.
+- A new feature announcement with no tutorial behind it → use `popover` or an `alert`.
+- Help text for a form field → use the field's `helper-text`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [tutorial-panel](tutorial-panel.md) — the provider holds the steps a hotspot shows; the panel lists and runs the tutorials.
+- [popover](popover.md) — the overlay the current step opens in.
+- [help-panel](help-panel.md) — static help without a guided run.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `hotspotId` | `string` | `—` | true | Matches the `hotspotId` of a tutorial step; the marker shows while that step's tutorial runs. |
+| `side` | `'start' \| 'end'` | `'end'` | false | Which side of the wrapped control the marker sits on, in reading direction. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The real control the step is about. |
+
+## States
+
+- Visual states: `inactive` (no marker), `active` (static marker: the step belongs to the running tutorial), `current` (marker filled and pulsing, popover open), `dismissed` (current step closed by the reader: marker filled, no pulse, popover closed)
+- `data-active` on the root when the marker shows; `data-current` on the root and on the marker for the current step
+- `data-side` mirrors `side`
+- The popover's `data-state` is `open` | `closed` (owned by `Popover`)
+
+## Accessibility
+
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the marker.
+- Keyboard map: the marker is a `button` in the tab order after the wrapped control; `Enter` / `Space` opens its step (and makes it current). Inside the popover `Tab` cycles Close, Previous and Next (the `Popover` loop); `Esc` closes the step and returns focus to the marker. Next, Previous and the marker move focus into the new step's popover; Finish moves focus to the panel's completion heading.
+- ARIA: the marker is named `Tutorial step: <title>` and carries `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls` (from `Popover.Trigger`). The popover is a non-modal `dialog` labelled by the step title and described by `Step n of N`. The pulse ring and dot are `aria-hidden`.
+- Contrast: the marker's `--primary` against the canvas ≥3:1 (non-text) in both themes.
+- Touch target: the visible marker is 24 px; a `before:` pseudo-element extends the hit area by 8 px on each side (40 px).
+
+## Right-to-left
+
+- Layout: the root is a flex row that follows `dir`; `side="start"` uses `flex-row-reverse`, which is logical. The popover placement mirrors through `usePlacement`.
+- Icons: none in the marker.
+- Keyboard: no arrow keys.
+- User data: none.
+
+## Internationalization
+
+| Key                | English source              | Override prop |
+| ------------------ | --------------------------- | ------------- |
+| `hotspot.label`    | `Tutorial step: {title}`    | —             |
+| `hotspot.stepOf`   | `Step {current} of {total}` | —             |
+| `hotspot.previous` | `Previous`                  | —             |
+| `hotspot.next`     | `Next`                      | —             |
+| `hotspot.finish`   | `Finish`                    | —             |
+
+- Formatting: none (integers interpolated). The close button's name comes from `popover.close`.
+
+## Responsive
+
+- Container queries: none: fixed-size marker.
+- Narrow: the root has `max-w-full` and the popover is `width="small"` (`--container-xs`), clamped by `Popover` to the viewport.
+- Touch: 40 px hit area through the pseudo-element.
+- Reflow: no horizontal scroll at 320 px; the popover wraps its text.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import Hotspot from '@aziontech/webkit/hotspot'
+  import TutorialPanel from '@aziontech/webkit/tutorial-panel'
+  import { ref } from 'vue'
+
+  const tutorials = [
+    {
+      id: 'publish',
+      title: 'Publish a change',
+      tasks: [
+        {
+          title: 'Review and deploy',
+          steps: [
+            {
+              title: 'Preview the change',
+              content: 'Open the preview to check the change before anyone else sees it.',
+              hotspotId: 'preview'
+            },
+            {
+              title: 'Deploy',
+              content: 'Select Deploy to send the change to production.',
+              hotspotId: 'deploy'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+  const active = ref('publish')
+  const step = ref(0)
+</script>
+
+<template>
+  <TutorialPanel.Provider
+    v-model:active="active"
+    v-model:step="step"
+    :tutorials="tutorials"
+  >
+    <div class="flex min-h-(--container-3xs) flex-wrap items-start gap-(--spacing-sm)">
+      <Hotspot hotspot-id="preview">
+        <Button
+          label="Preview"
+          kind="outlined"
+          size="medium"
+        />
+      </Hotspot>
+      <Hotspot hotspot-id="deploy">
+        <Button
+          label="Deploy"
+          kind="primary"
+          size="medium"
+        />
+      </Hotspot>
+    </div>
+  </TutorialPanel.Provider>
+</template>
+```
+
+---
+
 <!-- components/illustration.md -->
 
 # Illustration
@@ -13820,6 +14098,303 @@ Exports: `./shell-mockup` → `index.ts`, `./shell-mockup-root` → `shell-mocku
 ```
 
 2 more example(s) in [components/tag.md](https://github.com/aziontech/webkit/blob/main/.specs/components/tag.md).
+
+---
+
+<!-- components/tutorial-panel.md -->
+
+# Tutorial Panel
+
+> The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`. The panel draws its views from `HelpPanel` parts (`Header`, `Tutorial`, `Task`), so a tutorial looks the same whether a product shows a static checklist with `HelpPanel.Tutorial` or a guided run with `TutorialPanel`. Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.
+
+- Import: `import TutorialPanelRoot from '@aziontech/webkit/tutorial-panel-root'`
+- Compound import (dot notation, not tree-shakeable): `import TutorialPanel from '@aziontech/webkit/tutorial-panel'`
+- Category: content · Surface: product · Structure: composition
+- API as JSON: [tutorial-panel.json](https://github.com/aziontech/webkit/blob/main/.specs/tutorial-panel.json)
+
+## When to use
+
+- A reader learns a product task by doing it on the real screen, step by step, with the instructions pointing at the control they need next.
+- A product offers several tutorials in its help region and records which ones the reader finished.
+- A first-run or onboarding flow guides the reader through a real create and deploy, not a mock.
+
+## Do
+
+- Wrap the whole page in `TutorialPanel.Provider`, so the panel and every hotspot share one state.
+- Keep tutorials as data (`Tutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.
+- One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.
+- Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.
+- Set `completed` on a tutorial from what the product recorded (the `finish` event), not from a click.
+- Bind `v-model:active` and `v-model:step` and persist them when a tutorial must survive a navigation.
+
+## Don’t
+
+- Static help beside the page, with no guided run → use `help-panel` (a `HelpPanel.Tutorial` checklist when the owner only reports progress).
+- A multi-step create flow whose steps are forms in one surface → use `wizard`.
+- Ordered steps the reader navigates inside a page → use `stepper`.
+- A single tip pinned to one control → use `popover` or `hint`.
+- An empty page that needs one call to action → use `empty-state`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [hotspot](hotspot.md) — the marker beside a real control; the current step opens from it. Every step names one by `hotspotId`.
+- [help-panel](help-panel.md) — the parts the panel draws with; use it alone for help without a guided run.
+- [popover](popover.md) — what a hotspot opens; the step's title, content and Previous / Next live in it.
+- [drawer](drawer.md) — the host of the tools region on narrow screens; the panel goes inside it.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | `''` | false | The panel's heading. Empty uses the locale catalog (`Tutorials`). |
+| `description` | `string` | `''` | false | One line under the heading. Empty uses the locale catalog. |
+| `ariaLabel` | `string` | `''` | false | Accessible name for the panel's landmark. Empty uses the title. |
+| `loading` | `boolean` | `false` | false | Renders skeleton lines in place of the content while the tutorials load. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `completion` | { tutorial: Tutorial } | Extra content on the completion screen, such as a feedback link. |
+
+## Sub-component imports
+
+- `@aziontech/webkit/tutorial-panel-provider`
+
+## Sub-components
+
+The root ships a **compound API**: `index.ts` attaches the provider to the panel, so
+`<TutorialPanel.Provider>` resolves from the same import. The panel has no open state (the tools region
+that hosts it owns that), so there is no `Trigger` / `Content`. State flows through `provide`/`inject`
+(`injection-key.ts`, provided by the provider): the panel reads it through
+`composables/use-tutorial-context.ts`, which throws outside a provider, and `Hotspot` reads it through
+the optional variant, which returns null so a hotspot outside a provider renders only its content.
+
+- `tutorial-panel-provider/tutorial-panel-provider.vue` — Holds the tutorials, the running tutorial (`v-model:active`), the current step (`v-model:step`, flat across tasks), whether the reader dismissed the current step, and the hotspots on the page. Renders only its slot (no element).
+  - Props: `tutorials?: Tutorial[]` (default `[]`), `active?: string \| null` (default `undefined` — controlled when bound; uncontrolled starts at `null`), `step?: number` (default `undefined` — controlled when bound; uncontrolled starts at `0`; equals the step count once the tutorial is finished).
+  - Events: `update:active` (`string \| null`), `update:step` (`number`), `start` (`string` — the tutorial id, on Start and Restart), `exit` (`string` — on Exit or Back to tutorials), `finish` (`string` — on Finish of the last step).
+  - Slot: `default` — the page, with the panel and every hotspot inside.
+
+Exported types: `Tutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialTask` (`title`, `steps`), `TutorialStep` (`title`, `content`, `hotspotId`).
+
+```
+packages/webkit/src/components/content/tutorial-panel/
+├── tutorial-panel.vue                    (root; the panel views)
+├── tutorial-panel.test.ts
+├── index.ts                              (compound: attaches Provider)
+├── injection-key.ts                      (types + TutorialContext)
+├── composables/
+│   └── use-tutorial-context.ts           (strict and optional injectors)
+└── tutorial-panel-provider/
+    └── tutorial-panel-provider.vue
+```
+
+Exports:
+
+```jsonc
+"./tutorial-panel": "./src/components/content/tutorial-panel/index.ts",
+"./tutorial-panel-root": "./src/components/content/tutorial-panel/tutorial-panel.vue",
+"./tutorial-panel-provider": "./src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue"
+```
+
+Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutorial`, `Task`), `button`, `tag`.
+
+## States
+
+- Visual states: `list`, `running`, `complete`, `empty` (no tutorials), `loading`
+- `data-view` on the root: `list` | `running` | `complete`
+- `data-completed` on each list item mirrors the tutorial's `completed`
+- In `running`, each task's `HelpPanel.Task` status is derived from the current step: `complete` when every step of the task is behind it, `current` when it holds the current step, `upcoming` otherwise. The current step's row carries `aria-current="step"`.
+- `complete` shows a completion section (check icon, `Tutorial complete`, `You finished <title>.`, the `completion` slot, Restart and Back to tutorials) above the task list, every task complete.
+
+## Accessibility
+
+- Visible focus: the composed `Button`s carry the standard ring; focus targets that are not controls (the list heading, the completion heading, the current step row) take `tabindex="-1"` and `outline-none` because they receive focus only programmatically.
+- Keyboard map: `Tab` moves through Start / Restart, Exit, Restart and Back. Focus management: Start moves focus to the current step's popover (through its hotspot) or, when that hotspot is not on the page, to the step's row in the panel; Finish moves focus to the `Tutorial complete` heading; Exit and Back move focus to the list's heading.
+- ARIA: the panel is a `HelpPanel` complementary landmark named by `ariaLabel` or the title. Each list item's Start button is described by its tutorial's heading (`aria-describedby`), so repeated buttons are distinct. The task progress line (`HelpPanel.Tutorial`) is `aria-live="polite"`. The current step row carries `aria-current="step"`.
+- Contrast ≥4.5:1 on muted ink over `--bg-surface` in both themes.
+- Touch target: the composed `Button`s (small) meet 24 px; the panel adds no other control.
+
+## Right-to-left
+
+- Layout: logical utilities only; every row is a flex row that follows `dir`.
+- Icons: `pi pi-check-circle` (not mirrored), `pi pi-sign-out` on Exit (not mirrored; it names the action, not a direction).
+- Keyboard: no arrow keys.
+- User data: none.
+
+## Internationalization
+
+| Key                                  | English source                                                | Override prop |
+| ------------------------------------ | ------------------------------------------------------------- | ------------- |
+| `tutorialPanel.title`                | `Tutorials`                                                   | `title`       |
+| `tutorialPanel.description`          | `Learn the product by doing a real task, one step at a time.` | `description` |
+| `tutorialPanel.listLabel`            | `Available tutorials`                                         | —             |
+| `tutorialPanel.empty`                | `No tutorials yet.`                                           | —             |
+| `tutorialPanel.start`                | `Start tutorial`                                              | —             |
+| `tutorialPanel.restart`              | `Restart tutorial`                                            | —             |
+| `tutorialPanel.exit`                 | `Exit tutorial`                                               | —             |
+| `tutorialPanel.back`                 | `Back to tutorials`                                           | —             |
+| `tutorialPanel.completed`            | `Completed`                                                   | —             |
+| `tutorialPanel.completedTitle`       | `Tutorial complete`                                           | —             |
+| `tutorialPanel.completedDescription` | `You finished {title}.`                                       | —             |
+| `tutorialPanel.taskCount`            | `{count} task` / `{count} tasks`                              | —             |
+| `tutorialPanel.stepCount`            | `{count} step` / `{count} steps`                              | —             |
+
+- Formatting: plurals through `Intl.PluralRules` (the catalog's plural messages); tutorial content is the consumer's own text.
+
+## Responsive
+
+- Container queries: inherits `@container/help-panel` from `HelpPanel`; no breakpoint of its own — the list and the task rows stack at every width.
+- Narrow: the panel goes inside a `Drawer` (the tools region on phones); its content reflows to the drawer width.
+- Touch: targets are the composed small `Button`s (≥ 24 px; the drawer host gives them room).
+- Reflow: no horizontal scroll at 320 px; titles wrap.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import Hotspot from '@aziontech/webkit/hotspot'
+  import Input from '@aziontech/webkit/input'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import TutorialPanel from '@aziontech/webkit/tutorial-panel'
+  import { ref } from 'vue'
+
+  const tutorials = [
+    {
+      id: 'first-service',
+      title: 'Create your first service',
+      description: 'Two tasks, about three minutes.',
+      tasks: [
+        {
+          title: 'Create a service',
+          steps: [
+            {
+              title: 'Start a new service',
+              content: 'Select New service. The form opens below the list.',
+              hotspotId: 'new-service'
+            },
+            {
+              title: 'Name the service',
+              content: 'Type a name your team will recognize, such as storefront-api.',
+              hotspotId: 'service-name'
+            }
+          ]
+        },
+        {
+          title: 'Publish it',
+          steps: [
+            {
+              title: 'Deploy',
+              content: 'Select Deploy. The service keeps deploying if you leave this page.',
+              hotspotId: 'deploy'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'find-service',
+      title: 'Find a service',
+      description: 'One task, under a minute.',
+      completed: true,
+      tasks: [
+        {
+          title: 'Search the list',
+          steps: [
+            {
+              title: 'Search by name',
+              content: 'Type part of a name. The list filters as you type.',
+              hotspotId: 'search'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+  const active = ref(null)
+  const step = ref(0)
+  const name = ref('')
+  const query = ref('')
+</script>
+
+<template>
+  <TutorialPanel.Provider
+    v-model:active="active"
+    v-model:step="step"
+    :tutorials="tutorials"
+  >
+    <div class="@container flex w-full flex-wrap items-start gap-(--spacing-lg)">
+      <main class="flex min-w-0 flex-1 basis-(--container-xs) flex-col gap-(--spacing-md)">
+        <PageHeader
+          title="Services"
+          description="Everything your team runs, in one list."
+        />
+        <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+          <Hotspot
+            hotspot-id="search"
+            class="min-w-0 flex-1"
+          >
+            <Input
+              v-model="query"
+              aria-label="Search services"
+              placeholder="Search services"
+            />
+          </Hotspot>
+          <Hotspot hotspot-id="new-service">
+            <Button
+              label="New service"
+              icon="pi pi-plus"
+              size="medium"
+            />
+          </Hotspot>
+        </div>
+        <section
+          aria-labelledby="new-service-title"
+          class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
+        >
+          <h2
+            id="new-service-title"
+            class="text-heading-xxs text-(--text-default)"
+          >
+            New service
+          </h2>
+          <Hotspot hotspot-id="service-name">
+            <Input
+              v-model="name"
+              aria-label="Service name"
+              placeholder="storefront-api"
+            />
+          </Hotspot>
+          <div class="flex justify-end">
+            <Hotspot
+              hotspot-id="deploy"
+              side="start"
+            >
+              <Button
+                label="Deploy"
+                kind="primary"
+                size="medium"
+              />
+            </Hotspot>
+          </div>
+        </section>
+      </main>
+      <div
+        class="w-full rounded-(--shape-card) border border-(--border-default) @3xl:w-(--container-2xs)"
+      >
+        <TutorialPanel />
+      </div>
+    </div>
+  </TutorialPanel.Provider>
+</template>
+```
+
+1 more example(s) in [components/tutorial-panel.md](https://github.com/aziontech/webkit/blob/main/.specs/components/tutorial-panel.md).
 
 ---
 
@@ -16773,6 +17348,188 @@ Exports: `./shell-mockup` → `index.ts`, `./shell-mockup-root` → `shell-mocku
 
 ---
 
+<!-- components/error-boundary.md -->
+
+# Error Boundary
+
+> Guards one region of a page. When a component inside the region throws while it renders, sets up or runs a lifecycle hook, the boundary catches the error, reports it through its `error` event, and puts a recoverable message in the region's place: a danger `Alert` that says the section failed and offers **Try again**, which mounts the region again. The rest of the page keeps working. A `fallback` slot replaces the built-in message when the region needs a different shape (a card-sized `EmptyState`, for example).
+
+- Import: `import ErrorBoundary from '@aziontech/webkit/error-boundary'`
+- Category: feedback · Surface: product · Structure: monolithic
+- API as JSON: [error-boundary.json](https://github.com/aziontech/webkit/blob/main/.specs/error-boundary.json)
+
+## When to use
+
+- A dashboard card, a side panel, a tab body or any region whose failure should not take the whole page down.
+- A region that renders data you do not control (a third-party widget, a chart fed by a remote response, a plugin).
+- Around each route's content inside the app shell, so a failing page leaves the navigation usable (pass the route path as `resetKey`).
+- When the app reports render errors to a monitoring service: the `error` event carries the error and where it was thrown.
+
+## Do
+
+- Wrap regions, not the whole app. One boundary per card, panel or route body keeps the blast radius small.
+- Report every error: listen to `error` and send it to your monitoring service. The boundary stops the error from reaching the app error handler unless `propagate` is set.
+- Make Retry mean something. Listen to `retry` and reset the state that broke the region (refetch, clear the bad value) before it mounts again; a retry that renders the same bad data fails again.
+- Pass `resetKey` when the region shows different content for different keys (route path, record id), so moving on from a failed record clears the fallback.
+- Keep the fallback the size of the region. In a card, use a small `EmptyState`; in a page body, the built-in `Alert` is right.
+
+## Don’t
+
+- A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `platform/states/form-error` and `skills/webkit-ui-states` describe.
+- A whole page that cannot be shown (missing route, no access, server failure) → use the `platform/states/not-found` block.
+- A field that failed validation → use `field` with its error message.
+- Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [alert](alert.md) — the built-in fallback; also what a failed request shows inside a region that rendered fine.
+- [empty-state](empty-state.md) — a common custom fallback for a card-sized region.
+- [skeleton](skeleton.md) — what the region shows while it loads; the boundary only covers the failed case.
+- [toast](toast.md) — reports the outcome of an action; never use it for a region that failed to render.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | `''` | false | Heading of the built-in fallback. Empty uses the locale catalog (`This section failed to load`). |
+| `description` | `string` | `''` | false | Sentence under the heading of the built-in fallback. Empty uses the locale catalog. |
+| `retryLabel` | `string` | `''` | false | Label of the built-in Retry action. Empty uses the locale catalog (`Try again`). |
+| `resetKey` | `string \| number` | `undefined` | false | When this value changes while the fallback shows, the region is mounted again (pass the route path or the record id). |
+| `propagate` | `boolean` | `false` | false | When true, the error keeps travelling to the parent boundaries and the app error handler after this boundary handles it. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `error` | `ErrorBoundaryErrorEvent` | Fires once per failure with `{ error, info }`: what was thrown and Vue's description of where. Report it from here. |
+| `retry` | `void` | Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The region the boundary guards. Mounted again, from scratch, on every retry. |
+| `fallback` | { error: unknown, retry: () => void } | Replaces the built-in `Alert` while the region is failed. Call `retry` to mount it again. |
+
+## States
+
+- Visual states: `default` (the region renders), `error` (the fallback renders in its place)
+- `data-error` on the root is present while the fallback shows
+- A second error captured while the fallback already shows (a failing custom fallback) is not handled again: it travels to the parent, so a broken fallback can never loop.
+- What the boundary catches is what Vue's `onErrorCaptured` catches from descendant components: errors in render, setup, watchers, lifecycle hooks and component event handlers. Errors thrown directly in the slot's own markup belong to the component that owns the markup, and errors in native DOM listeners or promises outside Vue are not caught.
+
+## Accessibility
+
+- Visible focus: the root is focusable only by script (`tabindex="-1"`, `outline-none`) and never in the tab order; the Retry button carries the `Button` focus ring.
+- Keyboard map: `Tab` reaches the Retry action in the fallback; `Enter` / `Space` runs it. No key handling of its own.
+- Focus: when the region fails while focus was inside it (or had fallen to the document body), focus moves to the fallback `Alert`, which is announced. After a retry from inside the boundary, focus moves to the boundary's root so it is not lost to the body.
+- ARIA: the built-in fallback is an `Alert` with `role="alert"` (danger), so the failure is announced once when it appears. A custom fallback is responsible for its own announcement (`EmptyState` is `role="status"`).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): inherited from the `alert` danger tokens.
+- No motion.
+- Touch target ≥40×40 px: the Retry action is a `Button`.
+
+## Right-to-left
+
+- Layout: the boundary adds no layout; the `Alert` uses logical utilities and puts the action at the inline end.
+- Icons: the danger glyph is not mirrored.
+- Keyboard: no arrow-key navigation.
+- User data: the error message is never rendered by the built-in fallback; none.
+
+## Internationalization
+
+| Key                         | English source                                                                              | Override prop |
+| --------------------------- | ------------------------------------------------------------------------------------------- | ------------- |
+| `errorBoundary.title`       | This section failed to load                                                                 | `title`       |
+| `errorBoundary.description` | Something went wrong while showing this part of the page. The rest of the page still works. | `description` |
+| `errorBoundary.retry`       | Try again                                                                                   | `retryLabel`  |
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none of its own; the `Alert` is `@container/alert` and moves its action under the copy in a narrow region.
+- Narrow (≤ 640 px or a narrow container): the action wraps under the text (from `alert`).
+- Touch: the Retry button is 40 px; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import BarList from '@aziontech/webkit/bar-list'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import ErrorBoundary from '@aziontech/webkit/error-boundary'
+  import { ref } from 'vue'
+
+  const items = [
+    { id: 'web-app-prod', name: 'web-app-prod', value: 11420000 },
+    { id: 'payments-api', name: 'payments-api', value: 6240000 },
+    { id: 'storefront-checkout', name: 'storefront-checkout', value: 4910000 }
+  ]
+
+  const broken = ref(false)
+  const reported = ref('')
+
+  const format = (value) =>
+    new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(value)
+
+  const failingFormat = () => {
+    throw new Error('The response held a value the list could not read.')
+  }
+
+  const report = ({ error }) => {
+    reported.value = error instanceof Error ? error.message : String(error)
+  }
+
+  const recover = () => {
+    broken.value = false
+    reported.value = ''
+  }
+</script>
+
+<template>
+  <div class="flex w-full max-w-[512px] flex-col gap-(--spacing-sm)">
+    <Card title="Top services">
+      <template #content>
+        <ErrorBoundary
+          @error="report"
+          @retry="recover"
+        >
+          <BarList
+            :items="items"
+            :format-value="broken ? failingFormat : format"
+            aria-label="Top services by requests"
+          />
+        </ErrorBoundary>
+      </template>
+    </Card>
+    <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+      <Button
+        label="Simulate a failure"
+        kind="outlined"
+        size="medium"
+        :disabled="broken"
+        @click="broken = true"
+      />
+      <p
+        v-if="reported"
+        class="m-0 text-body-sm text-(--text-muted)"
+      >
+        Reported: {{ reported }}
+      </p>
+    </div>
+  </div>
+</template>
+```
+
+1 more example(s) in [components/error-boundary.md](https://github.com/aziontech/webkit/blob/main/.specs/components/error-boundary.md).
+
+---
+
 <!-- components/progress.md -->
 
 # Progress
@@ -19635,6 +20392,536 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ```
 
 1 more example(s) in [components/theme-switcher.md](https://github.com/aziontech/webkit/blob/main/.specs/components/theme-switcher.md).
+
+---
+
+<!-- components/app-layout.md -->
+
+# App Layout
+
+> The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shells/console` block) keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the frame to `AppLayout`.
+
+- Import: `import AppLayout from '@aziontech/webkit/app-layout'`
+- Category: layout · Surface: product · Structure: monolithic
+- API as JSON: [app-layout.json](https://github.com/aziontech/webkit/blob/main/.specs/app-layout.json)
+
+## When to use
+
+- A product shell needs a navigation rail, a global header and a scrolling content area that turn into a drawer-based layout on phones.
+- A page offers contextual help beside the work (`HelpPanel` in the tools region) that the reader opens and closes.
+- A list or table needs a resizable detail panel under it or beside it (the split panel), showing the selected item without leaving the page.
+- Page-level flash messages (`Alert`) must sit above the content and stay visible while the content scrolls.
+
+## Do
+
+- One `AppLayout` per page, at the root. Do not nest them.
+- Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer.
+- Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.
+- Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.
+- Use the split panel for the selected item of a collection. Close it when the selection clears.
+- Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.
+- Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background.
+
+## Don’t
+
+- A single resizable split inside a page, with no shell around it → use `resizable`.
+- A navigation rail on its own (resize, collapse, footer) → use `sidebar`; put it in the `navigation` slot.
+- A one-off overlay for a task (a create form, a detail preview) → use `drawer`.
+- Marketing and documentation pages → use the `shells/website` and `shells/documentation` blocks.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [sidebar](sidebar.md) — the navigation rail that goes in the `navigation` slot; it owns its own width, resize and collapse.
+- [global-header](global-header.md) — the bar that goes in the `header` slot.
+- [help-panel](help-panel.md) — the content of the tools region.
+- [drawer](drawer.md) — what the navigation and tools regions become below `compactBelow`.
+- [resizable](resizable.md) — a split between panes inside a page, without the shell.
+- [alert](alert.md) — the flash messages composed into the `notifications` slot.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `navigationOpen` | `boolean` | `true` | false | Whether the navigation region shows beside the content. Use with `v-model:navigation-open`. Not used while compact. |
+| `navigationLabel` | `string` | `''` | false | Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`). |
+| `toolsOpen` | `boolean` | `false` | false | Whether the tools region (help) is open; while compact it drives the tools drawer. Use with `v-model:tools-open`. |
+| `toolsLabel` | `string` | `''` | false | Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`). |
+| `toolsWidth` | `number` | `320` | false | Width of the tools region in pixels while not compact. |
+| `splitPanelOpen` | `boolean` | `false` | false | Whether the split panel is open. Use with `v-model:split-panel-open`. |
+| `splitPanelPosition` | `'bottom' \| 'side'` | `'bottom'` | false | Where the split panel sits: under the content or beside it. Use with `v-model:split-panel-position`. Bottom while compact. |
+| `splitPanelSize` | `number` | `320` | false | Height (bottom) or width (side) of the split panel in pixels. Use with `v-model:split-panel-size`. |
+| `splitPanelTitle` | `string` | `''` | false | Title of the split panel, shown in its header. Empty uses the locale catalog (`Details`). |
+| `storageKey` | `string` | `''` | false | When set, the split panel size and position and the navigation and tools open state are kept in `localStorage` under it. |
+| `compactBelow` | `number` | `768` | false | Width of the layout itself, in pixels, under which navigation and tools become drawers and the split panel moves down. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `update:navigationOpen` | `boolean` | v-model:navigation-open. |
+| `update:toolsOpen` | `boolean` | v-model:tools-open. |
+| `update:splitPanelOpen` | `boolean` | v-model:split-panel-open. |
+| `update:splitPanelPosition` | `'bottom' \| 'side'` | v-model:split-panel-position. |
+| `update:splitPanelSize` | `number` | v-model:split-panel-size; on every step. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The page content (the consumer's `<main>`). Scrolls on its own. |
+| `navigation` | { drawer: boolean } | The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. |
+| `header` | { compact: boolean, openNavigation: () => void, toggleNavigation: () => void, toggleTools: () => void } | The global header, above content, tools and split panel. |
+| `notifications` | — | Flash messages (`Alert`) above the breadcrumbs and the content; stays in place while content scrolls. |
+| `breadcrumbs` | — | Breadcrumbs above the content, inside the scroll area. |
+| `tools` | — | The tools region's body, usually a `HelpPanel`. |
+| `split-panel` | — | The split panel's body. |
+
+## States
+
+- Visual states: `default`, `compact`; per region `open` / `closed`; the split separator `focus-visible` and `resizing`.
+- `data-compact` on the root while the layout is narrower than `compactBelow`.
+- `data-navigation`, `data-tools`, `data-split-panel` on the root: `open` | `closed`.
+- `data-split-panel-position` on the root: `bottom` | `side` (always `bottom` while compact).
+- `data-resizing` on the split separator while it is dragged.
+- First render (server and client) is the wide layout; the compact layout applies after mount, once the layout has measured itself.
+
+## Accessibility
+
+- Visible focus: the separator shows `var(--accent)` on `focus-visible`; the region buttons are `IconButton` with their own ring.
+- Keyboard map: `Tab` reaches the region controls in DOM order (navigation, header, content, split panel, tools). On the split separator: `ArrowUp` / `ArrowDown` grow and shrink a bottom panel; `ArrowLeft` / `ArrowRight` grow and shrink a side panel (mirrored under RTL); `Shift` makes the step 64 px instead of 16 px; `Home` / `End` go to the minimum / maximum. `Escape` closes a compact drawer (from `Drawer`) and returns focus to the control that opened it.
+- ARIA: the tools region and the split panel are `<section aria-labelledby>` their header title (`<h2>`); the separator is `role="separator"` with `aria-orientation`, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` in pixels, `aria-controls` the split panel and an accessible name from the catalog. The compact drawers are named by `navigationLabel` and `toolsLabel`. The layout adds no landmark of its own around the content; the consumer's `<main>` and `Sidebar` `<nav>` are the landmarks.
+- Contrast ≥4.5:1 for the region titles; ≥3:1 for the separator against the surfaces.
+- `motion-reduce:transition-none` on the separator transition.
+- Touch target: the separator's hit area is 16 px across (a `before:` pseudo-element) over a 4 px line; region buttons are 32 px `IconButton` (40 px on `pointer: coarse` from `IconButton`).
+
+## Right-to-left
+
+- Layout: logical utilities only (`border-s`, `border-e`, `ms-auto`); the navigation sits at the inline start and the tools and side split panel at the inline end.
+- Icons: the position toggle icons (`pi pi-window-maximize` family) are not mirrored; close is not mirrored.
+- Keyboard: on a side split panel, the arrow that points away from the panel grows it — `ArrowLeft` in LTR, `ArrowRight` in RTL.
+- User data: none.
+
+## Internationalization
+
+| Key                          | English source          | Override prop     |
+| ---------------------------- | ----------------------- | ----------------- |
+| `appLayout.navigation`       | Navigation              | `navigationLabel` |
+| `appLayout.tools`            | Help                    | `toolsLabel`      |
+| `appLayout.closeTools`       | Close help              | —                 |
+| `appLayout.splitPanel`       | Details                 | `splitPanelTitle` |
+| `appLayout.closeSplitPanel`  | Close panel             | —                 |
+| `appLayout.resizeSplitPanel` | Resize panel            | —                 |
+| `appLayout.showAtSide`       | Show beside the content | —                 |
+| `appLayout.showAtBottom`     | Show under the content  | —                 |
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: the root is `@container/app-layout`; a `ResizeObserver` on the root switches to compact when its own width is under `compactBelow` (768 px by default), so the layout also goes compact inside a narrow host, not only on a narrow viewport.
+- Narrow (compact): navigation renders in a `Drawer` from the inline end (the design sample's phone menu), the tools in a `Drawer`, the split panel is forced to the bottom and its position toggle hides; the split panel's maximum is 70 % of the layout height.
+- Touch: region buttons are `IconButton`; the separator has a 16 px hit area and pointer drag works with touch (pointer events).
+- Reflow: the content scrolls on its own; no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Alert from '@aziontech/webkit/alert'
+  import AppLayout from '@aziontech/webkit/app-layout'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Button from '@aziontech/webkit/button'
+  import GlobalHeader from '@aziontech/webkit/global-header'
+  import HelpPanel from '@aziontech/webkit/help-panel'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import Link from '@aziontech/webkit/link'
+  import Menu from '@aziontech/webkit/menu'
+  import MenuGroup from '@aziontech/webkit/menu-group'
+  import MenuItem from '@aziontech/webkit/menu-item'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import Sidebar from '@aziontech/webkit/sidebar'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import { ref } from 'vue'
+
+  const toolsOpen = ref(true)
+  const splitPanelOpen = ref(true)
+  const notice = ref(true)
+
+  const crumbs = [{ label: 'Services', href: '#' }, { label: 'web-app-prod' }]
+</script>
+
+<template>
+  <div class="h-dvh">
+    <AppLayout
+      v-model:tools-open="toolsOpen"
+      v-model:split-panel-open="splitPanelOpen"
+      split-panel-title="web-app-prod"
+      tools-label="Help: Services"
+    >
+      <template #navigation="{ drawer }">
+        <Sidebar
+          aria-label="Main navigation"
+          :resizable="!drawer"
+          :collapsible="!drawer"
+        >
+          <Menu role="presentation">
+            <MenuGroup>
+              <MenuItem
+                label="Home"
+                icon="ai ai-home"
+                href="#"
+              />
+              <MenuItem
+                label="Services"
+                icon="ai ai-edge-application"
+                href="#"
+                selected
+              />
+              <MenuItem
+                label="Variables"
+                icon="ai ai-variables"
+                href="#"
+              />
+            </MenuGroup>
+          </Menu>
+        </Sidebar>
+      </template>
+
+      <template #header="{ compact, openNavigation, toggleTools }">
+        <GlobalHeader aria-label="Console">
+          <GlobalHeader.Left class="justify-start!">
+            <IconButton
+              v-if="compact"
+              icon="pi pi-bars"
+              aria-label="Open navigation"
+              kind="outlined"
+              size="medium"
+              @click="openNavigation"
+            />
+          </GlobalHeader.Left>
+          <GlobalHeader.Middle />
+          <GlobalHeader.Right>
+            <IconButton
+              icon="pi pi-question-circle"
+              aria-label="Help"
+              kind="outlined"
+              size="medium"
+              :aria-pressed="toolsOpen"
+              @click="toggleTools"
+            />
+          </GlobalHeader.Right>
+        </GlobalHeader>
+      </template>
+
+      <template #notifications>
+        <Alert
+          v-if="notice"
+          severity="info"
+          closable
+          @close="notice = false"
+        >
+          Scheduled maintenance on Nov 20 from 02:00 to 03:00 UTC. Services keep serving traffic.
+        </Alert>
+      </template>
+
+      <template #breadcrumbs>
+        <Breadcrumb :items="crumbs" />
+      </template>
+
+      <main class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
+        <PageHeader
+          title="web-app-prod"
+          description="The service that answers shop.example.com."
+        />
+        <div class="flex flex-wrap gap-(--spacing-xs)">
+          <Button
+            label="Show details"
+            kind="outlined"
+            size="medium"
+            @click="splitPanelOpen = true"
+          />
+        </div>
+      </main>
+
+      <template #split-panel>
+        <KeyValuePairs aria-label="Service details">
+          <KeyValuePairs.Item label="Status">
+            <StatusIndicator
+              severity="success"
+              label="Active"
+            />
+          </KeyValuePairs.Item>
+          <KeyValuePairs.Item label="Domain">shop.example.com</KeyValuePairs.Item>
+          <KeyValuePairs.Item label="Last deploy">Nov 10, 2026, 14:32</KeyValuePairs.Item>
+        </KeyValuePairs>
+      </template>
+
+      <template #tools>
+        <HelpPanel aria-label="Help: Services">
+          <HelpPanel.Header
+            title="Services"
+            description="Where your domains meet the code that answers them."
+          />
+          <HelpPanel.Section title="What is a service?">
+            <p>A service binds one or more domains to the code and rules that answer them.</p>
+          </HelpPanel.Section>
+          <HelpPanel.Links>
+            <Link
+              label="Services documentation"
+              href="https://www.azion.com/en/documentation/"
+              target="_blank"
+            />
+          </HelpPanel.Links>
+        </HelpPanel>
+      </template>
+    </AppLayout>
+  </div>
+</template>
+```
+
+2 more example(s) in [components/app-layout.md](https://github.com/aziontech/webkit/blob/main/.specs/components/app-layout.md).
+
+---
+
+<!-- components/board.md -->
+
+# Board
+
+> A configurable dashboard grid: the reader arranges the cards. `Board` owns the layout, an array of `{ id, span, height? }` bound with `v-model:layout`, and lays one `Board.Item` per entry on a column grid that collapses to one column in a narrow container. While `editing`, the `ChartCard` inside each item shows its drag handle and resize corner, and those handles report to the board instead of to the page: drag a card onto another or press the arrow keys on its handle to reorder, drag its corner or press the arrow keys on it to resize. Every move and resize is clamped, written back to the layout and announced in a polite live region. Taken from Cloudscape's board and board item, on top of the existing `ChartCard` handles.
+
+- Import: `import BoardRoot from '@aziontech/webkit/board-root'`
+- Compound import (dot notation, not tree-shakeable): `import Board from '@aziontech/webkit/board'`
+- Category: layout · Surface: product · Structure: composition
+- API as JSON: [board.json](https://github.com/aziontech/webkit/blob/main/.specs/board.json)
+
+## When to use
+
+- A dashboard whose reader chooses the order and the size of its cards, and the product keeps that layout as a preference.
+- A grid of cards that must be reorderable from the keyboard and announced to screen readers, not only by mouse.
+
+## Do
+
+- Keep the layout in the page and persist it wherever the product stores preferences; the board never stores it.
+- Offer an explicit Edit layout toggle (`aria-pressed`) and turn `editing` on with it, so handles do not crowd the read-only view.
+- Give every `Board.Item` a `label` (the card's title): it is the name the live region announces.
+- Offer Reset layout once the layout differs from the default.
+- Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable.
+
+## Don’t
+
+- A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `platform/dashboard/analytics-dashboard` block).
+- Two or three panes whose boundary the reader drags → use `resizable`.
+- Reordering the rows of a list or a table → use the table's reorderable rows or `pick-list`.
+- A grid of resources the reader selects, not arranges → use `cards`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- chart-card` — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.
+- [resizable](resizable.md) — split panes with a draggable divider, not a grid of cards.
+- [cards](cards.md) — a selectable collection of item cards with a fixed layout.
+- [page-header](page-header.md) — the title over the board, with the Edit layout and Reset layout actions beside it.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `columns` | `number` | `12` | false | Columns of the grid in a wide container; one column below `@3xl`. |
+| `minSpan` | `number` | `3` | false | Fewest columns an item may span. |
+| `maxSpan` | `number` | `12` | false | Most columns an item may span; capped at `columns`. |
+| `minHeight` | `number` | `240` | false | Smallest height in pixels a resize allows. |
+| `maxHeight` | `number` | `960` | false | Largest height in pixels a resize allows. |
+| `editing` | `boolean` | `false` | false | Shows the drag and resize handles of every card and lets the reader rearrange the board. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `item-move` | `{ id: string; from: number; to: number }` | An item moved, by drop or by the keyboard; zero-based. |
+| `item-resize` | `{ id: string; span: number; height: number \| undefined }` | A resize ended (pointer up or a resize key on the corner). |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | One `Board.Item` per layout entry, in layout order. |
+
+## Sub-component imports
+
+- `@aziontech/webkit/board-item`
+
+## Sub-components
+
+The root ships a compound API: `index.ts` attaches `Item` to the root. The board provides its
+context (`injection-key.ts`) to every `Board.Item`, and each item provides a narrower item context
+that `ChartCard` reads when it renders inside one: the card's `draggable` and `resizable` follow the
+board's `editing`, its span, height and bounds come from the layout entry, and its handles' moves,
+drags and resizes go to the board. `ChartCard` keeps working on its own outside a board.
+
+- `board-item/board-item.vue` — One cell of the grid, an `<li>` that spans the entry's columns (capped at the grid's current column count) and, when the entry has a `height`, that many pixels. It is the drop target while another item is dragged (`data-over` while hovered), registers its `label` for announcements, and returns focus to the handle that moved it.
+  - Props: `itemId: string` (required — the `id` of its layout entry), `label?: string` (default `''` — the name the live region announces; empty uses `Item <position>` from the locale catalog).
+  - Slot: `default` — the item's content, normally one `ChartCard`.
+  - `data-testid` fallback: `layout-board-item`.
+
+Resulting layout:
+
+```
+packages/webkit/src/components/layout/board/
+├── board.vue
+├── board.test.ts
+├── index.ts
+├── injection-key.ts          (BoardContext, BoardItemContext, BoardLayoutItem)
+├── composables/
+│   └── use-board-context.ts  (injects; throws outside a Board)
+└── board-item/
+    └── board-item.vue
+```
+
+Exports:
+
+```jsonc
+"./board": "./src/components/layout/board/index.ts",
+"./board-root": "./src/components/layout/board/board.vue",
+"./board-item": "./src/components/layout/board/board-item/board-item.vue"
+```
+
+Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }`,
+`BoardMoveDirection = 'up' | 'down' | 'left' | 'right'`.
+
+## v-model
+
+| Model            | Type                | Default | Emits           | Notes                                                                                      |
+| ---------------- | ------------------- | ------- | --------------- | ------------------------------------------------------------------------------------------ |
+| `v-model:layout` | `BoardLayoutItem[]` | `[]`    | `update:layout` | Order, span and height of every item. The board emits a new array on every move or resize. |
+
+## States
+
+- Visual states: `default`, `editing`; on `Board.Item`: `over` (a dragged item hovers it), and the card's own `dragging` / `resizing`
+- `data-editing` on the root mirrors `editing`
+- `data-over` on `Board.Item` while it is the drop target
+- `data-item-id` on `Board.Item` carries its `itemId`
+
+## Accessibility
+
+- Visible focus: the board adds no focus stop; the `ChartCard` handles carry `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
+- Keyboard map: on a card's drag handle, `ArrowUp` / `ArrowLeft` move the item one place earlier and `ArrowDown` / `ArrowRight` one place later (mirrored under `rtl`); focus stays on the moved handle. On the resize corner, `ArrowLeft` / `ArrowRight` change the span by one column, `ArrowUp` / `ArrowDown` the height by 24 px, `Home` / `End` jump to the span bounds, `Escape` cancels a pointer resize.
+- ARIA: the grid is a `<ul role="list">` named by `ariaLabel`; each item is an `<li>`. A visually hidden `<p aria-live="polite" aria-atomic="true">` announces each move (`<label> moved to position 2 of 6.`) and each resize (`<label> resized to 6 of 12 columns.`).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the board renders no ink of its own; the drop ring uses `--ring-color`.
+- `motion-reduce:transition-none` on the drop ring transition.
+- Touch target: the handles are the card's; dragging is a pointer gesture with the keyboard as its alternative.
+
+## Right-to-left
+
+- Layout: logical utilities only; the grid flows from the inline start, so the first item sits on the right under `rtl`.
+- Icons: none of its own.
+- Keyboard: the card's handles read arrows logically, so under `rtl` `ArrowLeft` moves an item later and widens it.
+- User data: none.
+
+## Internationalization
+
+| Key                       | English source                                                        | Override prop      |
+| ------------------------- | --------------------------------------------------------------------- | ------------------ |
+| `board.label`             | Dashboard                                                             | `ariaLabel`        |
+| `board.item`              | Item {position}                                                       | `Board.Item label` |
+| `board.moved`             | {label} moved to position {position} of {total}.                      | —                  |
+| `board.resized`           | {label} resized to {span} of {columns} columns.                       | —                  |
+| `board.resizedWithHeight` | {label} resized to {span} of {columns} columns, {height} pixels tall. | —                  |
+
+- Formatting: none; numbers are integers placed in the messages.
+
+## Responsive
+
+- Container queries: `@container/board`; one column below `@3xl` (48rem), `columns` from `@3xl`. An item spans `min(span, current columns)`.
+- Narrow (≤ 640 px or a narrow container): one card a row at full width; reordering still works, span changes take effect once the board is wide again.
+- Touch: dragging needs a pointer; the keyboard map is the alternative.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Board from '@aziontech/webkit/board'
+  import ChartCard from '@aziontech/webkit/chart-card'
+  import StatTile from '@aziontech/webkit/stat-tile'
+  import { ref } from 'vue'
+
+  const tiles = {
+    requests: {
+      title: 'Requests',
+      value: 24910000,
+      unit: '',
+      delta: 4.2,
+      inverse: false,
+      trend: [1.9, 1.8, 1.9, 1.6, 1.8, 1.7, 2.2, 2.2, 2.3, 2.4, 2.5, 2.3]
+    },
+    bandwidth: {
+      title: 'Data transferred',
+      value: 1.2,
+      unit: 'TB',
+      delta: 1.8,
+      inverse: false,
+      trend: [7.5, 8.7, 8.9, 10.2, 10.5, 10.6, 10, 9.8, 10.4, 8.6, 7.4, 8]
+    },
+    errors: {
+      title: 'Error rate',
+      value: 0.41,
+      unit: '%',
+      delta: -0.3,
+      inverse: true,
+      trend: [0.5, 0.48, 0.52, 0.47, 0.45, 0.44, 0.46, 0.43, 0.42, 0.44, 0.41, 0.41]
+    },
+    latency: {
+      title: 'Response time p95',
+      value: 182,
+      unit: 'ms',
+      delta: -3.2,
+      inverse: true,
+      trend: [166, 167, 151, 172, 200, 191, 205, 208, 205, 182, 165, 175]
+    }
+  }
+
+  const layout = ref([
+    { id: 'requests', span: 6 },
+    { id: 'bandwidth', span: 6 },
+    { id: 'errors', span: 4 },
+    { id: 'latency', span: 8 }
+  ])
+</script>
+
+<template>
+  <Board v-model:layout="layout">
+    <Board.Item
+      v-for="item in layout"
+      :key="item.id"
+      :item-id="item.id"
+      :label="tiles[item.id].title"
+    >
+      <ChartCard :aria-label="tiles[item.id].title">
+        <ChartCard.Content>
+          <StatTile
+            :label="tiles[item.id].title"
+            :value="tiles[item.id].value"
+            :unit="tiles[item.id].unit"
+            :delta="tiles[item.id].delta"
+            delta-label="vs previous 24 hours"
+            :inverse="tiles[item.id].inverse"
+            :trend="tiles[item.id].trend"
+          />
+        </ChartCard.Content>
+      </ChartCard>
+    </Board.Item>
+  </Board>
+</template>
+```
+
+1 more example(s) in [components/board.md](https://github.com/aziontech/webkit/blob/main/.specs/components/board.md).
 
 ---
 
