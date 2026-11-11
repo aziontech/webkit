@@ -66,3 +66,24 @@ Two entries changed for M1.10 row 51. `TriggerHost` now looks through a `Tooltip
 | --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------------------------------ |
 | doc-page-header | 26.3          | 26.21           | 26.40        | 26.5       | Raised: its overflow menu's `DropdownMenu.Trigger` carries the larger `TriggerHost`. |
 | confirm-dialog  | 23.6          | 23.48           | 23.71        | 23.8       | Raised: it ships `Dialog.Trigger`, which carries the larger `TriggerHost`.           |
+
+Fifteen new entries for M2.4 (the generative-AI components in `src/components/ai/`). Each budget is
+the measured gzip size plus about 8 %, rounded up to a quarter KB. `streaming-response` carries
+`CodeBlock` (26.75 KB on its own) for fenced code; `chat-message` carries `AiLoading`, `Avatar`,
+`Button`, `IconButton` and `Tooltip`.
+
+| Entry                 | Measured | Budget | Entry              | Measured | Budget |
+| --------------------- | -------- | ------ | ------------------ | -------- | ------ |
+| action-confirmation   | 10.09    | 11     | citation           | 5.51     | 6      |
+| ai-loading            | 2.24     | 2.5    | conversation       | 4.17     | 4.75   |
+| artifact-preview      | 8.89     | 9.75   | prompt-input       | 4.88     | 5.5    |
+| chat-message          | 22.11    | 24     | reasoning          | 4.08     | 4.5    |
+| chat-message-root     | 16.31    | 17.75  | sources            | 2.47     | 2.75   |
+| chat-message-actions  | 1.34     | 1.5    | streaming-response | 29.51    | 32     |
+| chat-message-feedback | 7.67     | 8.5    | suggestion-group   | 1.72     | 2      |
+| tool-call             | 3.07     | 3.5    |                    |          |        |
+
+The catalog budget in `test/mcp/catalog-split.test.mjs` went from 1.5 MB to 1.6 MB: the thirteen AI
+imports and three AI patterns add 58 KB (1,459,260 → 1,517,943 bytes), about 3 KB per component, the
+same as the existing entries. ROADMAP M2.10 row 2 moves the per-import prose out of `catalog.json`
+before M2.9 adds more.

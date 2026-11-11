@@ -1,0 +1,16 @@
+{
+  "component": "artifact-preview",
+  "title": "Components/Primitives/AI/ArtifactPreview",
+  "examples": [
+    {
+      "name": "Code",
+      "summary": "A generated configuration file: file icon, name, size and format, a short code preview, Copy and Open; Open is where the owner shows the full file in a side panel.",
+      "file": "code.vue"
+    },
+    {
+      "name": "Table",
+      "summary": "A generated CSV export with its first rows as an inline table preview and a Download control.",
+      "file": "table.vue"
+    }
+  ]
+}

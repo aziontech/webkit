@@ -33,7 +33,8 @@ Structure and states first, polish last:
   (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation`
 - **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
 - **Foundation:** `/webkit-baseline-ui` (tokens, typography, spacing rhythm)
-- **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz`
+- **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-genai` (AI chat
+  and agent actions)
 - **Polish:** `/webkit-motion-polish` → `/webkit-impeccable-polish`
 - **Verify:** `/webkit-ui-verify` (real browser, both themes, several widths, axe)
 - **Adopting WebKit in an existing app:** `/webkit-ds-adoption`
