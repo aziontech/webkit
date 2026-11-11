@@ -14,12 +14,16 @@ approval step sits between items.
 
 ## How the work runs
 
+- **Nothing is left behind.** Whatever an item does not finish goes, the moment it is found, into
+  the milestone's leftovers item (M1.10, M2.10) with what is missing and why. A milestone closes only
+  when its leftovers item is empty or each remaining row is external and says who owns it.
+
 - **Tests.** During the items only the fast checks run (lint, type-check, compiling every copyable
   SFC, catalog, toolkit tests: one to two minutes). The browser suite, visual, accessibility, RTL and
-  mobile checks run once, in M1.10, and are fixed there.
+  mobile checks run once, in M1.11, and are fixed there.
 - **Parallel agents.** M1.1 and M1.2 run first and alone, because they touch every file. Then
   M1.4–M1.7 (one agent per area), M1.8 and M1.9 run in parallel branches, and are integrated before
-  M1.10. In M2.9 the missing components split by component, one agent each. In Milestone 2, M2.1–M2.3 and M2.4 run in
+  M1.11. In M2.9 the missing components split by component, one agent each. In Milestone 2, M2.1–M2.3 and M2.4 run in
   parallel; M2.5 waits for M2.3.
 
 ## Decisions already taken
@@ -39,7 +43,7 @@ approval step sits between items.
 | Storybook          | Replaced by our own docs site that renders the real files and publishes `llms.txt`.                                                                                   |
 | CLI                | New `add`, `diff`, `search` / `view` and `check`.                                                                                                                     |
 | Who builds         | AI agents, in parallel where possible (see above). AI evaluation of screens runs in M2.7.                                                                             |
-| Who decides        | Nobody in this project: it is fully specified and merges into `main` at the end (M2.10). For components made after it, the M1.3 flow applies.                         |
+| Who decides        | Nobody in this project: it is fully specified and merges into `main` at the end (M2.11). For components made after it, the M1.3 flow applies.                         |
 | Development area   | Material for developing WebKit lives in `.claude/` (and `.specs/`); only `skills/`, `rules/`, `adapters/` and the packages ship.                                      |
 | Surfaces           | Every export is `product`, `marketing` or `docs`; nothing on the marketing or docs surface may disappear unrecorded.                                                  |
 
@@ -76,8 +80,6 @@ What the merge did not change, and where it is handled:
 | Built-in English strings (e.g. `paginator` `aria-label="Previous page"`), no locale layer.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | M1.4          |
 | 162 physical direction utilities (`ml-`, `pr-`, `left-`, `text-right`…) against 79 logical ones; no `dir` handling.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | M1.5 done     |
 | Components adapt to the viewport (`sm:`/`md:`/`lg:` ~440 uses) but only 4 files use container queries, so a component inside a drawer or split view lays out for the window, not its box.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | M1.6          |
-| 162 physical direction utilities (`ml-`, `pr-`, `left-`, `text-right`…) against 79 logical ones; no `dir` handling.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | M1.5          |
-| Components adapt to the viewport (`sm:`/`md:`/`lg:` ~440 uses) but only 4 files use container queries, so a component inside a drawer or split view lays out for the window, not its box. Done: the components that live in panels are containers (M1.6).                                                                                                                                                                                                                                                                                                                                                                                                                           | M1.6          |
 | `catalog.json` is now 7.5 MB (was 4.3 MB); the ESLint plugin and the MCP parse it whole.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | M1.7          |
 
 # Milestone 1 — WebKit complete
@@ -132,10 +134,10 @@ Exit: on a throwaway branch, delete `apps/storybook`; `catalog:build`, the packa
 
 Exit: v6 released; the codemod migrates a copy of the console with zero manual edits.
 
-**Status: done on the branch.** Still open from it: the release itself (with M2.10); running the codemod
+**Status: done on the branch.** Still open from it: the release itself (with M2.11); running the codemod
 on a copy of the console (needs the console repository, M2.9); `.claude/docs/COMPONENT_REQUIREMENTS.md`
 still shows `kind="text"` and `field-*` examples (the file is marked do-not-edit without approval); the
-hook test suite `.claude/hooks/__tests__/run.mjs` keeps its 2 failures from `main` (M2.10); exported type
+hook test suite `.claude/hooks/__tests__/run.mjs` keeps its 2 failures from `main` (M2.11); exported type
 names such as `SeverityTagLevel` keep their v5 names; the `PhoneInput` flag data (~105 KB gzipped) has no
 size budget (M1.7).
 
@@ -213,9 +215,36 @@ them against the SFC.
 states, filters in the URL, saved preferences) plus the components that depend on its API:
 property filter, collection preferences, cards collection. Table and the `table-view` block move to it.
 
-## M1.10 — Full test pass
+## M1.10 — Leftovers of Milestone 1
 
-The only full run of the slow suites, after M1.1–M1.9 are integrated: the browser suite (5,400+
+Everything M1.1–M1.9 did not finish. Each row closes here, before the full test pass.
+
+| #   | From      | Leftover                                                                                                                                       | How it closes                                                                                     |
+| --- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| 1   | M1.4      | Calendar typing understands English only (period hints such as "12 hours", "yesterday", date-field placeholders, start/end date and time text) | Parse and print with `Intl` and the active locale's catalog                                       |
+| 2   | M1.4      | Keycaps (Ctrl, Esc, ⌘) are not translated                                                                                                      | Catalog keys, `Kbd` reads them                                                                    |
+| 3   | M1.4      | The write-time hook does not run the built-in string check (only CI does); no consumer rule about strings                                      | Hook runs `built-in-strings`; `rules/webkit-strings.md`                                           |
+| 4   | M1.5      | Physical gradients (`bg-gradient-to-l/r`, about 6) do not mirror and the lint ignores them                                                     | `rtl:` variants; lint covers them                                                                 |
+| 5   | M1.5      | Specs of components that gained direction logic were not updated (only 7 of ~45)                                                               | Spec notes (Right-to-left) and checksums for each                                                 |
+| 6   | M1.6      | Wizard has no "Step n of N" line when its rail hides                                                                                           | Add it, translated                                                                                |
+| 7   | M1.6      | Select-all is reachable only by screen reader in a stacked table                                                                               | Visible select-all above the stacked rows (with M1.9, which owns Table)                           |
+| 8   | M1.6      | A Card, StatTile or ChartCard as a content-sized flex item collapses to zero width                                                             | Lint warning for that case                                                                        |
+| 9   | M1.6      | Reflow is tested at 320 and 1280 px only; no 200% zoom                                                                                         | Add 768, 1920, 2560 and 200% zoom                                                                 |
+| 10  | M1.2      | The codemod was never run on the console                                                                                                       | Run `migrate v6` on a copy of `azion-console-kit`; fix every gap it shows; record the MANUAL list |
+| 11  | M1.2      | `.claude/docs/COMPONENT_REQUIREMENTS.md` and the `storybook-write` skill still show `kind="text"`, `field-*` and other v5 names                | Update them (no approval needed in this project)                                                  |
+| 12  | M1.2      | The hook test suite has 2 failures inherited from `main` and does not run in CI                                                                | Fix both; add it to CI                                                                            |
+| 13  | M1.2      | Exported type names keep v5 names (`SeverityTagLevel`, `DocCardGroupMobileCols`, …)                                                            | Rename; map them in the codemod                                                                   |
+| 14  | M1.3      | Changes to existing components do not have to add a codemod entry                                                                              | Check: a changed public prop/export without a `src/cli/migrations/` entry fails                   |
+| 15  | M1.1      | Three example folders map to no export (`article-index`, `compare-competitors`, `azion-logo`)                                                  | Map them to their export or move them under the export they document                              |
+| 16  | M1.1–M1.9 | The mandatory `ui-craft` review never ran on the components and blocks this milestone added or changed                                         | Run it on every one; fix findings                                                                 |
+| 17  | M1.7      | `PhoneInput` (~105 KB gzipped with flag data) has no size budget                                                                               | Budget it; load flag data lazily                                                                  |
+
+External (not closable in this repository): the Rubik files must be published on fonts.azion.com
+(until then the jsDelivr fallback serves them); the AI usage check needs a paid session to run.
+
+## M1.11 — Full test pass
+
+The only full run of the slow suites, after M1.1–M1.10 are integrated: the browser suite (5,400+
 tests), the copyable-SFC test (every block and example mounts), visual tests, axe, RTL and locale
 snapshots, the five viewports, runtime budgets, and the browser matrix (last 2 Chrome, Edge,
 Firefox, Safari, iOS Safari, Android Chrome) with the public-API report. Every failure is fixed here.
@@ -328,7 +357,12 @@ themes) is implemented and proven by tests that run on every PR, not once. Start
 that already fixes axe findings (#1169) and extend it until axe, keyboard and screen-reader checks
 cover every component, block and example.
 
-## M2.10 — Close the branch and merge into `main`
+## M2.10 — Leftovers of Milestone 2
+
+Everything M2.1–M2.9 does not finish lands here as a row (from, leftover, how it closes) and closes
+before the branch is closed.
+
+## M2.11 — Close the branch and merge into `main`
 
 | #   | Item                         | Detail                                                                                                                                                                                                                                                                                                                                                                             |
 | --- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -343,7 +377,7 @@ cover every component, block and example.
 Visual baselines (0.3) are taken on the new model (Playwright over `examples/` and `blocks/`, M2.5),
 not on Storybook. Re-check every row against the code before running this item.
 
-Before the merge the full suites run again (as in M1.10), so everything Milestone 2 added — the
+Before the merge the full suites run again (as in M1.11), so everything Milestone 2 added — the
 M2.9 components above all — is covered.
 
 Exit: merged into `main` and released.
