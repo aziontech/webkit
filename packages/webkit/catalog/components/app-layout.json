@@ -22,7 +22,7 @@
  ],
  "bestPractices": [
   "One `AppLayout` per page, at the root. Do not nest them.",
-  "Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer.",
+  "Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer; call `closeNavigation` from the scope when an item is chosen in the drawer.",
   "Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.",
   "Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.",
   "Use the split panel for the selected item of a collection. Close it when the selection clears.",

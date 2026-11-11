@@ -93,7 +93,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Blocks: Shells
 
-- [Console (shells/console)](blocks/shells/console.md): The application shell every signed-in page renders inside.
+- [Console (shells/console)](blocks/shells/console.md): The application shell every signed-in page renders inside, built on `AppLayout`.
 - [Documentation (shells/documentation)](blocks/shells/documentation.md): The documentation shell.
 - [Website (shells/website)](blocks/shells/website.md): The marketing shell.
 
