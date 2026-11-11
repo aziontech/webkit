@@ -102,6 +102,10 @@ Cancel and Upgrade, side by side from `md`, full width below.
 
 Mounted once with the drawers. A failure no section owns (the payment service did not answer) is `toast.error` with Retry, and the drawer stays open with the entries kept; a successful upgrade closes both drawers and toasts `The account was upgraded to Pro.`
 
+### W. Card brand — `PaymentBrand` (required)
+
+The plate before the card on file in the Payment method section, named after the brand.
+
 ## Do
 
 - Disable every field and secondary action while the upgrade submits, and release the lock when it ends, on success and on failure.

@@ -38,6 +38,10 @@ Country or region, defaulting to the account's country.
 
 The PCI notice, `severity="info"`, `size="small"`, under the fields. A declined card adds a `danger` `Alert` at the top of the form, and the number field takes the invalid state with `The issuer declined this card.`
 
+### G. Card brand — `PaymentBrand` (required)
+
+The plate before `Ending in 8888`, `brand` as the payment API returns it. It is named after the brand (`Visa`) because the row text says only the last four digits.
+
 ## Do
 
 - Show only the last four digits of the card on file.
@@ -46,7 +50,7 @@ The PCI notice, `severity="info"`, `size="small"`, under the fields. A declined 
 
 ## Don't
 
-- Don't render the brand plate as a raster image; it is an inline mark in theme tokens.
+- Don't draw the brand plate by hand or as a raster image; `PaymentBrand` draws it in theme tokens.
 - Don't toast a card error; a declined or invalid card is an `Alert` in this card plus the field's invalid state.
 
 ## Copy
@@ -59,7 +63,7 @@ The PCI notice, `severity="info"`, `size="small"`, under the fields. A declined 
 
 ## Accessibility
 
-- The brand plate is `aria-hidden`; the row text carries the information.
+- The brand plate is an image named after the brand, so the row reads `Visa, Ending in 8888`; set `decorative` on it only when the row text already names the brand.
 - Autocomplete tokens let password managers and browsers fill the card.
 - When Change opens the form, move focus to the first field; on Cancel or Update, back to Change.
 

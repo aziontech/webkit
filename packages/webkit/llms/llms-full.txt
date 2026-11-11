@@ -1825,7 +1825,7 @@ The code of every state is in [blocks/headers/site-header.md](blocks/headers/sit
 - Surface: product
 - Source: `blocks/platform/account/change-plan-drawer/change-plan-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/change-plan-drawer")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CardPricing](../../../components/card-pricing.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [Field](../../../components/field.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CardPricing](../../../components/card-pricing.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [Field](../../../components/field.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -1934,6 +1934,10 @@ Cancel and Upgrade, side by side from `md`, full width below.
 
 Mounted once with the drawers. A failure no section owns (the payment service did not answer) is `toast.error` with Retry, and the drawer stays open with the entries kept; a successful upgrade closes both drawers and toasts `The account was upgraded to Pro.`
 
+### W. Card brand — `PaymentBrand` (required)
+
+The plate before the card on file in the Payment method section, named after the brand.
+
 ## Do
 
 - Disable every field and secondary action while the upgrade submits, and release the lock when it ends, on success and on failure.
@@ -1993,7 +1997,7 @@ The code of every state is in [blocks/platform/account/change-plan-drawer.md](bl
 - Surface: product
 - Source: `blocks/platform/account/onboarding-form/onboarding-form.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/onboarding-form")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Label](../../../components/label.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Progress](../../../components/progress.md), [RadioCards](../../../components/radio-cards.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Label](../../../components/label.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Progress](../../../components/progress.md), [RadioCards](../../../components/radio-cards.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -2120,12 +2124,12 @@ The code of every state is in [blocks/platform/account/onboarding-form.md](block
 
 # PaymentMethodCard (`platform/account/payment-method-card`)
 
-> The Payment method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert` and `Button`; the Visa plate is an inline monochrome card-brand mark drawn in theme tokens (`--bg-surface`, `--border-default`, `--text-default`), since webkit ships no card-brand asset.
+> The Payment method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert`, `Button` and `PaymentBrand` (the monochrome card-brand plate in theme tokens).
 
 - Surface: product
 - Source: `blocks/platform/account/payment-method-card/payment-method-card.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/payment-method-card")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Select](../../../components/select.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [PaymentBrand](../../../components/payment-brand.md), [Select](../../../components/select.md)
 - Skills: `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -2170,6 +2174,10 @@ Country or region, defaulting to the account's country.
 
 The PCI notice, `severity="info"`, `size="small"`, under the fields. A declined card adds a `danger` `Alert` at the top of the form, and the number field takes the invalid state with `The issuer declined this card.`
 
+### G. Card brand — `PaymentBrand` (required)
+
+The plate before `Ending in 8888`, `brand` as the payment API returns it. It is named after the brand (`Visa`) because the row text says only the last four digits.
+
 ## Do
 
 - Show only the last four digits of the card on file.
@@ -2178,7 +2186,7 @@ The PCI notice, `severity="info"`, `size="small"`, under the fields. A declined 
 
 ## Don't
 
-- Don't render the brand plate as a raster image; it is an inline mark in theme tokens.
+- Don't draw the brand plate by hand or as a raster image; `PaymentBrand` draws it in theme tokens.
 - Don't toast a card error; a declined or invalid card is an `Alert` in this card plus the field's invalid state.
 
 ## Copy
@@ -2191,7 +2199,7 @@ The PCI notice, `severity="info"`, `size="small"`, under the fields. A declined 
 
 ## Accessibility
 
-- The brand plate is `aria-hidden`; the row text carries the information.
+- The brand plate is an image named after the brand, so the row reads `Visa, Ending in 8888`; set `decorative` on it only when the row text already names the brand.
 - Autocomplete tokens let password managers and browsers fill the card.
 - When Change opens the form, move focus to the first field; on Cancel or Update, back to Change.
 
@@ -17549,6 +17557,103 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ```
 
 2 more example(s) in [components/overline.md](https://github.com/aziontech/webkit/blob/main/.specs/components/overline.md).
+
+---
+
+<!-- components/payment-brand.md -->
+
+# Payment Brand
+
+> The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB) drawn in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Discover, Elo, Hipercard, UnionPay, or an unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
+
+- Import: `import PaymentBrand from '@aziontech/webkit/payment-brand'`
+- Category: content · Surface: product · Structure: monolithic
+- API as JSON: [payment-brand.json](https://github.com/aziontech/webkit/blob/main/.specs/payment-brand.json)
+
+## When to use
+
+- A payment method row, a checkout summary or a billing table names the card on file: the plate sits before `Ending in 4242` or `Visa •••• 4242`.
+- A list of saved cards where the brand helps the reader tell them apart.
+
+## Do
+
+- Pass the brand as the payment API returns it; the plate normalizes `American Express`, `american_express`, `Diners Club` and casing.
+- When the row text already says the brand (`Visa •••• 4242`), set `decorative` so the name is not read twice; when the text says only `Ending in 4242`, leave the plate named.
+- Keep the plate at `medium` in rows and forms, `small` inside dense tables.
+
+## Don’t
+
+- The Azion logo → use `Brand`.
+- A partner or integration logo (Git providers, clouds) → use the product's logo asset or an `Avatar`.
+- A status or category of the card (expired, default) → use `Tag` beside the plate.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [brand](brand.md) — the same idea for the Azion lockup: an inline mark, sized by token.
+- [tag](tag.md) — put `Default` or `Expired` next to the plate, not inside it.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `brand` | `string` | `''` | false | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`…). Unknown values draw the generic card glyph. |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms. |
+| `label` | `string` | `undefined` | false | Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand. |
+| `decorative` | `boolean` | `false` | false | Hide the plate from assistive technology when the text next to it already names the brand. |
+
+## States
+
+- `data-brand` on the root: `visa` | `mastercard` | `amex` | `diners` | `jcb` | `discover` | `elo` | `hipercard` | `unionpay` | `unknown`.
+- `data-size`: `small` | `medium`.
+- `data-glyph`: `mark` when the brand has a drawn mark, `generic` otherwise.
+
+## Accessibility
+
+- The root is `role="img"` named by `label` or the brand's name; with `decorative` it is `aria-hidden="true"` and has no role.
+- The SVG inside is `aria-hidden` and not focusable; the plate takes no focus.
+- Contrast: the mark is `--text-default` on `--bg-surface` (above 4.5:1 in both themes); forced colors draw it in `CanvasText` because it uses `currentColor`.
+
+## Right-to-left
+
+- Layout: the plate is symmetric; no logical spacing inside it.
+- Icons: brand marks are not mirrored (they are logos).
+- Keyboard: none.
+- User data: none.
+
+## Internationalization
+
+| Key                    | English source | Override prop |
+| ---------------------- | -------------- | ------------- |
+| `paymentBrand.unknown` | `Card`         | `label`       |
+
+- Brand names (`Visa`, `Mastercard`, `American Express`, `Diners Club`, `JCB`, `Discover`, `Elo`, `Hipercard`, `UnionPay`) are trademarks and are not translated.
+
+## Responsive
+
+- Container queries: none.
+- Narrow: fixed size; `shrink-0` so a row never squeezes it.
+- Touch: not interactive.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import PaymentBrand from '@aziontech/webkit/payment-brand'
+</script>
+
+<template>
+  <div class="flex items-center gap-(--spacing-sm)">
+    <PaymentBrand brand="visa" />
+    <span class="text-label-md text-(--text-default)">Ending in 4242</span>
+  </div>
+</template>
+```
+
+1 more example(s) in [components/payment-brand.md](https://github.com/aziontech/webkit/blob/main/.specs/components/payment-brand.md).
 
 ---
 

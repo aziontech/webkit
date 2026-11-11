@@ -6585,6 +6585,47 @@
    "examplesFile": "catalog/examples/overflow-count.json",
    "docsFile": "catalog/components/overflow-count.json"
   },
+  "payment-brand": {
+   "import": "@aziontech/webkit/payment-brand",
+   "target": "./src/components/content/payment-brand/payment-brand.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/payment-brand",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "brand",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`…). Unknown values draw the generic card glyph."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand."
+    },
+    {
+     "name": "decorative",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Hide the plate from assistive technology when the text next to it already names the brand."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/payment-brand.json",
+   "docsFile": "catalog/components/payment-brand.json"
+  },
   "key-value-pairs-root": {
    "import": "@aziontech/webkit/key-value-pairs-root",
    "target": "./src/components/content/key-value-pairs/key-value-pairs.vue",
@@ -23850,6 +23891,7 @@
     "PanelContent",
     "PanelFooter",
     "PanelHeader",
+    "PaymentBrand",
     "Select",
     "Separator",
     "toast",
@@ -23874,6 +23916,7 @@
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/payment-brand",
     "@aziontech/webkit/select",
     "@aziontech/webkit/separator",
     "@aziontech/webkit/toast",
@@ -23937,6 +23980,7 @@
     "PanelContent",
     "PanelFooter",
     "PanelHeader",
+    "PaymentBrand",
     "Progress",
     "RadioCards",
     "Select",
@@ -23967,6 +24011,7 @@
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/payment-brand",
     "@aziontech/webkit/progress",
     "@aziontech/webkit/radio-cards",
     "@aziontech/webkit/select",
@@ -23994,7 +24039,7 @@
    "title": "Templates/Platform/Account/PaymentMethodCard",
    "source": "blocks/platform/account/payment-method-card/payment-method-card.vue",
    "surface": "product",
-   "summary": "The Payment method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert` and `Button`; the Visa plate is an inline monochrome card-brand mark drawn in theme tokens (`--bg-surface`, `--border-default`, `--text-default`), since webkit ships no card-brand asset.",
+   "summary": "The Payment method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert`, `Button` and `PaymentBrand` (the monochrome card-brand plate in theme tokens).",
    "intents": [
     "payment method",
     "credit card form",
@@ -24030,6 +24075,7 @@
     "Card",
     "Field",
     "Input",
+    "PaymentBrand",
     "Select"
    ],
    "imports": [
@@ -24038,6 +24084,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/field",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/payment-brand",
     "@aziontech/webkit/select"
    ],
    "primary": "Default",

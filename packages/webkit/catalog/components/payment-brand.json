@@ -1,0 +1,21 @@
+{
+ "purpose": "The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB) drawn in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Discover, Elo, Hipercard, UnionPay, or an unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.",
+ "useWhen": [
+  "A payment method row, a checkout summary or a billing table names the card on file: the plate sits before `Ending in 4242` or `Visa •••• 4242`.",
+  "A list of saved cards where the brand helps the reader tell them apart."
+ ],
+ "avoidWhen": [
+  "The Azion logo → use `Brand`.",
+  "A partner or integration logo (Git providers, clouds) → use the product's logo asset or an `Avatar`.",
+  "A status or category of the card (expired, default) → use `Tag` beside the plate."
+ ],
+ "related": [
+  "brand` — the same idea for the Azion lockup: an inline mark, sized by token.",
+  "tag` — put `Default` or `Expired` next to the plate, not inside it."
+ ],
+ "bestPractices": [
+  "Pass the brand as the payment API returns it; the plate normalizes `American Express`, `american_express`, `Diners Club` and casing.",
+  "When the row text already says the brand (`Visa •••• 4242`), set `decorative` so the name is not read twice; when the text says only `Ending in 4242`, leave the plate named.",
+  "Keep the plate at `medium` in rows and forms, `small` inside dense tables."
+ ]
+}

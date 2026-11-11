@@ -1040,6 +1040,10 @@ export const toolCall = {
   output: 'Output'
 } as const
 
+export const paymentBrand = {
+  unknown: 'Card'
+} as const
+
 export const en = {
   actionConfirmation,
   aiLoading,
@@ -1158,5 +1162,6 @@ export const en = {
   tree,
   unsavedChanges,
   tutorialPanel,
-  wizard
+  wizard,
+  paymentBrand
 }

@@ -928,5 +928,8 @@ export const es: Messages = {
     previous: 'Anterior',
     next: 'Siguiente',
     submit: 'Crear'
+  },
+  paymentBrand: {
+    unknown: 'Tarjeta'
   }
 }
