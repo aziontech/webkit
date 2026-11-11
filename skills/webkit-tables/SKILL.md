@@ -1,6 +1,6 @@
 ---
 name: webkit-tables
-description: Data tables on @aziontech/webkit — one data-driven <Table :data :columns row-key> with a column model (principal, grow, enableSorting, kind:'action', hideable) and a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters, scrolling its body internally via the h-full/min-h-0 chain. Ships a fixed set of cell recipes so every table reads the same — principal name cell, Tag/status-severity cell (one chip per row, a category chip one rounded severity), actions DropdownMenu cell, copy-value cell, "+N" overflow Popover, a Last Modified cell (Avatar + relative time in one column), the cross-resource link (the name, a 12px pi-external-link, and a tooltip naming the destination) and the domain cell built from it, with its copy button pinned to the cell's end edge for common-width alignment. The tabular companion to /webkit-form and /webkit-ui-states.
+description: Data tables on @aziontech/webkit — one data-driven <Table> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records and the density / wrap / stripe preferences, with a column model (principal, grow, enableSorting, kind:'action', hideable) and a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters, scrolling its body internally via the h-full/min-h-0 chain. Ships a fixed set of cell recipes so every table reads the same — principal name cell, Tag/status-severity cell (one chip per row, a category chip one rounded severity), actions DropdownMenu cell, copy-value cell, "+N" overflow Popover, a Last Modified cell (Avatar + relative time in one column), the cross-resource link (the name, a 12px pi-external-link, and a tooltip naming the destination) and the domain cell built from it, with its copy button pinned to the cell's end edge for common-width alignment. The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
 last_updated: 2026-11-11
 scope: general
@@ -44,6 +44,45 @@ or `node_modules/@aziontech/webkit/catalog.json` — never by reading a componen
 Tables are **data-driven**, not hand-authored rows: pass `:data` + `:columns` and render each column
 through a `#cell-<accessorKey>` slot. Never build `<tr>`/`<td>` by hand, and never restyle the Table's
 internals — compose inside its slots.
+
+### Bind it to `useCollection` — the default for any list
+
+A table that lists records is a collection: bind it to `useCollection`
+(`@aziontech/webkit/use-collection`, see `/webkit-lists`) and let the composable own the filter, the
+sort, the page, the selection and the saved preferences. One `v-bind` carries all of it:
+
+```vue
+<script setup>
+  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import Table from '@aziontech/webkit/table'
+  import { useCollection } from '@aziontech/webkit/use-collection'
+
+  const { tableProps, propertyFilterProps } = useCollection({
+    items: applications, // or fetch: ({ filter, sort, page, pageSize, signal }) => api(…)
+    columns,
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10 },
+    selection: {},
+    preferences: { storageKey: 'applications-table' },
+    url: true
+  })
+</script>
+
+<template>
+  <PropertyFilter v-bind="propertyFilterProps" />
+  <Table
+    v-bind="tableProps"
+    :bordered="false"
+  >
+    <!-- #cell-* slots -->
+  </Table>
+</template>
+```
+
+`tableProps` sets `manualSorting` / `manualFiltering` / `manualPagination`, so the table renders the one
+page it is given; the header checkbox selects that page and the selection survives paging. The columns
+arrive ordered and hidden per the saved preferences, with `density`, `wrapLines` and `striped`. Pass
+`:data` + `paginated` by hand only for a short, static table with no filter (a settings sub-list).
 
 ```vue
 <script setup>
@@ -98,6 +137,10 @@ const columns = [
 - **`enableSorting: true`** per sortable column (with `enable-sorting` on the root).
 
 ### Toolbar + applied filters
+
+A list page puts its `PropertyFilter` and `CollectionPreferences` **above** the card, bound to
+`useCollection` (`/webkit-lists`). The in-table toolbar below is for a table that is its own small
+surface (a drawer, a panel) and does not page through a collection.
 
 The toolbar is a fixed, ordered set of compound `Table.*` controls in the `#toolbar` slot; the
 applied-filter chips render in `#filters` via `Table.AppliedFilters`. `filterFields` (`{ id, label,
@@ -164,6 +207,29 @@ visually hidden, so screen readers keep them. Nothing to configure:
   drops under the title and wraps. Keep `Table.Search` `flex-1` so it takes the free line.
 - A hand-composed table (`Table.Header` / `Table.Row` without `columns`) never stacks; prefer the
   data-driven API in anything that can be narrow.
+
+### Thousands of rows — `virtual`
+
+A table that must show every row at once (a log, an export preview) with more than a few hundred rows
+sets `virtual`: only the rows in view (plus 8 above and below) render, the rest are space, so 10,000 rows
+mount and scroll fast. The viewport scrolls within `max-height` (40rem when unset); `estimate-row-height`
+(48) is the first guess until a row is measured. The root keeps `aria-rowcount` and every row its
+`aria-rowindex`. A paged list does not need it — page instead.
+
+```vue
+<Table :data="logLines" :columns="columns" virtual max-height="32rem" />
+```
+
+### Density, wrapped lines and stripes
+
+`density="compact"` shrinks the body rows, `wrap-lines` lets cell text (and any `truncate` inside a
+cell) wrap instead of ellipsizing, `striped` shades every other body row. They are the person's choice,
+not the page's: let `CollectionPreferences` set them through `useCollection` instead of hard-coding them.
+
+### Selection in a narrow box
+
+In the stacked layout the column headers are hidden, so the table renders a visible, labelled **Select
+all rows** checkbox above the stacked rows. Nothing to configure; do not add your own.
 
 ## Cell recipes
 
@@ -484,6 +550,9 @@ destructive actions in their own `DropdownMenu.Group`.
 ## Checklist
 
 - [ ] Table is data-driven: `:data` + `:columns` + `row-key`, rows via `#cell-<key>` — no hand-built `<tr>`.
+- [ ] A table that lists a collection is bound with `v-bind="tableProps"` from `useCollection`; filters, sort, page and selection are not kept in loose refs.
+- [ ] More than a few hundred rows on one screen → `virtual` with a `max-height`; otherwise paginate.
+- [ ] Density, wrap and stripes come from the saved preferences, not hard-coded per page.
 - [ ] Exactly one `principal: true` column; the actions column is `{ kind: 'action', hideable: false }`.
 - [ ] `grow: N` on long columns (repository, domain, timestamps); no fixed pixel widths.
 - [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · ColumnSelector; `#filters` → `Table.AppliedFilters`.

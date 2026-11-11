@@ -3,7 +3,7 @@
   "name": "TableView",
   "title": "Templates/Platform/View/TableView",
   "surface": "product",
-  "summary": "The canonical first-level list page: a medium page heading with the resource name and its one-line description, the Documentation and Create actions on the medium step (on a phone they stack below the copy, each at full width), then the controls row, the applied-filter chips and the resource table, laid out with the console page column and section rhythm. The controls are wired to the table: the filters narrow the rows and send the table back to its first page, the search drives the table’s global filter, the columns panel drives its column visibility, Refresh puts it in its loading state and Download CSV exports it. Any resource index takes this shape with its own columns. When the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then a small secondary Create and a small outlined Docs on one row), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`.",
+  "summary": "The canonical first-level list page: a medium page heading with the resource name and its one-line description, the Documentation and Create actions on the medium step (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then a small secondary Create and a small outlined Docs on one row), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -97,7 +97,18 @@
     "registro de atividades",
     "table view",
     "index table",
-    "visualização em tabela"
+    "visualização em tabela",
+    "property filter",
+    "filter tokens",
+    "collection preferences",
+    "table preferences",
+    "saved preferences",
+    "filters in the url",
+    "shareable filters",
+    "use collection",
+    "filtro por propriedade",
+    "preferências da tabela",
+    "filtros na url"
   ],
   "skills": ["webkit-lists", "webkit-tables", "webkit-ui-states"],
   "primary": {
@@ -107,7 +118,7 @@
   "variants": [
     {
       "name": "Empty",
-      "summary": "Every resource deleted on an account that is not new: the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with a small secondary Create Resource and a small outlined Docs button.",
+      "summary": "Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with a small secondary Create Resource and a small outlined Docs button.",
       "file": "variants/empty.vue"
     }
   ]

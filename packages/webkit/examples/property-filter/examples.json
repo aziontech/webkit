@@ -1,0 +1,16 @@
+{
+  "component": "property-filter",
+  "title": "Components/Primitives/Data/PropertyFilter",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One field that suggests a property, then an operator, then a value, and turns each choice into a removable token (`Status = Active`). Typed text without a property becomes a free-text token. With two tokens or more, a Match all / Match any switch combines them; Clear filters removes every token and the count says how many items match.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithCollection",
+      "summary": "Bound to `useCollection`: `propertyFilterProps` feeds the query, the properties and the match count, and the table rows narrow as tokens are added.",
+      "file": "with-collection.vue"
+    }
+  ]
+}

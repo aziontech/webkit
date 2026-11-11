@@ -56,6 +56,12 @@ export const es: Messages = {
     timezone: 'Zona horaria',
     localTimezone: 'Local'
   },
+  cards: {
+    label: 'Elementos',
+    selectAll: 'Seleccionar todos los elementos',
+    emptyTitle: 'Aún no hay elementos',
+    emptyDescription: 'Los elementos que crees aparecen aquí.'
+  },
   carousel: {
     next: 'Diapositiva siguiente',
     previous: 'Diapositiva anterior',
@@ -82,6 +88,30 @@ export const es: Messages = {
   },
   codeBlock: {
     copy: 'Copiar código'
+  },
+  collectionPreferences: {
+    trigger: 'Preferencias',
+    title: 'Preferencias',
+    confirm: 'Confirmar',
+    cancel: 'Cancelar',
+    pageSize: 'Elementos por página',
+    pageSizeOption: {
+      one: '{count} elemento',
+      other: '{count} elementos'
+    },
+    columns: 'Columnas',
+    columnsDescription: 'Elige qué columnas se muestran y en qué orden.',
+    alwaysShown: 'Siempre visible',
+    moveUp: 'Mover {column} hacia arriba',
+    moveDown: 'Mover {column} hacia abajo',
+    display: 'Visualización',
+    wrapLines: 'Ajustar líneas',
+    wrapLinesDescription: 'Mostrar el texto completo de cada celda.',
+    striped: 'Filas alternas',
+    stripedDescription: 'Sombrear una de cada dos filas.',
+    density: 'Densidad',
+    comfortable: 'Cómoda',
+    compact: 'Compacta'
   },
   command: {
     empty: 'No se encontraron resultados.',
@@ -261,6 +291,37 @@ export const es: Messages = {
   },
   popover: {
     close: 'Cerrar'
+  },
+  propertyFilter: {
+    label: 'Filtrar',
+    placeholder: 'Filtrar por propiedad o texto',
+    suggestions: 'Sugerencias',
+    useText: 'Usar: “{text}”',
+    properties: 'Propiedades',
+    operators: 'Operadores',
+    values: 'Valores',
+    tokens: 'Filtros aplicados',
+    operation: 'Combinar filtros',
+    matchAll: 'Todos',
+    matchAny: 'Cualquiera',
+    and: 'y',
+    or: 'o',
+    clear: 'Borrar filtros',
+    removeToken: 'Quitar filtro {token}',
+    matches: {
+      one: '{count} resultado',
+      other: '{count} resultados'
+    },
+    equals: 'Igual a',
+    notEquals: 'Distinto de',
+    contains: 'Contiene',
+    notContains: 'No contiene',
+    startsWith: 'Empieza por',
+    notStartsWith: 'No empieza por',
+    greater: 'Mayor que',
+    less: 'Menor que',
+    greaterOrEqual: 'Mayor o igual que',
+    lessOrEqual: 'Menor o igual que'
   },
   resizable: {
     handle: 'Redimensionar panel'

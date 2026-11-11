@@ -372,6 +372,54 @@ Paths in `file` and `examplesFile` are relative to the folder that holds `catalo
 - `Chart` keeps an even sample of at most 1,000 rows in its visually hidden data table; `tableView`
   still shows every row.
 
+### Collections
+
+v6 adds `useCollection` (`@aziontech/webkit/use-collection`) and three components that bind to it:
+`PropertyFilter` (`@aziontech/webkit/property-filter`), `CollectionPreferences`
+(`@aziontech/webkit/collection-preferences`) and `Cards` (`@aziontech/webkit/cards`). Nothing is
+removed, and the codemod changes nothing here: this is the shape a list page moves to when you touch it.
+
+A list that kept its own `search`, `filters`, `pagination` and `columnVisibility` refs, filtered `:data`
+in a `computed` and rewound the page in a `watch` becomes one call:
+
+```vue
+<script setup>
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import Table from '@aziontech/webkit/table'
+  import { useCollection } from '@aziontech/webkit/use-collection'
+
+  const { tableProps, propertyFilterProps, preferencesProps } = useCollection({
+    items: rows,
+    columns,
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10 },
+    preferences: { storageKey: 'resources-table' },
+    url: true
+  })
+</script>
+
+<template>
+  <PropertyFilter v-bind="propertyFilterProps" />
+  <CollectionPreferences v-bind="preferencesProps" />
+  <Table v-bind="tableProps" />
+</template>
+```
+
+- A server-side list passes `fetch({ filteringText, filter, sort, page, pageSize, signal })` returning
+  `{ items, total }` instead of `items`, and drops its own `manualSorting` / `manualPagination` /
+  `rowCount` wiring: `tableProps` sets them.
+- The chip filter bar of the `webkit-lists` skill (a `{ fieldId: values[] }` state behind one Popover)
+  becomes `PropertyFilter` tokens: each field is a property with `options`, each picked value a
+  `property = value` token, and values of one field are combined with Match any.
+- The search field beside it goes: a token without a property searches the text fields.
+- `Table` keeps its API. It gains `density`, `wrapLines`, `striped`, `virtual` and
+  `estimateRowHeight` (all off by default), and in the stacked layout its select-all is a visible
+  checkbox above the rows instead of a screen-reader-only header cell.
+- The `platform/view/table-view` block runs on `useCollection` with `PropertyFilter` and
+  `CollectionPreferences`; `platform/view/card-view` is new. Copy them again through the MCP
+  (`get_pattern`) to pick the change up.
+
 ## 5. Unchanged
 
 Theme tokens (apart from the sans stack above), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style

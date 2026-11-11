@@ -12,6 +12,10 @@ import TableRow from '@aziontech/webkit/table-row'
 import Tag from '@aziontech/webkit/tag'
 import { ref } from 'vue'
 
+import VirtualRowsExample from '../../../../../../../packages/webkit/examples/table/virtual-rows.vue'
+import virtualRowsSource from '../../../../../../../packages/webkit/examples/table/virtual-rows.vue?raw'
+import WithCollectionExample from '../../../../../../../packages/webkit/examples/table/with-collection.vue'
+import withCollectionSource from '../../../../../../../packages/webkit/examples/table/with-collection.vue?raw'
 import { toSfc } from '../../../_shared/story-source'
 
 const components = {
@@ -655,6 +659,37 @@ const meta = {
         category: 'props'
       }
     },
+    wrapLines: {
+      control: 'boolean',
+      description: 'Data-driven mode: cell text wraps onto several lines instead of truncating.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
+    },
+    striped: {
+      control: 'boolean',
+      description: 'Data-driven mode: every other body row takes the raised surface.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
+    },
+    density: {
+      control: 'inline-radio',
+      options: ['comfortable', 'compact'],
+      description: 'Row density: `compact` shrinks body rows and cell padding.',
+      table: {
+        type: { summary: "'comfortable' | 'compact'" },
+        defaultValue: { summary: "'comfortable'" },
+        category: 'props'
+      }
+    },
+    virtual: {
+      control: 'boolean',
+      description:
+        'Data-driven mode: render only the rows in view, for thousands of rows. The viewport scrolls within `maxHeight` (40rem when empty).',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
+    },
+    estimateRowHeight: {
+      control: 'number',
+      description: 'Row height (px) assumed in `virtual` mode until a row is measured.',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '48' }, category: 'props' }
+    },
     // --- events ---
     'onUpdate:sorting': {
       action: 'update:sorting',
@@ -1019,6 +1054,32 @@ export const Empty = {
           { cols: columns, rowsLiteral: 'const rows = []' }
         )
       }
+    }
+  }
+}
+
+export const VirtualRows = {
+  render: () => ({ components: { Example: VirtualRowsExample }, template: '<Example />' }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Ten thousand rows with `virtual`: only the rows in view render (plus a few above and below), the rest are space, so the table mounts and scrolls fast. The viewport scrolls within `max-height` (40rem when empty); `estimate-row-height` is the starting guess until a row is measured.'
+      },
+      source: { code: virtualRowsSource }
+    }
+  }
+}
+
+export const WithCollection = {
+  render: () => ({ components: { Example: WithCollectionExample }, template: '<Example />' }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Server mode of `useCollection`: `fetch` receives the text, sort, page and page size (and an abort signal) and returns one page and the total; `tableProps` binds data, loading, sorting, pagination and selection in one `v-bind`.'
+      },
+      source: { code: withCollectionSource }
     }
   }
 }

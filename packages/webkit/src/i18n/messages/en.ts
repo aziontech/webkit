@@ -60,6 +60,13 @@ export const calendar = {
   localTimezone: 'Local'
 } as const
 
+export const cards = {
+  label: 'Items',
+  selectAll: 'Select all items',
+  emptyTitle: 'No items yet',
+  emptyDescription: 'Items you create show here.'
+} as const
+
 export const carousel = {
   next: 'Next slide',
   previous: 'Previous slide',
@@ -90,6 +97,31 @@ export const chip = {
 
 export const codeBlock = {
   copy: 'Copy code'
+} as const
+
+export const collectionPreferences = {
+  trigger: 'Preferences',
+  title: 'Preferences',
+  confirm: 'Confirm',
+  cancel: 'Cancel',
+  pageSize: 'Page size',
+  pageSizeOption: {
+    one: '{count} item',
+    other: '{count} items'
+  },
+  columns: 'Columns',
+  columnsDescription: 'Choose which columns show, and their order.',
+  alwaysShown: 'Always shown',
+  moveUp: 'Move {column} up',
+  moveDown: 'Move {column} down',
+  display: 'Display',
+  wrapLines: 'Wrap lines',
+  wrapLinesDescription: 'Show the whole text of every cell.',
+  striped: 'Striped rows',
+  stripedDescription: 'Shade every other row.',
+  density: 'Density',
+  comfortable: 'Comfortable',
+  compact: 'Compact'
 } as const
 
 export const command = {
@@ -303,6 +335,38 @@ export const popover = {
   close: 'Close'
 } as const
 
+export const propertyFilter = {
+  label: 'Filter',
+  placeholder: 'Filter by property or text',
+  suggestions: 'Suggestions',
+  useText: 'Use: “{text}”',
+  properties: 'Properties',
+  operators: 'Operators',
+  values: 'Values',
+  tokens: 'Applied filters',
+  operation: 'Combine filters',
+  matchAll: 'Match all',
+  matchAny: 'Match any',
+  and: 'and',
+  or: 'or',
+  clear: 'Clear filters',
+  removeToken: 'Remove filter {token}',
+  matches: {
+    one: '{count} match',
+    other: '{count} matches'
+  },
+  equals: 'Equals',
+  notEquals: 'Does not equal',
+  contains: 'Contains',
+  notContains: 'Does not contain',
+  startsWith: 'Starts with',
+  notStartsWith: 'Does not start with',
+  greater: 'Greater than',
+  less: 'Less than',
+  greaterOrEqual: 'Greater than or equal to',
+  lessOrEqual: 'Less than or equal to'
+} as const
+
 export const resizable = {
   handle: 'Resize panel'
 } as const
@@ -481,11 +545,13 @@ export const en = {
   breadcrumb,
   browserFrame,
   calendar,
+  cards,
   carousel,
   chart,
   chartCard,
   chip,
   codeBlock,
+  collectionPreferences,
   command,
   comparisonTable,
   confirmDialog,
@@ -509,8 +575,8 @@ export const en = {
   kbd,
   label,
   link,
-  logView,
   logoWall,
+  logView,
   menu,
   miniButton,
   navigationMenu,
@@ -521,6 +587,7 @@ export const en = {
   phoneInput,
   pickList,
   popover,
+  propertyFilter,
   resizable,
   sectionHeader,
   settingsSection,

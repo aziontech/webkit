@@ -6799,6 +6799,41 @@
      "default": "true",
      "required": "false",
      "doc": "Data-driven mode: when the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of a horizontally scrolling grid. Set false to keep the grid at every width."
+    },
+    {
+     "name": "wrapLines",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: cell text wraps onto several lines instead of truncating."
+    },
+    {
+     "name": "striped",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: every other body row takes the raised surface."
+    },
+    {
+     "name": "density",
+     "type": "'comfortable' | 'compact'",
+     "default": "'comfortable'",
+     "required": "false",
+     "doc": "Row density: `compact` shrinks body rows and cell padding."
+    },
+    {
+     "name": "virtual",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout."
+    },
+    {
+     "name": "estimateRowHeight",
+     "type": "number",
+     "default": "48",
+     "required": "false",
+     "doc": "Row height (px) assumed in `virtual` mode until a row is measured."
     }
    ],
    "events": [
@@ -6900,7 +6935,7 @@
      "notes": "Data-driven mode: shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions."
     }
    ],
-   "purpose": "Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Pagination`](./pagination.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](../.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](../packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable).",
+   "purpose": "Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Pagination`](./pagination.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](../.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, the row height measured from the first rendered row). **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](../packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives the data-driven mode in both client and server modes without any new API on the table: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `pagination`, `rowCount`, `rowsPerPageOptions`, `enableRowSelection`, `rowSelection`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages.",
    "useWhen": [
     "Records with the same fields shown in rows and columns, where the reader compares, sorts, selects or acts on rows (resource lists, logs, usage breakdowns).",
     "A list needs a toolbar for search, structured filters, column visibility, CSV export or refresh — the `Table.*` toolbar parts drive the table through context.",
@@ -7132,6 +7167,41 @@
      "default": "true",
      "required": "false",
      "doc": "Data-driven mode: when the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of a horizontally scrolling grid. Set false to keep the grid at every width."
+    },
+    {
+     "name": "wrapLines",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: cell text wraps onto several lines instead of truncating."
+    },
+    {
+     "name": "striped",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: every other body row takes the raised surface."
+    },
+    {
+     "name": "density",
+     "type": "'comfortable' | 'compact'",
+     "default": "'comfortable'",
+     "required": "false",
+     "doc": "Row density: `compact` shrinks body rows and cell padding."
+    },
+    {
+     "name": "virtual",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout."
+    },
+    {
+     "name": "estimateRowHeight",
+     "type": "number",
+     "default": "48",
+     "required": "false",
+     "doc": "Row height (px) assumed in `virtual` mode until a row is measured."
     }
    ],
    "events": [
@@ -7233,7 +7303,7 @@
      "notes": "Data-driven mode: shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions."
     }
    ],
-   "purpose": "Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Pagination`](./pagination.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](../.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](../packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable).",
+   "purpose": "Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Pagination`](./pagination.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](../.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, the row height measured from the first rendered row). **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](../packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives the data-driven mode in both client and server modes without any new API on the table: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `pagination`, `rowCount`, `rowsPerPageOptions`, `enableRowSelection`, `rowSelection`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages.",
    "useWhen": [
     "Records with the same fields shown in rows and columns, where the reader compares, sorts, selects or acts on rows (resource lists, logs, usage breakdowns).",
     "A list needs a toolbar for search, structured filters, column visibility, CSV export or refresh — the `Table.*` toolbar parts drive the table through context.",
@@ -7379,6 +7449,287 @@
    "parent": "table",
    "treeShakeableImport": "@aziontech/webkit/table-refresh-button",
    "surface": "product"
+  },
+  "property-filter": {
+   "import": "@aziontech/webkit/property-filter",
+   "target": "./src/components/data/property-filter/property-filter.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/property-filter",
+   "category": "data",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "query",
+     "type": "PropertyFilterQuery",
+     "default": "undefined",
+     "required": "false",
+     "doc": "The tokens and how they combine. Supports v-model:query."
+    },
+    {
+     "name": "properties",
+     "type": "FilteringProperty[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Properties the suggestions offer, with their operators and values."
+    },
+    {
+     "name": "totalCount",
+     "type": "number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Items that match the query, announced next to the tokens. Hidden when unset."
+    },
+    {
+     "name": "placeholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Placeholder of the field. Empty uses the locale catalog."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the field. Empty uses the locale catalog."
+    },
+    {
+     "name": "freeText",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Accepts typed text with no property as a free-text token."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the field and the tokens."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:query",
+     "payload": "PropertyFilterQuery",
+     "notes": "A token was added or removed, the operation changed, or all cleared."
+    }
+   ],
+   "purpose": "One field that filters a collection by properties and free text, after Cloudscape's property filter. Typing suggests a property, then an operator, then a value, and each choice becomes a removable token (`Status = Active`); text typed without a property becomes a free-text token. Two or more tokens combine with Match all (and) or Match any (or). It edits a `PropertyFilterQuery` and never filters anything itself: `useCollection` (or the server) applies the query, and `propertyFilterProps` binds the query, the properties and the match count in one `v-bind`.",
+   "useWhen": [
+    "A list or table that people narrow by several fields at once (status, region, owner) and by text.",
+    "Any collection driven by `useCollection`, client or server mode.",
+    "Filters that must survive a reload or a shared link: the query serializes into the URL through `useCollection`."
+   ],
+   "avoidWhen": [
+    "A single text search over a short list → use `input` bound to `filterProps`.",
+    "A few fixed choices always on screen → use `toggle-group` or `chip` filters.",
+    "A structured filter builder with its own panel inside a table toolbar → use `table-filter`."
+   ],
+   "related": [
+    "use-collection` — applies the query; `propertyFilterProps` is the binding.",
+    "table` — the collection it usually filters.",
+    "cards` — the card form of a collection.",
+    "collection-preferences` — the panel that sits beside it in the controls row."
+   ],
+   "bestPractices": [
+    "Give every property with a closed set of values its `options`, so values are suggested and tokens print labels.",
+    "Set `type: 'number'` or `type: 'date'` on ordered properties to offer `>`, `<`, `>=`, `<=`.",
+    "Bind `totalCount` so people hear how many items match after each change.",
+    "Name the field after the collection (`aria-label=\"Filter resources\"`)."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/property-filter.json"
+  },
+  "collection-preferences": {
+   "import": "@aziontech/webkit/collection-preferences",
+   "target": "./src/components/data/collection-preferences/collection-preferences.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/collection-preferences",
+   "category": "data",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "preferences",
+     "type": "CollectionPreferencesValue",
+     "default": "{}",
+     "required": "false",
+     "doc": "The saved preferences. Supports v-model:preferences; changes apply on Confirm."
+    },
+    {
+     "name": "columns",
+     "type": "CollectionPreferencesColumn[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Columns to show, hide and order. Empty hides the columns section."
+    },
+    {
+     "name": "pageSizeOptions",
+     "type": "number[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Page sizes offered. Empty hides the page size section."
+    },
+    {
+     "name": "sections",
+     "type": "CollectionPreferencesSection[]",
+     "default": "['page-size', 'columns', 'wrap-lines', 'striped', 'density']",
+     "required": "false",
+     "doc": "Sections the panel shows, in this order."
+    },
+    {
+     "name": "container",
+     "type": "'dialog' | 'drawer'",
+     "default": "'dialog'",
+     "required": "false",
+     "doc": "Opens in a centered dialog or a side drawer."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Panel title and trigger label. Empty uses the locale catalog."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the trigger."
+    }
+   ],
+   "events": [
+    {
+     "name": "update:preferences",
+     "payload": "CollectionPreferencesValue",
+     "notes": "Confirm was activated."
+    },
+    {
+     "name": "confirm",
+     "payload": "CollectionPreferencesValue",
+     "notes": "Same value, for a handler that is not a model."
+    },
+    {
+     "name": "cancel",
+     "payload": "void",
+     "notes": "Cancel was activated; the draft is discarded."
+    }
+   ],
+   "slots": [
+    {
+     "name": "trigger",
+     "scope": "{ open: () => void }",
+     "notes": "Replaces the cog button; call `open` to open the panel."
+    }
+   ],
+   "purpose": "The preferences panel of a collection, after Cloudscape's collection preferences: a cog button opens a dialog (or a drawer) with the page size, the columns (shown, hidden and ordered; a locked column always shows), wrapped lines, striped rows and density. Changes are a draft until Confirm; Cancel, `Esc` and the close button discard them. It holds no saved state itself: `useCollection` saves the confirmed value in `localStorage` and `preferencesProps` binds the value, the columns and the page sizes in one `v-bind`.",
+   "useWhen": [
+    "A table or card collection whose people choose how many items a page shows and which fields they see.",
+    "Any collection driven by `useCollection`, which saves the result per collection."
+   ],
+   "avoidWhen": [
+    "A single column-visibility toggle inside a table toolbar → use `table-column-selector`.",
+    "Settings of the resource itself (not of how the list shows it) → use a form page or `dialog`."
+   ],
+   "related": [
+    "use-collection` — saves the preferences; `preferencesProps` is the binding.",
+    "table` — takes `density`, `wrapLines`, `striped`, the visible columns and their order.",
+    "cards` — takes the page size and the visible fields.",
+    "property-filter` — sits beside it in the controls row."
+   ],
+   "bestPractices": [
+    "Lock the column that names the item (`locked: true`): a row without its name is unreadable.",
+    "Show only the sections the collection uses (`sections`): cards have no striped rows.",
+    "Keep the trigger at the end of the controls row, after Refresh and Download."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/collection-preferences.json"
+  },
+  "cards": {
+   "import": "@aziontech/webkit/cards",
+   "target": "./src/components/data/cards/cards.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/cards",
+   "category": "data",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "Record<string, unknown>[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The items, one card each."
+    },
+    {
+     "name": "trackBy",
+     "type": "string",
+     "default": "'id'",
+     "required": "false",
+     "doc": "Field that identifies an item; selection keys read it."
+    },
+    {
+     "name": "selectionMode",
+     "type": "'none' | 'single' | 'multi'",
+     "default": "'none'",
+     "required": "false",
+     "doc": "No selection, one card, or several cards with a select-all above them."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows placeholder cards and sets aria-busy while true."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog."
+    }
+   ],
+   "slots": [
+    {
+     "name": "header",
+     "scope": "{ item: Record<string, unknown>; index: number; selected: boolean }",
+     "notes": "Card title; names the card and its selection control."
+    },
+    {
+     "name": "default",
+     "scope": "{ item: Record<string, unknown>; index: number; selected: boolean }",
+     "notes": "Card body: the item's fields."
+    },
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Shown when there are no items."
+    }
+   ],
+   "purpose": "A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It shares Table's item and selection model — `items`, `trackBy`, `selectedKeys` — so `useCollection` binds it through `cardsProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.",
+   "useWhen": [
+    "Items people recognise by a few fields or a picture rather than compare column by column (applications, templates, environments).",
+    "The card form of a list page (`platform/view/card-view`), filtered and paged by `useCollection`."
+   ],
+   "avoidWhen": [
+    "Records compared, sorted or scanned across many fields → use `table`.",
+    "A fixed marketing grid of features or links → use `card-grid`.",
+    "A single content box → use `card`."
+   ],
+   "related": [
+    "use-collection` — filters, pages and selects; `cardsProps` is the binding.",
+    "table` — the same collection as rows; same item and selection model.",
+    "property-filter`, `collection-preferences`, `pagination` — the controls around it.",
+    "card` — one standalone card."
+   ],
+   "bestPractices": [
+    "Put the item's name, as a link to the item, in the `header` slot: it also names the selection control.",
+    "Keep each card to a handful of label and value pairs; let `collection-preferences` choose which.",
+    "Use `selectionMode=\"multi\"` only when a bulk action exists next to the list."
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/cards.json"
   },
   "pagination": {
    "import": "@aziontech/webkit/pagination",
@@ -24397,6 +24748,12 @@
    "kind": "composable",
    "treeShakeableImport": "@aziontech/webkit/use-locale"
   },
+  "use-collection": {
+   "import": "@aziontech/webkit/use-collection",
+   "target": "./src/composables/use-collection/index.ts",
+   "kind": "composable",
+   "treeShakeableImport": "@aziontech/webkit/use-collection"
+  },
   "vite": {
    "import": "@aziontech/webkit/vite",
    "target": "./src/vite/index.js",
@@ -29453,6 +29810,65 @@
    ],
    "file": "catalog/patterns/platform/states/project-intake.json"
   },
+  "platform/view/card-view": {
+   "name": "CardView",
+   "title": "Templates/Platform/View/CardView",
+   "source": "blocks/platform/view/card-view/card-view.vue",
+   "surface": "product",
+   "summary": "The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the Documentation and Create actions, then the controls row — a `PropertyFilter` (Name, Status, Region, Requests, or free text) that grows to fill the row, a Delete button that counts the selected cards, and `CollectionPreferences` for the page size and which fields every card shows — then `Cards` and a `Pagination`. Each card is named by a link to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter, the sort and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a medium `EmptyState` with a Create action; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`.",
+   "intents": [
+    "card view",
+    "cards view",
+    "card list",
+    "cards list",
+    "resource cards",
+    "grid of cards",
+    "card grid page",
+    "gallery of resources",
+    "applications as cards",
+    "selectable cards",
+    "cards with filters",
+    "cards with pagination",
+    "visualização em cards",
+    "lista em cards",
+    "cartões de recursos",
+    "grade de cards"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-ui-states"
+   ],
+   "components": [
+    "Button",
+    "Cards",
+    "CollectionPreferences",
+    "EmptyState",
+    "PageHeader",
+    "Pagination",
+    "PropertyFilter",
+    "Tag",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/cards",
+    "@aziontech/webkit/collection-preferences",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/pagination-root",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "variants": [
+    {
+     "name": "Empty",
+     "summary": "An account with no applications: the heading and the controls stay, and the cards give way to a medium EmptyState with a small secondary Create Application button."
+    }
+   ],
+   "file": "catalog/patterns/platform/view/card-view.json"
+  },
   "platform/view/file-browser": {
    "name": "FileBrowser",
    "title": "Templates/Platform/View/FileBrowser",
@@ -29769,7 +30185,7 @@
    "title": "Templates/Platform/View/TableView",
    "source": "blocks/platform/view/table-view/table-view.vue",
    "surface": "product",
-   "summary": "The canonical first-level list page: a medium page heading with the resource name and its one-line description, the Documentation and Create actions on the medium step (on a phone they stack below the copy, each at full width), then the controls row, the applied-filter chips and the resource table, laid out with the console page column and section rhythm. The controls are wired to the table: the filters narrow the rows and send the table back to its first page, the search drives the table’s global filter, the columns panel drives its column visibility, Refresh puts it in its loading state and Download CSV exports it. Any resource index takes this shape with its own columns. When the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then a small secondary Create and a small outlined Docs on one row), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`.",
+   "summary": "The canonical first-level list page: a medium page heading with the resource name and its one-line description, the Documentation and Create actions on the medium step (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then a small secondary Create and a small outlined Docs on one row), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`.",
    "intents": [
     "list",
     "list page",
@@ -29859,7 +30275,18 @@
     "registro de atividades",
     "table view",
     "index table",
-    "visualização em tabela"
+    "visualização em tabela",
+    "property filter",
+    "filter tokens",
+    "collection preferences",
+    "table preferences",
+    "saved preferences",
+    "filters in the url",
+    "shareable filters",
+    "use collection",
+    "filtro por propriedade",
+    "preferências da tabela",
+    "filtros na url"
    ],
    "skills": [
     "webkit-lists",
@@ -29868,11 +30295,9 @@
    ],
    "components": [
     "Avatar",
-    "Badge",
     "Button",
-    "CalendarRoot",
     "Card",
-    "Chip",
+    "CollectionPreferences",
     "CopyButton",
     "DropdownMenuGroup",
     "DropdownMenuOption",
@@ -29885,19 +30310,19 @@
     "PopoverContent",
     "PopoverRoot",
     "PopoverTrigger",
+    "PropertyFilter",
     "Skeleton",
-    "Switch",
     "TableRoot",
     "Tag",
-    "Tooltip"
+    "Tooltip",
+    "use-collection",
+    "utils/csv"
    ],
    "imports": [
     "@aziontech/webkit/avatar",
-    "@aziontech/webkit/badge",
     "@aziontech/webkit/button",
-    "@aziontech/webkit/calendar-root",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/chip",
+    "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-option",
@@ -29910,18 +30335,20 @@
     "@aziontech/webkit/popover-content",
     "@aziontech/webkit/popover-root",
     "@aziontech/webkit/popover-trigger",
+    "@aziontech/webkit/property-filter",
     "@aziontech/webkit/skeleton",
-    "@aziontech/webkit/switch",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection",
+    "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",
    "guidelinesSummary": "The first-level index of one resource type. The user lands here from the sidebar to find a resource among many, narrow the list by its attributes, scan its state at a glance and act on it: open it, deploy it, clone it, delete it, or create a new one. Search, filters, columns, refresh and export all act on the same table, so the page is one heading over one band.",
    "variants": [
     {
      "name": "Empty",
-     "summary": "Every resource deleted on an account that is not new: the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with a small secondary Create Resource and a small outlined Docs button."
+     "summary": "Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with a small secondary Create Resource and a small outlined Docs button."
     }
    ],
    "file": "catalog/patterns/platform/view/table-view.json"

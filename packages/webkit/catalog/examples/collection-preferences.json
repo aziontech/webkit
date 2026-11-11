@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The cog button opens a dialog with page size, the columns (show, hide and move up or down; a locked column always shows), wrap lines, striped rows and density. Nothing changes until Confirm; Cancel, Esc and the close button discard the draft.",
+   "sfc": "<script setup>\n  import CollectionPreferences from '@aziontech/webkit/collection-preferences'\n  import { ref } from 'vue'\n\n  const columns = [\n    { id: 'name', label: 'Name', locked: true },\n    { id: 'status', label: 'Status' },\n    { id: 'region', label: 'Region' },\n    { id: 'requests', label: 'Requests' }\n  ]\n\n  const preferences = ref({\n    pageSize: 25,\n    columns: [\n      { id: 'name', visible: true },\n      { id: 'status', visible: true },\n      { id: 'region', visible: false },\n      { id: 'requests', visible: true }\n    ],\n    wrapLines: false,\n    striped: false,\n    density: 'comfortable'\n  })\n</script>\n\n<template>\n  <CollectionPreferences\n    v-model:preferences=\"preferences\"\n    :columns=\"columns\"\n    :page-size-options=\"[10, 25, 50, 100]\"\n  />\n</template>"
+  },
+  {
+   "name": "InADrawer",
+   "summary": "`container=\"drawer\"` opens the panel from the side, `sections` keeps only the columns and the density, and the `trigger` slot replaces the cog with a labelled button.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CollectionPreferences from '@aziontech/webkit/collection-preferences'\n  import { ref } from 'vue'\n\n  const columns = [\n    { id: 'name', label: 'Name', locked: true },\n    { id: 'domain', label: 'Domain' },\n    { id: 'status', label: 'Status' }\n  ]\n\n  const preferences = ref({ density: 'compact' })\n</script>\n\n<template>\n  <CollectionPreferences\n    v-model:preferences=\"preferences\"\n    :columns=\"columns\"\n    :sections=\"['columns', 'density']\"\n    container=\"drawer\"\n  >\n    <template #trigger=\"{ open }\">\n      <Button\n        label=\"Table settings\"\n        icon=\"pi pi-cog\"\n        kind=\"outlined\"\n        size=\"medium\"\n        @click=\"open\"\n      />\n    </template>\n  </CollectionPreferences>\n</template>"
+  }
+ ]
+}

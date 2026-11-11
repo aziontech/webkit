@@ -18,6 +18,7 @@
   } from '@tanstack/vue-table'
   import { useDebounceFn, useElementSize } from '@vueuse/core'
   import {
+    type ComponentPublicInstance,
     computed,
     getCurrentInstance,
     nextTick,
@@ -25,6 +26,7 @@
     provide,
     ref,
     useAttrs,
+    useId,
     useSlots,
     watch
   } from 'vue'
@@ -156,6 +158,16 @@
       exportFilename?: string
       /** Data-driven mode: when the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of a horizontally scrolling grid. Set false to keep the grid at every width. */
       stackable?: boolean
+      /** Data-driven mode: cell text wraps onto several lines instead of truncating. */
+      wrapLines?: boolean
+      /** Data-driven mode: every other body row takes the raised surface. */
+      striped?: boolean
+      /** Row density: `compact` shrinks body rows and cell padding. */
+      density?: 'comfortable' | 'compact'
+      /** Data-driven mode: render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout. */
+      virtual?: boolean
+      /** Row height (px) assumed in `virtual` mode until a row is measured. */
+      estimateRowHeight?: number
     }>(),
     {
       maxHeight: '',
@@ -185,7 +197,12 @@
       state: undefined,
       initialState: undefined,
       exportFilename: 'export.csv',
-      stackable: true
+      stackable: true,
+      wrapLines: false,
+      striped: false,
+      density: 'comfortable',
+      virtual: false,
+      estimateRowHeight: 48
     }
   )
 
@@ -233,8 +250,9 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'data-table'
   )
 
+  const viewportHeight = computed<string>(() => props.maxHeight || (props.virtual ? '40rem' : ''))
   const viewportHeightVar = computed<Record<string, string> | undefined>(() =>
-    props.maxHeight ? { '--table-viewport-height': props.maxHeight } : undefined
+    viewportHeight.value ? { '--table-viewport-height': viewportHeight.value } : undefined
   )
 
   const dataDriven = computed<boolean>(() => props.columns.length > 0)
@@ -444,6 +462,7 @@
   })
 
   const headers = computed(() => table.getHeaderGroups()[0]?.headers ?? [])
+  const visibleColumnKey = computed<string>(() => headers.value.map((h) => h.id).join('|'))
   const rows = computed(() => table.getRowModel().rows)
 
   const RESIZE_FALLBACK_MIN_WIDTH = 40
@@ -766,6 +785,63 @@
       rootWidth.value > 0 &&
       rootWidth.value < stackWidth.value
   )
+  const selectAllId = `${useId()}-select-all`
+
+  const viewportRef = ref<ComponentPublicInstance | null>(null)
+  const scrollTop = ref<number>(0)
+  const viewportClientHeight = ref<number>(0)
+  const measuredRowHeight = ref<number>(0)
+  const VIRTUAL_OVERSCAN = 8
+  const virtualActive = computed<boolean>(
+    () => props.virtual && dataDriven.value && !stacked.value && !props.loading
+  )
+  const rowHeight = computed<number>(
+    () => measuredRowHeight.value || Math.max(1, props.estimateRowHeight)
+  )
+  const windowStart = computed<number>(() => {
+    if (!virtualActive.value) return 0
+    const first = Math.max(0, Math.floor(scrollTop.value / rowHeight.value) - VIRTUAL_OVERSCAN)
+    return first - (first % 2)
+  })
+  const windowEnd = computed<number>(() => {
+    if (!virtualActive.value) return rows.value.length
+    const visible = Math.ceil((viewportClientHeight.value || 640) / rowHeight.value)
+    return Math.min(rows.value.length, windowStart.value + visible + VIRTUAL_OVERSCAN * 2)
+  })
+  const renderedRows = computed(() =>
+    virtualActive.value ? rows.value.slice(windowStart.value, windowEnd.value) : rows.value
+  )
+  const virtualPadding = computed<Record<string, string> | undefined>(() =>
+    virtualActive.value
+      ? {
+          paddingBlockStart: `${windowStart.value * rowHeight.value}px`,
+          paddingBlockEnd: `${(rows.value.length - windowEnd.value) * rowHeight.value}px`
+        }
+      : undefined
+  )
+  const visibleHeightOf = (el: HTMLElement): number =>
+    Math.min(el.clientHeight, globalThis.innerHeight || el.clientHeight)
+  const onViewportScroll = (event: Event): void => {
+    if (!props.virtual) return
+    const el = event.currentTarget as HTMLElement
+    scrollTop.value = el.scrollTop
+    viewportClientHeight.value = visibleHeightOf(el)
+  }
+  const measureRowHeight = (): void => {
+    const el = viewportRef.value?.$el as HTMLElement | undefined
+    if (!el || !virtualActive.value) return
+    viewportClientHeight.value = visibleHeightOf(el)
+    const row = el.querySelector<HTMLElement>('[role="rowgroup"]:not([data-frozen]) > [role="row"]')
+    const height = row?.offsetHeight ?? 0
+    if (height > 0 && Math.abs(height - measuredRowHeight.value) > 1)
+      measuredRowHeight.value = height
+  }
+  watch(
+    () => [virtualActive.value, renderedRows.value.length, props.density, props.wrapLines],
+    () => void nextTick(measureRowHeight),
+    { flush: 'post' }
+  )
+
   const isStackedField = (column: ColumnLike): boolean => {
     const meta = metaOf(column)
     return !meta.principal && (meta.kind ?? 'default') === 'default'
@@ -883,9 +959,12 @@
     :data-testid="testId"
     :data-border="bordered || null"
     :data-stacked="stacked || null"
+    :data-density="density"
+    :data-wrap="wrapLines || null"
     :aria-busy="loading || undefined"
+    :aria-rowcount="virtualActive ? rows.length + 1 : undefined"
     :style="viewportHeightVar"
-    class="@container/table flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
+    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-xxs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
   >
     <div
       v-if="$slots['title'] || $slots['toolbar']"
@@ -934,9 +1013,11 @@
     </TableCaption>
 
     <ScrollArea
-      :orientation="maxHeight ? 'both' : 'horizontal'"
+      ref="viewportRef"
+      :orientation="viewportHeight ? 'both' : 'horizontal'"
       :data-testid="`${testId}__viewport`"
       class="min-w-0 max-h-(--table-viewport-height)"
+      @scroll.passive="onViewportScroll"
     >
       <div
         role="presentation"
@@ -956,6 +1037,7 @@
                 :frozen="selectionFrozen ? 'start' : undefined"
               >
                 <Checkbox
+                  v-if="!stacked"
                   binary
                   :model-value="table.getIsAllPageRowsSelected()"
                   :indeterminate="table.getIsSomePageRowsSelected()"
@@ -987,6 +1069,26 @@
               </TableHeadCell>
             </TableRow>
           </TableHeader>
+
+          <div
+            v-if="stacked && enableRowSelection && !loading && rows.length > 0"
+            role="presentation"
+            :data-testid="`${testId}__stacked-select-all`"
+            class="flex min-h-10 items-center gap-(--spacing-xs) px-(--spacing-sm) pt-(--spacing-xs)"
+          >
+            <Checkbox
+              binary
+              :input-id="selectAllId"
+              :model-value="table.getIsAllPageRowsSelected()"
+              :indeterminate="table.getIsSomePageRowsSelected()"
+              @update:model-value="(v) => table.toggleAllPageRowsSelected(!!v)"
+            />
+            <label
+              :for="selectAllId"
+              class="cursor-pointer text-label-sm text-(--text-default)"
+              >{{ t('table.selectAll') }}</label
+            >
+          </div>
 
           <TableBody
             v-if="loading"
@@ -1050,17 +1152,31 @@
               v-if="!loading && rows.length > 0"
               key="rows"
               :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
+              :style="virtualPadding"
             >
               <TableRow
-                v-for="row in rows"
+                v-for="(row, index) in renderedRows"
                 :key="row.id"
-                v-memo="[row.getIsSelected(), row.original, resizeWidths, autoWidths, stacked]"
+                v-memo="[
+                  row.getIsSelected(),
+                  row.original,
+                  resizeWidths,
+                  autoWidths,
+                  stacked,
+                  striped,
+                  visibleColumnKey,
+                  windowStart + index
+                ]"
                 :selected="row.getIsSelected()"
-                :class="
+                :aria-rowindex="virtualActive ? windowStart + index + 2 : undefined"
+                :class="[
                   stacked
                     ? 'flex-wrap rounded-(--shape-elements) border! py-(--spacing-xxs)'
+                    : undefined,
+                  striped && (windowStart + index) % 2 === 1
+                    ? '[--table-row-bg:var(--bg-surface-raised)]'
                     : undefined
-                "
+                ]"
                 @click="onRowClick($event, row)"
               >
                 <TableCell

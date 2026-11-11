@@ -33,7 +33,27 @@
   {
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
-    "limit": "48 KB"
+    "limit": "50 KB"
+  },
+  {
+    "name": "property-filter",
+    "path": "src/components/data/property-filter/property-filter.vue",
+    "limit": "28 KB"
+  },
+  {
+    "name": "collection-preferences",
+    "path": "src/components/data/collection-preferences/collection-preferences.vue",
+    "limit": "32 KB"
+  },
+  {
+    "name": "cards",
+    "path": "src/components/data/cards/cards.vue",
+    "limit": "19 KB"
+  },
+  {
+    "name": "use-collection",
+    "path": "src/composables/use-collection/index.ts",
+    "limit": "6 KB"
   },
   {
     "name": "frame-box",

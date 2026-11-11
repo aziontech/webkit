@@ -56,6 +56,16 @@
       "name": "Empty",
       "summary": "When `data` is empty, the table renders a default empty state in the `#empty` slot — an illustration, a title, and a short description. Override the `#empty` slot to supply your own copy and call-to-action (e.g. a Create button or a documentation link).",
       "file": "empty.vue"
+    },
+    {
+      "name": "VirtualRows",
+      "summary": "Ten thousand rows with `virtual`: only the rows in view render (plus a few above and below), the rest are space, so the table mounts and scrolls fast. The viewport scrolls within `max-height` (40rem when empty); `estimate-row-height` is the starting guess until a row is measured.",
+      "file": "virtual-rows.vue"
+    },
+    {
+      "name": "WithCollection",
+      "summary": "Server mode of `useCollection`: `fetch` receives the text, sort, page and page size (and an abort signal) and returns one page and the total; `tableProps` binds data, loading, sorting, pagination and selection in one `v-bind`, and selection survives paging.",
+      "file": "with-collection.vue"
     }
   ]
 }
