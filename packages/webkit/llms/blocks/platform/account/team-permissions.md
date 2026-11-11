@@ -1,16 +1,16 @@
 # TeamPermissions (`platform/account/team-permissions`)
 
-> Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`.
+> Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team.
 
 - Surface: product
 - Source: `blocks/platform/account/team-permissions/team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/team-permissions")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
-teams; teams and permissions; roles; roles and permissions; permission matrix; access control; rbac; create team; user groups; times e permissões; papéis e permissões; matriz de permissões; controle de acesso; criar time
+teams; teams and permissions; roles; roles and permissions; permission matrix; access control; rbac; create team; user groups; times e permissões; papéis e permissões; matriz de permissões; controle de acesso; criar time; edit team; team members; editar time; membros do time
 
 Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model.
 
@@ -51,7 +51,17 @@ A search `Input` bound with `v-bind="filterProps"` (name, description, status) a
 
 When the teams do not load, a danger `Alert` with Retry takes the table's place and the heading stays.
 
-### G. Outcomes — `Toaster` (required)
+### G. Members — `Button`, `Avatar`, `IconButton` (EditTeam)
+
+Variant EditTeam only; it adds `Combobox`, `Field`, `SettingsSection`, `Switch`, `Textarea`, `Checkbox`, `Alert` and `SaveBar`.
+
+On the Edit Team page, a Members section above the matrix: an Add member `Combobox` over the account's users (`allow-custom` off, each option the name with the email as its description) with an Add button, then the members as a list with a square `Avatar`, name, email and a Remove `IconButton` named `Remove <name>`. With no member, a dashed sentence says the team grants nothing until someone joins. Members join from existing users only; inviting a new person belongs to `platform/account/users`.
+
+### H. Delete team and save — `ConfirmDialog`, `Button` (EditTeam)
+
+A Delete team section at the end of the form opens a `ConfirmDialog` that says how many members lose what the team grants; the confirm button spins while the request runs. The `SaveBar` says `You have unsaved changes.` and offers Discard and Save changes only once something differs from the saved team; unchanged, it offers Back to teams and a disabled Save changes.
+
+### I. Outcomes — `Toaster` (required)
 
 Duplicate and Delete end in a success toast. Team changes are not deploys, so the toast has no Edit or Redeploy.
 
@@ -75,6 +85,8 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 - **Permissions:** `View <Resource>`, `Edit <Resource>`; the whole set reads `All permissions`.
 - **Matrix hint:** `What this team can see and change. 3 of 15 selected.`
 - **Errors:** `This field is required.` under Name; `Select at least one permission.` above the matrix.
+- **Edit:** the page title is `Edit Team`, the save button `Save changes`; `Team "Developers" updated.` after saving.
+- **Members:** `Add member`, `Search users of this account`, `Remove <name>`; `Choose a user to add.` when Add is pressed with nothing chosen.
 - **Delete:** `Delete team`; `The 12 members of “Developers” lose the permissions it grants, unless another team grants them.`
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
@@ -83,12 +95,14 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 - The matrix is a real `table` with a caption, column headers View and Edit, one `tbody` per area whose first row is a `rowgroup` header holding the area's checkbox, and a row header per resource.
 - Each matrix checkbox is named `View <Resource>` or `Edit <Resource>`; the area checkbox is named by its label and reports mixed when partly checked.
 - After a failed save, focus moves to the name field or to the permissions filter.
+- Members are a list named `Members`; after Remove, focus moves to the next member's Remove button, or to Add member when the list is empty.
 - Table name links say where they go on their tooltip; the row menu is named `Actions for <team>`.
 
 ## States
 
 - Default: five teams (one with every permission, one inactive with no members) with search, refresh, sorting, row menus, duplicate and delete wired.
 - CreateTeam: the create page with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create.
+- EditTeam: a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
 - Empty: no team yet; the heading and an empty state with Create Team.
 - Loading: the first load; the search row and the table's loading rows.
 - Failed: the teams did not load; a danger Alert with Retry.
@@ -97,6 +111,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 
 - `platform/view/table-view` — the list page this one follows.
 - `platform/create/single-page-create` — the create page frame of the CreateTeam variant.
+- `platform/account/users` — invites people and assigns teams per person.
 - `platform/account/activity-history` — where role and team changes are audited.
 - `platform/account/tokens` — tokens act with the permissions of the person who created them.
 
@@ -104,6 +119,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 
 - `Default` — primary (the code below)
 - `CreateTeam` — The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Save in a SaveBar; errors on the name field and above the matrix.
+- `EditTeam` — The Edit Team page: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and a `SaveBar` that offers Discard and Save changes only once something changed.
 - `Empty` — No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table.
 - `Loading` — The first load: the search row and the table's loading rows.
 - `Failed` — The teams did not load: a danger Alert with Retry replaces the table; Retry loads them.

@@ -32,7 +32,12 @@
     "create database",
     "criar banco de dados",
     "table rows",
-    "linhas da tabela"
+    "linhas da tabela",
+    "import csv",
+    "import data",
+    "csv import",
+    "importar csv",
+    "importar dados"
   ],
   "skills": ["webkit-layout", "webkit-tables", "webkit-ui-states"],
   "primary": {
@@ -69,6 +74,11 @@
       "name": "TableData",
       "summary": "The events table in the Data view: 137 rows in a compact `TableRoot` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo.",
       "file": "variants/table-data.vue"
+    },
+    {
+      "name": "ImportCsv",
+      "summary": "An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped.",
+      "file": "variants/import-csv.vue"
     },
     {
       "name": "CreateDatabase",

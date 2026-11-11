@@ -365,3 +365,11 @@ frozen-edge fades and the row pseudo-element drop line. `table-root` stays insid
 | --------------- | ------------- | ------------ | ---------- | --------------------------------------------- |
 | listing-browser | 67.2          | 67.29        | 67.5       | Raised: carries `Table` (both lines' growth). |
 | listing-table   | 58.3          | 58.37        | 58.6       | Raised: carries `Table` (both lines' growth). |
+
+### M2.10 row 47 — PromptInput reference chips are lazy
+
+`PromptInputReferences` (the `References` list of removable `Chip`s) is a `defineAsyncComponent` chunk that downloads the first time a reference exists. `prompt-input` now counts its initial chunk only (`entryOnly`, 2 async chunks excluded): 11.45 → 5.80 KB measured, budget 11.45 → 6 KB. The shortcut menu listbox stays in the entry: the text area drives it synchronously (`aria-controls`, `aria-activedescendant`, the polite count), and its markup is a few hundred bytes.
+
+### M2.10 row 7 — ArtifactCanvas
+
+New entry `artifact-canvas`: 6.32 KB initial chunk (`entryOnly`; `CopyButton`'s fallback is the 2 async chunks), budget 6.5 KB. It carries `ResponseBranches`, `CopyButton` and `IconButton`. The `artifactCanvas` catalog group keeps `webkit-provider` (8.79 KB), `locales/pt-BR` (8.16 KB) and `locales/es` (8.25 KB) inside their budgets.

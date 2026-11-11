@@ -149,6 +149,7 @@
     "./overline": "./src/components/content/overline/overline.vue",
     "./action-confirmation": "./src/components/ai/action-confirmation/action-confirmation.vue",
     "./ai-loading": "./src/components/ai/ai-loading/ai-loading.vue",
+    "./artifact-canvas": "./src/components/ai/artifact-canvas/artifact-canvas.vue",
     "./artifact-preview": "./src/components/ai/artifact-preview/artifact-preview.vue",
     "./chat-message": "./src/components/ai/chat-message/index.ts",
     "./chat-message-root": "./src/components/ai/chat-message/chat-message.vue",

@@ -70,6 +70,14 @@ Variant CreateDatabase only; it is its own page and adds `PageHeader`, `Settings
 
 The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-error rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
 
+### M. Import data from CSV — `Drawer`, `Alert`, `TableRoot`, `Button` (optional)
+
+Variant ImportCsv only; it adds `FileDropzone`, `FileTokenGroup`, `Select`, `SettingsSection`, `PanelFooter` and the `Toaster` with `toast`.
+
+An empty table's Data view offers Insert row and Import data from CSV, and accepts a CSV dropped on the empty state; both open a large drawer `Import data into <table>` in three sections. **File**: a `FileDropzone` with Browse files, then the file as a `FileTokenGroup` token (dismiss to pick another); a header with a blank name, a header with no rows or a file that is not `.csv` is an error on the token. **Map columns**: one row per CSV column with its first value as an example, an arrow, and a `Select` of the table's columns (name, type, `required` for NOT NULL ones) plus Skip; columns are matched by name, ignoring case, when the file is read, and everything else starts on Skip. **Check rows**: a polite sentence `4 of 7 rows are ready to insert. 3 rows have errors and will be skipped.`, the errors per line (`Line 4: active “maybe” is not true or false (bool).`; at most 10, then `And N more.`) and the first five valid rows as a `TableRoot` named `Import preview` under the table's column names. The footer holds Cancel and the primary `Insert 4 rows`.
+
+Validation runs on Insert, as the form-error rule says: a table column mapped twice, a NOT NULL column with no CSV column, nothing mapped, or every row failing shows a danger `Alert` in the section that has to change, and nothing is inserted. A primary key may stay unmapped (the database assigns it). While inserting, the fieldset is disabled and Insert spins; then the drawer closes, the rows appear in the table and a success toast `4 rows inserted into subscribers.` says how many rows were skipped and offers Undo. Importing rows is not a deploy, so Edit and Redeploy do not apply.
+
 ## Do
 
 - Keep both tabs on the same layout: side panel to list, working pane to act.
@@ -95,6 +103,7 @@ The page the Databases list's Create opens, taken from the design sample's creat
 - **Editor placeholder:** one instruction, e.g. "Write your SQL query here".
 - **Search:** names the scope, e.g. "Search tables", "Search queries", "Search templates".
 - **Empty states:** title states the fact and the description says what to do, e.g. "No tables yet" with "Create your first table to store your data."; "Ready to execute" with "Execute a query to see the results here."
+- **Import:** `Import data from CSV` opens `Import data into <table>`; the submit is `Insert <n> rows`; per-line errors read `Line <n>: <column> “<value>” is not <expected> (<type>).` or `<column> is empty and cannot be.`
 - **Row menus:** verb and object, e.g. "Delete table", "Run query", "Delete query".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
@@ -107,6 +116,7 @@ The page the Databases list's Create opens, taken from the design sample's creat
 - On Create Database, the Name error is the input's `aria-describedby` and focus returns to the input after a failed submit.
 - `ToggleGroup`s are named ("Table view", "Result view") and the pagination is named "Results pagination".
 - The templates drawer traps focus while open and closes on Escape.
+- In the import drawer each mapping `Select` is named `Table column for <CSV column>`, the mapping and the per-line errors are named lists, and the ready count is a polite live region, so changing a mapping announces the new count.
 
 ## States
 
@@ -116,6 +126,7 @@ The page the Databases list's Create opens, taken from the design sample's creat
 - Query: the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
 - Templates: the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer behind the Templates button.
 - TableData: the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the toolbar.
+- ImportCsv: the empty subscribers table with the import drawer open on a seven-row file: `plan_name` still on Skip (Insert asks to map `plan`), `referrer` skipped, three lines with errors (a non-boolean, an empty required email, a date that does not parse).
 - CreateDatabase: the create database page with its Name and Active fields; try `acme-store` for the name conflict and a name starting with `offline` for the failed request.
 - Failed: the selected table's rows did not load; the Data view shows a danger `Alert` that names the table and offers Retry.
 

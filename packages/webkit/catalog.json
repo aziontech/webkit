@@ -2290,6 +2290,92 @@
    "examplesFile": "catalog/examples/ai-loading.json",
    "docsFile": "catalog/components/ai-loading.json"
   },
+  "artifact-canvas": {
+   "import": "@aziontech/webkit/artifact-canvas",
+   "target": "./src/components/ai/artifact-canvas/artifact-canvas.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/artifact-canvas",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "File name or title of the artifact (`top-orders.sql`); names the panel."
+    },
+    {
+     "name": "meta",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Facts that help recognize it, after the title: language, size, rows (`SQL · 12 lines`)."
+    },
+    {
+     "name": "kind",
+     "type": "'code' | 'table' | 'document'",
+     "default": "'document'",
+     "required": "false",
+     "doc": "What the artifact is; picks the icon and `data-kind`. The body is always the owner's slot."
+    },
+    {
+     "name": "versions",
+     "type": "number",
+     "default": "1",
+     "required": "false",
+     "doc": "How many versions exist. With more than one, the toolbar shows the `ResponseBranches` pager."
+    },
+    {
+     "name": "copyValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text the Copy control puts on the clipboard, of the version shown. Empty hides Copy."
+    },
+    {
+     "name": "downloadHref",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "URL of the version shown, for Download (`download` takes the title). Empty hides Download."
+    },
+    {
+     "name": "streaming",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "A new version is being generated: the pager locks, the body is `aria-busy` and a polite status says so."
+    }
+   ],
+   "events": [
+    {
+     "name": "close",
+     "payload": "—",
+     "notes": ""
+    },
+    {
+     "name": "copy",
+     "payload": "value: string",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "{ version: number }",
+     "notes": "The artifact of the version shown: a `CodeBlock`, a `TableRoot`, prose. Scrolls inside."
+    },
+    {
+     "name": "actions",
+     "scope": "—",
+     "notes": "Extra icon actions in the toolbar, before Copy and Download (Insert into editor, Run)."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/artifact-canvas.json",
+   "docsFile": "catalog/components/artifact-canvas.json"
+  },
   "artifact-preview": {
    "import": "@aziontech/webkit/artifact-preview",
    "target": "./src/components/ai/artifact-preview/artifact-preview.vue",
@@ -25432,7 +25518,7 @@
    "title": "Templates/Platform/Account/TeamPermissions",
    "source": "blocks/platform/account/team-permissions/team-permissions.vue",
    "surface": "product",
-   "summary": "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`.",
+   "summary": "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team.",
    "intents": [
     "teams",
     "teams and permissions",
@@ -25447,7 +25533,11 @@
     "papéis e permissões",
     "matriz de permissões",
     "controle de acesso",
-    "criar time"
+    "criar time",
+    "edit team",
+    "team members",
+    "editar time",
+    "membros do time"
    ],
    "skills": [
     "webkit-lists",
@@ -25462,6 +25552,7 @@
     "Button",
     "Card",
     "Checkbox",
+    "Combobox",
     "ConfirmDialog",
     "DropdownMenu",
     "EmptyState",
@@ -25484,6 +25575,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/checkbox",
+    "@aziontech/webkit/combobox",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
@@ -25506,6 +25598,10 @@
     {
      "name": "CreateTeam",
      "summary": "The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Save in a SaveBar; errors on the name field and above the matrix."
+    },
+    {
+     "name": "EditTeam",
+     "summary": "The Edit Team page: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and a `SaveBar` that offers Discard and Save changes only once something changed."
     },
     {
      "name": "Empty",
@@ -25845,7 +25941,13 @@
     "assistente virtual",
     "conversa com ia",
     "chat con ia",
-    "asistente de ia"
+    "asistente de ia",
+    "artifact",
+    "artifact canvas",
+    "generated file",
+    "code canvas",
+    "canvas de artefato",
+    "artefato gerado"
    ],
    "skills": [
     "webkit-genai",
@@ -25853,28 +25955,46 @@
     "webkit-microcopy"
    ],
    "components": [
+    "ArtifactCanvas",
+    "ArtifactPreview",
     "Button",
     "ChatMessage",
+    "CodeBlock",
     "Conversation",
     "CopyButton",
+    "Drawer",
+    "DrawerContent",
+    "DrawerOverlay",
+    "DrawerPortal",
+    "DrawerTitle",
     "EmptyState",
     "IconButton",
     "PromptInput",
     "Reasoning",
+    "Resizable",
     "Sources",
     "StreamingResponse",
     "SuggestionGroup",
     "Tag"
    ],
    "imports": [
+    "@aziontech/webkit/artifact-canvas",
+    "@aziontech/webkit/artifact-preview",
     "@aziontech/webkit/button",
     "@aziontech/webkit/chat-message",
+    "@aziontech/webkit/code-block",
     "@aziontech/webkit/conversation",
     "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/drawer",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-overlay",
+    "@aziontech/webkit/drawer-portal",
+    "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/prompt-input",
     "@aziontech/webkit/reasoning",
+    "@aziontech/webkit/resizable",
     "@aziontech/webkit/sources",
     "@aziontech/webkit/streaming-response",
     "@aziontech/webkit/suggestion-group",
@@ -25894,6 +26014,10 @@
     {
      "name": "LongThread",
      "summary": "Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread."
+    },
+    {
+     "name": "Artifact",
+     "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; asking for a change streams a new version into the canvas, which locks its pager while it is written and then shows it."
     }
    ],
    "file": "catalog/patterns/platform/ai/ai-chat.json"
@@ -30951,7 +31075,12 @@
     "create database",
     "criar banco de dados",
     "table rows",
-    "linhas da tabela"
+    "linhas da tabela",
+    "import csv",
+    "import data",
+    "csv import",
+    "importar csv",
+    "importar dados"
    ],
    "skills": [
     "webkit-layout",
@@ -30976,6 +31105,8 @@
     "DrawerTitle",
     "DropdownMenu",
     "EmptyState",
+    "FileDropzone",
+    "FileTokenGroup",
     "GlobalHeader",
     "HelperText",
     "IconButton",
@@ -30987,8 +31118,10 @@
     "PageTabs",
     "PaginationRoot",
     "PanelContent",
+    "PanelFooter",
     "PanelHeader",
     "SaveBar",
+    "Select",
     "SettingRow",
     "SettingsSection",
     "Sidebar",
@@ -31020,6 +31153,8 @@
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/file-dropzone",
+    "@aziontech/webkit/file-token-group",
     "@aziontech/webkit/global-header",
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
@@ -31031,8 +31166,10 @@
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/pagination-root",
     "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/save-bar",
+    "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/sidebar",
@@ -31072,6 +31209,10 @@
     {
      "name": "TableData",
      "summary": "The events table in the Data view: 137 rows in a compact `TableRoot` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo."
+    },
+    {
+     "name": "ImportCsv",
+     "summary": "An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped."
     },
     {
      "name": "CreateDatabase",

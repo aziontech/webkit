@@ -2587,17 +2587,17 @@ The code of every state is in [blocks/platform/account/profile.md](blocks/platfo
 
 # TeamPermissions (`platform/account/team-permissions`)
 
-> Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`.
+> Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team.
 
 - Surface: product
 - Source: `blocks/platform/account/team-permissions/team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/team-permissions")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
-teams; teams and permissions; roles; roles and permissions; permission matrix; access control; rbac; create team; user groups; times e permissões; papéis e permissões; matriz de permissões; controle de acesso; criar time
+teams; teams and permissions; roles; roles and permissions; permission matrix; access control; rbac; create team; user groups; times e permissões; papéis e permissões; matriz de permissões; controle de acesso; criar time; edit team; team members; editar time; membros do time
 
 Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model.
 
@@ -2638,7 +2638,17 @@ A search `Input` bound with `v-bind="filterProps"` (name, description, status) a
 
 When the teams do not load, a danger `Alert` with Retry takes the table's place and the heading stays.
 
-### G. Outcomes — `Toaster` (required)
+### G. Members — `Button`, `Avatar`, `IconButton` (EditTeam)
+
+Variant EditTeam only; it adds `Combobox`, `Field`, `SettingsSection`, `Switch`, `Textarea`, `Checkbox`, `Alert` and `SaveBar`.
+
+On the Edit Team page, a Members section above the matrix: an Add member `Combobox` over the account's users (`allow-custom` off, each option the name with the email as its description) with an Add button, then the members as a list with a square `Avatar`, name, email and a Remove `IconButton` named `Remove <name>`. With no member, a dashed sentence says the team grants nothing until someone joins. Members join from existing users only; inviting a new person belongs to `platform/account/users`.
+
+### H. Delete team and save — `ConfirmDialog`, `Button` (EditTeam)
+
+A Delete team section at the end of the form opens a `ConfirmDialog` that says how many members lose what the team grants; the confirm button spins while the request runs. The `SaveBar` says `You have unsaved changes.` and offers Discard and Save changes only once something differs from the saved team; unchanged, it offers Back to teams and a disabled Save changes.
+
+### I. Outcomes — `Toaster` (required)
 
 Duplicate and Delete end in a success toast. Team changes are not deploys, so the toast has no Edit or Redeploy.
 
@@ -2662,6 +2672,8 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 - **Permissions:** `View <Resource>`, `Edit <Resource>`; the whole set reads `All permissions`.
 - **Matrix hint:** `What this team can see and change. 3 of 15 selected.`
 - **Errors:** `This field is required.` under Name; `Select at least one permission.` above the matrix.
+- **Edit:** the page title is `Edit Team`, the save button `Save changes`; `Team "Developers" updated.` after saving.
+- **Members:** `Add member`, `Search users of this account`, `Remove <name>`; `Choose a user to add.` when Add is pressed with nothing chosen.
 - **Delete:** `Delete team`; `The 12 members of “Developers” lose the permissions it grants, unless another team grants them.`
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
@@ -2670,12 +2682,14 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 - The matrix is a real `table` with a caption, column headers View and Edit, one `tbody` per area whose first row is a `rowgroup` header holding the area's checkbox, and a row header per resource.
 - Each matrix checkbox is named `View <Resource>` or `Edit <Resource>`; the area checkbox is named by its label and reports mixed when partly checked.
 - After a failed save, focus moves to the name field or to the permissions filter.
+- Members are a list named `Members`; after Remove, focus moves to the next member's Remove button, or to Add member when the list is empty.
 - Table name links say where they go on their tooltip; the row menu is named `Actions for <team>`.
 
 ## States
 
 - Default: five teams (one with every permission, one inactive with no members) with search, refresh, sorting, row menus, duplicate and delete wired.
 - CreateTeam: the create page with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create.
+- EditTeam: a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
 - Empty: no team yet; the heading and an empty state with Create Team.
 - Loading: the first load; the search row and the table's loading rows.
 - Failed: the teams did not load; a danger Alert with Retry.
@@ -2684,6 +2698,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 
 - `platform/view/table-view` — the list page this one follows.
 - `platform/create/single-page-create` — the create page frame of the CreateTeam variant.
+- `platform/account/users` — invites people and assigns teams per person.
 - `platform/account/activity-history` — where role and team changes are audited.
 - `platform/account/tokens` — tokens act with the permissions of the person who created them.
 
@@ -2691,6 +2706,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 
 - `Default` — primary (the code below)
 - `CreateTeam` — The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Save in a SaveBar; errors on the name field and above the matrix.
+- `EditTeam` — The Edit Team page: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and a `SaveBar` that offers Discard and Save changes only once something changed.
 - `Empty` — No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table.
 - `Loading` — The first load: the search row and the table's loading rows.
 - `Failed` — The teams did not load: a danger Alert with Retry replaces the table; Retry loads them.
@@ -3081,12 +3097,12 @@ The code of every state is in [blocks/platform/ai/ai-action-approval.md](blocks/
 - Surface: product
 - Source: `blocks/platform/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/ai/ai-chat")`
-- Components: [Button](../../../components/button.md), [ChatMessage](../../../components/chat-message.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [PromptInput](../../../components/prompt-input.md), [Reasoning](../../../components/reasoning.md), [Sources](../../../components/sources.md), [StreamingResponse](../../../components/streaming-response.md), [SuggestionGroup](../../../components/suggestion-group.md), [Tag](../../../components/tag.md)
+- Components: [ArtifactCanvas](../../../components/artifact-canvas.md), [ArtifactPreview](../../../components/artifact-preview.md), [Button](../../../components/button.md), [ChatMessage](../../../components/chat-message.md), [CodeBlock](../../../components/code-block.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [PromptInput](../../../components/prompt-input.md), [Reasoning](../../../components/reasoning.md), [Resizable](../../../components/resizable.md), [Sources](../../../components/sources.md), [StreamingResponse](../../../components/streaming-response.md), [SuggestionGroup](../../../components/suggestion-group.md), [Tag](../../../components/tag.md)
 - Skills: `webkit-genai`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
-ai chat; ai assistant; chatbot; copilot; chat with ai; generative ai chat; assistant page; ask ai; llm chat; conversational ui; prompt and response; streaming response; chat de ia; assistente de ia; assistente virtual; conversa com ia; chat con ia; asistente de ia
+ai chat; ai assistant; chatbot; copilot; chat with ai; generative ai chat; assistant page; ask ai; llm chat; conversational ui; prompt and response; streaming response; chat de ia; assistente de ia; assistente virtual; conversa com ia; chat con ia; asistente de ia; artifact; artifact canvas; generated file; code canvas; canvas de artefato; artefato gerado
 
 A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `platform/ai/ai-chat-drawer`.
 
@@ -3141,6 +3157,12 @@ After the last complete response, two or three questions that narrow it, as wrap
 
 Pinned under the log, centered on the reading width. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter, and Submit becomes Stop while a response is pending or streaming. The disclaimer is its hint.
 
+### J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
+
+Variant Artifact only; it adds `ArtifactPreview`, `ArtifactCanvas`, `Resizable`, `CodeBlock` and a `Drawer` for narrow screens.
+
+When an answer produces something longer than a message (a query, a configuration, a table), the message carries an `ArtifactPreview` with Open and the whole artifact opens in an `ArtifactCanvas` beside the conversation: a `Resizable.Pane` (`min` 320, `max` 880) after a `Resizable.Handle` named `Resize the artifact`, so the reader widens or narrows it with the pointer or the arrow keys. Under the md breakpoint the pane and handle are hidden and Open shows the same canvas in a full-height `Drawer`. Every follow-up that changes the artifact adds a version: the canvas moves to it, `streaming` locks the pager and marks the body busy while it is written, and each message's preview names its version (`Version 3`) and opens that one. Open moves focus to the canvas title; Close (or Escape inside the canvas) hides it and returns focus to the Open that showed it; `Show artifact` in the header brings a closed canvas back.
+
 ## Do
 
 - Show the loading text only after a second; a response that arrives faster streams directly.
@@ -3187,10 +3209,12 @@ Pinned under the log, centered on the reading width. Enter submits, Shift+Enter 
 - Empty: the assistant before the first message, with the empty state and four support prompts; selecting one runs a full response.
 - Streaming: a response arriving with its caret and Stop in the composer, then sources, actions and follow-ups.
 - Error: a failed response with its partial text, the error line and Try again.
+- Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up streams version 3 into it.
 - LongThread: six earlier turns that overflow the log, opened on the newest response.
 
 ## Related
 
+- `artifact-canvas` — the side panel of the Artifact variant; `artifact-preview` — its card in the message.
 - `platform/ai/ai-chat-drawer` — the same conversation in a drawer over a resource page.
 - `platform/ai/ai-action-approval` — when a response proposes a change the reader must authorize.
 - `platform/states/async-submit` — long-running work outside a conversation.
@@ -3202,6 +3226,7 @@ Pinned under the log, centered on the reading width. Enter submits, Shift+Enter 
 - `Streaming` — A response arriving: the reader asked why storefront returns 502 errors and the answer streams in with its caret, a table on the way, the region busy and Stop in the composer; when it ends the sources, actions and follow-up questions appear.
 - `Error` — A response that failed mid-stream: the partial text stays, the error line says the connection was interrupted and Try again regenerates the response in place.
 - `LongThread` — Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread.
+- `Artifact` — An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; asking for a change streams a new version into the canvas, which locks its pager while it is written and then shows it.
 
 Each variant is the same screen in another state: `get_pattern("platform/ai/ai-chat", { variant })`, or the file under `blocks/platform/ai/ai-chat/variants/`.
 
@@ -10842,12 +10867,12 @@ The code of every state is in [blocks/platform/view/marketplace.md](blocks/platf
 - Surface: product
 - Source: `blocks/platform/view/query-editor/query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/query-editor")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PaginationRoot`, `PanelContent`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PaginationRoot`, `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
 
-query editor; sql editor; run query; query results; sql query page; query history; sql code editor; código sql; editor de consultas; editor sql; executar consulta; sql database; database tables; database detail; table schema; data grid; sql templates; banco de dados; banco de dados sql; tabelas do banco; create database; criar banco de dados; table rows; linhas da tabela
+query editor; sql editor; run query; query results; sql query page; query history; sql code editor; código sql; editor de consultas; editor sql; executar consulta; sql database; database tables; database detail; table schema; data grid; sql templates; banco de dados; banco de dados sql; tabelas do banco; create database; criar banco de dados; table rows; linhas da tabela; import csv; import data; csv import; importar csv; importar dados
 
 The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use.
 
@@ -10919,6 +10944,14 @@ Variant CreateDatabase only; it is its own page and adds `PageHeader`, `Settings
 
 The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-error rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
 
+### M. Import data from CSV — `Drawer`, `Alert`, `TableRoot`, `Button` (optional)
+
+Variant ImportCsv only; it adds `FileDropzone`, `FileTokenGroup`, `Select`, `SettingsSection`, `PanelFooter` and the `Toaster` with `toast`.
+
+An empty table's Data view offers Insert row and Import data from CSV, and accepts a CSV dropped on the empty state; both open a large drawer `Import data into <table>` in three sections. **File**: a `FileDropzone` with Browse files, then the file as a `FileTokenGroup` token (dismiss to pick another); a header with a blank name, a header with no rows or a file that is not `.csv` is an error on the token. **Map columns**: one row per CSV column with its first value as an example, an arrow, and a `Select` of the table's columns (name, type, `required` for NOT NULL ones) plus Skip; columns are matched by name, ignoring case, when the file is read, and everything else starts on Skip. **Check rows**: a polite sentence `4 of 7 rows are ready to insert. 3 rows have errors and will be skipped.`, the errors per line (`Line 4: active “maybe” is not true or false (bool).`; at most 10, then `And N more.`) and the first five valid rows as a `TableRoot` named `Import preview` under the table's column names. The footer holds Cancel and the primary `Insert 4 rows`.
+
+Validation runs on Insert, as the form-error rule says: a table column mapped twice, a NOT NULL column with no CSV column, nothing mapped, or every row failing shows a danger `Alert` in the section that has to change, and nothing is inserted. A primary key may stay unmapped (the database assigns it). While inserting, the fieldset is disabled and Insert spins; then the drawer closes, the rows appear in the table and a success toast `4 rows inserted into subscribers.` says how many rows were skipped and offers Undo. Importing rows is not a deploy, so Edit and Redeploy do not apply.
+
 ## Do
 
 - Keep both tabs on the same layout: side panel to list, working pane to act.
@@ -10944,6 +10977,7 @@ The page the Databases list's Create opens, taken from the design sample's creat
 - **Editor placeholder:** one instruction, e.g. "Write your SQL query here".
 - **Search:** names the scope, e.g. "Search tables", "Search queries", "Search templates".
 - **Empty states:** title states the fact and the description says what to do, e.g. "No tables yet" with "Create your first table to store your data."; "Ready to execute" with "Execute a query to see the results here."
+- **Import:** `Import data from CSV` opens `Import data into <table>`; the submit is `Insert <n> rows`; per-line errors read `Line <n>: <column> “<value>” is not <expected> (<type>).` or `<column> is empty and cannot be.`
 - **Row menus:** verb and object, e.g. "Delete table", "Run query", "Delete query".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
@@ -10956,6 +10990,7 @@ The page the Databases list's Create opens, taken from the design sample's creat
 - On Create Database, the Name error is the input's `aria-describedby` and focus returns to the input after a failed submit.
 - `ToggleGroup`s are named ("Table view", "Result view") and the pagination is named "Results pagination".
 - The templates drawer traps focus while open and closes on Escape.
+- In the import drawer each mapping `Select` is named `Table column for <CSV column>`, the mapping and the per-line errors are named lists, and the ready count is a polite live region, so changing a mapping announces the new count.
 
 ## States
 
@@ -10965,6 +11000,7 @@ The page the Databases list's Create opens, taken from the design sample's creat
 - Query: the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
 - Templates: the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer behind the Templates button.
 - TableData: the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the toolbar.
+- ImportCsv: the empty subscribers table with the import drawer open on a seven-row file: `plan_name` still on Skip (Insert asks to map `plan`), `referrer` skipped, three lines with errors (a non-boolean, an empty required email, a date that does not parse).
 - CreateDatabase: the create database page with its Name and Active fields; try `acme-store` for the name conflict and a name starting with `offline` for the failed request.
 - Failed: the selected table's rows did not load; the Data view shows a danger `Alert` that names the table and offers Retry.
 
@@ -10987,6 +11023,7 @@ The page the Databases list's Create opens, taken from the design sample's creat
 - `Templates` — The Editor tab before anything ran, with the Results band ready to execute; the Templates button opens the SQL quick templates drawer, and choosing a card loads its SQL into the editor.
 - `Failed` — The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry.
 - `TableData` — The events table in the Data view: 137 rows in a compact `TableRoot` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo.
+- `ImportCsv` — An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped.
 - `CreateDatabase` — The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, over a save bar with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/query-editor", { variant })`, or the file under `blocks/platform/view/query-editor/variants/`.
@@ -13259,6 +13296,216 @@ _None. Exports: `"./ai-loading"`; type `AiLoadingKind`. Composed DS components: 
 ```
 
 1 more example(s) in [components/ai-loading.md](https://github.com/aziontech/webkit/blob/main/.specs/components/ai-loading.md).
+
+---
+
+<!-- components/artifact-canvas.md -->
+
+# Artifact Canvas
+
+> The side panel that shows one generated artifact in full next to the conversation: a SQL file, a configuration, a table of results, a document. A header names it (title, meta, Close), a toolbar pages through its versions with `ResponseBranches` and offers Copy and Download, and the body scrolls on its own. It is the full view behind `ArtifactPreview`'s Open: the preview sits in the message, the canvas beside the thread. The owner places it in a `Resizable` pane, so the reader can widen it, narrow it or collapse it from the keyboard; the canvas fills whatever the pane gives it. Benchmarks: the artifact or canvas panel of chat assistants (a document beside the thread with versions), Cloudscape's split panel (a resizable side region with its own header and close).
+
+- Import: `import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'`
+- Category: ai · Surface: product · Structure: monolithic
+- API as JSON: [artifact-canvas.json](https://github.com/aziontech/webkit/blob/main/.specs/artifact-canvas.json)
+
+## When to use
+
+- An assistant answer produced something longer than a message can show: a file, a long query, a table, a document the reader will copy or keep.
+- The reader asks for changes to that thing and each answer makes a new version to compare with the earlier ones.
+- The reader reads the artifact and keeps chatting at the same time.
+
+## Do
+
+- Open the canvas from `ArtifactPreview`'s Open, then call `focus()` so the reader lands on its title; on Close return focus to the Open that opened it.
+- Put it in a `Resizable.Pane` with a `min` that keeps the toolbar on one row (about 320 px) and a handle named after the canvas (`Resize the artifact`).
+- Show the newest version when a new one finishes (set `v-model:version` to the last index); while it is generated set `streaming`, which locks the pager and marks the body busy.
+- Keep Copy and Download about the version shown; `copyValue` and `downloadHref` change with `version`.
+- One canvas at a time. Opening another artifact replaces the content and keeps the pane width.
+
+## Don’t
+
+- A short snippet that fits the message → `CodeBlock` or `ArtifactPreview` inside `ChatMessage`.
+- A setting or a form the reader must fill → `Drawer` with the form.
+- Help text about the page → `HelpPanel`.
+- A narrow screen: show the same canvas in a full-height `Drawer` instead of a side pane (see Responsive).
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [artifact-preview](artifact-preview.md) — the card in the message; its Open opens this canvas.
+- [response-branches](response-branches.md) — the version pager the toolbar reuses.
+- [resizable](resizable.md) — the split the owner puts the canvas in (pane, handle, collapse).
+- [chat-message](chat-message.md), `conversation` — the thread beside the canvas.
+- [copy-button](copy-button.md) — the Copy control.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | `—` | true | File name or title of the artifact (`top-orders.sql`); names the panel. |
+| `meta` | `string` | `''` | false | Facts that help recognize it, after the title: language, size, rows (`SQL · 12 lines`). |
+| `kind` | `'code' \| 'table' \| 'document'` | `'document'` | false | What the artifact is; picks the icon and `data-kind`. The body is always the owner's slot. |
+| `versions` | `number` | `1` | false | How many versions exist. With more than one, the toolbar shows the `ResponseBranches` pager. |
+| `copyValue` | `string` | `''` | false | Text the Copy control puts on the clipboard, of the version shown. Empty hides Copy. |
+| `downloadHref` | `string` | `''` | false | URL of the version shown, for Download (`download` takes the title). Empty hides Download. |
+| `streaming` | `boolean` | `false` | false | A new version is being generated: the pager locks, the body is `aria-busy` and a polite status says so. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `close` | `—` |  |
+| `copy` | `value: string` |  |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | { version: number } | The artifact of the version shown: a `CodeBlock`, a `TableRoot`, prose. Scrolls inside. |
+| `actions` | — | Extra icon actions in the toolbar, before Copy and Download (Insert into editor, Run). |
+
+## Sub-components
+
+_none_ — monolithic. The split and the handle are `Resizable`'s; the pager is `ResponseBranches`. Exposes `focus()`, which moves focus to the panel title (`tabindex="-1"`) for the owner to call after opening.
+
+## v-model
+
+| Model             | Type     | Default | Emits            | Notes                                                                 |
+| ----------------- | -------- | ------- | ---------------- | --------------------------------------------------------------------- |
+| `v-model:version` | `number` | `0`     | `update:version` | Zero-based index of the version shown, clamped by `ResponseBranches`. |
+
+## States
+
+- `data-kind` on the root (`code`, `table`, `document`); `data-streaming` while a version is generated.
+- One version: no pager; the toolbar keeps Copy and Download, and is not drawn when neither is set and the `actions` slot is empty.
+- `streaming`: the pager is disabled, the body has `aria-busy="true"`, and the status reads `Generating a new version`.
+- No `copyValue` / `downloadHref`: that control is not drawn.
+
+## Accessibility
+
+- The root is a `section` named by its title (`aria-labelledby`), so it is a region landmark (`top-orders.sql`). The title is an `h2` with `tabindex="-1"`, the target of `focus()`.
+- Close is an `IconButton` named `Close <title>`; Copy `Copy <title>`; Download `Download <title>`. The pager is `ResponseBranches` (`Artifact versions`, `Previous version`, `Next version`, a polite `2 of 3`).
+- The body is a focusable scroll region named `<title> content`, so keyboard readers can scroll a long artifact; it is `aria-busy` while streaming.
+- Keyboard: `Tab` order is title actions, then the toolbar, then the body; `Escape` anywhere inside closes the panel unless an inner control already handled it (`defaultPrevented`). Resizing is `Resizable.Handle`'s (arrow keys, Home, End).
+- The streaming status is a polite live region, announced once when generation starts.
+
+## Right-to-left
+
+- Layout: logical utilities only; the panel's inner layout mirrors, Close sits at the inline end.
+- Icons: the pager chevrons mirror through `ResponseBranches`; the other icons are not directional.
+- Keyboard: none beyond the inner controls.
+- User data: code bodies keep their own direction (`CodeBlock` is LTR); the title is `dir="auto"`.
+
+## Internationalization
+
+| Key                        | English source             | Override prop |
+| -------------------------- | -------------------------- | ------------- |
+| `artifactCanvas.close`     | `Close {title}`            | —             |
+| `artifactCanvas.copy`      | `Copy {title}`             | —             |
+| `artifactCanvas.download`  | `Download {title}`         | —             |
+| `artifactCanvas.versions`  | `Artifact versions`        | —             |
+| `artifactCanvas.content`   | `{title} content`          | —             |
+| `artifactCanvas.streaming` | `Generating a new version` | —             |
+
+- The title and the meta are the owner's text; the title has `dir="auto"`.
+
+## Responsive
+
+- Container queries: none; the canvas fills its pane (`h-full w-full`), and the toolbar wraps.
+- Narrow: under the `md` breakpoint the owner shows the canvas in a full-height `Drawer` instead of a pane; the component is the same.
+- Touch: icon controls are `IconButton` small, with its 40 px touch target.
+- Reflow: no horizontal page scroll at 320 px; wide content scrolls inside the body.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'
+  import ArtifactPreview from '@aziontech/webkit/artifact-preview'
+  import CodeBlock from '@aziontech/webkit/code-block'
+  import Resizable from '@aziontech/webkit/resizable'
+  import { nextTick, ref } from 'vue'
+
+  const versions = [
+    'SELECT * FROM orders;',
+    'SELECT id, customer_id, total\nFROM orders\nORDER BY total DESC;',
+    'SELECT id, customer_id, total\nFROM orders\nWHERE created_at > now() - interval 7 day\nORDER BY total DESC\nLIMIT 10;'
+  ]
+  const version = ref(versions.length - 1)
+  const open = ref(true)
+  const width = ref(420)
+  const canvas = ref(null)
+  const opener = ref(null)
+
+  const show = async () => {
+    open.value = true
+    await nextTick()
+    canvas.value?.focus()
+  }
+  const hide = async () => {
+    open.value = false
+    await nextTick()
+    opener.value?.querySelector('button')?.focus()
+  }
+</script>
+
+<template>
+  <Resizable
+    class="h-(--container-xs) w-full rounded-(--shape-card) border border-(--border-default)"
+    aria-label="Conversation and artifact"
+  >
+    <Resizable.Pane>
+      <div
+        ref="opener"
+        class="flex h-full flex-col gap-(--spacing-sm) overflow-auto p-(--spacing-md)"
+      >
+        <p class="m-0 text-body-sm text-(--text-default)">
+          Here are the ten biggest orders of the last seven days.
+        </p>
+        <ArtifactPreview
+          title="top-orders.sql"
+          meta="SQL"
+          icon="pi pi-code"
+          openable
+          @open="show"
+        />
+      </div>
+    </Resizable.Pane>
+    <Resizable.Handle
+      v-if="open"
+      aria-label="Resize the artifact"
+    />
+    <Resizable.Pane
+      v-if="open"
+      v-model:basis="width"
+      :min="300"
+      :max="720"
+    >
+      <ArtifactCanvas
+        ref="canvas"
+        v-model:version="version"
+        title="top-orders.sql"
+        :meta="`SQL · ${versions[version].split('\n').length} lines`"
+        kind="code"
+        :versions="versions.length"
+        :copy-value="versions[version]"
+        @close="hide"
+      >
+        <CodeBlock
+          :tabs="[{ label: 'SQL', value: 'sql', code: versions[version], language: 'sql' }]"
+          :copyable="false"
+          :bordered="false"
+        />
+      </ArtifactCanvas>
+    </Resizable.Pane>
+  </Resizable>
+</template>
+```
+
+1 more example(s) in [components/artifact-canvas.md](https://github.com/aziontech/webkit/blob/main/.specs/components/artifact-canvas.md).
 
 ---
 

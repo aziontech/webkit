@@ -425,3 +425,35 @@ Scope: new sections `CapabilityGrid`, `ProcessScroll`, `StickyCarousel`, `Consol
 - Decision: the inventory's "`Banner` `art` variants" is a sibling component, `BannerArt`, under `marketing/banner`. `Banner` is an announcement band with its own surfaces; a decorative backdrop for a hero's `background` slot is a different object. It draws WebKit's own `SpinningGlobe` and `NetworkMap`, so the system has one globe and one map. The sample's `MapMesh` traffic (rays and packets over the network map) is not drawn; it is an M2.10 row.
 
 Not verified by the unit tests: styled geometry (the tests run without CSS). The parity screenshots cover it for the cases listed in `m2.9-site-parity.md`.
+
+## M2.10 final leftovers (rows 7, 23, 46, 47)
+
+Scope: new component `ArtifactCanvas` (spec, examples Default and Table) and its use in `ai-chat#Artifact`; `query-editor#ImportCsv`; `team-permissions#EditTeam`; `PromptInput`'s lazy reference chips. Source order: the design sample has `CreateTeam.vue` (edit mode) and the empty-table "Import data from CSV" button with no flow behind it; it has no artifact canvas, so that design follows the chat assistants' canvas pattern and Cloudscape's split panel. A mechanical pass over every new SFC found no raw colours, palette classes or physical direction utilities.
+
+### ArtifactCanvas and ai-chat#Artifact
+
+- Structure: the canvas is the panel only (header, version toolbar, scrolling body); the split, the handle and the collapse are `Resizable`'s, the pager is `ResponseBranches`, Copy is `CopyButton`. Nothing in it re-implements a part the system ships.
+- States: one version (no pager), several, streaming (pager locked, body `aria-busy`, a polite "Generating a new version"), no Copy / Download (controls not drawn, toolbar dropped when empty).
+- Keyboard and focus: Open moves focus to the canvas title (`focus()`), Close and Escape return it to the Open that showed it; an Escape an inner control handled does not close. The body is a named, focusable scroll region.
+- Finding: the first variant hid the pane under `md` with `max-md:hidden` on `Resizable.Pane`/`Handle` and `Button`, which the pattern lint rejects (style override on a WebKit tag). Fixed: a `narrow` flag read from `matchMedia` after mount (server and first client render agree) chooses the pane or a full-height `Drawer`.
+- Finding: a drawer titled like the canvas gave two `top-orders.sql` headings. Fixed: the drawer is named `Artifact` (visually hidden), the canvas keeps the file name.
+- Each message's preview names its version (`Version 2`) and opens that version, so earlier answers stay reachable.
+
+### query-editor#ImportCsv
+
+- Flow: File → Map columns → Check rows → Insert, one drawer, errors only after Insert (form-error rule); a primary key may stay unmapped; rows with errors are skipped and counted in the outcome toast with Undo (not a deploy, so no Edit / Redeploy).
+- Finding: the Skip option showed the raw `__skip` value in the trigger before the list was opened. Fixed with `Select`'s `displayValue`.
+- Finding: the per-line error used `font-medium` and `mt-1`. Fixed: `text-label-sm` and `mt-(--spacing-xxs)`.
+- The mapping arrow mirrors under RTL; the ready count is a polite live region, so changing a mapping announces the new count.
+
+### team-permissions#EditTeam
+
+- From the sample's `CreateTeam.vue` in edit mode, plus the Members section the row asks for: add from the account's users only (`Combobox`, `allow-custom` off, then Add), Remove per member with focus moving to the next Remove or back to Add member.
+- Save changes is disabled until something differs from the saved team; Discard restores it. Delete team is a section at the end of the form behind a `ConfirmDialog` that counts the members who lose access.
+- Finding: `Avatar` normalises its label to two letters, so passing the name drew `AN` for Ana Ribeiro. Fixed: the variant passes the initials.
+
+### PromptInput
+
+- The reference chip list is an async chunk; the shortcut menu stays synchronous because the text area drives it through `aria-activedescendant` on every keystroke. No visual change.
+
+Not verified by the unit tests: styled geometry (the tests run without CSS), the canvas width limits in a real layout.

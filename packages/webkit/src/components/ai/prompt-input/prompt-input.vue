@@ -1,10 +1,18 @@
 <script setup lang="ts">
-  import { computed, nextTick, onMounted, ref, useAttrs, useId, watch } from 'vue'
+  import {
+    computed,
+    defineAsyncComponent,
+    nextTick,
+    onMounted,
+    ref,
+    useAttrs,
+    useId,
+    watch
+  } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
-  import Chip from '../../inputs/chip/chip.vue'
 
   export type PromptInputState = 'ready' | 'submitted' | 'streaming'
 
@@ -80,6 +88,8 @@
     /** Constraint text under the input: a disclaimer or the shortcuts it accepts. */
     hint?(): unknown
   }>()
+
+  const PromptInputReferences = defineAsyncComponent(() => import('./prompt-input-references.vue'))
 
   const attrs = useAttrs()
   const { t } = useTranslate({ promptInput: en.promptInput, promptInputMenu: en.promptInputMenu })
@@ -281,25 +291,14 @@
         class="flex flex-wrap gap-(--spacing-xs) px-(--spacing-xs) pt-(--spacing-xxs)"
       >
         <slot name="attachments" />
-        <ul
+        <PromptInputReferences
           v-if="references.length"
-          :aria-label="t('promptInputMenu.references')"
-          :data-testid="`${testId}__references`"
-          class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0"
-        >
-          <li
-            v-for="reference in references"
-            :key="`${reference.trigger}${reference.value}`"
-          >
-            <Chip
-              :label="`${reference.trigger}${reference.label}`"
-              size="small"
-              removable
-              :disabled="disabled"
-              @remove="removeReference(reference)"
-            />
-          </li>
-        </ul>
+          :references="references"
+          :label="t('promptInputMenu.references')"
+          :disabled="disabled"
+          :test-id="testId"
+          @remove="removeReference"
+        />
       </div>
       <ul
         v-if="menuOpen"

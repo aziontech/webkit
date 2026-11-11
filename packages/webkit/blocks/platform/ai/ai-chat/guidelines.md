@@ -53,6 +53,12 @@ After the last complete response, two or three questions that narrow it, as wrap
 
 Pinned under the log, centered on the reading width. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter, and Submit becomes Stop while a response is pending or streaming. The disclaimer is its hint.
 
+### J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
+
+Variant Artifact only; it adds `ArtifactPreview`, `ArtifactCanvas`, `Resizable`, `CodeBlock` and a `Drawer` for narrow screens.
+
+When an answer produces something longer than a message (a query, a configuration, a table), the message carries an `ArtifactPreview` with Open and the whole artifact opens in an `ArtifactCanvas` beside the conversation: a `Resizable.Pane` (`min` 320, `max` 880) after a `Resizable.Handle` named `Resize the artifact`, so the reader widens or narrows it with the pointer or the arrow keys. Under the md breakpoint the pane and handle are hidden and Open shows the same canvas in a full-height `Drawer`. Every follow-up that changes the artifact adds a version: the canvas moves to it, `streaming` locks the pager and marks the body busy while it is written, and each message's preview names its version (`Version 3`) and opens that one. Open moves focus to the canvas title; Close (or Escape inside the canvas) hides it and returns focus to the Open that showed it; `Show artifact` in the header brings a closed canvas back.
+
 ## Do
 
 - Show the loading text only after a second; a response that arrives faster streams directly.
@@ -99,10 +105,12 @@ Pinned under the log, centered on the reading width. Enter submits, Shift+Enter 
 - Empty: the assistant before the first message, with the empty state and four support prompts; selecting one runs a full response.
 - Streaming: a response arriving with its caret and Stop in the composer, then sources, actions and follow-ups.
 - Error: a failed response with its partial text, the error line and Try again.
+- Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up streams version 3 into it.
 - LongThread: six earlier turns that overflow the log, opened on the newest response.
 
 ## Related
 
+- `artifact-canvas` — the side panel of the Artifact variant; `artifact-preview` — its card in the message.
 - `platform/ai/ai-chat-drawer` — the same conversation in a drawer over a resource page.
 - `platform/ai/ai-action-approval` — when a response proposes a change the reader must authorize.
 - `platform/states/async-submit` — long-running work outside a conversation.
