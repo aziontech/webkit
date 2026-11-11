@@ -303,7 +303,22 @@ Exit: all suites green on the integrated branch.
 
 ## M2.3 — Docs site
 
-Our own docs site that renders `examples/` and `blocks/` with the code beside, foundations included. Replaces Storybook for people.
+Done: `apps/docs` (`@aziontech/webkit-docs`, private), a Vite + Vue Router site prerendered with
+`vite-ssg` (one static HTML per route, hydrated) and built with WebKit itself (`GlobalHeader`,
+`Sidebar`, `Menu`, `Command` search on ⌘K, `DocPageHeader`, `DocProse`, `DocOnThisPage`,
+`CodeBlock`, `Table`, `ThemeSwitcher`), Rubik, light/dark, an RTL toggle and en / pt-BR / es through
+`WebkitProvider`. Pages come from the files: one per component from `catalog.json` (summary,
+import, when to use / not, props / events / slots, every example from `examples/*/examples.json`
+mounted live beside its Shiki-highlighted source, do / don't, accessibility and RTL from
+`.specs/`), one per block from `blocks/**/block.json` (every state in a resizable iframe with 375 /
+768 / 1280 / full widths, source, `guidelines.md`, `npx @aziontech/webkit add <id>`), and
+foundations (color, typography, spacing, radius, shadows, motion, z-index parsed from the theme's
+`globals.css`; getting started, languages, RTL, layout and devices, accessibility from the README and
+`rules/`). "Copy for AI" on every component and block; `packages/webkit/llms/` is served at
+`/llms/` and linked as "View as Markdown" when it exists at build time. Use `pnpm docs:dev`,
+`docs:build`, `docs:preview`, `docs:smoke` (Playwright over every route, console errors and axe on a
+sample in both themes); how pages are generated and how to deploy statically is in
+`apps/docs/README.md`.
 
 ## M2.4 — Generative-AI components
 
@@ -405,6 +420,10 @@ before the branch is closed.
 | #   | From  | Leftover                                                                                                                                                                                                                                                         | How it closes                                                                                                                                                                                            |
 | --- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | M1.10 | The console is on WebKit 3.9.4 (PrimeVue wrappers): `migrate v6` rewrites 27 files and lists 1,804 `MANUAL` items in 853 files (MIGRATION-v6.md, "Field report: Azion Console"). Plugin, toast and dialog services, `field-*` and PrimeVue inputs are most of it | Migrate the console by area on its own branch (services and plugin first, then forms to `Field`, inputs, overlays, tables to `Table`), re-running `migrate v6 --dry-run` until it lists no `MANUAL` item |
+| 2   | M2.3  | Media that examples and blocks load by absolute path (`/media/…`, `/logos/…`, `/docs/…`) still lives in `apps/storybook/static`; the docs site serves and copies it from there | M2.5 moves the folder to `apps/docs/public` when Storybook is removed and drops `STATIC_ASSETS` from `apps/docs/plugins/paths.ts` |
+| 3   | M2.3  | Rubik does not load from `fonts.azion.com`: `https://fonts.azion.com/rubik/Rubik-VariableFont_wght.ttf` answers 404, so every page falls back to the system font | Publish `apps/fonts/rubik/` to fonts.azion.com (owner: whoever deploys apps/fonts), or have the theme self-host it |
+| 4   | M2.3  | White text on `--primary` (#F3652B) in the dark theme is about 3:1, under WCAG AA 4.5:1: axe flags every filled primary control (primary `Button`, selected states). The docs smoke test reports these nodes as a known gap instead of failing | Darken `--primary` for filled controls in dark (or use `--primary-contrast` black there) in `@aziontech/theme`, then drop the exception in `apps/docs/scripts/smoke.mjs` |
+| 5   | M2.3  | The docs link "View as Markdown" and "Copy for AI" to `packages/webkit/llms/components/<id>.md` and `llms/blocks/<id>.md`, guessing M2.2's layout | After M2.2 merges, rebuild the docs and check one component and one block show the link; adjust `llmsFile` in `apps/docs/plugins/content.ts` if the paths differ |
 
 ## M2.11 — Close the branch and merge into `main`
 
