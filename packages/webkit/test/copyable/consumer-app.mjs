@@ -31,13 +31,25 @@ export const CONSUMER_COMPILER_OPTIONS = {
   noEmit: true
 }
 
+// create-vue's env.d.ts (`/// <reference types="vite/client" />`): the Vite client types, so
+// `import.meta.env` and `?worker` / `?url` imports type-check as they do in the app.
+export const CONSUMER_ENV_FILES = [
+  join(dirname(require.resolve('vite/package.json', { paths: [PKG_DIR] })), 'client.d.ts')
+]
+
 // Runs vue-tsc over absolute file paths with the consumer options (and no vueCompilerOptions,
 // as create-vue writes none) and returns the `error TS` lines, paths relative to the package.
 export function consumerTypeErrors(files) {
   const dir = mkdtempSync(join(tmpdir(), 'webkit-consumer-ts-'))
   try {
     const tsconfig = join(dir, 'tsconfig.json')
-    writeFileSync(tsconfig, JSON.stringify({ compilerOptions: CONSUMER_COMPILER_OPTIONS, files }))
+    writeFileSync(
+      tsconfig,
+      JSON.stringify({
+        compilerOptions: CONSUMER_COMPILER_OPTIONS,
+        files: [...CONSUMER_ENV_FILES, ...files]
+      })
+    )
     const vueTsc = join(dirname(require.resolve('vue-tsc/package.json')), 'bin/vue-tsc.js')
     const run = spawnSync(process.execPath, [vueTsc, '-p', tsconfig, '--pretty', 'false'], {
       cwd: PKG_DIR,
