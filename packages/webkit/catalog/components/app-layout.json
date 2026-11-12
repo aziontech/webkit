@@ -27,6 +27,7 @@
   "Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.",
   "Use the split panel for the selected item of a collection. Close it when the selection clears.",
   "Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.",
-  "Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background."
+  "Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background.",
+  "A page body that fills the screen (an empty state, a centred form) is `<main class=\"flex min-h-full flex-col\">` in the default slot. Its height is what is left under the breadcrumbs, so it never scrolls by the breadcrumb row; do not subtract the breadcrumbs yourself."
  ]
 }

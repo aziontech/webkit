@@ -22,6 +22,7 @@
 - Use the split panel for the selected item of a collection. Close it when the selection clears.
 - Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.
 - Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background.
+- A page body that fills the screen (an empty state, a centred form) is `<main class="flex min-h-full flex-col">` in the default slot. Its height is what is left under the breadcrumbs, so it never scrolls by the breadcrumb row; do not subtract the breadcrumbs yourself.
 
 ## Don’t
 
@@ -70,11 +71,11 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | The page content (the consumer's `<main>`). Scrolls on its own. |
+| `default` | — | The page content (the consumer's `<main>`). Fills the content region under the breadcrumbs, so a full-height body (`min-h-full`) takes the rest of the height without overflowing; taller content scrolls. |
 | `navigation` | { drawer: boolean, closeNavigation: () => void } | The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. `closeNavigation` closes the drawer, e.g. after an item is chosen. |
 | `header` | { compact: boolean, openNavigation: () => void, toggleNavigation: () => void, toggleTools: () => void } | The global header, above content, tools and split panel. |
 | `notifications` | — | Flash messages (`Alert`) above the breadcrumbs and the content; stays in place while content scrolls. |
-| `breadcrumbs` | — | Breadcrumbs above the content, inside the scroll area. |
+| `breadcrumbs` | — | Breadcrumbs above the content, inside the scroll area; the page body fills the height left under them. |
 | `tools` | — | The tools region's body, usually a `HelpPanel`. |
 | `split-panel` | — | The split panel's body. |
 
@@ -310,6 +311,60 @@
 </template>
 ```
 
+### FullHeightPage
+
+```vue
+<script setup>
+  import AppLayout from '@aziontech/webkit/app-layout'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Button from '@aziontech/webkit/button'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import GlobalHeader from '@aziontech/webkit/global-header'
+  import PageHeader from '@aziontech/webkit/page-header'
+
+  const crumbs = [{ label: 'Workloads', href: '#' }, { label: 'Domains' }]
+</script>
+
+<template>
+  <div class="h-dvh">
+    <AppLayout>
+      <template #header>
+        <GlobalHeader aria-label="Console">
+          <GlobalHeader.Left />
+          <GlobalHeader.Middle />
+          <GlobalHeader.Right />
+        </GlobalHeader>
+      </template>
+
+      <template #breadcrumbs>
+        <Breadcrumb :items="crumbs" />
+      </template>
+
+      <main class="flex min-h-full flex-col gap-(--spacing-lg) p-(--spacing-md)">
+        <PageHeader
+          title="Domains"
+          description="The addresses this workload answers on."
+        />
+        <div class="flex flex-1 items-center justify-center">
+          <EmptyState
+            title="No domain yet"
+            description="Add a domain to route its traffic to this workload."
+            icon="pi pi-globe"
+          >
+            <template #actions>
+              <Button
+                kind="primary"
+                label="Add domain"
+              />
+            </template>
+          </EmptyState>
+        </div>
+      </main>
+    </AppLayout>
+  </div>
+</template>
+```
+
 ### SplitPanelSide
 
 ```vue
@@ -386,121 +441,6 @@
           </KeyValuePairs.Item>
           <KeyValuePairs.Item label="Domain">{{ selected.domain }}</KeyValuePairs.Item>
         </KeyValuePairs>
-      </template>
-    </AppLayout>
-  </div>
-</template>
-```
-
-### Compact
-
-```vue
-<script setup>
-  import AppLayout from '@aziontech/webkit/app-layout'
-  import Command from '@aziontech/webkit/command'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelpPanel from '@aziontech/webkit/help-panel'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import MenuGroup from '@aziontech/webkit/menu-group'
-  import MenuItem from '@aziontech/webkit/menu-item'
-  import MenuRoot from '@aziontech/webkit/menu-root'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import Sidebar from '@aziontech/webkit/sidebar'
-  import { ref } from 'vue'
-
-  const searchOpen = ref(false)
-  const searchPages = ['Applications', 'Workloads', 'Functions', 'Firewall']
-</script>
-
-<template>
-  <div class="mx-auto h-dvh w-full max-w-(--container-xs) border-x border-(--border-default)">
-    <AppLayout>
-      <template #navigation="{ drawer }">
-        <Sidebar
-          aria-label="Main navigation"
-          :resizable="!drawer"
-          :collapsible="!drawer"
-        >
-          <MenuRoot role="presentation">
-            <MenuGroup>
-              <MenuItem
-                label="Home"
-                icon="ai ai-home"
-                href="#"
-                selected
-              />
-              <MenuItem
-                label="Services"
-                icon="ai ai-edge-application"
-                href="#"
-              />
-            </MenuGroup>
-          </MenuRoot>
-        </Sidebar>
-      </template>
-
-      <template #header="{ compact, openNavigation, toggleTools }">
-        <div class="@container w-full">
-          <GlobalHeader aria-label="Console">
-            <GlobalHeader.Left>
-              <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                <IconButton
-                  v-if="compact"
-                  icon="pi pi-bars"
-                  aria-label="Open navigation"
-                  kind="outlined"
-                  size="medium"
-                  @click="openNavigation"
-                />
-              </div>
-            </GlobalHeader.Left>
-            <GlobalHeader.Middle />
-            <GlobalHeader.Right>
-              <SearchTrigger
-                collapsible
-                @open="searchOpen = true"
-              />
-              <IconButton
-                icon="pi pi-question-circle"
-                aria-label="Help"
-                kind="outlined"
-                size="medium"
-                @click="toggleTools"
-              />
-            </GlobalHeader.Right>
-          </GlobalHeader>
-          <Command v-model:open="searchOpen">
-            <Command.Input placeholder="Search the console" />
-            <Command.List>
-              <Command.Empty>No page matches your search.</Command.Empty>
-              <Command.Group heading="Pages">
-                <Command.Item
-                  v-for="page in searchPages"
-                  :key="page"
-                  :value="page"
-                  >{{ page }}</Command.Item
-                >
-              </Command.Group>
-            </Command.List>
-          </Command>
-        </div>
-      </template>
-
-      <main class="p-(--spacing-md)">
-        <PageHeader
-          title="Home"
-          description="On a narrow screen the navigation and the help open as drawers."
-        />
-      </main>
-
-      <template #tools>
-        <HelpPanel aria-label="Help: Home">
-          <HelpPanel.Header
-            title="Home"
-            description="A summary of what is running in this account."
-          />
-        </HelpPanel>
       </template>
     </AppLayout>
   </div>

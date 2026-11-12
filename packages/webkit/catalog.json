@@ -14696,7 +14696,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The page content (the consumer's `<main>`). Scrolls on its own."
+     "notes": "The page content (the consumer's `<main>`). Fills the content region under the breadcrumbs, so a full-height body (`min-h-full`) takes the rest of the height without overflowing; taller content scrolls."
     },
     {
      "name": "navigation",
@@ -14716,7 +14716,7 @@
     {
      "name": "breadcrumbs",
      "scope": "—",
-     "notes": "Breadcrumbs above the content, inside the scroll area."
+     "notes": "Breadcrumbs above the content, inside the scroll area; the page body fills the height left under them."
     },
     {
      "name": "tools",
@@ -25527,6 +25527,12 @@
    "target": "./src/composables/use-unsaved-changes/index.ts",
    "kind": "composable",
    "treeShakeableImport": "@aziontech/webkit/use-unsaved-changes"
+  },
+  "use-pinned-row": {
+   "import": "@aziontech/webkit/use-pinned-row",
+   "target": "./src/composables/use-pinned-row/index.ts",
+   "kind": "composable",
+   "treeShakeableImport": "@aziontech/webkit/use-pinned-row"
   },
   "attribute-editor": {
    "import": "@aziontech/webkit/attribute-editor",

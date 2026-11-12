@@ -418,5 +418,5 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Optional
 
-- [llms-full.txt](llms-full.txt): every foundation, block and component page in one file, sized for one context window: block guidelines without their code and the first example of each component (the pages above hold the code and every example).
+- [llms-full.txt](llms-full.txt): every foundation, block and component page in one file, sized for one context window: block guidelines with their parts and variants as names and without their code, and the first example of each component (the pages above hold the code, every example and every detail).
 - [catalog.json](../catalog.json): the machine catalog the pages are generated from (exports, props, tokens, blocks).
