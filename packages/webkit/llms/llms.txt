@@ -19,6 +19,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Accessibility](foundations/accessibility.md): WCAG 2.1 AA rules every component and screen follows: names, focus, keyboard, contrast, motion.
 - [Using WebKit in an app](foundations/usage.md): Start from a block, find a component, import it tree-shakeably, app-level setup and the quality checklist.
 
+## Blocks: Docs
+
+- [DocsArticle (docs/article)](blocks/docs/article.md): One page of the documentation, from the bar to the footer.
+- [DocsLanding (docs/landing)](blocks/docs/landing.md): The front door of the documentation.
+
 ## Blocks: Headers
 
 - [AuthHeader (headers/auth-header)](blocks/headers/auth-header.md): The top bar of every signed-out and first-run screen: sign in, sign up, password recovery and the onboarding steps.

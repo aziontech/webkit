@@ -1,0 +1,30 @@
+{
+  "id": "docs/landing",
+  "name": "DocsLanding",
+  "title": "Templates/Docs/Landing",
+  "surface": "docs",
+  "summary": "The documentation home, chrome included: the docs bar with a `SearchTrigger` that widens into the ⌘K field, the rail with the Getting started and Platform resources groups and the `ThemeSwitcher`, then a reading column with no outline rail. It opens on a `DocPageHeader` with no breadcrumb (the welcome title and one sentence), the Get started `Button` and a `DocPrompt` the reader hands to a coding agent. Then the entry points, each a `DocHeading` section: Start by interface (a full-width `DocCard` for agent setup over a three-column `DocCardGroup` of Console, CLI and API), Start by objective (two columns), Ready-made templates (four columns of framework glyphs, two on a phone, with an Also useful line in `DocProse`) and Follow along (release notes, blog, Discord). `DocPagination` points forward to the first page in reading order and the `Footer` closes the column. Built from `GlobalHeader`, `NavigationMenu`, `SearchTrigger`, `Sidebar`, `MenuRoot`, `ThemeSwitcher`, `ScrollArea`, `DocPageHeader`, `DocPrompt`, `DocCardGroup`, `DocCard`, `DocHeading`, `DocProse`, `DocPagination`, `Footer` and `StatusIndicator`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "documentation home",
+    "docs home page",
+    "docs landing page",
+    "documentation landing",
+    "welcome to the docs",
+    "docs index with entry points",
+    "start here page",
+    "developer portal home",
+    "página inicial da documentação",
+    "home da documentação",
+    "portal do desenvolvedor"
+  ],
+  "skills": ["webkit-layout", "webkit-navigation", "webkit-microcopy"],
+  "primary": {
+    "name": "Default",
+    "file": "landing.vue"
+  },
+  "variants": []
+}
