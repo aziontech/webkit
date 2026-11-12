@@ -1,14 +1,14 @@
 import {
   computed,
+  type ComputedRef,
+  type MaybeRefOrGetter,
   onMounted,
   onScopeDispose,
   readonly,
+  type Ref,
   ref,
   toValue,
-  watch,
-  type ComputedRef,
-  type MaybeRefOrGetter,
-  type Ref
+  watch
 } from 'vue'
 
 /** The elements a pinned row is measured from. */
