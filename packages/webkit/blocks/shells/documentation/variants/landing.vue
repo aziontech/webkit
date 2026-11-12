@@ -1,6 +1,7 @@
 <script setup>
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
+  import Command from '@aziontech/webkit/command'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import DocHeading from '@aziontech/webkit/doc-heading'
@@ -106,6 +107,8 @@
     { title: 'Getting started', links: ['Start for free', 'Pricing', 'Contact'] },
     { title: 'Developer', links: ['Documentation', 'API', 'Release notes'] }
   ]
+  const searchPages = ['Get started', 'Applications', 'Functions', 'Firewall', 'Azion CLI']
+  const searchOpen = ref(false)
 </script>
 
 <template>
@@ -154,6 +157,7 @@
           <SearchTrigger
             collapsible
             label="Search docs"
+            @open="searchOpen = true"
           />
           <IconButton
             icon="pi pi-github"
@@ -173,6 +177,20 @@
           />
         </GlobalHeader.Right>
       </GlobalHeader>
+      <Command v-model:open="searchOpen">
+        <Command.Input placeholder="Search docs" />
+        <Command.List>
+          <Command.Empty>No page matches your search.</Command.Empty>
+          <Command.Group heading="Pages">
+            <Command.Item
+              v-for="page in searchPages"
+              :key="page"
+              :value="page"
+              >{{ page }}</Command.Item
+            >
+          </Command.Group>
+        </Command.List>
+      </Command>
     </div>
 
     <div class="relative flex min-h-0 flex-1">

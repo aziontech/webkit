@@ -1,13 +1,14 @@
 import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import CollapsibleExample from '../../../../examples/search-trigger/collapsible.vue'
 import DefaultExample from '../../../../examples/search-trigger/default.vue'
 import DisabledExample from '../../../../examples/search-trigger/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
+import Command from '../../overlay/command/command.vue'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import SearchTrigger from './search-trigger.vue'
 
@@ -68,7 +69,7 @@ describe('SearchTrigger', () => {
     expect(on.getByRole('button', { name: 'Search' })).toBeTruthy()
   })
 
-  it('emits click with the MouseEvent on pointer, Enter and Space', async () => {
+  it('emits open with the MouseEvent on pointer, Enter and Space', async () => {
     const user = userEvent.setup()
     const { getByRole, emitted } = render(SearchTrigger)
     const button = getByRole('button', { name: 'Search' })
@@ -76,12 +77,12 @@ describe('SearchTrigger', () => {
     button.focus()
     await user.keyboard('{Enter}')
     await user.keyboard(' ')
-    const clicks = emitted('click') as [MouseEvent][]
+    const clicks = emitted('open') as [MouseEvent][]
     expect(clicks).toHaveLength(3)
     expect(clicks[0][0]).toBeInstanceOf(MouseEvent)
   })
 
-  it('does not emit click and leaves the tab order when disabled', async () => {
+  it('does not emit open and leaves the tab order when disabled', async () => {
     const user = userEvent.setup()
     const { getByTestId, emitted } = render(SearchTrigger, { props: { disabled: true } })
     const root = getByTestId('actions-search-trigger')
@@ -90,7 +91,60 @@ describe('SearchTrigger', () => {
     await user.click(root)
     await user.tab()
     expect(document.activeElement).not.toBe(root)
-    expect(emitted('click')).toBeUndefined()
+    expect(emitted('open')).toBeUndefined()
+  })
+
+  const press = (init: globalThis.KeyboardEventInit) => {
+    const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, ...init })
+    document.body.dispatchEvent(event)
+    return event
+  }
+
+  it('binds Ctrl+K and ⌘K on the window and emits open with the KeyboardEvent', () => {
+    const { emitted, unmount } = render(SearchTrigger)
+    const ctrl = press({ key: 'k', ctrlKey: true })
+    const meta = press({ key: 'K', metaKey: true })
+    press({ key: 'k' })
+    press({ key: 'k', ctrlKey: true, shiftKey: true })
+    const opens = emitted('open') as [KeyboardEvent][]
+    expect(opens).toHaveLength(2)
+    expect(opens[0][0]).toBe(ctrl)
+    expect(ctrl.defaultPrevented).toBe(true)
+    expect(meta.defaultPrevented).toBe(true)
+    unmount()
+    expect(press({ key: 'k', ctrlKey: true }).defaultPrevented).toBe(false)
+  })
+
+  it('leaves the shortcut alone when disabled or when shortcut is empty', () => {
+    const off = render(SearchTrigger, { props: { disabled: true } })
+    const a = press({ key: 'k', ctrlKey: true })
+    expect(off.emitted('open')).toBeUndefined()
+    expect(a.defaultPrevented).toBe(false)
+    off.unmount()
+    const none = render(SearchTrigger, { props: { shortcut: '' } })
+    press({ key: 'k', ctrlKey: true })
+    expect(none.emitted('open')).toBeUndefined()
+  })
+
+  it('stands down when a mounted Command claims the same shortcut', async () => {
+    const Both = defineComponent({
+      setup() {
+        const open = ref(false)
+        return () => [
+          h(SearchTrigger, { onOpen: () => (open.value = true) }),
+          h(Command, { open: open.value, 'onUpdate:open': (v: boolean) => (open.value = v) })
+        ]
+      }
+    })
+    const { emitted } = render(Both)
+    await nextTick()
+    press({ key: 'k', ctrlKey: true })
+    await nextTick()
+    expect(document.body.querySelector('[role="dialog"]')).not.toBeNull()
+    expect(emitted('open')).toBeUndefined()
+    press({ key: 'k', ctrlKey: true })
+    await nextTick()
+    expect(emitted('open')).toBeUndefined()
   })
 
   it('opens the Command palette from the Default example', async () => {

@@ -78,9 +78,9 @@ Inside the account menu, labelled `Theme`.
 The header labelled `Console`: navigation toggle on small screens, wordmark, search, `Create`,
 `Agent` and the account button.
 
-### M. Search shortcut — `Kbd` (required)
+### M. Search — `SearchTrigger` (required)
 
-Shows ⌘K on the search affordance so the shortcut is discoverable.
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
 
 ### N. Agent — `ButtonHighlight` (optional)
 
@@ -148,7 +148,7 @@ The labelled panel (`Navigation`) that contains the `Sidebar`.
 - The header is labelled `Console`, the rail `Main navigation`, the usage band `Usage`, the panels `Resources`, the drawer `Navigation`.
 - Every icon-only control has an `aria-label` and a `Tooltip`.
 - Row actions are reachable by keyboard: the menu trigger appears on focus as well as hover.
-- The command palette opens with ⌘K and from the search affordance; the shortcut is shown with `Kbd`.
+- The command palette opens with ⌘K and from the search affordance; the shortcut is shown by `SearchTrigger`.
 - Entrance animations and the card's dismiss transition honour `prefers-reduced-motion`.
 
 ## States

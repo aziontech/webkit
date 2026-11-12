@@ -18,9 +18,9 @@ The top bar of the documentation site. A reader arrives from search or from the 
 
 Default `content` placement, `aria-label="Azion documentation"`. Start cluster in `GlobalHeader.Left`, an empty `GlobalHeader.Nav`, the actions in `GlobalHeader.Right`.
 
-### B. Navigation trigger and end actions — `IconButton` (required)
+### B. Navigation trigger and GitHub — `IconButton` (required)
 
-Below `lg`, an outlined `pi-bars` icon button opens the documentation navigation (the rail leaves at that width). In the end cluster, Search leads, then GitHub (`href` with `target="_blank"`). Search can widen into a field with the ⌘K shortcut once the bar is wide enough; below that it stays an icon button.
+Below `lg`, an outlined `pi-bars` icon button opens the documentation navigation (the rail leaves at that width). In the end cluster, after the search, GitHub (`href` with `target="_blank"`).
 
 ### C. Brand — `Brand` (required)
 
@@ -33,6 +33,14 @@ The top-level sections (`Reference`, `Guides`, `Dev tools`) as `NavigationMenu.T
 ### E. Console — `Button` (required)
 
 `kind="secondary"`, medium, last in the bar: the way back to the product.
+
+### F. Search — `SearchTrigger` (required)
+
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
+
+### G. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 
@@ -47,7 +55,7 @@ The top-level sections (`Reference`, `Guides`, `Dev tools`) as `NavigationMenu.T
 ## Copy
 
 - **Section links:** nouns, sentence case, no verbs: `Reference`, `Guides`, `Dev tools`.
-- **Icon button labels:** say the target: `Search documentation`, `Azion on GitHub`, `Open documentation navigation`.
+- **Icon button labels:** say the target: `Search docs` (the `SearchTrigger` label), `Azion on GitHub`, `Open documentation navigation`.
 - **Console:** the product name alone: `Console`.
 
 ## Accessibility

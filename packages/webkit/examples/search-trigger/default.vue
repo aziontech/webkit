@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  <SearchTrigger @click="open = true" />
+  <SearchTrigger @open="open = true" />
   <Command
     v-model:open="open"
     shortcut="meta+k"

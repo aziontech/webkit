@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/detail/details-page/details-page.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/details-page")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [AppLayout](../../../components/app-layout.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [TopologyDiagram](../../../components/topology-diagram.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [AppLayout](../../../components/app-layout.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, [Item](../../../components/item.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [SaveBar](../../../components/save-bar.md), [SearchTrigger](../../../components/search-trigger.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [TopologyDiagram](../../../components/topology-diagram.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -30,9 +30,9 @@ The second-level page of one resource. The user arrives from a list row or a dep
 
 ## Building blocks
 
-### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `Kbd`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
+### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
 
-The persistent console shell from `skills/webkit-navigation`: the collapsible `Sidebar` with the brand, the `Command` palette and the module `Menu`, the account menu and theme switch in its footer, and one `GlobalHeader` with the `Breadcrumb`, Search with its `Kbd` hint, Create, Agent and the account avatar. Below md the sidebar moves into a left `Drawer`. The breadcrumb reads `module › resource name`, e.g. Resources › analytics-app, and never names a tab; the service overview ends it on its environment picker.
+The persistent console shell from `skills/webkit-navigation`: the collapsible `Sidebar` with the brand, the `Command` palette and the module `Menu`, the account menu and theme switch in its footer, and one `GlobalHeader` with the `Breadcrumb`, `SearchTrigger` (⌘K / Ctrl K), Create, Agent and the account avatar. Below md the sidebar moves into a left `Drawer`. The breadcrumb reads `module › resource name`, e.g. Resources › analytics-app, and never names a tab; the service overview ends it on its environment picker.
 
 ### B. Tab bar — `PageTabs`, `Tabs` (required)
 
@@ -53,6 +53,10 @@ The last band, on the canvas fill, says what the user can do next in one sentenc
 ### F. Get started — `SectionHeader`, `ToggleGroup`, `Card`, `CodeBlock` (optional)
 
 For a resource made from the CLI, the `platform/detail/get-started` section follows the summary: a `SectionHeader` with the CLI or GitHub Actions `ToggleGroup`, then three numbered step `Card`s with a `CodeBlock` each.
+
+### G. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Topology tab
 
@@ -157,16 +161,16 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
   import PageTabs from '@aziontech/webkit/page-tabs'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import SectionHeader from '@aziontech/webkit/section-header'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
@@ -913,37 +917,10 @@ jobs:
           </GlobalHeader.Left>
           <GlobalHeader.Middle />
           <GlobalHeader.Right>
-            <span class="contents @min-[47rem]:hidden">
-              <IconButton
-                icon="pi pi-search"
-                kind="outlined"
-                size="medium"
-                aria-label="Search"
-                aria-keyshortcuts="Meta+K"
-                @click="paletteOpen = true"
-              />
-            </span>
-            <button
-              type="button"
-              aria-label="Search"
-              aria-keyshortcuts="Meta+K"
-              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
-              @click="paletteOpen = true"
-            >
-              <span
-                class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
-                aria-hidden="true"
-              >
-                <i class="pi pi-search" />
-              </span>
-              <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-muted)">Search</span>
-              <Kbd
-                meta
-                size="small"
-                class="shrink-0"
-                >K</Kbd
-              >
-            </button>
+            <SearchTrigger
+              collapsible
+              @open="paletteOpen = true"
+            />
 
             <span class="contents md:hidden">
               <Tooltip

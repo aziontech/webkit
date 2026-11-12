@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/settings/settings-form/settings-form.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/settings/settings-form")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Label](../../../components/label.md), [Link](../../../components/link.md), [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Label](../../../components/label.md), [Link](../../../components/link.md), [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [SearchTrigger](../../../components/search-trigger.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -30,9 +30,9 @@ The place the user goes to change how an account or a project behaves. They scan
 
 ## Building blocks
 
-### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `Kbd`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
+### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
 
-The platform shell: the resizable, collapsible `Sidebar` with the `Brand`, the `Menu` and the account footer; the `GlobalHeader` with the `Breadcrumb`, the `Command` palette opened from search and its `Kbd` hint, Create and the Agent `ButtonHighlight`; and on a phone the same navigation in a right `Drawer`. The scroll region beside it is unpadded so the save footer can run full bleed.
+The platform shell: the resizable, collapsible `Sidebar` with the `Brand`, the `Menu` and the account footer; the `GlobalHeader` with the `Breadcrumb`, the `SearchTrigger` (⌘K / Ctrl K) that opens the `Command` palette, Create and the Agent `ButtonHighlight`; and on a phone the same navigation in a right `Drawer`. The scroll region beside it is unpadded so the save footer can run full bleed.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -49,6 +49,10 @@ One `SettingRow` per setting, with a `title` and a one-sentence `description`. T
 ### E. Save — `SaveBar`, `Button` (required)
 
 SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard puts back the last saved values and clears the errors. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, and SavePerCard puts an optional docs `Link` on the footer's start.
+
+### F. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 
@@ -137,10 +141,10 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Sidebar from '@aziontech/webkit/sidebar'
@@ -820,37 +824,10 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
           </GlobalHeader.Left>
           <GlobalHeader.Middle />
           <GlobalHeader.Right>
-            <span class="contents @min-[47rem]:hidden">
-              <IconButton
-                icon="pi pi-search"
-                kind="outlined"
-                size="medium"
-                aria-label="Search"
-                aria-keyshortcuts="Meta+K"
-                @click="paletteOpen = true"
-              />
-            </span>
-            <button
-              type="button"
-              aria-label="Search"
-              aria-keyshortcuts="Meta+K"
-              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
-              @click="paletteOpen = true"
-            >
-              <span
-                class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
-                aria-hidden="true"
-              >
-                <i class="pi pi-search" />
-              </span>
-              <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-muted)">Search</span>
-              <Kbd
-                meta
-                size="small"
-                class="shrink-0"
-                >K</Kbd
-              >
-            </button>
+            <SearchTrigger
+              collapsible
+              @open="paletteOpen = true"
+            />
 
             <span class="contents md:hidden">
               <Tooltip

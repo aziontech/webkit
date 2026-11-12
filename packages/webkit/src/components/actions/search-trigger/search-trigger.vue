@@ -1,20 +1,22 @@
 <script setup lang="ts">
+  import { defaultWindow, useEventListener } from '@vueuse/core'
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Kbd from '../../content/kbd/kbd.vue'
+  import { isShortcutClaimed } from '../../overlay/command/shortcut-registry'
 
   defineOptions({ name: 'SearchTrigger', inheritAttrs: false })
 
   interface Props {
     /** Visible muted text and accessible name; empty uses the catalog's `Search`. */
     label?: string
-    /** Key drawn after the platform modifier in the keycap and announced through `aria-keyshortcuts`; empty hides the keycap. */
+    /** Key that opens search with ⌘ or Ctrl: drawn in the keycap, announced through `aria-keyshortcuts` and bound on the window unless a mounted `Command` already listens for it; empty removes all three. */
     shortcut?: string
     /** Folds to the magnifier alone below the nearest container's `2xl` size; the label stays the accessible name. */
     collapsible?: boolean
-    /** Disables the button; `click` is not emitted. */
+    /** Disables the button and its shortcut; `open` is not emitted. */
     disabled?: boolean
   }
 
@@ -26,7 +28,7 @@
   })
 
   const emit = defineEmits<{
-    click: [event: MouseEvent]
+    open: [event: MouseEvent | KeyboardEvent]
   }>()
 
   const attrs = useAttrs()
@@ -46,8 +48,17 @@
 
   function onClick(event: MouseEvent) {
     if (props.disabled) return
-    emit('click', event)
+    emit('open', event)
   }
+
+  useEventListener(defaultWindow, 'keydown', (event: globalThis.KeyboardEvent) => {
+    const key = props.shortcut.trim().toLowerCase()
+    if (!key || props.disabled || event.defaultPrevented) return
+    if (!(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey) return
+    if (event.key.toLowerCase() !== key || isShortcutClaimed(`meta+${key}`)) return
+    event.preventDefault()
+    emit('open', event)
+  })
 </script>
 
 <template>

@@ -18,9 +18,9 @@ The top bar of every page inside the persistent console shell. It sits in the co
 
 Default `content` placement, `aria-label="Azion Console"`, in the content zone, never above the rail. Start cluster in `GlobalHeader.Left`, empty `GlobalHeader.Middle`, actions in `GlobalHeader.Right`.
 
-### B. Navigation trigger and search — `IconButton` (required)
+### B. Navigation trigger — `IconButton` (required)
 
-Below `md` an outlined `pi-bars` icon button opens the rail as a drawer. In the end cluster, Search comes first. From a bar width of `--container-2xl` (the `@2xl:` container variant) the search widens into a field-button with the ⌘K shortcut; both thresholds come from theme tokens, never raw px. Below `md`, Create and Agent also collapse into icon buttons.
+Below `md` an outlined `pi-bars` icon button opens the rail as a drawer. In the end cluster, `SearchTrigger` comes first. Below `md`, Create and Agent also collapse into icon buttons.
 
 ### C. Brand — `Brand` (required)
 
@@ -42,13 +42,13 @@ Inside a button labelled `Account settings`, always last.
 
 Shows from `md`, on every level. First level: one crumb, the module, with no link (`Applications`). Second level: the module with an `href`, then the resource's own name with no link. A tab is never a crumb.
 
-### H. Shortcut — `Kbd` (required)
+### H. Search — `SearchTrigger` (required)
 
-`meta` + `K` inside the search field-button shown while the bar is at least `--container-2xl` wide.
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
 
 ### I. Hints — `Tooltip` (required)
 
-Names every icon-only control: the navigation trigger, the collapsed search, and Create and Agent below `md`.
+Names every icon-only control: the navigation trigger, and Create and Agent below `md`.
 
 ## Do
 

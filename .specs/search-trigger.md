@@ -3,9 +3,9 @@ name: search-trigger
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 3a6f341c00f6b52a8d27cf60b3b552cecd2c2330b166d9dd2c18786769399abc
+checksum: 5430b10e2e1f076130ba65816d2f3329165c8f3e66aa0a821574c6ade3795c41
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -14,11 +14,11 @@ last_updated: 2026-11-12
 
 ## Purpose
 
-The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads "you can search here", but it is one `<button>` that emits `click`; the consumer opens `Command` (or its own search) from it. With `collapsible` it folds to the magnifier alone inside a narrow container, so one element serves the wide and the narrow bar.
+The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads "you can search here", but it is one `<button>` that emits `open` — on click and on the shortcut itself, which it binds on the window unless a mounted `Command` already listens for it. The consumer opens `Command` (or its own search) from `open`. Every app header — console, demo, docs and site — carries one: it is the single way search is offered in a top bar. With `collapsible` it folds to the magnifier alone inside a narrow container, so one element serves the wide and the narrow bar.
 
 ## When to use
 
-- The search entry of a console, demo or docs top bar (`GlobalHeader` end region) that opens the `Command` palette or a search dialog.
+- The search entry of every app header — console, demo, docs or site top bar (`GlobalHeader.Right`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.
 - Anywhere a shortcut-backed launcher should look like a field without being one.
 
 ## When NOT to use
@@ -29,15 +29,16 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 
 ## Related
 
-- `Command` — the palette this button opens; it owns the global ⌘K / Ctrl+K listener and `v-model:open`.
+- `Command` — the palette this button opens; when it is mounted it owns the global ⌘K / Ctrl+K listener and `v-model:open`, and the trigger stands its own listener down.
 - `Kbd` — draws the keycap with the OS-aware modifier glyph.
 - `IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.
 - `GlobalHeader` — the bar it sits in, usually in `GlobalHeader.Right`.
 
 ## Best practices
 
-- Wire `@click` to the same state the shortcut opens (`<Command v-model:open="open">`), so the button and ⌘K never disagree.
+- Wire `@open` to the same state the shortcut opens (`<Command v-model:open="open">`), so the button and ⌘K never disagree. Without a `Command` on the page, `@open` also fires on ⌘K / Ctrl K, so a custom search dialog gets the shortcut for free.
 - Keep `shortcut` equal to the key the `Command` root listens for (`K`), or clear it (`shortcut=""`) when no shortcut exists.
+- Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `webkit/header-search-trigger` lint rule flags both.
 - With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds below the container's `2xl` size and without a container it stays folded.
 - Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name.
 
@@ -53,7 +54,7 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 </script>
 
 <template>
-  <SearchTrigger @click="open = true" />
+  <SearchTrigger @open="open = true" />
   <Command v-model:open="open" />
 </template>
 ```
@@ -63,15 +64,15 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 | Prop          | Type      | Default | Required | JSDoc                                                                                                                  |
 | ------------- | --------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `label`       | `string`  | `''`    | false    | Visible muted text and accessible name; empty uses the catalog's `Search`.                                             |
-| `shortcut`    | `string`  | `'K'`   | false    | Key drawn after the platform modifier in the keycap and announced through `aria-keyshortcuts`; empty hides the keycap. |
+| `shortcut`    | `string`  | `'K'`   | false    | Key that opens search with ⌘ or Ctrl: drawn in the keycap, announced through `aria-keyshortcuts` and bound on the window unless a mounted `Command` already listens for it; empty removes all three. |
 | `collapsible` | `boolean` | `false` | false    | Folds to the magnifier alone below the nearest container's `2xl` size; the label stays the accessible name.            |
-| `disabled`    | `boolean` | `false` | false    | Disables the button; `click` is not emitted.                                                                           |
+| `disabled`    | `boolean` | `false` | false    | Disables the button and its shortcut; `open` is not emitted. |
 
 ## Events
 
 | Event   | Payload      | Notes                                                                               |
 | ------- | ------------ | ----------------------------------------------------------------------------------- |
-| `click` | `MouseEvent` | Fires when the button is activated (pointer, Enter or Space); not while `disabled`. |
+| `open` | `MouseEvent \| KeyboardEvent` | Fires when the button is activated (pointer, Enter or Space) and on ⌘K / Ctrl K when no mounted `Command` claims that shortcut; not while `disabled`. |
 
 ## Slots
 
@@ -112,7 +113,7 @@ _none_
 
 - Pattern: a WAI-ARIA APG **button** (`<button type="button">`); its accessible name is the label (`aria-label` keeps it when the label is visually hidden in the folded form).
 - Shortcut: `aria-keyshortcuts="Meta+K Control+K"` (both chords `Command` listens for, so the server and the client render the same attribute) when `shortcut` is set; the keycap is `aria-hidden` so the name is not read twice.
-- Keyboard map: `Tab` focuses; `Enter` and `Space` activate; the global shortcut belongs to `Command`.
+- Keyboard map: `Tab` focuses; `Enter` and `Space` activate; `⌘K` / `Ctrl K` anywhere on the page opens search (handled by `Command` when one is mounted, otherwise by the trigger, which emits `open`).
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Disabled: native `disabled` (out of the tab order, not announced as actionable); text and border keep ≥ 3:1 against the surface.
 - Contrast: muted label ≥ 4.5:1 on `--bg-surface` in light and dark; magnifier ≥ 3:1.
@@ -144,7 +145,7 @@ _none_
 ## Performance
 
 - Bundle budget: 3 KB gzip for `./search-trigger` in `.size-limit.json` (measured + ~0.5 KB headroom; includes `Kbd` and the translate composable).
-- Runtime budget: none; static.
+- Runtime budget: one `keydown` listener on the window while mounted.
 - Heavy parts: none.
 
 ## Examples

@@ -18,7 +18,7 @@ The marketing shell. A visitor scans to decide whether Azion fits, so the page i
 
 ### B. Icon actions — `IconButton` (required)
 
-The navigation trigger below `xl` and Search in the header; the small `transparent` social links in the footer.
+The navigation trigger below `xl` in the header; the small `transparent` social links in the footer.
 
 ### C. Brand — `Brand` (required)
 
@@ -71,6 +71,14 @@ In the footer's status slot.
 ### O. Language — `Select` (required)
 
 In the footer's language slot, trigger labelled `Language`.
+
+### P. Search — `SearchTrigger` (required)
+
+The header search, last in the end cluster as on azion.com: `collapsible` with no `@container` around the bar, so it stays the magnifier at every width. It still announces and binds ⌘K / Ctrl K and emits `open`, which opens the `Command` palette. Never a bare magnifier `IconButton` (rule `webkit-header-search`).
+
+### Q. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 

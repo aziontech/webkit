@@ -8,10 +8,10 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads \"you can search here\", but it is one `<button>` that emits `click`; the consumer opens `Command` (or its own search) from it. With `collapsible` it folds to the magnifier alone inside a narrow container, so one element serves the wide and the narrow bar.",
+ "purpose": "The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads \"you can search here\", but it is one `<button>` that emits `open` — on click and on the shortcut itself, which it binds on the window unless a mounted `Command` already listens for it. The consumer opens `Command` (or its own search) from `open`. Every app header — console, demo, docs and site — carries one: it is the single way search is offered in a top bar. With `collapsible` it folds to the magnifier alone inside a narrow container, so one element serves the wide and the narrow bar.",
  "setup": null,
  "useWhen": [
-  "The search entry of a console, demo or docs top bar (`GlobalHeader` end region) that opens the `Command` palette or a search dialog.",
+  "The search entry of every app header — console, demo, docs or site top bar (`GlobalHeader.Right`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.",
   "Anywhere a shortcut-backed launcher should look like a field without being one."
  ],
  "avoidWhen": [
@@ -20,14 +20,15 @@
   "For an icon-only toolbar action that is not search → use `IconButton`."
  ],
  "related": [
-  "Command` — the palette this button opens; it owns the global ⌘K / Ctrl+K listener and `v-model:open`.",
+  "Command` — the palette this button opens; when it is mounted it owns the global ⌘K / Ctrl+K listener and `v-model:open`, and the trigger stands its own listener down.",
   "Kbd` — draws the keycap with the OS-aware modifier glyph.",
   "IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.",
   "GlobalHeader` — the bar it sits in, usually in `GlobalHeader.Right`."
  ],
  "bestPractices": [
-  "Wire `@click` to the same state the shortcut opens (`<Command v-model:open=\"open\">`), so the button and ⌘K never disagree.",
+  "Wire `@open` to the same state the shortcut opens (`<Command v-model:open=\"open\">`), so the button and ⌘K never disagree. Without a `Command` on the page, `@open` also fires on ⌘K / Ctrl K, so a custom search dialog gets the shortcut for free.",
   "Keep `shortcut` equal to the key the `Command` root listens for (`K`), or clear it (`shortcut=\"\"`) when no shortcut exists.",
+  "Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `webkit/header-search-trigger` lint rule flags both.",
   "With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds below the container's `2xl` size and without a container it stays folded.",
   "Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name."
  ],
@@ -44,7 +45,7 @@
    "type": "string",
    "default": "'K'",
    "required": "false",
-   "doc": "Key drawn after the platform modifier in the keycap and announced through `aria-keyshortcuts`; empty hides the keycap."
+   "doc": "Key that opens search with ⌘ or Ctrl: drawn in the keycap, announced through `aria-keyshortcuts` and bound on the window unless a mounted `Command` already listens for it; empty removes all three."
   },
   {
    "name": "collapsible",
@@ -58,14 +59,14 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Disables the button; `click` is not emitted."
+   "doc": "Disables the button and its shortcut; `open` is not emitted."
   }
  ],
  "events": [
   {
-   "name": "click",
-   "payload": "MouseEvent",
-   "notes": "Fires when the button is activated (pointer, Enter or Space); not while `disabled`."
+   "name": "open",
+   "payload": "MouseEvent | KeyboardEvent",
+   "notes": "Fires when the button is activated (pointer, Enter or Space) and on ⌘K / Ctrl K when no mounted `Command` claims that shortcut; not while `disabled`."
   }
  ],
  "slots": [],
@@ -73,7 +74,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Command from '@aziontech/webkit/command'\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n  const pages = ['Workloads', 'Applications', 'Functions', 'Firewall']\n</script>\n\n<template>\n  <SearchTrigger @click=\"open = true\" />\n  <Command\n    v-model:open=\"open\"\n    shortcut=\"meta+k\"\n    @select=\"open = false\"\n  >\n    <Command.Input placeholder=\"Search pages\" />\n    <Command.List>\n      <Command.Empty>No results.</Command.Empty>\n      <Command.Group heading=\"Pages\">\n        <Command.Item\n          v-for=\"page in pages\"\n          :key=\"page\"\n          :value=\"page\"\n          >{{ page }}</Command.Item\n        >\n      </Command.Group>\n    </Command.List>\n  </Command>\n</template>"
+   "sfc": "<script setup>\n  import Command from '@aziontech/webkit/command'\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n  const pages = ['Workloads', 'Applications', 'Functions', 'Firewall']\n</script>\n\n<template>\n  <SearchTrigger @open=\"open = true\" />\n  <Command\n    v-model:open=\"open\"\n    shortcut=\"meta+k\"\n    @select=\"open = false\"\n  >\n    <Command.Input placeholder=\"Search pages\" />\n    <Command.List>\n      <Command.Empty>No results.</Command.Empty>\n      <Command.Group heading=\"Pages\">\n        <Command.Item\n          v-for=\"page in pages\"\n          :key=\"page\"\n          :value=\"page\"\n          >{{ page }}</Command.Item\n        >\n      </Command.Group>\n    </Command.List>\n  </Command>\n</template>"
   },
   {
    "name": "Collapsible",

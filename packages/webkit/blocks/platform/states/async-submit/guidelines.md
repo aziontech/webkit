@@ -71,9 +71,9 @@ The status dot in the account menu's plan entry.
 
 Where the page sits in the console.
 
-### N. Shortcut — `Kbd` (required)
+### N. Search — `SearchTrigger` (required)
 
-The search shortcut shown in the header.
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
 
 ### O. Upgrade — `ButtonHighlight` (required)
 

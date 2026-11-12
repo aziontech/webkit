@@ -75,12 +75,16 @@ ESLint (`@aziontech/webkit/eslint-plugin` + `vuejs-accessibility`, wired by `web
 build on: category-prefixed / deep-internal / barrel imports · hardcoded color · restyling a webkit
 component · a physical left/right utility (`ml-`, `pr-`, `left-`, `text-right`…) · a custom
 element where a webkit component exists · a hand-rolled `modelValue`+`update`
-instead of `defineModel` · a deprecated component · a whole-icon-set import · missing the
+instead of `defineModel` · a deprecated component · a whole-icon-set import · an app header without `SearchTrigger` or a hand-rolled ⌘K field · missing the
 tree-shakeable root · and the static a11y set (alt-text, aria-props, aria-role, click-without-key,
 label-has-for, no-autofocus). The rest — states, motion-reduce, contrast/behavioral a11y, both
 themes, microcopy — is verified at runtime by `/webkit-ui-verify` (the `webkit-ui-verifier` agent
 runs axe + screenshots), and taste is a review concern.
 
+- **Search in every app header.** A header that navigates (console, demo, docs, site) puts
+  `SearchTrigger` first in `GlobalHeader.Right`, wired to a `Command` palette (`⌘K` / `Ctrl K`);
+  never a hand-rolled field or a bare magnifier button. Lint: `webkit/header-search-trigger`
+  (rule `webkit-header-search`).
 - **Page layout.** One container class per band (`.layout-column`, `-form`, `-focused`,
   `.layout-form-create`, `-content`, `-site`) and two rhythm steps (`--layout-section-gap`,
   `--layout-group-gap`) — never a hand-rolled `max-w-*` page cap (rule `webkit-page-layout`).

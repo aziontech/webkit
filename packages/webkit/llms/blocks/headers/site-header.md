@@ -5,7 +5,7 @@
 - Surface: marketing
 - Source: `blocks/headers/site-header/site-header.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("headers/site-header")`
-- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [NavigationMenu](../../components/navigation-menu.md)
+- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [Command](../../components/command.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [NavigationMenu](../../components/navigation-menu.md), [SearchTrigger](../../components/search-trigger.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -28,9 +28,9 @@ The sticky top bar of the marketing site. A visitor is deciding whether to try A
 
 `kind="site"`, `aria-label="Azion"`, in a `sticky top-0` wrapper. Start in `GlobalHeader.Left`, navigation in `GlobalHeader.Middle`, actions in `GlobalHeader.Right`.
 
-### B. Navigation trigger and search — `IconButton` (required)
+### B. Navigation trigger — `IconButton` (required)
 
-Below `xl`, an outlined `pi-bars` icon button opens the navigation sheet. Search is the last control in the end cluster.
+Below `xl`, an outlined `pi-bars` icon button opens the navigation sheet.
 
 ### C. Brand — `Brand` (required)
 
@@ -43,6 +43,14 @@ Five top-level links (`Solutions`, `Products`, `Developer`, `Resources`, `Pricin
 ### E. Actions — `Button` (required)
 
 Contact (`transparent`, from `xl` only), Login (`secondary`) and Start for free (`primary`). One primary in the bar.
+
+### F. Search — `SearchTrigger` (required)
+
+The header search, last in the end cluster as on azion.com: `collapsible` with no `@container` around the bar, so it stays the magnifier at every width. It still announces and binds ⌘K / Ctrl K and emits `open`, which opens the `Command` palette. Never a bare magnifier `IconButton` (rule `webkit-header-search`).
+
+### G. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 
@@ -86,11 +94,16 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
 <script setup>
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
+  import Command from '@aziontech/webkit/command'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import NavigationMenu from '@aziontech/webkit/navigation-menu'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import { ref } from 'vue'
 
   const links = ['Solutions', 'Products', 'Developer', 'Resources', 'Pricing']
+  const searchPages = ['Functions', 'Applications', 'Firewall', 'Pricing', 'Documentation']
+  const searchOpen = ref(false)
 </script>
 
 <template>
@@ -179,15 +192,26 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
             class="shrink-0"
             href="#"
           />
-          <IconButton
-            icon="pi pi-search"
-            kind="outlined"
-            size="medium"
-            aria-label="Search"
-            class="shrink-0"
+          <SearchTrigger
+            collapsible
+            @open="searchOpen = true"
           />
         </GlobalHeader.Right>
       </GlobalHeader>
+      <Command v-model:open="searchOpen">
+        <Command.Input placeholder="Search azion.com" />
+        <Command.List>
+          <Command.Empty>No page matches your search.</Command.Empty>
+          <Command.Group heading="Pages">
+            <Command.Item
+              v-for="page in searchPages"
+              :key="page"
+              :value="page"
+              >{{ page }}</Command.Item
+            >
+          </Command.Group>
+        </Command.List>
+      </Command>
     </div>
   </div>
 </template>

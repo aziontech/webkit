@@ -18,7 +18,7 @@ Default `content` placement, `aria-label="Azion documentation"`; the same bar as
 
 ### B. Icon actions — `IconButton` (required)
 
-The navigation trigger below `lg`, Search and GitHub in the header, and the small `transparent` social links in the footer, each with an `aria-label`.
+The navigation trigger below `lg`, GitHub in the header, and the small `transparent` social links in the footer, each with an `aria-label`.
 
 ### C. Brand — `Brand` (required)
 
@@ -67,6 +67,14 @@ In the footer's status slot.
 ### N. Language — `Select` (required)
 
 In the footer's language slot, trigger labelled `Language`.
+
+### O. Search — `SearchTrigger` (required)
+
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
+
+### P. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 

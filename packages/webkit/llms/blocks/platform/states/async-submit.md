@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/states/async-submit/async-submit.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/states/async-submit")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Kbd](../../../components/kbd.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Sidebar](../../../components/sidebar.md), [Spinner](../../../components/spinner.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [SearchTrigger](../../../components/search-trigger.md), [Sidebar](../../../components/sidebar.md), [Spinner](../../../components/spinner.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-errors`, `webkit-ui-states`, `webkit-form`
 
 ## Asked as
@@ -83,9 +83,9 @@ The status dot in the account menu's plan entry.
 
 Where the page sits in the console.
 
-### N. Shortcut — `Kbd` (required)
+### N. Search — `SearchTrigger` (required)
 
-The search shortcut shown in the header.
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
 
 ### O. Upgrade — `ButtonHighlight` (required)
 
@@ -210,16 +210,16 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
   import EmptyState from '@aziontech/webkit/empty-state'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
   import PageHeader from '@aziontech/webkit/page-header'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
-  import Tooltip from '@aziontech/webkit/tooltip'
   import { toast, Toaster } from '@aziontech/webkit/toast'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
   const navGroups = [
@@ -868,37 +868,10 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
           </GlobalHeader.Left>
           <GlobalHeader.Middle />
           <GlobalHeader.Right>
-            <span class="contents @min-[47rem]:hidden">
-              <IconButton
-                icon="pi pi-search"
-                kind="outlined"
-                size="medium"
-                aria-label="Search"
-                aria-keyshortcuts="Meta+K"
-                @click="paletteOpen = true"
-              />
-            </span>
-            <button
-              type="button"
-              aria-label="Search"
-              aria-keyshortcuts="Meta+K"
-              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
-              @click="paletteOpen = true"
-            >
-              <span
-                class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
-                aria-hidden="true"
-              >
-                <i class="pi pi-search" />
-              </span>
-              <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-muted)">Search</span>
-              <Kbd
-                meta
-                size="small"
-                class="shrink-0"
-                >K</Kbd
-              >
-            </button>
+            <SearchTrigger
+              collapsible
+              @open="paletteOpen = true"
+            />
 
             <span class="contents md:hidden">
               <Tooltip

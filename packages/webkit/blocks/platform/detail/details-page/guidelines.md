@@ -18,9 +18,9 @@ The second-level page of one resource. The user arrives from a list row or a dep
 
 ## Building blocks
 
-### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `Kbd`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
+### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
 
-The persistent console shell from `skills/webkit-navigation`: the collapsible `Sidebar` with the brand, the `Command` palette and the module `Menu`, the account menu and theme switch in its footer, and one `GlobalHeader` with the `Breadcrumb`, Search with its `Kbd` hint, Create, Agent and the account avatar. Below md the sidebar moves into a left `Drawer`. The breadcrumb reads `module › resource name`, e.g. Resources › analytics-app, and never names a tab; the service overview ends it on its environment picker.
+The persistent console shell from `skills/webkit-navigation`: the collapsible `Sidebar` with the brand, the `Command` palette and the module `Menu`, the account menu and theme switch in its footer, and one `GlobalHeader` with the `Breadcrumb`, `SearchTrigger` (⌘K / Ctrl K), Create, Agent and the account avatar. Below md the sidebar moves into a left `Drawer`. The breadcrumb reads `module › resource name`, e.g. Resources › analytics-app, and never names a tab; the service overview ends it on its environment picker.
 
 ### B. Tab bar — `PageTabs`, `Tabs` (required)
 
@@ -41,6 +41,10 @@ The last band, on the canvas fill, says what the user can do next in one sentenc
 ### F. Get started — `SectionHeader`, `ToggleGroup`, `Card`, `CodeBlock` (optional)
 
 For a resource made from the CLI, the `platform/detail/get-started` section follows the summary: a `SectionHeader` with the CLI or GitHub Actions `ToggleGroup`, then three numbered step `Card`s with a `CodeBlock` each.
+
+### G. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Topology tab
 

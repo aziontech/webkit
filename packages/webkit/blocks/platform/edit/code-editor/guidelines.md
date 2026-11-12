@@ -18,7 +18,7 @@ The editing page of a service whose behavior lives in source code. The user writ
 
 ## Building blocks
 
-### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `Kbd`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
+### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
 
 The platform shell from `shells/console`: the `Sidebar` with `Brand`, the `Command` search, the `Menu` of modules and the account `DropdownMenu`; the `GlobalHeader` with the Services `Breadcrumb` and the Create and Agent actions; and on small screens the same sidebar inside a `Drawer`. The breadcrumb carries the service name, so the page has no title of its own. See `skills/webkit-navigation`.
 
@@ -69,6 +69,10 @@ The form column with four `SettingsSection`s: General (Name, required on Save), 
 ### K. Save bar — `SaveBar`, `Button` (required)
 
 A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab.
+
+### L. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 

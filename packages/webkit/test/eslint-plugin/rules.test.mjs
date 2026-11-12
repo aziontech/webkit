@@ -40,6 +40,8 @@ const authoringStandards = (await import('../../src/eslint-plugin/rules/authorin
   .default
 const containerNeedsWidth = (await import('../../src/eslint-plugin/rules/container-needs-width.js'))
   .default
+const headerSearchTrigger = (await import('../../src/eslint-plugin/rules/header-search-trigger.js'))
+  .default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -460,6 +462,54 @@ test('container-needs-width', () => {
         ),
         filename: 'l.vue',
         errors: [{ messageId: 'collapses' }]
+      }
+    ]
+  })
+})
+
+test('header-search-trigger', () => {
+  const header = (right, extra = '') =>
+    `<template><div class="@container"><GlobalHeader><GlobalHeader.Nav />` +
+    `<GlobalHeader.Right>${right}</GlobalHeader.Right></GlobalHeader></div>${extra}</template>`
+  vue.run('header-search-trigger', headerSearchTrigger, {
+    valid: [
+      { code: header('<SearchTrigger collapsible />'), filename: 'a.vue' },
+      {
+        code: '<template><GlobalHeader><GlobalHeader.Right><Avatar /></GlobalHeader.Right></GlobalHeader></template>',
+        filename: 'focused.vue'
+      },
+      {
+        code: '<template><global-header><navigation-menu /></global-header><search-trigger /></template>',
+        filename: 'kebab.vue'
+      },
+      {
+        code: '<template><SearchTrigger aria-keyshortcuts="Meta+K Control+K" /></template>',
+        filename: 'b.vue'
+      },
+      { code: '<template><IconButton icon="pi pi-search" /></template>', filename: 'toolbar.vue' },
+      { code: '<template><Kbd meta>K</Kbd></template>', filename: 'kbd.vue' }
+    ],
+    invalid: [
+      { code: header('<Avatar />'), filename: 'c.vue', errors: [{ messageId: 'missing' }] },
+      {
+        code: '<template><Sidebar /><GlobalHeader><GlobalHeader.Right /></GlobalHeader></template>',
+        filename: 'd.vue',
+        errors: [{ messageId: 'missing' }]
+      },
+      {
+        code: header('<SearchTrigger /><button aria-keyshortcuts="Meta+K">Search</button>'),
+        filename: 'e.vue',
+        errors: [{ messageId: 'handRolled' }]
+      },
+      {
+        code: '<template><Input readonly aria-keyshortcuts="Control+K" /></template>',
+        filename: 'f.vue',
+        errors: [{ messageId: 'handRolled' }]
+      },
+      {
+        code: header('<SearchTrigger /><IconButton icon="pi pi-search" aria-label="Search" />'),
+        filename: 'g.vue',
+        errors: [{ messageId: 'bareIcon' }]
       }
     ]
   })

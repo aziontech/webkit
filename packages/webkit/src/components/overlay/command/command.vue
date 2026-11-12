@@ -1,6 +1,17 @@
 <script setup lang="ts">
   import { defaultWindow, useEventListener } from '@vueuse/core'
-  import { computed, nextTick, provide, ref, shallowRef, useAttrs, useId, watch } from 'vue'
+  import {
+    computed,
+    nextTick,
+    onBeforeUnmount,
+    onMounted,
+    provide,
+    ref,
+    shallowRef,
+    useAttrs,
+    useId,
+    watch
+  } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
@@ -15,6 +26,7 @@
     type CommandItemValue,
     type CommandRegisteredItem
   } from './injection-key'
+  import { claimShortcut } from './shortcut-registry'
 
   defineOptions({
     name: 'Command',
@@ -211,6 +223,21 @@
     event.preventDefault()
     setOpen(!isOpen.value)
   })
+
+  let releaseShortcut = () => {}
+
+  onMounted(() => {
+    watch(
+      () => props.shortcut,
+      (shortcut) => {
+        releaseShortcut()
+        releaseShortcut = claimShortcut(shortcut)
+      },
+      { immediate: true }
+    )
+  })
+
+  onBeforeUnmount(() => releaseShortcut())
 
   watch(query, () => {
     resetActive()

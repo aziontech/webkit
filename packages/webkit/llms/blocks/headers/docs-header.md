@@ -5,7 +5,7 @@
 - Surface: docs
 - Source: `blocks/headers/docs-header/docs-header.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("headers/docs-header")`
-- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [NavigationMenu](../../components/navigation-menu.md)
+- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [Command](../../components/command.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [NavigationMenu](../../components/navigation-menu.md), [SearchTrigger](../../components/search-trigger.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -30,9 +30,9 @@ The top bar of the documentation site. A reader arrives from search or from the 
 
 Default `content` placement, `aria-label="Azion documentation"`. Start cluster in `GlobalHeader.Left`, an empty `GlobalHeader.Nav`, the actions in `GlobalHeader.Right`.
 
-### B. Navigation trigger and end actions — `IconButton` (required)
+### B. Navigation trigger and GitHub — `IconButton` (required)
 
-Below `lg`, an outlined `pi-bars` icon button opens the documentation navigation (the rail leaves at that width). In the end cluster, Search leads, then GitHub (`href` with `target="_blank"`). Search can widen into a field with the ⌘K shortcut once the bar is wide enough; below that it stays an icon button.
+Below `lg`, an outlined `pi-bars` icon button opens the documentation navigation (the rail leaves at that width). In the end cluster, after the search, GitHub (`href` with `target="_blank"`).
 
 ### C. Brand — `Brand` (required)
 
@@ -45,6 +45,14 @@ The top-level sections (`Reference`, `Guides`, `Dev tools`) as `NavigationMenu.T
 ### E. Console — `Button` (required)
 
 `kind="secondary"`, medium, last in the bar: the way back to the product.
+
+### F. Search — `SearchTrigger` (required)
+
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
+
+### G. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 
@@ -59,7 +67,7 @@ The top-level sections (`Reference`, `Guides`, `Dev tools`) as `NavigationMenu.T
 ## Copy
 
 - **Section links:** nouns, sentence case, no verbs: `Reference`, `Guides`, `Dev tools`.
-- **Icon button labels:** say the target: `Search documentation`, `Azion on GitHub`, `Open documentation navigation`.
+- **Icon button labels:** say the target: `Search docs` (the `SearchTrigger` label), `Azion on GitHub`, `Open documentation navigation`.
 - **Console:** the product name alone: `Console`.
 
 ## Accessibility
@@ -90,15 +98,20 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
 <script setup>
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
+  import Command from '@aziontech/webkit/command'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import NavigationMenu from '@aziontech/webkit/navigation-menu'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import { ref } from 'vue'
 
   const sections = ['Reference', 'Guides', 'Dev tools']
+  const searchPages = ['Get started', 'Applications', 'Functions', 'Firewall', 'Azion CLI']
+  const searchOpen = ref(false)
 </script>
 
 <template>
-  <div class="w-full bg-(--bg-canvas)">
+  <div class="@container w-full bg-(--bg-canvas)">
     <GlobalHeader aria-label="Azion documentation">
       <GlobalHeader.Left>
         <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
@@ -155,12 +168,10 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
       </GlobalHeader.Left>
       <GlobalHeader.Nav />
       <GlobalHeader.Right>
-        <IconButton
-          icon="pi pi-search"
-          kind="outlined"
-          size="medium"
-          aria-label="Search documentation"
-          class="shrink-0"
+        <SearchTrigger
+          collapsible
+          label="Search docs"
+          @open="searchOpen = true"
         />
         <IconButton
           icon="pi pi-github"
@@ -180,6 +191,20 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
         />
       </GlobalHeader.Right>
     </GlobalHeader>
+    <Command v-model:open="searchOpen">
+      <Command.Input placeholder="Search docs" />
+      <Command.List>
+        <Command.Empty>No page matches your search.</Command.Empty>
+        <Command.Group heading="Pages">
+          <Command.Item
+            v-for="page in searchPages"
+            :key="page"
+            :value="page"
+            >{{ page }}</Command.Item
+          >
+        </Command.Group>
+      </Command.List>
+    </Command>
   </div>
 </template>
 ```

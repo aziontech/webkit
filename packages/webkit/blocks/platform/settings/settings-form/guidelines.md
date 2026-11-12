@@ -18,9 +18,9 @@ The place the user goes to change how an account or a project behaves. They scan
 
 ## Building blocks
 
-### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `Kbd`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
+### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
 
-The platform shell: the resizable, collapsible `Sidebar` with the `Brand`, the `Menu` and the account footer; the `GlobalHeader` with the `Breadcrumb`, the `Command` palette opened from search and its `Kbd` hint, Create and the Agent `ButtonHighlight`; and on a phone the same navigation in a right `Drawer`. The scroll region beside it is unpadded so the save footer can run full bleed.
+The platform shell: the resizable, collapsible `Sidebar` with the `Brand`, the `Menu` and the account footer; the `GlobalHeader` with the `Breadcrumb`, the `SearchTrigger` (⌘K / Ctrl K) that opens the `Command` palette, Create and the Agent `ButtonHighlight`; and on a phone the same navigation in a right `Drawer`. The scroll region beside it is unpadded so the save footer can run full bleed.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -37,6 +37,10 @@ One `SettingRow` per setting, with a `title` and a one-sentence `description`. T
 ### E. Save — `SaveBar`, `Button` (required)
 
 SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard puts back the last saved values and clears the errors. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, and SavePerCard puts an optional docs `Link` on the footer's start.
+
+### F. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 

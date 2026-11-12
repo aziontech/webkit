@@ -1,15 +1,20 @@
 <script setup>
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
+  import Command from '@aziontech/webkit/command'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import NavigationMenu from '@aziontech/webkit/navigation-menu'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import { ref } from 'vue'
 
   const sections = ['Reference', 'Guides', 'Dev tools']
+  const searchPages = ['Get started', 'Applications', 'Functions', 'Firewall', 'Azion CLI']
+  const searchOpen = ref(false)
 </script>
 
 <template>
-  <div class="w-full bg-(--bg-canvas)">
+  <div class="@container w-full bg-(--bg-canvas)">
     <GlobalHeader aria-label="Azion documentation">
       <GlobalHeader.Left>
         <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
@@ -66,12 +71,10 @@
       </GlobalHeader.Left>
       <GlobalHeader.Nav />
       <GlobalHeader.Right>
-        <IconButton
-          icon="pi pi-search"
-          kind="outlined"
-          size="medium"
-          aria-label="Search documentation"
-          class="shrink-0"
+        <SearchTrigger
+          collapsible
+          label="Search docs"
+          @open="searchOpen = true"
         />
         <IconButton
           icon="pi pi-github"
@@ -91,5 +94,19 @@
         />
       </GlobalHeader.Right>
     </GlobalHeader>
+    <Command v-model:open="searchOpen">
+      <Command.Input placeholder="Search docs" />
+      <Command.List>
+        <Command.Empty>No page matches your search.</Command.Empty>
+        <Command.Group heading="Pages">
+          <Command.Item
+            v-for="page in searchPages"
+            :key="page"
+            :value="page"
+            >{{ page }}</Command.Item
+          >
+        </Command.Group>
+      </Command.List>
+    </Command>
   </div>
 </template>

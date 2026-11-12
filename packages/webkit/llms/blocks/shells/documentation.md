@@ -5,7 +5,7 @@
 - Surface: docs
 - Source: `blocks/shells/documentation/documentation.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/documentation")`
-- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [Diagram](../../components/diagram.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCta](../../components/doc-cta.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocItem](../../components/doc-item.md), [DocOnThisPage](../../components/doc-on-this-page.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), `ItemList`, `MenuGroup`, `MenuItem`, `MenuRoot`, `MenuSub`, `MenuSubContent`, `MenuSubTrigger`, [NavigationMenu](../../components/navigation-menu.md), [ScrollArea](../../components/scroll-area.md), [SearchTrigger](../../components/search-trigger.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
+- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [Command](../../components/command.md), [Diagram](../../components/diagram.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCta](../../components/doc-cta.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocItem](../../components/doc-item.md), [DocOnThisPage](../../components/doc-on-this-page.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), `ItemList`, `MenuGroup`, `MenuItem`, `MenuRoot`, `MenuSub`, `MenuSubContent`, `MenuSubTrigger`, [NavigationMenu](../../components/navigation-menu.md), [ScrollArea](../../components/scroll-area.md), [SearchTrigger](../../components/search-trigger.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
@@ -30,7 +30,7 @@ Default `content` placement, `aria-label="Azion documentation"`; the same bar as
 
 ### B. Icon actions — `IconButton` (required)
 
-The navigation trigger below `lg`, Search and GitHub in the header, and the small `transparent` social links in the footer, each with an `aria-label`.
+The navigation trigger below `lg`, GitHub in the header, and the small `transparent` social links in the footer, each with an `aria-label`.
 
 ### C. Brand — `Brand` (required)
 
@@ -79,6 +79,14 @@ In the footer's status slot.
 ### N. Language — `Select` (required)
 
 In the footer's language slot, trigger labelled `Language`.
+
+### O. Search — `SearchTrigger` (required)
+
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
+
+### P. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 
@@ -140,6 +148,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
 <script setup>
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
+  import Command from '@aziontech/webkit/command'
   import Footer from '@aziontech/webkit/footer'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -148,6 +157,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
   import MenuRoot from '@aziontech/webkit/menu-root'
   import NavigationMenu from '@aziontech/webkit/navigation-menu'
   import ScrollArea from '@aziontech/webkit/scroll-area'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -247,91 +257,107 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
     window.removeEventListener('resize', syncBrand)
     lgProbe?.remove()
   })
+  const searchPages = ['Get started', 'Applications', 'Functions', 'Firewall', 'Azion CLI']
+  const searchOpen = ref(false)
 </script>
 
 <template>
   <div class="flex h-screen min-h-0 w-full flex-col bg-(--bg-canvas) text-(--text-default)">
-    <GlobalHeader aria-label="Azion documentation">
-      <GlobalHeader.Left>
-        <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
-          <div class="shrink-0 lg:hidden">
-            <IconButton
-              icon="pi pi-bars"
-              kind="outlined"
-              size="medium"
-              aria-label="Open documentation navigation"
-            />
-          </div>
-          <GlobalHeader.Brand>
-            <a
-              href="#"
-              aria-label="Azion Docs home"
-              class="inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) gap-(--spacing-xs)"
-            >
-              <Brand
-                kind="default"
-                size="small"
+    <div class="@container w-full">
+      <GlobalHeader aria-label="Azion documentation">
+        <GlobalHeader.Left>
+          <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
+            <div class="shrink-0 lg:hidden">
+              <IconButton
+                icon="pi pi-bars"
+                kind="outlined"
+                size="medium"
+                aria-label="Open documentation navigation"
               />
-              <span
-                class="rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) text-overline-sm text-(--text-muted)"
+            </div>
+            <GlobalHeader.Brand>
+              <a
+                href="#"
+                aria-label="Azion Docs home"
+                class="inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) gap-(--spacing-xs)"
               >
-                Docs
-              </span>
-            </a>
-          </GlobalHeader.Brand>
-          <div class="shrink-0 ms-(--spacing-xs) hidden lg:flex">
-            <NavigationMenu aria-label="Documentation sections">
-              <NavigationMenu.List>
-                <NavigationMenu.Item
-                  v-for="section in sections"
-                  :key="section"
+                <Brand
+                  kind="default"
+                  size="small"
+                />
+                <span
+                  class="rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) text-overline-sm text-(--text-muted)"
                 >
-                  <NavigationMenu.Trigger href="#">{{ section }}</NavigationMenu.Trigger>
-                </NavigationMenu.Item>
-              </NavigationMenu.List>
-              <NavigationMenu.Portal>
-                <NavigationMenu.Positioner
-                  side="bottom"
-                  align="start"
-                  :side-offset="12"
-                >
-                  <NavigationMenu.Popup>
-                    <NavigationMenu.Arrow />
-                    <NavigationMenu.Viewport />
-                  </NavigationMenu.Popup>
-                </NavigationMenu.Positioner>
-              </NavigationMenu.Portal>
-            </NavigationMenu>
+                  Docs
+                </span>
+              </a>
+            </GlobalHeader.Brand>
+            <div class="shrink-0 ms-(--spacing-xs) hidden lg:flex">
+              <NavigationMenu aria-label="Documentation sections">
+                <NavigationMenu.List>
+                  <NavigationMenu.Item
+                    v-for="section in sections"
+                    :key="section"
+                  >
+                    <NavigationMenu.Trigger href="#">{{ section }}</NavigationMenu.Trigger>
+                  </NavigationMenu.Item>
+                </NavigationMenu.List>
+                <NavigationMenu.Portal>
+                  <NavigationMenu.Positioner
+                    side="bottom"
+                    align="start"
+                    :side-offset="12"
+                  >
+                    <NavigationMenu.Popup>
+                      <NavigationMenu.Arrow />
+                      <NavigationMenu.Viewport />
+                    </NavigationMenu.Popup>
+                  </NavigationMenu.Positioner>
+                </NavigationMenu.Portal>
+              </NavigationMenu>
+            </div>
           </div>
-        </div>
-      </GlobalHeader.Left>
-      <GlobalHeader.Nav />
-      <GlobalHeader.Right>
-        <IconButton
-          icon="pi pi-search"
-          kind="outlined"
-          size="medium"
-          aria-label="Search documentation"
-          class="shrink-0"
-        />
-        <IconButton
-          icon="pi pi-github"
-          kind="outlined"
-          size="medium"
-          aria-label="Azion on GitHub"
-          href="https://github.com/aziontech"
-          target="_blank"
-          class="shrink-0"
-        />
-        <Button
-          label="Console"
-          kind="secondary"
-          size="medium"
-          class="shrink-0"
-          href="#"
-        />
-      </GlobalHeader.Right>
-    </GlobalHeader>
+        </GlobalHeader.Left>
+        <GlobalHeader.Nav />
+        <GlobalHeader.Right>
+          <SearchTrigger
+            collapsible
+            label="Search docs"
+            @open="searchOpen = true"
+          />
+          <IconButton
+            icon="pi pi-github"
+            kind="outlined"
+            size="medium"
+            aria-label="Azion on GitHub"
+            href="https://github.com/aziontech"
+            target="_blank"
+            class="shrink-0"
+          />
+          <Button
+            label="Console"
+            kind="secondary"
+            size="medium"
+            class="shrink-0"
+            href="#"
+          />
+        </GlobalHeader.Right>
+      </GlobalHeader>
+    </div>
+    <Command v-model:open="searchOpen">
+      <Command.Input placeholder="Search docs" />
+      <Command.List>
+        <Command.Empty>No page matches your search.</Command.Empty>
+        <Command.Group heading="Pages">
+          <Command.Item
+            v-for="page in searchPages"
+            :key="page"
+            :value="page"
+            >{{ page }}</Command.Item
+          >
+        </Command.Group>
+      </Command.List>
+    </Command>
 
     <div class="relative flex min-h-0 flex-1">
       <aside class="hidden h-full w-(--container-2xs) shrink-0 lg:flex">

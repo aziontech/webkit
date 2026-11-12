@@ -1,29 +1,28 @@
 <script setup>
-  import Sidebar from '@aziontech/webkit/sidebar'
-  import SidebarHeader from '@aziontech/webkit/sidebar-header'
-  import SidebarFooter from '@aziontech/webkit/sidebar-footer'
-  import Input from '@aziontech/webkit/input'
-  import Kbd from '@aziontech/webkit/kbd'
   import Avatar from '@aziontech/webkit/avatar'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import Command from '@aziontech/webkit/command'
+  import CommandEmpty from '@aziontech/webkit/command-empty'
+  import CommandGroup from '@aziontech/webkit/command-group'
+  import CommandInput from '@aziontech/webkit/command-input'
+  import CommandItem from '@aziontech/webkit/command-item'
+  import CommandList from '@aziontech/webkit/command-list'
+  import CommandSeparator from '@aziontech/webkit/command-separator'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
-  import Command from '@aziontech/webkit/command'
-  import CommandInput from '@aziontech/webkit/command-input'
-  import CommandList from '@aziontech/webkit/command-list'
-  import CommandGroup from '@aziontech/webkit/command-group'
-  import CommandItem from '@aziontech/webkit/command-item'
-  import CommandSeparator from '@aziontech/webkit/command-separator'
-  import CommandEmpty from '@aziontech/webkit/command-empty'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Menu from '@aziontech/webkit/menu'
   import MenuBack from '@aziontech/webkit/menu-back'
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
   import MenuSub from '@aziontech/webkit/menu-sub'
-  import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
   import MenuSubContent from '@aziontech/webkit/menu-sub-content'
+  import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import Sidebar from '@aziontech/webkit/sidebar'
+  import SidebarFooter from '@aziontech/webkit/sidebar-footer'
+  import SidebarHeader from '@aziontech/webkit/sidebar-header'
   import { ref } from 'vue'
 
   const accountMenuOpen = ref(false)
@@ -37,33 +36,11 @@
   >
     <template #header>
       <SidebarHeader>
-        <div
-          class="cursor-pointer [&_input]:cursor-pointer"
-          @click="paletteOpen = true"
-          @keydown.enter="paletteOpen = true"
-        >
-          <Input
-            model-value=""
-            placeholder="Search"
-            size="large"
-            readonly
-            aria-label="Search navigation and commands"
-            aria-keyshortcuts="Meta+K"
-          >
-            <template #iconLeft
-              ><i
-                class="pi pi-search"
-                aria-hidden="true"
-            /></template>
-            <template #iconRight
-              ><Kbd
-                meta
-                size="small"
-                >K</Kbd
-              ></template
-            >
-          </Input>
-        </div>
+        <SearchTrigger
+          class="w-full"
+          label="Search navigation and commands"
+          @open="paletteOpen = true"
+        />
 
         <Command v-model:open="paletteOpen">
           <CommandInput placeholder="Search navigation and commands" />

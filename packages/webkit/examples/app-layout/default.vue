@@ -3,6 +3,7 @@
   import AppLayout from '@aziontech/webkit/app-layout'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
+  import Command from '@aziontech/webkit/command'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelpPanel from '@aziontech/webkit/help-panel'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -12,6 +13,7 @@
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
   import PageHeader from '@aziontech/webkit/page-header'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import { ref } from 'vue'
@@ -21,6 +23,8 @@
   const notice = ref(true)
 
   const crumbs = [{ label: 'Services', href: '#' }, { label: 'web-app-prod' }]
+  const searchOpen = ref(false)
+  const searchPages = ['Applications', 'Workloads', 'Functions', 'Firewall']
 </script>
 
 <template>
@@ -61,29 +65,49 @@
       </template>
 
       <template #header="{ compact, openNavigation, toggleTools }">
-        <GlobalHeader aria-label="Console">
-          <GlobalHeader.Left class="justify-start!">
-            <IconButton
-              v-if="compact"
-              icon="pi pi-bars"
-              aria-label="Open navigation"
-              kind="outlined"
-              size="medium"
-              @click="openNavigation"
-            />
-          </GlobalHeader.Left>
-          <GlobalHeader.Middle />
-          <GlobalHeader.Right>
-            <IconButton
-              icon="pi pi-question-circle"
-              aria-label="Help"
-              kind="outlined"
-              size="medium"
-              :aria-pressed="toolsOpen"
-              @click="toggleTools"
-            />
-          </GlobalHeader.Right>
-        </GlobalHeader>
+        <div class="@container w-full">
+          <GlobalHeader aria-label="Console">
+            <GlobalHeader.Left class="justify-start!">
+              <IconButton
+                v-if="compact"
+                icon="pi pi-bars"
+                aria-label="Open navigation"
+                kind="outlined"
+                size="medium"
+                @click="openNavigation"
+              />
+            </GlobalHeader.Left>
+            <GlobalHeader.Middle />
+            <GlobalHeader.Right>
+              <SearchTrigger
+                collapsible
+                @open="searchOpen = true"
+              />
+              <IconButton
+                icon="pi pi-question-circle"
+                aria-label="Help"
+                kind="outlined"
+                size="medium"
+                :aria-pressed="toolsOpen"
+                @click="toggleTools"
+              />
+            </GlobalHeader.Right>
+          </GlobalHeader>
+          <Command v-model:open="searchOpen">
+            <Command.Input placeholder="Search the console" />
+            <Command.List>
+              <Command.Empty>No page matches your search.</Command.Empty>
+              <Command.Group heading="Pages">
+                <Command.Item
+                  v-for="page in searchPages"
+                  :key="page"
+                  :value="page"
+                  >{{ page }}</Command.Item
+                >
+              </Command.Group>
+            </Command.List>
+          </Command>
+        </div>
       </template>
 
       <template #notifications>

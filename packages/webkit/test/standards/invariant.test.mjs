@@ -233,9 +233,9 @@ test('every shipped eslint rule is claimed by a standard (no orphan gates)', asy
   for (const s of STANDARDS) {
     for (const e of s.enforce || []) if (e.surface === 'lint') claimed.add(e.by)
   }
-  // prefer-webkit-component steers ADOPTION (use webkit instead of a foreign lib) —
-  // deliberately not a construction standard.
-  const ORPHAN_OK = new Set(['prefer-webkit-component'])
+  // prefer-webkit-component and header-search-trigger steer ADOPTION (use webkit instead of a
+  // foreign lib; search in an app header through SearchTrigger) — deliberately not construction standards.
+  const ORPHAN_OK = new Set(['prefer-webkit-component', 'header-search-trigger'])
   for (const name of Object.keys(rules)) {
     assert.ok(
       claimed.has(name) || ORPHAN_OK.has(name),
