@@ -20,18 +20,26 @@
     "button": {
       "import": "@aziontech/webkit/button",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/button"
+      "treeShakeableImport": "@aziontech/webkit/button",
+      "structure": "monolithic",
+      "props": [{ "name": "label" }, { "name": "kind" }],
+      "slots": [{ "name": "prefix" }]
     },
     "card": {
       "import": "@aziontech/webkit/card",
       "kind": "component",
       "treeShakeableImport": "@aziontech/webkit/card",
-      "styleSeam": true
+      "styleSeam": true,
+      "structure": "monolithic",
+      "props": [{ "name": "title" }],
+      "slots": [{ "name": "header" }, { "name": "content" }]
     },
     "chip": {
       "import": "@aziontech/webkit/chip",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/chip"
+      "treeShakeableImport": "@aziontech/webkit/chip",
+      "structure": "monolithic",
+      "props": [{ "name": "removable" }]
     },
     "chips": {
       "import": "@aziontech/webkit/chips",
@@ -45,7 +53,9 @@
       "kind": "component",
       "compoundRoot": true,
       "treeShakeableImport": "@aziontech/webkit/table-root",
-      "subcomponents": ["@aziontech/webkit/table-row"]
+      "subcomponents": ["@aziontech/webkit/table-row"],
+      "structure": "composition",
+      "slots": [{ "name": "default" }]
     },
     "table-root": {
       "import": "@aziontech/webkit/table-root",

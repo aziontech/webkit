@@ -43,6 +43,17 @@ const KNOWN_CONFLICTS = [
     ],
     reason:
       "the component API takes the client's brand colours as CSS colours (brand: { base, glow }); every spelling of one is a hardcoded colour to the rule"
+  },
+  {
+    rule: 'webkit/no-dropped-children',
+    files: [
+      'blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue',
+      'blocks/platform/ai/ai-chat-drawer/variants/error.vue',
+      'blocks/platform/ai/ai-chat-drawer/variants/long-thread.vue',
+      'blocks/platform/ai/ai-chat-drawer/variants/streaming.vue'
+    ],
+    reason:
+      'the block puts the workload summary straight inside Card, which has no default slot, so it never renders; the fix is to wrap it in <template #content> in the block'
   }
 ]
 

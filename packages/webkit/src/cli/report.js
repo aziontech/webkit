@@ -29,7 +29,8 @@ export const RULE_PURPOSE = {
   'no-output-in-command': 'shell code sample that mixes the command with what it prints',
   'menu-node-href': 'navigation node naming its destination path/to/url instead of href',
   'no-gap-after-closing-section':
-    'SectionGap or closing frame after a section that draws its own close'
+    'SectionGap or closing frame after a section that draws its own close',
+  'no-dropped-children': 'content inside a webkit component with no default slot, never rendered'
 }
 
 const TEMPLATE_ONLY_RULES = [
@@ -37,7 +38,8 @@ const TEMPLATE_ONLY_RULES = [
   'container-needs-width',
   'header-search-trigger',
   'no-wrapped-page-chrome',
-  'no-gap-after-closing-section'
+  'no-gap-after-closing-section',
+  'no-dropped-children'
 ]
 
 export const FORMATS = new Set(['markdown', 'json'])
