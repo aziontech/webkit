@@ -6,6 +6,7 @@ import { dirname, join, relative, resolve } from 'node:path'
 
 import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/authoring-checks.js'
 import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/token-checks.js'
+import noClockInSetup from '../src/eslint-plugin/rules/no-clock-in-setup.js'
 import noPhysicalDirection from '../src/eslint-plugin/rules/no-physical-direction.js'
 import { Linter } from 'eslint'
 import * as vueParser from 'vue-eslint-parser'
@@ -19,6 +20,7 @@ import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-complian
 
 const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES, ...STRING_MESSAGES }
 const DIRECTION_DIRS = ['src/components', 'blocks', 'examples']
+const CLOCK_DIRS = ['blocks', 'examples']
 const DETAILS = new Map()
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
@@ -71,8 +73,39 @@ function directionViolations() {
   return keys
 }
 
+function clockViolations() {
+  const linter = new Linter({ configType: 'flat' })
+  const config = [
+    {
+      files: ['**/*.vue', '**/*.ts', '**/*.js'],
+      languageOptions: {
+        parser: vueParser,
+        parserOptions: { parser: tsParser, ecmaVersion: 'latest', sourceType: 'module' }
+      },
+      plugins: { webkit: { rules: { 'no-clock-in-setup': noClockInSetup } } },
+      rules: { 'webkit/no-clock-in-setup': 'error' }
+    }
+  ]
+  const keys = []
+  for (const dir of CLOCK_DIRS) {
+    for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
+      if (!/\.(vue|ts|js)$/.test(abs) || /\.(test|stories)\.ts$/.test(abs)) continue
+      const source = readFileSync(abs, 'utf-8')
+      if (!/\bDate\b/.test(source)) continue
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      for (const m of linter.verify(source, config, { filename: abs })) {
+        if (m.ruleId !== 'webkit/no-clock-in-setup') continue
+        const key = `${rel}::clock:no-clock-in-setup`
+        keys.push(key)
+        DETAILS.set(key, `line ${m.line}: ${m.message}`)
+      }
+    }
+  }
+  return keys
+}
+
 function currentViolations() {
-  const keys = [...directionViolations()]
+  const keys = [...directionViolations(), ...clockViolations()]
   for (const abs of walk(SRC)) {
     const rel = relative(ROOT, abs).split('\\').join('/')
     if (rel.startsWith(WIP_PREFIX) || rel.endsWith('.d.ts')) continue
@@ -156,8 +189,8 @@ if (introduced.length) {
     console.error(`  ${file}`)
     if (id.startsWith('spec:')) {
       console.error(`    [spec] ${id.slice(5)}`)
-    } else if (id.startsWith('direction:')) {
-      console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(10)}`)
+    } else if (id.startsWith('direction:') || id.startsWith('clock:')) {
+      console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(id.indexOf(':') + 1)}`)
     } else {
       console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^(token|i18n):/, '')] ?? id}`)
     }

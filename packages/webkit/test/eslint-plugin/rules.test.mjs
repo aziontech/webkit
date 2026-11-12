@@ -51,6 +51,7 @@ const noRootRelativeAsset = (
   await import('../../src/eslint-plugin/rules/no-root-relative-asset.js')
 ).default
 const menuNodeHref = (await import('../../src/eslint-plugin/rules/menu-node-href.js')).default
+const noClockInSetup = (await import('../../src/eslint-plugin/rules/no-clock-in-setup.js')).default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -1103,6 +1104,65 @@ test('menu-node-href', () => {
         code: `<template><Menu :groups="[{ items: [{ id: 'a', label: 'A', path: '/a' }] }]" /></template>`,
         filename: 'b.vue',
         errors: [{ messageId: 'alias' }]
+      }
+    ]
+  })
+})
+
+test('no-clock-in-setup', () => {
+  js.run('no-clock-in-setup', noClockInSetup, {
+    valid: [
+      'const NOW = Date.UTC(2026, 10, 10, 12)',
+      'const ago = new Date(NOW - 3_600_000)',
+      "const parsed = new Date('2026-11-10T12:00:00Z')",
+      'const refresh = () => { updatedAt.value = new Date() }',
+      'onMounted(() => { now.value = Date.now() })',
+      'watch(source, () => { stamp = Date.now() })',
+      'function tick() { return Date.now() }',
+      'const later = Date.now'
+    ],
+    invalid: [
+      {
+        code: 'const referenceTime = Math.floor(Date.now() / 60_000) * 60_000',
+        errors: [{ messageId: 'clock', data: { call: 'Date.now()' } }]
+      },
+      {
+        code: 'const today = new Date()',
+        errors: [{ messageId: 'clock', data: { call: 'new Date()' } }]
+      },
+      {
+        code: 'const now = ref(Date.now())',
+        errors: [{ messageId: 'clock' }]
+      },
+      {
+        code: 'const year = computed(() => new Date().getFullYear())',
+        errors: [{ messageId: 'clock', data: { call: 'new Date()' } }]
+      }
+    ]
+  })
+  vue.run('no-clock-in-setup', noClockInSetup, {
+    valid: [
+      {
+        code: `<script setup>
+const NOW = Date.UTC(2026, 10, 10, 12)
+</script>
+<template><button @click="stamp = Date.now()">Refresh</button><Cell :value="new Date(NOW)" /></template>`,
+        filename: 'a.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: `<script setup>
+const rows = [{ updatedAt: new Date(Date.now() - 7_200_000) }]
+</script>
+<template><Table :data="rows" /></template>`,
+        filename: 'b.vue',
+        errors: [{ messageId: 'clock', data: { call: 'Date.now()' } }]
+      },
+      {
+        code: `<template><span>{{ new Date().getFullYear() }}</span></template>`,
+        filename: 'c.vue',
+        errors: [{ messageId: 'clock', data: { call: 'new Date()' } }]
       }
     ]
   })
