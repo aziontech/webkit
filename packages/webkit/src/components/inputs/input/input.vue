@@ -41,6 +41,8 @@
     required?: boolean
     /** Applies the invalid border + ring tokens and sets aria-invalid. */
     invalid?: boolean
+    /** Sets the value and placeholder in the monospace code face, for CLI commands, IDs, tokens and hashes. */
+    monospace?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -51,6 +53,7 @@
     readonly: false,
     required: false,
     invalid: false,
+    monospace: false,
     type: 'text',
     maxLength: undefined,
     autocomplete: undefined,
@@ -125,10 +128,11 @@
     :data-readonly="readonly || null"
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
+    :data-monospace="monospace || null"
     :data-has-icon-left="hasIconLeft || null"
     :data-has-icon-right="hasIconRight || null"
     :class="[
-      'relative inline-flex items-center w-full cursor-text',
+      'group/input relative inline-flex items-center w-full cursor-text',
       'gap-(--spacing-xs) px-(--spacing-sm)',
       'rounded-(--shape-elements)',
       'border border-(--border-default) bg-(--bg-surface) text-(--text-default)',
@@ -142,7 +146,7 @@
       'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
       'data-[invalid]:border-(--danger-border)',
       'data-[required]:border-(--warning-border)',
-      'data-[readonly]:bg-transparent data-[readonly]:border-dashed data-[readonly]:cursor-default',
+      'data-[readonly]:cursor-default',
       'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
       attrs.class
     ]"
@@ -171,7 +175,7 @@
       :aria-required="isRequired || undefined"
       :data-testid="testId"
       dir="auto"
-      class="relative z-(--z-input-field) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default"
+      class="relative z-(--z-input-field) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm group-data-[monospace]/input:text-label-code-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default"
       v-bind="{ ...autofillHints, ...passthroughAttrs }"
       :id="controlId"
       :aria-describedby="describedBy"

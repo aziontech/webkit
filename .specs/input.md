@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: abe1086c5e93dd37d2a58b02136c565be9445a6ed3fd57ad40577a6c0edc6a29
+checksum: 6e44497865a60651e5250e64d56e65b6384901b8703e1e4b87a3b4245594bc0d
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Input Text — Component Spec
@@ -37,6 +37,10 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 
 - Prefer the `field-*` wrapper when you need a label, helper text, or validation message.
 - Set an appropriate `type`/`inputmode` for the content (email, url, …).
+- Set `monospace` on a field whose value is code-like: a CLI command, an ID, a token, a hash, a path. Pair it with `:spellcheck="false"`.
+- A read-only command or ID the user copies: `readonly` + `monospace` inside an `InputGroup` with a `CopyButton`, and a description saying why it cannot change.
+- Do not set `monospace` on prose values (names, titles, e-mails, domains typed by the user).
+- Do not restyle a read-only field (dashed border, transparent fill): it is the same filled field, made non-editable; the reason belongs in the field's description.
 
 ## Usage
 
@@ -74,9 +78,10 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 | `spellcheck`   | `boolean \| undefined`           | `undefined` | false    | Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck="false"` on every field. |
 | `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px.                                                                                                                                    |
 | `disabled`     | `boolean`                        | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                                                                                                       |
-| `readonly`     | `boolean`                        | `false`     | false    | Marks the field read-only: value is visible, focusable and copyable but not editable. Renders transparent with a dashed border and no hover (`data-readonly`), distinct from both the editable and the disabled field.                                  |
+| `readonly`     | `boolean`                        | `false`     | false    | Marks the field read-only: value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`); distinct from the disabled field.                  |
 | `required`     | `boolean`                        | `false`     | false    | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component.                                                                                        |
 | `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid`.                                                                                                                                                                                       |
+| `monospace`    | `boolean`                        | `false`     | false    | Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for CLI commands, IDs, tokens and hashes (`data-monospace`).                                                                                                          |
 
 ## Events
 
@@ -95,7 +100,8 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 
 - Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `readonly`, `invalid`
 - Password managers: the `<input>` carries `data-1p-ignore`, `data-lpignore`, `data-bwignore` and `data-form-type="other"` unless it is a credential or identity field — `autocomplete` set to any token but `off`, or `type="email"`. A read-only field always carries them. This keeps 1Password, LastPass, Bitwarden and Dashlane from offering a sign-in on ordinary fields (names, IDs, searches) while login fields stay fillable. A consumer attr (e.g. `data-1p-ignore="false"`) wins.
-- `data-readonly` mirrors the `readonly` prop: a read-only field drops its fill (`bg-transparent`), draws a dashed border and gets no hover border, so it never looks editable. The value keeps `var(--text-default)` (readable and copyable, unlike `disabled`) and the field stays focusable.
+- `data-readonly` mirrors the `readonly` prop: a read-only field keeps the editable field's fill (`var(--bg-surface)`) and solid `var(--border-default)` border, as the design sample draws it; it only drops the hover border and takes a default cursor. The value keeps `var(--text-default)` (readable and copyable, unlike `disabled`) and the field stays focusable. Why the value cannot change is said by the field's description, not by a different chrome.
+- `data-monospace` mirrors the `monospace` prop: the value and the placeholder render in `.text-label-code-sm` instead of `.text-label-sm`.
 - `data-size` mirrors the `size` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
@@ -114,6 +120,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 | Region                               | Token (DESIGN.md)                                                                                                   |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
 | typography                           | `.text-label-sm`                                                                                                    |
+| typography (`monospace`)             | `.text-label-code-sm`                                                                                               |
 | surface                              | `var(--bg-surface)`                                                                                                 |
 | surface (disabled)                   | `var(--bg-disabled)`                                                                                                |
 | text                                 | `var(--text-default)`                                                                                               |
@@ -162,6 +169,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 - Email — justification: documents `type="email"` (native browser keyboard / validation surface) since the `type` prop is restricted and only two values matter visually.
 - MaxLength — justification: documents `maxLength` as a hard character cap; behavior is invisible from props alone and only observable while typing.
 - Disabled
+- ReadOnly — justification: the `readonly` look (filled, non-editable) is a top-level prop and not visible from the other stories; shown with `monospace` as a copyable CLI command beside a read-only ID.
 
 ## Constraints — DO NOT
 
