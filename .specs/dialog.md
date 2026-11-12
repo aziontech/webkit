@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: c4da1c7a64e3f7d40c438f339e7a6c9de4684e6929b210d2f372893f33e3edd2
+checksum: 274c9f12763def3a2853c1255a8737fc6819c607d82c44b3014de82b2b67ea20
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Dialog — Component Spec
@@ -37,6 +37,7 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 
 - Trap focus, restore it on close, and close on Escape and overlay click.
 - One clear primary action; keep the body scannable.
+- Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 
 ## Usage
 
@@ -111,18 +112,21 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 
 ## Props
 
-| Prop          | Type         | Default     | Required | JSDoc                                                 |
-| ------------- | ------------ | ----------- | -------- | ----------------------------------------------------- |
-| `open`        | `boolean`    | `undefined` | false    | Controlled open state. Use with `v-model:open`.       |
-| `defaultOpen` | `boolean`    | `false`     | false    | Initial open state when uncontrolled.                 |
-| `dismissible` | `boolean`    | `true`      | false    | When true, overlay click and Escape close the dialog. |
-| `size`        | `DialogSize` | `'medium'`  | false    | Panel max-width preset passed to the inner Panel.     |
+| Prop          | Type         | Default    | Required | JSDoc                                                 |
+| ------------- | ------------ | ---------- | -------- | ----------------------------------------------------- |
+| `defaultOpen` | `boolean`    | `false`    | false    | Initial open state when uncontrolled.                 |
+| `dismissible` | `boolean`    | `true`     | false    | When true, overlay click and Escape close the dialog. |
+| `size`        | `DialogSize` | `'medium'` | false    | Panel max-width preset passed to the inner Panel.     |
+
+## v-model
+
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                                                        |
+| -------------- | --------- | ----------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (trigger, `Dialog.Close`, `Esc`, overlay click). While unbound the dialog is uncontrolled and starts at `defaultOpen`. |
 
 ## Events
 
-| Event         | Payload          | Notes         |
-| ------------- | ---------------- | ------------- |
-| `update:open` | `value: boolean` | v-model:open. |
+_No events of its own: `update:open` comes from `v-model:open` (see v-model above)._
 
 ## Slots
 

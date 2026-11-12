@@ -443,6 +443,66 @@ describe('Menu (composition, drill stack + data mode)', () => {
     await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
   })
 
+  const inlineSub = (open: { value?: boolean; events: boolean[] }) =>
+    defineComponent({
+      components: COMPONENTS,
+      setup: () => ({ open }),
+      template: `
+        <Menu aria-label="Console navigation">
+          <MenuGroup label="Azion platform">
+            <MenuSub
+              v-if="open.value === undefined"
+              @update:open="(value) => open.events.push(value)"
+            >
+              <MenuSubTrigger label="Getting started" kind="inline" />
+              <MenuSubContent>
+                <MenuItem label="Installation" href="/docs/install" />
+              </MenuSubContent>
+            </MenuSub>
+            <MenuSub
+              v-else
+              v-model:open="open.value"
+              @update:open="(value) => open.events.push(value)"
+            >
+              <MenuSubTrigger label="Getting started" kind="inline" />
+              <MenuSubContent>
+                <MenuItem label="Installation" href="/docs/install" />
+              </MenuSubContent>
+            </MenuSub>
+          </MenuGroup>
+        </Menu>
+      `
+    })
+
+  it('an inline sub with only an update:open listener stays uncontrolled and reports each toggle', async () => {
+    const state = ref<{ value?: boolean; events: boolean[] }>({ events: [] })
+    const view = render(inlineSub(state.value))
+    const trigger = view.getByRole('button', { name: 'Getting started' })
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
+
+    expect(state.value.events).toEqual([true, false])
+  })
+
+  it('v-model:open drives an inline sub and receives its toggles', async () => {
+    const state = ref<{ value?: boolean; events: boolean[] }>({ value: true, events: [] })
+    const view = render(inlineSub(state.value))
+    const trigger = view.getByRole('button', { name: 'Getting started' })
+    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
+
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
+    expect(state.value.value).toBe(false)
+    expect(state.value.events).toEqual([false])
+
+    state.value.value = true
+    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
+  })
+
   it('renders no Back button at the root level', () => {
     const view = render(composed())
 

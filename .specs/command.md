@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 2
-checksum: eb6652d6e6cedf398d16dee109f6a9c885d03aff2ac0e4ad7ceab31ae34b2855
+checksum: 232915bfaf6c77896f7cef17b41a14fc1c19f6485d14ba6aa018bdb08d10216f
 created: 2026-07-23
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Command Menu — Component Spec
@@ -36,6 +36,7 @@ Command Menu is a ⌘K command palette: a modal overlay with a search input and 
 
 - Write items as Title Case verb phrases describing an action ("Deploy Project"), not navigation labels.
 - Keep the palette controlled via `v-model:open` so the app can open it from a button and from the global ⌘K shortcut.
+- Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 - Group related actions with `<Command.Group heading="…">` and separate distinct sections with `<Command.Separator>`.
 
 ## Usage
@@ -144,19 +145,23 @@ packages/webkit/src/components/overlay/command/
 
 ## Props
 
-| Prop          | Type      | Default     | Required | JSDoc                                                                                                                                  |
-| ------------- | --------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `open`        | `boolean` | `undefined` | false    | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the palette is uncontrolled.                           |
-| `defaultOpen` | `boolean` | `false`     | false    | Initial open state when uncontrolled.                                                                                                  |
-| `dismissible` | `boolean` | `true`      | false    | When true, backdrop click and Escape close the palette.                                                                                |
-| `shortcut`    | `string`  | `'meta+k'`  | false    | Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms. |
+| Prop          | Type      | Default    | Required | JSDoc                                                                                                                                  |
+| ------------- | --------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultOpen` | `boolean` | `false`    | false    | Initial open state when uncontrolled.                                                                                                  |
+| `dismissible` | `boolean` | `true`     | false    | When true, backdrop click and Escape close the palette.                                                                                |
+| `shortcut`    | `string`  | `'meta+k'` | false    | Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms. |
+
+## v-model
+
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                                                                           |
+| -------------- | --------- | ----------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (trigger, the `shortcut`, item activation, `Esc`, backdrop click). While unbound the palette is uncontrolled and starts at `defaultOpen`. |
 
 ## Events
 
-| Event         | Payload                                                         | Notes                                                                                                                                                                                                                             |
-| ------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `update:open` | `boolean`                                                       | Fires on every open/closed transition; supports `v-model:open`.                                                                                                                                                                   |
-| `select`      | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fires when an enabled item is activated (click or `Enter`). `event` is the activation event; `value` is the item's identifier. The palette closes automatically and focus returns to the element that was focused before opening. |
+| Event    | Payload                                                         | Notes                                                                                                                                                                                                                             |
+| -------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fires when an enabled item is activated (click or `Enter`). `event` is the activation event; `value` is the item's identifier. The palette closes automatically and focus returns to the element that was focused before opening. |
 
 ## Slots
 

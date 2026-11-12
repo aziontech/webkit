@@ -33,7 +33,7 @@
   )
 
   /** Controlled open state. Use with v-model:open; while unbound the drawer starts at defaultOpen. */
-  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
   const uid = useId()
@@ -42,7 +42,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-drawer')
 
-  const openProp = computed(() => openModel.value)
+  const openProp = computed<boolean | undefined>(() => openModel.value)
 
   const isOpen = useControllable<boolean>({
     prop: openProp,

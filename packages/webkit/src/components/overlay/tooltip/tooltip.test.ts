@@ -170,6 +170,7 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
       await fireEvent.focusIn(getByTestId('overlay-tooltip'))
       await settle()
 
+      expect(onUpdate).toHaveBeenCalledTimes(1)
       expect(onUpdate).toHaveBeenCalledWith(true)
     })
 

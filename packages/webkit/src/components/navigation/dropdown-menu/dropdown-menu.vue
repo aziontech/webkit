@@ -39,8 +39,6 @@
   }>()
 
   interface Props {
-    /** Controlled open state. Use with v-model:open or update:open. When omitted, the component is uncontrolled. */
-    open?: boolean
     /** Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time. */
     placement?: DropdownMenuPlacementInput
     /** Pixel gap between the trigger and the panel. */
@@ -50,21 +48,20 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    open: undefined,
     placement: 'bottom-start',
     offset: 4,
     disabled: false
   })
 
   const emit = defineEmits<{
-    'update:open': [value: boolean]
     select: [
       event: globalThis.MouseEvent | globalThis.KeyboardEvent,
       value: DropdownMenuOptionValue
     ]
   }>()
 
-  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
+  /** Controlled open state. Use with v-model:open; while unbound the menu is uncontrolled and starts closed. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
   const uid = useId()
@@ -90,7 +87,7 @@
   const triggerId = `${uid}-trigger`
   const panelId = `${uid}-panel`
 
-  const openProp = computed(() => openModel.value ?? props.open)
+  const openProp = computed<boolean | undefined>(() => openModel.value)
 
   const isOpenState = useControllable<boolean>({
     prop: openProp,
