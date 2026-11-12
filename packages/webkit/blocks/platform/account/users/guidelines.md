@@ -24,9 +24,9 @@ Title `Users` and one sentence that says access comes from teams. Actions: Docum
 
 A search `Input` bound with `v-bind="filterProps"` over name, email and status. Hidden while the list failed to load.
 
-### C. Users table — `Card`, `Table`, `Avatar`, `useCollection` (required)
+### C. Users table — `Card`, `Table`, `Avatar`, `Tag`, `useCollection` (required)
 
-`Table` with `v-bind="tableProps"` in a flush `Card`, sortable by name. Name: a square `Avatar` with the initials, the name (or the email while the invitation is pending), `Owner` in muted text after the owner's name, and the email under it. Status is `Table.CellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `Table.CellTime`, or `Not signed in yet` for an invitation.
+`Table` with `v-bind="tableProps"` in a flush `Card`, sortable by name. Name: a square `Avatar` with the initials, the name (or the email while the invitation is pending), an `Owner` `Tag` (`severity="highlight"`, small) after the owner's name, and the email under it. Status is `Table.CellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `Table.CellTime`, or `Not signed in yet` for an invitation.
 
 ### D. Teams per person — `MultiSelect`, `Tooltip` (required)
 

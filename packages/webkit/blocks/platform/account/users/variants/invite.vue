@@ -21,6 +21,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Table from '@aziontech/webkit/table'
+  import Tag from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
@@ -317,11 +318,13 @@
                       <span class="truncate text-body-sm text-(--text-default)">{{
                         displayName(row)
                       }}</span>
-                      <span
+                      <Tag
                         v-if="row.owner"
-                        class="shrink-0 text-body-xs text-(--text-muted)"
-                        >Owner</span
-                      >
+                        label="Owner"
+                        severity="highlight"
+                        size="small"
+                        class="shrink-0"
+                      />
                     </span>
                     <span
                       v-if="row.name"
