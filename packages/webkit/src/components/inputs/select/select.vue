@@ -3,7 +3,14 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { fieldContextKey } from '../field/injection-key'
-  import { selectContextKey, type SelectSize, type SelectValue } from './injection-key'
+  import {
+    selectContextKey,
+    type SelectKind,
+    type SelectSize,
+    type SelectValue
+  } from './injection-key'
+
+  export type { SelectKind, SelectSize, SelectValue } from './injection-key'
 
   defineOptions({
     name: 'Select',
@@ -23,6 +30,8 @@
     placeholder?: string
     /** Size token; affects trigger height. */
     size?: SelectSize
+    /** Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb. */
+    kind?: SelectKind
     /** Disables the trigger and prevents opening. */
     disabled?: boolean
     /** Marks the field read-only; selection visible, dropdown locked. */
@@ -42,6 +51,7 @@
     defaultOpen: false,
     placeholder: undefined,
     size: 'medium',
+    kind: 'outlined',
     disabled: false,
     readonly: false,
     required: false,
@@ -148,6 +158,7 @@
     isSelected,
     multiple: computed(() => props.multiple),
     size: computed(() => props.size),
+    kind: computed(() => props.kind),
     disabled: isDisabled,
     readonly: computed(() => props.readonly),
     invalid: isInvalid,
@@ -169,13 +180,14 @@
     :data-state="openState ? 'open' : 'closed'"
     :data-mode="multiple ? 'multiple' : 'single'"
     :data-size="size"
+    :data-kind="kind"
     :data-disabled="isDisabled || null"
     :data-readonly="readonly || null"
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
     :data-filled="filled || null"
     :class="attrs.class"
-    class="relative inline-block w-full"
+    class="relative inline-block w-full data-[kind=transparent]:w-auto data-[kind=transparent]:max-w-full"
   >
     <slot />
   </div>

@@ -117,9 +117,20 @@
       <a
         v-else-if="node.href"
         :href="node.href"
-        class="min-w-0 truncate rounded-(--shape-elements) text-label-sm text-(--text-default) underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-        >{{ node.name }}</a
+        :data-testid="`${testId}__node-link`"
+        class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-elements) text-label-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
       >
+        <span
+          dir="auto"
+          class="min-w-0 truncate underline-offset-2 group-hover/link:underline"
+          >{{ node.name }}</span
+        >
+        <i
+          class="pi pi-external-link shrink-0 text-body-xs leading-none"
+          aria-hidden="true"
+          :data-testid="`${testId}__node-link-icon`"
+        />
+      </a>
       <span
         v-else
         class="min-w-0 truncate text-label-sm text-(--text-default)"

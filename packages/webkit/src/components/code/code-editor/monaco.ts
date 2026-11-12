@@ -52,6 +52,19 @@ export interface CodeEditorMonaco {
   }
   MarkerSeverity: { Error: number; Warning: number; Info: number }
   Uri?: { parse(value: string): unknown }
+  languages?: CodeEditorMonacoLanguages
+}
+
+/** A registered language; Monaco's built-in languages carry a `loader` for their Monarch grammar. */
+export interface CodeEditorMonacoLanguage {
+  id: string
+  loader?: () => Promise<{ language?: unknown }>
+}
+
+/** The part of `monaco.languages` CodeEditor uses to colour function calls. */
+export interface CodeEditorMonacoLanguages {
+  getLanguages(): CodeEditorMonacoLanguage[]
+  setMonarchTokensProvider(languageId: string, language: object): unknown
 }
 
 /** What `loader` resolves to: the module itself or a module with a default export. */
@@ -142,6 +155,62 @@ const COLORS: Record<string, string> = {
   'scrollbarSlider.background': '--bg-selected',
   'scrollbarSlider.hoverBackground': '--bg-hover',
   'scrollbarSlider.activeBackground': '--bg-selected'
+}
+
+const CALL_LANGUAGES = ['javascript', 'typescript']
+
+const CALL_RULES: unknown[] = [
+  [/(\.)(\s*)([a-zA-Z_$][\w$]*)(?=\s*\()/, ['delimiter', '', 'function']],
+  [/#?[a-z_$][\w$]*(?=\s*\()/, { cases: { '@keywords': 'keyword', '@default': 'function' } }],
+  [/\b(?:true|false|null|undefined)\b/, 'constant'],
+  [/[A-Z][A-Z0-9_$]+(?![\w$])/, 'identifier']
+]
+
+interface MonarchGrammar {
+  tokenizer: Record<string, unknown[]>
+}
+
+const isGrammar = (value: unknown): value is MonarchGrammar =>
+  typeof value === 'object' &&
+  value !== null &&
+  'tokenizer' in value &&
+  Array.isArray((value as MonarchGrammar).tokenizer['common'])
+
+export function withCallRules(grammar: MonarchGrammar): MonarchGrammar {
+  return {
+    ...grammar,
+    tokenizer: {
+      ...grammar.tokenizer,
+      common: [...CALL_RULES, ...(grammar.tokenizer['common'] ?? [])]
+    }
+  }
+}
+
+const highlighted = new WeakMap<object, Promise<void>>()
+
+export function highlightCalls(api: { languages?: CodeEditorMonacoLanguages }): Promise<void> {
+  const languages = api.languages
+  if (!languages?.getLanguages || !languages.setMonarchTokensProvider) return Promise.resolve()
+  const pending = highlighted.get(api)
+  if (pending) return pending
+  const run = Promise.all(
+    languages
+      .getLanguages()
+      .filter((entry) => CALL_LANGUAGES.includes(entry.id) && entry.loader)
+      .map(async (entry) => {
+        const grammar = (await entry.loader?.())?.language
+        if (isGrammar(grammar)) languages.setMonarchTokensProvider(entry.id, withCallRules(grammar))
+      })
+  ).then(
+    () => undefined,
+    () => undefined
+  )
+  highlighted.set(api, run)
+  return run
+}
+
+export function padLineNumber(line: number): string {
+  return String(line).padStart(2, '0')
 }
 
 const HEX = /^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i

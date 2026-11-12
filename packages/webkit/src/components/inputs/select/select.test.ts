@@ -6,6 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/select/default.vue'
 import Disabled from '../../../../examples/select/disabled.vue'
 import Multiple from '../../../../examples/select/multiple.vue'
+import Transparent from '../../../../examples/select/transparent.vue'
 import WithGroups from '../../../../examples/select/with-groups.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Select, { SelectContent, SelectGroup, SelectOption, SelectTrigger } from './index'
@@ -116,6 +117,30 @@ describe('Select (compound / overlay)', () => {
   })
 
   // ---- Root renders + reflects state via data-* -----------------------------
+  it('defaults to the outlined kind and mirrors kind on the root, trigger and panel', async () => {
+    const outlined = render(Host)
+    expect(outlined.getByTestId('select').getAttribute('data-kind')).toBe('outlined')
+    expect(outlined.getByTestId('select-trigger').getAttribute('data-kind')).toBe('outlined')
+    outlined.unmount()
+
+    const view = render(Transparent)
+    const trigger = view.getByRole('combobox', { name: 'Switch environment' })
+    expect(view.getByTestId('select').getAttribute('data-kind')).toBe('transparent')
+    expect(trigger.getAttribute('data-kind')).toBe('transparent')
+    expect(trigger).toHaveTextContent('Production')
+    await fireEvent.click(trigger)
+    const content = getContent()!
+    expect(content.getAttribute('data-kind')).toBe('transparent')
+    await fireEvent.click(within(content).getByRole('option', { name: 'Staging' }))
+    expect(trigger).toHaveTextContent('Staging')
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('has no a11y violations on the transparent switcher in a breadcrumb', async () => {
+    const view = render(Transparent)
+    await expectNoA11yViolations(view.container)
+  })
+
   it('renders the root div with the default testid and closed/single state', () => {
     const { getByTestId } = render(Host)
 

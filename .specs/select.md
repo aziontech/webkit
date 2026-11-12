@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 4aa364e33ad2710c7789d25809cb055ecf2419dd8b727a2ea09adc461fceeb21
+checksum: 092d0f4f6f1ba5242dd41cfbc6502de0fa83bf4b1241ed2fd08597a7e17eee83
 created: 2026-06-15
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Select — Component Spec
@@ -46,6 +46,8 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 - Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.
 - With `multiple`, `modelValue` becomes an array; for a field that is always multi-pick prefer `multi-select`.
 - Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.
+- A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `kind="transparent"` with `size="small"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.
+- Keep `kind="transparent"` out of forms: it draws no border, so it cannot show the `invalid` or `required` border; a form field is the default `outlined` inside a `Field`.
 
 ## Usage
 
@@ -89,19 +91,20 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 ## Props
 
-| Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                                                                              |
-| -------------- | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `modelValue`   | `string \| number \| unknown[]`  | `undefined` | false    | Two-way bound selection. Scalar in single mode; array in multi mode.                                                                                                                                               |
-| `multiple`     | `boolean`                        | `false`     | false    | When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array.                                                                                                |
-| `open`         | `boolean`                        | `undefined` | false    | Controlled open state for the dropdown. Use with `v-model:open`.                                                                                                                                                   |
-| `defaultOpen`  | `boolean`                        | `false`     | false    | Initial open state when uncontrolled.                                                                                                                                                                              |
-| `placeholder`  | `string`                         | `undefined` | false    | Trigger placeholder shown when no option is selected.                                                                                                                                                              |
-| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`.                                                                                                                         |
-| `disabled`     | `boolean`                        | `false`     | false    | Disables the trigger and prevents opening; applies disabled tokens.                                                                                                                                                |
-| `readonly`     | `boolean`                        | `false`     | false    | Marks the field read-only; the current selection is visible but the dropdown cannot open.                                                                                                                          |
-| `required`     | `boolean`                        | `false`     | false    | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component. |
-| `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                                                                                   |
-| `displayValue` | `(value: unknown) => string`     | `undefined` | false    | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`.                                                                                                           |
+| Prop           | Type                             | Default      | Required | JSDoc                                                                                                                                                                                                              |
+| -------------- | -------------------------------- | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `modelValue`   | `string \| number \| unknown[]`  | `undefined`  | false    | Two-way bound selection. Scalar in single mode; array in multi mode.                                                                                                                                               |
+| `multiple`     | `boolean`                        | `false`      | false    | When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array.                                                                                                |
+| `open`         | `boolean`                        | `undefined`  | false    | Controlled open state for the dropdown. Use with `v-model:open`.                                                                                                                                                   |
+| `defaultOpen`  | `boolean`                        | `false`      | false    | Initial open state when uncontrolled.                                                                                                                                                                              |
+| `placeholder`  | `string`                         | `undefined`  | false    | Trigger placeholder shown when no option is selected.                                                                                                                                                              |
+| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`   | false    | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`.                                                                                                                         |
+| `kind`         | `'outlined' \| 'transparent'`    | `'outlined'` | false    | Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb.      |
+| `disabled`     | `boolean`                        | `false`      | false    | Disables the trigger and prevents opening; applies disabled tokens.                                                                                                                                                |
+| `readonly`     | `boolean`                        | `false`      | false    | Marks the field read-only; the current selection is visible but the dropdown cannot open.                                                                                                                          |
+| `required`     | `boolean`                        | `false`      | false    | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component. |
+| `invalid`      | `boolean`                        | `false`      | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                                                                                   |
+| `displayValue` | `(value: unknown) => string`     | `undefined`  | false    | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`.                                                                                                           |
 
 ## Events
 
@@ -121,6 +124,8 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 - Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `invalid`, `required`, `opened`
 - `data-state` on the root and trigger: `open` | `closed`
 - `data-size` on the trigger mirrors the `size` prop
+- `data-kind` on the root, the trigger and the panel mirrors `kind` (`outlined` | `transparent`)
+- `kind="transparent"`: the trigger and root size to the value (`w-auto`, capped at the container), no border, no fill, `--spacing-xs` inline padding, `.text-label-md` like a breadcrumb crumb, `--bg-mask` on hover and while open; the panel stops matching the trigger's width and takes at least `--container-3xs`
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-mode` on the root: `single` | `multiple`
 - `data-selected` on `<SelectOption>` when the option's value is part of the current selection
@@ -141,6 +146,9 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 | typography (group heading)           | `.text-label-sm` + `text-(--text-muted)`                                                                                        |
 | surface (trigger)                    | `var(--bg-surface)`                                                                                                             |
 | surface (trigger disabled)           | `var(--bg-disabled)`                                                                                                            |
+| surface (transparent hover / open)   | `var(--bg-mask)`                                                                                                                |
+| typography (transparent trigger)     | `.text-label-md`                                                                                                                |
+| panel min width (transparent)        | `var(--container-3xs)`                                                                                                          |
 | surface (panel)                      | `var(--bg-surface-raised)`                                                                                                      |
 | surface (option hover)               | `var(--bg-hover)`                                                                                                               |
 | surface (option selected)            | `var(--bg-selected)`                                                                                                            |
@@ -162,6 +170,10 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 | spacing (option gap)                 | `var(--spacing-xs)`                                                                                                             |
 | shape                                | `var(--shape-elements)`                                                                                                         |
 | shadow (panel)                       | `var(--shadow-xs)`                                                                                                              |
+
+## Decisions and open questions
+
+- **`kind` on Select (2026-11-12).** The console's workload page ends its breadcrumb on the environment (`Production ⌄`) drawn as text, and the design sample got it by overriding the trigger with `!` classes (`border-0! bg-transparent! h-6! …`). The look is now `kind="transparent"`, named from the shared vocabulary (`transparent` = no surface until hover, as `Button` and `ButtonGroup`); the bordered field is `outlined`, the default, so no existing select changes. Decided: the transparent trigger keeps the `size` heights (28 px at `small`, not the sample's 24 px) so its target stays the same as every other small control; it zeroes the focus ring offset like the sample, since it sits inside a line of text; and its panel takes at least `--container-3xs` instead of the trigger's width, which would be a few characters wide. The `./select` budget moves from 19.75 KB to 20 KB (measured 19.91 KB, up from 19.73 KB).
 
 ## Theme gaps
 
@@ -185,6 +197,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 - Default
 - Sizes — composite story rendering all three sizes side by side (canonical composite example).
+- Transparent — justification: the `kind="transparent"` trigger only reads right in its place, the environment switcher at the end of a breadcrumb (`Workloads › workload_01 › Production`).
 - Single — justification: documents the radio-style indicator and scalar `modelValue` shape (the default mode); pairs with `Multiple` to make the two modes browseable in one click.
 - Multiple — justification: documents the checkbox-style indicator and array `modelValue` shape that the `multiple` prop unlocks.
 - WithGroups — justification: documents the `<SelectGroup label="…">` heading anatomy from Figma `3899:29361` (Group region), which is not reachable from Default.

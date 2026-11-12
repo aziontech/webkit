@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: be1efcca0d80c7bd7588619acf69dc02e511e4b529b51567beb7541202942b1a
+checksum: 137d3c6ed27195b221e70856e38ec545369aff6239153579b26ad098d0c34daa
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # TopologyDiagram — Component Spec
@@ -40,16 +40,21 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 - Mark a staged change `dashed` with a warning status and a message that says the deploy applies it.
 - Mark the last node of each branch `terminal` so no connector leaves it.
 - Give every unbound slot a message that says what happens without it.
+- Give a node `href` when its resource has a page: the name becomes a link that ends in the open glyph (`pi pi-external-link`), as every resource name in the console does.
+- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`pi pi-plus`, `kind="outlined"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.key`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
 
 ## Usage
 
 ```vue
 <script setup>
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/webkit/tooltip'
   import TopologyDiagram from '@aziontech/webkit/topology-diagram'
   import { ref } from 'vue'
 
   const levels = [
-    { key: 'project', nodes: [{ key: 'project', kind: 'Project', name: 'web-app', status: 'Live', severity: 'success' }] },
+    { key: 'domains', nodes: [{ key: 'domains', kind: 'Domains', icon: 'pi pi-globe', name: 'web-app.azion.app', status: '1 domain' }] },
+    { key: 'project', nodes: [{ key: 'project', kind: 'Project', name: 'web-app', href: '/projects/web-app', status: 'Live', severity: 'success' }] },
     { key: 'policy', nodes: [{ key: 'policy', kind: 'Policy', bindable: true, bindOptions: [{ value: 'edge-guard', label: 'edge-guard' }], terminal: true }] }
   ]
   const expanded = ref([])
@@ -60,7 +65,21 @@ The deployment topology of a resource as a left-to-right diagram: each column is
     v-model:expanded="expanded"
     :levels="levels"
     @bind="(key, value) => {}"
-  />
+  >
+    <template #actions="{ node }">
+      <Tooltip
+        v-if="node.key === 'domains'"
+        text="Add domain"
+      >
+        <IconButton
+          icon="pi pi-plus"
+          kind="outlined"
+          size="small"
+          aria-label="Add domain"
+        />
+      </Tooltip>
+    </template>
+  </TopologyDiagram>
 </template>
 ```
 
@@ -116,6 +135,7 @@ Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`;
 | body divider    | `var(--border-muted)`                       |
 | connector       | `var(--accent)`                             |
 | muted text      | `var(--text-muted)`                         |
+| name link       | `.text-label-sm` `var(--text-default)`, open glyph `pi pi-external-link` `.text-body-xs`, underline on hover |
 | column gap      | `var(--spacing-xl)`; node gap `var(--spacing-md)` |
 
 ## Theme gaps
@@ -169,10 +189,15 @@ Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`;
 
 ## Examples
 
-- Default — a full topology with a bound and an unbound bindable node and the `actions` slot.
+- Default — a full topology with linked names (open glyph), a bound and an unbound bindable node and the `actions` slot (the Domains `+`).
 - Binding — justified: staging bind, remove and create needs state across interactions.
 - Loading — the `loading` prop.
 - Empty — the empty line and the `empty` slot.
+
+## Decisions and open questions
+
+- **Open glyph on linked names (2026-11-12).** A node with `href` renders its name as a link followed by `pi pi-external-link`, as the design sample's `ResourceLink` and WebKit's `TableCellLink` do for every resource name, internal or not; the link keeps same-tab navigation and the glyph is `aria-hidden`. No `external` flag: the sample never draws a linked name without it.
+- **The Domains `+` stays in the `actions` slot.** A battery-2 builder left it out though the slot already existed; the fix is discoverability (Best practices, Usage, the Default example), not a new prop.
 
 ## Constraints — DO NOT
 

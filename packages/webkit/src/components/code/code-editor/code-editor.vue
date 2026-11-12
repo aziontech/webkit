@@ -24,6 +24,8 @@
     type CodeEditorMonacoModel,
     type CodeEditorMonacoModule,
     fontFromTokens,
+    highlightCalls,
+    padLineNumber,
     themeFromTokens
   } from './monaco'
 
@@ -31,6 +33,8 @@
     CodeEditorMonaco,
     CodeEditorMonacoDiffEditor,
     CodeEditorMonacoEditor,
+    CodeEditorMonacoLanguage,
+    CodeEditorMonacoLanguages,
     CodeEditorMonacoModel,
     CodeEditorMonacoModule,
     CodeEditorMonacoTheme
@@ -80,6 +84,8 @@
     fill?: boolean
     /** Shows the line-number gutter. */
     lineNumbers?: boolean
+    /** Zero-pads line numbers to two digits (01, 02…), as the console's full-page function and arguments editors do. */
+    padLineNumbers?: boolean
     /** Model path for Monaco language services (`index.ts`, `args.json`). */
     path?: string
     /** Accessible name when no `Field` label names it. Empty uses the locale catalog. */
@@ -98,6 +104,7 @@
     height: '16rem',
     fill: false,
     lineNumbers: true,
+    padLineNumbers: false,
     path: '',
     ariaLabel: ''
   })
@@ -186,6 +193,8 @@
   const plainLabel = computed(() => props.ariaLabel || (field ? undefined : t('codeEditor.label')))
 
   const linesOf = (text: string) => text.split('\n')
+
+  const lineLabel = (line: number) => (props.padLineNumbers ? padLineNumber(line) : String(line))
 
   const panes = computed(() => {
     const modified = {
@@ -340,7 +349,7 @@
   const editorOptions = () => ({
     readOnly: isReadonly.value,
     domReadOnly: isReadonly.value,
-    lineNumbers: props.lineNumbers ? 'on' : 'off',
+    lineNumbers: props.lineNumbers ? (props.padLineNumbers ? padLineNumber : 'on') : 'off',
     minimap: { enabled: false },
     automaticLayout: true,
     scrollBeyondLastLine: false,
@@ -427,6 +436,8 @@
       return
     }
     if (unmounted) return
+    await highlightCalls(loaded)
+    if (unmounted) return
     api = loaded
     mode.value = 'monaco'
     await nextTick()
@@ -503,10 +514,13 @@
     }
   )
 
-  watch([isReadonly, () => props.lineNumbers, () => props.ariaLabel], () => {
-    ;(diffEditor ?? editor)?.updateOptions(editorOptions())
-    labelDiffSides()
-  })
+  watch(
+    [isReadonly, () => props.lineNumbers, () => props.padLineNumbers, () => props.ariaLabel],
+    () => {
+      ;(diffEditor ?? editor)?.updateOptions(editorOptions())
+      labelDiffSides()
+    }
+  )
 
   watch(() => props.markers, applyMarkers, { deep: true })
 
@@ -600,7 +614,7 @@
                   :data-severity="(pane.main && markerByLine.get(index + 1)) || null"
                   class="relative min-w-[2ch] tabular-nums data-[severity]:font-medium data-[severity=error]:text-(--danger-contrast) data-[severity=info]:text-(--info-contrast) data-[severity=warning]:text-(--warning-contrast) forced-colors:data-[severity]:text-[Highlight]"
                 >
-                  {{ index + 1 }}
+                  {{ lineLabel(index + 1) }}
                 </li>
               </ol>
               <textarea

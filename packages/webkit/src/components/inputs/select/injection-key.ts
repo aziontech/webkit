@@ -2,6 +2,9 @@ import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
 export type SelectSize = 'small' | 'medium' | 'large'
 
+/** Trigger look: the bordered field, or no border or fill until hover for a switcher inside a line of text. */
+export type SelectKind = 'outlined' | 'transparent'
+
 export type SelectValue = string | number | unknown[] | undefined
 
 export interface SelectContext {
@@ -20,6 +23,8 @@ export interface SelectContext {
   multiple: ComputedRef<boolean>
   /** Static state flags. */
   size: ComputedRef<SelectSize>
+  /** Trigger look. */
+  kind: ComputedRef<SelectKind>
   disabled: ComputedRef<boolean>
   readonly: ComputedRef<boolean>
   invalid: ComputedRef<boolean>

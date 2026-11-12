@@ -1108,7 +1108,7 @@
   {
     "name": "select",
     "path": "src/components/inputs/select/index.ts",
-    "limit": "19.75 KB"
+    "limit": "20 KB"
   },
   {
     "name": "multi-select",
@@ -1250,7 +1250,7 @@
   {
     "name": "code-editor",
     "path": "src/components/code/code-editor/code-editor.vue",
-    "limit": "8 KB"
+    "limit": "8.5 KB"
   },
   {
     "name": "button-group",

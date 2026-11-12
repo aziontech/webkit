@@ -522,7 +522,7 @@ are_; it is not the page's title block.
 | **Third level** — a typed sub-collection           | `[{ label: 'Edge DNS', href: '/edge-dns' }, { label: 'Zone', href: '/edge-dns' }, { label: zone.name }]` |
 | **Focused creation flow**                          | `[{ label: 'Applications', href: '/applications' }, { label: 'Create' }]`                                |
 
-Four rules hold across every row:
+These rules hold across every row:
 
 1. **First-level pages are not special-cased to hide the crumb.** One crumb is still a breadcrumb —
    it is what names the module now that there is no `PageHeader`.
@@ -534,6 +534,12 @@ Four rules hold across every row:
 4. **A tab is never a crumb.** Switching tabs does not change the breadcrumb — the tab is second-level
    _navigation within one page_, and it already has its own visible bar. It travels in `?tab=`, not in
    the trail.
+5. **A switcher that ends the trail reads as a crumb.** A resource that lives in several environments
+   (or versions) ends its trail on the current one as a switcher: `Workloads › workload_01 ›
+Production ⌄`. It is `<Select kind="transparent" size="small">` with `aria-label` on
+   `Select.Trigger` ("Switch environment") in the last `<li>` of `Breadcrumb.List`: no border or fill
+   until hover, sized to its value. Never a bordered `Select` in the header, and never a trigger
+   restyled with `!` overrides.
 
 ## Wiring Vue Router — `href` plus `@navigate`
 
