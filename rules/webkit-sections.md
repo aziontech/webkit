@@ -19,9 +19,13 @@ JSON. Never rebuild a band from primitives when a section exists.
 - For a section with a form (lead form, newsletter): listen to `submit` (`(event, values)`) and send
   from the site. The section never posts. Feed the outcome back through its `loading`, `submitted`
   and `error` props; the messages come from the JSON.
-- Open the page with `SiteNav` and wire its search: `@search` opens the page's `Command`
-  (`<Command v-model:open="searchOpen">`), as `rules/webkit-header-search.md` asks of every header.
-  On a phone it drops Login from the bar, as azion.com does; leave `secondaryActionOnPhones` off.
+- Compose the site chrome once: `SiteLayout` (`@aziontech/webkit/site-layout`) in `App.vue`, with
+  the `SiteNav` data as `navigation` and the `SiteFooter` data as `footer`, around `RouterView`. It
+  places `SiteNav` first and `SiteFooter` last, unwrapped, and opens the ⌘K palette from the bar's
+  search. A page is only its sections, in the layout's slot. The `shells/website` block is this
+  layout with the azion.com data: copy it as the app shell, never per page.
+  `SiteNav` drops Login from the bar on a phone, as azion.com does; leave
+  `secondaryActionOnPhones` off. `SiteFooter` draws its own top rule, frame and closing bottom rule.
 - Size a screen-filling hero under `SiteNav` with the `--layout-header-height` token: `HeroBand`
   takes it out of the screen by default, and a bare `Hero kind="screen"` takes
   `offset="var(--layout-header-height)"`. Never a literal (`56px`, `3.5rem`).
@@ -33,8 +37,6 @@ JSON. Never rebuild a band from primitives when a section exists.
   `autoplayInterval` / `v-model`, `ArticleHighlight` `v-model`, `CapabilityGrid` `titleKind`,
   `CodeSplit` action `kind` (`transparent` for a "Learn more" text button), `SiteFooter` link
   `external`, `UseCaseLinks` items without `href` for a link-less grid.
-- Close the page with `SiteFooter` as the last child of the page shell, unwrapped. It draws its own
-  top rule, its frame and its closing bottom rule, and ends on the bottom bar from `lg`.
 - A titled row of cards that scrolls sideways, with the previous/next arrows on the title row ("See
   how to use", "Industries"), is `CardCarousel` (`card-carousel`): each card takes `eyebrow`,
   `title`, `description`, `href` and `linkLabel`. Do not compose it from `Carousel` and `Overline`.
@@ -60,6 +62,8 @@ JSON. Never rebuild a band from primitives when a section exists.
   section changes in webkit first.
 - Do not wrap a section in your own `max-w-*`, padding or border to change its look. Spacing between
   bands is `SectionGap`.
+- Do not build the site header or footer from `GlobalHeader`, `NavigationMenu` or `Footer`, and do
+  not place `SiteNav` / `SiteFooter` in a page: `SiteLayout` owns them, once.
 - Do not wrap `SiteFooter` or `SiteNav` in a `div` with `border-t`, `border-b` or padding: the
   rules double and the frame drifts off the page column.
 - Do not pad an item list with placeholders, drop an item, or pick `columns` from the item count to

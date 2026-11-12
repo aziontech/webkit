@@ -1,0 +1,147 @@
+{
+ "name": "doc-layout",
+ "binding": "DocLayout",
+ "import": "@aziontech/webkit/doc-layout",
+ "treeShakeableImport": "@aziontech/webkit/doc-layout",
+ "category": "documentation",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `Menu`) on the inline start, the article in the layout's `<main>`, the \"On this page\" rail (`DocOnThisPage`) on the inline end with its own slot below it, and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article, rendered through the default slot.",
+ "setup": null,
+ "useWhen": [
+  "Every documentation page (guide, reference, legal, changelog): put one `DocLayout` in the app's root (around `RouterView`) and render each page's article as its default slot.",
+  "A docs site that needs the navigation rail, the outline and the search palette without hand-composing `GlobalHeader`, `Sidebar`, `Menu`, `DocOnThisPage`, `Drawer` and `Command`."
+ ],
+ "avoidWhen": [
+  "The signed-in console → `ConsoleLayout`. Marketing pages → `SiteLayout`.",
+  "A docs landing page with no rail (the docs home) → render it with `DocHero` and the sections, without this layout, or pass an empty `navigation` and `outline`."
+ ],
+ "related": [
+  "DocOnThisPage` — the outline rail; `outline` and `outlineGroups` are bound onto it.",
+  "DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header.",
+  "DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.",
+  "Sidebar`, `Menu` — the navigation rail; `navigation` is mapped onto `Menu` groups.",
+  "SearchTrigger`, `Command` — the header search and the palette it opens.",
+  "shells/documentation` — the block that shows this layout with a sample docs tree."
+ ],
+ "bestPractices": [
+  "Compose the layout once, in the app's root; each route renders only its article. Never put a header, a rail or an inner scroll area in a page.",
+  "Give every navigation row an `id` and an `href` (an in-app path is followed with the router; never `to`); leave `activeId` empty so the current page follows the route.",
+  "Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.",
+  "Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCta`) in `aside`, and the site footer (`Footer kind=\"content\"`) in `footer`.",
+  "The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls."
+ ],
+ "props": [
+  {
+   "name": "navigation",
+   "type": "DocLayoutNavGroup[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The docs tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, defaultOpen?, children? }`; an in-app `href` is followed with the router."
+  },
+  {
+   "name": "activeId",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id of the current row. Empty matches the current route against each row's `href`."
+  },
+  {
+   "name": "sections",
+   "type": "DocLayoutSection[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`."
+  },
+  {
+   "name": "home",
+   "type": "string",
+   "default": "'/'",
+   "required": "false",
+   "doc": "Where the Azion Docs mark links."
+  },
+  {
+   "name": "outline",
+   "type": "DocTocItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The article's headings for the \"On this page\" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused."
+  },
+  {
+   "name": "outlineGroups",
+   "type": "DocTocGroup[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Complementary link groups under the outline (GitHub, Community)."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`)."
+  },
+  {
+   "name": "searchOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:searchOpen`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "navigate",
+   "payload": "(event: MouseEvent | KeyboardEvent, item: DocLayoutNavItem)",
+   "notes": "Fired when a navigation row or a palette page is chosen; the layout then follows its `href` (an in-app path with the router). Event first."
+  },
+  {
+   "name": "search-select",
+   "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+   "notes": "Fired when a palette item from the `search` slot is chosen. Event first."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The article, rendered inside the layout's `<main>`."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "The header's end actions after the search (GitHub, Console)."
+  },
+  {
+   "name": "navigation-footer",
+   "scope": "—",
+   "notes": "The foot of the navigation rail and of the drawer (the theme switch)."
+  },
+  {
+   "name": "aside",
+   "scope": "—",
+   "notes": "Content under the outline in the end rail (a `DocCta`)."
+  },
+  {
+   "name": "footer",
+   "scope": "—",
+   "notes": "The footer under the article (`Footer kind=\"content\"`)."
+  },
+  {
+   "name": "search",
+   "scope": "{ query: string }",
+   "notes": "Extra `Command.Group`s listed before the navigation pages."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup lang=\"ts\">\n  import Button from '@aziontech/webkit/button'\n  import DocCta from '@aziontech/webkit/doc-cta'\n  import DocHeading from '@aziontech/webkit/doc-heading'\n  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'\n  import DocPageHeader from '@aziontech/webkit/doc-page-header'\n  import DocProse from '@aziontech/webkit/doc-prose'\n  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'\n  import { ref } from 'vue'\n\n  const navigation: DocLayoutNavGroup[] = [\n    {\n      label: 'Fundamentals',\n      items: [\n        { id: 'overview', label: 'Overview', href: '/docs' },\n        {\n          id: 'get-started',\n          label: 'Get started',\n          defaultOpen: true,\n          children: [\n            { id: 'create-account', label: 'Create an account', href: '/docs/create-account' },\n            { id: 'first-deploy', label: 'First deploy', href: '/docs/first-deploy' }\n          ]\n        }\n      ]\n    }\n  ]\n\n  const outline = [\n    { id: 'before-you-start', text: 'Before you start', depth: 2 },\n    { id: 'deploy-with-cli', text: 'Deploy with Azion CLI', depth: 2 },\n    { id: 'next-steps', text: 'Next steps', depth: 2 }\n  ]\n\n  const theme = ref<ThemeSwitcherValue>('system')\n</script>\n\n<template>\n  <DocLayout\n    :navigation=\"navigation\"\n    :sections=\"[\n      { label: 'Guides', href: '/docs' },\n      { label: 'Reference', href: '/docs/reference' }\n    ]\"\n    :outline=\"outline\"\n    active-id=\"first-deploy\"\n  >\n    <template #actions>\n      <Button\n        label=\"Console\"\n        kind=\"secondary\"\n        size=\"medium\"\n        href=\"https://console.azion.com\"\n      />\n    </template>\n\n    <template #navigation-footer>\n      <ThemeSwitcher\n        v-model=\"theme\"\n        aria-label=\"Theme\"\n      />\n    </template>\n\n    <template #aside>\n      <DocCta\n        title=\"Ready to build?\"\n        label=\"Deploy your first application for free.\"\n        primary-label=\"Start for free\"\n        primary-href=\"https://console.azion.com/signup\"\n      />\n    </template>\n\n    <div class=\"layout-boundary\">\n      <div class=\"layout-column-content flex flex-col gap-(--spacing-lg)\">\n        <DocPageHeader\n          title=\"First deploy\"\n          description=\"Deploy a template and see it served from the edge.\"\n          :breadcrumb=\"[\n            { label: 'Get started', href: '/docs/get-started' },\n            { label: 'First deploy' }\n          ]\"\n        />\n        <DocProse>\n          <DocHeading\n            id=\"before-you-start\"\n            :level=\"2\"\n            >Before you start</DocHeading\n          >\n          <p>You need an Azion account and a GitHub account.</p>\n          <DocHeading\n            id=\"deploy-with-cli\"\n            :level=\"2\"\n            >Deploy with Azion CLI</DocHeading\n          >\n          <p>Install the CLI, log in and run the deploy command from your project folder.</p>\n          <DocHeading\n            id=\"next-steps\"\n            :level=\"2\"\n            >Next steps</DocHeading\n          >\n          <p>Add a domain and turn on the cache for your static assets.</p>\n        </DocProse>\n      </div>\n    </div>\n  </DocLayout>\n</template>"
+  }
+ ],
+ "docs": "components/doc-layout.md"
+}

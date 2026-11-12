@@ -1,0 +1,25 @@
+{
+ "purpose": "The marketing site's chrome, composed once in the app: `SiteNav` on top, the page's sections in the layout's `<main>`, `SiteFooter` at the foot, and the `Command` search palette wired to the bar's search button and to ⌘K / Ctrl K. The navigation and the footer are data (the `SiteNav` and `SiteFooter` props), the canvas is painted with the theme tokens so a dark site never shows an unpainted page below the fold, and the palette lists every destination of the navigation by default. Site pages are only their sections, rendered through the default slot; they never repeat the bar or the footer.",
+ "useWhen": [
+  "Every public marketing page (home, product, solution, company, legal): put one `SiteLayout` in the app's root (around `RouterView`) and render each page's sections as its default slot.",
+  "A site that needs the Azion navigation, footer and search palette without hand-composing `GlobalHeader`, `NavigationMenu`, `Footer`, `SearchTrigger` and `Command`."
+ ],
+ "avoidWhen": [
+  "The signed-in console → `ConsoleLayout`. Documentation → `DocLayout`.",
+  "A one-off landing page with no site navigation (a campaign form) → render the sections on their own."
+ ],
+ "related": [
+  "SiteNav` — the bar and its mega-menus; `navigation` is bound onto it.",
+  "SiteFooter` — the footer; `footer` is bound onto it (`kind=\"site\"` closes a framed page).",
+  "SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.",
+  "Command` — the search palette the bar's search button opens.",
+  "shells/website` — the block that shows this layout with the azion.com navigation and footer."
+ ],
+ "bestPractices": [
+  "Compose the layout once, in the app's root; each route renders only its sections. Never add `SiteNav`, `SiteFooter`, `GlobalHeader` or `Footer` to a page.",
+  "The site is dark: set `data-theme=\"dark\"` on `<html>` (in `index.html`), so the layout, the teleported menus and the palette all resolve the dark tokens.",
+  "Bind the real navigation and footer data once (`navigation`, `footer`); give every navigation item an `href` so it also appears in the search palette.",
+  "Add extra palette groups (articles, docs results) in the `search` slot; listen to `search-select` for them.",
+  "The page renders no `<main>` of its own: the layout owns the landmark."
+ ]
+}

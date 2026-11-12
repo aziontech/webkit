@@ -629,8 +629,8 @@ count permits, and lets a short last row share the width evenly — under three 
 a framed grid reads as a missing card, so the rule has no exceptions for content cells;
 `layout="fixed"` is for tiles whose width must not change (square logo walls, a cell spanning rows).
 
-**The footer closes the frame and nothing follows it.** `SiteFooter` is the page shell's last child,
-unwrapped; from `lg` the page ends on its bottom bar (the brand leads the social row), below `lg` on
+**The footer closes the frame and nothing follows it.** `SiteLayout` places `SiteFooter` as its last
+child, unwrapped — a page never adds one; from `lg` the page ends on its bottom bar (the brand leads the social row), below `lg` on
 the signature band that carries the brand.
 
 ## 7. The control cap in a field row
@@ -1043,8 +1043,9 @@ wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every d
 
 The window still owns the shell:
 
-- Below `md` the console sidebar is not shown; the shell opens the same `Sidebar` inside a
-  `Drawer` from a menu button (the `shells/console` block).
+- `ConsoleLayout` measures its own width (through `AppLayout`): below 768 px the rail moves into
+  the layout's navigation drawer, opened from the header's menu button. `DocLayout` moves its rail
+  into a drawer below `lg` and shows the outline rail from `xl`.
 - Below `md` a `Dialog` or `Drawer` is a bottom sheet; below `sm` it is a full-height, full-width
   sheet, and its `PanelFooter` actions stay pinned and stretch.
 - Ultra-wide (1920, 2560 px): the column classes of section 2 cap the content, so wide screens add
@@ -1176,7 +1177,44 @@ const hintId = useId() // stable id for the ARIA association
 
 `@aziontech/webkit` is the Azion design system: a set of themed, accessible Vue 3 components. This project depends on it. When you build or review UI here, reach for a webkit component first, import it with the flat path, and style with `@aziontech/theme` tokens. This skill is the paste-safe reference for doing that right.
 
-## Start here: a screen begins from a pattern
+## Start here: one app layout, then each screen is a page body
+
+The chrome is composed **once**, in `App.vue`, around `RouterView`, from the layout of the surface:
+
+```vue
+<script setup>
+  import ConsoleLayout from '@aziontech/webkit/console-layout'
+  import { navigation } from './navigation'
+</script>
+
+<template>
+  <ConsoleLayout
+    :navigation="navigation"
+    :breadcrumbs="$route.meta.breadcrumbs ?? []"
+    :account="{ name: 'Ana Souza', email: 'ana@example.com' }"
+  >
+    <RouterView />
+  </ConsoleLayout>
+</template>
+```
+
+- **Console:** `ConsoleLayout` — navigation rows `{ id, label, icon, href }` (an in-app `href` is
+  followed with the app's router, no `@navigate` wiring needed) and the active row follows the
+  route; `actions`, `account-menu`, `search`, `header-start`, `breadcrumbs`, `notifications` and `tools` slots. A page
+  opens the shared palette with `useConsoleLayout().openSearch()`
+  (`@aziontech/webkit/use-console-layout`).
+- **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteNav` and `SiteFooter` data. The
+  site is dark: `<html data-theme="dark">`.
+- **Docs:** `DocLayout` — the docs tree, section links, `outline` (the article's headings), and
+  `actions`, `navigation-footer`, `aside`, `footer` slots. The document scrolls.
+
+The shell blocks (`shells/console`, `shells/website`, `shells/documentation`) are these layouts with
+the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
+A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `GlobalHeader`, `SiteNav`,
+`SiteFooter` or `Command`. Some platform blocks still inline a whole console shell around their body:
+keep what is inside their `<main>` and drop the rest.
+
+## A screen begins from a pattern
 
 Before composing anything, check whether the screen already exists as a block:
 `npx @aziontech/webkit search <the screen in plain words>` ("login", "account settings", "delete
@@ -1197,8 +1235,8 @@ keeping to the guidelines. Only when no pattern fits, compose from components (b
 - **Every app header has search.** A console, demo, docs or site header puts `SearchTrigger`
   (`@aziontech/webkit/search-trigger`) first in `GlobalHeader.Right`, opening a `Command` palette;
   it draws `Search … ⌘K` (`Ctrl K` off macOS) on a wide bar and the magnifier on a narrow one, and
-  binds the shortcut. Start from a header or shell block and it is already there (rule
-  `webkit-header-search`, lint `webkit/header-search-trigger`).
+  binds the shortcut. `ConsoleLayout`, `SiteLayout` and `DocLayout` already carry it, wired to
+  their palette (rule `webkit-header-search`, lint `webkit/header-search-trigger`).
 - **A docs home is `shells/documentation --variant Landing`.** It opens on `DocHero` (display
   title with air above it, deck, `Get started` then `CopyPromptButton` — the dark "Copy prompt"
   chip carrying the Claude, ChatGPT, Gemini and Cursor marks — and a note), then the first section
@@ -12089,157 +12127,131 @@ The code of every state is in [blocks/platform/view/waf-tuning.md](blocks/platfo
 
 # Console (`shells/console`)
 
-> The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is `SearchTrigger` (`collapsible`): the field with its ⌘K / Ctrl K keycap while the bar’s content box is at least `--container-2xl` wide and the magnifier below it; every state is framed by `AppLayout`, which measures its own width: below 768px it becomes compact, the rail moves into the layout's navigation drawer opened from the hamburger that leads the wordmark, and choosing an item closes it. First-level lists, detail pages with their tabs and Home all render inside it. Built from `AppLayout`, `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `SearchTrigger` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.
+> The console shell as one component: `ConsoleLayout`, composed once in the app around RouterView, so a console page is only its body. Its `navigation` is the Azion console tree as data (Overview, Workloads, Deployments; Build, Secure, Store, Observe; Marketplace and the Settings drill-in), each row with an `href` the layout follows with the app's router, and the active row follows the route; it renders the resizable, collapsible rail with the wordmark and the account at its foot, the header with breadcrumbs, the search trigger, the app's actions and the avatar, the ⌘K palette listing every navigation page, and the single main. Below 768 px of its own width the rail becomes a drawer opened from the header's menu button. This block fills the slots: Create (`Button`) and Agent (`ButtonHighlight`), icon-only (`IconButton` with a `Tooltip`) while compact; Recents and Actions as `Command` groups; the account menu (`DropdownMenu` with `ThemeSwitcher`, Upgrade to Pro and `StatusIndicator`). The body is a stand-in list page (`PageHeader`, Filter, a search `Input`, the toolbar and a `Card`) for platform/view/table-view; a page opens the same palette with useConsoleLayout().openSearch().
 
 - Surface: product
 - Source: `blocks/shells/console/console.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/console")`
-- Components: [Alert](../../components/alert.md), [AppLayout](../../components/app-layout.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [Dialog](../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Menu](../../components/menu.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SearchTrigger](../../components/search-trigger.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), `type`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [ConsoleLayout](../../components/console-layout.md), [Dialog](../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
 
-platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console; notifications panel; notifications drawer; notification center; central de notificações; painel de notificações; switch account; account switcher; organization switcher; change organization; trocar conta; trocar organização; selecionar conta
+platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console; notifications panel; notifications drawer; notification center; central de notificações; painel de notificações; switch account; account switcher; organization switcher; change organization; trocar conta; trocar organização; selecionar conta; console layout component; ConsoleLayout; app layout with router view; layout do console com RouterView
 
-The application shell every signed-in page renders inside, built on `AppLayout`. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: a navigation rail on the left (wordmark, the ⌘K palette, the grouped navigation, the account menu) and a content zone on the right headed by one global header (search, Create, Agent, the avatar). Pages render only their own content in the zone; this block's page bodies are stand-ins for `platform/view/table-view` and `platform/detail/details-page`.
+The application shell every signed-in page renders inside. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: the navigation rail (wordmark, grouped navigation with drill-in levels, the account at its foot), one global header (breadcrumbs, search, the app's actions, the avatar) and the ⌘K palette. All of that is one component, `ConsoleLayout`: this block is the app's `App.vue` — compose it once around `RouterView` and every console page is only the body rendered through its default slot. The body here is a stand-in for `platform/view/table-view`.
 
 ## When to use
 
-- Every browse page: first-level lists, Home and dashboards, resource details with their tabs, settings.
+- The root of a console app: every browse page (first-level lists, Home and dashboards, resource details with their tabs, settings) renders inside it.
 
 ## When not to use
 
 - Create, edit and deploy flows: use the focused shell headed by `headers/creation-header`, with no rail.
 - Signed-out screens: `platform/auth` with `headers/auth-header`.
 - Documentation and marketing: `shells/documentation`, `shells/website`.
+- A page needing the resizable split panel: compose `AppLayout` directly for that page.
 
 ## Building blocks
 
-### A. Rail — `Sidebar` (required)
+### A. Shell — `ConsoleLayout` (required)
 
-Full height, `resizable` by its edge and `collapsible` from its foot, with labelled resize and collapse controls (`Resize sidebar`, `Collapse sidebar`, `Expand sidebar`). Header holds the wordmark and the palette, body the navigation, footer the account. While compact the same `Sidebar` renders inside the `AppLayout` navigation drawer (block S).
+Composed once in `App.vue` around `RouterView`. `navigation` is the console tree as data: groups of rows `{ id, label, icon, href }` (an in-app `href` is followed with the app's router, an external one loads normally; `kind: 'drill'` with `groups` for Settings; `tagValue` for a `Preview` badge). The active row follows the current route; leave `active-id` empty in the app (this block sets it only because its preview has no router). `breadcrumbs` takes the trail from the route meta (`{ label, to }`; empty on a first-level page). `account` is the signed-in user. The layout renders the rail (resizable and collapsible, a drawer below 768 px of its own width), the header, the `SearchTrigger` wired to the ⌘K `Command` palette (every navigation page is listed), the avatar, and the single `<main>`; a page opens the same palette with `useConsoleLayout().openSearch()`.
 
-### B. Wordmark — `Brand` (required)
+### B. Actions — `Button` (required)
 
-At the top of the rail and at the start of the header, each linked home with `aria-label="Azion home"`.
+In the `actions` slot: Create (`primary`, `medium`, with its icon) while not compact. In the page body: Documentation (`outlined`) and the create action, and Upgrade to Pro (`secondary`) in the account menu.
 
-### C. Palette — `Command` (required)
+### C. Agent — `ButtonHighlight` (required)
 
-The ⌘K palette: `Command.Input`, then Recents (only while the query is empty), the navigation groups, Actions and Account, separated by `Command.Separator`, and `Command.Empty` for no match. Opened from the header search and the shortcut.
+The AI assistant entry in the `actions` slot, after Create, while not compact.
 
-### D. Navigation — `Menu` (required)
+### D. Hints — `Tooltip` (required)
 
-The grouped sections with drill-in levels and `Menu.Back`, driven by `groups` and `active-id`. The active item is the current module.
+Names every icon-only control: the compact Create and Agent, the page toolbar icons.
 
-### E. Identity — `Avatar` (required)
+### E. Icon actions — `IconButton` (required)
 
-Twice: in the rail footer next to the user's name, and in the header inside a button labelled `Account settings`. The user is never shown signed out, even with the rail collapsed.
+Create and Agent while the `actions` slot's `compact` is true; the page toolbar (Refresh, Download CSV, Columns).
 
-### F. Account menu — `DropdownMenu` (required)
+### F. Palette groups — `Command` (required)
 
-Opens upward from the rail footer: identity, then Account settings and Personal tokens, the theme, links out (Home page, Changelog, Feedback, Docs), Log out, and the Upgrade to Pro and system status foot.
+In the `search` slot: Recents (only while the query is empty) and Actions, as `Command.Group`s of `Command.Item`s; their selection arrives as `search-select`. The navigation pages are added by the layout.
 
-### G. Hints — `Tooltip` (required)
+### G. Account menu — `DropdownMenu` (required)
 
-Names every icon-only control: the account menu, the navigation trigger, the collapsed Create and Agent, the toolbar icons.
+In the `account-menu` slot, as `DropdownMenu.Group`s: identity, Account settings and Personal tokens, the theme, Docs, Log out, and the Upgrade to Pro and system status foot. The layout opens it from the rail footer and from the header avatar.
 
-### H. Icon actions — `IconButton` (required)
-
-The account menu trigger, the navigation trigger while compact, Create and Agent while compact, and the page toolbar (Refresh, Download CSV, Columns).
-
-### I. Theme — `ThemeSwitcher` (required)
+### H. Theme — `ThemeSwitcher` (required)
 
 Inside the account menu, labelled `Theme`.
 
-### J. Buttons — `Button` (required)
-
-Upgrade to Pro (`secondary`) in the account menu; Create (`primary`) in the header while not compact; the page's own actions in the stand-in body.
-
-### K. System status — `StatusIndicator` (required)
+### I. System status — `StatusIndicator` (required)
 
 At the foot of the account menu: `All systems normal` with `success` severity; switch severity and label when the status page reports an incident.
 
-### L. Header — `GlobalHeader` (required)
+### J. Page title — `PageHeader` (stand-in body)
 
-One header, inside the content zone (an `@container`), `aria-label="Console"`. The breadcrumb names the location on every level while not compact: one unlinked crumb on a first-level page, the module and the resource from the second level (see the DetailPage state).
+The list page's title and description, with Documentation and the create action in its `actions` slot.
 
-### M. Search — `SearchTrigger` (required)
+### K. Search field — `Input` (stand-in body)
 
-The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
+The list's search, with a leading icon and an `aria-label`, growing between Filter and the toolbar icons.
 
-### N. Agent — `ButtonHighlight` (required)
-
-The AI assistant entry in the header while not compact.
-
-### O. Location — `Breadcrumb` (required)
-
-In the header while not compact: `Resources` alone on the ListPage, with no link; module, resource and the environment `Select` on the DetailPage. A tab is never a crumb.
-
-### P. Search field — `Input` (stand-in body)
-
-The sample list's search, with a leading icon and an `aria-label`. The ListPage has no `PageHeader`: per `skills/webkit-navigation` the crumb names the first-level list and the page opens on its controls row, search and Filter on the start side, the toolbar icons, Documentation (outlined) and Create Resource (primary, large, the page's only large control) on the end side.
-
-### Q. Table frame — `Card` (stand-in body)
+### L. Table frame — `Card` (stand-in body)
 
 Flush (`:padded="false"`), holding the table; the card is the only border.
 
-### R. Frame — `AppLayout` (required)
-
-Every state renders inside one `AppLayout`: the rail in `#navigation`, the header in `#header`, the page in the default slot (which scrolls on its own), flash messages in `#notifications` and the notifications list in `#tools`. The layout measures its own width, not the viewport's, so the shell turns compact in a narrow host (a split view, an embedded preview) the same way it does on a phone.
-
-### S. Compact navigation — `AppLayout` navigation drawer (required below `compactBelow`)
-
-While compact, `AppLayout` renders the same `Sidebar` inside its navigation drawer, named `Navigation`; the `#navigation` scope's `drawer` flag drops the rail-only resize and collapse controls there. The header scope's `compact` swaps the breadcrumb for the hamburger and wordmark and `openNavigation` opens the drawer. Choosing a `Menu` item calls `closeNavigation` from the `#navigation` scope, so the drawer closes on every navigation. No page composes its own `Drawer` for the rail.
-
 ## Do
 
-- Compose this shell once in the app and render every browse page through its default slot.
-- Keep the rail's navigation and the palette's navigation groups built from the same data.
-- Keep exactly one `GlobalHeader` per page, inside the content zone.
-- Apply the content inset once in the shell; pages never re-pad.
+- Compose `ConsoleLayout` once in `App.vue` and render every browse page through its default slot; replace this block's stand-in body with `<RouterView />`.
+- Keep the navigation in one data file shared by the app; the rail and the palette both read it.
+- Give every row an `href` (never `to` or `path`); derive `breadcrumbs` from the route.
+- Frame a list or form body with `layout-boundary` + `layout-column`; open a detail body flush on `PageTabs`.
 
 ## Don't
 
+- Don't render `AppLayout`, `Sidebar`, `GlobalHeader`, `SearchTrigger`, a `Command` palette or a `<main>` in a page; the layout owns them.
 - Don't render the rail on create, edit or deploy pages.
-- Don't add page actions to the global header; they belong to the page's controls row or tab row.
+- Don't add page actions to the global header; they belong to the page's header, controls row or tab row.
 - Don't hide the avatar when the rail is collapsed or in the drawer.
-- Don't open the notifications region as a popover over the page; it is a region beside the content that the reader keeps open while working.
+- Don't open the notifications region as a popover over the page; it is the layout's tools region beside the content.
 
 ## Copy
 
-- **Palette placeholder:** what can be searched: `Search resources, pages and commands`. **Empty:** a full sentence: `No resource, page or command matches your search.`
-- **Navigation and menu items:** nouns as the module pages are titled, in sentence case (`Personal tokens`, `Activity history`, `Build and deployment`, `Account settings`); Azion product names keep theirs (`Edge DNS`). No ampersand.
+- **Palette groups:** `Recents`, `Actions`; the layout's placeholder `Search pages and commands` and its empty line come from the locale catalog.
+- **Navigation and menu items:** nouns as the module pages are titled (`Personal tokens`, `Activity history`, `Build and deployment`, `Account settings`); Azion product names keep theirs (`Edge DNS`, `Real-Time Metrics`). No ampersand.
 - **Status:** a short state, not a sentence: `All systems normal`.
-- **Header actions:** `Create`, `Agent`, `Search`.
-- **Module create:** `Create` plus the entity, on the controls row: `Create Resource`.
+- **Header actions:** `Create`, `Agent`.
+- **Module create:** `Create` plus the entity: `Create Application`.
 
 ## Accessibility
 
-- The rail is a labelled navigation (`Main navigation`); its resize handle and collapse control have names and work by keyboard.
-- ⌘K opens the palette and is announced with `aria-keyshortcuts="Meta+K"`; focus returns to the trigger on close.
-- The drawer traps focus while open and returns it to the navigation trigger.
+- One `main` (the layout's), one `banner` (the header), the rail as a labelled navigation (`Main navigation`); the page body starts with its `h1` (`PageHeader`).
+- ⌘K / Ctrl K opens the palette, announced through `aria-keyshortcuts` on the search; focus returns to the trigger on close.
+- The rail's drawer traps focus while open, closes on `Escape` and when a row is chosen, and returns focus to the menu button.
 - Icon-only controls have both an `aria-label` and a tooltip.
 - The bell is a toggle (`aria-pressed`) and names the unread count; unread items carry a visually hidden `Unread:` prefix, not colour alone.
 
 ## States
 
-- ListPage: a first-level list page in the `AppLayout` default slot; the header carries the single unlinked `Resources` crumb and the page opens on its controls row.
-- DetailPage: a resource detail page in the same `AppLayout` frame. The breadcrumb reads module, resource, then the environment as a small `Select` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The default slot holds one `main` with a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`) that stays in view while the tab content scrolls under it.
-- Notifications: the bell opens the notifications region beside the content (a drawer when narrow), with unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState once cleared; the failed deploy also shows as a flash Alert above the page. The flash sits in `#notifications` and the list in `#tools`, so both the rail and the list become drawers in a narrow host. The bell's `aria-label` carries the unread count and the `Badge` on it is hidden from assistive technology.
-- AccountSwitch: the header starts with the current account (square `Avatar` with its initials, the name, a chevron), `Switch account (Ctrl+O)` on its tooltip and `aria-keyshortcuts`; while compact it shows the avatar and the chevron only (the name stays in its `aria-label`), and the wordmark hides when the header is narrower than `--container-sm`, so the header fits 320 px; it and the shortcut open a large `Dialog` with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `Table.CellStatus`, ID and client ID as `Table.CellId`. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search.
+- ListPage: a first-level list page in the `ConsoleLayout` default slot: no breadcrumb on a first level, the page opens on its `PageHeader` (title, description, Documentation and the create action) and its controls row (Filter, search, Refresh, Download CSV, Columns) over the table.
+- DetailPage: a resource detail page rendered through `ConsoleLayout`. The `breadcrumbs` slot composes the trail (a crumb that is a control, so the data prop does not fit): `Breadcrumb.List` with Applications, the application, then the environment as a small `Select` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
+- Notifications: the ListPage through `ConsoleLayout` with the bell after Create and Agent in the `actions` slot; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Notifications"`), a region beside the content and a drawer when narrow. The `tools` slot holds the list: unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState `You are all caught up` once cleared. The failed deploy also shows as a flash Alert (Edit, Redeploy) in the `notifications` slot above the page. The bell's `aria-label` carries the unread count, `aria-pressed` follows the region, and the `Badge` on it is hidden from assistive technology.
+- AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `header-start` slot, before the breadcrumbs (square `Avatar` with its initials, the name, a chevron), `Switch account (Ctrl+O)` on its tooltip and `aria-keyshortcuts`; while the slot's `compact` is true it shows the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `Table.CellStatus`, ID and client ID as `Table.CellId`. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search.
 
 ## Related
 
 - `headers/resource-header` — this shell's header on its own.
 - `headers/creation-header` — the focused shell for create, edit and deploy.
-- `platform/view/table-view`, `platform/detail/details-page`, `platform/dashboard/home-dashboard` — the real page bodies.
+- `platform/view/table-view`, `platform/detail/details-page`, `platform/dashboard/home-dashboard` — the page bodies rendered in the slot.
 
 ## Variants
 
 - `ListPage` — primary (the code below)
-- `DetailPage` — A resource detail page on `AppLayout`: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it.
-- `Notifications` — The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up.
-- `AccountSwitch` — The account switcher in the header (square Avatar, account name, Ctrl+O or ⌘O): a large Dialog with search over the organization, group and workspace tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.
+- `DetailPage` — A resource detail page rendered through `ConsoleLayout`: its `breadcrumbs` slot composes a `Breadcrumb` that reads Applications, the application, then its environment as a `Select` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it.
+- `Notifications` — The ListPage rendered through `ConsoleLayout` with a bell in its `actions` slot: the bell carries an unread `Badge` and toggles the layout's tools region (`v-model:tools-open`, titled Notifications, a drawer on a narrow screen), whose `tools` slot lists deploys, invitations and alerts with Mark all as read and Clear all and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` in the `notifications` slot above the page, and an empty list reads You are all caught up through `EmptyState`.
+- `AccountSwitch` — The ListPage rendered through `ConsoleLayout` with the account switcher in its `header-start` slot (square `Avatar`, the account name, a chevron; avatar and chevron only while compact; Ctrl+O or ⌘O): a large `Dialog` with search over the organization, group and workspace `Table` tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.
 
 Each variant is the same screen in another state: `get_pattern("shells/console", { variant })`, or the file under `blocks/shells/console/variants/`.
 
@@ -12251,23 +12263,23 @@ The code of every state is in [blocks/shells/console.md](blocks/shells/console.m
 
 # Documentation (`shells/documentation`)
 
-> The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`. Three variants fill the reading column with a real page, built only from the documentation parts: Article is a tutorial (First deploy) — `DocPageHeader` with breadcrumb, last updated and the Copy / View as Markdown and Agent setup actions, then one `DocProse` holding a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocHeading` sections, `DocSteps` with `CodeBlock` commands, a `DocPrompt` for the coding agent, Next steps as `DocCardGroup`, Related resources as `DocItem` rows in a `FrameBox`, then `DocPagination`, with the outline rail as `DocOnThisPage` plus the closing `DocCta`; Reference is a product reference page (an info callout, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home (no outline rail): a `DocHero` (display-size title, deck, `Get started` then the dark `CopyPromptButton` with the Claude, ChatGPT, Gemini and Cursor marks, and a note on what the prompt does), then Start by interface opening on a `DocAgentCard` ("Your AI agent, fluent in Azion" with the inline Copy prompt; "Prefer the guided route?" with the orange Agent setup over a halftone) above the Console, CLI and API `DocCard`s in the Azion product marks, then objectives, ready-made templates in their brand colours (`ai-cor`), Stop attacks, compliance and Follow along, and the pager forward. The variants carry search as a `SearchTrigger` that widens into the ⌘K field.
+> The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCta` in its `aside` slot, and the `Footer` (`kind="content"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Three variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPagination`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward.
 
 - Surface: docs
 - Source: `blocks/shells/documentation/documentation.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/documentation")`
-- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [Command](../../components/command.md), [CopyPromptButton](../../components/copy-prompt-button.md), [Diagram](../../components/diagram.md), [DocAgentCard](../../components/doc-agent-card.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCta](../../components/doc-cta.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocHero](../../components/doc-hero.md), [DocItem](../../components/doc-item.md), [DocOnThisPage](../../components/doc-on-this-page.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), `ItemList`, `MenuGroup`, `MenuItem`, `MenuRoot`, `MenuSub`, `MenuSubContent`, `MenuSubTrigger`, [NavigationMenu](../../components/navigation-menu.md), [ScrollArea](../../components/scroll-area.md), [SearchTrigger](../../components/search-trigger.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
+- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [CopyPromptButton](../../components/copy-prompt-button.md), [Diagram](../../components/diagram.md), [DocAgentCard](../../components/doc-agent-card.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCta](../../components/doc-cta.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocHero](../../components/doc-hero.md), [DocItem](../../components/doc-item.md), [DocLayout](../../components/doc-layout.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [IconButton](../../components/icon-button.md), `ItemList`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
 
-docs shell; documentation layout; docs page layout; documentation site; docs sidebar; on this page outline; knowledge base layout; layout da documentação; página de documentação; estrutura da documentação; documentation shell; docs layout; documentation article; docs article page; tutorial page; getting started guide; how-to guide; product reference page; reference documentation; docs page with steps and code; documentation home; docs home page; docs landing page; developer portal home; artigo da documentação; página de tutorial; guia de primeiros passos; página de referência do produto; página inicial da documentação; home da documentação; docs home with copy prompt and AI agent logos; your AI agent fluent in Azion card; botão copiar prompt com logos de IA
+docs shell; documentation layout; docs page layout; documentation site; docs sidebar; on this page outline; knowledge base layout; layout da documentação; página de documentação; estrutura da documentação; documentation shell; docs layout; documentation article; docs article page; tutorial page; getting started guide; how-to guide; product reference page; reference documentation; docs page with steps and code; documentation home; docs home page; docs landing page; developer portal home; artigo da documentação; página de tutorial; guia de primeiros passos; página de referência do produto; página inicial da documentação; home da documentação; docs home with copy prompt and AI agent logos; your AI agent fluent in Azion card; botão copiar prompt com logos de IA; docs layout component; DocLayout
 
-The documentation shell. A reader comes to learn one task and leave, so the shell keeps the page readable and the next page close: the docs header on top, a rail of the current product's pages from `lg`, a reading column that scrolls on its own, the "On this page" outline from `xl`, and the footer inside the reading column's scroller so the bands sit between the rail and the outline.
+The documentation shell. A reader comes to learn one task and leave, so the shell keeps the page readable and the next page close. It is `DocLayout`, composed once in the app around `RouterView`: the layout owns the docs header, the navigation rail, the "On this page" rail, the search palette and the footer, and the document itself scrolls with the header and both rails sticky. Every docs page is only its article.
 
 ## When to use
 
-- Every documentation, guide or reference page.
+- Every documentation, guide or reference page, and the docs home.
 
 ## When not to use
 
@@ -12275,123 +12287,108 @@ The documentation shell. A reader comes to learn one task and leave, so the shel
 
 ## Building blocks
 
-### A. Header — `GlobalHeader` (required)
+### A. Layout — `DocLayout` (required)
 
-Default `content` placement, `aria-label="Azion documentation"`; the same bar as `headers/docs-header`.
+Composed once around the router view. `navigation` is the docs tree as data (groups of rows with `id`, `label` and `href`; an inline subsection is a row with `children` and `defaultOpen`), `sections` the header's section links, `home` where the Azion Docs mark links, `outline` the article's headings (`{ id, text, depth }`) and `outline-groups` the GitHub and Community links under them. It renders the single main landmark, the rail from `lg` (a drawer below it), the outline from `xl`, and the ⌘K palette of every navigation page. In an app leave `active-id` empty so the current row follows the route; the preview has no router, so it passes the current row's id.
 
-### B. Icon actions — `IconButton` (required)
+### B. Header actions — `IconButton` (required)
 
-The navigation trigger below `lg`, GitHub in the header, and the small `transparent` social links in the footer, each with an `aria-label`.
+In the `actions` slot: GitHub, `kind="outlined"`, with an `ariaLabel`. In the footer, the small `transparent` social links.
 
-### C. Brand — `Brand` (required)
+### C. Console — `Button` (required)
 
-In the header with the Docs tag, and in the footer: it leads the social row from `lg` and moves to the signature band below it.
+`secondary`, last in the `actions` slot.
 
-### D. Section links — `NavigationMenu` (required from lg)
+### D. Theme — `ThemeSwitcher` (required)
 
-The top-level documentation sections in the header.
+In the `navigation-footer` slot, labelled `Theme`; the layout shows it at the foot of the rail and of the drawer.
 
-### E. Console — `Button` (required)
+### E. Call to action — `DocCta` (optional)
 
-`secondary`, last in the header.
+In the `aside` slot, under the outline: "Ready to build?" with a primary and a secondary link.
 
-### F. Rail — `Sidebar` (required from lg)
+### F. Masthead — `DocPageHeader` (required)
 
-`aria-label="Docs"`, the width of `--container-2xs`, holding the page menu and the theme switcher in its footer. Below `lg` it leaves and the header trigger opens the navigation.
+The first thing in the article: breadcrumb, title, deck, and on real pages the last-updated date and the meta actions.
 
-### G. Theme — `ThemeSwitcher` (required)
+### G. Running text — `DocProse` (required)
 
-In the rail footer, labelled `Theme`.
+Everything under the masthead; it sets the running text and gives the headings their type scale.
 
-### H. Page menu — `MenuRoot` (required)
+### H. Section headings — `DocHeading` (required)
 
-The rail's page navigation for the current product.
+One per outline entry, with the same `id` the `outline` item carries: the layout tracks which heading is in view and scrolls a chosen entry under the sticky header.
 
-### I. Product group — `MenuGroup` (required)
+### I. Footer — `Footer` (required)
 
-One per product (`Functions`), with the product name as its heading.
+In the `footer` slot, `kind="content"`, under a top rule: `Footer.Column` with `Footer.Link` items, then the social, status, language and brand slots. With `signature="compact"` the brand leads the social row from `lg` (`hidden lg:inline-flex`) and the signature band carries it below `lg`, in CSS.
 
-### J. Page link — `MenuItem` (required)
+### J. Brand — `Brand` (required)
 
-One per page, the current page `selected`.
+In the footer only; the header mark belongs to the layout.
 
-### K. Reading column — `ScrollArea` (required)
-
-The article and the footer scroll inside it, so the header, rail and outline stay put.
-
-### L. Footer — `Footer` (required)
-
-`kind="content"`, inside the scroller: `Footer.Column` with `Footer.Link` items, then the social, status, language and brand slots. It stacks below `md`.
-
-### M. System status — `StatusIndicator` (required)
+### K. System status — `StatusIndicator` (required)
 
 In the footer's status slot.
 
-### N. Language — `Select` (required)
+### L. Language — `Select` (required)
 
 In the footer's language slot, trigger labelled `Language`.
 
-### O. Search — `SearchTrigger` (required)
-
-The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
-
-### P. Search palette — `Command` (required)
-
-The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
-
 ## Do
 
-- For a real page, start from a variant (Article, Reference, Landing), not from the primary: the primary's column is a placeholder, and the variants build it from the `Doc*` parts only.
-- Build a docs home from the Landing variant: `DocHero` (display title with `--spacing-xxl` of air, deck, `Get started` then `CopyPromptButton`, a note on what the prompt does), then the first section opening on `DocAgentCard` above the Console / CLI / API `DocCardGroup`. Product cards use the Azion marks (`ai ai-azion`, `ai ai-azion-cli`, `ai ai-azion-api`) in the muted ink; framework templates use the brand-colour set (`ai-cor ai-react`, `ai-cor ai-vue`…).
-- Put everything under `DocPageHeader` in one `DocProse`: it sets the running text and gives `DocHeading` its type scale. Every `DocHeading` has an `id`, and `DocOnThisPage` lists the same headings.
+- Compose `DocLayout` once in the app's root around `RouterView`; each route renders only its `<article>`.
+- For a real page, start from a variant (Article, Reference, Landing): the variants build the article from the `Doc*` parts only.
+- Give every `DocHeading` an `id` and pass the same ids, in document order, as `outline`.
+- Put everything under `DocPageHeader` in one `DocProse`.
+- Give every navigation row an `id` and an `href` (an in-app path is followed with the router); keep the rail scoped to the current product; the header section links switch products.
+- Build a docs home from the Landing variant: `DocHero` with `CopyPromptButton`, then `DocAgentCard` above the Console / CLI / API cards; pass no `outline`.
 - Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocStep`, with its command as a `CodeBlock` inside the same step.
-- Use `SearchTrigger` (`collapsible`, `Search docs`) inside an `@container` for search, so it is the ⌘K field when the bar is wide and the magnifier when it is narrow.
-- Keep the outline's items equal to the article's `h2` headings.
-- Keep the rail scoped to the current product; the header links switch products.
-- Let the footer run full bleed across the zone between rail and outline.
 
 ## Don't
 
-- Don't hand-write the outline, the pager or the masthead; `DocOnThisPage`, `DocPagination` and `DocPageHeader` own their markup and labels.
-- Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`, or the prose restyles its `<a>` and the label loses contrast.
-- Don't leave the rail rows on `MenuItem`'s default glyph: pass `icon=""`.
-- Don't use the marketing `Banner` on the landing, and don't fake the agent card with a `DocCard` and an eyebrow or an `// AGENT SETUP` overline: the docs home's agent block is `DocAgentCard`.
-- Don't open the docs home with `DocPageHeader` or put the prompt text on it as a `DocPrompt`: the home is `DocHero` + `CopyPromptButton` (the prompt is copied, not shown).
-- Don't put the footer outside the scroller: it would stay pinned and eat the reading height.
+- Don't put a `ScrollArea`, an `h-screen` frame or any inner scroll region around the article: the document scrolls, so find in page, scroll restoration and full-page captures work.
+- Don't render a `<main>` in a page; the layout already renders the only one.
+- Don't repeat the header, the search, the navigation rail, the outline or the footer in a page.
+- Don't hand-write the outline, the pager or the masthead; the layout's outline rail, `DocPagination` and `DocPageHeader` own their markup and labels.
+- Don't give a `DocHeading` an id the `outline` does not list, or list an id no heading carries.
+- Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`.
+- Don't measure the viewport in script to place the footer brand; the `lg:` utilities and `signature="compact"` decide it in CSS.
 - Don't reuse the console rail here; docs navigation is pages, not modules.
 
 ## Copy
 
-- **Outline heading:** `On this page`.
 - **Article headings:** verb-led tasks in sentence case: `Create the function`, `Verify the response`.
-- **Menu items:** page titles exactly as the `h1` reads.
+- **Navigation rows:** page titles exactly as the `h1` reads.
 - **Step titles:** imperative, ending with a period when the step is a sentence: `Open Azion Console.`
 - **Landing groups:** `Start by interface`, `Start by objective`, `Ready-made templates`, `Follow along`; card link labels are a verb and the object (`Install the CLI`).
 
 ## Accessibility
 
-- One `h1` per article; outline links target the `h2` ids.
-- `ScrollArea` keeps keyboard scrolling working; the article is reachable without passing through the rail.
-- Each `nav` (header sections, rail, outline) is labelled so screen reader users can tell them apart.
+- One main landmark: the layout's. The article is an `<article>` inside it, never a second `<main>`.
+- One `h1` per article (the masthead or the hero); `DocHeading` levels follow it in order (2, then 3 under a 2), and outline entries target those ids.
+- Landmarks: the header is a banner, the rail and the outline are labelled navigation regions, the footer is contentinfo; `Tab` runs header → rail → article → outline → footer.
+- Choosing an outline entry moves focus to its heading and clears the sticky header.
 
 ## States
 
-- Default: the chrome with a placeholder column; rail from `lg`, outline from `xl`, footer stacked below `md`.
-- Article: a tutorial page from the `Doc*` parts, pager in both directions, outline rail with `DocOnThisPage` and `DocCta`.
+- Default: the chrome around a short guide; rail from `lg` (drawer below), outline with the GitHub and Community groups and the `DocCta` from `xl`, the full footer under the article.
+- Article: a tutorial page from the `Doc*` parts, pager in both directions, outline with an indented level 3 entry.
 - Reference: a product reference page with a callout, the request-path diagram, a JSON rule and a term list; pager forward only.
-- Landing: the documentation home; no outline rail, `DocHero` with `CopyPromptButton`, `DocAgentCard`, entry-point grids, pager forward to the first page.
+- Landing: the documentation home; navigation rail, no outline rail, `DocHero` with `CopyPromptButton`, `DocAgentCard`, entry-point grids, pager forward to the first page.
 
 ## Related
 
+- `DocLayout` — the component this block shows.
 - `headers/docs-header` — the header on its own.
-- `shells/website` — the marketing counterpart that shares the footer.
+- `shells/console` (`ConsoleLayout`) and `shells/website` (`SiteLayout`) — the console and marketing counterparts.
 
 ## Variants
 
 - `Default` — primary (the code below)
-- `Article` — A tutorial page: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources, the pager, and the outline rail with DocOnThisPage and DocCta.
-- `Reference` — A product reference page: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps.
-- `Landing` — The documentation home, as Azion Docs draws it: no outline rail; a DocHero with Get started and the CopyPromptButton (agent marks) and its note, then a DocAgentCard (Your AI agent, fluent in Azion / Prefer the guided route? with Agent setup over a halftone) above the Console, CLI and API cards, then objectives, coloured framework templates, Stop attacks, compliance, Follow along and the pager forward.
+- `Article` — A tutorial page inside DocLayout: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources and the pager; the outline tracks its DocHeading ids, with the GitHub and Community groups and a DocCta under it.
+- `Reference` — A product reference page inside DocLayout: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps; the outline tracks its four sections, with a DocCta under it.
+- `Landing` — The documentation home inside DocLayout, with the navigation rail and no outline rail: a DocHero with Get started and the CopyPromptButton (agent marks) and its note, then a DocAgentCard above the Console, CLI and API cards, then objectives, coloured framework templates, Stop attacks, compliance, Follow along and the pager forward.
 
 Each variant is the same screen in another state: `get_pattern("shells/documentation", { variant })`, or the file under `blocks/shells/documentation/variants/`.
 
@@ -12403,129 +12400,108 @@ The code of every state is in [blocks/shells/documentation.md](blocks/shells/doc
 
 # Website (`shells/website`)
 
-> The website shell: a sticky `GlobalHeader` in its `site` placement (see Templates › Headers › SiteHeader), one `Hero` band opening the page, every section stacked inside one framed `SectionContainer max-width="site"` separated by hatched gaps, a closing frame that draws no rule of its own, and the `Footer` in its `site` placement closing the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous; the hairline above the footer is the mirror of the hero’s top rule, so the frame turns the corner instead of stopping at it. The footer’s social buttons are small, the brand mark leads the social row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it, and row two sizes its bands by content, so the row never wraps while the status pair still has room. Built from `GlobalHeader`, `Hero`, `SectionContainer`, `SectionGap`, `SectionModule`, `FrameBox`, `BigNumbers`, `TextureMaterial` and `Footer`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav.
+> The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteNav data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooter data (`kind: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width="site"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooter closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `FrameBox`, `BigNumbers` and `TextureMaterial`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav.
 
 - Surface: marketing
 - Source: `blocks/shells/website/website.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/website")`
-- Components: [BigNumbers](../../components/big-numbers.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Command](../../components/command.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [GlobalHeader](../../components/global-header.md), [Hero](../../components/hero.md), [IconButton](../../components/icon-button.md), [NavigationMenu](../../components/navigation-menu.md), [SearchTrigger](../../components/search-trigger.md), [SectionContainer](../../components/section-container.md), [SectionGap](../../components/section-gap.md), [SectionModule](../../components/section-module.md), [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [TextureMaterial](../../components/texture-material.md)
+- Components: [BigNumbers](../../components/big-numbers.md), [Button](../../components/button.md), [FrameBox](../../components/frame-box.md), [Hero](../../components/hero.md), [SectionContainer](../../components/section-container.md), [SectionGap](../../components/section-gap.md), [SectionModule](../../components/section-module.md), [SiteLayout](../../components/site-layout.md), [TextureMaterial](../../components/texture-material.md)
 - Skills: `webkit-layout`
 
 ## Asked as
 
-site shell; marketing site layout; landing page layout; website layout; marketing page frame; layout do site; estrutura do site; página de marketing; website shell; marketing site shell
+site shell; marketing site layout; landing page layout; website layout; marketing page frame; layout do site; estrutura do site; página de marketing; website shell; marketing site shell; site layout component; SiteLayout; layout do site com SiteNav
 
-The marketing shell. A visitor scans to decide whether Azion fits, so the page is one continuous frame: a sticky site header, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The hero, sections and footer all resolve to the site measure, which is what keeps the side rules continuous down the page.
+The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteNav` and `SiteFooter` data; each page is only its sections, in the layout's slot.
 
 ## When to use
 
-- Product, solution and landing pages on the public site.
+- Product, solution, company and landing pages on the public site.
 
 ## When not to use
 
 - Documentation: `shells/documentation`. Product UI: `shells/console`.
+- A one-off campaign page with no site navigation: render its sections on their own.
 
 ## Building blocks
 
-### A. Header — `GlobalHeader` (required)
+### A. Site chrome — `SiteLayout` (required)
 
-`kind="site"` in a sticky wrapper; the same bar as `headers/site-header`.
+Composed once in the app's root around `RouterView`. `navigation` is the `SiteNav` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooter` data with `kind: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
 
-### B. Icon actions — `IconButton` (required)
-
-The navigation trigger below `xl` in the header; the small `transparent` social links in the footer.
-
-### C. Brand — `Brand` (required)
-
-In the header, and in the footer leading the social row from `lg` or in the signature band below it.
-
-### D. Primary navigation — `NavigationMenu` (required from xl)
-
-The five top-level links with the `contrast` mega-menu popup.
-
-### E. Actions — `Button` (required)
-
-Header actions (Contact, Login, Start for free) and the hero's primary and outlined large buttons.
-
-### F. Opening band — `Hero` (required)
+### B. Opening band — `Hero` (required)
 
 `kind="band"`, `size="large"`, `max-width="site"`; `Hero.Title` carries the eyebrow, title, description and the two actions, centred.
 
-### G. Frame — `SectionContainer` (required)
+### C. Actions — `Button` (required)
+
+The hero's primary and outlined large buttons, worded like the bar's actions.
+
+### D. Frame — `SectionContainer` (required)
 
 `max-width="site"`; every section after the hero stacks inside it.
 
-### H. Separator — `SectionGap` (required)
+### E. Separator — `SectionGap` (required)
 
 `hatch` between sections. Use it instead of margins.
 
-### I. Section — `SectionModule` (required)
+### F. Section — `SectionModule` (required)
 
 One per section; here unpadded and undivided around a framed figure row.
 
-### J. Framed area — `FrameBox` (required)
+### G. Framed area — `FrameBox` (required)
 
-Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own. When the page ends on a closing section (`ClosingCallToAction`, `ClosingCallToActionNewsletter`, `ClosingCallToActionAgents`, `ClosingCallToActionTemplates`), drop both the trailing `SectionGap` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
+Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToAction`, `ClosingCallToActionNewsletter`, `ClosingCallToActionAgents`, `ClosingCallToActionTemplates`), drop both the trailing `SectionGap` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
 
-### K. Figures — `BigNumbers` (optional)
+### H. Figures — `BigNumbers` (optional)
 
 A row of headline figures inside a `FrameBox`.
 
-### L. Texture — `TextureMaterial` (optional)
+### I. Texture — `TextureMaterial` (optional)
 
 `kind="lines"`, the decorative fill of the closing frame.
 
-### M. Footer — `Footer` (required)
-
-`kind="site"`, with columns, social, status, language and brand slots; the hairline above it mirrors the hero's top rule.
-
-### N. System status — `StatusIndicator` (required)
-
-In the footer's status slot.
-
-### O. Language — `Select` (required)
-
-In the footer's language slot, trigger labelled `Language`.
-
-### P. Search — `SearchTrigger` (required)
-
-The header search, last in the end cluster as on azion.com: `collapsible` with no `@container` around the bar, so it stays the magnifier at every width. It still announces and binds ⌘K / Ctrl K and emits `open`, which opens the `Command` palette. Never a bare magnifier `IconButton` (rule `webkit-header-search`).
-
-### Q. Search palette — `Command` (required)
-
-The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
-
 ## Do
 
+- Compose `SiteLayout` once, in the app's root, and render each route's sections in its default slot.
+- Set `data-theme="dark"` on `<html>` (in `index.html`) for the dark site, so the layout, the teleported mega-menus and the palette all resolve the dark tokens.
 - Keep every band on the site measure; one off-measure section breaks the side rules.
+- Give every navigation item an `href`; add extra palette groups (articles, docs results) in the `search` slot.
 - Separate sections with `SectionGap`, not with spacing utilities.
 - Keep one primary action per band.
 
 ## Don't
 
+- Never add `SiteNav`, `SiteFooter`, `GlobalHeader` or `Footer` to a page; the layout already renders them.
+- Never render a second `<main>`; the layout owns the landmark.
+- Don't wrap the layout's slot content in a border, padding or `max-w-*` of its own.
 - Don't nest a second `SectionContainer`.
 - Don't put interactive content inside `TextureMaterial`; it is decoration.
 
 ## Copy
 
 - **Hero title:** the outcome in sentence case, under ten words. **Eyebrow:** the product name: `Functions`.
-- **Hero actions:** match the header's wording and capitalization (`Start for free`, `Talk to a specialist`); the sample's hero reads `Start for free`, which should follow the header.
+- **Hero actions:** match the bar's wording and capitalization (`Start for free`, `Talk to a specialist`).
 - **Figures:** a number and a short noun phrase.
+- **Palette placeholder:** `Search azion.com`.
 
 ## Accessibility
 
+- Landmarks come from the layout: the bar is the banner named "Azion", the page is its single `main`, the footer is the `contentinfo`.
 - One `h1` (the hero title) per page; sections use `h2`.
-- The sticky header must not cover anchor targets; scroll with an offset.
+- ⌘K / Ctrl K opens the palette; `Escape` closes it and returns focus to the bar's search button.
+- The sticky bar must not cover anchor targets; scroll with an offset.
 - Decorative textures and hatches are hidden from assistive technology.
 
 ## States
 
-- Default: the only state.
+- Default: the page with the palette closed; the palette opens from the bar's search button or ⌘K / Ctrl K, and the bar's mega-menus and sheet own their states.
 
 ## Related
 
-- `headers/site-header` — the header on its own.
-- `shells/documentation` — shares the footer anatomy in its `content` placement.
+- `shells/console` — the signed-in counterpart, on `ConsoleLayout`.
+- `shells/documentation` — the docs counterpart, shares the footer anatomy in its `content` placement.
+- `headers/site-header` — the bar on its own.
 
 ## Variants
 
@@ -24683,6 +24659,238 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 ---
 
+<!-- components/doc-layout.md -->
+
+# Doc Layout
+
+> The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `Menu`) on the inline start, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it, and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article, rendered through the default slot.
+
+- Import: `import DocLayout from '@aziontech/webkit/doc-layout'`
+- Category: documentation · Surface: docs · Structure: monolithic
+- API as JSON: [doc-layout.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-layout.json)
+
+## When to use
+
+- Every documentation page (guide, reference, legal, changelog): put one `DocLayout` in the app's root (around `RouterView`) and render each page's article as its default slot.
+- A docs site that needs the navigation rail, the outline and the search palette without hand-composing `GlobalHeader`, `Sidebar`, `Menu`, `DocOnThisPage`, `Drawer` and `Command`.
+
+## Do
+
+- Compose the layout once, in the app's root; each route renders only its article. Never put a header, a rail or an inner scroll area in a page.
+- Give every navigation row an `id` and an `href` (an in-app path is followed with the router; never `to`); leave `activeId` empty so the current page follows the route.
+- Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.
+- Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCta`) in `aside`, and the site footer (`Footer kind="content"`) in `footer`.
+- The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls.
+
+## Don’t
+
+- The signed-in console → `ConsoleLayout`. Marketing pages → `SiteLayout`.
+- A docs landing page with no rail (the docs home) → render it with `DocHero` and the sections, without this layout, or pass an empty `navigation` and `outline`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- DocOnThisPage` — the outline rail; `outline` and `outlineGroups` are bound onto it.
+- DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header.
+- DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.
+- Sidebar`, `Menu` — the navigation rail; `navigation` is mapped onto `Menu` groups.
+- SearchTrigger`, `Command` — the header search and the palette it opens.
+- shells/documentation` — the block that shows this layout with a sample docs tree.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `navigation` | `DocLayoutNavGroup[]` | `[]` | false | The docs tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, defaultOpen?, children? }`; an in-app `href` is followed with the router. |
+| `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
+| `sections` | `DocLayoutSection[]` | `[]` | false | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`. |
+| `home` | `string` | `'/'` | false | Where the Azion Docs mark links. |
+| `outline` | `DocTocItem[]` | `[]` | false | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused. |
+| `outlineGroups` | `DocTocGroup[]` | `[]` | false | Complementary link groups under the outline (GitHub, Community). |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). |
+| `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `navigate` | `(event: MouseEvent \| KeyboardEvent, item: DocLayoutNavItem)` | Fired when a navigation row or a palette page is chosen; the layout then follows its `href` (an in-app path with the router). Event first. |
+| `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fired when a palette item from the `search` slot is chosen. Event first. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The article, rendered inside the layout's `<main>`. |
+| `actions` | — | The header's end actions after the search (GitHub, Console). |
+| `navigation-footer` | — | The foot of the navigation rail and of the drawer (the theme switch). |
+| `aside` | — | Content under the outline in the end rail (a `DocCta`). |
+| `footer` | — | The footer under the article (`Footer kind="content"`). |
+| `search` | { query: string } | Extra `Command.Group`s listed before the navigation pages. |
+
+## v-model
+
+| Model                 | Type      | Default | Emits               | Notes                                                                         |
+| --------------------- | --------- | ------- | ------------------- | ----------------------------------------------------------------------------- |
+| `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the header search and ⌘K / Ctrl K set it. |
+
+## States
+
+- Visual states: `default`; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when `outline` or `aside` has content; the palette `open` / `closed`.
+- Outline: the entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
+- Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the article owns its states).
+
+## Accessibility
+
+- Landmarks: the header is `GlobalHeader` (`<header>` named by the catalog `Documentation sections` on its section links); the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the article is inside the single `<main>`; the end rail is an `<aside>` holding the `DocOnThisPage` navigation landmarks. A page must not render a second `<main>`.
+- Keyboard map: `Tab` runs header → rail → article → end rail → footer; `⌘K` / `Ctrl K` opens the palette (`Command`); the compact menu button opens the drawer, `Escape` closes it and returns focus. Choosing an outline entry moves focus to its heading (made focusable with `tabindex="-1"`).
+- Names: the mark link (`Azion Docs home`), the compact menu button (`Open documentation navigation`) and the search (`Search docs`) come from the locale catalog.
+- Visible focus: composed controls own their rings; the mark link uses `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
+
+## Right-to-left
+
+- Layout: logical utilities only; the navigation rail sits at the inline start, the outline at the inline end, and the drawer opens from the inline start.
+- Icons: the mark is not mirrored; `Menu` and `DocOnThisPage` mirror their own glyphs.
+- Keyboard: arrow handling is `Menu`'s and `Command`'s, both direction-aware.
+- User data: labels render with `dir="auto"` inside `Menu`, `DocOnThisPage` and `Command`.
+
+## Internationalization
+
+| Key                        | English source                  | Override prop |
+| -------------------------- | ------------------------------- | ------------- |
+| `docLayout.navigation`     | `Documentation`                 | `ariaLabel`   |
+| `docLayout.sections`       | `Documentation sections`        | —             |
+| `docLayout.home`           | `Azion Docs home`               | —             |
+| `docLayout.badge`          | `Docs`                          | —             |
+| `docLayout.openNavigation` | `Open documentation navigation` | —             |
+| `docLayout.search`         | `Search docs`                   | —             |
+| `docLayout.searchEmpty`    | `No page matches your search.`  | —             |
+| `docLayout.pages`          | `Pages`                         | —             |
+
+- Formatting: none. Navigation and outline text is consumer data.
+
+## Responsive
+
+- Breakpoints (viewport, because the layout is the page): the navigation rail shows from `lg` and is a drawer below; the outline rail shows from `xl`; the section links show from `lg`. The header is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on a narrow header.
+- Narrow: the article takes the full width; the end rail content (`aside`) is not repeated under the article.
+- Touch: menu button and search are 32 px controls, 44 px on coarse pointers through their components.
+- Reflow: no horizontal scroll at 320 px; the document scrolls, never an inner region.
+
+## Examples
+
+### Default
+
+```vue
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import DocCta from '@aziontech/webkit/doc-cta'
+  import DocHeading from '@aziontech/webkit/doc-heading'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
+  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocProse from '@aziontech/webkit/doc-prose'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import { ref } from 'vue'
+
+  const navigation: DocLayoutNavGroup[] = [
+    {
+      label: 'Fundamentals',
+      items: [
+        { id: 'overview', label: 'Overview', href: '/docs' },
+        {
+          id: 'get-started',
+          label: 'Get started',
+          defaultOpen: true,
+          children: [
+            { id: 'create-account', label: 'Create an account', href: '/docs/create-account' },
+            { id: 'first-deploy', label: 'First deploy', href: '/docs/first-deploy' }
+          ]
+        }
+      ]
+    }
+  ]
+
+  const outline = [
+    { id: 'before-you-start', text: 'Before you start', depth: 2 },
+    { id: 'deploy-with-cli', text: 'Deploy with Azion CLI', depth: 2 },
+    { id: 'next-steps', text: 'Next steps', depth: 2 }
+  ]
+
+  const theme = ref<ThemeSwitcherValue>('system')
+</script>
+
+<template>
+  <DocLayout
+    :navigation="navigation"
+    :sections="[
+      { label: 'Guides', href: '/docs' },
+      { label: 'Reference', href: '/docs/reference' }
+    ]"
+    :outline="outline"
+    active-id="first-deploy"
+  >
+    <template #actions>
+      <Button
+        label="Console"
+        kind="secondary"
+        size="medium"
+        href="https://console.azion.com"
+      />
+    </template>
+
+    <template #navigation-footer>
+      <ThemeSwitcher
+        v-model="theme"
+        aria-label="Theme"
+      />
+    </template>
+
+    <template #aside>
+      <DocCta
+        title="Ready to build?"
+        label="Deploy your first application for free."
+        primary-label="Start for free"
+        primary-href="https://console.azion.com/signup"
+      />
+    </template>
+
+    <div class="layout-boundary">
+      <div class="layout-column-content flex flex-col gap-(--spacing-lg)">
+        <DocPageHeader
+          title="First deploy"
+          description="Deploy a template and see it served from the edge."
+          :breadcrumb="[
+            { label: 'Get started', href: '/docs/get-started' },
+            { label: 'First deploy' }
+          ]"
+        />
+        <DocProse>
+          <DocHeading
+            id="before-you-start"
+            :level="2"
+            >Before you start</DocHeading
+          >
+          <p>You need an Azion account and a GitHub account.</p>
+          <DocHeading
+            id="deploy-with-cli"
+            :level="2"
+            >Deploy with Azion CLI</DocHeading
+          >
+          <p>Install the CLI, log in and run the deploy command from your project folder.</p>
+          <DocHeading
+            id="next-steps"
+            :level="2"
+            >Next steps</DocHeading
+          >
+          <p>Add a domain and turn on the cache for your static assets.</p>
+        </DocProse>
+      </div>
+    </div>
+  </DocLayout>
+</template>
+```
+
+---
+
 <!-- components/doc-on-this-page.md -->
 
 # Doc On This Page
@@ -31002,6 +31210,281 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 ---
 
+<!-- components/console-layout.md -->
+
+# Console Layout
+
+> The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `Menu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
+
+- Import: `import ConsoleLayout from '@aziontech/webkit/console-layout'`
+- Category: layout · Surface: product · Structure: monolithic
+- API as JSON: [console-layout.json](https://github.com/aziontech/webkit/blob/main/.specs/console-layout.json)
+
+## When to use
+
+- Every signed-in console page: put one `ConsoleLayout` in the app's root (around `RouterView`) and render each page block as its default slot.
+- A product area that needs the console navigation, breadcrumbs, the ⌘K palette and the account menu without hand-composing `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `SearchTrigger` and `Command`.
+
+## Do
+
+- Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.
+- Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/menu-node-href`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
+- Pass the page's trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
+- Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
+- Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
+- Put an account switcher in `header-start`, page-level flash messages in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
+- Use the `breadcrumbs` slot only when a crumb is a control (an environment `Select`); otherwise pass the data prop.
+- Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`.
+- The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
+
+## Don’t
+
+- A focused flow with no navigation rail (a creation wizard, sign-in) → render the page on its own or with the flow's own header.
+- Public marketing pages → `SiteLayout`. Documentation → `DocLayout`.
+- When the page needs the split panel → compose `AppLayout` directly; `ConsoleLayout` covers the navigation, header, notifications, tools and content regions.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.
+- Sidebar`, `Menu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `Menu` groups).
+- SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
+- Breadcrumb` — the header trail on wide layouts (`breadcrumbs`).
+- shells/console` — the block that shows this layout with sample console navigation.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `navigation` | `ConsoleLayoutNavGroup[]` | `[]` | false | The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router. |
+| `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
+| `breadcrumbs` | `ConsoleLayoutCrumb[]` | `[]` | false | The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page. |
+| `home` | `string` | `'/'` | false | Where the brand mark links. |
+| `account` | `ConsoleLayoutAccount` | `undefined` | false | The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`). |
+| `searchPlaceholder` | `string` | `''` | false | Placeholder of the palette's input. Empty uses the locale catalog (`Search pages and commands`). |
+| `toolsLabel` | `string` | `''` | false | Title of the tools region (help, notifications). Empty uses `AppLayout`'s catalog (`Help`). |
+| `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
+| `toolsOpen` | `boolean` | `false` | false | Two-way value (`v-model:toolsOpen`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `navigate` | `(event: MouseEvent \| KeyboardEvent, item: ConsoleLayoutNavItem)` | Fired when a navigation row or a palette page is chosen; the layout then follows its `href` (an in-app path with the app's router). A row without `href` is left to this handler. Event first. |
+| `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The page body, rendered inside the layout's `<main>`. |
+| `actions` | { compact: boolean, toggleTools: () => void } | The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell). |
+| `header-start` | { compact: boolean } | Content at the start of the header, before the breadcrumbs (an account or organization switcher). |
+| `breadcrumbs` | — | A composed trail that replaces the one built from `breadcrumbs` (a last crumb that is an environment `Select`); hidden while compact. |
+| `notifications` | — | Flash messages (`Alert`) above the page, kept in view while the page scrolls. |
+| `tools` | — | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`. |
+| `search` | { query: string } | Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette. |
+| `account-menu` | — | DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar. |
+
+## v-model
+
+| Model                 | Type      | Default | Emits               | Notes                                                                                                |
+| --------------------- | --------- | ------- | ------------------- | ---------------------------------------------------------------------------------------------------- |
+| `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it.              |
+| `v-model:tools-open`  | `boolean` | `false` | `update:toolsOpen`  | Whether the tools region (help or notifications) is open beside the content; a drawer while compact. |
+
+## States
+
+- Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the breadcrumbs give way to the brand), the palette `open` / `closed`.
+- `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
+- Active navigation row: `Menu`'s `activeId`; a row inside a drill level opens that level, a row inside an inline row expands it.
+- Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the page body owns its states).
+
+## Accessibility
+
+- Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `GlobalHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
+- Keyboard map: `Tab` runs rail → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `Menu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
+- Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the account trigger (`Account menu`) come from the locale catalog; the avatar carries the account name.
+- Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
+- Choosing a row in the compact drawer closes it.
+
+## Right-to-left
+
+- Layout: logical utilities only; the rail sits at the inline start and `AppLayout` mirrors the drawer side.
+- Icons: the breadcrumb separator and `Menu.Back` mirror through their own components; the brand and avatar are not mirrored.
+- Keyboard: arrow handling is `Menu`'s and `Command`'s, both direction-aware.
+- User data: labels render with `dir="auto"` inside `Menu`, `Breadcrumb` and `Command`.
+
+## Internationalization
+
+| Key                               | English source                            | Override prop       |
+| --------------------------------- | ----------------------------------------- | ------------------- |
+| `consoleLayout.navigation`        | `Main navigation`                         | `ariaLabel`         |
+| `consoleLayout.home`              | `Azion home`                              | —                   |
+| `consoleLayout.openNavigation`    | `Open navigation`                         | —                   |
+| `consoleLayout.accountMenu`       | `Account menu`                            | —                   |
+| `consoleLayout.searchPlaceholder` | `Search pages and commands`               | `searchPlaceholder` |
+| `consoleLayout.searchEmpty`       | `No page or command matches your search.` | —                   |
+| `consoleLayout.pages`             | `Pages`                                   | —                   |
+
+- Formatting: none. Navigation, breadcrumb and account text is consumer data.
+
+## Responsive
+
+- Container queries: `AppLayout` measures its own width; below its `compactBelow` the rail is a drawer and the header shows the hamburger and the brand instead of the breadcrumbs. The header bar is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on narrow headers.
+- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates.
+- Touch: hamburger and avatar keep the 32 px controls of `IconButton` / `Avatar` and grow on coarse pointers through those components.
+- Reflow: no horizontal scroll at 320 px; the page body scrolls inside `AppLayout`'s content region.
+
+## Examples
+
+### Default
+
+```vue
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import ButtonHighlight from '@aziontech/webkit/button-highlight'
+  import Command from '@aziontech/webkit/command'
+  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  const navigation: ConsoleLayoutNavGroup[] = [
+    {
+      items: [
+        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' }
+      ]
+    },
+    {
+      label: 'Build',
+      items: [
+        {
+          id: 'applications',
+          label: 'Applications',
+          icon: 'ai ai-edge-application',
+          href: '/applications'
+        },
+        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' }
+      ]
+    },
+    {
+      label: 'Store',
+      items: [
+        {
+          id: 'sql-database',
+          label: 'SQL Database',
+          icon: 'ai ai-edge-sql',
+          href: '/sql-database',
+          tagValue: 'Preview'
+        }
+      ]
+    },
+    {
+      label: 'More',
+      items: [
+        {
+          id: 'settings',
+          label: 'Settings',
+          icon: 'pi pi-cog',
+          kind: 'drill',
+          groups: [
+            {
+              label: 'Settings',
+              items: [
+                { id: 'settings-general', label: 'General', href: '/settings' },
+                { id: 'settings-users', label: 'Users management', href: '/settings/users' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+</script>
+
+<template>
+  <ConsoleLayout
+    :navigation="navigation"
+    :breadcrumbs="[{ label: 'Workloads', href: '/workloads' }, { label: 'edge-shop' }]"
+    :account="{ name: 'Ana Souza', email: 'ana.souza@example.com' }"
+    active-id="workloads"
+  >
+    <template #actions="{ compact }">
+      <Tooltip
+        v-if="compact"
+        text="Create"
+        placement="bottom"
+      >
+        <IconButton
+          icon="pi pi-plus-circle"
+          kind="primary"
+          size="medium"
+          ariaLabel="Create"
+        />
+      </Tooltip>
+      <template v-else>
+        <Button
+          label="Create"
+          kind="primary"
+          size="medium"
+          icon="pi pi-plus-circle"
+        />
+        <ButtonHighlight
+          label="Agent"
+          size="medium"
+          icon="ai ai-ask-azion"
+        />
+      </template>
+    </template>
+
+    <template #search="{ query }">
+      <Command.Group
+        v-if="!query"
+        heading="Recents"
+      >
+        <Command.Item value="recent:edge-shop">edge-shop</Command.Item>
+        <Command.Item value="recent:auth-handler">auth-handler</Command.Item>
+      </Command.Group>
+    </template>
+
+    <template #account-menu>
+      <DropdownMenu.Group>
+        <DropdownMenu.Option
+          value="settings"
+          label="Account settings"
+        />
+        <DropdownMenu.Option
+          value="logout"
+          label="Log out"
+        />
+      </DropdownMenu.Group>
+    </template>
+
+    <div class="layout-boundary">
+      <div class="layout-column flex flex-col gap-(--layout-group-gap)">
+        <PageHeader
+          title="edge-shop"
+          description="The workload that serves the storefront."
+        />
+        <EmptyState
+          title="No deployments yet"
+          description="Deploy the workload to see its history here."
+        />
+      </div>
+    </div>
+  </ConsoleLayout>
+</template>
+```
+
+1 more example(s) in [components/console-layout.md](https://github.com/aziontech/webkit/blob/main/.specs/components/console-layout.md).
+
+---
+
 <!-- components/footer.md -->
 
 # Footer
@@ -32768,6 +33251,214 @@ between them is the ring-offset surface below.
       </SidebarFooter>
     </template>
   </Sidebar>
+</template>
+```
+
+---
+
+<!-- components/site-layout.md -->
+
+# Site Layout
+
+> The marketing site's chrome, composed once in the app: `SiteNav` on top, the page's sections in the layout's `<main>`, `SiteFooter` at the foot, and the `Command` search palette wired to the bar's search button and to ⌘K / Ctrl K. The navigation and the footer are data (the `SiteNav` and `SiteFooter` props), the canvas is painted with the theme tokens so a dark site never shows an unpainted page below the fold, and the palette lists every destination of the navigation by default. Site pages are only their sections, rendered through the default slot; they never repeat the bar or the footer.
+
+- Import: `import SiteLayout from '@aziontech/webkit/site-layout'`
+- Category: layout · Surface: product · Structure: monolithic
+- API as JSON: [site-layout.json](https://github.com/aziontech/webkit/blob/main/.specs/site-layout.json)
+
+## When to use
+
+- Every public marketing page (home, product, solution, company, legal): put one `SiteLayout` in the app's root (around `RouterView`) and render each page's sections as its default slot.
+- A site that needs the Azion navigation, footer and search palette without hand-composing `GlobalHeader`, `NavigationMenu`, `Footer`, `SearchTrigger` and `Command`.
+
+## Do
+
+- Compose the layout once, in the app's root; each route renders only its sections. Never add `SiteNav`, `SiteFooter`, `GlobalHeader` or `Footer` to a page.
+- The site is dark: set `data-theme="dark"` on `<html>` (in `index.html`), so the layout, the teleported menus and the palette all resolve the dark tokens.
+- Bind the real navigation and footer data once (`navigation`, `footer`); give every navigation item an `href` so it also appears in the search palette.
+- Add extra palette groups (articles, docs results) in the `search` slot; listen to `search-select` for them.
+- The page renders no `<main>` of its own: the layout owns the landmark.
+
+## Don’t
+
+- The signed-in console → `ConsoleLayout`. Documentation → `DocLayout`.
+- A one-off landing page with no site navigation (a campaign form) → render the sections on their own.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- SiteNav` — the bar and its mega-menus; `navigation` is bound onto it.
+- SiteFooter` — the footer; `footer` is bound onto it (`kind="site"` closes a framed page).
+- SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
+- Command` — the search palette the bar's search button opens.
+- shells/website` — the block that shows this layout with the azion.com navigation and footer.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `navigation` | `SiteLayoutNavigation` | `—` | true | The bar, bound onto `SiteNav`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`. |
+| `footer` | `SiteLayoutFooter` | `undefined` | false | The footer, bound onto `SiteFooter`: `{ kind?, home?, columns?, socials?, statusLabel?, languages? }`; `kind` defaults to `site`. No footer when absent. |
+| `searchPlaceholder` | `string` | `''` | false | Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`). |
+| `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `navigate` | `(event: MouseEvent \| KeyboardEvent, page: SiteLayoutPage)` | Fired when a navigation destination is chosen in the palette (`{ label, href }`); the layout then follows it (with the app's router for an in-site path). Event first. |
+| `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fired when a palette item from the `search` slot is chosen. Event first. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The page's sections, rendered inside the layout's `<main>`. |
+| `search` | { query: string } | Extra `Command.Group`s listed before the navigation destinations. |
+
+## v-model
+
+| Model                 | Type      | Default | Emits               | Notes                                                                               |
+| --------------------- | --------- | ------- | ------------------- | ----------------------------------------------------------------------------------- |
+| `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the bar's search button and ⌘K / Ctrl K set it. |
+
+## States
+
+- Visual states: `default`; the palette `open` / `closed`; the bar's sheet and mega-menus own their states (`SiteNav`).
+- Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the sections own their states).
+
+## Accessibility
+
+- Landmarks: the bar is the `SiteNav` banner named "Azion"; the sections are inside the layout's single `<main>`; the footer is the `SiteFooter` `contentinfo`. A page must not render a second `<main>`.
+- Keyboard map: `Tab` runs bar → page → footer; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The bar's menus and sheet own their keyboard models.
+- Visible focus and contrast: owned by the composed components; the canvas tokens keep text ≥ 4.5:1 in light and dark.
+
+## Right-to-left
+
+- Layout: logical utilities only; `SiteNav` and `SiteFooter` mirror their own rows.
+- Icons: none of its own.
+- Keyboard: arrow handling is `Command`'s and `SiteNav`'s, both direction-aware.
+- User data: destination labels render inside `Command.Item` with `dir="auto"`.
+
+## Internationalization
+
+| Key                            | English source                 | Override prop       |
+| ------------------------------ | ------------------------------ | ------------------- |
+| `siteLayout.searchPlaceholder` | `Search the site`              | `searchPlaceholder` |
+| `siteLayout.searchEmpty`       | `No page matches your search.` | —                   |
+| `siteLayout.pages`             | `Pages`                        | —                   |
+
+- Formatting: none. Navigation and footer text is consumer data.
+
+## Responsive
+
+- Container queries: none of its own; `SiteNav` switches to its sheet below `xl` and `SiteFooter` reflows its rows.
+- Narrow: the main column is full width; the sections own their measure (`SectionContainer`).
+- Touch: owned by the composed components.
+- Reflow: no horizontal scroll at 320 px; the page scrolls the document (no inner scroll area), so a full-page capture shows the whole page.
+
+## Examples
+
+### Default
+
+```vue
+<script setup lang="ts">
+  import HeroBand from '@aziontech/webkit/hero-band'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
+  import SiteLayout, {
+    type SiteLayoutFooter,
+    type SiteLayoutNavigation
+  } from '@aziontech/webkit/site-layout'
+
+  const navigation: SiteLayoutNavigation = {
+    home: '/en/',
+    menus: [
+      {
+        value: 'products',
+        label: 'Products',
+        columns: [
+          [
+            {
+              label: 'Build',
+              items: [
+                {
+                  label: 'Functions',
+                  description: 'Run serverless code close to your users',
+                  href: '/en/products/functions/'
+                },
+                {
+                  label: 'Applications',
+                  description: 'Deliver and accelerate your applications',
+                  href: '/en/products/applications/'
+                }
+              ]
+            }
+          ],
+          [
+            {
+              label: 'Secure',
+              items: [
+                {
+                  label: 'Firewall',
+                  description: 'Stop attacks before they reach your origin',
+                  href: '/en/products/firewall/'
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    links: [{ label: 'Pricing', href: '/en/pricing/' }],
+    contact: { label: 'Contact', href: '/en/contact/' },
+    secondaryAction: { label: 'Login', href: 'https://console.azion.com/login' },
+    primaryAction: { label: 'Start for free', href: 'https://console.azion.com/signup' }
+  }
+
+  const footer: SiteLayoutFooter = {
+    home: '/en/',
+    columns: [
+      {
+        title: 'Products',
+        links: [
+          { label: 'Functions', href: '/en/products/functions/' },
+          { label: 'Firewall', href: '/en/products/firewall/' }
+        ]
+      },
+      {
+        title: 'Company',
+        links: [
+          { label: 'About us', href: '/en/about-us/' },
+          { label: 'Careers', href: '/en/careers/' }
+        ]
+      }
+    ],
+    socials: [
+      { icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
+    ],
+    statusLabel: 'All Systems Operational',
+    languages: ['EN', 'PT-BR', 'ES']
+  }
+</script>
+
+<template>
+  <SiteLayout
+    :navigation="navigation"
+    :footer="footer"
+  >
+    <HeroBand
+      kind="centered"
+      eyebrow="Functions"
+      title="Run code where your users are"
+      description="Deploy serverless functions to the edge network in seconds."
+      :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
+      :secondary-action="{ label: 'Talk to an expert', href: '/en/contact/' }"
+    />
+    <SectionContainer max-width="site">
+      <SectionGap hatch />
+    </SectionContainer>
+  </SiteLayout>
 </template>
 ```
 

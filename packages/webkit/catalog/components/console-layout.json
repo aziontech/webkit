@@ -1,0 +1,30 @@
+{
+ "purpose": "The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `Menu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.",
+ "useWhen": [
+  "Every signed-in console page: put one `ConsoleLayout` in the app's root (around `RouterView`) and render each page block as its default slot.",
+  "A product area that needs the console navigation, breadcrumbs, the ⌘K palette and the account menu without hand-composing `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `SearchTrigger` and `Command`."
+ ],
+ "avoidWhen": [
+  "A focused flow with no navigation rail (a creation wizard, sign-in) → render the page on its own or with the flow's own header.",
+  "Public marketing pages → `SiteLayout`. Documentation → `DocLayout`.",
+  "When the page needs the split panel → compose `AppLayout` directly; `ConsoleLayout` covers the navigation, header, notifications, tools and content regions."
+ ],
+ "related": [
+  "AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.",
+  "Sidebar`, `Menu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `Menu` groups).",
+  "SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.",
+  "Breadcrumb` — the header trail on wide layouts (`breadcrumbs`).",
+  "shells/console` — the block that shows this layout with sample console navigation."
+ ],
+ "bestPractices": [
+  "Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.",
+  "Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/menu-node-href`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.",
+  "Pass the page's trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.",
+  "Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.",
+  "Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.",
+  "Put an account switcher in `header-start`, page-level flash messages in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).",
+  "Use the `breadcrumbs` slot only when a crumb is a control (an environment `Select`); otherwise pass the data prop.",
+  "Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`.",
+  "The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages."
+ ]
+}

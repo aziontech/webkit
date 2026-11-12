@@ -220,8 +220,8 @@ count permits, and lets a short last row share the width evenly — under three 
 a framed grid reads as a missing card, so the rule has no exceptions for content cells;
 `layout="fixed"` is for tiles whose width must not change (square logo walls, a cell spanning rows).
 
-**The footer closes the frame and nothing follows it.** `SiteFooter` is the page shell's last child,
-unwrapped; from `lg` the page ends on its bottom bar (the brand leads the social row), below `lg` on
+**The footer closes the frame and nothing follows it.** `SiteLayout` places `SiteFooter` as its last
+child, unwrapped — a page never adds one; from `lg` the page ends on its bottom bar (the brand leads the social row), below `lg` on
 the signature band that carries the brand.
 
 ## 7. The control cap in a field row

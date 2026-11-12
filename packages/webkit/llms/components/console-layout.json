@@ -1,0 +1,179 @@
+{
+ "name": "console-layout",
+ "binding": "ConsoleLayout",
+ "import": "@aziontech/webkit/console-layout",
+ "treeShakeableImport": "@aziontech/webkit/console-layout",
+ "category": "layout",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `Menu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.",
+ "setup": null,
+ "useWhen": [
+  "Every signed-in console page: put one `ConsoleLayout` in the app's root (around `RouterView`) and render each page block as its default slot.",
+  "A product area that needs the console navigation, breadcrumbs, the ⌘K palette and the account menu without hand-composing `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `SearchTrigger` and `Command`."
+ ],
+ "avoidWhen": [
+  "A focused flow with no navigation rail (a creation wizard, sign-in) → render the page on its own or with the flow's own header.",
+  "Public marketing pages → `SiteLayout`. Documentation → `DocLayout`.",
+  "When the page needs the split panel → compose `AppLayout` directly; `ConsoleLayout` covers the navigation, header, notifications, tools and content regions."
+ ],
+ "related": [
+  "AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.",
+  "Sidebar`, `Menu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `Menu` groups).",
+  "SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.",
+  "Breadcrumb` — the header trail on wide layouts (`breadcrumbs`).",
+  "shells/console` — the block that shows this layout with sample console navigation."
+ ],
+ "bestPractices": [
+  "Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.",
+  "Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/menu-node-href`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.",
+  "Pass the page's trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.",
+  "Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.",
+  "Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.",
+  "Put an account switcher in `header-start`, page-level flash messages in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).",
+  "Use the `breadcrumbs` slot only when a crumb is a control (an environment `Select`); otherwise pass the data prop.",
+  "Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`.",
+  "The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages."
+ ],
+ "props": [
+  {
+   "name": "navigation",
+   "type": "ConsoleLayoutNavGroup[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router."
+  },
+  {
+   "name": "activeId",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id of the current row. Empty matches the current route against each row's `href`."
+  },
+  {
+   "name": "breadcrumbs",
+   "type": "ConsoleLayoutCrumb[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page."
+  },
+  {
+   "name": "home",
+   "type": "string",
+   "default": "'/'",
+   "required": "false",
+   "doc": "Where the brand mark links."
+  },
+  {
+   "name": "account",
+   "type": "ConsoleLayoutAccount",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`)."
+  },
+  {
+   "name": "searchPlaceholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder of the palette's input. Empty uses the locale catalog (`Search pages and commands`)."
+  },
+  {
+   "name": "toolsLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the tools region (help, notifications). Empty uses `AppLayout`'s catalog (`Help`)."
+  },
+  {
+   "name": "searchOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:searchOpen`)."
+  },
+  {
+   "name": "toolsOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:toolsOpen`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "navigate",
+   "payload": "(event: MouseEvent | KeyboardEvent, item: ConsoleLayoutNavItem)",
+   "notes": "Fired when a navigation row or a palette page is chosen; the layout then follows its `href` (an in-app path with the app's router). A row without `href` is left to this handler. Event first."
+  },
+  {
+   "name": "search-select",
+   "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+   "notes": "Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The page body, rendered inside the layout's `<main>`."
+  },
+  {
+   "name": "actions",
+   "scope": "{ compact: boolean, toggleTools: () => void }",
+   "notes": "The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell)."
+  },
+  {
+   "name": "header-start",
+   "scope": "{ compact: boolean }",
+   "notes": "Content at the start of the header, before the breadcrumbs (an account or organization switcher)."
+  },
+  {
+   "name": "breadcrumbs",
+   "scope": "—",
+   "notes": "A composed trail that replaces the one built from `breadcrumbs` (a last crumb that is an environment `Select`); hidden while compact."
+  },
+  {
+   "name": "notifications",
+   "scope": "—",
+   "notes": "Flash messages (`Alert`) above the page, kept in view while the page scrolls."
+  },
+  {
+   "name": "tools",
+   "scope": "—",
+   "notes": "The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`."
+  },
+  {
+   "name": "search",
+   "scope": "{ query: string }",
+   "notes": "Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette."
+  },
+  {
+   "name": "account-menu",
+   "scope": "—",
+   "notes": "DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup lang=\"ts\">\n  import Button from '@aziontech/webkit/button'\n  import ButtonHighlight from '@aziontech/webkit/button-highlight'\n  import Command from '@aziontech/webkit/command'\n  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'\n  import DropdownMenu from '@aziontech/webkit/dropdown-menu'\n  import EmptyState from '@aziontech/webkit/empty-state'\n  import IconButton from '@aziontech/webkit/icon-button'\n  import PageHeader from '@aziontech/webkit/page-header'\n  import Tooltip from '@aziontech/webkit/tooltip'\n\n  const navigation: ConsoleLayoutNavGroup[] = [\n    {\n      items: [\n        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },\n        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' }\n      ]\n    },\n    {\n      label: 'Build',\n      items: [\n        {\n          id: 'applications',\n          label: 'Applications',\n          icon: 'ai ai-edge-application',\n          href: '/applications'\n        },\n        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' }\n      ]\n    },\n    {\n      label: 'Store',\n      items: [\n        {\n          id: 'sql-database',\n          label: 'SQL Database',\n          icon: 'ai ai-edge-sql',\n          href: '/sql-database',\n          tagValue: 'Preview'\n        }\n      ]\n    },\n    {\n      label: 'More',\n      items: [\n        {\n          id: 'settings',\n          label: 'Settings',\n          icon: 'pi pi-cog',\n          kind: 'drill',\n          groups: [\n            {\n              label: 'Settings',\n              items: [\n                { id: 'settings-general', label: 'General', href: '/settings' },\n                { id: 'settings-users', label: 'Users management', href: '/settings/users' }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  ]\n</script>\n\n<template>\n  <ConsoleLayout\n    :navigation=\"navigation\"\n    :breadcrumbs=\"[{ label: 'Workloads', href: '/workloads' }, { label: 'edge-shop' }]\"\n    :account=\"{ name: 'Ana Souza', email: 'ana.souza@example.com' }\"\n    active-id=\"workloads\"\n  >\n    <template #actions=\"{ compact }\">\n      <Tooltip\n        v-if=\"compact\"\n        text=\"Create\"\n        placement=\"bottom\"\n      >\n        <IconButton\n          icon=\"pi pi-plus-circle\"\n          kind=\"primary\"\n          size=\"medium\"\n          ariaLabel=\"Create\"\n        />\n      </Tooltip>\n      <template v-else>\n        <Button\n          label=\"Create\"\n          kind=\"primary\"\n          size=\"medium\"\n          icon=\"pi pi-plus-circle\"\n        />\n        <ButtonHighlight\n          label=\"Agent\"\n          size=\"medium\"\n          icon=\"ai ai-ask-azion\"\n        />\n      </template>\n    </template>\n\n    <template #search=\"{ query }\">\n      <Command.Group\n        v-if=\"!query\"\n        heading=\"Recents\"\n      >\n        <Command.Item value=\"recent:edge-shop\">edge-shop</Command.Item>\n        <Command.Item value=\"recent:auth-handler\">auth-handler</Command.Item>\n      </Command.Group>\n    </template>\n\n    <template #account-menu>\n      <DropdownMenu.Group>\n        <DropdownMenu.Option\n          value=\"settings\"\n          label=\"Account settings\"\n        />\n        <DropdownMenu.Option\n          value=\"logout\"\n          label=\"Log out\"\n        />\n      </DropdownMenu.Group>\n    </template>\n\n    <div class=\"layout-boundary\">\n      <div class=\"layout-column flex flex-col gap-(--layout-group-gap)\">\n        <PageHeader\n          title=\"edge-shop\"\n          description=\"The workload that serves the storefront.\"\n        />\n        <EmptyState\n          title=\"No deployments yet\"\n          description=\"Deploy the workload to see its history here.\"\n        />\n      </div>\n    </div>\n  </ConsoleLayout>\n</template>"
+  },
+  {
+   "name": "PageOpensSearch",
+   "sfc": "<script setup lang=\"ts\">\n  import Button from '@aziontech/webkit/button'\n  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'\n  import PageHeader from '@aziontech/webkit/page-header'\n  import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'\n  import { defineComponent, h } from 'vue'\n\n  const navigation: ConsoleLayoutNavGroup[] = [\n    {\n      items: [\n        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },\n        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' },\n        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' }\n      ]\n    }\n  ]\n\n  const FindWorkload = defineComponent({\n    name: 'FindWorkload',\n    setup() {\n      const { openSearch } = useConsoleLayout()\n      return () =>\n        h(Button, {\n          label: 'Find a workload',\n          icon: 'pi pi-search',\n          kind: 'outlined',\n          size: 'medium',\n          onClick: openSearch\n        })\n    }\n  })\n</script>\n\n<template>\n  <ConsoleLayout\n    :navigation=\"navigation\"\n    active-id=\"workloads\"\n  >\n    <div class=\"layout-boundary\">\n      <div class=\"layout-column flex flex-col gap-(--layout-group-gap)\">\n        <PageHeader\n          title=\"Workloads\"\n          description=\"Open the same palette as the header search, from the page.\"\n        >\n          <template #actions>\n            <FindWorkload />\n          </template>\n        </PageHeader>\n      </div>\n    </div>\n  </ConsoleLayout>\n</template>"
+  }
+ ],
+ "docs": "components/console-layout.md"
+}

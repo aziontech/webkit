@@ -1,22 +1,22 @@
 # Documentation (`shells/documentation`)
 
-> The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`. Three variants fill the reading column with a real page, built only from the documentation parts: Article is a tutorial (First deploy) — `DocPageHeader` with breadcrumb, last updated and the Copy / View as Markdown and Agent setup actions, then one `DocProse` holding a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocHeading` sections, `DocSteps` with `CodeBlock` commands, a `DocPrompt` for the coding agent, Next steps as `DocCardGroup`, Related resources as `DocItem` rows in a `FrameBox`, then `DocPagination`, with the outline rail as `DocOnThisPage` plus the closing `DocCta`; Reference is a product reference page (an info callout, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home (no outline rail): a `DocHero` (display-size title, deck, `Get started` then the dark `CopyPromptButton` with the Claude, ChatGPT, Gemini and Cursor marks, and a note on what the prompt does), then Start by interface opening on a `DocAgentCard` ("Your AI agent, fluent in Azion" with the inline Copy prompt; "Prefer the guided route?" with the orange Agent setup over a halftone) above the Console, CLI and API `DocCard`s in the Azion product marks, then objectives, ready-made templates in their brand colours (`ai-cor`), Stop attacks, compliance and Follow along, and the pager forward. The variants carry search as a `SearchTrigger` that widens into the ⌘K field.
+> The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCta` in its `aside` slot, and the `Footer` (`kind="content"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Three variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPagination`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward.
 
 - Surface: docs
 - Source: `blocks/shells/documentation/documentation.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/documentation")`
-- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [Command](../../components/command.md), [CopyPromptButton](../../components/copy-prompt-button.md), [Diagram](../../components/diagram.md), [DocAgentCard](../../components/doc-agent-card.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCta](../../components/doc-cta.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocHero](../../components/doc-hero.md), [DocItem](../../components/doc-item.md), [DocOnThisPage](../../components/doc-on-this-page.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), `ItemList`, `MenuGroup`, `MenuItem`, `MenuRoot`, `MenuSub`, `MenuSubContent`, `MenuSubTrigger`, [NavigationMenu](../../components/navigation-menu.md), [ScrollArea](../../components/scroll-area.md), [SearchTrigger](../../components/search-trigger.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
+- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [CopyPromptButton](../../components/copy-prompt-button.md), [Diagram](../../components/diagram.md), [DocAgentCard](../../components/doc-agent-card.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCta](../../components/doc-cta.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocHero](../../components/doc-hero.md), [DocItem](../../components/doc-item.md), [DocLayout](../../components/doc-layout.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [IconButton](../../components/icon-button.md), `ItemList`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
 
-docs shell; documentation layout; docs page layout; documentation site; docs sidebar; on this page outline; knowledge base layout; layout da documentação; página de documentação; estrutura da documentação; documentation shell; docs layout; documentation article; docs article page; tutorial page; getting started guide; how-to guide; product reference page; reference documentation; docs page with steps and code; documentation home; docs home page; docs landing page; developer portal home; artigo da documentação; página de tutorial; guia de primeiros passos; página de referência do produto; página inicial da documentação; home da documentação; docs home with copy prompt and AI agent logos; your AI agent fluent in Azion card; botão copiar prompt com logos de IA
+docs shell; documentation layout; docs page layout; documentation site; docs sidebar; on this page outline; knowledge base layout; layout da documentação; página de documentação; estrutura da documentação; documentation shell; docs layout; documentation article; docs article page; tutorial page; getting started guide; how-to guide; product reference page; reference documentation; docs page with steps and code; documentation home; docs home page; docs landing page; developer portal home; artigo da documentação; página de tutorial; guia de primeiros passos; página de referência do produto; página inicial da documentação; home da documentação; docs home with copy prompt and AI agent logos; your AI agent fluent in Azion card; botão copiar prompt com logos de IA; docs layout component; DocLayout
 
-The documentation shell. A reader comes to learn one task and leave, so the shell keeps the page readable and the next page close: the docs header on top, a rail of the current product's pages from `lg`, a reading column that scrolls on its own, the "On this page" outline from `xl`, and the footer inside the reading column's scroller so the bands sit between the rail and the outline.
+The documentation shell. A reader comes to learn one task and leave, so the shell keeps the page readable and the next page close. It is `DocLayout`, composed once in the app around `RouterView`: the layout owns the docs header, the navigation rail, the "On this page" rail, the search palette and the footer, and the document itself scrolls with the header and both rails sticky. Every docs page is only its article.
 
 ## When to use
 
-- Every documentation, guide or reference page.
+- Every documentation, guide or reference page, and the docs home.
 
 ## When not to use
 
@@ -24,168 +24,199 @@ The documentation shell. A reader comes to learn one task and leave, so the shel
 
 ## Building blocks
 
-### A. Header — `GlobalHeader` (required)
+### A. Layout — `DocLayout` (required)
 
-Default `content` placement, `aria-label="Azion documentation"`; the same bar as `headers/docs-header`.
+Composed once around the router view. `navigation` is the docs tree as data (groups of rows with `id`, `label` and `href`; an inline subsection is a row with `children` and `defaultOpen`), `sections` the header's section links, `home` where the Azion Docs mark links, `outline` the article's headings (`{ id, text, depth }`) and `outline-groups` the GitHub and Community links under them. It renders the single main landmark, the rail from `lg` (a drawer below it), the outline from `xl`, and the ⌘K palette of every navigation page. In an app leave `active-id` empty so the current row follows the route; the preview has no router, so it passes the current row's id.
 
-### B. Icon actions — `IconButton` (required)
+### B. Header actions — `IconButton` (required)
 
-The navigation trigger below `lg`, GitHub in the header, and the small `transparent` social links in the footer, each with an `aria-label`.
+In the `actions` slot: GitHub, `kind="outlined"`, with an `ariaLabel`. In the footer, the small `transparent` social links.
 
-### C. Brand — `Brand` (required)
+### C. Console — `Button` (required)
 
-In the header with the Docs tag, and in the footer: it leads the social row from `lg` and moves to the signature band below it.
+`secondary`, last in the `actions` slot.
 
-### D. Section links — `NavigationMenu` (required from lg)
+### D. Theme — `ThemeSwitcher` (required)
 
-The top-level documentation sections in the header.
+In the `navigation-footer` slot, labelled `Theme`; the layout shows it at the foot of the rail and of the drawer.
 
-### E. Console — `Button` (required)
+### E. Call to action — `DocCta` (optional)
 
-`secondary`, last in the header.
+In the `aside` slot, under the outline: "Ready to build?" with a primary and a secondary link.
 
-### F. Rail — `Sidebar` (required from lg)
+### F. Masthead — `DocPageHeader` (required)
 
-`aria-label="Docs"`, the width of `--container-2xs`, holding the page menu and the theme switcher in its footer. Below `lg` it leaves and the header trigger opens the navigation.
+The first thing in the article: breadcrumb, title, deck, and on real pages the last-updated date and the meta actions.
 
-### G. Theme — `ThemeSwitcher` (required)
+### G. Running text — `DocProse` (required)
 
-In the rail footer, labelled `Theme`.
+Everything under the masthead; it sets the running text and gives the headings their type scale.
 
-### H. Page menu — `MenuRoot` (required)
+### H. Section headings — `DocHeading` (required)
 
-The rail's page navigation for the current product.
+One per outline entry, with the same `id` the `outline` item carries: the layout tracks which heading is in view and scrolls a chosen entry under the sticky header.
 
-### I. Product group — `MenuGroup` (required)
+### I. Footer — `Footer` (required)
 
-One per product (`Functions`), with the product name as its heading.
+In the `footer` slot, `kind="content"`, under a top rule: `Footer.Column` with `Footer.Link` items, then the social, status, language and brand slots. With `signature="compact"` the brand leads the social row from `lg` (`hidden lg:inline-flex`) and the signature band carries it below `lg`, in CSS.
 
-### J. Page link — `MenuItem` (required)
+### J. Brand — `Brand` (required)
 
-One per page, the current page `selected`.
+In the footer only; the header mark belongs to the layout.
 
-### K. Reading column — `ScrollArea` (required)
-
-The article and the footer scroll inside it, so the header, rail and outline stay put.
-
-### L. Footer — `Footer` (required)
-
-`kind="content"`, inside the scroller: `Footer.Column` with `Footer.Link` items, then the social, status, language and brand slots. It stacks below `md`.
-
-### M. System status — `StatusIndicator` (required)
+### K. System status — `StatusIndicator` (required)
 
 In the footer's status slot.
 
-### N. Language — `Select` (required)
+### L. Language — `Select` (required)
 
 In the footer's language slot, trigger labelled `Language`.
 
-### O. Search — `SearchTrigger` (required)
-
-The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
-
-### P. Search palette — `Command` (required)
-
-The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
-
 ## Do
 
-- For a real page, start from a variant (Article, Reference, Landing), not from the primary: the primary's column is a placeholder, and the variants build it from the `Doc*` parts only.
-- Build a docs home from the Landing variant: `DocHero` (display title with `--spacing-xxl` of air, deck, `Get started` then `CopyPromptButton`, a note on what the prompt does), then the first section opening on `DocAgentCard` above the Console / CLI / API `DocCardGroup`. Product cards use the Azion marks (`ai ai-azion`, `ai ai-azion-cli`, `ai ai-azion-api`) in the muted ink; framework templates use the brand-colour set (`ai-cor ai-react`, `ai-cor ai-vue`…).
-- Put everything under `DocPageHeader` in one `DocProse`: it sets the running text and gives `DocHeading` its type scale. Every `DocHeading` has an `id`, and `DocOnThisPage` lists the same headings.
+- Compose `DocLayout` once in the app's root around `RouterView`; each route renders only its `<article>`.
+- For a real page, start from a variant (Article, Reference, Landing): the variants build the article from the `Doc*` parts only.
+- Give every `DocHeading` an `id` and pass the same ids, in document order, as `outline`.
+- Put everything under `DocPageHeader` in one `DocProse`.
+- Give every navigation row an `id` and an `href` (an in-app path is followed with the router); keep the rail scoped to the current product; the header section links switch products.
+- Build a docs home from the Landing variant: `DocHero` with `CopyPromptButton`, then `DocAgentCard` above the Console / CLI / API cards; pass no `outline`.
 - Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocStep`, with its command as a `CodeBlock` inside the same step.
-- Use `SearchTrigger` (`collapsible`, `Search docs`) inside an `@container` for search, so it is the ⌘K field when the bar is wide and the magnifier when it is narrow.
-- Keep the outline's items equal to the article's `h2` headings.
-- Keep the rail scoped to the current product; the header links switch products.
-- Let the footer run full bleed across the zone between rail and outline.
 
 ## Don't
 
-- Don't hand-write the outline, the pager or the masthead; `DocOnThisPage`, `DocPagination` and `DocPageHeader` own their markup and labels.
-- Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`, or the prose restyles its `<a>` and the label loses contrast.
-- Don't leave the rail rows on `MenuItem`'s default glyph: pass `icon=""`.
-- Don't use the marketing `Banner` on the landing, and don't fake the agent card with a `DocCard` and an eyebrow or an `// AGENT SETUP` overline: the docs home's agent block is `DocAgentCard`.
-- Don't open the docs home with `DocPageHeader` or put the prompt text on it as a `DocPrompt`: the home is `DocHero` + `CopyPromptButton` (the prompt is copied, not shown).
-- Don't put the footer outside the scroller: it would stay pinned and eat the reading height.
+- Don't put a `ScrollArea`, an `h-screen` frame or any inner scroll region around the article: the document scrolls, so find in page, scroll restoration and full-page captures work.
+- Don't render a `<main>` in a page; the layout already renders the only one.
+- Don't repeat the header, the search, the navigation rail, the outline or the footer in a page.
+- Don't hand-write the outline, the pager or the masthead; the layout's outline rail, `DocPagination` and `DocPageHeader` own their markup and labels.
+- Don't give a `DocHeading` an id the `outline` does not list, or list an id no heading carries.
+- Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`.
+- Don't measure the viewport in script to place the footer brand; the `lg:` utilities and `signature="compact"` decide it in CSS.
 - Don't reuse the console rail here; docs navigation is pages, not modules.
 
 ## Copy
 
-- **Outline heading:** `On this page`.
 - **Article headings:** verb-led tasks in sentence case: `Create the function`, `Verify the response`.
-- **Menu items:** page titles exactly as the `h1` reads.
+- **Navigation rows:** page titles exactly as the `h1` reads.
 - **Step titles:** imperative, ending with a period when the step is a sentence: `Open Azion Console.`
 - **Landing groups:** `Start by interface`, `Start by objective`, `Ready-made templates`, `Follow along`; card link labels are a verb and the object (`Install the CLI`).
 
 ## Accessibility
 
-- One `h1` per article; outline links target the `h2` ids.
-- `ScrollArea` keeps keyboard scrolling working; the article is reachable without passing through the rail.
-- Each `nav` (header sections, rail, outline) is labelled so screen reader users can tell them apart.
+- One main landmark: the layout's. The article is an `<article>` inside it, never a second `<main>`.
+- One `h1` per article (the masthead or the hero); `DocHeading` levels follow it in order (2, then 3 under a 2), and outline entries target those ids.
+- Landmarks: the header is a banner, the rail and the outline are labelled navigation regions, the footer is contentinfo; `Tab` runs header → rail → article → outline → footer.
+- Choosing an outline entry moves focus to its heading and clears the sticky header.
 
 ## States
 
-- Default: the chrome with a placeholder column; rail from `lg`, outline from `xl`, footer stacked below `md`.
-- Article: a tutorial page from the `Doc*` parts, pager in both directions, outline rail with `DocOnThisPage` and `DocCta`.
+- Default: the chrome around a short guide; rail from `lg` (drawer below), outline with the GitHub and Community groups and the `DocCta` from `xl`, the full footer under the article.
+- Article: a tutorial page from the `Doc*` parts, pager in both directions, outline with an indented level 3 entry.
 - Reference: a product reference page with a callout, the request-path diagram, a JSON rule and a term list; pager forward only.
-- Landing: the documentation home; no outline rail, `DocHero` with `CopyPromptButton`, `DocAgentCard`, entry-point grids, pager forward to the first page.
+- Landing: the documentation home; navigation rail, no outline rail, `DocHero` with `CopyPromptButton`, `DocAgentCard`, entry-point grids, pager forward to the first page.
 
 ## Related
 
+- `DocLayout` — the component this block shows.
 - `headers/docs-header` — the header on its own.
-- `shells/website` — the marketing counterpart that shares the footer.
+- `shells/console` (`ConsoleLayout`) and `shells/website` (`SiteLayout`) — the console and marketing counterparts.
 
 ## Variants
 
 - `Default` — primary (the code below)
-- `Article` — A tutorial page: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources, the pager, and the outline rail with DocOnThisPage and DocCta.
-- `Reference` — A product reference page: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps.
-- `Landing` — The documentation home, as Azion Docs draws it: no outline rail; a DocHero with Get started and the CopyPromptButton (agent marks) and its note, then a DocAgentCard (Your AI agent, fluent in Azion / Prefer the guided route? with Agent setup over a halftone) above the Console, CLI and API cards, then objectives, coloured framework templates, Stop attacks, compliance, Follow along and the pager forward.
+- `Article` — A tutorial page inside DocLayout: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources and the pager; the outline tracks its DocHeading ids, with the GitHub and Community groups and a DocCta under it.
+- `Reference` — A product reference page inside DocLayout: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps; the outline tracks its four sections, with a DocCta under it.
+- `Landing` — The documentation home inside DocLayout, with the navigation rail and no outline rail: a DocHero with Get started and the CopyPromptButton (agent marks) and its note, then a DocAgentCard above the Console, CLI and API cards, then objectives, coloured framework templates, Stop attacks, compliance, Follow along and the pager forward.
 
 Each variant is the same screen in another state: `get_pattern("shells/documentation", { variant })`, or the file under `blocks/shells/documentation/variants/`.
 
 ## Code (`Default`)
 
 ```vue
-<script setup lang="ts">
+<script setup>
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import Command from '@aziontech/webkit/command'
+  import DocCta from '@aziontech/webkit/doc-cta'
+  import DocHeading from '@aziontech/webkit/doc-heading'
+  import DocLayout from '@aziontech/webkit/doc-layout'
+  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocProse from '@aziontech/webkit/doc-prose'
   import Footer from '@aziontech/webkit/footer'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
-  import MenuGroup from '@aziontech/webkit/menu-group'
-  import MenuItem from '@aziontech/webkit/menu-item'
-  import MenuRoot from '@aziontech/webkit/menu-root'
-  import NavigationMenu from '@aziontech/webkit/navigation-menu'
-  import ScrollArea from '@aziontech/webkit/scroll-area'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Select from '@aziontech/webkit/select'
-  import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
-  import { onBeforeUnmount, onMounted, ref } from 'vue'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { ref } from 'vue'
 
-  const sections = ['Reference', 'Guides', 'Dev tools']
-  const pages = [
-    'Overview',
-    'Getting started',
-    'How it works',
-    'Examples',
-    'Reference',
-    'Limits',
-    'Best practices',
-    'Troubleshooting'
+  const sections = [
+    { label: 'Reference', href: '/docs/reference' },
+    { label: 'Guides', href: '/docs/guides' },
+    { label: 'Dev tools', href: '/docs/dev-tools' }
   ]
+
+  const navigation = [
+    {
+      label: 'Functions',
+      items: [
+        { id: 'functions-overview', label: 'Overview', href: '/docs/functions' },
+        {
+          id: 'functions-getting-started',
+          label: 'Getting started',
+          href: '/docs/functions/getting-started'
+        },
+        {
+          id: 'functions-how-it-works',
+          label: 'How it works',
+          href: '/docs/functions/how-it-works'
+        },
+        { id: 'functions-examples', label: 'Examples', href: '/docs/functions/examples' },
+        { id: 'functions-reference', label: 'Reference', href: '/docs/functions/reference' },
+        { id: 'functions-limits', label: 'Limits', href: '/docs/functions/limits' },
+        {
+          id: 'functions-best-practices',
+          label: 'Best practices',
+          href: '/docs/functions/best-practices'
+        },
+        {
+          id: 'functions-troubleshooting',
+          label: 'Troubleshooting',
+          href: '/docs/functions/troubleshooting'
+        }
+      ]
+    }
+  ]
+
+  const crumbs = [{ label: 'Functions', href: '/docs/functions' }, { label: 'Getting started' }]
+
   const outline = [
-    'Overview',
-    'Prerequisites',
-    'Create the function',
-    'Instantiate it in your application',
-    'Verify the response',
-    'Next steps'
+    { id: 'prerequisites', text: 'Prerequisites', depth: 2 },
+    { id: 'create-the-function', text: 'Create the function', depth: 2 },
+    { id: 'instantiate-the-function', text: 'Instantiate it in your application', depth: 2 },
+    { id: 'verify-the-response', text: 'Verify the response', depth: 2 },
+    { id: 'next-steps', text: 'Next steps', depth: 2 }
   ]
-  const theme = ref<ThemeSwitcherValue>('dark')
+
+  const outlineGroups = [
+    {
+      label: 'GitHub',
+      links: [
+        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'pi pi-github' },
+        {
+          label: 'Contribute to this page',
+          href: 'https://github.com/aziontech/azion',
+          icon: 'pi pi-pencil'
+        }
+      ]
+    },
+    {
+      label: 'Community',
+      links: [
+        { label: 'Discord', href: 'https://discord.gg/azion', icon: 'pi pi-discord' },
+        { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x' }
+      ]
+    }
+  ]
+
+  const theme = ref('dark')
 
   const columns = [
     {
@@ -242,291 +273,189 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
 
   const languages = ['EN', 'PT-BR', 'ES']
   const language = ref('EN')
-
-  const brandLeadsSocialRow = ref(false)
-  let lgProbe: HTMLElement | null = null
-  const syncBrand = () => {
-    if (lgProbe) brandLeadsSocialRow.value = getComputedStyle(lgProbe).display !== 'none'
-  }
-  onMounted(() => {
-    lgProbe = document.createElement('span')
-    lgProbe.className = 'hidden lg:block'
-    document.body.append(lgProbe)
-    syncBrand()
-    window.addEventListener('resize', syncBrand)
-  })
-  onBeforeUnmount(() => {
-    window.removeEventListener('resize', syncBrand)
-    lgProbe?.remove()
-  })
-  const searchPages = ['Get started', 'Applications', 'Functions', 'Firewall', 'Azion CLI']
-  const searchOpen = ref(false)
 </script>
 
 <template>
-  <div class="flex h-screen min-h-0 w-full flex-col bg-(--bg-canvas) text-(--text-default)">
-    <div class="@container w-full">
-      <GlobalHeader aria-label="Azion documentation">
-        <GlobalHeader.Left>
-          <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
-            <div class="shrink-0 lg:hidden">
-              <IconButton
-                icon="pi pi-bars"
-                kind="outlined"
-                size="medium"
-                ariaLabel="Open documentation navigation"
-              />
-            </div>
-            <GlobalHeader.Brand>
-              <a
-                href="#"
-                aria-label="Azion Docs home"
-                class="inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) gap-(--spacing-xs)"
-              >
-                <Brand
-                  kind="default"
-                  size="small"
-                />
-                <span
-                  class="rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) text-overline-sm text-(--text-muted)"
-                >
-                  Docs
-                </span>
-              </a>
-            </GlobalHeader.Brand>
-            <div class="shrink-0 ms-(--spacing-xs) hidden lg:flex">
-              <NavigationMenu aria-label="Documentation sections">
-                <NavigationMenu.List>
-                  <NavigationMenu.Item
-                    v-for="section in sections"
-                    :key="section"
-                  >
-                    <NavigationMenu.Trigger href="#">{{ section }}</NavigationMenu.Trigger>
-                  </NavigationMenu.Item>
-                </NavigationMenu.List>
-                <NavigationMenu.Portal>
-                  <NavigationMenu.Positioner
-                    side="bottom"
-                    align="start"
-                    :side-offset="12"
-                  >
-                    <NavigationMenu.Popup>
-                      <NavigationMenu.Arrow />
-                      <NavigationMenu.Viewport />
-                    </NavigationMenu.Popup>
-                  </NavigationMenu.Positioner>
-                </NavigationMenu.Portal>
-              </NavigationMenu>
-            </div>
-          </div>
-        </GlobalHeader.Left>
-        <GlobalHeader.Nav />
-        <GlobalHeader.Right>
-          <SearchTrigger
-            collapsible
-            label="Search docs"
-            @open="searchOpen = true"
-          />
-          <IconButton
-            icon="pi pi-github"
-            kind="outlined"
-            size="medium"
-            ariaLabel="Azion on GitHub"
-            href="https://github.com/aziontech"
-            target="_blank"
-            class="shrink-0"
-          />
-          <Button
-            label="Console"
-            kind="secondary"
-            size="medium"
-            class="shrink-0"
-            href="#"
-          />
-        </GlobalHeader.Right>
-      </GlobalHeader>
-    </div>
-    <Command v-model:open="searchOpen">
-      <Command.Input placeholder="Search docs" />
-      <Command.List>
-        <Command.Empty>No page matches your search.</Command.Empty>
-        <Command.Group heading="Pages">
-          <Command.Item
-            v-for="page in searchPages"
-            :key="page"
-            :value="page"
-            >{{ page }}</Command.Item
-          >
-        </Command.Group>
-      </Command.List>
-    </Command>
+  <DocLayout
+    :navigation="navigation"
+    active-id="functions-getting-started"
+    :sections="sections"
+    home="/docs"
+    :outline="outline"
+    :outline-groups="outlineGroups"
+  >
+    <article
+      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-xxl)"
+    >
+      <DocPageHeader
+        title="Getting started"
+        description="Create a function, instantiate it in an application, and verify the response from the edge."
+        :breadcrumb="crumbs"
+      />
+      <DocProse>
+        <DocHeading
+          id="prerequisites"
+          :level="2"
+          >Prerequisites</DocHeading
+        >
+        <p>An Azion account and an application that already answers on its Azion domain.</p>
+        <DocHeading
+          id="create-the-function"
+          :level="2"
+          >Create the function</DocHeading
+        >
+        <p>
+          Open Functions in the console, select Create Function, paste the handler below and save
+          it.
+        </p>
+        <DocHeading
+          id="instantiate-the-function"
+          :level="2"
+          >Instantiate it in your application</DocHeading
+        >
+        <p>
+          On the application's Functions tab, add an instance pointing at the function you just
+          created.
+        </p>
+        <DocHeading
+          id="verify-the-response"
+          :level="2"
+          >Verify the response</DocHeading
+        >
+        <p>Request the domain and read the header the function sets.</p>
+        <DocHeading
+          id="next-steps"
+          :level="2"
+          >Next steps</DocHeading
+        >
+        <p>Read the limits before you move a production route onto the function.</p>
+      </DocProse>
+    </article>
 
-    <div class="relative flex min-h-0 flex-1">
-      <aside class="hidden h-full w-(--container-2xs) shrink-0 lg:flex">
-        <div class="flex w-full h-full">
-          <Sidebar
-            aria-label="Docs"
-            class="w-full"
-          >
-            <template #footer>
-              <ThemeSwitcher
-                v-model="theme"
-                aria-label="Theme"
-              />
-            </template>
-            <MenuRoot role="presentation">
-              <MenuGroup label="Functions">
-                <MenuItem
-                  v-for="page in pages"
-                  :key="page"
-                  :label="page"
-                  :selected="page === 'Getting started'"
-                  href="#"
-                />
-              </MenuGroup>
-            </MenuRoot>
-          </Sidebar>
-        </div>
-      </aside>
+    <template #actions>
+      <IconButton
+        icon="pi pi-github"
+        kind="outlined"
+        size="medium"
+        ariaLabel="Azion on GitHub"
+        href="https://github.com/aziontech"
+        target="_blank"
+        class="shrink-0"
+      />
+      <Button
+        label="Console"
+        kind="secondary"
+        size="medium"
+        class="shrink-0"
+        href="https://console.azion.com"
+      />
+    </template>
 
-      <main class="flex min-h-0 min-w-0 flex-1 flex-col">
-        <div class="flex flex-1">
-          <ScrollArea class="w-full">
-            <article
-              class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-md) pt-(--spacing-md) pb-(--spacing-xxl)"
-            >
-              <p class="text-overline-sm uppercase text-(--text-muted)">Functions</p>
-              <h1 class="text-heading-xl">Getting started</h1>
-              <p class="text-body-md text-(--text-muted)">
-                Create a function, instantiate it in an application, and verify the response from
-                the edge.
-              </p>
-              <h2 class="pt-(--spacing-lg) text-heading-md">Create the function</h2>
-              <p class="text-body-md text-(--text-muted)">
-                Open Functions in the console, select Create Function, paste the handler below and
-                save it.
-              </p>
-              <h2 class="pt-(--spacing-lg) text-heading-md">Instantiate it in your application</h2>
-              <p class="text-body-md text-(--text-muted)">
-                On the application's Functions tab, add an instance pointing at the function you
-                just created.
-              </p>
-              <h2 class="pt-(--spacing-lg) text-heading-md">Verify the response</h2>
-              <p class="text-body-md text-(--text-muted)">
-                Request the domain and read the header the function sets.
-              </p>
-            </article>
+    <template #navigation-footer>
+      <ThemeSwitcher
+        v-model="theme"
+        aria-label="Theme"
+      />
+    </template>
 
-            <div class="w-full border-t border-(--border-default)">
-              <Footer
-                kind="content"
-                aria-label="Footer"
-              >
-                <Footer.Column
-                  v-for="column in columns"
-                  :key="column.title"
-                  :title="column.title"
-                >
-                  <Footer.Link
-                    v-for="link in column.links"
-                    :key="link"
-                    href="#"
-                    >{{ link }}</Footer.Link
-                  >
-                </Footer.Column>
-
-                <template #social>
-                  <a
-                    v-if="brandLeadsSocialRow"
-                    href="#"
-                    aria-label="Azion home"
-                    class="inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) me-(--spacing-xs)"
-                  >
-                    <Brand size="small" />
-                  </a>
-                  <IconButton
-                    v-for="social in socials"
-                    :key="social.label"
-                    kind="transparent"
-                    size="small"
-                    :icon="social.icon"
-                    :ariaLabel="social.label"
-                    :href="social.href"
-                    target="_blank"
-                  />
-                </template>
-
-                <template #status>
-                  <StatusIndicator
-                    severity="success"
-                    label="All systems operational"
-                  />
-                </template>
-
-                <template #language>
-                  <div class="w-28">
-                    <Select
-                      v-model="language"
-                      placeholder="Language"
-                    >
-                      <Select.Trigger aria-label="Language">
-                        <template #iconLeft>
-                          <i
-                            class="pi pi-globe text-(--text-muted)"
-                            aria-hidden="true"
-                          />
-                        </template>
-                      </Select.Trigger>
-                      <Select.Content>
-                        <Select.Option
-                          v-for="option in languages"
-                          :key="option"
-                          :value="option"
-                        >
-                          {{ option }}
-                        </Select.Option>
-                      </Select.Content>
-                    </Select>
-                  </div>
-                </template>
-
-                <template
-                  v-if="!brandLeadsSocialRow"
-                  #brand
-                >
-                  <a
-                    href="#"
-                    aria-label="Azion home"
-                    class="inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) mx-auto"
-                  >
-                    <Brand size="small" />
-                  </a>
-                </template>
-              </Footer>
-            </div>
-          </ScrollArea>
-        </div>
-      </main>
-
-      <aside
-        class="hidden w-(--container-3xs) shrink-0 flex-col gap-(--spacing-sm) border-s border-(--border-default) px-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg) xl:flex"
+    <template #aside>
+      <DocCta
+        title="Ready to build?"
+        primary-label="Start for free"
+        primary-href="https://console.azion.com/signup"
+        secondary-label="See our plans"
+        secondary-href="https://www.azion.com/en/pricing/"
       >
-        <p class="text-overline-sm uppercase text-(--text-muted)">On this page</p>
-        <ul class="flex flex-col border-s border-(--border-default)">
-          <li
-            v-for="item in outline"
-            :key="item"
+        Deploy your first application in minutes.
+      </DocCta>
+    </template>
+
+    <template #footer>
+      <div class="w-full border-t border-(--border-default)">
+        <Footer
+          kind="content"
+          signature="compact"
+          aria-label="Footer"
+        >
+          <Footer.Column
+            v-for="column in columns"
+            :key="column.title"
+            :title="column.title"
           >
-            <a
+            <Footer.Link
+              v-for="link in column.links"
+              :key="link"
               href="#"
-              class="block px-(--spacing-sm) py-(--spacing-xxs) text-label-md text-(--text-muted) hover:text-(--text-default)"
+              >{{ link }}</Footer.Link
             >
-              {{ item }}
+          </Footer.Column>
+
+          <template #social>
+            <a
+              href="/"
+              aria-label="Azion home"
+              class="me-(--spacing-xs) hidden w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none lg:inline-flex"
+            >
+              <Brand size="small" />
             </a>
-          </li>
-        </ul>
-      </aside>
-    </div>
-  </div>
+            <IconButton
+              v-for="social in socials"
+              :key="social.label"
+              kind="transparent"
+              size="small"
+              :icon="social.icon"
+              :ariaLabel="social.label"
+              :href="social.href"
+              target="_blank"
+            />
+          </template>
+
+          <template #status>
+            <StatusIndicator
+              severity="success"
+              label="All systems operational"
+            />
+          </template>
+
+          <template #language>
+            <div class="w-28">
+              <Select
+                v-model="language"
+                placeholder="Language"
+              >
+                <Select.Trigger aria-label="Language">
+                  <template #iconLeft>
+                    <i
+                      class="pi pi-globe text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </Select.Trigger>
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in languages"
+                    :key="option"
+                    :value="option"
+                  >
+                    {{ option }}
+                  </Select.Option>
+                </Select.Content>
+              </Select>
+            </div>
+          </template>
+
+          <template #brand>
+            <a
+              href="/"
+              aria-label="Azion home"
+              class="mx-auto inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+            >
+              <Brand size="small" />
+            </a>
+          </template>
+        </Footer>
+      </div>
+    </template>
+  </DocLayout>
 </template>
 ```

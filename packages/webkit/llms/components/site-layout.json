@@ -1,0 +1,98 @@
+{
+ "name": "site-layout",
+ "binding": "SiteLayout",
+ "import": "@aziontech/webkit/site-layout",
+ "treeShakeableImport": "@aziontech/webkit/site-layout",
+ "category": "layout",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The marketing site's chrome, composed once in the app: `SiteNav` on top, the page's sections in the layout's `<main>`, `SiteFooter` at the foot, and the `Command` search palette wired to the bar's search button and to ⌘K / Ctrl K. The navigation and the footer are data (the `SiteNav` and `SiteFooter` props), the canvas is painted with the theme tokens so a dark site never shows an unpainted page below the fold, and the palette lists every destination of the navigation by default. Site pages are only their sections, rendered through the default slot; they never repeat the bar or the footer.",
+ "setup": null,
+ "useWhen": [
+  "Every public marketing page (home, product, solution, company, legal): put one `SiteLayout` in the app's root (around `RouterView`) and render each page's sections as its default slot.",
+  "A site that needs the Azion navigation, footer and search palette without hand-composing `GlobalHeader`, `NavigationMenu`, `Footer`, `SearchTrigger` and `Command`."
+ ],
+ "avoidWhen": [
+  "The signed-in console → `ConsoleLayout`. Documentation → `DocLayout`.",
+  "A one-off landing page with no site navigation (a campaign form) → render the sections on their own."
+ ],
+ "related": [
+  "SiteNav` — the bar and its mega-menus; `navigation` is bound onto it.",
+  "SiteFooter` — the footer; `footer` is bound onto it (`kind=\"site\"` closes a framed page).",
+  "SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.",
+  "Command` — the search palette the bar's search button opens.",
+  "shells/website` — the block that shows this layout with the azion.com navigation and footer."
+ ],
+ "bestPractices": [
+  "Compose the layout once, in the app's root; each route renders only its sections. Never add `SiteNav`, `SiteFooter`, `GlobalHeader` or `Footer` to a page.",
+  "The site is dark: set `data-theme=\"dark\"` on `<html>` (in `index.html`), so the layout, the teleported menus and the palette all resolve the dark tokens.",
+  "Bind the real navigation and footer data once (`navigation`, `footer`); give every navigation item an `href` so it also appears in the search palette.",
+  "Add extra palette groups (articles, docs results) in the `search` slot; listen to `search-select` for them.",
+  "The page renders no `<main>` of its own: the layout owns the landmark."
+ ],
+ "props": [
+  {
+   "name": "navigation",
+   "type": "SiteLayoutNavigation",
+   "default": "—",
+   "required": "true",
+   "doc": "The bar, bound onto `SiteNav`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`."
+  },
+  {
+   "name": "footer",
+   "type": "SiteLayoutFooter",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The footer, bound onto `SiteFooter`: `{ kind?, home?, columns?, socials?, statusLabel?, languages? }`; `kind` defaults to `site`. No footer when absent."
+  },
+  {
+   "name": "searchPlaceholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`)."
+  },
+  {
+   "name": "searchOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:searchOpen`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "navigate",
+   "payload": "(event: MouseEvent | KeyboardEvent, page: SiteLayoutPage)",
+   "notes": "Fired when a navigation destination is chosen in the palette (`{ label, href }`); the layout then follows it (with the app's router for an in-site path). Event first."
+  },
+  {
+   "name": "search-select",
+   "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+   "notes": "Fired when a palette item from the `search` slot is chosen. Event first."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The page's sections, rendered inside the layout's `<main>`."
+  },
+  {
+   "name": "search",
+   "scope": "{ query: string }",
+   "notes": "Extra `Command.Group`s listed before the navigation destinations."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup lang=\"ts\">\n  import HeroBand from '@aziontech/webkit/hero-band'\n  import SectionContainer from '@aziontech/webkit/section-container'\n  import SectionGap from '@aziontech/webkit/section-gap'\n  import SiteLayout, {\n    type SiteLayoutFooter,\n    type SiteLayoutNavigation\n  } from '@aziontech/webkit/site-layout'\n\n  const navigation: SiteLayoutNavigation = {\n    home: '/en/',\n    menus: [\n      {\n        value: 'products',\n        label: 'Products',\n        columns: [\n          [\n            {\n              label: 'Build',\n              items: [\n                {\n                  label: 'Functions',\n                  description: 'Run serverless code close to your users',\n                  href: '/en/products/functions/'\n                },\n                {\n                  label: 'Applications',\n                  description: 'Deliver and accelerate your applications',\n                  href: '/en/products/applications/'\n                }\n              ]\n            }\n          ],\n          [\n            {\n              label: 'Secure',\n              items: [\n                {\n                  label: 'Firewall',\n                  description: 'Stop attacks before they reach your origin',\n                  href: '/en/products/firewall/'\n                }\n              ]\n            }\n          ]\n        ]\n      }\n    ],\n    links: [{ label: 'Pricing', href: '/en/pricing/' }],\n    contact: { label: 'Contact', href: '/en/contact/' },\n    secondaryAction: { label: 'Login', href: 'https://console.azion.com/login' },\n    primaryAction: { label: 'Start for free', href: 'https://console.azion.com/signup' }\n  }\n\n  const footer: SiteLayoutFooter = {\n    home: '/en/',\n    columns: [\n      {\n        title: 'Products',\n        links: [\n          { label: 'Functions', href: '/en/products/functions/' },\n          { label: 'Firewall', href: '/en/products/firewall/' }\n        ]\n      },\n      {\n        title: 'Company',\n        links: [\n          { label: 'About us', href: '/en/about-us/' },\n          { label: 'Careers', href: '/en/careers/' }\n        ]\n      }\n    ],\n    socials: [\n      { icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }\n    ],\n    statusLabel: 'All Systems Operational',\n    languages: ['EN', 'PT-BR', 'ES']\n  }\n</script>\n\n<template>\n  <SiteLayout\n    :navigation=\"navigation\"\n    :footer=\"footer\"\n  >\n    <HeroBand\n      kind=\"centered\"\n      eyebrow=\"Functions\"\n      title=\"Run code where your users are\"\n      description=\"Deploy serverless functions to the edge network in seconds.\"\n      :primary-action=\"{ label: 'Start for free', href: 'https://console.azion.com/signup' }\"\n      :secondary-action=\"{ label: 'Talk to an expert', href: '/en/contact/' }\"\n    />\n    <SectionContainer max-width=\"site\">\n      <SectionGap hatch />\n    </SectionContainer>\n  </SiteLayout>\n</template>"
+  }
+ ],
+ "docs": "components/site-layout.md"
+}

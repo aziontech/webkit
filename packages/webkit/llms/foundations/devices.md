@@ -32,8 +32,9 @@ wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every d
 
 The window still owns the shell:
 
-- Below `md` the console sidebar is not shown; the shell opens the same `Sidebar` inside a
-  `Drawer` from a menu button (the `shells/console` block).
+- `ConsoleLayout` measures its own width (through `AppLayout`): below 768 px the rail moves into
+  the layout's navigation drawer, opened from the header's menu button. `DocLayout` moves its rail
+  into a drawer below `lg` and shows the outline rail from `xl`.
 - Below `md` a `Dialog` or `Drawer` is a bottom sheet; below `sm` it is a full-height, full-width
   sheet, and its `PanelFooter` actions stay pinned and stretch.
 - Ultra-wide (1920, 2560 px): the column classes of section 2 cap the content, so wide screens add

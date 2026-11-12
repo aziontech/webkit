@@ -1,166 +1,133 @@
-<script setup lang="ts">
-  import AppLayout from '@aziontech/webkit/app-layout'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+<script setup>
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
+  import ConsoleLayout from '@aziontech/webkit/console-layout'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Menu, { type MenuNode } from '@aziontech/webkit/menu'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import Sidebar from '@aziontech/webkit/sidebar'
+  import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref, watch } from 'vue'
+  import { ref } from 'vue'
 
-  interface NavNode extends Omit<MenuNode, 'children' | 'groups'> {
-    path?: string
-    query?: Record<string, string>
-    children?: NavNode[]
-    groups?: NavGroup[]
-  }
-  interface NavGroup {
-    label?: string
-    items: NavNode[]
-  }
-
-  const navGroups: NavGroup[] = [
+  const navigation = [
     {
       items: [
-        { id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' },
-        { id: 'projects', label: 'Projects', icon: 'pi pi-folder', path: '/projects' },
+        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' },
         {
           id: 'deployments',
           label: 'Deployments',
-          icon: 'pi pi-cloud-upload',
-          path: '/deployments'
+          icon: 'ai ai-deploy-pillar',
+          href: '/deployments'
         }
       ]
     },
     {
       label: 'Build',
       items: [
-        { id: 'resources', label: 'Resources', icon: 'pi pi-box', path: '/resources' },
-        { id: 'services', label: 'Services', icon: 'pi pi-server', path: '/services' },
-        { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', path: '/variables' },
-        { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', path: '/integrations' },
-        { id: 'templates', label: 'Templates', icon: 'pi pi-clone', path: '/templates' }
+        {
+          id: 'applications',
+          label: 'Applications',
+          icon: 'ai ai-edge-application',
+          href: '/applications'
+        },
+        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' },
+        { id: 'variables', label: 'Variables', icon: 'ai ai-variables', href: '/variables' },
+        {
+          id: 'connectors',
+          label: 'Connectors',
+          icon: 'ai ai-edge-connectors',
+          href: '/connectors'
+        },
+        {
+          id: 'custom-pages',
+          label: 'Custom Pages',
+          icon: 'ai ai-custom-pages',
+          href: '/custom-pages'
+        }
       ]
     },
     {
-      label: 'Security',
+      label: 'Secure',
       items: [
-        { id: 'domains', label: 'Domains', icon: 'pi pi-globe', path: '/domains' },
-        { id: 'policies', label: 'Policies', icon: 'pi pi-shield', path: '/policies' },
-        { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', path: '/rule-sets' },
-        { id: 'keys', label: 'Keys', icon: 'pi pi-key', path: '/keys' }
+        { id: 'firewall', label: 'Firewall', icon: 'ai ai-edge-firewall', href: '/firewall' },
+        { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', href: '/edge-dns' },
+        { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules', href: '/waf-rules' },
+        {
+          id: 'certificate-manager',
+          label: 'Certificate Manager',
+          icon: 'ai ai-certificate-manager',
+          href: '/certificate-manager'
+        },
+        {
+          id: 'network-lists',
+          label: 'Network Lists',
+          icon: 'ai ai-network-lists',
+          href: '/network-lists'
+        }
       ]
     },
     {
-      label: 'Data',
+      label: 'Store',
       items: [
         {
-          id: 'databases',
-          label: 'Databases',
-          icon: 'pi pi-database',
-          path: '/databases',
+          id: 'object-storage',
+          label: 'Object Storage',
+          icon: 'ai ai-edge-storage',
+          href: '/object-storage'
+        },
+        {
+          id: 'sql-database',
+          label: 'SQL Database',
+          icon: 'ai ai-edge-sql',
+          href: '/sql-database',
           tagValue: 'Preview'
-        },
-        { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', path: '/storage' }
+        }
       ]
     },
     {
-      label: 'Observability',
+      label: 'Observe',
       items: [
-        { id: 'logs', label: 'Logs', icon: 'pi pi-file', path: '/logs' },
         {
-          id: 'metrics-module',
-          label: 'Metrics',
-          icon: 'pi pi-chart-bar',
-          kind: 'drill',
-          href: '/metrics',
-          groups: [
-            {
-              items: [{ id: 'metrics', label: 'Overview', path: '/metrics' }]
-            },
-            {
-              label: 'Build',
-              items: [
-                {
-                  id: 'metrics-resources',
-                  label: 'Resources',
-                  path: '/metrics',
-                  query: { dashboard: 'resources' }
-                },
-                {
-                  id: 'metrics-services',
-                  label: 'Services',
-                  path: '/metrics',
-                  query: { dashboard: 'services' }
-                },
-                {
-                  id: 'metrics-cache',
-                  label: 'Cache',
-                  path: '/metrics',
-                  query: { dashboard: 'cache' }
-                }
-              ]
-            },
-            {
-              label: 'Security',
-              items: [
-                {
-                  id: 'metrics-domains',
-                  label: 'Domains',
-                  path: '/metrics',
-                  query: { dashboard: 'domains' }
-                },
-                {
-                  id: 'metrics-policies',
-                  label: 'Policies',
-                  path: '/metrics',
-                  query: { dashboard: 'policies' }
-                },
-                {
-                  id: 'metrics-rule-sets',
-                  label: 'Rule sets',
-                  path: '/metrics',
-                  query: { dashboard: 'rule-sets' }
-                }
-              ]
-            },
-            {
-              label: 'Data',
-              items: [
-                {
-                  id: 'metrics-databases',
-                  label: 'Databases',
-                  path: '/metrics',
-                  query: { dashboard: 'databases' }
-                },
-                {
-                  id: 'metrics-storage',
-                  label: 'Storage',
-                  path: '/metrics',
-                  query: { dashboard: 'storage' }
-                }
-              ]
-            }
-          ]
+          id: 'data-stream',
+          label: 'Data Stream',
+          icon: 'ai ai-data-stream',
+          href: '/data-stream'
         },
-        { id: 'events', label: 'Events', icon: 'pi pi-bolt', path: '/events' }
+        { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse', href: '/edge-pulse' },
+        {
+          id: 'real-time-metrics',
+          label: 'Real-Time Metrics',
+          icon: 'ai ai-real-time-metrics',
+          href: '/real-time-metrics'
+        },
+        {
+          id: 'real-time-events',
+          label: 'Real-Time Events',
+          icon: 'ai ai-real-time-events',
+          href: '/real-time-events'
+        },
+        {
+          id: 'real-time-purge',
+          label: 'Real-Time Purge',
+          icon: 'ai ai-real-time-purge',
+          href: '/real-time-purge'
+        }
       ]
     },
     {
       label: 'More',
       items: [
-        { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', path: '/catalog' },
+        {
+          id: 'marketplace',
+          label: 'Marketplace',
+          icon: 'ai ai-marketplace',
+          href: '/marketplace'
+        },
         {
           id: 'settings',
           label: 'Settings',
@@ -170,36 +137,36 @@
             {
               label: 'Settings',
               items: [
-                { id: 'settings-general', label: 'General', path: '/account' },
+                { id: 'settings-general', label: 'General', href: '/settings' },
                 {
-                  id: 'settings-build-deployment',
+                  id: 'settings-build',
                   label: 'Build and deployment',
-                  path: '/account/build-deployment'
+                  href: '/settings/build-deployment'
                 },
                 {
                   id: 'settings-environments',
                   label: 'Environments',
-                  path: '/account/environments'
+                  href: '/settings/environments'
                 },
-                { id: 'settings-users', label: 'Users management', path: '/account/users' },
-                { id: 'settings-teams', label: 'Teams and permissions', path: '/account/teams' }
+                { id: 'settings-users', label: 'Users management', href: '/settings/users' },
+                { id: 'settings-teams', label: 'Teams and permissions', href: '/settings/teams' }
               ]
             },
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
-                { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
-                { id: 'settings-security-mfa', label: 'Multi-factor auth' },
-                { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
+                { id: 'settings-tokens', label: 'Personal tokens', href: '/settings/tokens' },
+                { id: 'settings-credentials', label: 'Credentials', href: '/settings/credentials' },
+                { id: 'settings-mfa', label: 'Multi-factor auth', href: '/settings/mfa' },
+                { id: 'settings-sessions', label: 'Active sessions', href: '/settings/sessions' },
+                { id: 'settings-activity', label: 'Activity history', href: '/settings/activity' }
               ]
             },
             {
               label: 'Billing',
               items: [
-                { id: 'settings-billing', label: 'Billing and plan', path: '/account/billing' },
-                { id: 'settings-invoices', label: 'Invoices' }
+                { id: 'settings-billing', label: 'Billing and plan', href: '/settings/billing' },
+                { id: 'settings-invoices', label: 'Invoices', href: '/settings/invoices' }
               ]
             }
           ]
@@ -208,614 +175,280 @@
     }
   ]
 
-  const recentRows = [
-    {
-      key: 'resources/1020655',
-      name: 'resource-01',
-      icon: 'pi pi-box',
-      typeLabel: 'Resource',
-      navId: 'resources'
-    },
-    {
-      key: 'domains/domain-1020655',
-      name: 'app.example.com',
-      icon: 'pi pi-globe',
-      typeLabel: 'Domain',
-      navId: 'domains'
-    },
-    {
-      key: 'databases/feature-flags',
-      name: 'feature-flags',
-      icon: 'pi pi-database',
-      typeLabel: 'Database',
-      navId: 'databases'
-    }
+  const account = { name: 'Ana Souza', email: 'ana.souza@example.com' }
+
+  const recents = [
+    { id: 'azion-site', label: 'azion-site', icon: 'ai ai-edge-application', type: 'Application' },
+    { id: 'edge-auth', label: 'edge-auth', icon: 'ai ai-edge-functions', type: 'Function' },
+    { id: 'shop-assets', label: 'shop-assets', icon: 'ai ai-edge-storage', type: 'Bucket' }
   ]
 
-  const accountCommands = [
-    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
-    { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
-    { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
-  ]
-
-  const activeId = ref('resources')
-  const paletteOpen = ref(false)
-  const paletteQuery = ref('')
-  const theme = ref<ThemeSwitcherValue>('system')
-  const railWidth = ref<number | null>(null)
-  const railCollapsed = ref(false)
+  const theme = ref('system')
   const search = ref('')
-  const crumbs = [{ label: 'Resources' }]
 
-  watch(paletteOpen, () => {
-    paletteQuery.value = ''
-  })
-
-  const leaves = (items: NavNode[]): NavNode[] =>
-    items.flatMap((item) =>
-      item.groups
-        ? leaves(item.groups.flatMap((group) => group.items))
-        : item.children
-          ? leaves(item.children)
-          : [item]
-    )
-
-  const paletteGroups = navGroups.flatMap((group, groupIndex) => {
-    const blocks: { key: string; heading: string; items: NavNode[] }[] = []
-    let run: NavNode[] = []
-    const flush = () => {
-      if (run.length) {
-        blocks.push({
-          key: `area-${groupIndex}-${blocks.length}`,
-          heading: group.label ?? '',
-          items: leaves(run)
-        })
-      }
-      run = []
-    }
-    for (const item of group.items) {
-      if (item.groups || item.children) {
-        flush()
-        blocks.push({ key: item.id, heading: item.label, items: leaves([item]) })
-      } else run.push(item)
-    }
-    flush()
-    return blocks
-  })
-
-  const resolvedTheme = computed(() =>
-    theme.value === 'system'
-      ? globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : theme.value
-  )
-
-  const actionCommands = computed(() => [
-    { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
-    {
-      id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
-      icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
-    },
-    {
-      id: 'sidebar',
-      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
-      icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
-    }
-  ])
-
-  const onNavigate = (node: MenuNode, closeNavigation: () => void) => {
-    activeId.value = node.id
-    closeNavigation()
-  }
-
-  const onPaletteSelect = (_event: Event, value: string | number) => {
-    const [scope, id] = String(value).split(':')
-    if (scope === 'nav') activeId.value = id
-    if (scope === 'res') {
-      activeId.value = recentRows.find((row) => row.key === id)?.navId ?? activeId.value
-    }
-    if (id === 'theme') theme.value = resolvedTheme.value === 'dark' ? 'light' : 'dark'
-    if (id === 'sidebar') railCollapsed.value = !railCollapsed.value
+  const onSearchSelect = (_event, value) => {
+    if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
   }
 </script>
 
 <template>
-  <div class="h-dvh [--sidebar-width:var(--container-2xs)]">
-    <AppLayout>
-      <template #navigation="{ drawer, closeNavigation }">
-        <Sidebar
-          v-model:width="railWidth"
-          v-model:collapsed="railCollapsed"
-          :resizable="!drawer"
-          :collapsible="!drawer"
-          aria-label="Main navigation"
-          collapse-aria-label="Collapse sidebar"
-          expand-aria-label="Expand sidebar"
-          resize-aria-label="Resize sidebar"
+  <ConsoleLayout
+    :navigation="navigation"
+    :account="account"
+    active-id="applications"
+    @search-select="onSearchSelect"
+  >
+    <template #actions="{ compact }">
+      <template v-if="compact">
+        <Tooltip
+          text="Create"
+          placement="bottom"
         >
-          <template #header>
-            <div class="-m-(--spacing-md) flex flex-col">
-              <div
-                class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
-              >
-                <a
-                  href="/home"
-                  aria-label="Azion home"
-                  class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                >
-                  <Brand
-                    kind="default"
-                    size="small"
-                  />
-                </a>
-              </div>
+          <IconButton
+            icon="pi pi-plus-circle"
+            kind="primary"
+            size="medium"
+            ariaLabel="Create"
+          />
+        </Tooltip>
+        <Tooltip
+          text="Agent"
+          placement="bottom"
+        >
+          <IconButton
+            icon="ai ai-ask-azion"
+            kind="outlined"
+            size="medium"
+            ariaLabel="Agent"
+          />
+        </Tooltip>
+      </template>
+      <template v-else>
+        <Button
+          label="Create"
+          kind="primary"
+          size="medium"
+          icon="pi pi-plus-circle"
+        />
+        <ButtonHighlight
+          label="Agent"
+          size="medium"
+          icon="ai ai-ask-azion"
+        />
+      </template>
+    </template>
 
-              <Command
-                v-model:open="paletteOpen"
-                @select="onPaletteSelect"
-              >
-                <Command.Input
-                  placeholder="Search resources, pages and commands"
-                  @update:model-value="(value: string) => (paletteQuery = value)"
-                />
-                <Command.List>
-                  <Command.Group
-                    v-if="!paletteQuery"
-                    key="recents"
-                    heading="Recents"
-                  >
-                    <Command.Item
-                      v-for="row in recentRows"
-                      :key="row.key"
-                      :value="'res:' + row.key"
-                    >
-                      <template #prefix>
-                        <i
-                          :class="row.icon"
-                          aria-hidden="true"
-                        />
-                      </template>
-                      {{ row.name }}
-                      <template #suffix>
-                        <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
-                      </template>
-                    </Command.Item>
-                  </Command.Group>
-
-                  <Command.Separator
-                    v-if="!paletteQuery"
-                    key="recents-rule"
-                  />
-
-                  <Command.Group
-                    v-for="group in paletteGroups"
-                    :key="group.key"
-                    :heading="group.heading"
-                  >
-                    <Command.Item
-                      v-for="item in group.items"
-                      :key="item.id"
-                      :value="'nav:' + item.id"
-                    >
-                      <template
-                        v-if="item.icon"
-                        #prefix
-                      >
-                        <i
-                          :class="item.icon"
-                          aria-hidden="true"
-                        />
-                      </template>
-                      {{ item.label }}
-                    </Command.Item>
-                  </Command.Group>
-
-                  <Command.Separator key="commands-rule" />
-
-                  <Command.Group heading="Actions">
-                    <Command.Item
-                      v-for="command in actionCommands"
-                      :key="command.id"
-                      :value="'cmd:' + command.id"
-                    >
-                      <template #prefix>
-                        <i
-                          :class="command.icon"
-                          aria-hidden="true"
-                        />
-                      </template>
-                      {{ command.label }}
-                    </Command.Item>
-                  </Command.Group>
-
-                  <Command.Group heading="Account">
-                    <Command.Item
-                      v-for="command in accountCommands"
-                      :key="command.id"
-                      :value="'cmd:' + command.id"
-                    >
-                      <template #prefix>
-                        <i
-                          :class="command.icon"
-                          aria-hidden="true"
-                        />
-                      </template>
-                      {{ command.label }}
-                    </Command.Item>
-                  </Command.Group>
-
-                  <Command.Empty>No resource, page or command matches your search.</Command.Empty>
-                </Command.List>
-              </Command>
-            </div>
+    <template #search="{ query }">
+      <Command.Group
+        v-if="!query"
+        heading="Recents"
+      >
+        <Command.Item
+          v-for="row in recents"
+          :key="row.id"
+          :value="`recent:${row.id}`"
+        >
+          <template #prefix>
+            <i
+              :class="row.icon"
+              aria-hidden="true"
+            />
           </template>
+          {{ row.label }}
+          <template #suffix>
+            <span class="text-label-sm text-(--text-muted)">{{ row.type }}</span>
+          </template>
+        </Command.Item>
+      </Command.Group>
+      <Command.Group heading="Actions">
+        <Command.Item value="action:create">
+          <template #prefix>
+            <i
+              class="pi pi-plus-circle"
+              aria-hidden="true"
+            />
+          </template>
+          Create Application
+        </Command.Item>
+        <Command.Item value="action:theme">
+          <template #prefix>
+            <i
+              class="pi pi-moon"
+              aria-hidden="true"
+            />
+          </template>
+          Switch theme
+        </Command.Item>
+      </Command.Group>
+    </template>
 
-          <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
-            <Menu
-              :groups="navGroups"
-              :active-id="activeId"
-              role="presentation"
-              @navigate="(_event, node) => onNavigate(node, closeNavigation)"
-            >
-              <Menu.Back />
-            </Menu>
+    <template #account-menu>
+      <DropdownMenu.Group>
+        <template #top>
+          <div class="flex min-w-0 flex-col">
+            <span class="truncate text-label-md text-(--text-default)">{{ account.name }}</span>
+            <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
           </div>
+        </template>
+        <DropdownMenu.Option
+          value="settings"
+          label="Account settings"
+        >
+          <template #right>
+            <i
+              class="pi pi-cog"
+              aria-hidden="true"
+            />
+          </template>
+        </DropdownMenu.Option>
+        <DropdownMenu.Option
+          value="personal-tokens"
+          label="Personal tokens"
+        >
+          <template #right>
+            <i
+              class="pi pi-key"
+              aria-hidden="true"
+            />
+          </template>
+        </DropdownMenu.Option>
+      </DropdownMenu.Group>
+      <DropdownMenu.Group>
+        <div
+          class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
+        >
+          <span class="flex-1 truncate text-start text-label-sm text-(--text-default)">Theme</span>
+          <ThemeSwitcher
+            v-model="theme"
+            aria-label="Theme"
+          />
+        </div>
+      </DropdownMenu.Group>
+      <DropdownMenu.Group>
+        <DropdownMenu.Option
+          value="docs"
+          label="Docs"
+        >
+          <template #right>
+            <i
+              class="pi pi-book"
+              aria-hidden="true"
+            />
+          </template>
+        </DropdownMenu.Option>
+        <DropdownMenu.Option
+          value="logout"
+          label="Log out"
+        >
+          <template #right>
+            <i
+              class="pi pi-sign-out"
+              aria-hidden="true"
+            />
+          </template>
+        </DropdownMenu.Option>
+      </DropdownMenu.Group>
+      <DropdownMenu.Group>
+        <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
+          <Button
+            label="Upgrade to Pro"
+            kind="secondary"
+            size="medium"
+            class="w-full"
+          />
+          <div class="flex justify-center px-(--spacing-xs)">
+            <StatusIndicator
+              severity="success"
+              label="All systems normal"
+            />
+          </div>
+        </div>
+      </DropdownMenu.Group>
+    </template>
 
-          <template #footer>
-            <div class="flex items-center gap-(--spacing-xs)">
-              <Avatar
-                label="alex@example.com"
-                size="small"
-                kind="square"
-              />
-              <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">alex</span>
-              <DropdownMenu placement="top-end">
-                <DropdownMenu.Trigger>
-                  <Tooltip text="Account menu">
-                    <IconButton
-                      icon="pi pi-ellipsis-v"
-                      ariaLabel="Account menu"
-                      kind="outlined"
-                      size="small"
-                    />
-                  </Tooltip>
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <template #top>
-                    <div class="flex min-w-0 flex-col">
-                      <span class="truncate text-label-md text-(--text-default)">alex</span>
-                      <span class="truncate text-body-xs text-(--text-muted)"
-                        >alex@example.com</span
-                      >
-                    </div>
-                  </template>
-                  <DropdownMenu.Option
-                    value="settings"
-                    label="Account settings"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-cog"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                  <DropdownMenu.Option
-                    value="personal-tokens"
-                    label="Personal tokens"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-key"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                </DropdownMenu.Group>
-                <DropdownMenu.Group>
-                  <div
-                    class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
-                  >
-                    <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
-                      >Theme</span
-                    >
-                    <ThemeSwitcher
-                      v-model="theme"
-                      aria-label="Theme"
-                    />
-                  </div>
-                </DropdownMenu.Group>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Option
-                    value="home"
-                    label="Home page"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-home"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                  <DropdownMenu.Option
-                    value="changelog"
-                    label="Changelog"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-pencil"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                  <DropdownMenu.Option
-                    value="feedback"
-                    label="Feedback"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-comment"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                  <DropdownMenu.Option
-                    value="docs"
-                    label="Docs"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-book"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                </DropdownMenu.Group>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Option
-                    value="logout"
-                    label="Log out"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-sign-out"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                </DropdownMenu.Group>
-                <DropdownMenu.Group>
-                  <div
-                    class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
-                  >
-                    <Button
-                      label="Upgrade to Pro"
-                      kind="secondary"
-                      size="medium"
-                      class="w-full"
-                    />
-                    <div class="flex justify-center px-(--spacing-xs)">
-                      <StatusIndicator
-                        severity="success"
-                        label="All systems normal"
-                      />
-                    </div>
-                  </div>
-                </DropdownMenu.Group>
-              </DropdownMenu>
+    <div class="layout-boundary">
+      <div class="layout-column flex flex-col gap-(--layout-group-gap)">
+        <PageHeader
+          title="Applications"
+          description="Build, deploy, and manage your applications."
+        >
+          <template #actions>
+            <Button
+              label="Documentation"
+              icon="pi pi-book"
+              kind="outlined"
+              size="medium"
+              href="https://www.azion.com/en/documentation/"
+              target="_blank"
+            />
+            <Button
+              label="Create Application"
+              icon="pi pi-plus"
+              kind="outlined"
+              size="medium"
+            />
+          </template>
+        </PageHeader>
+
+        <div class="flex items-center gap-(--spacing-xs)">
+          <Button
+            label="Filter"
+            kind="outlined"
+            size="medium"
+            icon="pi pi-filter"
+          />
+          <div class="flex min-w-0 flex-1">
+            <Input
+              v-model="search"
+              size="medium"
+              placeholder="Search"
+              aria-label="Search applications"
+              class="w-full"
+            >
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </div>
+          <Tooltip text="Refresh">
+            <IconButton
+              icon="pi pi-refresh"
+              kind="outlined"
+              size="medium"
+              ariaLabel="Refresh"
+            />
+          </Tooltip>
+          <Tooltip text="Download CSV">
+            <IconButton
+              icon="pi pi-download"
+              kind="outlined"
+              size="medium"
+              ariaLabel="Download CSV"
+            />
+          </Tooltip>
+          <Tooltip text="Columns">
+            <IconButton
+              icon="ai ai-column"
+              kind="outlined"
+              size="medium"
+              ariaLabel="Columns"
+            />
+          </Tooltip>
+        </div>
+
+        <Card :padded="false">
+          <template #content>
+            <div
+              class="flex min-h-(--container-3xs) items-center justify-center text-body-sm text-(--text-muted)"
+            >
+              The page body: platform/view/table-view
             </div>
           </template>
-        </Sidebar>
-      </template>
-
-      <template #header="{ compact, openNavigation }">
-        <div class="@container">
-          <GlobalHeader aria-label="Console">
-            <GlobalHeader.Left>
-              <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
-                <span
-                  v-if="compact"
-                  class="contents"
-                >
-                  <Tooltip
-                    text="Open navigation"
-                    placement="bottom"
-                  >
-                    <IconButton
-                      icon="pi pi-bars"
-                      ariaLabel="Open navigation"
-                      kind="outlined"
-                      size="medium"
-                      @click="openNavigation"
-                    />
-                  </Tooltip>
-                </span>
-
-                <a
-                  v-if="compact"
-                  href="/home"
-                  aria-label="Azion home"
-                  class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                >
-                  <Brand
-                    kind="default"
-                    size="small"
-                  />
-                </a>
-
-                <div
-                  v-else
-                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
-                >
-                  <Breadcrumb
-                    :items="crumbs"
-                    class="w-full"
-                  />
-                </div>
-              </div>
-            </GlobalHeader.Left>
-            <GlobalHeader.Middle />
-            <GlobalHeader.Right>
-              <SearchTrigger
-                collapsible
-                @open="paletteOpen = true"
-              />
-
-              <span
-                v-if="compact"
-                class="contents"
-              >
-                <Tooltip
-                  text="Create"
-                  placement="bottom"
-                >
-                  <IconButton
-                    icon="pi pi-plus-circle"
-                    kind="primary"
-                    size="medium"
-                    ariaLabel="Create"
-                  />
-                </Tooltip>
-                <Tooltip
-                  text="Agent"
-                  placement="bottom"
-                >
-                  <IconButton
-                    icon="ai ai-ask-azion"
-                    kind="outlined"
-                    size="medium"
-                    ariaLabel="Agent"
-                  />
-                </Tooltip>
-              </span>
-              <span
-                v-else
-                class="contents"
-              >
-                <Button
-                  label="Create"
-                  kind="primary"
-                  size="medium"
-                  icon="pi pi-plus-circle"
-                />
-                <ButtonHighlight
-                  label="Agent"
-                  size="medium"
-                  icon="ai ai-ask-azion"
-                />
-              </span>
-
-              <button
-                type="button"
-                aria-label="Account settings"
-                class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-              >
-                <Avatar
-                  label="alex@example.com"
-                  size="medium"
-                  kind="square"
-                />
-              </button>
-            </GlobalHeader.Right>
-          </GlobalHeader>
-        </div>
-      </template>
-
-      <div class="layout-boundary animate-page-enter motion-reduce:animate-none">
-        <main class="layout-column flex min-h-full flex-col">
-          <section class="flex min-w-0 flex-col gap-(--layout-section-gap)">
-            <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-              <header class="flex flex-wrap items-center gap-(--layout-group-gap)">
-                <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
-                  <Button
-                    label="Filter"
-                    kind="outlined"
-                    size="medium"
-                    icon="pi pi-filter"
-                  />
-                  <div class="flex min-w-36 grow basis-(--container-2xs)">
-                    <Input
-                      v-model="search"
-                      size="medium"
-                      placeholder="Search resources"
-                      aria-label="Search resources"
-                      class="w-full"
-                    >
-                      <template #iconLeft>
-                        <i
-                          class="pi pi-search"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </Input>
-                  </div>
-                </div>
-                <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                  <Tooltip
-                    text="Refresh"
-                    class="shrink-0"
-                  >
-                    <IconButton
-                      icon="pi pi-refresh"
-                      kind="outlined"
-                      size="medium"
-                      ariaLabel="Refresh"
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    text="Download CSV"
-                    class="shrink-0"
-                  >
-                    <IconButton
-                      icon="pi pi-download"
-                      kind="outlined"
-                      size="medium"
-                      ariaLabel="Download CSV"
-                    />
-                  </Tooltip>
-                  <Tooltip text="Columns">
-                    <IconButton
-                      icon="ai ai-column"
-                      kind="outlined"
-                      size="medium"
-                      ariaLabel="Columns"
-                    />
-                  </Tooltip>
-                  <Button
-                    label="Documentation"
-                    icon="pi pi-book"
-                    kind="outlined"
-                    size="medium"
-                    href="https://example.com/docs/resources"
-                    target="_blank"
-                  />
-                  <Button
-                    label="Create Resource"
-                    icon="pi pi-plus"
-                    kind="primary"
-                    size="large"
-                  />
-                </div>
-              </header>
-
-              <section class="flex min-h-0 flex-col">
-                <Card :padded="false">
-                  <template #content>
-                    <div
-                      class="flex min-h-(--container-3xs) items-center justify-center text-body-sm text-(--text-muted)"
-                    >
-                      Table
-                    </div>
-                  </template>
-                </Card>
-              </section>
-            </section>
-          </section>
-        </main>
+        </Card>
       </div>
-    </AppLayout>
-  </div>
+    </div>
+  </ConsoleLayout>
 </template>

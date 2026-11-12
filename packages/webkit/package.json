@@ -830,6 +830,10 @@
       "types": "./types/components/documentation/doc-item/doc-item.vue.d.ts",
       "default": "./src/components/documentation/doc-item/doc-item.vue"
     },
+    "./doc-layout": {
+      "types": "./types/components/documentation/doc-layout/doc-layout.vue.d.ts",
+      "default": "./src/components/documentation/doc-layout/doc-layout.vue"
+    },
     "./doc-on-this-page": {
       "types": "./types/components/documentation/doc-on-this-page/doc-on-this-page.vue.d.ts",
       "default": "./src/components/documentation/doc-on-this-page/doc-on-this-page.vue"
@@ -1217,6 +1221,18 @@
     "./app-layout": {
       "types": "./types/components/layout/app-layout/app-layout.vue.d.ts",
       "default": "./src/components/layout/app-layout/app-layout.vue"
+    },
+    "./console-layout": {
+      "types": "./types/components/layout/console-layout/console-layout.vue.d.ts",
+      "default": "./src/components/layout/console-layout/console-layout.vue"
+    },
+    "./use-console-layout": {
+      "types": "./types/components/layout/console-layout/composables/use-console-layout.d.ts",
+      "default": "./src/components/layout/console-layout/composables/use-console-layout.ts"
+    },
+    "./site-layout": {
+      "types": "./types/components/layout/site-layout/site-layout.vue.d.ts",
+      "default": "./src/components/layout/site-layout/site-layout.vue"
     },
     "./board": {
       "types": "./types/components/layout/board/index.d.ts",

@@ -5,6 +5,21 @@
     "limit": "23 KB"
   },
   {
+    "name": "console-layout",
+    "path": "src/components/layout/console-layout/console-layout.vue",
+    "limit": "66 KB"
+  },
+  {
+    "name": "site-layout",
+    "path": "src/components/layout/site-layout/site-layout.vue",
+    "limit": "71 KB"
+  },
+  {
+    "name": "doc-layout",
+    "path": "src/components/documentation/doc-layout/doc-layout.vue",
+    "limit": "65 KB"
+  },
+  {
     "name": "browser-frame",
     "path": "src/components/content/browser-frame/browser-frame.vue",
     "limit": "12.1 KB",

@@ -108,9 +108,9 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Blocks: Shells
 
-- [Console (shells/console)](blocks/shells/console.md): The application shell every signed-in page renders inside, built on `AppLayout`.
+- [Console (shells/console)](blocks/shells/console.md): The application shell every signed-in page renders inside.
 - [Documentation (shells/documentation)](blocks/shells/documentation.md): The documentation shell.
-- [Website (shells/website)](blocks/shells/website.md): The marketing shell.
+- [Website (shells/website)](blocks/shells/website.md): The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer clos…
 
 ## Components: Actions
 
@@ -220,6 +220,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DocHeading](components/doc-heading.md): A documentation section heading that is also the link to itself.
 - [DocHero](components/doc-hero.md): The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt…
 - [DocItem](components/doc-item.md): One row of the documentation's related-content list: a leading glyph in a framed 32px tile, the row's name, and the sentence that says what the thing is.
+- [DocLayout](components/doc-layout.md): The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `Menu`) on the inline start, the ar…
 - [DocOnThisPage](components/doc-on-this-page.md): The "On this page" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community).
 - [DocPageHeader](components/doc-page-header.md): The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slo…
 - [DocPagination](components/doc-pagination.md): The previous / next pair that closes a documentation page.
@@ -280,6 +281,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [AppLayout](components/app-layout.md): The frame every signed-in product page renders inside.
 - [Board](components/board.md): A configurable dashboard grid: the reader arranges the cards.
+- [ConsoleLayout](components/console-layout.md): The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `Menu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own act…
 - [Footer](components/footer.md): Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`.
 - [FrameBox](components/frame-box.md): The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content.
 - [GlobalHeader](components/global-header.md): Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants.
@@ -292,6 +294,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SettingRow](components/setting-row.md): One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs.
 - [SettingsSection](components/settings-section.md): A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingRow` rows).
 - [Sidebar](components/sidebar.md): Helps users move between views or sections.
+- [SiteLayout](components/site-layout.md): The marketing site's chrome, composed once in the app: `SiteNav` on top, the page's sections in the layout's `<main>`, `SiteFooter` at the foot, and the `Command` search palette wired to the bar's search button and to…
 
 ## Components: Marketing
 

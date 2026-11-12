@@ -14,6 +14,25 @@ them is optional:
 4. **Reference (depth)** — `node_modules/@aziontech/webkit/rules/webkit-*.md` (also copied to
    `.claude/rules/`) carry the full standards behind the invariants.
 
+### Compose the app layout once, then every screen is a page body
+
+The chrome of an app is one layout component, composed once in the app's root (`App.vue`, around
+`RouterView`) — never copied into a page:
+
+| Surface                     | Layout                                               | What it gives the pages                                                                                                                                                                                                                                                                                                                                  |
+| --------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Console (signed-in product) | `ConsoleLayout` (`@aziontech/webkit/console-layout`) | navigation rail from `navigation` data (`href` on every row: an in-app path is followed with the router; the active row follows the route), header with breadcrumbs + `SearchTrigger` + the ⌘K `Command` palette, account menu, `actions` slot; a page opens the palette with `useConsoleLayout().openSearch()` (`@aziontech/webkit/use-console-layout`) |
+| Marketing site              | `SiteLayout` (`@aziontech/webkit/site-layout`)       | `SiteNav` + `SiteFooter` from data, the ⌘K palette, the dark canvas painted to the end                                                                                                                                                                                                                                                                   |
+| Documentation               | `DocLayout` (`@aziontech/webkit/doc-layout`)         | sticky header, docs rail (drawer on phones), the "On this page" rail tracking the reading position; the document scrolls                                                                                                                                                                                                                                 |
+
+Start the layout from its shell block (`npx @aziontech/webkit add shells/console`,
+`shells/website`, `shells/documentation`): the block is the `App.vue`, with the real navigation data;
+replace its stand-in body with `<RouterView />`. Every other block is then **only the page body**
+that renders inside the layout's default slot: it renders no `<main>`, `AppLayout`, `Sidebar`,
+`GlobalHeader`, `SiteNav`, `SiteFooter`, `Command` or navigation data of its own. If a block you
+copied still carries an inline shell (older platform blocks wrap their body in `AppLayout` with a
+`Sidebar` and a `GlobalHeader`), keep only what is inside its `<main>` and drop the rest.
+
 ### Start every screen from a pattern
 
 A whole screen — login, signup, settings, a list, a create flow, a detail page — is never built from
@@ -36,6 +55,8 @@ foundation, a JSON API per component, and `llms-full.txt` with everything in one
 
 ### Invariants — always follow
 
+- **One layout, composed once.** `ConsoleLayout`, `SiteLayout` or `DocLayout` in `App.vue`; pages
+  are bodies in its slot, never a second shell, `<main>` or ⌘K palette (above).
 - **Patterns, then components.** Screens start from a pattern (above). Pieces reach for an
   `@aziontech/webkit` component before writing custom UI — find one via the `webkit` MCP
   (`suggest_component`), `node_modules/@aziontech/webkit/llms/llms.txt` or

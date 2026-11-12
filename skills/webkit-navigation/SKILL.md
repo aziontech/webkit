@@ -590,6 +590,9 @@ With Vue Router, keep the rows real links and let the router do the navigation:
 - A named route becomes `href` through `router.resolve(to).href`; never put the route object on the node.
 - `active-id` follows the route, not the click, so Back / Forward and deep links select the right row.
 - A modified click (Ctrl, ⌘, Shift, middle button) is left to the browser, so open-in-new-tab works.
+- With `ConsoleLayout` or `DocLayout` (the app's layout, composed once in `App.vue`) none of this is
+  wired by hand: give each row of their `navigation` an `href`; they push in-app hrefs through the
+  router, match the active row against the route and leave a modified click to the browser.
 
 ## Hard rules
 

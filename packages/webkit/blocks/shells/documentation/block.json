@@ -3,7 +3,7 @@
   "name": "Documentation",
   "title": "Templates/Shells/Documentation",
   "surface": "docs",
-  "summary": "The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`. Three variants fill the reading column with a real page, built only from the documentation parts: Article is a tutorial (First deploy) — `DocPageHeader` with breadcrumb, last updated and the Copy / View as Markdown and Agent setup actions, then one `DocProse` holding a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocHeading` sections, `DocSteps` with `CodeBlock` commands, a `DocPrompt` for the coding agent, Next steps as `DocCardGroup`, Related resources as `DocItem` rows in a `FrameBox`, then `DocPagination`, with the outline rail as `DocOnThisPage` plus the closing `DocCta`; Reference is a product reference page (an info callout, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home (no outline rail): a `DocHero` (display-size title, deck, `Get started` then the dark `CopyPromptButton` with the Claude, ChatGPT, Gemini and Cursor marks, and a note on what the prompt does), then Start by interface opening on a `DocAgentCard` (\"Your AI agent, fluent in Azion\" with the inline Copy prompt; \"Prefer the guided route?\" with the orange Agent setup over a halftone) above the Console, CLI and API `DocCard`s in the Azion product marks, then objectives, ready-made templates in their brand colours (`ai-cor`), Stop attacks, compliance and Follow along, and the pager forward. The variants carry search as a `SearchTrigger` that widens into the ⌘K field.",
+  "summary": "The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCta` in its `aside` slot, and the `Footer` (`kind=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Three variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPagination`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -41,7 +41,9 @@
     "home da documentação",
     "docs home with copy prompt and AI agent logos",
     "your AI agent fluent in Azion card",
-    "botão copiar prompt com logos de IA"
+    "botão copiar prompt com logos de IA",
+    "docs layout component",
+    "DocLayout"
   ],
   "skills": ["webkit-layout", "webkit-navigation"],
   "primary": {
@@ -51,17 +53,17 @@
   "variants": [
     {
       "name": "Article",
-      "summary": "A tutorial page: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources, the pager, and the outline rail with DocOnThisPage and DocCta.",
+      "summary": "A tutorial page inside DocLayout: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources and the pager; the outline tracks its DocHeading ids, with the GitHub and Community groups and a DocCta under it.",
       "file": "variants/article.vue"
     },
     {
       "name": "Reference",
-      "summary": "A product reference page: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps.",
+      "summary": "A product reference page inside DocLayout: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps; the outline tracks its four sections, with a DocCta under it.",
       "file": "variants/reference.vue"
     },
     {
       "name": "Landing",
-      "summary": "The documentation home, as Azion Docs draws it: no outline rail; a DocHero with Get started and the CopyPromptButton (agent marks) and its note, then a DocAgentCard (Your AI agent, fluent in Azion / Prefer the guided route? with Agent setup over a halftone) above the Console, CLI and API cards, then objectives, coloured framework templates, Stop attacks, compliance, Follow along and the pager forward.",
+      "summary": "The documentation home inside DocLayout, with the navigation rail and no outline rail: a DocHero with Get started and the CopyPromptButton (agent marks) and its note, then a DocAgentCard above the Console, CLI and API cards, then objectives, coloured framework templates, Stop attacks, compliance, Follow along and the pager forward.",
       "file": "variants/landing.vue"
     }
   ]

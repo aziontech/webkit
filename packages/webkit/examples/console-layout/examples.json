@@ -1,0 +1,16 @@
+{
+  "component": "console-layout",
+  "title": "Components/Primitives/Layout/ConsoleLayout",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The console chrome around a list page: navigation as data with a drill level and a Preview badge, the breadcrumb, Create and Agent in the actions slot (icon-only while compact), recent resources in the ⌘K palette and the account menu. The page body is only the slot content.",
+      "file": "default.vue"
+    },
+    {
+      "name": "PageOpensSearch",
+      "summary": "A page inside the layout opens the shared ⌘K palette from its own button with `useConsoleLayout().openSearch()`; it never mounts a second palette.",
+      "file": "page-opens-search.vue"
+    }
+  ]
+}

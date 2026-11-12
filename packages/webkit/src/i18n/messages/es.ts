@@ -284,6 +284,15 @@ export const es: Messages = {
     confirm: 'Confirmar',
     cancel: 'Cancelar'
   },
+  consoleLayout: {
+    navigation: 'Navegación principal',
+    home: 'Inicio de Azion',
+    openNavigation: 'Abrir navegación',
+    accountMenu: 'Menú de la cuenta',
+    searchPlaceholder: 'Buscar páginas y comandos',
+    searchEmpty: 'Ninguna página o comando coincide con la búsqueda.',
+    pages: 'Páginas'
+  },
   copyButton: {
     copy: 'Copiar',
     copied: 'Copiado'
@@ -400,6 +409,16 @@ export const es: Messages = {
     zoomedImage: 'Imagen en pantalla completa',
     closeFullScreen: 'Cerrar pantalla completa',
     close: 'Cerrar'
+  },
+  docLayout: {
+    navigation: 'Documentación',
+    sections: 'Secciones de la documentación',
+    home: 'Inicio de Azion Docs',
+    badge: 'Docs',
+    openNavigation: 'Abrir navegación de la documentación',
+    search: 'Buscar en la documentación',
+    searchEmpty: 'Ninguna página coincide con la búsqueda.',
+    pages: 'Páginas'
   },
   docOnThisPage: {
     title: 'En esta página'
@@ -754,6 +773,11 @@ export const es: Messages = {
     home: 'Página de inicio de Azion',
     language: 'Idioma',
     newTab: '(se abre en una pestaña nueva)'
+  },
+  siteLayout: {
+    searchPlaceholder: 'Buscar en el sitio',
+    searchEmpty: 'Ninguna página coincide con la búsqueda.',
+    pages: 'Páginas'
   },
   siteNav: {
     open: 'Abrir navegación',

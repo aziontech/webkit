@@ -2,7 +2,7 @@
 name: webkit-layout
 description: The page container system — how a page built on @aziontech/webkit gets its width, its inset from the app chrome, and its vertical rhythm. Fixes the three-level page shape (boundary → parent section → band), the five measures and what picks one (the payload, never the URL), why the boundary is not part of the measure and what that buys, the two rhythm steps and the margin form for a band whose parent cannot carry a gap, the site frame, the control cap inside an item-group field row, and the device contract (viewport breakpoints for the shell, container queries for anything that can sit in a drawer, split view or card, touch targets, reflow at 320 px). Everything comes from the `layout-*` utilities and tokens in @aziontech/theme — a page never writes its own `mx-auto max-w-*`, and full-bleed is the absence of a column class, not a `w-full`. Use when building any page, adding a sticky action bar, wondering how wide a page should be, or reviewing a page whose column drifts left, whose bar misaligns with the body it submits, or whose sections breathe unevenly.
 status: active
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-styling, webkit-tokens, webkit-direction, ui-verify, review]
 ---
@@ -43,6 +43,21 @@ the boundary on a padded page) · `/webkit-baseline-ui` (tokens, typography, spa
 - The page changes width between two states (empty vs populated) or between two sibling tabs.
 
 ---
+
+## 0. The app layout owns the chrome; a page is its body
+
+Everything in this skill is about the page **inside** the app's layout. The chrome around it is one
+component, composed once in `App.vue` around `RouterView`:
+
+- **Console:** `ConsoleLayout` — rail, header, breadcrumbs, ⌘K palette, account. It renders the
+  `<main>` and pads nothing: the page body carries its own boundary and measure
+  (`layout-boundary` + `layout-column` on a list or form; a detail page opens flush on `PageTabs`).
+- **Site:** `SiteLayout` — `SiteNav`, the page's sections in its `<main>`, `SiteFooter` last.
+- **Docs:** `DocLayout` — sticky header and rails around the article; the document scrolls.
+
+A page never renders `AppLayout`, `Sidebar`, `GlobalHeader`, `SiteNav`, `SiteFooter`, a `Command`
+palette or a second `<main>`. A copied block that still inlines a shell gives you its `<main>`'s
+content and nothing else.
 
 ## 1. Three levels, and no fourth
 
@@ -262,8 +277,8 @@ count permits, and lets a short last row share the width evenly — under three 
 a framed grid reads as a missing card, so the rule has no exceptions for content cells;
 `layout="fixed"` is for tiles whose width must not change (square logo walls, a cell spanning rows).
 
-**The footer closes the frame and nothing follows it.** `SiteFooter` is the page shell's last child,
-unwrapped; from `lg` the page ends on its bottom bar (the brand leads the social row), below `lg` on
+**The footer closes the frame and nothing follows it.** `SiteLayout` places `SiteFooter` as its last
+child, unwrapped — a page never adds one; from `lg` the page ends on its bottom bar (the brand leads the social row), below `lg` on
 the signature band that carries the brand.
 
 ## 7. The control cap in a field row
@@ -327,8 +342,9 @@ wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every d
 
 The window still owns the shell:
 
-- Below `md` the console sidebar is not shown; the shell opens the same `Sidebar` inside a
-  `Drawer` from a menu button (the `shells/console` block).
+- `ConsoleLayout` measures its own width (through `AppLayout`): below 768 px the rail moves into
+  the layout's navigation drawer, opened from the header's menu button. `DocLayout` moves its rail
+  into a drawer below `lg` and shows the outline rail from `xl`.
 - Below `md` a `Dialog` or `Drawer` is a bottom sheet; below `sm` it is a full-height, full-width
   sheet, and its `PanelFooter` actions stay pinned and stretch.
 - Ultra-wide (1920, 2560 px): the column classes of section 2 cap the content, so wide screens add
@@ -375,6 +391,8 @@ truncating text `min-w-0`.
   to fill the last row, or pick `columns` from the item count — compose `CardGrid` and let its
   default balanced layout fill the rows.
 - **NEVER** wrap `SiteFooter` or `SiteNav` in a bordered or padded `div`; they draw their own rules.
+- **NEVER** compose the chrome in a page: one `ConsoleLayout` / `SiteLayout` / `DocLayout` in
+  `App.vue`, and every page is only the body of its default slot.
 - **NEVER** cap the app shell — the sidebar, the global header, the content zone's own inset stay
   fluid. The cap lives on the page's own column.
 
