@@ -1,11 +1,7 @@
 <script setup lang="ts">
   import { computed, shallowRef, useAttrs, useId, useTemplateRef, watch } from 'vue'
 
-  import {
-    type IllustrationAssetLoader,
-    loadIllustrationPlaceholder,
-    resolveIllustrationAsset
-  } from '../../../assets/illustrations/registry'
+  import type { IllustrationAssetLoader } from '../../../assets/illustrations/registry'
   import type { IllustrationScene } from '../../../assets/illustrations/scene'
 
   defineOptions({
@@ -45,27 +41,20 @@
     () => props.name,
     (name) => {
       if (typeof document === 'undefined') return
-      const load = name ? resolveIllustrationAsset(name) : null
-      if (!load) {
-        if (name) {
-          console.warn(
-            `[webkit] <Illustration>: no scene named "${name}"; rendering the placeholder. The names are listed in llms/foundations/illustrations.md and by the MCP tool list_assets.`
-          )
-        }
-        paint(loadIllustrationPlaceholder)
-          .then((painted) => {
-            if (props.name && resolveIllustrationAsset(props.name)) return
-            scene.value = painted
-            placeheld.value = true
-          })
-          .catch(warnUnloaded)
-        return
-      }
-      paint(load)
-        .then((painted) => {
+      import('../../../assets/illustrations/registry')
+        .then(({ loadIllustrationPlaceholder, resolveIllustrationAsset }) => {
           if (props.name !== name) return
-          scene.value = painted
-          placeheld.value = false
+          const load = name ? resolveIllustrationAsset(name) : null
+          if (!load && name) {
+            console.warn(
+              `[webkit] <Illustration>: no scene named "${name}". Names: llms/foundations/illustrations.md or the MCP tool list_assets.`
+            )
+          }
+          return paint(load ?? loadIllustrationPlaceholder).then((painted) => {
+            if (props.name !== name) return
+            scene.value = painted
+            placeheld.value = !load
+          })
         })
         .catch(warnUnloaded)
     },
