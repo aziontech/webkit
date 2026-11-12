@@ -49,7 +49,7 @@ Title and description at the start, the control at the end. `kind="stacked"` for
 
 ### F. Text value — `Input` (required)
 
-Large, with an `aria-label` that matches the row title. Client ID is `readonly`. Address rows use `postal-code`, `address-line1` and `address-line2` autocomplete.
+Large, with an `aria-label` that matches the row title. Client ID is `readonly`. Address rows use `postal-code`, `address-line1` and `address-line2` autocomplete; Company name uses `organization`.
 
 ### G. Long value — `Textarea` (required)
 
@@ -379,6 +379,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                           size="large"
                           class="w-full"
                           aria-label="Company name"
+                          autocomplete="organization"
                           placeholder="Company S.A."
                           :disabled="saving"
                         />

@@ -92,7 +92,7 @@ Each control of the card form (cardholder, country, number, expiry, security cod
 
 ### Q. Text value — `Input` (required)
 
-Cardholder, number, expiry, security code and the address lines, with `cc-*` autocomplete and `inputmode="numeric"` on the card numbers.
+Cardholder, number, expiry, security code and the address lines, with `cc-*` autocomplete, `postal-code`, `address-line1` and `address-line2` on the address, and `inputmode="numeric"` on the card numbers.
 
 ### R. Choice — `Select` (required)
 
@@ -444,6 +444,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     postalCode: '01310-100',
     state: 'São Paulo',
     city: 'São Paulo',
+    line1: 'Avenida Paulista, 1000',
     line2: ''
   }
   const blankAddress = () => ({
@@ -451,6 +452,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     postalCode: '',
     state: undefined,
     city: undefined,
+    line1: '',
     line2: ''
   })
   const address = reactive({ useAccountInformation: true, ...accountAddress })
@@ -975,6 +977,15 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                           </Select>
                         </Field>
                       </div>
+                      <Field>
+                        <Field.Label>Address</Field.Label>
+                        <Input
+                          v-model="address.line1"
+                          name="addressLine1"
+                          size="large"
+                          autocomplete="address-line1"
+                        />
+                      </Field>
                       <Field>
                         <Field.Label>Address line 2</Field.Label>
                         <Input

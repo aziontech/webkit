@@ -246,6 +246,7 @@
                           size="large"
                           class="w-full"
                           aria-label="Company name"
+                          autocomplete="organization"
                           placeholder="Company S.A."
                           :disabled="saving"
                         />

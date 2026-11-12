@@ -80,7 +80,7 @@ Each control of the card form (cardholder, country, number, expiry, security cod
 
 ### Q. Text value — `Input` (required)
 
-Cardholder, number, expiry, security code and the address lines, with `cc-*` autocomplete and `inputmode="numeric"` on the card numbers.
+Cardholder, number, expiry, security code and the address lines, with `cc-*` autocomplete, `postal-code`, `address-line1` and `address-line2` on the address, and `inputmode="numeric"` on the card numbers.
 
 ### R. Choice — `Select` (required)
 
