@@ -170,6 +170,7 @@
     "./button-highlight": "./src/components/actions/button-highlight/button-highlight.vue",
     "./mini-button": "./src/components/actions/mini-button/mini-button.vue",
     "./copy-button": "./src/components/actions/copy-button/copy-button.vue",
+    "./search-trigger": "./src/components/actions/search-trigger/search-trigger.vue",
     "./toggle-group": "./src/components/actions/toggle-group/toggle-group.vue",
     "./icon-button": "./src/components/actions/icon-button/icon-button.vue",
     "./split-button": "./src/components/actions/split-button/split-button.vue",

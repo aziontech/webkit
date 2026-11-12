@@ -1006,5 +1006,8 @@ export const es: Messages = {
     prompt: 'Prompt',
     copyCommand: 'Copiar comando',
     copyPrompt: 'Copiar prompt'
+  },
+  searchTrigger: {
+    label: 'Buscar'
   }
 }

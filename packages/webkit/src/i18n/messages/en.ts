@@ -1131,6 +1131,10 @@ export const sectionCommand = {
   copyPrompt: 'Copy prompt'
 } as const
 
+export const searchTrigger = {
+  label: 'Search'
+} as const
+
 export const en = {
   actionConfirmation,
   aiLoading,
@@ -1262,5 +1266,6 @@ export const en = {
   otpInput,
   consolePanel,
   customerSpotlight,
-  sectionCommand
+  sectionCommand,
+  searchTrigger
 }

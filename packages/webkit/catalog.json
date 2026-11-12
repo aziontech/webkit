@@ -3540,6 +3540,54 @@
    "examplesFile": "catalog/examples/copy-button.json",
    "docsFile": "catalog/components/copy-button.json"
   },
+  "search-trigger": {
+   "import": "@aziontech/webkit/search-trigger",
+   "target": "./src/components/actions/search-trigger/search-trigger.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/search-trigger",
+   "category": "actions",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Visible muted text and accessible name; empty uses the catalog's `Search`."
+    },
+    {
+     "name": "shortcut",
+     "type": "string",
+     "default": "'K'",
+     "required": "false",
+     "doc": "Key drawn after the platform modifier in the keycap and announced through `aria-keyshortcuts`; empty hides the keycap."
+    },
+    {
+     "name": "collapsible",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Folds to the magnifier alone below the nearest container's `2xl` size; the label stays the accessible name."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the button; `click` is not emitted."
+    }
+   ],
+   "events": [
+    {
+     "name": "click",
+     "payload": "MouseEvent",
+     "notes": "Fires when the button is activated (pointer, Enter or Space); not while `disabled`."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/search-trigger.json",
+   "docsFile": "catalog/components/search-trigger.json"
+  },
   "toggle-group": {
    "import": "@aziontech/webkit/toggle-group",
    "target": "./src/components/actions/toggle-group/toggle-group.vue",
@@ -32229,7 +32277,7 @@
    "title": "Templates/Shells/Documentation",
    "source": "blocks/shells/documentation/documentation.vue",
    "surface": "docs",
-   "summary": "The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`.",
+   "summary": "The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`. Three variants fill the reading column with a real page, built only from the documentation parts: Article is a tutorial (First deploy) — `DocPageHeader` with breadcrumb, last updated and the Copy / View as Markdown and Agent setup actions, then one `DocProse` holding a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocHeading` sections, `DocSteps` with `CodeBlock` commands, a `DocPrompt` for the coding agent, Next steps as `DocCardGroup`, Related resources as `DocItem` rows in a `FrameBox`, then `DocPagination`, with the outline rail as `DocOnThisPage` plus the closing `DocCta`; Reference is a product reference page (an info callout, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home (no outline rail: welcome `DocPageHeader`, Get started, a `DocPrompt`, then `DocCardGroup` entry points by interface, objective, template and follow-along). The variants carry search as a `SearchTrigger` that widens into the ⌘K field.",
    "intents": [
     "docs shell",
     "documentation layout",
@@ -32242,7 +32290,25 @@
     "página de documentação",
     "estrutura da documentação",
     "documentation shell",
-    "docs layout"
+    "docs layout",
+    "documentation article",
+    "docs article page",
+    "tutorial page",
+    "getting started guide",
+    "how-to guide",
+    "product reference page",
+    "reference documentation",
+    "docs page with steps and code",
+    "documentation home",
+    "docs home page",
+    "docs landing page",
+    "developer portal home",
+    "artigo da documentação",
+    "página de tutorial",
+    "guia de primeiros passos",
+    "página de referência do produto",
+    "página inicial da documentação",
+    "home da documentação"
    ],
    "skills": [
     "webkit-layout",
@@ -32251,14 +32317,36 @@
    "components": [
     "Brand",
     "Button",
+    "CodeBlock",
+    "Diagram",
+    "DocCallout",
+    "DocCard",
+    "DocCardGroup",
+    "DocCta",
+    "DocFrame",
+    "DocHeading",
+    "DocItem",
+    "DocOnThisPage",
+    "DocPageHeader",
+    "DocPagination",
+    "DocPrompt",
+    "DocProse",
+    "DocStep",
+    "DocSteps",
     "Footer",
+    "FrameBox",
     "GlobalHeader",
     "IconButton",
+    "ItemList",
     "MenuGroup",
     "MenuItem",
     "MenuRoot",
+    "MenuSub",
+    "MenuSubContent",
+    "MenuSubTrigger",
     "NavigationMenu",
     "ScrollArea",
+    "SearchTrigger",
     "Select",
     "Sidebar",
     "StatusIndicator",
@@ -32267,14 +32355,36 @@
    "imports": [
     "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
+    "@aziontech/webkit/code-block",
+    "@aziontech/webkit/diagram",
+    "@aziontech/webkit/doc-callout",
+    "@aziontech/webkit/doc-card",
+    "@aziontech/webkit/doc-card-group",
+    "@aziontech/webkit/doc-cta",
+    "@aziontech/webkit/doc-frame",
+    "@aziontech/webkit/doc-heading",
+    "@aziontech/webkit/doc-item",
+    "@aziontech/webkit/doc-on-this-page",
+    "@aziontech/webkit/doc-page-header",
+    "@aziontech/webkit/doc-pagination",
+    "@aziontech/webkit/doc-prompt",
+    "@aziontech/webkit/doc-prose",
+    "@aziontech/webkit/doc-step",
+    "@aziontech/webkit/doc-steps",
     "@aziontech/webkit/footer",
+    "@aziontech/webkit/frame-box",
     "@aziontech/webkit/global-header",
     "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/item-list",
     "@aziontech/webkit/menu-group",
     "@aziontech/webkit/menu-item",
     "@aziontech/webkit/menu-root",
+    "@aziontech/webkit/menu-sub",
+    "@aziontech/webkit/menu-sub-content",
+    "@aziontech/webkit/menu-sub-trigger",
     "@aziontech/webkit/navigation-menu",
     "@aziontech/webkit/scroll-area",
+    "@aziontech/webkit/search-trigger",
     "@aziontech/webkit/select",
     "@aziontech/webkit/sidebar",
     "@aziontech/webkit/status-indicator",
@@ -32282,7 +32392,20 @@
    ],
    "primary": "Default",
    "guidelinesSummary": "The documentation shell. A reader comes to learn one task and leave, so the shell keeps the page readable and the next page close: the docs header on top, a rail of the current product's pages from `lg`, a reading column that scrolls on its own, the \"On this page\" outline from `xl`, and the footer inside the reading column's scroller so the bands sit between the rail and the outline.",
-   "variants": [],
+   "variants": [
+    {
+     "name": "Article",
+     "summary": "A tutorial page: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources, the pager, and the outline rail with DocOnThisPage and DocCta."
+    },
+    {
+     "name": "Reference",
+     "summary": "A product reference page: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps."
+    },
+    {
+     "name": "Landing",
+     "summary": "The documentation home: no outline rail; the welcome masthead, Get started, a DocPrompt, then DocCardGroup entry points by interface, objective, template and follow-along, and the pager forward."
+    }
+   ],
    "file": "catalog/patterns/shells/documentation.json"
   },
   "shells/website": {
