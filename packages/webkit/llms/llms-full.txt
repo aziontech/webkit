@@ -18718,6 +18718,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - Put the item's name, as a link to the item, in the `header` slot: it also names the selection control.
 - Keep each card to a handful of label and value pairs; let `collection-preferences` choose which.
 - Use `selectionMode="multi"` only when a bulk action exists next to the list.
+- Pass items typed with your own interface (`Domain[]`): the slots read `item.name` with that type, so never cast `item` in a slot or widen the items to `Record<string, unknown>[]`.
 
 ## Don’t
 
@@ -18736,7 +18737,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `Record<string, unknown>[]` | `[]` | false | The items, one card each. |
+| `items` | `TItem[]` | `[]` | false | The items, one card each. |
 | `trackBy` | `string` | `'id'` | false | Field that identifies an item; selection keys read it. |
 | `selectionMode` | `'none' \| 'single' \| 'multi'` | `'none'` | false | No selection, one card, or several cards with a select-all above them. |
 | `loading` | `boolean` | `false` | false | Shows placeholder cards and sets aria-busy while true. |
@@ -18747,8 +18748,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `header` | { item: Record<string, unknown>; index: number; selected: boolean } | Card title; names the card and its selection control. |
-| `default` | { item: Record<string, unknown>; index: number; selected: boolean } | Card body: the item's fields. |
+| `header` | CardsItemSlotProps<TItem> | Card title; names the card and its selection control. |
+| `default` | CardsItemSlotProps<TItem> | Card body: the item's fields. |
 | `empty` | — | Shown when there are no items. |
 
 ## v-model
@@ -24063,6 +24064,7 @@ The imperative API is backed by a small reactive store composable, declared here
 - Use `minItems: 1` when the form needs at least one row, so the last row keeps its fields and loses its Remove.
 - Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.
 - Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.
+- Type the rows with your own interface (`ref<Header[]>`): `value` in `cell-<key>` and `item` in every slot then carry the field types, so a `Select` or `Switch` binds `value` without `as string` / `as boolean`.
 - Name the editor (`ariaLabel`) after what the rows are: "Environment variables", "Request headers".
 
 ## Don’t
@@ -24085,8 +24087,8 @@ The imperative API is backed by a small reactive store composable, declared here
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `AttributeEditorItem[]` | `[]` | false | Rows in list mode. Supports v-model:items. |
-| `groups` | `AttributeEditorItem[][]` | `undefined` | false | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups. |
+| `items` | `TItem[]` | `[]` | false | Rows in list mode. Supports v-model:items. |
+| `groups` | `TItem[][]` | `undefined` | false | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups. |
 | `definition` | `AttributeEditorColumn[]` | `[]` | false | Columns of every row: key of the item field, label, placeholder, required. |
 | `errors` | `AttributeEditorErrors` | `[]` | false | Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none. |
 | `addButtonLabel` | `string` | `''` | false | Label of the Add button. Empty uses the locale catalog. |
@@ -24096,8 +24098,8 @@ The imperative API is backed by a small reactive store composable, declared here
 | `limit` | `number` | `undefined` | false | Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced. |
 | `groupLimit` | `number` | `undefined` | false | Most groups allowed in grouped mode. |
 | `minItems` | `number` | `0` | false | Fewest rows kept; rows at the minimum lose their Remove button. |
-| `newItem` | `() => AttributeEditorItem` | `undefined` | false | Builds a new row. Unset creates an item with an empty string per column key. |
-| `itemRemovable` | `(item: AttributeEditorItem) => boolean` | `undefined` | false | Hides Remove on the rows it returns false for. Unset makes every row removable. |
+| `newItem` | `() => TItem` | `undefined` | false | Builds a new row. Unset creates an item with an empty string per column key. |
+| `itemRemovable` | `(item: TItem) => boolean` | `undefined` | false | Hides Remove on the rows it returns false for. Unset makes every row removable. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm. |
 | `disabled` | `boolean` | `false` | false | Disables every control, Add and Remove. |
 | `addDisabled` | `boolean` | `false` | false | Disables Add only, for example until the last row is filled in. |
@@ -24107,10 +24109,10 @@ The imperative API is backed by a small reactive store composable, declared here
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:items` | `AttributeEditorItem[]` | A row was added, removed or edited in list mode. |
-| `update:groups` | `AttributeEditorItem[][]` | A row or group was added, removed or edited in grouped mode. |
+| `update:items` | `TItem[]` | A row was added, removed or edited in list mode. |
+| `update:groups` | `TItem[][]` | A row or group was added, removed or edited in grouped mode. |
 | `add` | `{ index: number; groupIndex?: number }` | After a row is added; `groupIndex` only in grouped mode. |
-| `remove` | `{ index: number; item: AttributeEditorItem; groupIndex?: number }` | After a row is removed. |
+| `remove` | `{ index: number; item: TItem; groupIndex?: number }` | After a row is removed. |
 
 ## Slots
 
@@ -35278,6 +35280,7 @@ even when the row carries nothing but its title.
 ## Do
 
 - Give each `Tabs.Item` and its `Tabs.Panel` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility.
+- Type a variable that holds the active tab or a list of tab definitions with the exported `TabsValue` (`ref<TabsValue>('overview')`), never `string | number` spelled out or a cast.
 - Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.
 - closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
 - dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
@@ -36550,6 +36553,8 @@ packages/webkit/src/components/overlay/command/
 - Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.
 - Set `width` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.
 - Use `placement="auto"` for triggers that can sit near a viewport edge.
+- Use a side placement (`right-start`, `left-start`, …) for a trigger in a narrow column or a sidebar, where the panel should open beside the trigger instead of covering the content below it. Type a placement held in a variable with the exported `PopoverPlacement` (or `PopoverPlacementInput` when it can be `'auto'`), never a cast.
+- Bind the open state with `v-model:open` (or `:open` + `@update:open`, whose handler receives a `boolean`).
 - Set `dismissible` to `false` only when an outside click would discard input. Then give the user a way out: `Popover.Close` or a footer action.
 
 ## Don’t
@@ -36571,18 +36576,12 @@ packages/webkit/src/components/overlay/command/
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled. |
-| `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | false | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on available viewport space. |
+| `placement` | `PopoverPlacementInput` | `'bottom-start'` | false | Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment. |
 | `offset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
 | `width` | `'small' \| 'medium' \| 'large'` | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:open` | `boolean` | Fires on every open/closed transition; supports `v-model:open`. Emitted on trigger toggle, `Popover.Close`, `Esc`, and outside-click. |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -36633,6 +36632,12 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Events: _none_.
   - Slots: `default` — action buttons (e.g. Cancel / Apply).
 
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+|---|---|---|---|---|
+| `v-model:open` | `boolean \| undefined` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void`. Fires on every open/closed transition: trigger toggle, `Popover.Close`, `Esc`, and outside-click. While unbound (`undefined`) the popover is uncontrolled and starts closed. |
+
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
@@ -36640,7 +36645,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - `data-disabled` mirrors the `disabled` prop on root and trigger
 - Cursor: the trigger wrapper shows `pointer`, and `not-allowed` with `data-disabled`
 - `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
-- `data-placement` on the floating panel mirrors the resolved placement (`'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
+- `data-placement` on the floating panel mirrors the resolved placement (any `PopoverPlacement`; `'auto'` resolves to one of `'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
 
 ## Accessibility
 

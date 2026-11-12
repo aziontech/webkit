@@ -16,6 +16,7 @@
 - Put the item's name, as a link to the item, in the `header` slot: it also names the selection control.
 - Keep each card to a handful of label and value pairs; let `collection-preferences` choose which.
 - Use `selectionMode="multi"` only when a bulk action exists next to the list.
+- Pass items typed with your own interface (`Domain[]`): the slots read `item.name` with that type, so never cast `item` in a slot or widen the items to `Record<string, unknown>[]`.
 
 ## Don’t
 
@@ -35,7 +36,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `Record<string, unknown>[]` | `[]` | false | The items, one card each. |
+| `items` | `TItem[]` | `[]` | false | The items, one card each. |
 | `trackBy` | `string` | `'id'` | false | Field that identifies an item; selection keys read it. |
 | `selectionMode` | `'none' \| 'single' \| 'multi'` | `'none'` | false | No selection, one card, or several cards with a select-all above them. |
 | `loading` | `boolean` | `false` | false | Shows placeholder cards and sets aria-busy while true. |
@@ -46,8 +47,8 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `header` | { item: Record<string, unknown>; index: number; selected: boolean } | Card title; names the card and its selection control. |
-| `default` | { item: Record<string, unknown>; index: number; selected: boolean } | Card body: the item's fields. |
+| `header` | CardsItemSlotProps<TItem> | Card title; names the card and its selection control. |
+| `default` | CardsItemSlotProps<TItem> | Card body: the item's fields. |
 | `empty` | — | Shown when there are no items. |
 
 ## v-model

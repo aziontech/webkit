@@ -8957,7 +8957,7 @@
    "props": [
     {
      "name": "items",
-     "type": "Record<string, unknown>[]",
+     "type": "TItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The items, one card each."
@@ -9001,12 +9001,12 @@
    "slots": [
     {
      "name": "header",
-     "scope": "{ item: Record<string, unknown>; index: number; selected: boolean }",
+     "scope": "CardsItemSlotProps<TItem>",
      "notes": "Card title; names the card and its selection control."
     },
     {
      "name": "default",
-     "scope": "{ item: Record<string, unknown>; index: number; selected: boolean }",
+     "scope": "CardsItemSlotProps<TItem>",
      "notes": "Card body: the item's fields."
     },
     {
@@ -15700,7 +15700,7 @@
   },
   "global-header": {
    "import": "@aziontech/webkit/global-header",
-   "target": "./src/components/layout/global-header/index.js",
+   "target": "./src/components/layout/global-header/index.ts",
    "kind": "component",
    "compoundRoot": true,
    "treeShakeableImport": null,
@@ -17478,7 +17478,7 @@
   },
   "breadcrumb": {
    "import": "@aziontech/webkit/breadcrumb",
-   "target": "./src/components/navigation/breadcrumb/index.js",
+   "target": "./src/components/navigation/breadcrumb/index.ts",
    "kind": "component",
    "compoundRoot": true,
    "treeShakeableImport": null,
@@ -17864,7 +17864,7 @@
   },
   "tabs": {
    "import": "@aziontech/webkit/tabs",
-   "target": "./src/components/navigation/tabs/index.js",
+   "target": "./src/components/navigation/tabs/index.ts",
    "kind": "component",
    "compoundRoot": true,
    "treeShakeableImport": null,
@@ -18147,7 +18147,7 @@
   },
   "navigation-menu": {
    "import": "@aziontech/webkit/navigation-menu",
-   "target": "./src/components/navigation/navigation-menu/index.js",
+   "target": "./src/components/navigation/navigation-menu/index.ts",
    "kind": "component",
    "compoundRoot": true,
    "treeShakeableImport": null,
@@ -18902,18 +18902,11 @@
    "structure": "composition",
    "props": [
     {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled."
-    },
-    {
      "name": "placement",
-     "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+     "type": "PopoverPlacementInput",
      "default": "'bottom-start'",
      "required": "false",
-     "doc": "Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on available viewport space."
+     "doc": "Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment."
     },
     {
      "name": "offset",
@@ -18942,13 +18935,13 @@
      "default": "true",
      "required": "false",
      "doc": "Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
-    }
-   ],
-   "events": [
+    },
     {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "Fires on every open/closed transition; supports `v-model:open`. Emitted on trigger toggle, `Popover.Close`, `Esc`, and outside-click."
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "slots": [
@@ -18972,18 +18965,11 @@
    "structure": "composition",
    "props": [
     {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled."
-    },
-    {
      "name": "placement",
-     "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+     "type": "PopoverPlacementInput",
      "default": "'bottom-start'",
      "required": "false",
-     "doc": "Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on available viewport space."
+     "doc": "Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment."
     },
     {
      "name": "offset",
@@ -19012,13 +18998,13 @@
      "default": "true",
      "required": "false",
      "doc": "Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
-    }
-   ],
-   "events": [
+    },
     {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "Fires on every open/closed transition; supports `v-model:open`. Emitted on trigger toggle, `Popover.Close`, `Esc`, and outside-click."
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "slots": [
@@ -25693,14 +25679,14 @@
    "props": [
     {
      "name": "items",
-     "type": "AttributeEditorItem[]",
+     "type": "TItem[]",
      "default": "[]",
      "required": "false",
      "doc": "Rows in list mode. Supports v-model:items."
     },
     {
      "name": "groups",
-     "type": "AttributeEditorItem[][]",
+     "type": "TItem[][]",
      "default": "undefined",
      "required": "false",
      "doc": "Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups."
@@ -25770,14 +25756,14 @@
     },
     {
      "name": "newItem",
-     "type": "() => AttributeEditorItem",
+     "type": "() => TItem",
      "default": "undefined",
      "required": "false",
      "doc": "Builds a new row. Unset creates an item with an empty string per column key."
     },
     {
      "name": "itemRemovable",
-     "type": "(item: AttributeEditorItem) => boolean",
+     "type": "(item: TItem) => boolean",
      "default": "undefined",
      "required": "false",
      "doc": "Hides Remove on the rows it returns false for. Unset makes every row removable."
@@ -25814,12 +25800,12 @@
    "events": [
     {
      "name": "update:items",
-     "payload": "AttributeEditorItem[]",
+     "payload": "TItem[]",
      "notes": "A row was added, removed or edited in list mode."
     },
     {
      "name": "update:groups",
-     "payload": "AttributeEditorItem[][]",
+     "payload": "TItem[][]",
      "notes": "A row or group was added, removed or edited in grouped mode."
     },
     {
@@ -25829,7 +25815,7 @@
     },
     {
      "name": "remove",
-     "payload": "{ index: number; item: AttributeEditorItem; groupIndex?: number }",
+     "payload": "{ index: number; item: TItem; groupIndex?: number }",
      "notes": "After a row is removed."
     }
    ],

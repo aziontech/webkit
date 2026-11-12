@@ -35,19 +35,20 @@
   "Use `minItems: 1` when the form needs at least one row, so the last row keeps its fields and loses its Remove.",
   "Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.",
   "Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.",
+  "Type the rows with your own interface (`ref<Header[]>`): `value` in `cell-<key>` and `item` in every slot then carry the field types, so a `Select` or `Switch` binds `value` without `as string` / `as boolean`.",
   "Name the editor (`ariaLabel`) after what the rows are: \"Environment variables\", \"Request headers\"."
  ],
  "props": [
   {
    "name": "items",
-   "type": "AttributeEditorItem[]",
+   "type": "TItem[]",
    "default": "[]",
    "required": "false",
    "doc": "Rows in list mode. Supports v-model:items."
   },
   {
    "name": "groups",
-   "type": "AttributeEditorItem[][]",
+   "type": "TItem[][]",
    "default": "undefined",
    "required": "false",
    "doc": "Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups."
@@ -117,14 +118,14 @@
   },
   {
    "name": "newItem",
-   "type": "() => AttributeEditorItem",
+   "type": "() => TItem",
    "default": "undefined",
    "required": "false",
    "doc": "Builds a new row. Unset creates an item with an empty string per column key."
   },
   {
    "name": "itemRemovable",
-   "type": "(item: AttributeEditorItem) => boolean",
+   "type": "(item: TItem) => boolean",
    "default": "undefined",
    "required": "false",
    "doc": "Hides Remove on the rows it returns false for. Unset makes every row removable."
@@ -161,12 +162,12 @@
  "events": [
   {
    "name": "update:items",
-   "payload": "AttributeEditorItem[]",
+   "payload": "TItem[]",
    "notes": "A row was added, removed or edited in list mode."
   },
   {
    "name": "update:groups",
-   "payload": "AttributeEditorItem[][]",
+   "payload": "TItem[][]",
    "notes": "A row or group was added, removed or edited in grouped mode."
   },
   {
@@ -176,7 +177,7 @@
   },
   {
    "name": "remove",
-   "payload": "{ index: number; item: AttributeEditorItem; groupIndex?: number }",
+   "payload": "{ index: number; item: TItem; groupIndex?: number }",
    "notes": "After a row is removed."
   }
  ],

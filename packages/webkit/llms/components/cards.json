@@ -28,12 +28,13 @@
  "bestPractices": [
   "Put the item's name, as a link to the item, in the `header` slot: it also names the selection control.",
   "Keep each card to a handful of label and value pairs; let `collection-preferences` choose which.",
-  "Use `selectionMode=\"multi\"` only when a bulk action exists next to the list."
+  "Use `selectionMode=\"multi\"` only when a bulk action exists next to the list.",
+  "Pass items typed with your own interface (`Domain[]`): the slots read `item.name` with that type, so never cast `item` in a slot or widen the items to `Record<string, unknown>[]`."
  ],
  "props": [
   {
    "name": "items",
-   "type": "Record<string, unknown>[]",
+   "type": "TItem[]",
    "default": "[]",
    "required": "false",
    "doc": "The items, one card each."
@@ -78,12 +79,12 @@
  "slots": [
   {
    "name": "header",
-   "scope": "{ item: Record<string, unknown>; index: number; selected: boolean }",
+   "scope": "CardsItemSlotProps<TItem>",
    "notes": "Card title; names the card and its selection control."
   },
   {
    "name": "default",
-   "scope": "{ item: Record<string, unknown>; index: number; selected: boolean }",
+   "scope": "CardsItemSlotProps<TItem>",
    "notes": "Card body: the item's fields."
   },
   {

@@ -19,6 +19,8 @@
 - Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.
 - Set `width` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.
 - Use `placement="auto"` for triggers that can sit near a viewport edge.
+- Use a side placement (`right-start`, `left-start`, …) for a trigger in a narrow column or a sidebar, where the panel should open beside the trigger instead of covering the content below it. Type a placement held in a variable with the exported `PopoverPlacement` (or `PopoverPlacementInput` when it can be `'auto'`), never a cast.
+- Bind the open state with `v-model:open` (or `:open` + `@update:open`, whose handler receives a `boolean`).
 - Set `dismissible` to `false` only when an outside click would discard input. Then give the user a way out: `Popover.Close` or a footer action.
 
 ## Don’t
@@ -41,18 +43,12 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled. |
-| `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | false | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on available viewport space. |
+| `placement` | `PopoverPlacementInput` | `'bottom-start'` | false | Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment. |
 | `offset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
 | `width` | `'small' \| 'medium' \| 'large'` | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:open` | `boolean` | Fires on every open/closed transition; supports `v-model:open`. Emitted on trigger toggle, `Popover.Close`, `Esc`, and outside-click. |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -103,6 +99,12 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Events: _none_.
   - Slots: `default` — action buttons (e.g. Cancel / Apply).
 
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+|---|---|---|---|---|
+| `v-model:open` | `boolean \| undefined` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void`. Fires on every open/closed transition: trigger toggle, `Popover.Close`, `Esc`, and outside-click. While unbound (`undefined`) the popover is uncontrolled and starts closed. |
+
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
@@ -110,7 +112,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - `data-disabled` mirrors the `disabled` prop on root and trigger
 - Cursor: the trigger wrapper shows `pointer`, and `not-allowed` with `data-disabled`
 - `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
-- `data-placement` on the floating panel mirrors the resolved placement (`'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
+- `data-placement` on the floating panel mirrors the resolved placement (any `PopoverPlacement`; `'auto'` resolves to one of `'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
 
 ## Accessibility
 
@@ -241,6 +243,38 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       <PopoverContent>
         <PopoverHeader>
           <PopoverTitle>top-end</PopoverTitle>
+          <PopoverClose />
+        </PopoverHeader>
+        <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
+      </PopoverContent>
+    </PopoverRoot>
+
+    <PopoverRoot placement="right-start">
+      <PopoverTrigger>
+        <Button
+          kind="secondary"
+          label="right-start"
+        />
+      </PopoverTrigger>
+      <PopoverContent>
+        <PopoverHeader>
+          <PopoverTitle>right-start</PopoverTitle>
+          <PopoverClose />
+        </PopoverHeader>
+        <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
+      </PopoverContent>
+    </PopoverRoot>
+
+    <PopoverRoot placement="left-start">
+      <PopoverTrigger>
+        <Button
+          kind="secondary"
+          label="left-start"
+        />
+      </PopoverTrigger>
+      <PopoverContent>
+        <PopoverHeader>
+          <PopoverTitle>left-start</PopoverTitle>
           <PopoverClose />
         </PopoverHeader>
         <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>

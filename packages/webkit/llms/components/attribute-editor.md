@@ -19,6 +19,7 @@
 - Use `minItems: 1` when the form needs at least one row, so the last row keeps its fields and loses its Remove.
 - Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.
 - Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.
+- Type the rows with your own interface (`ref<Header[]>`): `value` in `cell-<key>` and `item` in every slot then carry the field types, so a `Select` or `Switch` binds `value` without `as string` / `as boolean`.
 - Name the editor (`ariaLabel`) after what the rows are: "Environment variables", "Request headers".
 
 ## Don’t
@@ -42,8 +43,8 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `AttributeEditorItem[]` | `[]` | false | Rows in list mode. Supports v-model:items. |
-| `groups` | `AttributeEditorItem[][]` | `undefined` | false | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups. |
+| `items` | `TItem[]` | `[]` | false | Rows in list mode. Supports v-model:items. |
+| `groups` | `TItem[][]` | `undefined` | false | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups. |
 | `definition` | `AttributeEditorColumn[]` | `[]` | false | Columns of every row: key of the item field, label, placeholder, required. |
 | `errors` | `AttributeEditorErrors` | `[]` | false | Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none. |
 | `addButtonLabel` | `string` | `''` | false | Label of the Add button. Empty uses the locale catalog. |
@@ -53,8 +54,8 @@
 | `limit` | `number` | `undefined` | false | Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced. |
 | `groupLimit` | `number` | `undefined` | false | Most groups allowed in grouped mode. |
 | `minItems` | `number` | `0` | false | Fewest rows kept; rows at the minimum lose their Remove button. |
-| `newItem` | `() => AttributeEditorItem` | `undefined` | false | Builds a new row. Unset creates an item with an empty string per column key. |
-| `itemRemovable` | `(item: AttributeEditorItem) => boolean` | `undefined` | false | Hides Remove on the rows it returns false for. Unset makes every row removable. |
+| `newItem` | `() => TItem` | `undefined` | false | Builds a new row. Unset creates an item with an empty string per column key. |
+| `itemRemovable` | `(item: TItem) => boolean` | `undefined` | false | Hides Remove on the rows it returns false for. Unset makes every row removable. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm. |
 | `disabled` | `boolean` | `false` | false | Disables every control, Add and Remove. |
 | `addDisabled` | `boolean` | `false` | false | Disables Add only, for example until the last row is filled in. |
@@ -64,10 +65,10 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:items` | `AttributeEditorItem[]` | A row was added, removed or edited in list mode. |
-| `update:groups` | `AttributeEditorItem[][]` | A row or group was added, removed or edited in grouped mode. |
+| `update:items` | `TItem[]` | A row was added, removed or edited in list mode. |
+| `update:groups` | `TItem[][]` | A row or group was added, removed or edited in grouped mode. |
 | `add` | `{ index: number; groupIndex?: number }` | After a row is added; `groupIndex` only in grouped mode. |
-| `remove` | `{ index: number; item: AttributeEditorItem; groupIndex?: number }` | After a row is removed. |
+| `remove` | `{ index: number; item: TItem; groupIndex?: number }` | After a row is removed. |
 
 ## Slots
 

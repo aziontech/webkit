@@ -23,6 +23,8 @@
   "Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.",
   "Set `width` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.",
   "Use `placement=\"auto\"` for triggers that can sit near a viewport edge.",
+  "Use a side placement (`right-start`, `left-start`, …) for a trigger in a narrow column or a sidebar, where the panel should open beside the trigger instead of covering the content below it. Type a placement held in a variable with the exported `PopoverPlacement` (or `PopoverPlacementInput` when it can be `'auto'`), never a cast.",
+  "Bind the open state with `v-model:open` (or `:open` + `@update:open`, whose handler receives a `boolean`).",
   "Set `dismissible` to `false` only when an outside click would discard input. Then give the user a way out: `Popover.Close` or a footer action."
  ]
 }

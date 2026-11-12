@@ -25,6 +25,7 @@
   "Use `minItems: 1` when the form needs at least one row, so the last row keeps its fields and loses its Remove.",
   "Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.",
   "Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.",
+  "Type the rows with your own interface (`ref<Header[]>`): `value` in `cell-<key>` and `item` in every slot then carry the field types, so a `Select` or `Switch` binds `value` without `as string` / `as boolean`.",
   "Name the editor (`ariaLabel`) after what the rows are: \"Environment variables\", \"Request headers\"."
  ]
 }
