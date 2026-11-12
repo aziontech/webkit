@@ -274,13 +274,15 @@ split view or a card these change:
   | `@lg`   | 512 px                 | 552 px      | `@6xl`  | 1152 px | 1388 px |
   | `@xl`   | 576 px                 | 644 px      | `@7xl`  | 1280 px | 1620 px |
 
-  Up to `@xl` the shift is at most 68 px. From `@2xl` up, check each use: a step that has to
+  Up to `@xl` the shift is at most 68 px, but it can still cross a phone: a 390 px phone gives a
+  padded box about 326 px wide, which is past the old `@xs` (320) and short of the new one (348),
+  so `@2xs:` is the step that keeps a row on that phone. From `@2xl` up, check each use: a step that has to
   happen inside a page column (at most 1388 px on the site, 1620 px in the console) may now never
   happen. Move it to the nearest step that still fits (`@6xl:` → `@5xl:`, `@7xl:` → `@6xl:`)
   rather than writing a raw `@min-[…]:`. Width utilities (`max-w-md`, `w-2xl`,
-  `max-w-(--container-md)`) already read the theme values and do not change. In WebKit itself the
-  wide `Diagram` layout now starts at `@5xl` and `Cards` shows four columns from `@6xl`; the
-  `get-started` steps (`platform/detail/get-started`, the Overview of
+  `max-w-(--container-md)`) already read the theme values and do not change. In WebKit itself
+  `Hero.Title` keeps its actions in a row from `@2xs`, the wide `Diagram` layout now starts at
+  `@5xl` and `Cards` shows four columns from `@6xl`; the `get-started` steps (`platform/detail/get-started`, the Overview of
   `platform/detail/details-page`) sit side by side from `@4xl` (1024 px), so a 1280 px console
   window stacks them.
 - **Stacked table (opt-in).** A data-driven `Table` keeps its horizontally scrolling grid at
