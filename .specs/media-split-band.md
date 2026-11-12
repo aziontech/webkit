@@ -7,7 +7,7 @@ spec_version: 2
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-12
-checksum: c47677f728182253289627cc7fb44116bb5d41b7f32a4bba457bb35ee58b3e85
+checksum: f2accb5bd7746d83f0f1cccd8bf7f3ea49f7f12f4af081333b07b19bafb80b22
 ---
 
 # MediaSplitBand — Component Spec
@@ -88,7 +88,7 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 - Empty: when `title` is empty the band renders nothing but its root; with no media set the media cell is omitted
 - With exactly one action the band is a link to that action's `href`; with none or two it is not a link
 - Media precedence: `scene`, `widget`, `diagram`, `image`, `illustration`. A widget, a diagram and a framed image are inset from the cell's edges (`media-split`'s `mediaPadded`); a scene, a plain image (which covers the cell) and an illustration run flush
-- A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `product-widget`)
+- A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `product-widget`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
 - Scenes, widget and diagram load on demand (`defineAsyncComponent`)
 
 ## Motion & Animations

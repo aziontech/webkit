@@ -142,6 +142,7 @@
               <ProductWidget
                 :name="band.widget"
                 :hover="hovered === index"
+                :cursor="false"
               />
             </template>
             <template

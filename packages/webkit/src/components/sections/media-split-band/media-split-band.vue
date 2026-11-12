@@ -186,6 +186,7 @@
             v-else-if="media === 'widget' && widget"
             :name="widget"
             :hover="hovered"
+            :cursor="false"
           />
           <Diagram
             v-else-if="media === 'diagram' && diagram"

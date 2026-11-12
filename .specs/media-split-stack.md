@@ -7,7 +7,7 @@ spec_version: 2
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-12
-checksum: 23dacbc249a6aaf4e8df022752aefbcc4682e3fccf7b74974bb794f4661c78c8
+checksum: e38557d13eded04e56a919191b3d4100810c9be8b620414202b52f9aecef1bf3
 ---
 
 # MediaSplitStack — Component Spec
@@ -86,7 +86,7 @@ A run of large media-split bands that pile up under the site header as the page 
 - Empty: when `bands` is empty the run renders nothing — not the header, not the stack
 - The header renders only when `title` is set; a band renders its button and its link only when it has an `action`, and its media cell only when it has a picture
 - Media precedence per band: `widget`, then `diagram`, then `illustration`, then `image`. A widget or a diagram is inset from the cell's edges (`media-split`'s `mediaPadded`), and so is a framed image; an illustration and a plain image run flush
-- A widget plays its beat while the pointer is over its band (`hover`), and shows its finished state on touch and under reduced motion (owned by `product-widget`)
+- A widget plays its beat while the pointer is over its band (`hover`), and shows its finished state on touch and under reduced motion (owned by `product-widget`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
 - Widget and diagram load on demand (`defineAsyncComponent`): a run that uses neither never downloads them
 
 ## Motion & Animations

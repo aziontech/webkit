@@ -152,6 +152,8 @@ describe('MediaSplitStack', () => {
     const diagram = await findByTestId('marketing-diagram', {}, { timeout: 5000 })
     expect(diagram.getAttribute('data-name')).toBe('load-balancer')
     expect(getByRole('img', { name: 'G2' })).toBeInTheDocument()
+    await expect.poll(() => widget.textContent).toContain('Data Source')
+    expect(widget.textContent).not.toContain('Bianca')
     const splits = Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`))
     expect(splits.map((split) => split.hasAttribute('data-media-padded'))).toEqual([
       true,

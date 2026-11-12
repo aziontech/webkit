@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { type Component, computed, markRaw, shallowRef, useAttrs, watch } from 'vue'
+  import { type Component, computed, markRaw, provide, shallowRef, useAttrs, watch } from 'vue'
 
   import type { TextureMaterialKind } from '../../marketing/texture-material/texture-material.vue'
   import type { ShellMockupFade, ShellMockupKind } from '../shell-mockup/shell-mockup.vue'
+  import { ProductWidgetInjectionKey } from './injection-key'
   import { resolveProductWidget } from './registry'
 
   defineOptions({ name: 'ProductWidget', inheritAttrs: false })
@@ -99,18 +100,20 @@
     active?: boolean
     /** Whether the pointer is over the host; a fragment plays its beat while it is. */
     hover?: boolean
-    /** How a framed widget is plated; unset keeps the widget's own plating. */
+    /** How a workload screen is plated (window or bare); fragments are always bare and ignore it, and unset keeps the widget's own plating. */
     kind?: ShellMockupKind
-    /** Draws the console bar on a framed widget; unset keeps the widget's own bar. */
+    /** Draws the console bar on a workload screen; fragments have no bar and ignore it, and unset keeps the widget's own bar. */
     chrome?: boolean
-    /** Design width of a framed widget from md up; unset keeps the widget's own width. */
+    /** Design width of a workload screen from md up; fragments keep their own width, and unset keeps the widget's own. */
     width?: number
-    /** Edge a framed widget fades out along. */
+    /** Edge a workload screen, workload-overview or application-version fades out along; fragments keep their own fade. */
     fade?: ShellMockupFade
     /** Texture a full-screen widget is grounded with. */
     texture?: TextureMaterialKind
     /** Tab a tabbed widget plays (workload-overview, application-version, functions-start); other widgets ignore it, and unset plays the first tab. */
     tab?: ProductWidgetTab
+    /** Draws the named collaborator cursor a fragment acts its beat with; turn it off for a still console picture. Widgets without a cursor ignore it. */
+    cursor?: boolean
     /** Milliseconds between revealed log lines in the deploy logs widget; unset keeps its own pace. */
     interval?: number
   }
@@ -124,6 +127,7 @@
     fade: 'none',
     texture: 'none',
     tab: undefined,
+    cursor: true,
     interval: undefined
   })
 
@@ -157,6 +161,26 @@
     )
   })
 
+  provide(ProductWidgetInjectionKey, { cursor: computed(() => props.cursor) })
+
+  function warnIgnored(name: ProductWidgetName, keys: string[]) {
+    if (!dev) return
+    const set: Record<string, boolean> = {
+      kind: props.kind !== undefined,
+      chrome: props.chrome !== undefined,
+      width: props.width !== undefined,
+      fade: props.fade !== 'none',
+      texture: props.texture !== 'none',
+      tab: props.tab !== undefined,
+      interval: props.interval !== undefined
+    }
+    const ignored = Object.keys(set).filter((key) => set[key] && !keys.includes(key))
+    if (!ignored.length) return
+    console.warn(
+      `[webkit] <ProductWidget name="${name}">: ${ignored.join(', ')} ${ignored.length > 1 ? 'have' : 'has'} no effect on this widget. Fragments are drawn bare at their own width; only the workload screens take kind, chrome, width and fade (see the product-widget spec).`
+    )
+  }
+
   watch(
     () => props.name,
     (name) => {
@@ -173,6 +197,7 @@
           if (props.name !== name) return
           declared.value = Object.keys((component as { props?: object }).props ?? {})
           widget.value = markRaw(component)
+          warnIgnored(name, declared.value)
         })
         .catch((error: unknown) => {
           if (dev) console.warn(`[webkit] <ProductWidget>: could not load "${name}".`, error)
