@@ -944,6 +944,11 @@
     "limit": "0.75 KB"
   },
   {
+    "name": "feature-list",
+    "path": "src/components/content/feature-list/feature-list.vue",
+    "limit": "1.5 KB"
+  },
+  {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
     "limit": "5.9 KB"

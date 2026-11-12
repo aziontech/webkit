@@ -258,6 +258,7 @@
     "./key-value-pairs-root": "./src/components/content/key-value-pairs/key-value-pairs.vue",
     "./key-value-pairs-item": "./src/components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue",
     "./key-value-pairs-group": "./src/components/content/key-value-pairs/key-value-pairs-group/key-value-pairs-group.vue",
+    "./feature-list": "./src/components/content/feature-list/feature-list.vue",
     "./network-map": "./src/components/content/network-map/network-map.vue",
     "./trace": "./src/components/code/trace/trace.vue",
     "./log-view": "./src/components/code/log-view/log-view.vue",

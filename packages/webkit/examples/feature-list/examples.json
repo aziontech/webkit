@@ -1,0 +1,21 @@
+{
+  "component": "feature-list",
+  "title": "Components/Primitives/Content/FeatureList",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The perks of an upgrade card: four included features, each behind a check mark, in one column.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Columns",
+      "summary": "Eight perks at `columns: 2`: two columns when the list's own box is at least the md container, one column below it.",
+      "file": "columns.vue"
+    },
+    {
+      "name": "WithDescriptions",
+      "summary": "The features of a change-plan drawer, each with a one-line description under its label.",
+      "file": "with-descriptions.vue"
+    }
+  ]
+}

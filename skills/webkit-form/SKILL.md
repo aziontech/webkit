@@ -175,6 +175,11 @@ contexts** in Azion products:
   Invoices; each card titled by a `SettingsSection`, see Approach A § _Section title_) **or as a
   single flush block** (all rows in one container, for shorter or flat settings). Used for Billing,
   Integrations, Account Settings — "define and manage personal account preferences and profile config".
+  The read-only cards beside them are components too, never a hand-written `dl` or `ul`: plan
+  facts (Plan Price, Billing Period, Next Invoice) are `KeyValuePairs kind="split"`
+  (`@aziontech/webkit/key-value-pairs`, label at the start, value at the end of each row), and
+  the perks of an upgrade card are `FeatureList` (`@aziontech/webkit/feature-list`, a check per
+  included feature, `:columns="2"` in a wide card).
 
 - **Card with independent saves.** Long configuration pages split into multiple `Card` sections
   where **each card owns its own save**, so the user commits changes in parts instead of one giant
