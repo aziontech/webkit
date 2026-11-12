@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-12
-checksum: 3002838e7f234bcad547db8e27bd72a936903b21a63b6f931168128726d6169c
+checksum: af9039737036c16b34019fc336e259949b37eed7c17bce92aa9aeec44c13cd48
 ---
 # ClientQuotes — Component Spec
 
@@ -31,6 +31,7 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 
 - Three to six items; the tabs need room for each client's mark.
 - Give each item either a registry `mark` or a `logo` URL with `clientName`, not both.
+- On azion.com the client wall is in each brand's colours, not one ink: give each client its logo file from the package, `import gpa from '@aziontech/webkit/assets/gpa-extended-color.svg'`, then `logo: gpa`. On the dark site use `-extended-color.svg` where the colour logo reads on black (GPA, Zoop, HeroSpark, Magalu) and `-extended-reversed.svg` where the colour logo has dark lettering (Axur, Contabilizei, Dafiti, Global Fashion Group as `gfg`); on a light page use `-extended-color.svg`. A registry `mark` (one ink, follows the theme) is for a client that ships no logo file. `catalog.json` lists every file under `imports` with `"kind": "asset"`.
 - Every item needs its quotation (`text`): a card is a tab that features it, and an item without one is skipped. Do not invent a quotation to fill the wall; list the clients you have quotes for, or use `logo-wall-quote` for one quotation beside a logo wall.
 - The band advances on a timer like azion.com's. Set `:autoplay="false"` when the page must hold one quote (a still capture, a page with other moving content), and bind `v-model` (the selected index) to open on a quote other than the first; never wrap or re-time the band yourself.
 
@@ -39,14 +40,16 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 ```vue
 <script setup>
 import ClientQuotes from '@aziontech/webkit/client-quotes'
+import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+import magalu from '@aziontech/webkit/assets/magalu-extended-color.svg'
 </script>
 
 <template>
   <ClientQuotes
     aria-label="Client stories"
     :items="[
-      { mark: 'dafiti', clientName: 'Dafiti', text: 'One of the best CDN and WAF solutions I have ever used.', name: 'Julian H', jobTitle: 'IT OPS, SRE & SEC Manager at Dafiti Group' },
-      { logo: '/logos/magalu.svg', clientName: 'Magalu', text: 'Azion shielded us from sophisticated cyberattacks.', name: 'Allan Monteiro', jobTitle: 'CISO at Magalu' }
+      { logo: axur, clientName: 'Axur', text: 'With Azion, we scale proprietary AI models without managing infrastructure.', name: 'Fabio Ramos', jobTitle: 'CEO at Axur' },
+      { logo: magalu, clientName: 'Magalu', text: 'Azion shielded us from sophisticated cyberattacks.', name: 'Allan Monteiro', jobTitle: 'CISO at Magalu' }
     ]"
     :primary-action="{ label: 'See customer stories', href: '/success-cases', trailing: true }"
   />

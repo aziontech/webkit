@@ -2,20 +2,24 @@
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import ClientQuotes from '@aziontech/webkit/client-quotes'
+  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+  import contabilizeiExtendedReversed from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
+  import dafitiExtendedReversed from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
   import herosparkExtendedColor from '@aziontech/webkit/assets/herospark-extended-color.svg'
   import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
   import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
 
   const items = [
     {
-      mark: 'dafiti',
+      logo: dafitiExtendedReversed,
       clientName: 'Dafiti',
       text: "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers.",
       name: 'Julian H',
       jobTitle: 'IT OPS, SRE & SEC Manager at Dafiti Group'
     },
     {
-      mark: 'axur',
+      logo: axurExtendedReversed,
+      clientName: 'Axur',
       text: 'With Azion, we scale proprietary AI models without managing infrastructure—inspecting millions of websites daily and automating the market’s fastest threat takedown.',
       name: 'Fabio Ramos',
       jobTitle: 'CEO at Axur'
@@ -42,7 +46,8 @@
       jobTitle: 'Information Security Manager at Zoop'
     },
     {
-      mark: 'contabilizei',
+      logo: contabilizeiExtendedReversed,
+      clientName: 'Contabilizei',
       text: 'With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed.',
       name: 'Fabrício Santos',
       jobTitle: 'DevSecOps Manager at Contabilizei'

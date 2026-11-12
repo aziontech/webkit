@@ -189,7 +189,11 @@ Logos, compliance badges and illustrations ship in the package: import the file 
 (`import magalu from '@aziontech/webkit/assets/magalu-extended-color.svg'`, then
 `logo: magalu`). Names follow `<brand>-<extended|symbol>-<color|mono|reversed>` (`extended` is the
 wordmark, `symbol` the mark; `color` for light surfaces, `reversed` for dark ones, `mono` in one
-ink); `catalog.json` lists every file under `imports` with `"kind": "asset"`. Photos, covers,
+ink); `catalog.json` lists every file under `imports` with `"kind": "asset"`. A client wall
+(`ClientQuotes`, `LogoWall`) on the dark site shows each brand in colour: `-extended-color` where it
+reads on black (GPA, Zoop, HeroSpark, Magalu), `-extended-reversed` where the colour logo has dark
+lettering (Axur, Contabilizei, Dafiti, `gfg`); a one-ink registry `mark` only for a client with no
+logo file. Photos, covers,
 banners and clips are your content: pass URLs your app serves, or
 `@aziontech/webkit/assets/placeholder-image.svg` / `placeholder-clip.webm` until you have them.
 Never copy a root-relative `/marketing-components/…` or `/media/…` URL from azion.com or the docs

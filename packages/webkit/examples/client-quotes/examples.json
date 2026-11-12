@@ -16,7 +16,7 @@
   "site": [
     {
       "name": "Default",
-      "summary": "The Retail page row, led by Dafiti. Magalu, HeroSpark and Zoop use their colour logo files; Dafiti, Axur and Contabilizei use a registered mark drawn in the theme ink.",
+      "summary": "The Retail page row, led by Dafiti, with every client's logo file as on azion.com: Magalu, HeroSpark and Zoop in colour (`-extended-color.svg`), Dafiti, Axur and Contabilizei in their reversed files (`-extended-reversed.svg`), whose colour versions have dark lettering that would vanish on the dark site.",
       "file": "site-default.vue",
       "json": "site-default.json"
     }
