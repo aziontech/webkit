@@ -8,8 +8,11 @@ import {
   ENTRY_CANDIDATES,
   ESLINT_CONFIG_CANDIDATES,
   firstExisting,
+  gitState,
+  LEGACY_HUSKY_HOOK_MARKER,
   MCP_SERVER_NAME,
   POSTCSS_CONFIG_CANDIDATES,
+  rawColourStylesheets,
   read,
   STYLELINT_CONFIG_CANDIDATES
 } from './plan.js'
@@ -160,13 +163,66 @@ export function planDoctor(projectDir) {
 
   const hook = read(join(projectDir, '.husky/pre-commit'))
   const hasHook = Boolean(hook && /stylelint/.test(hook))
+  const legacyHook = Boolean(hook && hook.includes(LEGACY_HUSKY_HOOK_MARKER))
   add(
     'pre-commit hook',
-    hasHook ? 'ok' : 'warn',
-    hasHook
-      ? '.husky/pre-commit lints on commit'
-      : 'no .husky/pre-commit lint block — commits are not linted locally.'
+    hasHook && !legacyHook ? 'ok' : 'warn',
+    !hasHook
+      ? 'no .husky/pre-commit lint block — commits are not linted locally.'
+      : legacyHook
+        ? '.husky/pre-commit lints the whole tree, build output included (`npx stylelint "**/*…"`), so the first commit after a build fails on compiled CSS — re-run `npx @aziontech/webkit init` to lint `src/` only.'
+        : '.husky/pre-commit lints on commit'
   )
+
+  if (hasHook) {
+    const git = gitState(projectDir)
+    add(
+      'git hooks',
+      git.huskyActive ? 'ok' : 'warn',
+      !git.available
+        ? 'git was not found — the pre-commit hook cannot run.'
+        : !git.repo
+          ? 'not a git repository — the pre-commit hook cannot run. After `git init`, run `npx husky` once to activate it.'
+          : git.huskyActive
+            ? `core.hooksPath = ${git.hooksPath}`
+            : `the pre-commit hook is not active (core.hooksPath is ${git.hooksPath ? `"${git.hooksPath}"` : 'unset'}) — run \`npx husky\` once (husky skips activation when the install runs before \`git init\`).`
+    )
+  }
+
+  const eslintText = eslintCfg ? read(join(projectDir, eslintCfg)) || '' : ''
+  const stylelintIgnore = read(join(projectDir, '.stylelintignore')) || ''
+  const stylelintText = stylelintCfg ? read(join(projectDir, stylelintCfg)) || '' : ''
+  const ignoresDist = (text) => /(^|[\s'"/*])dist(\/|['"\s]|$)/m.test(text)
+  const eslintIgnores = ignoresDist(eslintText)
+  const stylelintIgnores =
+    ignoresDist(stylelintIgnore) || /ignoreFiles[\s\S]*dist/.test(stylelintText)
+  add(
+    'build output ignored',
+    eslintIgnores && stylelintIgnores ? 'ok' : 'warn',
+    eslintIgnores && stylelintIgnores
+      ? 'eslint and stylelint skip dist/'
+      : [
+          ...(eslintIgnores
+            ? []
+            : [
+                `${eslintCfg || 'the eslint config'} does not ignore dist/ — add \`{ ignores: ['**/dist/'] }\` first in the config, or lint reports the compiled bundle.`
+              ]),
+          ...(stylelintIgnores
+            ? []
+            : [
+                'stylelint does not ignore dist/ — add `dist/` to .stylelintignore, or it lints the compiled CSS (hundreds of errors).'
+              ])
+        ].join('\n')
+  )
+
+  const rawStylesheets = rawColourStylesheets(projectDir)
+  if (rawStylesheets.length) {
+    add(
+      'raw colours in styles',
+      'warn',
+      `${rawStylesheets.join(', ')} — hex/rgb/hsl values that the webkit stylelint rejects, so the pre-commit hook fails. Use theme tokens, or delete a starter template's stylesheet and its import.`
+    )
+  }
 
   const entry = firstExisting(projectDir, ENTRY_CANDIDATES)
   if (entry) {
@@ -227,8 +283,7 @@ export function planDoctor(projectDir) {
       : "src/webkit.css does not `@import '@aziontech/theme'` — no design tokens, so every component renders unstyled. Run `npx @aziontech/webkit init`."
   )
 
-  const eslintSrc = eslintCfg ? read(join(projectDir, eslintCfg)) || '' : ''
-  const plugged = /@aziontech\/webkit\/eslint-plugin/.test(eslintSrc)
+  const plugged = /@aziontech\/webkit\/eslint-plugin/.test(eslintText)
   add(
     'lint plugin',
     plugged ? 'ok' : 'fail',

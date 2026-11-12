@@ -344,6 +344,9 @@ function printPlan(plan) {
       case 'report':
         process.stdout.write(`PLAN   report ${action.state}: .claude/${action.rel}\n`)
         break
+      case 'activate-hooks':
+        process.stdout.write('PLAN   activate git hooks (npx husky)\n')
+        break
       default:
         process.stdout.write(`PLAN   ${action.type} ${action.path || ''}\n`)
     }

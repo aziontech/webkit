@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -350,44 +350,52 @@ Canonical pattern:
           <DialogClose />
         </PanelHeader>
 
-        <!-- compact modal body: --spacing-md between blocks -->
-        <PanelContent class="flex flex-col gap-(--spacing-md)">
-          <Alert
-            severity="warning"
-            label="Once confirmed, this action can't be reversed."
-          />
-          <p class="m-0 text-body-sm text-(--text-muted)">
-            The selected Application will be deleted, along with all associated settings or
-            instances.
-          </p>
-          <label
-            for="confirm-delete"
-            class="text-body-sm text-(--text-default)"
-          >
-            To confirm, type "{{ phrase }}" in the box below:
-          </label>
-          <Input
-            id="confirm-delete"
-            v-model="confirmation"
-            autocomplete="off"
-            class="w-full"
-          />
+        <!-- compact modal body: --spacing-md between blocks, on your own wrapper -->
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <Alert
+              severity="warning"
+              label="Once confirmed, this action can't be reversed."
+            />
+            <p class="m-0 text-body-sm text-(--text-muted)">
+              The selected Application will be deleted, along with all associated settings or
+              instances.
+            </p>
+            <label
+              for="confirm-delete"
+              class="text-body-sm text-(--text-default)"
+            >
+              To confirm, type "{{ phrase }}" in the box below:
+            </label>
+            <Input
+              id="confirm-delete"
+              v-model="confirmation"
+              autocomplete="off"
+              class="w-full"
+            />
+          </div>
         </PanelContent>
 
-        <PanelFooter class="flex-col md:flex-row md:justify-end">
-          <Button
-            class="w-full md:w-auto"
-            label="Cancel"
-            kind="outlined"
-            @click="open = false"
-          />
-          <Button
-            class="w-full md:w-auto"
-            label="Delete"
-            kind="danger"
-            :disabled="!canDelete"
-            @click="remove"
-          />
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                label="Cancel"
+                kind="outlined"
+                @click="open = false"
+              />
+            </div>
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                label="Delete"
+                kind="danger"
+                :disabled="!canDelete"
+                @click="remove"
+              />
+            </div>
+          </div>
         </PanelFooter>
       </DialogContent>
     </DialogPortal>
