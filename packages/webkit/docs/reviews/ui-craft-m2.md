@@ -488,4 +488,4 @@ Reviewed from the styled visual suite (docs pages at 1440 and 390, light and dar
 - `CopyPromptButton`: dark in both themes through `data-theme="dark"` on the chip, framed by the page's `--border-default` so it reads on the light canvas as in the reference; accent hairlines top and bottom stand in for the reference glow. Label swap to `Copied` keeps the width (both labels share one grid cell).
 - `DocAgentCard`: (fixed) the halftone first covered the whole aside, behind the question; it now fades in from the bottom corner (`fade="top"`, ramp toward the bottom end). No overline or eyebrow, as in the reference.
 - Landing: (fixed) sections stacked their own `gap` on top of `DocProse`'s paragraph and block spacing, so heading → lead → card ran ~55 px against ~40 px in the reference; the gap is gone and prose spacing alone sets the rhythm.
-- Open: the folded `SearchTrigger` has no visual tooltip (M2.10 row 54).
+- Open: the folded `SearchTrigger` has no visual tooltip (M2.10 row 55).

@@ -7,7 +7,7 @@ export const codeSintax = {
     'code-sintax-keyword': tokenRef('primitives.blue.700'),
     'code-sintax-punctuation': tokenRef('primitives.gray.650'),
     'code-sintax-comment': tokenRef('primitives.gray.650'),
-    'code-sintax-function': tokenRef('brand.primary.primary-800'),
+    'code-sintax-function': tokenRef('brand.primary.primary-700'),
     'code-sintax-type': tokenRef('primitives.yellow.800'),
     'code-sintax-string': tokenRef('primitives.blue.700')
   },
@@ -17,7 +17,7 @@ export const codeSintax = {
     'code-sintax-keyword': tokenRef('primitives.blue.300'),
     'code-sintax-punctuation': tokenRef('primitives.gray.400'),
     'code-sintax-comment': tokenRef('primitives.gray.400'),
-    'code-sintax-function': tokenRef('brand.primary.primary-400'),
+    'code-sintax-function': tokenRef('brand.primary.primary-500'),
     'code-sintax-type': tokenRef('primitives.yellow.300'),
     'code-sintax-string': tokenRef('primitives.blue.300')
   }

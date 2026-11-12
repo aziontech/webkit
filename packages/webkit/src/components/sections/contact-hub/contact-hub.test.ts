@@ -135,6 +135,26 @@ describe('ContactHub', () => {
     ).toEqual(channels.map((channel) => channel.title))
   })
 
+  it.each([
+    [1, '1'],
+    [2, '2'],
+    [3, '3'],
+    [4, '2'],
+    [5, '3']
+  ])('splits %i channels into rows of %s, leaving no empty cell', (count, perRow) => {
+    const many = Array.from({ length: count }, (_, i) => ({
+      ...channels[0],
+      title: `Channel ${i}`
+    }))
+    const { getAllByTestId } = band({ channels: many })
+    const grids = getAllByTestId('marketing-card-grid')
+    const grid = grids[grids.length - 1]
+
+    expect(grid).toHaveAttribute('data-layout', 'balanced')
+    expect(grid).toHaveAttribute('data-count', String(count))
+    expect(grid?.style.getPropertyValue('--card-grid-cols-lg')).toBe(perRow)
+  })
+
   it('has no a11y violations', async () => {
     const { container } = band()
 

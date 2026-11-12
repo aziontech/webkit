@@ -82,7 +82,8 @@
       label: 'Shell',
       value: 'shell',
       language: 'bash',
-      code: 'curl -I https://<your-azion-domain>\n# HTTP/2 200'
+      code: 'curl -I https://<your-azion-domain>',
+      output: 'HTTP/2 200'
     }
   ]
   const installTabs = [

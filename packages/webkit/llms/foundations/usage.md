@@ -147,6 +147,20 @@ import { defineAsyncComponent } from 'vue'
 const Dialog = defineAsyncComponent(() => import('@aziontech/webkit/dialog'))
 ```
 
+### Docs pages: code samples and diagrams
+
+- A code sample is `DocCodeGroup`. Set `language` on every sample; the block shows a label header
+  with its readable name (Shell, JavaScript, JSON) by default.
+- A **command** block holds only what the reader runs; its copy control copies exactly that (a
+  leading `$ ` prompt is drawn but not copied). What the command prints goes in the sample's
+  `output` field, drawn as a separate muted "Output" block with no copy control, or in prose. Never
+  write output into the command as `# HTTP/2 200` (lint `webkit/no-output-in-command`, rule
+  `webkit-code-samples`).
+- A standalone printout (a deploy log) is `<DocCodeGroup kind="output" …>`, not a "Text" sample.
+- A flow diagram in a docs column is `Diagram` with one `row`: in the docs column it stacks, the
+  nodes are centred, connectors run through the centre of each node and an edge label sits on its
+  line. Do not offset nodes or labels to fake that.
+
 ### Large data and server rendering
 
 - Pass the whole list: `Select`, `MultiSelect`, `LogView` and `CodeBlock` mount long lists (over 300 rows) in chunks as they scroll into view, and `Tree` renders collapsed children only when expanded. Do not page or slice the data yourself to make them fast.

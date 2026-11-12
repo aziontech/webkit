@@ -42,6 +42,11 @@ const containerNeedsWidth = (await import('../../src/eslint-plugin/rules/contain
   .default
 const headerSearchTrigger = (await import('../../src/eslint-plugin/rules/header-search-trigger.js'))
   .default
+const noWrappedPageChrome = (
+  await import('../../src/eslint-plugin/rules/no-wrapped-page-chrome.js')
+).default
+const noOutputInCommand = (await import('../../src/eslint-plugin/rules/no-output-in-command.js'))
+  .default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -399,6 +404,50 @@ test('no-physical-direction (template + script + fix)', () => {
         output: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-s-md', { 'me-1': true })</script><template><i :class="c" /></template>`,
         filename: 'g.vue',
         errors: [{ messageId: 'physical' }, { messageId: 'physical' }]
+      }
+    ]
+  })
+})
+
+test('no-wrapped-page-chrome', () => {
+  const sfc = (template, from = '@aziontech/webkit/site-footer', name = 'SiteFooter') =>
+    `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
+  vue.run('no-wrapped-page-chrome', noWrappedPageChrome, {
+    valid: [
+      { code: sfc('<div class="flex flex-col"><main /><SiteFooter /></div>'), filename: 'a.vue' },
+      {
+        code: sfc(
+          '<div class="sticky top-0 z-40"><SiteNav /></div>',
+          '@aziontech/webkit/site-nav',
+          'SiteNav'
+        ),
+        filename: 'b.vue'
+      },
+      {
+        code: '<template><div class="border-t"><SiteFooter /></div></template>',
+        filename: 'c.vue'
+      },
+      { code: sfc('<div class="border-t"><Footer /></div>'), filename: 'd.vue' }
+    ],
+    invalid: [
+      {
+        code: sfc('<div class="w-full border-t border-(--border-default)"><SiteFooter /></div>'),
+        filename: 'e.vue',
+        errors: [{ messageId: 'wrapped' }]
+      },
+      {
+        code: sfc('<div class="md:py-8"><site-footer /></div>'),
+        filename: 'f.vue',
+        errors: [{ messageId: 'wrapped' }]
+      },
+      {
+        code: sfc(
+          '<header class="border-b"><SiteNav /></header>',
+          '@aziontech/webkit/site-nav',
+          'SiteNav'
+        ),
+        filename: 'g.vue',
+        errors: [{ messageId: 'wrapped' }]
       }
     ]
   })
@@ -766,6 +815,14 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         errors: [{ messageId: 'slot-without-defineslots' }]
       },
       {
+        code: sfc(
+          "import { computed, useSlots } from 'vue'; defineSlots<{ /** Aside. */ aside(): unknown }>(); const slots = useSlots(); const hasAside = computed(() => Boolean(slots.aside))",
+          '<div><slot name="aside" /></div>'
+        ),
+        filename: 'h.vue',
+        errors: [{ messageId: 'computed-slot-presence' }]
+      },
+      {
         code: sfc('const a = 1 // explains a', '<div><!-- explains the div --></div>'),
         filename: 'f.vue',
         errors: [{ messageId: 'prose-comment' }, { messageId: 'prose-comment' }]
@@ -865,4 +922,52 @@ test('layout class families: shared constant used by the rule and the MCP', asyn
     assert.equal(isLayoutClass(bad), false, bad)
   }
   assert.deepEqual(nonLayoutClasses('w-full  mt-2 self-start text-red'), ['mt-2', 'text-red'])
+})
+
+test('no-output-in-command', () => {
+  const sample = (code, language = 'bash') =>
+    `const samples = [{ label: 'Shell', language: '${language}', code: ${JSON.stringify(code)} }]`
+  js.run('no-output-in-command', noOutputInCommand, {
+    valid: [
+      sample('curl -I https://example.com'),
+      sample('# Install the CLI\ncurl -fsSL https://cli.azion.app/install.sh | bash'),
+      sample('# Install\nnpm install\n# Build\nnpm run build'),
+      sample('#!/bin/sh\nazion deploy'),
+      sample('$ azion login\n$ azion deploy'),
+      sample('$ azion deploy \\\n  --local'),
+      sample('curl -I https://example.com\n# HTTP/2 200', 'text'),
+      'const tab = { language: "bash", code: someCode }'
+    ],
+    invalid: [
+      {
+        code: sample('curl -I https://<your-azion-domain>\n# HTTP/2 200'),
+        errors: [{ messageId: 'output' }]
+      },
+      { code: sample('azion version\n# Azion CLI 4.23.0'), errors: [{ messageId: 'output' }] },
+      {
+        code: sample('azion deploy\n# => https://my-site.azion.app'),
+        errors: [{ messageId: 'output' }]
+      },
+      { code: sample('$ azion version\nAzion CLI 4.23.0'), errors: [{ messageId: 'output' }] },
+      {
+        code: 'const t = { lang: `sh`, code: `npm test\n# returns 0` }',
+        errors: [{ messageId: 'output' }]
+      }
+    ]
+  })
+  vue.run('no-output-in-command', noOutputInCommand, {
+    valid: [
+      {
+        code: `<template><DocCodeGroup :samples="[{ language: 'bash', code: 'curl -I https://x', output: 'HTTP/2 200' }]" /></template>`,
+        filename: 'a.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: `<template><DocCodeGroup :samples="[{ language: 'bash', code: 'curl -I https://x\\n# HTTP/2 200' }]" /></template>`,
+        filename: 'b.vue',
+        errors: [{ messageId: 'output' }]
+      }
+    ]
+  })
 })

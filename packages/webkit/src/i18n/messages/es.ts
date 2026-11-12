@@ -216,7 +216,8 @@ export const es: Messages = {
     removeNamed: 'Quitar {label}'
   },
   codeBlock: {
-    copy: 'Copiar código'
+    copy: 'Copiar código',
+    output: 'Salida'
   },
   codeEditor: {
     label: 'Editor de código',

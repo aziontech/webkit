@@ -46,7 +46,7 @@
 
   const attrs = useAttrs()
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'marketing-section-module')
-  const hasHeader = computed(() => Boolean(slots.header || props.title))
+  const hasHeader = () => Boolean(slots.header || props.title)
 </script>
 
 <template>
@@ -59,7 +59,7 @@
     class="w-full data-[divided]:border-t data-[divided]:border-(--border-default)"
   >
     <slot
-      v-if="hasHeader"
+      v-if="hasHeader()"
       name="header"
     >
       <SectionTitle

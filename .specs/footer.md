@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: a5621e6a936788e2faabd58c11bc7a2d22e05f473fb76d4887b769dab2a31651
+checksum: db1b8c9dfe84b350cbd64d4577b03ac282a4f9cbd86130cb508412a6643a1ffd
 created: 2026-08-10
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Footer — Component Spec
@@ -144,10 +144,11 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 
 ## Props
 
-| Prop        | Type                  | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                        |
-| ----------- | --------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ariaLabel` | `string`              | `''`        | false    | Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`).                                                                                                                                                                                                                                                                                      |
-| `kind`      | `'content' \| 'site'` | `'content'` | false    | Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. |
+| Prop        | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                        |
+| ----------- | ----------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel` | `string`                | `''`        | false    | Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`).                                                                                                                                                                                                                                                                                      |
+| `signature` | `'always' \| 'compact'` | `'always'`  | false    | Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same.                                                                                                                         |
+| `kind`      | `'content' \| 'site'`   | `'content'` | false    | Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. |
 
 ## Events
 
@@ -172,6 +173,8 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 
 - Visual states: `default` on the shell and columns; `default`, `hover`, `focus-visible`, `active`, `visited` on `footer-link`.
 - Placement: `data-kind="content" | "site"` on the root (from `kind`); the bands read it through `group-data-[kind=site]:` for the cap and the bottom rule, the column `FrameBox` draws its side rules and corner marks only in `site`, and the gutters render only in `site`.
+- Signature placement: `data-signature="always" | "compact"` on the root (from `signature`); in `compact` the signature band carries `group-data-[signature=compact]:lg:hidden`.
+- Each band renders exactly when its slot renders, read at render time rather than cached: a slot behind a `v-if` that turns off — or a slot the server rendered and the client does not — takes its band with it, so no empty bordered band is ever left under the bottom bar.
 - No `data-state`; the shell has no interactive states — slotted children own their own.
 
 ## Motion & Animations
