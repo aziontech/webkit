@@ -1053,6 +1053,9 @@ creation date, an e-mail that only support can change — is **read-only**, not 
 - `readonly` keeps the value in `var(--text-default)`, focusable and copyable. The `Input` stays the
   **same filled field** (surface, solid border) and only drops the hover border, as the design
   sample draws it; never restyle it (dashed border, transparent fill) to make it look different.
+- **A long value takes `Textarea readonly`**, which draws the same filled field as `Input` (a
+  certificate, a generated policy, a description only an admin can change; `Textarea` example
+  ReadOnly). Never a `<pre>` or a styled block in its place.
 - Say **why** in the helper text (who owns the value, and how to change it if that is possible): the
   description, not the chrome, tells the user the value is fixed.
 - **Code-like values take `monospace`**: a CLI command, an ID, a token, a hash, a path. A command the
@@ -1181,8 +1184,8 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 - [ ] Native hints on the `<input>`: `type`, `autocomplete` + `name`, `spellcheck="false"` on
       e-mails, slugs and codes; paste is never blocked; a failed submit focuses the first field in
       error; submit is never pre-disabled.
-- [ ] A value the user cannot change is `readonly` (the filled field, with a helper saying why), never
-      `disabled` and never an editable field the save ignores.
+- [ ] A value the user cannot change is `readonly` on its `Input` or `Textarea` (the filled field,
+      with a helper saying why), never `disabled` and never an editable field the save ignores.
 - [ ] Leaving the page with unsaved edits asks first (or the edits survive the navigation).
 - [ ] `<form novalidate @submit.prevent>`; Enter submits; the scope locks off one flag
       (`<fieldset :disabled>` **and** `:disabled` on every control + Save `:loading`, per `/webkit-ui-states`
