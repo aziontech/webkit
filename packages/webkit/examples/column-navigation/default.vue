@@ -1,7 +1,7 @@
 <script setup>
-  import ColumnNavigation from '@aziontech/webkit/column-navigation'
   import ColumnNavigationColumn from '@aziontech/webkit/column-navigation-column'
   import ColumnNavigationItem from '@aziontech/webkit/column-navigation-item'
+  import ColumnNavigation from '@aziontech/webkit/column-navigation-root'
 </script>
 
 <template>

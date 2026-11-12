@@ -1,5 +1,5 @@
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid'
+  import CardGrid from '@aziontech/webkit/card-grid-root'
   import Illustration from '@aziontech/webkit/illustration'
   import MediaTile from '@aziontech/webkit/media-tile'
 </script>

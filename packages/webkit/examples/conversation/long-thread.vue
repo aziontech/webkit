@@ -1,5 +1,5 @@
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
+  import ChatMessage from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
 
   const questions = [

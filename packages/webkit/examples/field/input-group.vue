@@ -1,7 +1,7 @@
 <script setup>
-  import { ref } from 'vue'
   import Field from '@aziontech/webkit/field'
   import InputGroup from '@aziontech/webkit/input-group'
+  import { ref } from 'vue'
 
   const domain = ref('')
 </script>

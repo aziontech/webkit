@@ -1,6 +1,6 @@
 <script setup>
-  import ChartCard from '@aziontech/webkit/chart-card'
   import Chart from '@aziontech/webkit/chart'
+  import ChartCard from '@aziontech/webkit/chart-card'
   import { ref } from 'vue'
 
   const labels = [

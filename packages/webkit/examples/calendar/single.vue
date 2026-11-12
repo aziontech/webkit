@@ -1,7 +1,6 @@
 <script setup>
+  import Calendar from '@aziontech/webkit/calendar-root'
   import { ref } from 'vue'
-
-  import Calendar from '@aziontech/webkit/calendar'
 
   const date = ref(null)
 </script>

@@ -1,6 +1,6 @@
 <script setup>
-  import DonutChart from '@aziontech/webkit/donut-chart'
   import Button from '@aziontech/webkit/button'
+  import DonutChart from '@aziontech/webkit/donut-chart'
 
   const series = [
     {

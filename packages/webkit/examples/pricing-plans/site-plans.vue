@@ -1,7 +1,7 @@
 <script setup>
+  import PricingPlans from '@aziontech/webkit/pricing-plans'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import PricingPlans from '@aziontech/webkit/pricing-plans'
 
   const periods = [
     {

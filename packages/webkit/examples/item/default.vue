@@ -1,6 +1,6 @@
 <script setup>
-  import Item from '@aziontech/webkit/item'
   import Button from '@aziontech/webkit/button'
+  import Item from '@aziontech/webkit/item'
 </script>
 
 <template>

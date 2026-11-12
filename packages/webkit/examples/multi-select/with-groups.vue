@@ -1,9 +1,9 @@
 <script setup>
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
   import MultiSelectGroup from '@aziontech/webkit/multi-select-group'
   import MultiSelectOption from '@aziontech/webkit/multi-select-option'
+  import MultiSelect from '@aziontech/webkit/multi-select-root'
+  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import { ref } from 'vue'
 
   const value = ref([])

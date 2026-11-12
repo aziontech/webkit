@@ -1,7 +1,6 @@
 <script setup>
-  import ChartCard from '@aziontech/webkit/chart-card'
   import Chart from '@aziontech/webkit/chart'
-  import Hint from '@aziontech/webkit/hint'
+  import ChartCard from '@aziontech/webkit/chart-card'
 
   const labels = [
     '13:05',

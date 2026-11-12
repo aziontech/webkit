@@ -1,6 +1,6 @@
 <script setup>
-  import DocFrame from '@aziontech/webkit/doc-frame'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+  import DocFrame from '@aziontech/webkit/doc-frame'
 </script>
 
 <template>

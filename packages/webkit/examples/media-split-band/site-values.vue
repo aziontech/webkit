@@ -1,7 +1,7 @@
 <script setup>
+  import MediaSplitBand from '@aziontech/webkit/media-split-band'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import MediaSplitBand from '@aziontech/webkit/media-split-band'
 
   const scene = {
     component: 'BrandGlobeScene'

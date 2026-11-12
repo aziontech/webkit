@@ -1,6 +1,6 @@
 <script setup>
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import Link from '@aziontech/webkit/link'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>

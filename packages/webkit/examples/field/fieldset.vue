@@ -1,13 +1,18 @@
 <script setup>
-  import { ref } from 'vue'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import RadioButton from '@aziontech/webkit/radio-button'
   import Select from '@aziontech/webkit/select'
+  import { ref } from 'vue'
 
   const region = ref('sa-east')
   const plan = ref('pro')
   const name = ref('')
+  const plans = [
+    { value: 'free', label: 'Free' },
+    { value: 'pro', label: 'Pro' },
+    { value: 'business', label: 'Business' }
+  ]
 </script>
 
 <template>
@@ -38,16 +43,16 @@
       <Field.Set>
         <Field.Legend kind="label">Plan</Field.Legend>
         <Field
-          v-for="option in ['free', 'pro', 'business']"
-          :key="option"
+          v-for="option in plans"
+          :key="option.value"
           orientation="horizontal"
         >
           <RadioButton
             v-model="plan"
-            :value="option"
+            :value="option.value"
             name="plan"
           />
-          <Field.Label class="capitalize">{{ option }}</Field.Label>
+          <Field.Label>{{ option.label }}</Field.Label>
         </Field>
       </Field.Set>
     </Field.Group>

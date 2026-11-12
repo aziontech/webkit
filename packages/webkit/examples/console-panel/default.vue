@@ -1,6 +1,6 @@
 <script setup>
   import ConsolePanel from '@aziontech/webkit/console-panel'
-  import ShellMockup from '@aziontech/webkit/shell-mockup'
+  import ShellMockup from '@aziontech/webkit/shell-mockup-root'
   import Tag from '@aziontech/webkit/tag'
 
   const tabs = [

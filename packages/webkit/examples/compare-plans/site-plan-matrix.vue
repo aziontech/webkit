@@ -1,7 +1,7 @@
 <script setup>
+  import ComparePlans from '@aziontech/webkit/compare-plans'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import ComparePlans from '@aziontech/webkit/compare-plans'
 
   const plans = [
     {

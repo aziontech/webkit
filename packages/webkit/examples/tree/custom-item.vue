@@ -1,7 +1,7 @@
 <script setup>
-  import Tree from '@aziontech/webkit/tree'
-  import Tag from '@aziontech/webkit/tag'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Tag from '@aziontech/webkit/tag'
+  import Tree from '@aziontech/webkit/tree'
   import { ref } from 'vue'
 
   const items = [

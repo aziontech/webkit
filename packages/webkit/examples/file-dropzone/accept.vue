@@ -1,7 +1,6 @@
 <script setup>
-  import { ref } from 'vue'
-
   import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import { ref } from 'vue'
 
   const accepted = ref([])
   const rejected = ref([])

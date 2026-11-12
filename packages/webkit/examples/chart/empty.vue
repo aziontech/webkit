@@ -1,6 +1,6 @@
 <script setup>
-  import Chart from '@aziontech/webkit/chart'
   import Button from '@aziontech/webkit/button'
+  import Chart from '@aziontech/webkit/chart'
 
   const labels = [
     '13:05',

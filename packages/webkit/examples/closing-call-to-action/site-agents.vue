@@ -1,7 +1,7 @@
 <script setup>
+  import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'
 
   const typedWords = ['Console', 'CLI', 'MCP server']
 

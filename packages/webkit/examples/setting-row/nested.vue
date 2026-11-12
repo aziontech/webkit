@@ -68,6 +68,7 @@
           />
         </SettingRow>
         <SettingRow
+          key="setting-row-2"
           v-if="form.useHttps"
           title="Minimum TLS version"
           description="Clients negotiating below this version are refused."
@@ -95,6 +96,7 @@
           </Select>
         </SettingRow>
         <SettingRow
+          key="setting-row-3"
           v-if="form.useHttps"
           title="HTTP/3 support"
           description="Serve HTTP/3 over QUIC. It runs on top of HTTPS."
@@ -107,6 +109,7 @@
           />
         </SettingRow>
         <SettingRow
+          key="setting-row-4"
           v-if="form.useHttps && form.useHttp3"
           title="HTTP/3 ports"
           description="One port per line. 443 is the default."

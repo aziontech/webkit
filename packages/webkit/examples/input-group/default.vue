@@ -1,7 +1,5 @@
 <script setup>
-  import InputGroup from '@aziontech/webkit/input-group'
-  import Button from '@aziontech/webkit/button'
-  import Select from '@aziontech/webkit/select'
+  import InputGroup from '@aziontech/webkit/input-group-root'
 </script>
 
 <template>

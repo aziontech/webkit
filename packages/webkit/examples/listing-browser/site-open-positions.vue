@@ -1,7 +1,7 @@
 <script setup>
+  import ListingBrowser from '@aziontech/webkit/listing-browser'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import ListingBrowser from '@aziontech/webkit/listing-browser'
 
   const columns = [
     {

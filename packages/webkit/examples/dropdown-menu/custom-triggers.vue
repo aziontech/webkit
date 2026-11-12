@@ -1,10 +1,9 @@
 <script setup>
-  import DropdownMenu, {
-    DropdownMenuGroup,
-    DropdownMenuOption,
-    DropdownMenuTrigger
-  } from '@aziontech/webkit/dropdown-menu'
   import Avatar from '@aziontech/webkit/avatar'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
 </script>
 
@@ -35,11 +34,12 @@
 
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar
-          label="IB"
-          aria-label="Account menu"
-          class="cursor-pointer"
-        />
+        <span class="inline-flex cursor-pointer">
+          <Avatar
+            label="IB"
+            aria-label="Account menu"
+          />
+        </span>
       </DropdownMenuTrigger>
       <DropdownMenuGroup label="Account">
         <DropdownMenuOption

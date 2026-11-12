@@ -1,6 +1,6 @@
 <script setup>
-  import { Toaster, toast } from '@aziontech/webkit/toast'
   import Button from '@aziontech/webkit/button'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
 </script>
 
 <template>

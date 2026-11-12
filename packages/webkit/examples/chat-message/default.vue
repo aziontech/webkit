@@ -1,5 +1,5 @@
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
+  import ChatMessage from '@aziontech/webkit/chat-message-root'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
 </script>
 

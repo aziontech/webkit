@@ -11,7 +11,6 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-
   import { reactive, watch } from 'vue'
 
   const sizes = ['small', 'medium', 'large']
@@ -57,13 +56,19 @@
               Panel max-width preset for the {{ size }} dialog, applied from the md breakpoint up.
             </DialogDescription>
           </PanelContent>
-          <PanelFooter class="flex-col md:flex-row md:justify-end">
-            <Button
-              class="w-full md:w-auto"
-              label="Close"
-              kind="outlined"
-              @click="openBySize[size] = false"
-            />
+          <PanelFooter>
+            <div
+              class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
+            >
+              <div class="w-full md:w-fit">
+                <Button
+                  class="w-full"
+                  label="Close"
+                  kind="outlined"
+                  @click="openBySize[size] = false"
+                />
+              </div>
+            </div>
           </PanelFooter>
         </DialogContent>
       </DialogPortal>

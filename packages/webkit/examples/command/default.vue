@@ -1,9 +1,9 @@
 <script setup>
-  import Command from '@aziontech/webkit/command'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
   import CommandList from '@aziontech/webkit/command-list'
+  import Command from '@aziontech/webkit/command-root'
   import CommandSeparator from '@aziontech/webkit/command-separator'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import { ref } from 'vue'

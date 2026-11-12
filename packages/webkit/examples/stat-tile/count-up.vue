@@ -1,6 +1,6 @@
 <script setup>
-  import StatTile from '@aziontech/webkit/stat-tile'
   import Button from '@aziontech/webkit/button'
+  import StatTile from '@aziontech/webkit/stat-tile'
   import { ref } from 'vue'
 
   const value = ref(48210)

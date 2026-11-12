@@ -1,6 +1,6 @@
 <script setup>
-  import HeroTitle from '@aziontech/webkit/hero-title'
   import Button from '@aziontech/webkit/button'
+  import HeroTitle from '@aziontech/webkit/hero-title'
 </script>
 
 <template>

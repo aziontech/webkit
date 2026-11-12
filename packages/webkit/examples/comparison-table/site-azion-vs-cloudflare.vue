@@ -1,9 +1,9 @@
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import ComparisonTable from '@aziontech/webkit/comparison-table'
   import cloudflareExtendedColor from '@aziontech/webkit/assets/cloudflare-extended-color.svg'
   import cloudflareExtendedReversed from '@aziontech/webkit/assets/cloudflare-extended-reversed.svg'
+  import ComparisonTable from '@aziontech/webkit/comparison-table'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
 
   const competitor = {
     name: 'Cloudflare',

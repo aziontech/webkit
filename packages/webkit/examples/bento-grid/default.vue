@@ -1,6 +1,6 @@
 <script setup>
-  import BentoGrid from '@aziontech/webkit/bento-grid'
   import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
+  import BentoGrid from '@aziontech/webkit/bento-grid-root'
 </script>
 
 <template>

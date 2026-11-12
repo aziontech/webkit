@@ -1,6 +1,6 @@
 <script setup>
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import Pagination from '@aziontech/webkit/pagination'
+  import Pagination from '@aziontech/webkit/pagination-root'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
   const messages = {

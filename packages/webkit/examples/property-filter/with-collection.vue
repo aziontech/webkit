@@ -1,6 +1,6 @@
 <script setup>
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table from '@aziontech/webkit/table'
+  import Table from '@aziontech/webkit/table-root'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
   const workloads = Array.from({ length: 36 }, (_, i) => ({

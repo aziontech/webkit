@@ -1,6 +1,6 @@
 <script setup>
-  import EmptyState from '@aziontech/webkit/empty-state'
   import Button from '@aziontech/webkit/button'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import MiniButton from '@aziontech/webkit/mini-button'
 </script>
 

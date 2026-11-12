@@ -1,7 +1,7 @@
 <script setup>
+  import FaqSection from '@aziontech/webkit/faq-section'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import FaqSection from '@aziontech/webkit/faq-section'
 
   const items = [
     {

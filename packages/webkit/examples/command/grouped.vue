@@ -1,12 +1,12 @@
 <script setup>
-  import { ref } from 'vue'
-  import Command from '@aziontech/webkit/command'
-  import CommandInput from '@aziontech/webkit/command-input'
-  import CommandList from '@aziontech/webkit/command-list'
-  import CommandGroup from '@aziontech/webkit/command-group'
-  import CommandItem from '@aziontech/webkit/command-item'
-  import CommandSeparator from '@aziontech/webkit/command-separator'
   import Button from '@aziontech/webkit/button'
+  import CommandGroup from '@aziontech/webkit/command-group'
+  import CommandInput from '@aziontech/webkit/command-input'
+  import CommandItem from '@aziontech/webkit/command-item'
+  import CommandList from '@aziontech/webkit/command-list'
+  import Command from '@aziontech/webkit/command-root'
+  import CommandSeparator from '@aziontech/webkit/command-separator'
+  import { ref } from 'vue'
 
   const open = ref(false)
 </script>

@@ -1,6 +1,5 @@
 <script setup>
-  import InputGroup from '@aziontech/webkit/input-group'
-  import Button from '@aziontech/webkit/button'
+  import InputGroup from '@aziontech/webkit/input-group-root'
   import Select from '@aziontech/webkit/select'
   import { ref } from 'vue'
 

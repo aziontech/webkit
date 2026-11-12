@@ -1,63 +1,4 @@
 {
-  "accordion/with-log-view.vue": {
-    "webkit/no-style-override": 1
-  },
-  "app-layout/compact.vue": {
-    "webkit/no-style-override": 1,
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "app-layout/default.vue": {
-    "webkit/no-style-override": 1,
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "app-layout/split-panel-side.vue": {
-    "webkit/no-style-override": 1
-  },
-  "artifact-canvas/default.vue": {
-    "webkit/no-style-override": 2
-  },
-  "bento-grid/default.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "bento-grid/mosaic.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "bento-grid/spans.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "calendar/clearable.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "calendar/default.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "calendar/horizontal.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "calendar/min-max.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "calendar/open.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "calendar/select-period.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "calendar/single.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "calendar/sizes.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "calendar/with-presets.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "calendar/with-time.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "calendar/with-timezone.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
   "card-grid/balanced.vue": {
     "webkit/prefer-tree-shakeable-root": 1
   },
@@ -76,155 +17,19 @@
   "card-grid/kinds.vue": {
     "webkit/prefer-tree-shakeable-root": 1
   },
-  "chart-card/with-controls.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "chat-message/default.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "chat-message/error.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "chat-message/grouped-and-system.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
   "client-mosaic-columns/default.vue": {
     "webkit/no-hardcoded-color": 6
   },
   "client-mosaic/site-columns.vue": {
     "webkit/no-hardcoded-color": 6
   },
-  "column-navigation/columns.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "column-navigation/default.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "column-navigation/rows.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "command/default.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "command/disabled.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "command/empty.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "command/grouped.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "command/with-shortcuts.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "console-panel/default.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "conversation/default.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "conversation/long-thread.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "conversation/start-alignment.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
   "customer-spotlight/default.vue": {
     "webkit/no-hardcoded-color": 6
-  },
-  "dialog/default.vue": {
-    "webkit/no-style-override": 3
-  },
-  "dialog/scroll-content-mobile.vue": {
-    "webkit/no-style-override": 3
-  },
-  "dialog/scroll-content.vue": {
-    "webkit/no-style-override": 3
-  },
-  "dialog/sizes.vue": {
-    "webkit/no-style-override": 2
-  },
-  "drawer/default.vue": {
-    "webkit/no-style-override": 3
-  },
-  "drawer/scroll-content.vue": {
-    "webkit/no-style-override": 4
-  },
-  "drawer/sizes.vue": {
-    "webkit/no-style-override": 3
-  },
-  "dropdown-menu/auto-placement.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "dropdown-menu/custom-triggers.vue": {
-    "webkit/no-style-override": 1,
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "dropdown-menu/default.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "dropdown-menu/groups-with-top-and-bottom-slots.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "dropdown-menu/groups.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "dropdown-menu/option-affordances.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "dropdown-menu/placements.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "dropdown-menu/states.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "dropdown-menu/with-top-and-bottom-slots.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "field/fieldset.vue": {
-    "webkit/no-style-override": 1
-  },
-  "flow/custom-nodes.vue": {
-    "webkit/no-style-override": 2
   },
   "global-header/content-zone.vue": {
     "webkit/no-style-override": 1
   },
   "global-header/site-placement.vue": {
-    "webkit/no-style-override": 1
-  },
-  "hero/alignment.vue": {
-    "webkit/no-style-override": 3
-  },
-  "hero/asset-windows.vue": {
-    "webkit/no-style-override": 1
-  },
-  "hero/backdrops.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "hero/banners.vue": {
-    "webkit/no-style-override": 1
-  },
-  "hero/carousel.vue": {
-    "webkit/no-style-override": 1
-  },
-  "hero/widths.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "input-group/default.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "input-group/with-button.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "input-group/with-select.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "item/with-group.vue": {
-    "webkit/no-style-override": 3
-  },
-  "item/with-image-media.vue": {
     "webkit/no-style-override": 1
   },
   "label/default.vue": {
@@ -235,21 +40,6 @@
   },
   "label/required.vue": {
     "vuejs-accessibility/label-has-for": 1
-  },
-  "log-view/default.vue": {
-    "webkit/no-style-override": 1
-  },
-  "log-view/flush.vue": {
-    "webkit/no-style-override": 1
-  },
-  "log-view/loading.vue": {
-    "webkit/no-style-override": 1
-  },
-  "media-tile/band.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "media-tile/kinds.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
   },
   "menu/client-routing.vue": {
     "webkit/prefer-tree-shakeable-root": 1
@@ -267,39 +57,6 @@
     "webkit/prefer-tree-shakeable-root": 1
   },
   "menu/types.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "multi-select/default.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "multi-select/disabled.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "multi-select/filled.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "multi-select/invalid.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "multi-select/long-list.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "multi-select/sizes.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "multi-select/with-groups.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "multi-select/with-option-extras.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "multi-select/with-search-and-footer.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "navigation-menu/default.vue": {
-    "webkit/no-style-override": 3
-  },
-  "pagination/data-driven.vue": {
     "webkit/prefer-tree-shakeable-root": 1
   },
   "popover/anatomy.vue": {
@@ -320,38 +77,6 @@
   },
   "popover/widths.vue": {
     "webkit/prefer-tree-shakeable-root": 1
-  },
-  "property-filter/with-collection.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "resizable/collapsed.vue": {
-    "webkit/no-style-override": 1
-  },
-  "resizable/default.vue": {
-    "webkit/no-style-override": 1
-  },
-  "resizable/disabled.vue": {
-    "webkit/no-style-override": 1
-  },
-  "resizable/orientations.vue": {
-    "webkit/no-style-override": 2
-  },
-  "scroll-area/default.vue": {
-    "webkit/no-style-override": 1
-  },
-  "scroll-area/fade.vue": {
-    "webkit/no-style-override": 2
-  },
-  "scroll-area/orientations.vue": {
-    "webkit/no-style-override": 3
-  },
-  "sidebar/default.vue": {
-    "webkit/no-style-override": 2,
-    "webkit/prefer-tree-shakeable-root": 3
-  },
-  "sidebar/resizable.vue": {
-    "webkit/no-style-override": 2,
-    "webkit/prefer-tree-shakeable-root": 3
   },
   "spinner/default.vue": {
     "webkit/no-style-override": 1
@@ -401,18 +126,6 @@
   "table/with-collection.vue": {
     "webkit/prefer-tree-shakeable-root": 1
   },
-  "tabs/centered.vue": {
-    "webkit/no-style-override": 1
-  },
-  "tabs/default.vue": {
-    "webkit/no-style-override": 4
-  },
-  "tabs/scrollable.vue": {
-    "webkit/no-style-override": 2
-  },
-  "topic/in-grid.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
   "topology-diagram/binding.vue": {
     "webkit/no-style-override": 1
   },
@@ -424,15 +137,5 @@
   },
   "topology-diagram/loading.vue": {
     "webkit/no-style-override": 1
-  },
-  "webkit-provider/custom-messages.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "webkit-provider/default.vue": {
-    "webkit/no-style-override": 1,
-    "webkit/prefer-tree-shakeable-root": 1
-  },
-  "webkit-provider/right-to-left.vue": {
-    "webkit/prefer-tree-shakeable-root": 1
   }
 }

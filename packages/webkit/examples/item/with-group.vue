@@ -1,7 +1,7 @@
 <script setup>
-  import Item from '@aziontech/webkit/item'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
+  import Item from '@aziontech/webkit/item'
 </script>
 
 <template>
@@ -15,9 +15,11 @@
           size="medium"
         />
       </Item.Media>
-      <Item.Content class="gap-(--spacing-1)">
-        <Item.Title>shadcn</Item.Title>
-        <Item.Description>shadcn@vercel.com</Item.Description>
+      <Item.Content>
+        <div class="flex flex-col gap-(--spacing-1)">
+          <Item.Title>shadcn</Item.Title>
+          <Item.Description>shadcn@vercel.com</Item.Description>
+        </div>
       </Item.Content>
       <Item.Actions>
         <Button
@@ -37,9 +39,11 @@
           size="medium"
         />
       </Item.Media>
-      <Item.Content class="gap-(--spacing-1)">
-        <Item.Title>maxleiter</Item.Title>
-        <Item.Description>maxleiter@vercel.com</Item.Description>
+      <Item.Content>
+        <div class="flex flex-col gap-(--spacing-1)">
+          <Item.Title>maxleiter</Item.Title>
+          <Item.Description>maxleiter@vercel.com</Item.Description>
+        </div>
       </Item.Content>
       <Item.Actions>
         <Button
@@ -59,9 +63,11 @@
           size="medium"
         />
       </Item.Media>
-      <Item.Content class="gap-(--spacing-1)">
-        <Item.Title>evilrabbit</Item.Title>
-        <Item.Description>evilrabbit@vercel.com</Item.Description>
+      <Item.Content>
+        <div class="flex flex-col gap-(--spacing-1)">
+          <Item.Title>evilrabbit</Item.Title>
+          <Item.Description>evilrabbit@vercel.com</Item.Description>
+        </div>
       </Item.Content>
       <Item.Actions>
         <Button

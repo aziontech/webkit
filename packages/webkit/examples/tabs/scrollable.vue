@@ -52,15 +52,18 @@
         :label="tab.label"
       />
     </Tabs.List>
-    <Tabs.Content class="mt-(--spacing-4)">
-      <Tabs.Panel
-        v-for="tab in tabs"
-        :key="tab.value"
-        :value="tab.value"
-        class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)"
-      >
-        <p class="text-body-sm text-(--text-default)">Content for {{ tab.label }}</p>
-      </Tabs.Panel>
-    </Tabs.Content>
+    <div class="w-full pt-(--spacing-4)">
+      <Tabs.Content>
+        <Tabs.Panel
+          v-for="tab in tabs"
+          :key="tab.value"
+          :value="tab.value"
+        >
+          <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
+            <p class="text-body-sm text-(--text-default)">Content for {{ tab.label }}</p>
+          </div>
+        </Tabs.Panel>
+      </Tabs.Content>
+    </div>
   </Tabs.Root>
 </template>

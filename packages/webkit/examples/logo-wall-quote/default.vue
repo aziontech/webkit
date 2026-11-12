@@ -1,5 +1,4 @@
 <script setup>
-  import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
   import agibankExtendedColor from '@aziontech/webkit/assets/agibank-extended-color.svg'
   import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
   import bancoDeLaNacionExtendedMono from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
@@ -10,6 +9,7 @@
   import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
   import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
   import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
+  import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
 </script>
 
 <template>

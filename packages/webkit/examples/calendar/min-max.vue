@@ -1,7 +1,6 @@
 <script setup>
+  import Calendar from '@aziontech/webkit/calendar-root'
   import { ref } from 'vue'
-
-  import Calendar from '@aziontech/webkit/calendar'
 
   const today = new Date(2026, 10, 10)
   const range = ref({ start: new Date(2026, 10, 3), end: today })

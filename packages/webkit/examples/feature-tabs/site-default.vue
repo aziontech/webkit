@@ -1,7 +1,7 @@
 <script setup>
+  import FeatureTabs from '@aziontech/webkit/feature-tabs'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import FeatureTabs from '@aziontech/webkit/feature-tabs'
 
   const tabs = [
     {

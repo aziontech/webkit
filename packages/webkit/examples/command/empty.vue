@@ -1,10 +1,10 @@
 <script setup>
-  import { ref } from 'vue'
-  import Command from '@aziontech/webkit/command'
+  import Button from '@aziontech/webkit/button'
+  import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandList from '@aziontech/webkit/command-list'
-  import CommandEmpty from '@aziontech/webkit/command-empty'
-  import Button from '@aziontech/webkit/button'
+  import Command from '@aziontech/webkit/command-root'
+  import { ref } from 'vue'
 
   const open = ref(false)
 </script>

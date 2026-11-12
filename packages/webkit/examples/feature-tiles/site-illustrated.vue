@@ -1,7 +1,7 @@
 <script setup>
+  import FeatureTiles from '@aziontech/webkit/feature-tiles'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import FeatureTiles from '@aziontech/webkit/feature-tiles'
 
   const tiles = [
     {

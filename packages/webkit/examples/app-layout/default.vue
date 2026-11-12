@@ -9,9 +9,9 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import Link from '@aziontech/webkit/link'
-  import Menu from '@aziontech/webkit/menu'
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
+  import Menu from '@aziontech/webkit/menu-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
@@ -67,7 +67,7 @@
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container w-full">
           <GlobalHeader aria-label="Console">
-            <GlobalHeader.Left class="justify-start!">
+            <GlobalHeader.Left>
               <IconButton
                 v-if="compact"
                 icon="pi pi-bars"

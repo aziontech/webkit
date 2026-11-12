@@ -1,6 +1,6 @@
 <script setup>
-  import SectionTitle from '@aziontech/webkit/section-title'
   import Button from '@aziontech/webkit/button'
+  import SectionTitle from '@aziontech/webkit/section-title'
 </script>
 
 <template>

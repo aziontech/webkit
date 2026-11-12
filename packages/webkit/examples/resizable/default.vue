@@ -6,21 +6,23 @@
 </script>
 
 <template>
-  <Resizable
-    orientation="horizontal"
-    aria-label="Workspace"
-    class="h-64"
-  >
-    <Resizable.Pane aria-label="Document"
-      >Flexible — no basis, so it takes what is left.</Resizable.Pane
+  <div class="h-64">
+    <Resizable
+      class="h-full"
+      orientation="horizontal"
+      aria-label="Workspace"
     >
-    <Resizable.Handle aria-label="Resize the panel" />
-    <Resizable.Pane
-      v-model:basis="basis"
-      :min="160"
-      :max="480"
-      aria-label="Panel"
-      >Sized</Resizable.Pane
-    >
-  </Resizable>
+      <Resizable.Pane aria-label="Document"
+        >Flexible — no basis, so it takes what is left.</Resizable.Pane
+      >
+      <Resizable.Handle aria-label="Resize the panel" />
+      <Resizable.Pane
+        v-model:basis="basis"
+        :min="160"
+        :max="480"
+        aria-label="Panel"
+        >Sized</Resizable.Pane
+      >
+    </Resizable>
+  </div>
 </template>
