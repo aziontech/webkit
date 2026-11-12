@@ -1,6 +1,6 @@
 # DeployProgressDialog (`platform/create/deploy-progress-dialog`)
 
-> The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, cannot be dismissed and keeps Close disabled; under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Activating <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button` and `Toaster`. The page behind it is a page body for ConsoleLayout.
+> The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, cannot be dismissed and keeps Close disabled; under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Activating <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.
 
 - Surface: product
 - Source: `blocks/platform/create/deploy-progress-dialog/deploy-progress-dialog.vue` in `@aziontech/webkit`
@@ -53,9 +53,9 @@ One bordered row per Deployment Setting: its name, the environments and projects
 
 Retry failed (outlined) appears only when the run settled with failures; Close (primary) is disabled while the run goes on.
 
-### G. Outcome toast — `Toaster` (required)
+### Outcome toast — through `toast`
 
-One toast id for the run: `toast.loading` with "It keeps running if you leave." when it starts, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy**. Edit reopens the dialog on the failed rows; Redeploy runs every setting again. Never View deployments.
+One toast id for the run: `toast.loading` with "It keeps running if you leave." when it starts, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy**. Edit reopens the dialog on the failed rows; Redeploy runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 
@@ -127,7 +127,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Progress from '@aziontech/webkit/progress'
   import Spinner from '@aziontech/webkit/spinner'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
@@ -521,8 +521,6 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
         </DialogContent>
       </DialogPortal>
     </Dialog>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>
 ```

@@ -1,6 +1,6 @@
 # Profile (`platform/account/profile`)
 
-> The profile page of a signed-in account, and the layout every account settings page follows: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account name and Billing emails come filled from the account and are checked on Save; the Appearance font picker defaults to Rubik. A save that fails with no field to blame raises an error toast with Retry and keeps the changes. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `HelperText`, `Toaster` and `Button`. A page body for ConsoleLayout, rendered in its default slot.
+> The profile page of a signed-in account, and the layout every account settings page follows: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account name and Billing emails come filled from the account and are checked on Save; the Appearance font picker defaults to Rubik. A save that fails with no field to blame raises an error toast with Retry and keeps the changes. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `HelperText` and `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/profile/profile.vue` in `@aziontech/webkit`
@@ -79,9 +79,9 @@ Rises with a motion-reduced transition once the form differs from the saved copy
 
 Under Account name and Billing emails after Save: `required` when empty, `invalid` when an address is malformed, linked with `aria-describedby`. Save stops and focus moves to the first field in error.
 
-### N. Toasts — `Toaster` (required)
+### Toasts — through `toast`
 
-Mounted once with the page. A save no field owns that fails is `toast.error` with Retry and keeps the changes; a successful save toasts `Profile saved.`
+A save no field owns that fails is `toast.error` with Retry and keeps the changes; a successful save toasts `Profile saved.` This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 
@@ -145,7 +145,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, ref } from 'vue'
 
   const form = reactive({
@@ -294,7 +294,6 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 </script>
 
 <template>
-  <Toaster position="bottom-right" />
   <div class="flex flex-1 flex-col">
     <div class="flex min-h-0 flex-1 flex-col">
       <form

@@ -1,6 +1,6 @@
 # ReleaseImpact (`platform/create/release-impact`)
 
-> The Review and deploy page of a release that carries several resources at once. The left column holds one card per resource: its type and icon, a Required or Read-only `Tag` or an include `Switch` named by a `Tooltip`, the resource and a version `Select` that tracks the latest Ready version or pins one (each with a Current `Tag` and its age), an invalid line and Build a version when nothing is Ready, and a Dependencies box whose `Accordion` groups modules and integrations with counts, a Shared `Tag` with the resources that also reference it and one info `Alert` saying a shared dependency deploys at one version. The right column is the sticky Impact `Card`: a `ToggleGroup` switches a Tree (Deployment Settings, their environments and the projects they publish to, with rails and counts) and a Flow (the same as left-to-right cards), and its footer sums up what the release reaches. A sticky footer holds the hint, Cancel and Deploy release, which asks in a `ConfirmDialog` and then runs as an async action: one toast turns from Deploying release… into the outcome with Edit and Redeploy, and the page shows the outcome `Alert` with the same two actions. Built from `Card`, `Tag`, `Switch`, `Tooltip`, `Field`, `Select`, `Badge`, `Accordion`, `Alert`, `ToggleGroup`, `Skeleton`, `Spinner`, `Button`, `ConfirmDialog` and `Toaster`.
+> The Review and deploy page of a release that carries several resources at once. The left column holds one card per resource: its type and icon, a Required or Read-only `Tag` or an include `Switch` named by a `Tooltip`, the resource and a version `Select` that tracks the latest Ready version or pins one (each with a Current `Tag` and its age), an invalid line and Build a version when nothing is Ready, and a Dependencies box whose `Accordion` groups modules and integrations with counts, a Shared `Tag` with the resources that also reference it and one info `Alert` saying a shared dependency deploys at one version. The right column is the sticky Impact `Card`: a `ToggleGroup` switches a Tree (Deployment Settings, their environments and the projects they publish to, with rails and counts) and a Flow (the same as left-to-right cards), and its footer sums up what the release reaches. A sticky footer holds the hint, Cancel and Deploy release, which asks in a `ConfirmDialog` and then runs as an async action: one toast turns from Deploying release… into the outcome with Edit and Redeploy, and the page shows the outcome `Alert` with the same two actions. Built from `Card`, `Tag`, `Switch`, `Tooltip`, `Field`, `Select`, `Badge`, `Accordion`, `Alert`, `ToggleGroup`, `Skeleton`, `Spinner`, `Button`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.
 
 - Surface: product
 - Source: `blocks/platform/create/release-impact/release-impact.vue` in `@aziontech/webkit`
@@ -59,9 +59,9 @@ The right column, sticky from `xl`. The `Card` header has the title Impact and, 
 
 The `Card` footer sums the reach in one sentence: projects, environments and Deployment Settings.
 
-### F. Footer and commit — `Button`, `ConfirmDialog`, `Toaster` (required)
+### F. Footer and commit — `Button`, `ConfirmDialog` (required)
 
-A sticky bar: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`kind="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`platform/states/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments.
+A sticky bar: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`kind="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`platform/states/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 
@@ -137,7 +137,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Spinner from '@aziontech/webkit/spinner'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
@@ -1148,7 +1148,6 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
         </div>
       </footer>
     </main>
-    <Toaster position="bottom-right" />
   </div>
 </template>
 ```

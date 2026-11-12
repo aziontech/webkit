@@ -63,9 +63,9 @@ Name is required and unique; the error sits under the field (`This field is requ
 
 After Create the drawer closes and a `Dialog` opens: the token's name, a warning `Alert` that this is the only time the secret is shown, the secret in a read-only `PasswordInput` (masked, with show) and a `CopyButton` beside it. A polite status line confirms the copy and the footer button changes from `I copied the token` to `Done`. Closing clears the secret from memory.
 
-### J. Confirmations and outcomes — `ConfirmDialog`, `Toaster` (required)
+### J. Confirmations and outcomes — `ConfirmDialog` (required)
 
-Revoke asks in a danger `ConfirmDialog` that says what stops working and that it cannot be undone; the confirm button spins while the request runs. Delete asks the same way. Both end in a success toast; a create, revoke or delete is not a deploy, so the toast carries no Edit or Redeploy.
+Revoke asks in a danger `ConfirmDialog` that says what stops working and that it cannot be undone; the confirm button spins while the request runs. Delete asks the same way. Both end in a success toast; a create, revoke or delete is not a deploy, so the toast carries no Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 
@@ -158,7 +158,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Table, { type TableColumn } from '@aziontech/webkit/table'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref } from 'vue'
@@ -801,8 +801,6 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       confirm-label="Delete token"
       @confirm="remove"
     />
-
-    <Toaster position="bottom-right" />
   </div>
 </template>
 ```

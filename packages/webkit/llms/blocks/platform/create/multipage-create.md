@@ -74,6 +74,7 @@ A stacked row with a five-row `Textarea` whose label, placeholder and guidance f
 - Keep Cancel apart from Back and Next, on the opposite side.
 - Keep the create action on the last step only; every step before it says Next.
 - Keep the chosen host visible in the chooser even when it falls outside the first six.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 

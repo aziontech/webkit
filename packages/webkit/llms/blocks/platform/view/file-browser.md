@@ -78,11 +78,11 @@ A second `FileDropzone kind="overlay"` sits inside the `section` that holds the 
 
 ### K. Transfer card and outcome toast — `Button` (optional)
 
-Variants Uploading and MoveObject only; they add `UploadProgress` and the `Toaster` with `toast`.
+Variants Uploading and MoveObject only; they add `UploadProgress` and raise their toasts with `toast`.
 
 Every transfer (upload, move) runs in one floating `UploadProgress` at the inline-end bottom corner, so the person can keep browsing, change folder or open another resource while it runs. The header counts finished files over one overall bar (`Uploading 2 of 5 files`), each row carries its bar, Cancel while it runs or waits, Retry when it failed with the reason under the name. Files land in the table as each finishes, not at the end. Close appears when everything finished and returns focus to Add to files (or to the toolbar, after a move). At most two files upload at a time; the rest wait.
 
-When a transfer finishes the page reports it with a toast as well as the card, because the card may be collapsed or the person may be elsewhere. Its actions fit the files, never a deploy action: after a clean upload or move, `Open folder` (goes to the destination); after a partial upload, a danger toast `1 of 5 files weren't uploaded.` that says where the rest went and offers `Retry failed`. Storage objects are not deployed, so the async-submit Edit and Redeploy pair does not apply. The `Toaster` sits at `top-right` so it never covers the transfer card.
+When a transfer finishes the page reports it with a toast as well as the card, because the card may be collapsed or the person may be elsewhere. Its actions fit the files, never a deploy action: after a clean upload or move, `Open folder` (goes to the destination); after a partial upload, a danger toast `1 of 5 files weren't uploaded.` that says where the rest went and offers `Retry failed`. Storage objects are not deployed, so the async-submit Edit and Redeploy pair does not apply. Each of these toasts passes `position: 'top-right'` so it never covers the transfer card, whatever corner the app's region defaults to.
 
 ### L. Selection and Move — `TableRoot`, `DropdownMenuOption` (optional)
 
@@ -101,6 +101,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - Keep refused files in the upload dialog with their reason, and leave them out of the upload count.
 - Run every transfer in the one floating `UploadProgress` card and let the person keep working.
 - End every transfer with a toast whose action fits the files: Open folder or Retry failed.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 

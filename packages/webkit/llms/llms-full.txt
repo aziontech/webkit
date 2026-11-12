@@ -2125,9 +2125,9 @@ The drawer the Billing page opens from its Subscription Plan card. The user want
 - S. Notices — `Alert` (required)
 - T. Same address — `Checkbox` (required)
 - U. Footer — `PanelFooter` (required)
-- V. Toasts — `Toaster` (required)
-- W. Card brand — `PaymentBrand` (required)
-- X. Included features — `FeatureList` (required)
+- V. Card brand — `PaymentBrand` (required)
+- W. Included features — `FeatureList` (required)
+- Toasts — through `toast`
 
 What each part takes: [blocks/platform/account/change-plan-drawer.md](blocks/platform/account/change-plan-drawer.md).
 
@@ -2218,7 +2218,7 @@ Where an account admin arranges the account's hierarchy. Workspaces sit under gr
 - F. Labels — `Dialog`, `Field`, `MultiSelect` (required)
 - G. Delete — `ConfirmDialog` (required)
 - H. Empty and failure — `EmptyState`, `Alert` (conditional)
-- I. Outcomes — `Toaster` (required)
+- Outcomes — through `toast`
 
 What each part takes: [blocks/platform/account/manage-resources.md](blocks/platform/account/manage-resources.md).
 
@@ -2310,7 +2310,7 @@ Multi-factor authentication for a whole account. An admin sees who signs in with
 - C. Password-only warning — `Alert` (conditional)
 - D. People table — `Input`, `Table`, `Avatar`, `useCollection` (required)
 - E. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
-- F. Load failure and outcomes — `Alert`, `Toaster` (required)
+- F. Load failure and outcomes — `Alert` (required)
 
 What each part takes: [blocks/platform/account/mfa-management.md](blocks/platform/account/mfa-management.md).
 
@@ -2580,7 +2580,7 @@ The profile page of a signed-in account, and the layout every account settings p
 - K. Connection state — `Tag` (optional)
 - L. Unsaved changes — `SaveBar` (required)
 - M. Field message — `HelperText` (conditional)
-- N. Toasts — `Toaster` (required)
+- Toasts — through `toast`
 
 What each part takes: [blocks/platform/account/profile.md](blocks/platform/account/profile.md).
 
@@ -2668,7 +2668,7 @@ Who can do what in the account. An admin keeps one team per role (Administrators
 - F. Load failure — `Alert` (conditional)
 - G. Members — `Button`, `Avatar`, `IconButton` (EditTeam)
 - H. Delete team and save — `ConfirmDialog`, `Button` (EditTeam)
-- I. Outcomes — `Toaster` (required)
+- Outcomes — through `toast`
 
 What each part takes: [blocks/platform/account/team-permissions.md](blocks/platform/account/team-permissions.md).
 
@@ -2768,7 +2768,7 @@ The Personal tokens page of the account settings. A person creates a token for a
 - G. Create drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `SettingsSection`, `PanelFooter` (required)
 - H. Fields — `Field`, `Textarea`, `Select`, `HelperText` (required)
 - I. One-time reveal — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
-- J. Confirmations and outcomes — `ConfirmDialog`, `Toaster` (required)
+- J. Confirmations and outcomes — `ConfirmDialog` (required)
 
 What each part takes: [blocks/platform/account/tokens.md](blocks/platform/account/tokens.md).
 
@@ -2861,7 +2861,7 @@ Who can sign in to the account, and through which teams. An admin invites a team
 - E. Row actions — `Table`, `DropdownMenu`, `ConfirmDialog` (required)
 - F. Invite drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerDescription`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
 - G. Only the owner, no match and load failure — `EmptyState`, `Alert` (conditional)
-- H. Outcomes — `Toaster` (required)
+- Outcomes — through `toast`
 
 What each part takes: [blocks/platform/account/users.md](blocks/platform/account/users.md).
 
@@ -3512,6 +3512,7 @@ What each part takes: [blocks/platform/create/create-in-drawer.md](blocks/platfo
 - Validate on submit only: an empty required field gets the amber required prompt after Save is pressed.
 - Close the drawer on success and show the new item in the list behind it, with a toast that names it.
 - Stack a second, medium drawer for a missing item of the same resource, such as an origin for a rule, and select the new one back into the parent.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -3626,6 +3627,7 @@ What each part takes: [blocks/platform/create/deploy-drawer.md](blocks/platform/
 - Tag a dependency other services reference as Shared, name them in a `Tooltip`, and say once that a shared dependency deploys at one version.
 - When a dependency has no ready version, disable Deploy and say why in the footer, next to the button it disables.
 - After Deploy, follow `platform/states/async-submit`: the drawer closes and one toast per run turns from Deploying… into the outcome, with Edit (reopens the drawer with the same choices) and Redeploy.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -3728,7 +3730,7 @@ The modal progress of one deploy that activates several Deployment Settings, eac
 - D. Filter — `ToggleGroup` (required)
 - E. Rows — `OutcomeMark`, `Spinner`, `Tag` (required)
 - F. Footer — `PanelFooter`, `Button` (required)
-- G. Outcome toast — `Toaster` (required)
+- Outcome toast — through `toast`
 
 What each part takes: [blocks/platform/create/deploy-progress-dialog.md](blocks/platform/create/deploy-progress-dialog.md).
 
@@ -4123,6 +4125,7 @@ What each part takes: [blocks/platform/create/multipage-create.md](blocks/platfo
 - Keep Cancel apart from Back and Next, on the opposite side.
 - Keep the create action on the last step only; every step before it says Next.
 - Keep the chosen host visible in the chooser even when it falls outside the first six.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -4338,7 +4341,7 @@ The Review and deploy page of a release that carries several resources at once: 
 - C. Resource and version — `Field`, `Select`, `Tag` (required)
 - D. Dependencies — `Badge`, `Accordion`, `Alert`, `Tag`, `Tooltip`, `Select` (required when a resource references others)
 - E. Impact — `Card`, `ToggleGroup`, `Spinner`, `Skeleton`, `Alert`, `Button` (required)
-- F. Footer and commit — `Button`, `ConfirmDialog`, `Toaster` (required)
+- F. Footer and commit — `Button`, `ConfirmDialog` (required)
 
 What each part takes: [blocks/platform/create/release-impact.md](blocks/platform/create/release-impact.md).
 
@@ -6547,6 +6550,7 @@ What each part takes: [blocks/platform/detail/details-page.md](blocks/platform/d
 - Put the one primary page action (Deploy) on the tab row, medium and outlined; keep Visit in the summary.
 - Give Versions and Deployments the same controls row and table shape as `platform/view/table-view`, scoped to this resource, with a small section heading.
 - On a deployment page, lead with a status banner (success, or danger with Redeploy) and disable Visit until the deployment is live.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -6842,6 +6846,7 @@ What each part takes: [blocks/platform/detail/record-table.md](blocks/platform/d
 - Raise the save bar only when something changed, and keep it until Save lands or Discard restores the record.
 - Reuse the table view controls row and table recipe in the Records tab so filters, search and columns behave the same as on index pages.
 - Rewind pagination to the first page when filters or search change.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -6951,6 +6956,7 @@ What each part takes: [blocks/platform/detail/version-detail.md](blocks/platform
 - Keep the history pane collapsible and resizable so the settings keep their width when it is closed.
 - Show what a revert changes before it runs: the settings with old and new values, and the rules added and removed.
 - Report a revert like any deploy: one toast that turns into the outcome, with Edit and Redeploy.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -6983,7 +6989,7 @@ What each part takes: [blocks/platform/detail/version-detail.md](blocks/platform
 - The version `Select` trigger is named "Switch version"; its search input is named "Search versions".
 - Every `Switch` and `Input` in a setting row has an `aria-label` that matches the row title.
 - A disabled control with a reason gets a `Tooltip` that the keyboard can reach.
-- The revert dialog traps focus, is named by its title and returns focus to Revert on close. Each changed setting carries a visually hidden sentence ("changes from On to Off"); the struck-through values and the arrow are `aria-hidden`. The toasts live in the `Toaster` region, and the bar's status line announces "Reverting to <id>…".
+- The revert dialog traps focus, is named by its title and returns focus to Revert on close. Each changed setting carries a visually hidden sentence ("changes from On to Off"); the struck-through values and the arrow are `aria-hidden`. The toasts live in the app's one `Toaster` region (the app mounts it; the page body only calls `toast`), and the bar's status line announces "Reverting to <id>…".
 - Icon-only buttons (Version actions, Close version history, Edit version info) have an `aria-label`; decorative icons are `aria-hidden`.
 
 ## States
@@ -7068,6 +7074,7 @@ What each part takes: [blocks/platform/edit/attribute-editor.md](blocks/platform
 - Keep the label of each field inside its `InputGroupAddon`, tied to the field by `for`.
 - Reset the drawer on open so a closed and reopened drawer never shows stale rows.
 - Follow `skills/webkit-form` for required states and `skills/webkit-lists` for the list page.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -7306,6 +7313,7 @@ What each part takes: [blocks/platform/edit/edit-resource.md](blocks/platform/ed
 - Say when the record changed elsewhere as soon as it is known, and ask before Save overwrites it.
 - Keep the edits on screen after a reload with an Undo, so a stale form never loses work silently.
 - Ask for the resource name before a delete, with a copy button beside the name.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -7533,7 +7541,7 @@ The table schema of a SQL database: the definition of one table and the drawers 
 - F. Insert row drawer — `PanelFooter` (required)
 - G. Change type dialog — `ConfirmDialog`, `CodeEditor` (required)
 - H. Truncate table dialog — `ConfirmDialog`, `CodeEditor`, `Input` (required)
-- I. Outcome toasts — `Toaster` (required)
+- Outcome toasts — through `toast`
 
 What each part takes: [blocks/platform/edit/schema-editor.md](blocks/platform/edit/schema-editor.md).
 
@@ -7720,7 +7728,7 @@ The async-action pattern, taken from the design sample (`/forms/async-deployment
 
 This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
-The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-right' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/webkit/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. A standalone preview of this block shows the inline states only; its toasts appear wherever an app has mounted the region.
+The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-right' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/webkit/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. The docs preview mounts one region around the block the way an app root does, so its frames show the toasts; a copy of the page shows them wherever the app has mounted the region.
 
 The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Failed the permanent failure toast and Succeeded the success toast; leaving the page dismisses the story's toast so the next story starts clean.
 
@@ -8070,8 +8078,8 @@ This block is a page body for a create page: render it under the focused creatio
 - E. Choice — `Select` (required)
 - F. Long text — `Textarea` (optional)
 - G. Actions — `Button` (required)
-- H. Result notices — `Toaster` (required)
-- I. Section notice — `Alert` (conflict and rejection only)
+- H. Section notice — `Alert` (conflict and rejection only)
+- Result notices — through `toast`
 
 What each part takes: [blocks/platform/states/form-validation.md](blocks/platform/states/form-validation.md).
 
@@ -8110,7 +8118,7 @@ What each part takes: [blocks/platform/states/form-validation.md](blocks/platfor
 - Every control has a `Field.Label` bound by `for`; the description and message are wired to the control by `Field`.
 - The loading region is `role="status"` with an accessible name (`Loading the form`).
 - Focus moves to the first field in error, only after the lock is released, since a disabled control cannot take focus.
-- Toasts are announced by the `Toaster`; the error toast keeps its Retry reachable by keyboard.
+- Toasts are announced by the app's `Toaster` region; the error toast keeps its Retry reachable by keyboard.
 - A section `Alert` sits in reading order before the fields it governs.
 
 ## States
@@ -8595,6 +8603,7 @@ What each part takes: [blocks/platform/view/file-browser.md](blocks/platform/vie
 - Keep refused files in the upload dialog with their reason, and leave them out of the upload count.
 - Run every transfer in the one floating `UploadProgress` card and let the person keep working.
 - End every transfer with a toast whose action fits the files: Open folder or Retry failed.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -8705,10 +8714,10 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - J. Integration facts — `KeyValuePairs` (required)
 - K. Overview — `DocProse` (required)
 - L. Install form — `Field`, `Select` (required)
-- M. Install toast — `Toaster` (required)
-- N. Solution page — `Tabs`, `Card`, `Select`, `Field`, `KeyValuePairs`, `DocProse` (optional)
-- O. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
-- P. Template page — `Field`, `Button`, `KeyValuePairs` (optional)
+- M. Solution page — `Tabs`, `Card`, `Select`, `Field`, `KeyValuePairs`, `DocProse` (optional)
+- N. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
+- O. Template page — `Field`, `Button`, `KeyValuePairs` (optional)
+- Install toast — through `toast`
 
 What each part takes: [blocks/platform/view/marketplace.md](blocks/platform/view/marketplace.md).
 
@@ -8844,6 +8853,7 @@ What each part takes: [blocks/platform/view/query-editor.md](blocks/platform/vie
 - Offer JSON beside Table for results, so the raw shape is one click away.
 - Confirm Delete table with `platform/delete/delete-with-confirmation`.
 - Mark the page root with `data-layout-fill` (every variant but CreateDatabase), so the panes scroll on their own instead of the page.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -8944,7 +8954,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - C. Phases — `Card`, `Accordion` (required)
 - D. Rules table — `TableRoot`, `Tag`, `Field`, `Switch` (required)
 - E. Order controls — `Input`, `IconButton`, `Tooltip` (required)
-- F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Toaster` (required)
+- F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert` (required)
 - G. States — `EmptyState` (required)
 
 What each part takes: [blocks/platform/view/rules-list.md](blocks/platform/view/rules-list.md).
@@ -9400,7 +9410,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - B. Threshold settings — `Field`, `Select`, `Input`, `IconButton`, `Tooltip` (required)
 - C. Matches table — `Card`, `TableRoot`, `Tag`, `EmptyState` (required)
 - D. Allow dialog — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
-- E. Outcome — `Toaster`, `Alert` (required)
+- E. Outcome — `Alert` (required)
 
 What each part takes: [blocks/platform/view/waf-tuning.md](blocks/platform/view/waf-tuning.md).
 
@@ -23742,7 +23752,7 @@ One-time app-level wiring before the first toast() call — service (recommended
 
 ## Do
 
-- Mount `Toaster` once near the app root, or install `ToastPlugin`. Don't mount one per page; the store renders only the first registered region.
+- Mount `Toaster` once at the app root (in `App.vue`, before the layout or `RouterView`), or install `ToastPlugin`. Never render a `Toaster` in a page, a view or a page-body block: only the first `Toaster` to mount is active and it gives the role up when it unmounts, so a page's copy is either inert or, when it mounted first, silences every toast in the app once the user leaves that page. A page only imports `toast`. A full page routed outside the console layout is still a route of the same app, not a root. `patterns:check` fails a block outside `blocks/shells/` that renders one.
 - Use the typed shortcuts (`toast.success`, `toast.error`, …). The type sets the icon; every type is announced once and politely by the Toaster's single live region (an error interrupting what the user is doing is worse than hearing it a moment later, and switching the region between polite and assertive made screen readers drop or repeat the stack).
 - Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).
 - duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.

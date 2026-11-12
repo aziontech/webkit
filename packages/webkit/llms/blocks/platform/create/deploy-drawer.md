@@ -75,6 +75,7 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - Tag a dependency other services reference as Shared, name them in a `Tooltip`, and say once that a shared dependency deploys at one version.
 - When a dependency has no ready version, disable Deploy and say why in the footer, next to the button it disables.
 - After Deploy, follow `platform/states/async-submit`: the drawer closes and one toast per run turns from Deploying… into the outcome, with Edit (reopens the drawer with the same choices) and Redeploy.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 

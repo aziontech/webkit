@@ -1,6 +1,6 @@
 # Users (`platform/account/users`)
 
-> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over a search `Input` and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email, the owner marked with a highlight `Tag`, the email under it), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `Input`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `Tooltip`, `DropdownMenu`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `EmptyState`, `Alert` and `Toaster`. A page body for ConsoleLayout, rendered in its default slot.
+> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over a search `Input` and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email, the owner marked with a highlight `Tag`, the email under it), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `Input`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `Tooltip`, `DropdownMenu`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `EmptyState`, `Alert`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/users/users.vue` in `@aziontech/webkit`
@@ -56,9 +56,9 @@ A medium right `Drawer` around a `form`: a description of what the invitation do
 
 With only the owner, a small `EmptyState` under the table invites the first teammate. `No matching users` with Clear search sits in the table's `#empty` slot. When the list fails to load, a danger `Alert` with Retry takes the table's place.
 
-### H. Outcomes — `Toaster` (required)
+### Outcomes — through `toast`
 
-Invitations, team changes, resends and removals end in a success toast. They are not deploys, so no toast carries Edit or Redeploy.
+Invitations, team changes, resends and removals end in a success toast. They are not deploys, so no toast carries Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 
@@ -141,7 +141,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Table from '@aziontech/webkit/table'
   import type { TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref } from 'vue'
@@ -692,8 +692,6 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       :confirm-label="pending?.status === 'Invited' ? 'Cancel invitation' : 'Remove user'"
       @confirm="remove"
     />
-
-    <Toaster position="bottom-right" />
   </div>
 </template>
 ```

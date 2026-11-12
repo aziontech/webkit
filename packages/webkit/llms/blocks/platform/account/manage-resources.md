@@ -64,9 +64,9 @@ Title `Delete <name>` or `Delete 3 resources`. The description counts what is in
 
 No resource: a flush `EmptyState` with Create workspace replaces the table. Load failure: a danger `Alert` with Retry takes the table's place; the heading and toolbar stay.
 
-### I. Outcomes — `Toaster` (required)
+### Outcomes — through `toast`
 
-Every action ends in a success toast. Move and Delete carry Undo. Hierarchy changes are not deploys, so no toast offers Edit or Redeploy.
+Every action ends in a success toast. Move and Delete carry Undo. Hierarchy changes are not deploys, so no toast offers Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 
@@ -153,7 +153,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Table, { type TableColumn } from '@aziontech/webkit/table'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, useId } from 'vue'
 
@@ -1050,8 +1050,6 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       confirm-label="Delete"
       @confirm="confirmDelete"
     />
-
-    <Toaster position="bottom-right" />
   </div>
 </template>
 ```

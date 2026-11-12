@@ -81,6 +81,7 @@ One wrapping row of filled medium `Chip`s, one per applied field, in field order
 - Raise the save bar only when something changed, and keep it until Save lands or Discard restores the record.
 - Reuse the table view controls row and table recipe in the Records tab so filters, search and columns behave the same as on index pages.
 - Rewind pagination to the first page when filters or search change.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
