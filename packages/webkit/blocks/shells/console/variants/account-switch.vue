@@ -1,10 +1,10 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout from '@aziontech/webkit/console-layout'
+  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
   import Dialog from '@aziontech/webkit/dialog'
   import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
@@ -22,13 +22,14 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table'
-  import Tag from '@aziontech/webkit/tag'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import type { TableColumn } from '@aziontech/webkit/table-root'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 
-  const navigation = [
+  const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
         { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
@@ -198,20 +199,41 @@
     { id: 'shop-assets', label: 'shop-assets', icon: 'ai ai-edge-storage', type: 'Bucket' }
   ]
 
-  const theme = ref('system')
+  const theme = ref<ThemeSwitcherValue>('system')
   const search = ref('')
 
-  const onSearchSelect = (_event, value) => {
+  const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
   }
 
-  const accountTypes = {
+  type AccountType = 'organization' | 'group' | 'workspace'
+
+  type AccountTypeMeta = { label: string; icon: string; severity: TagSeverity }
+
+  type Account = {
+    id: string
+    clientId: string
+    name: string
+    type: AccountType
+    parentId: string | null
+  }
+
+  type AccountRow = Account & {
+    depth: number
+    hasChildren: boolean
+    expanded: boolean
+    typeLabel: string
+    typeIcon: string
+    typeSeverity: TagSeverity
+  }
+
+  const accountTypes: Record<AccountType, AccountTypeMeta> = {
     organization: { label: 'Organization', icon: 'pi pi-building', severity: 'primary' },
     group: { label: 'Group', icon: 'pi pi-users', severity: 'info' },
     workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'secondary' }
   }
 
-  const accounts = [
+  const accounts: Account[] = [
     {
       id: '1001',
       clientId: '7f3a1',
@@ -228,7 +250,7 @@
     { id: '3105', clientId: '9c2e8', name: 'Research', type: 'workspace', parentId: '3001' }
   ]
 
-  const childrenOf = (id) => accounts.filter((entry) => entry.parentId === id)
+  const childrenOf = (id: string | null) => accounts.filter((entry) => entry.parentId === id)
 
   const currentAccountId = ref('2201')
   const currentAccount = computed(
@@ -237,20 +259,20 @@
 
   const switchOpen = ref(false)
   const accountQuery = ref('')
-  const collapsed = ref(new Set())
+  const collapsed = ref(new Set<string>())
   const shortcut = ref('Ctrl+O')
 
-  const matchesQuery = (entry, needle) =>
+  const matchesQuery = (entry: Account, needle: string) =>
     [entry.name, entry.id, entry.clientId].some((value) => value.toLowerCase().includes(needle))
 
-  const subtreeMatches = (entry, needle) =>
+  const subtreeMatches = (entry: Account, needle: string): boolean =>
     matchesQuery(entry, needle) ||
     childrenOf(entry.id).some((child) => subtreeMatches(child, needle))
 
   const accountRows = computed(() => {
     const needle = accountQuery.value.trim().toLowerCase()
-    const rows = []
-    const walk = (parentId, depth) => {
+    const rows: AccountRow[] = []
+    const walk = (parentId: string | null, depth: number) => {
       for (const entry of childrenOf(parentId)) {
         if (needle && !subtreeMatches(entry, needle)) continue
         const hasChildren = childrenOf(entry.id).length > 0
@@ -260,7 +282,9 @@
           depth,
           hasChildren,
           expanded,
-          typeLabel: accountTypes[entry.type].label
+          typeLabel: accountTypes[entry.type].label,
+          typeIcon: accountTypes[entry.type].icon,
+          typeSeverity: accountTypes[entry.type].severity
         })
         if (hasChildren && expanded) walk(entry.id, depth + 1)
       }
@@ -269,14 +293,14 @@
     return rows
   })
 
-  const accountColumns = [
+  const accountColumns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', principal: true, grow: 3 },
     { accessorKey: 'typeLabel', header: 'Type', minWidth: 140 },
     { accessorKey: 'id', header: 'ID', minWidth: 120 },
     { accessorKey: 'clientId', header: 'Client ID', minWidth: 120 }
   ]
 
-  const toggleAccount = (row) => {
+  const toggleAccount = (row: AccountRow) => {
     const next = new Set(collapsed.value)
     if (next.has(row.id)) next.delete(row.id)
     else next.add(row.id)
@@ -289,7 +313,7 @@
     nextTick(() => document.getElementById('account-switch-search')?.focus())
   }
 
-  const chooseAccount = (row) => {
+  const chooseAccount = (row: Account) => {
     switchOpen.value = false
     if (row.id === currentAccountId.value) {
       toast.info(`You are already on ${row.name}.`)
@@ -303,7 +327,7 @@
 
   const isMac = () => /mac/i.test(navigator.platform || navigator.userAgent || '')
 
-  const onShortcut = (event) => {
+  const onShortcut = (event: KeyboardEvent) => {
     if (event.key?.toLowerCase() !== 'o' || event.altKey || event.shiftKey) return
     if (!(isMac() ? event.metaKey : event.ctrlKey)) return
     event.preventDefault()
@@ -673,7 +697,7 @@
                           aria-hidden="true"
                         />
                         <i
-                          :class="accountTypes[row.type].icon"
+                          :class="row.typeIcon"
                           class="shrink-0 text-body-sm text-(--text-muted)"
                           aria-hidden="true"
                         />
@@ -696,8 +720,8 @@
                     <template #cell-typeLabel="{ row }">
                       <Table.CellStatus
                         :label="row.typeLabel"
-                        :icon="accountTypes[row.type].icon"
-                        :severity="accountTypes[row.type].severity"
+                        :icon="row.typeIcon"
+                        :severity="row.typeSeverity"
                       />
                     </template>
                     <template #cell-id="{ value }">

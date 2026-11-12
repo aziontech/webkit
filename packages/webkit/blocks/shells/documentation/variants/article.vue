@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
   import DocCallout from '@aziontech/webkit/doc-callout'
@@ -7,7 +7,7 @@
   import DocCta from '@aziontech/webkit/doc-cta'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocItem from '@aziontech/webkit/doc-item'
-  import DocLayout from '@aziontech/webkit/doc-layout'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocPagination from '@aziontech/webkit/doc-pagination'
   import DocPrompt from '@aziontech/webkit/doc-prompt'
@@ -19,7 +19,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import ItemList from '@aziontech/webkit/item-list'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { ref } from 'vue'
 
   const sections = [
@@ -28,7 +28,7 @@
     { label: 'Dev tools', href: '/docs/dev-tools' }
   ]
 
-  const navigation = [
+  const navigation: DocLayoutNavGroup[] = [
     {
       label: 'Fundamentals',
       items: [
@@ -63,7 +63,7 @@
     }
   ]
 
-  const theme = ref('system')
+  const theme = ref<ThemeSwitcherValue>('system')
 
   const crumbs = [
     { label: 'Fundamentals', href: '/docs/fundamentals' },

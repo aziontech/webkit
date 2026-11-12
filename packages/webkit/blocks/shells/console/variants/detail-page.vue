@@ -1,23 +1,24 @@
-<script setup>
+<script setup lang="ts">
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout from '@aziontech/webkit/console-layout'
+  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Select from '@aziontech/webkit/select'
+  import type { SelectValue } from '@aziontech/webkit/select-root'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
-  const navigation = [
+  const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
         { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
@@ -187,9 +188,9 @@
     { id: 'shop-assets', label: 'shop-assets', icon: 'ai ai-edge-storage', type: 'Bucket' }
   ]
 
-  const theme = ref('system')
+  const theme = ref<ThemeSwitcherValue>('system')
 
-  const onSearchSelect = (_event, value) => {
+  const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
   }
 
@@ -219,13 +220,13 @@
     return environments.filter((entry) => entry.name.toLowerCase().includes(needle))
   })
 
-  const environmentLabel = (value) => String(value ?? '')
+  const environmentLabel = (value: unknown) => String(value ?? '')
 
-  const pickEnvironment = (value) => {
+  const pickEnvironment = (value: SelectValue) => {
     if (typeof value === 'string' && value !== '__create-environment__') environment.value = value
   }
 
-  const onEnvironmentOpen = (open) => {
+  const onEnvironmentOpen = (open: boolean) => {
     if (!open) environmentQuery.value = ''
   }
 </script>

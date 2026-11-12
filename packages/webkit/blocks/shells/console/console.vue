@@ -1,19 +1,19 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout from '@aziontech/webkit/console-layout'
+  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
 
-  const navigation = [
+  const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
         { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
@@ -183,10 +183,10 @@
     { id: 'shop-assets', label: 'shop-assets', icon: 'ai ai-edge-storage', type: 'Bucket' }
   ]
 
-  const theme = ref('system')
+  const theme = ref<ThemeSwitcherValue>('system')
   const search = ref('')
 
-  const onSearchSelect = (_event, value) => {
+  const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
   }
 </script>
