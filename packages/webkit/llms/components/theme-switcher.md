@@ -73,8 +73,8 @@
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { ref } from 'vue'
 
   const theme = ref('system')
 </script>
@@ -88,8 +88,8 @@
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { ref } from 'vue'
 
   const theme = ref('system')
 </script>

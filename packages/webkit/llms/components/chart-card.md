@@ -149,8 +149,8 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 
 ```vue
 <script setup>
-  import ChartCard from '@aziontech/webkit/chart-card'
   import Chart from '@aziontech/webkit/chart'
+  import ChartCard from '@aziontech/webkit/chart-card'
   import Hint from '@aziontech/webkit/hint'
 
   const labels = [
@@ -220,9 +220,8 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 
 ```vue
 <script setup>
-  import ChartCard from '@aziontech/webkit/chart-card'
   import Chart from '@aziontech/webkit/chart'
-  import Hint from '@aziontech/webkit/hint'
+  import ChartCard from '@aziontech/webkit/chart-card'
 
   const labels = [
     '13:05',

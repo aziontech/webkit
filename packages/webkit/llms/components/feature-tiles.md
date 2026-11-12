@@ -64,9 +64,9 @@
 
 ```vue
 <script setup>
-  import FeatureTiles from '@aziontech/webkit/feature-tiles'
   import branches from '@aziontech/webkit/assets/branches.svg'
   import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
+  import FeatureTiles from '@aziontech/webkit/feature-tiles'
 </script>
 
 <template>
@@ -97,9 +97,9 @@
 
 ```vue
 <script setup>
-  import FeatureTiles from '@aziontech/webkit/feature-tiles'
   import branches from '@aziontech/webkit/assets/branches.svg'
   import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
+  import FeatureTiles from '@aziontech/webkit/feature-tiles'
 </script>
 
 <template>

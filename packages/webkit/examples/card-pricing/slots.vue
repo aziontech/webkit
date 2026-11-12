@@ -1,6 +1,6 @@
 <script setup>
-  import CardPricing from '@aziontech/webkit/card-pricing'
   import Button from '@aziontech/webkit/button'
+  import CardPricing from '@aziontech/webkit/card-pricing'
 </script>
 
 <template>

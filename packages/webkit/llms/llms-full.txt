@@ -14123,58 +14123,62 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 </script>
 
 <template>
-  <Resizable
-    :orientation="narrow ? 'vertical' : 'horizontal'"
+  <div
     class="w-full rounded-(--shape-card) border border-(--border-default)"
     :class="narrow ? 'h-(--container-md)' : 'h-(--container-xs)'"
-    aria-label="Conversation and artifact"
   >
-    <Resizable.Pane>
-      <div
-        ref="opener"
-        class="flex h-full flex-col gap-(--spacing-sm) overflow-auto p-(--spacing-md)"
-      >
-        <p class="m-0 text-body-sm text-(--text-default)">
-          Here are the ten biggest orders of the last seven days.
-        </p>
-        <ArtifactPreview
-          title="top-orders.sql"
-          meta="SQL"
-          icon="pi pi-code"
-          openable
-          @open="show"
-        />
-      </div>
-    </Resizable.Pane>
-    <Resizable.Handle
-      v-if="open"
-      aria-label="Resize the artifact"
-    />
-    <Resizable.Pane
-      v-if="open"
-      :basis="narrow ? height : width"
-      :min="narrow ? 160 : 300"
-      :max="narrow ? 360 : 720"
-      @update:basis="(value) => (narrow ? (height = value) : (width = value))"
+    <Resizable
+      :orientation="narrow ? 'vertical' : 'horizontal'"
+      class="h-full"
+      aria-label="Conversation and artifact"
     >
-      <ArtifactCanvas
-        ref="canvas"
-        v-model:version="version"
-        title="top-orders.sql"
-        :meta="`SQL · ${versions[version].split('\n').length} lines`"
-        kind="code"
-        :versions="versions.length"
-        :copy-value="versions[version]"
-        @close="hide"
+      <Resizable.Pane>
+        <div
+          ref="opener"
+          class="flex h-full flex-col gap-(--spacing-sm) overflow-auto p-(--spacing-md)"
+        >
+          <p class="m-0 text-body-sm text-(--text-default)">
+            Here are the ten biggest orders of the last seven days.
+          </p>
+          <ArtifactPreview
+            title="top-orders.sql"
+            meta="SQL"
+            icon="pi pi-code"
+            openable
+            @open="show"
+          />
+        </div>
+      </Resizable.Pane>
+      <Resizable.Handle
+        v-if="open"
+        aria-label="Resize the artifact"
+      />
+      <Resizable.Pane
+        v-if="open"
+        :basis="narrow ? height : width"
+        :min="narrow ? 160 : 300"
+        :max="narrow ? 360 : 720"
+        @update:basis="(value) => (narrow ? (height = value) : (width = value))"
       >
-        <CodeBlock
-          :tabs="[{ label: 'SQL', value: 'sql', code: versions[version], language: 'sql' }]"
-          :copyable="false"
-          :bordered="false"
-        />
-      </ArtifactCanvas>
-    </Resizable.Pane>
-  </Resizable>
+        <ArtifactCanvas
+          ref="canvas"
+          v-model:version="version"
+          title="top-orders.sql"
+          :meta="`SQL · ${versions[version].split('\n').length} lines`"
+          kind="code"
+          :versions="versions.length"
+          :copy-value="versions[version]"
+          @close="hide"
+        >
+          <CodeBlock
+            :tabs="[{ label: 'SQL', value: 'sql', code: versions[version], language: 'sql' }]"
+            :copyable="false"
+            :bordered="false"
+          />
+        </ArtifactCanvas>
+      </Resizable.Pane>
+    </Resizable>
+  </div>
 </template>
 ```
 
@@ -16598,8 +16602,8 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 
 ```vue
 <script setup>
-  import ChartCard from '@aziontech/webkit/chart-card'
   import Chart from '@aziontech/webkit/chart'
+  import ChartCard from '@aziontech/webkit/chart-card'
   import Hint from '@aziontech/webkit/hint'
 
   const labels = [
@@ -17987,8 +17991,8 @@ LogView ships flat, individually importable sub-components (each from its own `@
 ```vue
 <script setup>
   import LogView from '@aziontech/webkit/log-view'
-  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import LogViewContent from '@aziontech/webkit/log-view-content'
+  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import { ref } from 'vue'
 
   const lines = [
@@ -18010,15 +18014,17 @@ LogView ships flat, individually importable sub-components (each from its own `@
 </script>
 
 <template>
-  <LogView
-    :lines="lines"
-    v-model:search="search"
-    v-model:warnings-only="warningsOnly"
-    class="h-[640px]"
-  >
-    <LogViewHeader />
-    <LogViewContent />
-  </LogView>
+  <div class="h-[640px]">
+    <LogView
+      :lines="lines"
+      v-model:search="search"
+      v-model:warnings-only="warningsOnly"
+      class="h-full"
+    >
+      <LogViewHeader />
+      <LogViewContent />
+    </LogView>
+  </div>
 </template>
 ```
 
@@ -19881,8 +19887,8 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 
 ```vue
 <script setup>
-  import Item from '@aziontech/webkit/item'
   import Button from '@aziontech/webkit/button'
+  import Item from '@aziontech/webkit/item'
 </script>
 
 <template>
@@ -20114,8 +20120,8 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ```vue
 <script setup>
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import Link from '@aziontech/webkit/link'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>
@@ -21113,9 +21119,9 @@ Exports: `./shell-mockup` → `index.ts`, `./shell-mockup-root` → `shell-mocku
 
 ```vue
 <script setup>
-  import ShellMockup from '@aziontech/webkit/shell-mockup'
   import Button from '@aziontech/webkit/button'
   import Input from '@aziontech/webkit/input'
+  import ShellMockup from '@aziontech/webkit/shell-mockup'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
 </script>
@@ -26132,8 +26138,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 ```vue
 <script setup>
-  import EmptyState from '@aziontech/webkit/empty-state'
   import Button from '@aziontech/webkit/button'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import MiniButton from '@aziontech/webkit/mini-button'
 </script>
 
@@ -26799,8 +26805,8 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ```vue
 <script setup>
-  import { Toaster, toast } from '@aziontech/webkit/toast'
   import Button from '@aziontech/webkit/button'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
 
   const show = () =>
     toast('Event has been created', {
@@ -28005,9 +28011,9 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
+  import { ref } from 'vue'
 
   const email = ref('')
 </script>
@@ -28139,10 +28145,9 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
-
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import { ref } from 'vue'
 
   const input = ref(null)
   const browse = () => input.value?.click()
@@ -29410,10 +29415,10 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
   import Field from '@aziontech/webkit/field'
   import PasswordInput from '@aziontech/webkit/password-input'
   import PasswordRequirements from '@aziontech/webkit/password-requirements'
+  import { ref } from 'vue'
 
   const password = ref('')
 </script>
@@ -29523,9 +29528,9 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
   import Field from '@aziontech/webkit/field'
   import PhoneInput from '@aziontech/webkit/phone-input'
+  import { ref } from 'vue'
 
   const digits = ref('')
   const country = ref('BR')
@@ -30652,8 +30657,8 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { ref } from 'vue'
 
   const theme = ref('system')
 </script>
@@ -32158,23 +32163,25 @@ context, so a consumer never wires one part to the other.
 </script>
 
 <template>
-  <Resizable
-    orientation="horizontal"
-    aria-label="Workspace"
-    class="h-64"
-  >
-    <Resizable.Pane aria-label="Document"
-      >Flexible — no basis, so it takes what is left.</Resizable.Pane
+  <div class="h-64">
+    <Resizable
+      class="h-full"
+      orientation="horizontal"
+      aria-label="Workspace"
     >
-    <Resizable.Handle aria-label="Resize the panel" />
-    <Resizable.Pane
-      v-model:basis="basis"
-      :min="160"
-      :max="480"
-      aria-label="Panel"
-      >Sized</Resizable.Pane
-    >
-  </Resizable>
+      <Resizable.Pane aria-label="Document"
+        >Flexible — no basis, so it takes what is left.</Resizable.Pane
+      >
+      <Resizable.Handle aria-label="Resize the panel" />
+      <Resizable.Pane
+        v-model:basis="basis"
+        :min="160"
+        :max="480"
+        aria-label="Panel"
+        >Sized</Resizable.Pane
+      >
+    </Resizable>
+  </div>
 </template>
 ```
 
@@ -32372,17 +32379,23 @@ context, so a consumer never wires one part to the other.
 </script>
 
 <template>
-  <ScrollArea
-    orientation="vertical"
-    aria-label="Scrollable content"
-    class="h-[200px] max-w-(--container-md) rounded-(--shape-elements) border border-(--border-default) p-(--spacing-4) text-body-sm text-(--text-default)"
+  <div
+    class="h-[200px] max-w-(--container-md) rounded-(--shape-elements) border border-(--border-default)"
   >
-    Jokester began sneaking into the castle in the middle of the night and leaving jokes all over
-    the place: under the king's pillow, in his soup, even in the royal toilet. The king was furious,
-    but he couldn't seem to stop Jokester. And then one day, the king tripped over one of Jokester's
-    whoopee cushions and fell into the moat. He was so embarrassed that he decided to make Jokester
-    the official court jester.
-  </ScrollArea>
+    <ScrollArea
+      orientation="vertical"
+      aria-label="Scrollable content"
+      class="h-full"
+    >
+      <div class="p-(--spacing-4) text-body-sm text-(--text-default)">
+        Jokester began sneaking into the castle in the middle of the night and leaving jokes all
+        over the place: under the king's pillow, in his soup, even in the royal toilet. The king was
+        furious, but he couldn't seem to stop Jokester. And then one day, the king tripped over one
+        of Jokester's whoopee cushions and fell into the moat. He was so embarrassed that he decided
+        to make Jokester the official court jester.
+      </div>
+    </ScrollArea>
+  </div>
 </template>
 ```
 
@@ -33047,17 +33060,17 @@ between them is the ring-offset surface below.
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
   import CommandList from '@aziontech/webkit/command-list'
-  import CommandRoot from '@aziontech/webkit/command-root'
+  import Command from '@aziontech/webkit/command-root'
   import CommandSeparator from '@aziontech/webkit/command-separator'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
   import MenuBack from '@aziontech/webkit/menu-back'
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
-  import MenuRoot from '@aziontech/webkit/menu-root'
+  import Menu from '@aziontech/webkit/menu-root'
   import MenuSub from '@aziontech/webkit/menu-sub'
   import MenuSubContent from '@aziontech/webkit/menu-sub-content'
   import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
@@ -33072,199 +33085,198 @@ between them is the ring-offset surface below.
 </script>
 
 <template>
-  <Sidebar
-    aria-label="Console"
-    class="h-screen w-[280px]"
-  >
-    <template #header>
-      <SidebarHeader>
-        <SearchTrigger
-          class="w-full"
-          @open="paletteOpen = true"
-        />
-
-        <CommandRoot v-model:open="paletteOpen">
-          <CommandInput placeholder="Search navigation and commands" />
-          <CommandList>
-            <CommandGroup heading="Build">
-              <CommandItem value="nav:applications">
-                <template #prefix
-                  ><i
-                    class="ai ai-edge-application"
-                    aria-hidden="true"
-                /></template>
-                Applications
-              </CommandItem>
-              <CommandItem value="nav:variables">
-                <template #prefix
-                  ><i
-                    class="ai ai-variables"
-                    aria-hidden="true"
-                /></template>
-                Variables
-              </CommandItem>
-            </CommandGroup>
-
-            <CommandSeparator />
-
-            <CommandGroup heading="Account">
-              <CommandItem value="cmd:settings">
-                <template #prefix
-                  ><i
-                    class="pi pi-cog"
-                    aria-hidden="true"
-                /></template>
-                Account Settings
-              </CommandItem>
-            </CommandGroup>
-
-            <CommandEmpty>No navigation or command matches your search.</CommandEmpty>
-          </CommandList>
-        </CommandRoot>
-      </SidebarHeader>
-    </template>
-    <MenuRoot role="presentation">
-      <MenuBack />
-      <MenuGroup>
-        <MenuItem
-          label="Home"
-          icon="ai ai-home"
-          href="/"
-          selected
-        />
-        <MenuItem
-          label="Marketplace"
-          icon="ai ai-marketplace"
-          href="/marketplace"
-        />
-      </MenuGroup>
-      <MenuGroup label="Build">
-        <MenuItem
-          label="Applications"
-          icon="ai ai-edge-application"
-          href="/applications"
-        />
-        <MenuSub default-open>
-          <MenuSubTrigger
-            label="Edge Functions"
-            kind="inline"
+  <div class="h-screen w-[280px]">
+    <Sidebar aria-label="Console">
+      <template #header>
+        <SidebarHeader>
+          <SearchTrigger
+            class="w-full"
+            @open="paletteOpen = true"
           />
-          <MenuSubContent>
-            <MenuItem
-              label="Runtime APIs"
-              href="/functions/runtime-apis"
+
+          <Command v-model:open="paletteOpen">
+            <CommandInput placeholder="Search navigation and commands" />
+            <CommandList>
+              <CommandGroup heading="Build">
+                <CommandItem value="nav:applications">
+                  <template #prefix
+                    ><i
+                      class="ai ai-edge-application"
+                      aria-hidden="true"
+                  /></template>
+                  Applications
+                </CommandItem>
+                <CommandItem value="nav:variables">
+                  <template #prefix
+                    ><i
+                      class="ai ai-variables"
+                      aria-hidden="true"
+                  /></template>
+                  Variables
+                </CommandItem>
+              </CommandGroup>
+
+              <CommandSeparator />
+
+              <CommandGroup heading="Account">
+                <CommandItem value="cmd:settings">
+                  <template #prefix
+                    ><i
+                      class="pi pi-cog"
+                      aria-hidden="true"
+                  /></template>
+                  Account Settings
+                </CommandItem>
+              </CommandGroup>
+
+              <CommandEmpty>No navigation or command matches your search.</CommandEmpty>
+            </CommandList>
+          </Command>
+        </SidebarHeader>
+      </template>
+      <Menu role="presentation">
+        <MenuBack />
+        <MenuGroup>
+          <MenuItem
+            label="Home"
+            icon="ai ai-home"
+            href="/"
+            selected
+          />
+          <MenuItem
+            label="Marketplace"
+            icon="ai ai-marketplace"
+            href="/marketplace"
+          />
+        </MenuGroup>
+        <MenuGroup label="Build">
+          <MenuItem
+            label="Applications"
+            icon="ai ai-edge-application"
+            href="/applications"
+          />
+          <MenuSub default-open>
+            <MenuSubTrigger
+              label="Edge Functions"
+              kind="inline"
             />
-            <MenuItem
-              label="Bundlers"
-              href="/functions/bundlers"
+            <MenuSubContent>
+              <MenuItem
+                label="Runtime APIs"
+                href="/functions/runtime-apis"
+              />
+              <MenuItem
+                label="Bundlers"
+                href="/functions/bundlers"
+              />
+            </MenuSubContent>
+          </MenuSub>
+          <MenuItem
+            label="Variables"
+            icon="ai ai-variables"
+            href="/variables"
+          />
+        </MenuGroup>
+        <MenuGroup label="Store">
+          <MenuItem
+            label="Object Storage"
+            icon="ai ai-edge-storage"
+            href="/object-storage"
+          />
+          <MenuItem
+            label="SQL Database"
+            icon="ai ai-edge-sql"
+            href="/sql-database"
+            tag-value="Preview"
+            tag-severity="primary"
+          />
+        </MenuGroup>
+        <MenuGroup label="Account">
+          <MenuSub>
+            <MenuSubTrigger
+              label="Settings"
+              icon="pi pi-cog"
+              kind="drill"
             />
-          </MenuSubContent>
-        </MenuSub>
-        <MenuItem
-          label="Variables"
-          icon="ai ai-variables"
-          href="/variables"
-        />
-      </MenuGroup>
-      <MenuGroup label="Store">
-        <MenuItem
-          label="Object Storage"
-          icon="ai ai-edge-storage"
-          href="/object-storage"
-        />
-        <MenuItem
-          label="SQL Database"
-          icon="ai ai-edge-sql"
-          href="/sql-database"
-          tag-value="Preview"
-          tag-severity="primary"
-        />
-      </MenuGroup>
-      <MenuGroup label="Account">
-        <MenuSub>
-          <MenuSubTrigger
-            label="Settings"
-            icon="pi pi-cog"
-            kind="drill"
-          />
-          <MenuSubContent>
-            <MenuGroup label="Organization">
-              <MenuItem
-                label="General"
-                href="/settings/general"
-              />
-              <MenuItem
-                label="Members"
-                href="/settings/members"
-              />
-              <MenuItem
-                label="Billing"
-                href="/settings/billing"
-              />
-            </MenuGroup>
-          </MenuSubContent>
-        </MenuSub>
-      </MenuGroup>
-    </MenuRoot>
-    <template #footer>
-      <SidebarFooter>
-        <div class="flex items-center gap-(--spacing-xs)">
-          <Avatar
-            kind="square"
-            size="small"
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"
-            alt="Alex Moreira"
-          />
-          <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
-            >Alex Moreira</span
-          >
-          <DropdownMenuRoot
-            v-model:open="accountMenuOpen"
-            placement="top-end"
-          >
-            <DropdownMenuTrigger>
-              <IconButton
-                icon="pi pi-ellipsis-v"
-                aria-label="Account menu"
-                kind="outlined"
-                size="small"
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuGroup>
-              <template #top>
-                <div class="flex min-w-0 flex-col">
-                  <span class="truncate text-label-md text-(--text-default)">Alex Moreira</span>
-                  <span class="truncate text-body-xs text-(--text-muted)"
-                    >rafael.umman@example.com</span
-                  >
-                </div>
-              </template>
-              <DropdownMenuOption
-                value="settings"
-                label="Account Settings"
-              />
-              <DropdownMenuOption
-                value="personal-tokens"
-                label="Personal Tokens"
-              />
-            </DropdownMenuGroup>
-            <DropdownMenuGroup>
-              <DropdownMenuOption
-                value="logout"
-                label="Log Out"
-              >
-                <template #right
-                  ><i
-                    class="pi pi-sign-out"
-                    aria-hidden="true"
-                /></template>
-              </DropdownMenuOption>
-            </DropdownMenuGroup>
-          </DropdownMenuRoot>
-        </div>
-      </SidebarFooter>
-    </template>
-  </Sidebar>
+            <MenuSubContent>
+              <MenuGroup label="Organization">
+                <MenuItem
+                  label="General"
+                  href="/settings/general"
+                />
+                <MenuItem
+                  label="Members"
+                  href="/settings/members"
+                />
+                <MenuItem
+                  label="Billing"
+                  href="/settings/billing"
+                />
+              </MenuGroup>
+            </MenuSubContent>
+          </MenuSub>
+        </MenuGroup>
+      </Menu>
+      <template #footer>
+        <SidebarFooter>
+          <div class="flex items-center gap-(--spacing-xs)">
+            <Avatar
+              kind="square"
+              size="small"
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"
+              alt="Alex Moreira"
+            />
+            <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
+              >Alex Moreira</span
+            >
+            <DropdownMenu
+              v-model:open="accountMenuOpen"
+              placement="top-end"
+            >
+              <DropdownMenuTrigger>
+                <IconButton
+                  icon="pi pi-ellipsis-v"
+                  aria-label="Account menu"
+                  kind="outlined"
+                  size="small"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuGroup>
+                <template #top>
+                  <div class="flex min-w-0 flex-col">
+                    <span class="truncate text-label-md text-(--text-default)">Alex Moreira</span>
+                    <span class="truncate text-body-xs text-(--text-muted)"
+                      >rafael.umman@example.com</span
+                    >
+                  </div>
+                </template>
+                <DropdownMenuOption
+                  value="settings"
+                  label="Account Settings"
+                />
+                <DropdownMenuOption
+                  value="personal-tokens"
+                  label="Personal Tokens"
+                />
+              </DropdownMenuGroup>
+              <DropdownMenuGroup>
+                <DropdownMenuOption
+                  value="logout"
+                  label="Log Out"
+                >
+                  <template #right
+                    ><i
+                      class="pi pi-sign-out"
+                      aria-hidden="true"
+                  /></template>
+                </DropdownMenuOption>
+              </DropdownMenuGroup>
+            </DropdownMenu>
+          </div>
+        </SidebarFooter>
+      </template>
+    </Sidebar>
+  </div>
 </template>
 ```
 
@@ -34115,8 +34127,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import CallToAction from '@aziontech/webkit/call-to-action'
   import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/webkit/call-to-action'
 </script>
 
 <template>
@@ -35261,9 +35273,6 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
-  import FrameBox from '@aziontech/webkit/frame-box'
-  import LogoWall from '@aziontech/webkit/logo-wall'
-  import Quote from '@aziontech/webkit/quote'
   import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
   import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
   import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
@@ -35271,6 +35280,9 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
   import nznLogo from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
+  import FrameBox from '@aziontech/webkit/frame-box'
+  import LogoWall from '@aziontech/webkit/logo-wall'
+  import Quote from '@aziontech/webkit/quote'
 </script>
 
 <template>
@@ -36066,14 +36078,14 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
+  import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
+  import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
+  import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
+  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import Button from '@aziontech/webkit/button'
   import FrameBox from '@aziontech/webkit/frame-box'
   import QuoteTabs from '@aziontech/webkit/quote-tabs'
-  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
-  import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
-  import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
-  import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
 </script>
 
 <template>
@@ -36220,8 +36232,8 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
   import FrameBox from '@aziontech/webkit/frame-box'
+  import SectionContainer from '@aziontech/webkit/section-container'
 </script>
 
 <template>
@@ -36312,8 +36324,8 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
-  import SectionGap from '@aziontech/webkit/section-gap'
   import FrameBox from '@aziontech/webkit/frame-box'
+  import SectionGap from '@aziontech/webkit/section-gap'
 </script>
 
 <template>
@@ -39875,8 +39887,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import Tooltip from '@aziontech/webkit/tooltip'
   import Button from '@aziontech/webkit/button'
+  import Tooltip from '@aziontech/webkit/tooltip'
 </script>
 
 <template>
@@ -41058,7 +41070,6 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import ClientMosaic from '@aziontech/webkit/client-mosaic'
   import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
   import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
   import exameExtendedMono from '@aziontech/webkit/assets/exame-extended-mono.svg'
@@ -41069,6 +41080,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   import netshoesPhoto from '@aziontech/webkit/assets/netshoes-photo.jpg'
   import nznExtendedReversed from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import rennerExtendedReversed from '@aziontech/webkit/assets/renner-extended-reversed.svg'
+  import ClientMosaic from '@aziontech/webkit/client-mosaic'
 </script>
 
 <template>
@@ -41203,10 +41215,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
   import dafitiExtendedReversed from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
   import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
   import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
 </script>
 
 <template>
@@ -42406,9 +42418,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import ComparisonTable from '@aziontech/webkit/comparison-table'
   import cloudflareExtendedColor from '@aziontech/webkit/assets/cloudflare-extended-color.svg'
   import cloudflareExtendedReversed from '@aziontech/webkit/assets/cloudflare-extended-reversed.svg'
+  import ComparisonTable from '@aziontech/webkit/comparison-table'
 
   const competitor = {
     name: 'Cloudflare',
@@ -42671,12 +42683,12 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import ComplianceBadges from '@aziontech/webkit/compliance-badges'
   import ccpaSymbolColor from '@aziontech/webkit/assets/ccpa-symbol-color.svg'
   import gdprSymbolColor from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
   import lgpdSymbolColor from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
   import pciDssSymbolColor from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
   import socSymbolColor from '@aziontech/webkit/assets/soc-symbol-color.svg'
+  import ComplianceBadges from '@aziontech/webkit/compliance-badges'
 </script>
 
 <template>
@@ -43066,10 +43078,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'
   import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
   import americanasExtendedReversed from '@aziontech/webkit/assets/americanas-extended-reversed.svg'
   import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
+  import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'
 
   const cards = [
     {
@@ -43510,9 +43522,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import FeatureTiles from '@aziontech/webkit/feature-tiles'
   import branches from '@aziontech/webkit/assets/branches.svg'
   import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
+  import FeatureTiles from '@aziontech/webkit/feature-tiles'
 </script>
 
 <template>
@@ -44323,11 +44335,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import InvestorMarks from '@aziontech/webkit/investor-marks'
   import monasheesExtendedMono from '@aziontech/webkit/assets/monashees-extended-mono.svg'
   import monasheesExtendedReversed from '@aziontech/webkit/assets/monashees-extended-reversed.svg'
   import qualcommExtendedMono from '@aziontech/webkit/assets/qualcomm-extended-mono.svg'
   import qualcommExtendedReversed from '@aziontech/webkit/assets/qualcomm-extended-reversed.svg'
+  import InvestorMarks from '@aziontech/webkit/investor-marks'
 </script>
 
 <template>
@@ -44700,7 +44712,6 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
   import agibankExtendedColor from '@aziontech/webkit/assets/agibank-extended-color.svg'
   import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
   import bancoDeLaNacionExtendedMono from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
@@ -44711,6 +44722,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
   import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
   import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
+  import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
 </script>
 
 <template>
@@ -44997,8 +45009,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import MediaSplitStack from '@aziontech/webkit/media-split-stack'
   import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
+  import MediaSplitStack from '@aziontech/webkit/media-split-stack'
 
   const bands = [
     {
@@ -45254,8 +45266,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import PhotoMarquee from '@aziontech/webkit/photo-marquee'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+  import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 </script>
 
 <template>
@@ -45819,7 +45831,6 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
   import forresterExtendedColor from '@aziontech/webkit/assets/forrester-extended-color.svg'
   import forresterExtendedReversed from '@aziontech/webkit/assets/forrester-extended-reversed.svg'
   import frostAndSullivanExtendedColor from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
@@ -45829,6 +45840,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   import gartnerExtendedReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
   import gigaomExtendedColor from '@aziontech/webkit/assets/gigaom-extended-color.svg'
   import gigaomExtendedReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
+  import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 </script>
 
 <template>

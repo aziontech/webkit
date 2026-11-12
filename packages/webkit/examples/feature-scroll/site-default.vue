@@ -1,7 +1,7 @@
 <script setup>
+  import FeatureScroll from '@aziontech/webkit/feature-scroll'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import FeatureScroll from '@aziontech/webkit/feature-scroll'
 
   const items = [
     {

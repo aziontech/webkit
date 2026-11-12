@@ -1,7 +1,7 @@
 <script setup>
+  import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
 
   const primaryAction = {
     label: 'See open roles',

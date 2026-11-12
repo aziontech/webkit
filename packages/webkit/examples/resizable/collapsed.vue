@@ -13,20 +13,22 @@
     >
       {{ collapsed ? 'Show' : 'Hide' }} the preview
     </button>
-    <Resizable
-      aria-label="Workspace"
-      class="h-64"
-    >
-      <Resizable.Pane aria-label="Editor">Editor</Resizable.Pane>
-      <Resizable.Handle aria-label="Resize the preview" />
-      <Resizable.Pane
-        v-model:collapsed="collapsed"
-        :basis="240"
-        :min="160"
-        collapsible
-        aria-label="Preview"
-        >Preview</Resizable.Pane
+    <div class="h-64">
+      <Resizable
+        class="h-full"
+        aria-label="Workspace"
       >
-    </Resizable>
+        <Resizable.Pane aria-label="Editor">Editor</Resizable.Pane>
+        <Resizable.Handle aria-label="Resize the preview" />
+        <Resizable.Pane
+          v-model:collapsed="collapsed"
+          :basis="240"
+          :min="160"
+          collapsible
+          aria-label="Preview"
+          >Preview</Resizable.Pane
+        >
+      </Resizable>
+    </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <script setup>
+  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
   import { ref } from 'vue'
 
   const form = {

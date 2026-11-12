@@ -1,6 +1,6 @@
 <script setup>
-  import { ref } from 'vue'
   import Chip from '@aziontech/webkit/chip'
+  import { ref } from 'vue'
 
   const production = ref(true)
   const staging = ref(false)

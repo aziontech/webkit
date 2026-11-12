@@ -54,10 +54,10 @@
 
 ```vue
 <script setup>
-  import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
   import dafitiExtendedReversed from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
   import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
   import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
 </script>
 
 <template>

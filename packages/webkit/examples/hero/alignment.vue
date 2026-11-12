@@ -8,7 +8,7 @@
       kind="screen"
       align="top"
       max-width="full"
-      class="[--banner-offset:75dvh]"
+      offset="75dvh"
     >
       <Hero.Title
         centered
@@ -21,7 +21,7 @@
       kind="screen"
       align="center"
       max-width="full"
-      class="[--banner-offset:75dvh]"
+      offset="75dvh"
     >
       <Hero.Title
         centered
@@ -34,7 +34,7 @@
       kind="screen"
       align="bottom"
       max-width="full"
-      class="[--banner-offset:75dvh]"
+      offset="75dvh"
     >
       <Hero.Title
         centered

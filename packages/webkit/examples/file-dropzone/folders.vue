@@ -1,9 +1,8 @@
 <script setup>
-  import { ref } from 'vue'
-
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import { ref } from 'vue'
 
   const filesInput = ref(null)
   const folderInput = ref(null)

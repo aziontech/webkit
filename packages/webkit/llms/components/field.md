@@ -112,9 +112,9 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
+  import { ref } from 'vue'
 
   const email = ref('')
 </script>
@@ -137,9 +137,9 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 ```vue
 <script setup>
-  import { computed, ref } from 'vue'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
+  import { computed, ref } from 'vue'
 
   const slug = ref('My Project')
   const invalid = computed(() => !/^[a-z0-9-]+$/.test(slug.value))
@@ -167,10 +167,10 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Field from '@aziontech/webkit/field'
   import Switch from '@aziontech/webkit/switch'
+  import { ref } from 'vue'
 
   const terms = ref(false)
   const notifications = ref(true)

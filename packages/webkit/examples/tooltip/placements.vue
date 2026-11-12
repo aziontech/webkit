@@ -1,6 +1,6 @@
 <script setup>
-  import Tooltip from '@aziontech/webkit/tooltip'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/webkit/tooltip'
 </script>
 
 <template>

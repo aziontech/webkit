@@ -3,7 +3,7 @@
   {
    "name": "Default",
    "summary": "Inside a `Field`: the label targets the tel input, the dial-code select filters as you type, and `update:phone` hands over the E.164 number and whether it is complete.",
-   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import Field from '@aziontech/webkit/field'\n  import PhoneInput from '@aziontech/webkit/phone-input'\n\n  const digits = ref('')\n  const country = ref('BR')\n  const phone = ref(null)\n</script>\n\n<template>\n  <Field\n    required\n    class=\"max-w-(--container-xs)\"\n  >\n    <Field.Label>Phone</Field.Label>\n    <PhoneInput\n      v-model=\"digits\"\n      v-model:country=\"country\"\n      name=\"phone\"\n      @update:phone=\"phone = $event\"\n    />\n    <Field.Description>We'll use this to send the verification code.</Field.Description>\n  </Field>\n</template>"
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import PhoneInput from '@aziontech/webkit/phone-input'\n  import { ref } from 'vue'\n\n  const digits = ref('')\n  const country = ref('BR')\n  const phone = ref(null)\n</script>\n\n<template>\n  <Field\n    required\n    class=\"max-w-(--container-xs)\"\n  >\n    <Field.Label>Phone</Field.Label>\n    <PhoneInput\n      v-model=\"digits\"\n      v-model:country=\"country\"\n      name=\"phone\"\n      @update:phone=\"phone = $event\"\n    />\n    <Field.Description>We'll use this to send the verification code.</Field.Description>\n  </Field>\n</template>"
   }
  ]
 }

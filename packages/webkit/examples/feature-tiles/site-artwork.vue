@@ -1,9 +1,9 @@
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import FeatureTiles from '@aziontech/webkit/feature-tiles'
   import branches from '@aziontech/webkit/assets/branches.svg'
   import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
+  import FeatureTiles from '@aziontech/webkit/feature-tiles'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
 
   const tiles = [
     {

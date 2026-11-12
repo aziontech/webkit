@@ -1,8 +1,8 @@
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
   import ArticleCards from '@aziontech/webkit/article-cards'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
 
   const items = [
     {

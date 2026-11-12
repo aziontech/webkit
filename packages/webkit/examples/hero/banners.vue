@@ -25,27 +25,28 @@
       />
     </Hero>
 
-    <Hero
-      kind="screen"
-      max-width="site"
-      class="[--banner-top-height:44%]"
-    >
-      <template #top>
-        <div
-          class="mx-auto w-full max-w-(--container-3xl) pt-(--spacing-xl) mask-b-from-45% mask-b-to-80%"
-        >
-          <Illustration name="low-latency" />
-        </div>
-      </template>
+    <div class="[--banner-top-height:44%]">
+      <Hero
+        kind="screen"
+        max-width="site"
+      >
+        <template #top>
+          <div
+            class="mx-auto w-full max-w-(--container-3xl) pt-(--spacing-xl) mask-b-from-45% mask-b-to-80%"
+          >
+            <Illustration name="low-latency" />
+          </div>
+        </template>
 
-      <Hero.Title
-        centered
-        eyebrow="#top"
-        eyebrow-prefix="//"
-        title="Closer to every user"
-        description="A scene framed by the window on the band's top edge. The window clips it, so only the part it frames shows above the copy."
-      />
-    </Hero>
+        <Hero.Title
+          centered
+          eyebrow="#top"
+          eyebrow-prefix="//"
+          title="Closer to every user"
+          description="A scene framed by the window on the band's top edge. The window clips it, so only the part it frames shows above the copy."
+        />
+      </Hero>
+    </div>
 
     <Hero
       kind="screen"

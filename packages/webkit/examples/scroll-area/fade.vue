@@ -10,9 +10,9 @@
       <ScrollArea
         fade
         aria-label="Deployments"
-        class="h-[240px] p-(--spacing-xs)"
+        class="max-h-[240px]"
       >
-        <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
+        <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-(--spacing-xs)">
           <li
             class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
@@ -83,9 +83,8 @@
         fade
         orientation="horizontal"
         aria-label="Regions"
-        class="p-(--spacing-xs)"
       >
-        <div class="flex w-max gap-(--spacing-xs)">
+        <div class="flex w-max gap-(--spacing-xs) p-(--spacing-xs)">
           <span
             class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
             >São Paulo</span

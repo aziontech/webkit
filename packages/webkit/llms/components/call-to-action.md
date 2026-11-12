@@ -92,8 +92,8 @@
 
 ```vue
 <script setup>
-  import CallToAction from '@aziontech/webkit/call-to-action'
   import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/webkit/call-to-action'
 </script>
 
 <template>
@@ -116,8 +116,8 @@
 
 ```vue
 <script setup>
-  import CallToAction from '@aziontech/webkit/call-to-action'
   import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/webkit/call-to-action'
 </script>
 
 <template>
@@ -141,8 +141,8 @@
 
 ```vue
 <script setup>
-  import CallToAction from '@aziontech/webkit/call-to-action'
   import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/webkit/call-to-action'
 </script>
 
 <template>

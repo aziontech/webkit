@@ -73,10 +73,10 @@
 
 ```vue
 <script setup>
-  import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'
   import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
   import americanasExtendedReversed from '@aziontech/webkit/assets/americanas-extended-reversed.svg'
   import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
+  import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'
 
   const cards = [
     {

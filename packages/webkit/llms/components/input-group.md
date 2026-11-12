@@ -130,8 +130,6 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ```vue
 <script setup>
   import InputGroup from '@aziontech/webkit/input-group'
-  import Button from '@aziontech/webkit/button'
-  import Select from '@aziontech/webkit/select'
 </script>
 
 <template>
@@ -169,8 +167,6 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ```vue
 <script setup>
   import InputGroup from '@aziontech/webkit/input-group'
-  import Button from '@aziontech/webkit/button'
-  import Select from '@aziontech/webkit/select'
 </script>
 
 <template>

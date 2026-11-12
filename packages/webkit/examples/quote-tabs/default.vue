@@ -1,12 +1,12 @@
 <script setup>
+  import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
+  import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
+  import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
+  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import Button from '@aziontech/webkit/button'
   import FrameBox from '@aziontech/webkit/frame-box'
   import QuoteTabs from '@aziontech/webkit/quote-tabs'
-  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
-  import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
-  import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
-  import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
 </script>
 
 <template>

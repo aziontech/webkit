@@ -1,6 +1,6 @@
 <script setup>
-  import Ticker from '@aziontech/webkit/ticker'
   import TextureMaterial from '@aziontech/webkit/texture-material'
+  import Ticker from '@aziontech/webkit/ticker'
 </script>
 
 <template>

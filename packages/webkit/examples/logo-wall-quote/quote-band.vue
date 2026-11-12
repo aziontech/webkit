@@ -1,7 +1,7 @@
 <script setup>
-  import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
   import agibankExtendedColor from '@aziontech/webkit/assets/agibank-extended-color.svg'
   import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
+  import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
 </script>
 
 <template>

@@ -1,10 +1,10 @@
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
   import ArticleCards from '@aziontech/webkit/article-cards'
   import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
   import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
   import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
 
   const items = [
     {

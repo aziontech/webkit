@@ -1,10 +1,10 @@
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
   import dafitiExtendedReversed from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
   import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
   import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
 
   const cells = [
     {

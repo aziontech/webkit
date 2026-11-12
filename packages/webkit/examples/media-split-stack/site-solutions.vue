@@ -1,8 +1,8 @@
 <script setup>
+  import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
+  import MediaSplitStack from '@aziontech/webkit/media-split-stack'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import MediaSplitStack from '@aziontech/webkit/media-split-stack'
-  import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
 
   const bands = [
     {

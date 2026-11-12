@@ -122,9 +122,9 @@ Exports: `./shell-mockup` → `index.ts`, `./shell-mockup-root` → `shell-mocku
 
 ```vue
 <script setup>
-  import ShellMockup from '@aziontech/webkit/shell-mockup'
   import Button from '@aziontech/webkit/button'
   import Input from '@aziontech/webkit/input'
+  import ShellMockup from '@aziontech/webkit/shell-mockup'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
 </script>
@@ -213,9 +213,9 @@ Exports: `./shell-mockup` → `index.ts`, `./shell-mockup-root` → `shell-mocku
 
 ```vue
 <script setup>
-  import ShellMockup from '@aziontech/webkit/shell-mockup'
   import Button from '@aziontech/webkit/button'
   import Input from '@aziontech/webkit/input'
+  import ShellMockup from '@aziontech/webkit/shell-mockup'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
 </script>

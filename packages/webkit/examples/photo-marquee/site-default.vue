@@ -1,8 +1,8 @@
 <script setup>
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+  import PhotoMarquee from '@aziontech/webkit/photo-marquee'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import PhotoMarquee from '@aziontech/webkit/photo-marquee'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 
   const photos = [
     {

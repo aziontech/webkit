@@ -1,6 +1,6 @@
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
   import FrameBox from '@aziontech/webkit/frame-box'
+  import SectionContainer from '@aziontech/webkit/section-container'
 </script>
 
 <template>

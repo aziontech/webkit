@@ -69,17 +69,23 @@
 </script>
 
 <template>
-  <ScrollArea
-    orientation="vertical"
-    aria-label="Scrollable content"
-    class="h-[200px] max-w-(--container-md) rounded-(--shape-elements) border border-(--border-default) p-(--spacing-4) text-body-sm text-(--text-default)"
+  <div
+    class="h-[200px] max-w-(--container-md) rounded-(--shape-elements) border border-(--border-default)"
   >
-    Jokester began sneaking into the castle in the middle of the night and leaving jokes all over
-    the place: under the king's pillow, in his soup, even in the royal toilet. The king was furious,
-    but he couldn't seem to stop Jokester. And then one day, the king tripped over one of Jokester's
-    whoopee cushions and fell into the moat. He was so embarrassed that he decided to make Jokester
-    the official court jester.
-  </ScrollArea>
+    <ScrollArea
+      orientation="vertical"
+      aria-label="Scrollable content"
+      class="h-full"
+    >
+      <div class="p-(--spacing-4) text-body-sm text-(--text-default)">
+        Jokester began sneaking into the castle in the middle of the night and leaving jokes all
+        over the place: under the king's pillow, in his soup, even in the royal toilet. The king was
+        furious, but he couldn't seem to stop Jokester. And then one day, the king tripped over one
+        of Jokester's whoopee cushions and fell into the moat. He was so embarrassed that he decided
+        to make Jokester the official court jester.
+      </div>
+    </ScrollArea>
+  </div>
 </template>
 ```
 
@@ -92,29 +98,40 @@
 
 <template>
   <div class="flex flex-wrap items-start gap-(--spacing-6)">
-    <ScrollArea
-      orientation="vertical"
-      aria-label="Vertical scroll"
-      class="h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default) p-(--spacing-3) text-body-sm text-(--text-default)"
-    >
-      <div class="h-[320px]">Tall content that scrolls along the vertical axis.</div>
-    </ScrollArea>
-    <ScrollArea
-      orientation="horizontal"
-      aria-label="Horizontal scroll"
-      class="w-[240px] rounded-(--shape-elements) border border-(--border-default) p-(--spacing-3) text-body-sm text-(--text-default)"
-    >
-      <p class="m-0 w-max whitespace-nowrap">
-        This line is intentionally wider than the container so horizontal scrolling is required.
-      </p>
-    </ScrollArea>
-    <ScrollArea
-      orientation="both"
-      aria-label="Two-axis scroll"
-      class="h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default) p-(--spacing-3) text-body-sm text-(--text-default)"
-    >
-      <div class="h-[320px] w-[480px]">Tall and wide content for two-axis scrolling.</div>
-    </ScrollArea>
+    <div class="h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default)">
+      <ScrollArea
+        orientation="vertical"
+        aria-label="Vertical scroll"
+        class="h-full"
+      >
+        <div class="p-(--spacing-3) text-body-sm text-(--text-default)">
+          <div class="h-[320px]">Tall content that scrolls along the vertical axis.</div>
+        </div>
+      </ScrollArea>
+    </div>
+    <div class="w-[240px] rounded-(--shape-elements) border border-(--border-default)">
+      <ScrollArea
+        orientation="horizontal"
+        aria-label="Horizontal scroll"
+      >
+        <div class="w-max p-(--spacing-3) text-body-sm text-(--text-default)">
+          <p class="m-0 w-max whitespace-nowrap">
+            This line is intentionally wider than the container so horizontal scrolling is required.
+          </p>
+        </div>
+      </ScrollArea>
+    </div>
+    <div class="h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default)">
+      <ScrollArea
+        orientation="both"
+        aria-label="Two-axis scroll"
+        class="h-full"
+      >
+        <div class="w-max p-(--spacing-3) text-body-sm text-(--text-default)">
+          <div class="h-[320px] w-[480px]">Tall and wide content for two-axis scrolling.</div>
+        </div>
+      </ScrollArea>
+    </div>
   </div>
 </template>
 ```
@@ -134,9 +151,9 @@
       <ScrollArea
         fade
         aria-label="Deployments"
-        class="h-[240px] p-(--spacing-xs)"
+        class="max-h-[240px]"
       >
-        <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
+        <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-(--spacing-xs)">
           <li
             class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
@@ -207,9 +224,8 @@
         fade
         orientation="horizontal"
         aria-label="Regions"
-        class="p-(--spacing-xs)"
       >
-        <div class="flex w-max gap-(--spacing-xs)">
+        <div class="flex w-max gap-(--spacing-xs) p-(--spacing-xs)">
           <span
             class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
             >São Paulo</span

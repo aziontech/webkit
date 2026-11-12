@@ -1,7 +1,7 @@
 <script setup>
+  import PlatformDirectory from '@aziontech/webkit/platform-directory'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import PlatformDirectory from '@aziontech/webkit/platform-directory'
 
   const groups = [
     {

@@ -121,23 +121,25 @@ context, so a consumer never wires one part to the other.
 </script>
 
 <template>
-  <Resizable
-    orientation="horizontal"
-    aria-label="Workspace"
-    class="h-64"
-  >
-    <Resizable.Pane aria-label="Document"
-      >Flexible — no basis, so it takes what is left.</Resizable.Pane
+  <div class="h-64">
+    <Resizable
+      class="h-full"
+      orientation="horizontal"
+      aria-label="Workspace"
     >
-    <Resizable.Handle aria-label="Resize the panel" />
-    <Resizable.Pane
-      v-model:basis="basis"
-      :min="160"
-      :max="480"
-      aria-label="Panel"
-      >Sized</Resizable.Pane
-    >
-  </Resizable>
+      <Resizable.Pane aria-label="Document"
+        >Flexible — no basis, so it takes what is left.</Resizable.Pane
+      >
+      <Resizable.Handle aria-label="Resize the panel" />
+      <Resizable.Pane
+        v-model:basis="basis"
+        :min="160"
+        :max="480"
+        aria-label="Panel"
+        >Sized</Resizable.Pane
+      >
+    </Resizable>
+  </div>
 </template>
 ```
 
@@ -150,36 +152,40 @@ context, so a consumer never wires one part to the other.
 
 <template>
   <div class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-2">
-    <Resizable
-      orientation="horizontal"
-      aria-label="Side by side"
-      class="h-64 overflow-hidden rounded-(--shape-card) border border-(--border-default)"
-    >
-      <Resizable.Pane aria-label="Editor">Editor</Resizable.Pane>
-      <Resizable.Handle aria-label="Resize the preview" />
-      <Resizable.Pane
-        :basis="200"
-        :min="120"
-        :max="400"
-        aria-label="Preview"
-        >Preview</Resizable.Pane
+    <div class="h-64 overflow-hidden rounded-(--shape-card) border border-(--border-default)">
+      <Resizable
+        orientation="horizontal"
+        aria-label="Side by side"
+        class="h-full"
       >
-    </Resizable>
-    <Resizable
-      orientation="vertical"
-      aria-label="Stacked"
-      class="h-64 overflow-hidden rounded-(--shape-card) border border-(--border-default)"
-    >
-      <Resizable.Pane aria-label="Editor">Editor</Resizable.Pane>
-      <Resizable.Handle aria-label="Resize the terminal" />
-      <Resizable.Pane
-        :basis="96"
-        :min="48"
-        :max="200"
-        aria-label="Terminal"
-        >Terminal</Resizable.Pane
+        <Resizable.Pane aria-label="Editor">Editor</Resizable.Pane>
+        <Resizable.Handle aria-label="Resize the preview" />
+        <Resizable.Pane
+          :basis="200"
+          :min="120"
+          :max="400"
+          aria-label="Preview"
+          >Preview</Resizable.Pane
+        >
+      </Resizable>
+    </div>
+    <div class="h-64 overflow-hidden rounded-(--shape-card) border border-(--border-default)">
+      <Resizable
+        orientation="vertical"
+        aria-label="Stacked"
+        class="h-full"
       >
-    </Resizable>
+        <Resizable.Pane aria-label="Editor">Editor</Resizable.Pane>
+        <Resizable.Handle aria-label="Resize the terminal" />
+        <Resizable.Pane
+          :basis="96"
+          :min="48"
+          :max="200"
+          aria-label="Terminal"
+          >Terminal</Resizable.Pane
+        >
+      </Resizable>
+    </div>
   </div>
 </template>
 ```
@@ -202,21 +208,23 @@ context, so a consumer never wires one part to the other.
     >
       {{ collapsed ? 'Show' : 'Hide' }} the preview
     </button>
-    <Resizable
-      aria-label="Workspace"
-      class="h-64"
-    >
-      <Resizable.Pane aria-label="Editor">Editor</Resizable.Pane>
-      <Resizable.Handle aria-label="Resize the preview" />
-      <Resizable.Pane
-        v-model:collapsed="collapsed"
-        :basis="240"
-        :min="160"
-        collapsible
-        aria-label="Preview"
-        >Preview</Resizable.Pane
+    <div class="h-64">
+      <Resizable
+        class="h-full"
+        aria-label="Workspace"
       >
-    </Resizable>
+        <Resizable.Pane aria-label="Editor">Editor</Resizable.Pane>
+        <Resizable.Handle aria-label="Resize the preview" />
+        <Resizable.Pane
+          v-model:collapsed="collapsed"
+          :basis="240"
+          :min="160"
+          collapsible
+          aria-label="Preview"
+          >Preview</Resizable.Pane
+        >
+      </Resizable>
+    </div>
   </div>
 </template>
 ```

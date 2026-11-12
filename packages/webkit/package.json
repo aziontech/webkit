@@ -40,6 +40,7 @@
     "spec-status": "node scripts/check-spec-status.mjs",
     "spec-template:check": "node scripts/check-spec-template.mjs",
     "patterns:check": "node scripts/check-patterns.mjs",
+    "examples:lint": "node scripts/check-examples-lint.mjs",
     "marketing:check": "node scripts/check-marketing-inventory.mjs",
     "naming:check": "node scripts/check-naming.mjs",
     "js-dts:check": "node scripts/build-js-dts.mjs --check",

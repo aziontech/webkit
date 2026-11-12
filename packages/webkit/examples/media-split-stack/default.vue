@@ -1,6 +1,6 @@
 <script setup>
-  import MediaSplitStack from '@aziontech/webkit/media-split-stack'
   import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
+  import MediaSplitStack from '@aziontech/webkit/media-split-stack'
 
   const bands = [
     {

@@ -1,7 +1,7 @@
 <script setup>
   import LogView from '@aziontech/webkit/log-view'
-  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import LogViewContent from '@aziontech/webkit/log-view-content'
+  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import { ref } from 'vue'
 
   const lines = [
@@ -27,15 +27,17 @@
     class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
   >
     <span class="text-label-sm text-(--text-muted)">Deploy output</span>
-    <LogView
-      :lines="lines"
-      :bordered="false"
-      v-model:search="search"
-      v-model:warnings-only="warningsOnly"
-      class="mt-(--spacing-sm) h-[420px]"
-    >
-      <LogViewHeader />
-      <LogViewContent />
-    </LogView>
+    <div class="mt-(--spacing-sm) h-[420px]">
+      <LogView
+        :lines="lines"
+        :bordered="false"
+        v-model:search="search"
+        v-model:warnings-only="warningsOnly"
+        class="h-full"
+      >
+        <LogViewHeader />
+        <LogViewContent />
+      </LogView>
+    </div>
   </div>
 </template>

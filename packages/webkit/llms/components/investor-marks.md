@@ -53,11 +53,11 @@
 
 ```vue
 <script setup>
-  import InvestorMarks from '@aziontech/webkit/investor-marks'
   import monasheesExtendedMono from '@aziontech/webkit/assets/monashees-extended-mono.svg'
   import monasheesExtendedReversed from '@aziontech/webkit/assets/monashees-extended-reversed.svg'
   import qualcommExtendedMono from '@aziontech/webkit/assets/qualcomm-extended-mono.svg'
   import qualcommExtendedReversed from '@aziontech/webkit/assets/qualcomm-extended-reversed.svg'
+  import InvestorMarks from '@aziontech/webkit/investor-marks'
 </script>
 
 <template>

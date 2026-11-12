@@ -83,15 +83,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Item from '@aziontech/webkit/item'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <Item>\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item>\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
   },
   {
    "name": "Outline",
-   "sfc": "<script setup>\n  import Item from '@aziontech/webkit/item'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <Item kind=\"outlined\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item kind=\"outlined\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
   },
   {
    "name": "Muted",
-   "sfc": "<script setup>\n  import Item from '@aziontech/webkit/item'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <Item kind=\"muted\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item kind=\"muted\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
   }
  ],
  "docs": "components/item.md"

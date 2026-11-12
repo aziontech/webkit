@@ -111,8 +111,8 @@ LogView ships flat, individually importable sub-components (each from its own `@
 ```vue
 <script setup>
   import LogView from '@aziontech/webkit/log-view'
-  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import LogViewContent from '@aziontech/webkit/log-view-content'
+  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import { ref } from 'vue'
 
   const lines = [
@@ -134,15 +134,17 @@ LogView ships flat, individually importable sub-components (each from its own `@
 </script>
 
 <template>
-  <LogView
-    :lines="lines"
-    v-model:search="search"
-    v-model:warnings-only="warningsOnly"
-    class="h-[640px]"
-  >
-    <LogViewHeader />
-    <LogViewContent />
-  </LogView>
+  <div class="h-[640px]">
+    <LogView
+      :lines="lines"
+      v-model:search="search"
+      v-model:warnings-only="warningsOnly"
+      class="h-full"
+    >
+      <LogViewHeader />
+      <LogViewContent />
+    </LogView>
+  </div>
 </template>
 ```
 
@@ -151,8 +153,8 @@ LogView ships flat, individually importable sub-components (each from its own `@
 ```vue
 <script setup>
   import LogView from '@aziontech/webkit/log-view'
-  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import LogViewContent from '@aziontech/webkit/log-view-content'
+  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import { ref } from 'vue'
 
   const lines = [
@@ -178,16 +180,18 @@ LogView ships flat, individually importable sub-components (each from its own `@
     class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
   >
     <span class="text-label-sm text-(--text-muted)">Deploy output</span>
-    <LogView
-      :lines="lines"
-      :bordered="false"
-      v-model:search="search"
-      v-model:warnings-only="warningsOnly"
-      class="mt-(--spacing-sm) h-[420px]"
-    >
-      <LogViewHeader />
-      <LogViewContent />
-    </LogView>
+    <div class="mt-(--spacing-sm) h-[420px]">
+      <LogView
+        :lines="lines"
+        :bordered="false"
+        v-model:search="search"
+        v-model:warnings-only="warningsOnly"
+        class="h-full"
+      >
+        <LogViewHeader />
+        <LogViewContent />
+      </LogView>
+    </div>
   </div>
 </template>
 ```
@@ -197,8 +201,8 @@ LogView ships flat, individually importable sub-components (each from its own `@
 ```vue
 <script setup>
   import LogView from '@aziontech/webkit/log-view'
-  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import LogViewContent from '@aziontech/webkit/log-view-content'
+  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import { ref } from 'vue'
 
   const lines = [
@@ -220,15 +224,17 @@ LogView ships flat, individually importable sub-components (each from its own `@
 </script>
 
 <template>
-  <LogView
-    :lines="lines"
-    loading
-    v-model:search="search"
-    v-model:warnings-only="warningsOnly"
-    class="h-[640px]"
-  >
-    <LogViewHeader />
-    <LogViewContent />
-  </LogView>
+  <div class="h-[640px]">
+    <LogView
+      :lines="lines"
+      loading
+      v-model:search="search"
+      v-model:warnings-only="warningsOnly"
+      class="h-full"
+    >
+      <LogViewHeader />
+      <LogViewContent />
+    </LogView>
+  </div>
 </template>
 ```

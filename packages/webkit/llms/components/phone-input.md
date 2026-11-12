@@ -84,9 +84,9 @@
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
   import Field from '@aziontech/webkit/field'
   import PhoneInput from '@aziontech/webkit/phone-input'
+  import { ref } from 'vue'
 
   const digits = ref('')
   const country = ref('BR')

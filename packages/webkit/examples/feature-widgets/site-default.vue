@@ -1,7 +1,7 @@
 <script setup>
+  import FeatureWidgets from '@aziontech/webkit/feature-widgets'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import FeatureWidgets from '@aziontech/webkit/feature-widgets'
 
   const primaryAction = {
     label: 'Start for free',

@@ -1,7 +1,7 @@
 <script setup>
+  import CliTerminal from '@aziontech/webkit/cli-terminal'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import CliTerminal from '@aziontech/webkit/cli-terminal'
 
   const session =
     'azion link --preset javascript --name auth-handler --auto\n# Project successfully configured\n\nazion deploy --auto\n# Upload completed successfully!\n# Your Application was deployed successfully\n# Domain: https://k7q2fmx4ze.map.azionedge.net\n\ncurl https://k7q2fmx4ze.map.azionedge.net/\n# Hello World'

@@ -1,7 +1,7 @@
 <script setup>
+  import ResourceGrid from '@aziontech/webkit/resource-grid'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import ResourceGrid from '@aziontech/webkit/resource-grid'
 
   const items = [
     {

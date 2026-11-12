@@ -217,8 +217,8 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 
 ```vue
 <script setup>
-  import HelpPanel from '@aziontech/webkit/help-panel'
   import Button from '@aziontech/webkit/button'
+  import HelpPanel from '@aziontech/webkit/help-panel'
 </script>
 
 <template>

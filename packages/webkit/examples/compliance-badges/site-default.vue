@@ -1,12 +1,12 @@
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import ComplianceBadges from '@aziontech/webkit/compliance-badges'
   import ccpaSymbolColor from '@aziontech/webkit/assets/ccpa-symbol-color.svg'
   import gdprSymbolColor from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
   import lgpdSymbolColor from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
   import pciDssSymbolColor from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
   import socSymbolColor from '@aziontech/webkit/assets/soc-symbol-color.svg'
+  import ComplianceBadges from '@aziontech/webkit/compliance-badges'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
 
   const certifications = [
     {

@@ -1,6 +1,6 @@
 <script setup>
-  import SectionGap from '@aziontech/webkit/section-gap'
   import FrameBox from '@aziontech/webkit/frame-box'
+  import SectionGap from '@aziontech/webkit/section-gap'
 </script>
 
 <template>

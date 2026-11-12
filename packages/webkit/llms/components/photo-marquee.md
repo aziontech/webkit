@@ -63,8 +63,8 @@
 
 ```vue
 <script setup>
-  import PhotoMarquee from '@aziontech/webkit/photo-marquee'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+  import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 </script>
 
 <template>

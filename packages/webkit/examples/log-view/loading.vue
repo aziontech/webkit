@@ -1,7 +1,7 @@
 <script setup>
   import LogView from '@aziontech/webkit/log-view'
-  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import LogViewContent from '@aziontech/webkit/log-view-content'
+  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import { ref } from 'vue'
 
   const lines = [
@@ -23,14 +23,16 @@
 </script>
 
 <template>
-  <LogView
-    :lines="lines"
-    loading
-    v-model:search="search"
-    v-model:warnings-only="warningsOnly"
-    class="h-[640px]"
-  >
-    <LogViewHeader />
-    <LogViewContent />
-  </LogView>
+  <div class="h-[640px]">
+    <LogView
+      :lines="lines"
+      loading
+      v-model:search="search"
+      v-model:warnings-only="warningsOnly"
+      class="h-full"
+    >
+      <LogViewHeader />
+      <LogViewContent />
+    </LogView>
+  </div>
 </template>

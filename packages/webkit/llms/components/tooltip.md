@@ -84,8 +84,8 @@
 
 ```vue
 <script setup>
-  import Tooltip from '@aziontech/webkit/tooltip'
   import Button from '@aziontech/webkit/button'
+  import Tooltip from '@aziontech/webkit/tooltip'
 </script>
 
 <template>
@@ -106,8 +106,8 @@
 
 ```vue
 <script setup>
-  import Tooltip from '@aziontech/webkit/tooltip'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/webkit/tooltip'
 </script>
 
 <template>
@@ -164,8 +164,8 @@
 
 ```vue
 <script setup>
-  import Tooltip from '@aziontech/webkit/tooltip'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/webkit/tooltip'
 </script>
 
 <template>

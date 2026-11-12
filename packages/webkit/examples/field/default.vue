@@ -1,7 +1,7 @@
 <script setup>
-  import { ref } from 'vue'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
+  import { ref } from 'vue'
 
   const email = ref('')
 </script>

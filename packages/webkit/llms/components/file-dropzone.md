@@ -105,10 +105,9 @@
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
-
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import { ref } from 'vue'
 
   const input = ref(null)
   const browse = () => input.value?.click()
@@ -138,11 +137,10 @@
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
-
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import { ref } from 'vue'
 
   const filesInput = ref(null)
   const folderInput = ref(null)

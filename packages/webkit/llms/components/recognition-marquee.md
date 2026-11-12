@@ -64,7 +64,6 @@
 
 ```vue
 <script setup>
-  import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
   import forresterExtendedColor from '@aziontech/webkit/assets/forrester-extended-color.svg'
   import forresterExtendedReversed from '@aziontech/webkit/assets/forrester-extended-reversed.svg'
   import frostAndSullivanExtendedColor from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
@@ -74,6 +73,7 @@
   import gartnerExtendedReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
   import gigaomExtendedColor from '@aziontech/webkit/assets/gigaom-extended-color.svg'
   import gigaomExtendedReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
+  import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 </script>
 
 <template>

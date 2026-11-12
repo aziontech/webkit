@@ -57,11 +57,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'\n\n  const theme = ref('system')\n</script>\n\n<template>\n  <ThemeSwitcher v-model=\"theme\" />\n</template>"
+   "sfc": "<script setup>\n  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'\n  import { ref } from 'vue'\n\n  const theme = ref('system')\n</script>\n\n<template>\n  <ThemeSwitcher v-model=\"theme\" />\n</template>"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'\n\n  const theme = ref('system')\n</script>\n\n<template>\n  <ThemeSwitcher\n    v-model=\"theme\"\n    disabled\n  />\n</template>"
+   "sfc": "<script setup>\n  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'\n  import { ref } from 'vue'\n\n  const theme = ref('system')\n</script>\n\n<template>\n  <ThemeSwitcher\n    v-model=\"theme\"\n    disabled\n  />\n</template>"
   }
  ],
  "docs": "components/theme-switcher.md"

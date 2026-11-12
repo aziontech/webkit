@@ -1,7 +1,4 @@
 <script setup>
-  import FrameBox from '@aziontech/webkit/frame-box'
-  import LogoWall from '@aziontech/webkit/logo-wall'
-  import Quote from '@aziontech/webkit/quote'
   import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
   import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
   import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
@@ -9,6 +6,9 @@
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
   import nznLogo from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
+  import FrameBox from '@aziontech/webkit/frame-box'
+  import LogoWall from '@aziontech/webkit/logo-wall'
+  import Quote from '@aziontech/webkit/quote'
 </script>
 
 <template>

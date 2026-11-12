@@ -1,7 +1,7 @@
 <script setup>
+  import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-action-templates'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-action-templates'
 
   const primaryAction = {
     label: 'Start for free',

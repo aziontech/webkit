@@ -1,5 +1,4 @@
 <script setup>
-  import ClientMosaic from '@aziontech/webkit/client-mosaic'
   import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
   import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
   import exameExtendedMono from '@aziontech/webkit/assets/exame-extended-mono.svg'
@@ -10,6 +9,7 @@
   import netshoesPhoto from '@aziontech/webkit/assets/netshoes-photo.jpg'
   import nznExtendedReversed from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import rennerExtendedReversed from '@aziontech/webkit/assets/renner-extended-reversed.svg'
+  import ClientMosaic from '@aziontech/webkit/client-mosaic'
 </script>
 
 <template>

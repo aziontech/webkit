@@ -41,56 +41,60 @@
 </script>
 
 <template>
-  <Resizable
-    :orientation="narrow ? 'vertical' : 'horizontal'"
+  <div
     class="w-full rounded-(--shape-card) border border-(--border-default)"
     :class="narrow ? 'h-(--container-md)' : 'h-(--container-xs)'"
-    aria-label="Conversation and artifact"
   >
-    <Resizable.Pane>
-      <div
-        ref="opener"
-        class="flex h-full flex-col gap-(--spacing-sm) overflow-auto p-(--spacing-md)"
-      >
-        <p class="m-0 text-body-sm text-(--text-default)">
-          Here are the ten biggest orders of the last seven days.
-        </p>
-        <ArtifactPreview
-          title="top-orders.sql"
-          meta="SQL"
-          icon="pi pi-code"
-          openable
-          @open="show"
-        />
-      </div>
-    </Resizable.Pane>
-    <Resizable.Handle
-      v-if="open"
-      aria-label="Resize the artifact"
-    />
-    <Resizable.Pane
-      v-if="open"
-      :basis="narrow ? height : width"
-      :min="narrow ? 160 : 300"
-      :max="narrow ? 360 : 720"
-      @update:basis="(value) => (narrow ? (height = value) : (width = value))"
+    <Resizable
+      :orientation="narrow ? 'vertical' : 'horizontal'"
+      class="h-full"
+      aria-label="Conversation and artifact"
     >
-      <ArtifactCanvas
-        ref="canvas"
-        v-model:version="version"
-        title="top-orders.sql"
-        :meta="`SQL · ${versions[version].split('\n').length} lines`"
-        kind="code"
-        :versions="versions.length"
-        :copy-value="versions[version]"
-        @close="hide"
+      <Resizable.Pane>
+        <div
+          ref="opener"
+          class="flex h-full flex-col gap-(--spacing-sm) overflow-auto p-(--spacing-md)"
+        >
+          <p class="m-0 text-body-sm text-(--text-default)">
+            Here are the ten biggest orders of the last seven days.
+          </p>
+          <ArtifactPreview
+            title="top-orders.sql"
+            meta="SQL"
+            icon="pi pi-code"
+            openable
+            @open="show"
+          />
+        </div>
+      </Resizable.Pane>
+      <Resizable.Handle
+        v-if="open"
+        aria-label="Resize the artifact"
+      />
+      <Resizable.Pane
+        v-if="open"
+        :basis="narrow ? height : width"
+        :min="narrow ? 160 : 300"
+        :max="narrow ? 360 : 720"
+        @update:basis="(value) => (narrow ? (height = value) : (width = value))"
       >
-        <CodeBlock
-          :tabs="[{ label: 'SQL', value: 'sql', code: versions[version], language: 'sql' }]"
-          :copyable="false"
-          :bordered="false"
-        />
-      </ArtifactCanvas>
-    </Resizable.Pane>
-  </Resizable>
+        <ArtifactCanvas
+          ref="canvas"
+          v-model:version="version"
+          title="top-orders.sql"
+          :meta="`SQL · ${versions[version].split('\n').length} lines`"
+          kind="code"
+          :versions="versions.length"
+          :copy-value="versions[version]"
+          @close="hide"
+        >
+          <CodeBlock
+            :tabs="[{ label: 'SQL', value: 'sql', code: versions[version], language: 'sql' }]"
+            :copyable="false"
+            :bordered="false"
+          />
+        </ArtifactCanvas>
+      </Resizable.Pane>
+    </Resizable>
+  </div>
 </template>

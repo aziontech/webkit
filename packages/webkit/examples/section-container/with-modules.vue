@@ -1,7 +1,7 @@
 <script setup>
   import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionModule from '@aziontech/webkit/section-module'
   import SectionGap from '@aziontech/webkit/section-gap'
+  import SectionModule from '@aziontech/webkit/section-module'
 </script>
 
 <template>

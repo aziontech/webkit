@@ -272,6 +272,9 @@ jobs:
       - name: Patterns (G1) — every template story is a pattern with intents, real skills and a lint-clean SFC
         run: pnpm --filter @aziontech/webkit run patterns:check
 
+      - name: Examples — every example passes the lint `webkit init` installs (strict preset), ratcheted by a baseline
+        run: pnpm --filter @aziontech/webkit run examples:lint
+
       - name: Cited names (G2) — skills, rules and patterns only cite exports that exist
         run: pnpm --filter @aziontech/webkit run cited-names
 

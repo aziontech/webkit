@@ -1,9 +1,9 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import Select from '@aziontech/webkit/select'
   import Wizard from '@aziontech/webkit/wizard'
-  import Alert from '@aziontech/webkit/alert'
   import { ref } from 'vue'
 
   const step = ref(0)

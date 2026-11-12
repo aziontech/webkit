@@ -95,9 +95,9 @@
 
 ```vue
 <script setup>
-  import DocFrame from '@aziontech/webkit/doc-frame'
   import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+  import DocFrame from '@aziontech/webkit/doc-frame'
 </script>
 
 <template>
@@ -121,8 +121,8 @@
 
 ```vue
 <script setup>
-  import DocFrame from '@aziontech/webkit/doc-frame'
   import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
+  import DocFrame from '@aziontech/webkit/doc-frame'
 </script>
 
 <template>

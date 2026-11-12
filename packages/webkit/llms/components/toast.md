@@ -100,8 +100,8 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ```vue
 <script setup>
-  import { Toaster, toast } from '@aziontech/webkit/toast'
   import Button from '@aziontech/webkit/button'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
 
   const show = () =>
     toast('Event has been created', {
@@ -123,8 +123,8 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ```vue
 <script setup>
-  import { Toaster, toast } from '@aziontech/webkit/toast'
   import Button from '@aziontech/webkit/button'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
 </script>
 
 <template>
@@ -193,8 +193,8 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ```vue
 <script setup>
-  import { Toaster, toast } from '@aziontech/webkit/toast'
   import Button from '@aziontech/webkit/button'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
 
   const show = () =>
     toast('Event has been created', {
