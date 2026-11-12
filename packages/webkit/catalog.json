@@ -18102,6 +18102,13 @@
           "doc": "Vertical rhythm of the band; `large` is the opening a product page leads with."
         },
         {
+          "name": "titleLength",
+          "type": "'short' | 'long'",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Length of the headline in the `centered` and `title-band` layouts; `short` narrows its column so a brief headline and sentence stay compact, `long` widens it so a longer headline breaks into two lines instead of three. Unset, each layout keeps its own width."
+        },
+        {
           "name": "eyebrow",
           "type": "string",
           "default": "''",
@@ -18194,6 +18201,7 @@
       ],
       "bestPractices": [
         "Use `title-band` with `size=\"large\"` for a product page and `size=\"medium\"` for a page whose bands start right under the headline.",
+        "Set `titleLength=\"short\"` on a `title-band` whose headline and sentence are brief, such as an institutional page, and `titleLength=\"long\"` on a `centered` band whose headline would otherwise break into three lines. Leave it unset to keep each layout's own width; the `pixel-floor` and `copy-beside-art` layouts ignore it.",
         "Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.",
         "Set `headerOffset` to the height of the site header so a band that fills a screen fills exactly the first screen with it."
       ]

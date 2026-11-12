@@ -6,6 +6,7 @@ import HeroBand from './hero-band.vue'
 
 const TESTID = 'sections-hero-band'
 const HERO_TESTID = 'marketing-hero'
+const HERO_TITLE_TESTID = 'marketing-hero-title'
 const TITLE = 'Deliver content fast, worldwide'
 const HIGHLIGHT = 'Build and run applications'
 const EYEBROW = 'Cache'
@@ -66,6 +67,48 @@ describe('HeroBand', () => {
     const { getByTestId } = band({ size: 'large' })
 
     expect(getByTestId(HERO_TESTID).getAttribute('data-size')).toBe('large')
+  })
+
+  it('sets the title-band headline in the wide column by default', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('4xl')
+  })
+
+  it('narrows the title-band headline column with titleLength=short', () => {
+    const { getByTestId } = band({ titleLength: 'short' })
+
+    expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('xl')
+  })
+
+  it('keeps the title-band headline in the wide column with titleLength=long', () => {
+    const { getByTestId } = band({ titleLength: 'long' })
+
+    expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('4xl')
+  })
+
+  it('sets the centered headline in the narrow column by default', () => {
+    const { getByTestId } = band({ kind: 'centered' })
+
+    expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('xl')
+  })
+
+  it('widens the centered headline column with titleLength=long', () => {
+    const { getByTestId } = band({ kind: 'centered', titleLength: 'long' })
+
+    expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('3xl')
+  })
+
+  it.each([
+    ['pixel-floor', '4xl'],
+    ['copy-beside-art', 'xl']
+  ] as const)('ignores titleLength with kind=%s', (kind, width) => {
+    const short = band({ kind, titleLength: 'short' })
+    expect(short.getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe(width)
+    short.unmount()
+
+    const long = band({ kind, titleLength: 'long' })
+    expect(long.getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe(width)
   })
 
   it.each(['centered', 'pixel-floor', 'copy-beside-art'] as const)(

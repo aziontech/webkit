@@ -23,6 +23,7 @@ const ASSETS = [
   'ai-applications',
   'api-endpoints',
   'automate-threat-mitigation',
+  'azion-highlight',
   'azion-to-akamai',
   'azion-to-aws',
   'azion-to-cloudflare',

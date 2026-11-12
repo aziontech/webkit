@@ -21,6 +21,7 @@ import {
 const ASSETS = [
   'ai-applications',
   'automate-threat-mitigation',
+  'azion-highlight',
   'azion-to-akamai',
   'azion-to-aws',
   'azion-to-cloudflare',
