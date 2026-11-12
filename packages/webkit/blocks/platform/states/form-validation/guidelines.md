@@ -2,6 +2,8 @@
 
 Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading. A server rejection scoped to one section of a long form is its own block, `platform/states/form-error`.
 
+This block is a page body for a create page: render it under the focused creation header (`headers/creation-header`), not in `ConsoleLayout`.
+
 ## When to use
 
 - As the reference for the submit states of any create or edit form: what happens on Create with gaps, while the request is in flight, and on each kind of answer.

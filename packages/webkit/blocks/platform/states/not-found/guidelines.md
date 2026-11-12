@@ -2,6 +2,8 @@
 
 The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - A route that matches nothing: the catch-all route of the app renders the primary.
@@ -25,7 +27,7 @@ The large numeral art in the `EmptyState` icon slot, 192 px wide on phones and 2
 
 ### B. Message — `EmptyState` (required)
 
-The title says what happened in the user's words (`Page not found`, `You don't have access to this page`); the description says why it may have happened and what to do next, in one or two sentences. Full-page variants centre it on the canvas, at most `--container-md` wide; ResourceNotFound uses `bordered` inside the content column, since the shell is still around it.
+The title says what happened in the user's words (`Page not found`, `You don't have access to this page`); the description says why it may have happened and what to do next, in one or two sentences. The 404, 403 and 500 variants centre it in the layout's content region, at most `--container-md` wide; ResourceNotFound uses `bordered` inside the content column.
 
 ### C. Actions — `Button` (required)
 
@@ -58,7 +60,7 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 ## Accessibility
 
 - Each variant has exactly one `h1` (visually hidden) naming the error code, so the page has a heading and the code is announced even though the figure is decorative.
-- The full-page variants are the `main` landmark; ResourceNotFound sits in the shell's content column and renders its own `main` only as a stand-alone page.
+- Every variant is a body inside the layout's `main`, with no `main` of its own.
 - The figure is `aria-hidden` (inside the `EmptyState` icon wrapper); never put the only statement of the error in the art.
 - The `EmptyState` is `role="status"`, so a client-side route change to this page is announced.
 - Try again shows the `Button` loading state while the page reloads; the button keeps its label.

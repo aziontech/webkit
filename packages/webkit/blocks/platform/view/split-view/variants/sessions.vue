@@ -1,16 +1,12 @@
 <script setup>
   import Accordion from '@aziontech/webkit/accordion'
-  import Avatar from '@aziontech/webkit/avatar'
   import Badge from '@aziontech/webkit/badge'
-  import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import CalendarRoot from '@aziontech/webkit/calendar-root'
   import Chart from '@aziontech/webkit/chart'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Chip from '@aziontech/webkit/chip'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -20,318 +16,17 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Menu from '@aziontech/webkit/menu'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-
-  const navGroups = [
-    {
-      items: [
-        { id: 'home', label: 'Home', icon: 'pi pi-home', href: '/home' },
-        { id: 'projects', label: 'Projects', icon: 'pi pi-folder', href: '/projects' },
-        {
-          id: 'deployments',
-          label: 'Deployments',
-          icon: 'pi pi-cloud-upload',
-          href: '/deployments'
-        }
-      ]
-    },
-    {
-      label: 'Build',
-      items: [
-        { id: 'resources', label: 'Resources', icon: 'pi pi-box', href: '/resources' },
-        { id: 'services', label: 'Services', icon: 'pi pi-server', href: '/services' },
-        { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', href: '/variables' },
-        { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', href: '/integrations' },
-        { id: 'templates', label: 'Templates', icon: 'pi pi-clone', href: '/templates' }
-      ]
-    },
-    {
-      label: 'Security',
-      items: [
-        { id: 'domains', label: 'Domains', icon: 'pi pi-globe', href: '/domains' },
-        { id: 'policies', label: 'Policies', icon: 'pi pi-shield', href: '/policies' },
-        { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', href: '/rule-sets' },
-        { id: 'keys', label: 'Keys', icon: 'pi pi-key', href: '/keys' }
-      ]
-    },
-    {
-      label: 'Data',
-      items: [
-        {
-          id: 'databases',
-          label: 'Databases',
-          icon: 'pi pi-database',
-          href: '/databases',
-          tagValue: 'Preview'
-        },
-        { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', href: '/storage' }
-      ]
-    },
-    {
-      label: 'Observability',
-      items: [
-        { id: 'logs', label: 'Logs', icon: 'pi pi-file', href: '/logs' },
-        {
-          id: 'metrics-module',
-          label: 'Metrics',
-          icon: 'pi pi-chart-bar',
-          kind: 'drill',
-          href: '/metrics',
-          groups: [
-            {
-              items: [{ id: 'metrics', label: 'Overview', href: '/metrics' }]
-            },
-            {
-              label: 'Build',
-              items: [
-                {
-                  id: 'metrics-resources',
-                  label: 'Resources',
-                  href: '/metrics',
-                  query: { dashboard: 'resources' }
-                },
-                {
-                  id: 'metrics-services',
-                  label: 'Services',
-                  href: '/metrics',
-                  query: { dashboard: 'services' }
-                },
-                {
-                  id: 'metrics-cache',
-                  label: 'Cache',
-                  href: '/metrics',
-                  query: { dashboard: 'cache' }
-                }
-              ]
-            },
-            {
-              label: 'Security',
-              items: [
-                {
-                  id: 'metrics-domains',
-                  label: 'Domains',
-                  href: '/metrics',
-                  query: { dashboard: 'domains' }
-                },
-                {
-                  id: 'metrics-policies',
-                  label: 'Policies',
-                  href: '/metrics',
-                  query: { dashboard: 'policies' }
-                },
-                {
-                  id: 'metrics-rule-sets',
-                  label: 'Rule sets',
-                  href: '/metrics',
-                  query: { dashboard: 'rule-sets' }
-                }
-              ]
-            },
-            {
-              label: 'Data',
-              items: [
-                {
-                  id: 'metrics-databases',
-                  label: 'Databases',
-                  href: '/metrics',
-                  query: { dashboard: 'databases' }
-                },
-                {
-                  id: 'metrics-storage',
-                  label: 'Storage',
-                  href: '/metrics',
-                  query: { dashboard: 'storage' }
-                }
-              ]
-            }
-          ]
-        },
-        { id: 'events', label: 'Events', icon: 'pi pi-bolt', href: '/events' }
-      ]
-    },
-    {
-      label: 'More',
-      items: [
-        { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', href: '/catalog' },
-        {
-          id: 'settings',
-          label: 'Settings',
-          icon: 'pi pi-cog',
-          kind: 'drill',
-          groups: [
-            {
-              label: 'Settings',
-              items: [
-                { id: 'settings-general', label: 'General', href: '/account' },
-                {
-                  id: 'settings-build-deployment',
-                  label: 'Build and deployment',
-                  href: '/account/build-deployment'
-                },
-                {
-                  id: 'settings-environments',
-                  label: 'Environments',
-                  href: '/account/environments'
-                },
-                { id: 'settings-users', label: 'Users management', href: '/account/users' },
-                { id: 'settings-teams', label: 'Teams and permissions', href: '/account/teams' }
-              ]
-            },
-            {
-              label: 'Access',
-              items: [
-                { id: 'settings-tokens', label: 'Personal tokens', href: '/personal-tokens' },
-                { id: 'settings-credentials', label: 'Credentials', href: '/account/credentials' },
-                { id: 'settings-security-mfa', label: 'Multi-factor auth' },
-                { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity history', href: '/account/activity' }
-              ]
-            },
-            {
-              label: 'Billing',
-              items: [
-                { id: 'settings-billing', label: 'Billing and plan', href: '/account/billing' },
-                { id: 'settings-invoices', label: 'Invoices' }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  const recentRows = [
-    {
-      key: 'resources/1020655',
-      name: 'resource-01',
-      icon: 'pi pi-box',
-      typeLabel: 'Resource',
-      navId: 'resources'
-    },
-    {
-      key: 'domains/domain-1020655',
-      name: 'app.example.com',
-      icon: 'pi pi-globe',
-      typeLabel: 'Domain',
-      navId: 'domains'
-    },
-    {
-      key: 'databases/feature-flags',
-      name: 'feature-flags',
-      icon: 'pi pi-database',
-      typeLabel: 'Database',
-      navId: 'databases'
-    }
-  ]
-
-  const accountCommands = [
-    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
-    { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
-    { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
-  ]
-
-  const activeId = ref('events')
-  const navOpen = ref(false)
-  const paletteOpen = ref(false)
-  const paletteQuery = ref('')
-  const theme = ref('system')
-  const railWidth = ref(null)
-  const railCollapsed = ref(false)
-
-  watch(paletteOpen, () => {
-    paletteQuery.value = ''
-  })
-
-  const leaves = (items) =>
-    items.flatMap((item) =>
-      item.groups
-        ? leaves(item.groups.flatMap((group) => group.items))
-        : item.children
-          ? leaves(item.children)
-          : [item]
-    )
-
-  const paletteGroups = navGroups.flatMap((group, groupIndex) => {
-    const blocks = []
-    let run = []
-    const flush = () => {
-      if (run.length) {
-        blocks.push({
-          key: `area-${groupIndex}-${blocks.length}`,
-          heading: group.label ?? '',
-          items: leaves(run)
-        })
-      }
-      run = []
-    }
-    for (const item of group.items) {
-      if (item.groups || item.children) {
-        flush()
-        blocks.push({ key: item.id, heading: item.label, items: leaves([item]) })
-      } else run.push(item)
-    }
-    flush()
-    return blocks
-  })
-
-  const resolvedTheme = computed(() =>
-    theme.value === 'system'
-      ? globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : theme.value
-  )
-
-  const actionCommands = computed(() => [
-    { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
-    {
-      id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
-      icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
-    },
-    {
-      id: 'sidebar',
-      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
-      icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
-    }
-  ])
-
-  const onNavigate = (event, node) => {
-    const modified = event.metaKey || event.ctrlKey || event.shiftKey || event.button > 0
-    if (node.href && !modified) event.preventDefault()
-    activeId.value = node.id
-  }
-
-  const onMobileNavigate = (event, node) => {
-    onNavigate(event, node)
-    navOpen.value = false
-  }
-
-  const onPaletteSelect = (event, value) => {
-    const [scope, id] = String(value).split(':')
-    if (scope === 'nav') activeId.value = id
-    if (scope === 'res') {
-      activeId.value = recentRows.find((row) => row.key === id)?.navId ?? activeId.value
-    }
-    if (id === 'theme') theme.value = resolvedTheme.value === 'dark' ? 'light' : 'dark'
-    if (id === 'sidebar') railCollapsed.value = !railCollapsed.value
-  }
 
   const referenceNow = Date.UTC(2026, 10, 10, 14, 30)
 
@@ -1508,1594 +1203,1025 @@
 </script>
 
 <template>
-  <div class="relative flex h-dvh overflow-hidden bg-(--bg-canvas)">
-    <div class="hidden h-full [--sidebar-width:var(--container-2xs)] md:flex">
-      <Sidebar
-        v-model:width="railWidth"
-        v-model:collapsed="railCollapsed"
-        resizable
-        collapsible
-        aria-label="Main navigation"
-        collapse-aria-label="Collapse sidebar"
-        expand-aria-label="Expand sidebar"
-        resize-aria-label="Resize sidebar"
-      >
-        <template #header>
-          <div class="-m-(--spacing-md) flex flex-col">
-            <div
-              class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
-            >
-              <a
-                href="/home"
-                aria-label="Azion home"
-                class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-              >
-                <Brand
-                  kind="default"
-                  size="small"
-                />
-              </a>
-            </div>
-
-            <Command
-              v-model:open="paletteOpen"
-              @select="onPaletteSelect"
-            >
-              <Command.Input
-                placeholder="Search resources, pages and commands"
-                @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
+  <div class="flex min-h-0 flex-1 flex-col">
+    <section
+      ref="sessionStrip"
+      aria-label="Investigations"
+      class="relative flex shrink-0 flex-col gap-(--spacing-xxs) border-b border-(--border-default) px-(--spacing-lg) pt-(--spacing-xs)"
+      data-testid="session-strip"
+    >
+      <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+        <div
+          class="min-w-0 flex-1"
+          @keydown="onSessionKeydown"
+          @dblclick="onSessionDblclick"
+        >
+          <Tabs v-model="activeSession">
+            <Tabs.List>
+              <Tabs.Item
+                v-for="session in sessions"
+                :key="session.id"
+                :value="session.id"
+                :label="session.name"
+                :closable="sessions.length > 1"
+                :data-testid="`session-tab-${session.id}`"
+                @close="closeSession(session.id)"
               />
-              <Command.List>
-                <Command.Group
-                  v-if="!paletteQuery"
-                  key="recents"
-                  heading="Recents"
-                >
-                  <Command.Item
-                    v-for="row in recentRows"
-                    :key="row.key"
-                    :value="'res:' + row.key"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="row.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ row.name }}
-                    <template #suffix>
-                      <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
-                    </template>
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Separator
-                  v-if="!paletteQuery"
-                  key="recents-rule"
-                />
-
-                <Command.Group
-                  v-for="group in paletteGroups"
-                  :key="group.key"
-                  :heading="group.heading"
-                >
-                  <Command.Item
-                    v-for="item in group.items"
-                    :key="item.id"
-                    :value="'nav:' + item.id"
-                  >
-                    <template
-                      v-if="item.icon"
-                      #prefix
-                    >
-                      <i
-                        :class="item.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ item.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Separator key="commands-rule" />
-
-                <Command.Group heading="Actions">
-                  <Command.Item
-                    v-for="command in actionCommands"
-                    :key="command.id"
-                    :value="'cmd:' + command.id"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="command.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ command.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Group heading="Account">
-                  <Command.Item
-                    v-for="command in accountCommands"
-                    :key="command.id"
-                    :value="'cmd:' + command.id"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="command.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ command.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Empty>No resource, page or command matches your search.</Command.Empty>
-              </Command.List>
-            </Command>
-          </div>
-        </template>
-
-        <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
-          <Menu
-            :groups="navGroups"
-            :active-id="activeId"
-            role="presentation"
-            @navigate="onNavigate"
-          >
-            <Menu.Back />
-          </Menu>
+            </Tabs.List>
+          </Tabs>
         </div>
-
-        <template #footer>
-          <div class="flex items-center gap-(--spacing-xs)">
-            <Avatar
-              label="alex@example.com"
-              size="small"
-              kind="square"
-            />
-            <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">alex</span>
-            <DropdownMenu placement="top-end">
-              <DropdownMenu.Trigger>
-                <Tooltip text="Account menu">
-                  <IconButton
-                    icon="pi pi-ellipsis-v"
-                    aria-label="Account menu"
-                    kind="outlined"
-                    size="small"
-                  />
-                </Tooltip>
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <template #top>
-                  <div class="flex min-w-0 flex-col">
-                    <span class="truncate text-label-md text-(--text-default)">alex</span>
-                    <span class="truncate text-body-xs text-(--text-muted)">alex@example.com</span>
-                  </div>
-                </template>
-                <DropdownMenu.Option
-                  value="settings"
-                  label="Account settings"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-cog"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="personal-tokens"
-                  label="Personal tokens"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-key"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <div
-                  class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
-                >
-                  <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
-                    >Theme</span
-                  >
-                  <ThemeSwitcher
-                    v-model="theme"
-                    aria-label="Theme"
-                  />
-                </div>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="home"
-                  label="Home page"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-home"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="changelog"
-                  label="Changelog"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-pencil"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="feedback"
-                  label="Feedback"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-comment"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="docs"
-                  label="Docs"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-book"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="logout"
-                  label="Log out"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-sign-out"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
-                  <Button
-                    label="Upgrade to Pro"
-                    kind="secondary"
-                    size="medium"
-                    class="w-full"
-                  />
-                  <div class="flex justify-center px-(--spacing-xs)">
-                    <StatusIndicator
-                      severity="success"
-                      label="All systems normal"
-                    />
-                  </div>
-                </div>
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </div>
-        </template>
-      </Sidebar>
-    </div>
-
-    <div class="flex min-w-0 flex-1 flex-col">
-      <div class="@container">
-        <GlobalHeader aria-label="Console">
-          <GlobalHeader.Left>
-            <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
-              <span class="contents md:hidden">
-                <Tooltip
-                  text="Open navigation"
-                  placement="bottom"
-                >
-                  <IconButton
-                    icon="pi pi-bars"
-                    aria-label="Open navigation"
-                    kind="outlined"
-                    size="medium"
-                    @click="navOpen = true"
-                  />
-                </Tooltip>
-              </span>
-
-              <a
-                href="/home"
-                aria-label="Azion home"
-                class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none md:hidden"
-              >
-                <Brand
-                  kind="default"
-                  size="small"
-                />
-              </a>
-            </div>
-          </GlobalHeader.Left>
-          <GlobalHeader.Middle />
-          <GlobalHeader.Right>
-            <SearchTrigger
-              collapsible
-              @open="paletteOpen = true"
-            />
-
-            <span class="contents md:hidden">
-              <Tooltip
-                text="Create"
-                placement="bottom"
-              >
-                <IconButton
-                  icon="pi pi-plus-circle"
-                  kind="primary"
-                  size="medium"
-                  aria-label="Create"
-                />
-              </Tooltip>
-              <Tooltip
-                text="Agent"
-                placement="bottom"
-              >
-                <IconButton
-                  icon="ai ai-ask-azion"
-                  kind="outlined"
-                  size="medium"
-                  aria-label="Agent"
-                />
-              </Tooltip>
-            </span>
-            <span class="hidden md:contents">
-              <Button
-                label="Create"
-                kind="primary"
-                size="medium"
-                icon="pi pi-plus-circle"
-              />
-              <ButtonHighlight
-                label="Agent"
-                size="medium"
-                icon="ai ai-ask-azion"
-              />
-            </span>
-
-            <button
-              type="button"
-              aria-label="Account settings"
-              class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-            >
-              <Avatar
-                label="alex@example.com"
-                size="medium"
-                kind="square"
-              />
-            </button>
-          </GlobalHeader.Right>
-        </GlobalHeader>
-      </div>
-
-      <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
-        <main class="flex h-full min-h-0 flex-col">
-          <section
-            ref="sessionStrip"
-            aria-label="Investigations"
-            class="relative flex shrink-0 flex-col gap-(--spacing-xxs) border-b border-(--border-default) px-(--spacing-lg) pt-(--spacing-xs)"
-            data-testid="session-strip"
-          >
-            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-              <div
-                class="min-w-0 flex-1"
-                @keydown="onSessionKeydown"
-                @dblclick="onSessionDblclick"
-              >
-                <Tabs v-model="activeSession">
-                  <Tabs.List>
-                    <Tabs.Item
-                      v-for="session in sessions"
-                      :key="session.id"
-                      :value="session.id"
-                      :label="session.name"
-                      :closable="sessions.length > 1"
-                      :data-testid="`session-tab-${session.id}`"
-                      @close="closeSession(session.id)"
-                    />
-                  </Tabs.List>
-                </Tabs>
-              </div>
-              <Tooltip text="New investigation">
-                <IconButton
-                  icon="pi pi-plus"
-                  kind="transparent"
-                  size="small"
-                  aria-label="New investigation"
-                  data-testid="session-new"
-                  @click="newSession"
-                />
-              </Tooltip>
-              <DropdownMenu
-                placement="bottom-end"
-                @select="onSessionAction"
-              >
-                <DropdownMenu.Trigger>
-                  <Tooltip text="Investigation actions">
-                    <IconButton
-                      icon="pi pi-ellipsis-h"
-                      kind="transparent"
-                      size="small"
-                      :aria-label="`Actions for ${currentSession.name}`"
-                      data-testid="session-actions"
-                    />
-                  </Tooltip>
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Option
-                    value="rename"
-                    label="Rename"
-                    command="F2"
-                  />
-                  <DropdownMenu.Option
-                    value="duplicate"
-                    label="Duplicate"
-                  />
-                  <DropdownMenu.Option
-                    value="close"
-                    label="Close investigation"
-                    :disabled="sessions.length === 1"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </div>
-            <div
-              v-if="renamingId"
-              class="absolute top-(--spacing-xs) z-10"
-              :style="{ left: `${renameBox.left}px`, width: `${Math.max(renameBox.width, 160)}px` }"
-            >
-              <Input
-                ref="renameInput"
-                v-model="renameDraft"
+        <Tooltip text="New investigation">
+          <IconButton
+            icon="pi pi-plus"
+            kind="transparent"
+            size="small"
+            aria-label="New investigation"
+            data-testid="session-new"
+            @click="newSession"
+          />
+        </Tooltip>
+        <DropdownMenu
+          placement="bottom-end"
+          @select="onSessionAction"
+        >
+          <DropdownMenu.Trigger>
+            <Tooltip text="Investigation actions">
+              <IconButton
+                icon="pi pi-ellipsis-h"
+                kind="transparent"
                 size="small"
-                aria-label="Investigation name"
-                class="w-full"
-                data-testid="session-rename"
-                @keydown.enter.prevent="finishRename(true)"
-                @keydown.esc.prevent="finishRename(false)"
-                @blur="finishRename(true)"
+                :aria-label="`Actions for ${currentSession.name}`"
+                data-testid="session-actions"
               />
-            </div>
-            <p
-              role="status"
-              class="text-body-sm text-(--text-muted)"
-              data-testid="session-notice"
-            >
-              {{ sessionNotice }}
-            </p>
-          </section>
-          <header
-            class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
+            </Tooltip>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Group>
+            <DropdownMenu.Option
+              value="rename"
+              label="Rename"
+              command="F2"
+            />
+            <DropdownMenu.Option
+              value="duplicate"
+              label="Duplicate"
+            />
+            <DropdownMenu.Option
+              value="close"
+              label="Close investigation"
+              :disabled="sessions.length === 1"
+            />
+          </DropdownMenu.Group>
+        </DropdownMenu>
+      </div>
+      <div
+        v-if="renamingId"
+        class="absolute top-(--spacing-xs) z-10"
+        :style="{ left: `${renameBox.left}px`, width: `${Math.max(renameBox.width, 160)}px` }"
+      >
+        <Input
+          ref="renameInput"
+          v-model="renameDraft"
+          size="small"
+          aria-label="Investigation name"
+          class="w-full"
+          data-testid="session-rename"
+          @keydown.enter.prevent="finishRename(true)"
+          @keydown.esc.prevent="finishRename(false)"
+          @blur="finishRename(true)"
+        />
+      </div>
+      <p
+        role="status"
+        class="text-body-sm text-(--text-muted)"
+        data-testid="session-notice"
+      >
+        {{ sessionNotice }}
+      </p>
+    </section>
+    <header
+      class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
+    >
+      <header class="flex items-center gap-(--layout-group-gap)">
+        <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
+          <div
+            ref="filterRoot"
+            class="flex shrink-0 items-center"
+            data-testid="filter-button"
           >
-            <header class="flex items-center gap-(--layout-group-gap)">
-              <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
-                <div
-                  ref="filterRoot"
-                  class="flex shrink-0 items-center"
-                  data-testid="filter-button"
-                >
-                  <Popover
-                    v-model:open="filterOpen"
-                    placement="bottom-start"
-                    :dismissible="!calendarOpen"
-                    class="shrink-0"
-                  >
-                    <div class="relative">
-                      <Popover.Trigger>
-                        <Button
-                          label="Filter"
-                          kind="outlined"
-                          size="medium"
-                          icon="pi pi-filter"
-                          data-testid="filter-button__trigger"
-                        />
-                        <Transition
-                          enter-from-class="scale-75 opacity-0"
-                          enter-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                          leave-to-class="scale-75 opacity-0"
-                          leave-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                        >
-                          <div
-                            v-if="filterCount"
-                            class="pointer-events-none absolute -top-2 -end-2 min-w-5"
-                          >
-                            <Badge
-                              :label="String(filterCount)"
-                              severity="primary"
-                              size="small"
-                              aria-hidden="true"
-                              data-testid="filter-button__count"
-                              class="w-full"
-                            />
-                          </div>
-                        </Transition>
-                      </Popover.Trigger>
-                    </div>
-
-                    <Popover.Content>
-                      <div
-                        ref="filterPanel"
-                        class="flex flex-col"
-                        @keydown.down="moveFilterFocus($event, 1)"
-                        @keydown.up="moveFilterFocus($event, -1)"
-                      >
-                        <div
-                          ref="filterRegion"
-                          :style="{ height: filterRegionHeight }"
-                          class="relative overflow-hidden transition-[height] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                        >
-                          <Transition
-                            :enter-from-class="
-                              filterDirection === 'forward'
-                                ? 'translate-x-[12%] opacity-0'
-                                : 'translate-x-[-12%] opacity-0'
-                            "
-                            enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                            :leave-to-class="
-                              filterDirection === 'forward'
-                                ? 'translate-x-[-12%] opacity-0'
-                                : 'translate-x-[12%] opacity-0'
-                            "
-                            leave-active-class="absolute inset-x-0 top-0 transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                          >
-                            <div
-                              :key="filterLevel"
-                              :data-level="filterLevel"
-                              class="flex flex-col"
-                            >
-                              <div
-                                v-if="filterField"
-                                class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xs)"
-                              >
-                                <IconButton
-                                  icon="pi pi-angle-left"
-                                  kind="outlined"
-                                  size="small"
-                                  :aria-label="
-                                    customFilterField
-                                      ? 'Back to date periods'
-                                      : 'Back to all filters'
-                                  "
-                                  @click="customFilterField ? leaveCustomRange() : backToFields()"
-                                />
-                                <span class="truncate text-label-sm text-(--text-default)">
-                                  {{ filterField.label }}
-                                </span>
-                              </div>
-
-                              <div
-                                v-if="customFilterField"
-                                class="px-(--spacing-md) py-(--spacing-sm)"
-                              >
-                                <CalendarRoot
-                                  v-model="customRange"
-                                  v-model:open="calendarOpen"
-                                  mode="range"
-                                  size="medium"
-                                  :show-fields="false"
-                                  placeholder="Select a range"
-                                  class="w-full"
-                                  @update:model-value="commitCustomRange"
-                                />
-                              </div>
-
-                              <template v-else>
-                                <div class="border-b border-(--border-default) p-(--spacing-xs)">
-                                  <Input
-                                    v-model="filterQuery"
-                                    size="medium"
-                                    class="w-full"
-                                    :placeholder="
-                                      filterField
-                                        ? `Filter ${filterField.label.toLowerCase()}`
-                                        : 'Filter by'
-                                    "
-                                    :aria-label="
-                                      filterField
-                                        ? `Search ${filterField.label} values`
-                                        : 'Search filter fields'
-                                    "
-                                  >
-                                    <template #iconLeft>
-                                      <i
-                                        class="pi pi-search"
-                                        aria-hidden="true"
-                                      />
-                                    </template>
-                                  </Input>
-                                </div>
-
-                                <div
-                                  class="flex max-h-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto p-(--spacing-xxs)"
-                                >
-                                  <template v-if="!filterField">
-                                    <button
-                                      v-for="field in filterRows"
-                                      :key="field.id"
-                                      type="button"
-                                      data-filter-row
-                                      class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                      :aria-expanded="false"
-                                      @click="enterFilterField(field.id)"
-                                    >
-                                      <span class="grow truncate">{{ field.label }}</span>
-                                      <span
-                                        v-if="isApplied(filters, field)"
-                                        class="truncate text-(--text-muted)"
-                                      >
-                                        {{ summarizeText(field, filters[field.id]) }}
-                                      </span>
-                                      <i
-                                        class="pi pi-angle-right shrink-0 text-(--text-muted)"
-                                        aria-hidden="true"
-                                      />
-                                    </button>
-                                  </template>
-
-                                  <template v-else>
-                                    <button
-                                      v-for="option in filterRows"
-                                      :key="String(option.value)"
-                                      type="button"
-                                      data-filter-row
-                                      :role="
-                                        option.custom
-                                          ? undefined
-                                          : filterField.kind === 'range'
-                                            ? 'menuitemradio'
-                                            : 'menuitemcheckbox'
-                                      "
-                                      :aria-checked="
-                                        option.custom ? undefined : isPicked(option.value)
-                                      "
-                                      class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                      @click="pickFilterOption(filterField, option)"
-                                    >
-                                      <span class="grow truncate">{{ option.label }}</span>
-                                      <i
-                                        v-if="option.custom"
-                                        class="pi pi-angle-right shrink-0 text-(--text-muted)"
-                                        aria-hidden="true"
-                                      />
-                                      <i
-                                        v-else
-                                        class="pi pi-check shrink-0 text-(--text-default)"
-                                        :class="isPicked(option.value) ? '' : 'invisible'"
-                                        aria-hidden="true"
-                                      />
-                                    </button>
-                                  </template>
-
-                                  <p
-                                    v-if="!filterRows.length"
-                                    class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
-                                  >
-                                    No match for “{{ filterQuery }}”.
-                                  </p>
-                                </div>
-
-                                <div
-                                  v-if="filterField && isApplied(filters, filterField)"
-                                  class="border-t border-(--border-default) p-(--spacing-xxs)"
-                                >
-                                  <button
-                                    type="button"
-                                    class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                    @click="clearFilterField(filterField)"
-                                  >
-                                    <i
-                                      class="pi pi-filter-slash text-(--text-muted)"
-                                      aria-hidden="true"
-                                    />
-                                    Clear {{ filterField.label }}
-                                  </button>
-                                </div>
-                              </template>
-                            </div>
-                          </Transition>
-                        </div>
-                      </div>
-                    </Popover.Content>
-                  </Popover>
-                </div>
-                <div class="flex min-w-36 grow basis-(--container-2xs)">
-                  <Input
-                    v-model="search"
-                    size="medium"
-                    placeholder="Search events, hosts, paths or addresses"
-                    aria-label="Search events"
-                    class="w-full"
-                  >
-                    <template #iconLeft>
-                      <i
-                        class="pi pi-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-                </div>
-              </div>
-              <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-                <Tooltip
-                  text="Refresh"
-                  class="shrink-0"
-                >
-                  <IconButton
-                    icon="pi pi-refresh"
+            <Popover
+              v-model:open="filterOpen"
+              placement="bottom-start"
+              :dismissible="!calendarOpen"
+              class="shrink-0"
+            >
+              <div class="relative">
+                <Popover.Trigger>
+                  <Button
+                    label="Filter"
                     kind="outlined"
                     size="medium"
-                    :loading="loading"
-                    aria-label="Refresh"
-                    data-testid="refresh-button"
-                    @click="refresh"
+                    icon="pi pi-filter"
+                    data-testid="filter-button__trigger"
                   />
-                </Tooltip>
-                <Tooltip
-                  text="Download CSV"
-                  class="shrink-0"
-                >
-                  <IconButton
-                    icon="pi pi-download"
-                    kind="outlined"
-                    size="medium"
-                    :disabled="!tableRef"
-                    aria-label="Download CSV"
-                    data-testid="export-button"
-                    @click="exportCsv"
-                  />
-                </Tooltip>
-              </div>
-            </header>
-
-            <div
-              v-if="filterChips.length"
-              class="relative flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
-              data-testid="filter-chips"
-            >
-              <TransitionGroup
-                move-class="transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                enter-from-class="scale-90 opacity-0"
-                leave-from-class="scale-100 opacity-100"
-                leave-to-class="scale-90 opacity-0"
-                leave-active-class="pointer-events-none absolute duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-              >
-                <span
-                  v-for="field in filterChips"
-                  :key="field.id"
-                  class="inline-flex w-fit max-w-full transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                >
-                  <Chip
-                    :data-filter-chip="field.id"
-                    :label="field.label"
-                    kind="filled"
-                    size="medium"
-                    clickable
-                    removable
-                    @click="enterFilterField(field.id)"
-                    @remove="clearFilterField(field)"
+                  <Transition
+                    enter-from-class="scale-75 opacity-0"
+                    enter-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+                    leave-to-class="scale-75 opacity-0"
+                    leave-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
                   >
-                    <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                      <span class="truncate text-(--text-muted)">{{ field.label }}</span>
-                      <span class="truncate">{{ summarizeFilter(field)?.label }}</span>
-                      <span
-                        v-if="summarizeFilter(field)?.extra"
-                        class="shrink-0 text-(--text-muted)"
-                      >
-                        +{{ summarizeFilter(field).extra }}
-                      </span>
-                    </span>
-                  </Chip>
-                </span>
-              </TransitionGroup>
-            </div>
-          </header>
-
-          <section
-            ref="explorerEl"
-            class="animate-content-enter motion-reduce:animate-none relative flex min-h-0 min-w-0 flex-1 overflow-hidden"
-          >
-            <div
-              v-if="showFieldsPanel"
-              key="fields-panel"
-              class="contents [--sidebar-width:var(--container-2xs)]"
-            >
-              <Sidebar
-                v-model:collapsed="fieldsCollapsed"
-                v-model:width="fieldsWidth"
-                resizable
-                collapsible
-                aria-label="Fields"
-                collapse-aria-label="Hide the fields panel"
-                expand-aria-label="Show the fields panel"
-                resize-aria-label="Resize the fields panel"
-              >
-                <template #header>
-                  <div class="px-(--spacing-xs)">
-                    <Input
-                      v-model="fieldSearch"
-                      size="medium"
-                      class="w-full"
-                      placeholder="Search fields"
-                      aria-label="Search fields"
+                    <div
+                      v-if="filterCount"
+                      class="pointer-events-none absolute -top-2 -end-2 min-w-5"
                     >
-                      <template #iconLeft>
-                        <i
-                          class="pi pi-search"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </Input>
-                  </div>
-                </template>
-
-                <div>
-                  <div
-                    class="flex items-baseline justify-between gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xxs) pt-(--spacing-xxs)"
-                  >
-                    <span class="text-label-sm text-(--text-muted)">Shown</span>
-                    <span class="text-label-sm text-(--text-muted)">Values</span>
-                  </div>
-
-                  <div
-                    v-for="field in shownFields"
-                    :key="field.id"
-                    class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
-                  >
-                    <div class="min-w-0 flex-1">
-                      <Field
-                        orientation="horizontal"
-                        :disabled="field.locked"
-                      >
-                        <Checkbox
-                          binary
-                          :model-value="true"
-                          :input-id="`event-field-${field.id}`"
-                          @update:model-value="toggleColumn(field.id)"
-                        />
-                        <Field.Label>
-                          <span class="truncate">{{ field.label }}</span>
-                        </Field.Label>
-                      </Field>
-                    </div>
-
-                    <Popover
-                      v-if="canFilterField(field) && fieldCounts[field.id]"
-                      placement="right-start"
-                    >
-                      <div
-                        class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
-                      >
-                        <Popover.Trigger
-                          role="button"
-                          tabindex="0"
-                          :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
-                        >
-                          {{ fieldCounts[field.id] }}
-                        </Popover.Trigger>
-                      </div>
-
-                      <Popover.Content>
-                        <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
-                          <p
-                            class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
-                          >
-                            {{ field.label }} · top values
-                          </p>
-
-                          <button
-                            v-for="entry in topFieldValues(field.id)"
-                            :key="String(entry.value)"
-                            type="button"
-                            role="menuitemcheckbox"
-                            :aria-checked="isValueApplied(field.id, entry.value)"
-                            :data-applied="isValueApplied(field.id, entry.value) || null"
-                            class="flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-applied:bg-(--bg-selected) motion-reduce:transition-none"
-                            @click="toggleFieldValue(field.id, entry.value)"
-                          >
-                            <span
-                              class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
-                            >
-                              {{ formatEventValue(field, entry.value) }}
-                            </span>
-                            <span
-                              class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
-                            >
-                              {{ entry.count }}
-                            </span>
-                            <i
-                              v-if="isValueApplied(field.id, entry.value)"
-                              class="pi pi-check shrink-0 text-(--primary)"
-                              aria-hidden="true"
-                            />
-                          </button>
-
-                          <p
-                            v-if="fieldValueOverflow(field.id)"
-                            class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
-                          >
-                            {{ fieldValueOverflow(field.id) }} more values in this window.
-                          </p>
-                        </div>
-                      </Popover.Content>
-                    </Popover>
-
-                    <span
-                      v-else
-                      class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
-                      :data-empty="fieldCounts[field.id] ? null : true"
-                      :aria-label="`${fieldCounts[field.id]} distinct values`"
-                    >
-                      {{ fieldCounts[field.id] }}
-                    </span>
-                  </div>
-
-                  <div
-                    v-if="fieldCategories.length"
-                    class="mt-(--spacing-xs)"
-                  >
-                    <Accordion
-                      v-model="openCategories"
-                      type="multiple"
-                      size="medium"
-                      arrow-position="left"
-                    >
-                      <Accordion.Item
-                        v-for="category in fieldCategories"
-                        :key="category.id"
-                        :value="category.id"
-                      >
-                        <Accordion.Trigger>
-                          <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                            <span class="truncate text-label-sm text-(--text-default)">
-                              {{ category.label }}
-                            </span>
-                            <Tag
-                              v-if="categoryFilterCount(category)"
-                              :label="String(categoryFilterCount(category))"
-                              severity="info"
-                              size="small"
-                            />
-                          </span>
-                        </Accordion.Trigger>
-
-                        <Accordion.Content>
-                          <div
-                            v-for="field in category.fields"
-                            :key="field.id"
-                            class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
-                          >
-                            <div class="min-w-0 flex-1">
-                              <Field orientation="horizontal">
-                                <Checkbox
-                                  binary
-                                  :model-value="false"
-                                  :input-id="`event-field-${field.id}`"
-                                  @update:model-value="toggleColumn(field.id)"
-                                />
-                                <Field.Label>
-                                  <span class="truncate">{{ field.label }}</span>
-                                </Field.Label>
-                              </Field>
-                            </div>
-
-                            <Popover
-                              v-if="canFilterField(field) && fieldCounts[field.id]"
-                              placement="right-start"
-                            >
-                              <div
-                                class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
-                              >
-                                <Popover.Trigger
-                                  role="button"
-                                  tabindex="0"
-                                  :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
-                                >
-                                  {{ fieldCounts[field.id] }}
-                                </Popover.Trigger>
-                              </div>
-
-                              <Popover.Content>
-                                <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
-                                  <p
-                                    class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
-                                  >
-                                    {{ field.label }} · top values
-                                  </p>
-
-                                  <button
-                                    v-for="entry in topFieldValues(field.id)"
-                                    :key="String(entry.value)"
-                                    type="button"
-                                    role="menuitemcheckbox"
-                                    :aria-checked="isValueApplied(field.id, entry.value)"
-                                    :data-applied="isValueApplied(field.id, entry.value) || null"
-                                    class="flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-applied:bg-(--bg-selected) motion-reduce:transition-none"
-                                    @click="toggleFieldValue(field.id, entry.value)"
-                                  >
-                                    <span
-                                      class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
-                                    >
-                                      {{ formatEventValue(field, entry.value) }}
-                                    </span>
-                                    <span
-                                      class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
-                                    >
-                                      {{ entry.count }}
-                                    </span>
-                                    <i
-                                      v-if="isValueApplied(field.id, entry.value)"
-                                      class="pi pi-check shrink-0 text-(--primary)"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-
-                                  <p
-                                    v-if="fieldValueOverflow(field.id)"
-                                    class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
-                                  >
-                                    {{ fieldValueOverflow(field.id) }} more values in this window.
-                                  </p>
-                                </div>
-                              </Popover.Content>
-                            </Popover>
-
-                            <span
-                              v-else
-                              class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
-                              :data-empty="fieldCounts[field.id] ? null : true"
-                              :aria-label="`${fieldCounts[field.id]} distinct values`"
-                            >
-                              {{ fieldCounts[field.id] }}
-                            </span>
-                          </div>
-                        </Accordion.Content>
-                      </Accordion.Item>
-                    </Accordion>
-                  </div>
-
-                  <p
-                    v-if="!hasFieldMatches"
-                    class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
-                  >
-                    No fields match "{{ fieldSearch }}".
-                  </p>
-                </div>
-              </Sidebar>
-            </div>
-
-            <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
-              <section
-                class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-              >
-                <div class="flex flex-wrap items-end gap-(--spacing-md)">
-                  <dl class="flex flex-wrap items-end gap-(--spacing-xl)">
-                    <div class="flex flex-col">
-                      <dt class="text-label-sm text-(--text-muted)">Events</dt>
-                      <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-                        {{ summary.total.toLocaleString('en-US') }}
-                      </dd>
-                    </div>
-                    <div class="flex flex-col">
-                      <dt class="text-label-sm text-(--text-muted)">Errors</dt>
-                      <dd
-                        class="m-0 text-heading-xs tabular-nums text-(--text-default) data-raised:text-(--danger-contrast)"
-                        :data-raised="summary.errors ? true : null"
-                        :aria-label="`${summary.errors} errors, ${errorShareLabel}`"
-                      >
-                        {{ summary.errors.toLocaleString('en-US') }}
-                      </dd>
-                    </div>
-                    <div class="flex flex-col">
-                      <dt class="text-label-sm text-(--text-muted)">Avg request time</dt>
-                      <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-                        {{
-                          summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms`
-                        }}
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-
-                <Chart
-                  :range="null"
-                  :series="volumeSeries"
-                  :labels="volumeLabels"
-                  :format-label="formatEventClock"
-                  :height="80"
-                  :aria-label="chartLabel"
-                  @update:range="selectVolume"
-                >
-                  <Chart.Axis
-                    kind="x"
-                    :ticks="3"
-                  />
-                  <Chart.Brush />
-                  <Chart.Bar
-                    kind="histogram"
-                    stacked
-                  />
-                  <Chart.Crosshair />
-                  <Chart.Tooltip />
-                </Chart>
-              </section>
-
-              <section class="flex min-h-0 min-w-0 flex-1 flex-col">
-                <div class="flex min-h-0 flex-1">
-                  <TableRoot
-                    ref="tableRef"
-                    v-model:pagination="pagination"
-                    :data="matchedEvents"
-                    :columns="columns"
-                    row-key="id"
-                    enable-sorting
-                    paginated
-                    :page-size="25"
-                    :bordered="false"
-                    header-kind="compact"
-                    max-height="100%"
-                    class="w-full"
-                    :loading="loading"
-                    @row-click="openDocument"
-                  >
-                    <template #header-detail>
-                      <span class="sr-only">Open the event document</span>
-                    </template>
-
-                    <template #cell-detail="{ row }">
-                      <i
-                        class="pi pi-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none"
-                        :data-open="row.id === selectedId || null"
+                      <Badge
+                        :label="String(filterCount)"
+                        severity="primary"
+                        size="small"
                         aria-hidden="true"
-                      />
-                    </template>
-
-                    <template #cell-time="{ value }">
-                      <span
-                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)"
-                      >
-                        {{ value }}
-                      </span>
-                    </template>
-
-                    <template #cell-level="{ value }">
-                      <Table.CellStatus
-                        :label="value"
-                        :severity="eventLevelSeverity(value)"
-                      />
-                    </template>
-
-                    <template #cell-message="{ value }">
-                      <span class="min-w-0 truncate text-(--text-default)">{{ value }}</span>
-                    </template>
-
-                    <template #cell-status="{ value }">
-                      <span
-                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[tone=error]:text-(--danger-contrast) data-[tone=warn]:text-(--warning-contrast)"
-                        :data-tone="statusTone(value)"
-                      >
-                        {{ formatEventValue(statusField, value) }}
-                      </span>
-                    </template>
-
-                    <template
-                      v-for="field in genericColumns"
-                      :key="field.id"
-                      #[`cell-${field.id}`]="{ value }"
-                    >
-                      <span
-                        class="min-w-0 truncate text-(--text-default) data-mono:text-label-code-sm data-numeric:tabular-nums"
-                        :data-mono="field.mono || null"
-                        :data-numeric="field.align === 'end' || null"
-                      >
-                        {{ formatEventValue(field, value) }}
-                      </span>
-                    </template>
-
-                    <template #empty>
-                      <EmptyState
-                        v-if="!events.length"
-                        key="no-traffic"
-                        size="small"
-                        icon="pi pi-inbox"
-                        title="No events yet"
-                        description="Events appear here as soon as traffic reaches this workspace's resources."
-                      />
-                      <EmptyState
-                        v-else-if="search.trim()"
-                        key="no-match"
-                        size="small"
-                        icon="pi pi-search"
-                        title="No events match this search"
-                        description="Clear the search, or widen the period to cover more of the log."
-                      />
-                      <EmptyState
-                        v-else
-                        key="no-events"
-                        size="small"
-                        icon="pi pi-filter-slash"
-                        title="No events in this window"
-                        description="Widen the period or clear a filter to see more of the log."
-                      />
-                    </template>
-                  </TableRoot>
-                </div>
-              </section>
-            </div>
-
-            <Sidebar
-              v-if="isWide"
-              key="event-document-panel"
-              v-model:width="documentWidth"
-              v-model:collapsed="documentCollapsed"
-              side="end"
-              resizable
-              aria-label="Event document"
-              resize-aria-label="Resize the event panel"
-              min-width-token="--container-xs"
-              max-width-token="--container-lg"
-            >
-              <template #header>
-                <div class="flex items-center justify-between gap-(--spacing-xs)">
-                  <span class="min-w-0 truncate text-heading-xxs text-(--text-default)">
-                    Event
-                  </span>
-                  <Tooltip text="Close">
-                    <IconButton
-                      icon="pi pi-times"
-                      kind="transparent"
-                      size="small"
-                      aria-label="Close the event document"
-                      @click="closeDocument"
-                    />
-                  </Tooltip>
-                </div>
-              </template>
-
-              <div
-                v-if="documentEvent"
-                class="-m-(--spacing-md)"
-              >
-                <div class="flex min-w-0 flex-col">
-                  <div
-                    class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
-                  >
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                      <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                        <Tag
-                          :label="documentEvent.level"
-                          :severity="eventLevelSeverity(documentEvent.level)"
-                          size="medium"
-                        />
-                        <Tag
-                          :label="documentEvent.sourceLabel"
-                          severity="secondary"
-                          size="medium"
-                        />
-                      </div>
-                      <p class="text-body-md text-(--text-default)">{{ documentEvent.message }}</p>
-                      <p class="text-label-code-sm tabular-nums text-(--text-muted)">
-                        {{ documentEvent.time }}
-                      </p>
-                    </div>
-
-                    <dl
-                      class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
-                    >
-                      <template
-                        v-for="row in documentRows"
-                        :key="row.id"
-                      >
-                        <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                        <dd
-                          class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
-                        >
-                          {{ row.value }}
-                        </dd>
-                      </template>
-                    </dl>
-                  </div>
-
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                    <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
-                      Event document
-                    </h3>
-                    <div class="min-w-0">
-                      <CodeBlock
-                        :tabs="documentTabs"
-                        :bordered="false"
-                        show-line-numbers
-                        copy-aria-label="Copy the event document as JSON"
+                        data-testid="filter-button__count"
                         class="w-full"
                       />
                     </div>
-                  </div>
-                </div>
+                  </Transition>
+                </Popover.Trigger>
               </div>
-            </Sidebar>
-          </section>
 
-          <Drawer
-            v-model:open="documentDrawerOpen"
-            size="medium"
-            side="right"
-          >
-            <DrawerPortal>
-              <DrawerOverlay />
-              <DrawerContent>
-                <PanelHeader class="w-full">
-                  <DrawerTitle>Event</DrawerTitle>
-                  <DrawerClose />
-                </PanelHeader>
-                <div class="min-h-0 flex-1 overflow-auto">
+              <Popover.Content>
+                <div
+                  ref="filterPanel"
+                  class="flex flex-col"
+                  @keydown.down="moveFilterFocus($event, 1)"
+                  @keydown.up="moveFilterFocus($event, -1)"
+                >
                   <div
-                    v-if="documentEvent"
-                    class="flex min-w-0 flex-col"
+                    ref="filterRegion"
+                    :style="{ height: filterRegionHeight }"
+                    class="relative overflow-hidden transition-[height] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
                   >
-                    <div
-                      class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
+                    <Transition
+                      :enter-from-class="
+                        filterDirection === 'forward'
+                          ? 'translate-x-[12%] opacity-0'
+                          : 'translate-x-[-12%] opacity-0'
+                      "
+                      enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+                      :leave-to-class="
+                        filterDirection === 'forward'
+                          ? 'translate-x-[-12%] opacity-0'
+                          : 'translate-x-[12%] opacity-0'
+                      "
+                      leave-active-class="absolute inset-x-0 top-0 transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
                     >
-                      <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                        <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                          <Tag
-                            :label="documentEvent.level"
-                            :severity="eventLevelSeverity(documentEvent.level)"
-                            size="medium"
+                      <div
+                        :key="filterLevel"
+                        :data-level="filterLevel"
+                        class="flex flex-col"
+                      >
+                        <div
+                          v-if="filterField"
+                          class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xs)"
+                        >
+                          <IconButton
+                            icon="pi pi-angle-left"
+                            kind="outlined"
+                            size="small"
+                            :aria-label="
+                              customFilterField
+                                ? 'Back to date periods'
+                                : 'Back to all filters'
+                            "
+                            @click="customFilterField ? leaveCustomRange() : backToFields()"
                           />
-                          <Tag
-                            :label="documentEvent.sourceLabel"
-                            severity="secondary"
+                          <span class="truncate text-label-sm text-(--text-default)">
+                            {{ filterField.label }}
+                          </span>
+                        </div>
+
+                        <div
+                          v-if="customFilterField"
+                          class="px-(--spacing-md) py-(--spacing-sm)"
+                        >
+                          <CalendarRoot
+                            v-model="customRange"
+                            v-model:open="calendarOpen"
+                            mode="range"
                             size="medium"
+                            :show-fields="false"
+                            placeholder="Select a range"
+                            class="w-full"
+                            @update:model-value="commitCustomRange"
                           />
                         </div>
-                        <p class="text-body-md text-(--text-default)">
-                          {{ documentEvent.message }}
-                        </p>
-                        <p class="text-label-code-sm tabular-nums text-(--text-muted)">
-                          {{ documentEvent.time }}
-                        </p>
-                      </div>
 
-                      <dl
-                        class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
-                      >
-                        <template
-                          v-for="row in documentRows"
-                          :key="row.id"
-                        >
-                          <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                          <dd
-                            class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
+                        <template v-else>
+                          <div class="border-b border-(--border-default) p-(--spacing-xs)">
+                            <Input
+                              v-model="filterQuery"
+                              size="medium"
+                              class="w-full"
+                              :placeholder="
+                                filterField
+                                  ? `Filter ${filterField.label.toLowerCase()}`
+                                  : 'Filter by'
+                              "
+                              :aria-label="
+                                filterField
+                                  ? `Search ${filterField.label} values`
+                                  : 'Search filter fields'
+                              "
+                            >
+                              <template #iconLeft>
+                                <i
+                                  class="pi pi-search"
+                                  aria-hidden="true"
+                                />
+                              </template>
+                            </Input>
+                          </div>
+
+                          <div
+                            class="flex max-h-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto p-(--spacing-xxs)"
                           >
-                            {{ row.value }}
-                          </dd>
-                        </template>
-                      </dl>
-                    </div>
+                            <template v-if="!filterField">
+                              <button
+                                v-for="field in filterRows"
+                                :key="field.id"
+                                type="button"
+                                data-filter-row
+                                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                :aria-expanded="false"
+                                @click="enterFilterField(field.id)"
+                              >
+                                <span class="grow truncate">{{ field.label }}</span>
+                                <span
+                                  v-if="isApplied(filters, field)"
+                                  class="truncate text-(--text-muted)"
+                                >
+                                  {{ summarizeText(field, filters[field.id]) }}
+                                </span>
+                                <i
+                                  class="pi pi-angle-right shrink-0 text-(--text-muted)"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                            </template>
 
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                      <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
-                        Event document
-                      </h3>
-                      <div class="min-w-0">
-                        <CodeBlock
-                          :tabs="documentTabs"
-                          :bordered="false"
-                          show-line-numbers
-                          copy-aria-label="Copy the event document as JSON"
-                          class="w-full"
-                        />
+                            <template v-else>
+                              <button
+                                v-for="option in filterRows"
+                                :key="String(option.value)"
+                                type="button"
+                                data-filter-row
+                                :role="
+                                  option.custom
+                                    ? undefined
+                                    : filterField.kind === 'range'
+                                      ? 'menuitemradio'
+                                      : 'menuitemcheckbox'
+                                "
+                                :aria-checked="
+                                  option.custom ? undefined : isPicked(option.value)
+                                "
+                                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                @click="pickFilterOption(filterField, option)"
+                              >
+                                <span class="grow truncate">{{ option.label }}</span>
+                                <i
+                                  v-if="option.custom"
+                                  class="pi pi-angle-right shrink-0 text-(--text-muted)"
+                                  aria-hidden="true"
+                                />
+                                <i
+                                  v-else
+                                  class="pi pi-check shrink-0 text-(--text-default)"
+                                  :class="isPicked(option.value) ? '' : 'invisible'"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                            </template>
+
+                            <p
+                              v-if="!filterRows.length"
+                              class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
+                            >
+                              No match for “{{ filterQuery }}”.
+                            </p>
+                          </div>
+
+                          <div
+                            v-if="filterField && isApplied(filters, filterField)"
+                            class="border-t border-(--border-default) p-(--spacing-xxs)"
+                          >
+                            <button
+                              type="button"
+                              class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                              @click="clearFilterField(filterField)"
+                            >
+                              <i
+                                class="pi pi-filter-slash text-(--text-muted)"
+                                aria-hidden="true"
+                              />
+                              Clear {{ filterField.label }}
+                            </button>
+                          </div>
+                        </template>
                       </div>
-                    </div>
+                    </Transition>
                   </div>
                 </div>
-              </DrawerContent>
-            </DrawerPortal>
-          </Drawer>
-        </main>
+              </Popover.Content>
+            </Popover>
+          </div>
+          <div class="flex min-w-36 grow basis-(--container-2xs)">
+            <Input
+              v-model="search"
+              size="medium"
+              placeholder="Search events, hosts, paths or addresses"
+              aria-label="Search events"
+              class="w-full"
+            >
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </div>
+        </div>
+        <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+          <Tooltip
+            text="Refresh"
+            class="shrink-0"
+          >
+            <IconButton
+              icon="pi pi-refresh"
+              kind="outlined"
+              size="medium"
+              :loading="loading"
+              aria-label="Refresh"
+              data-testid="refresh-button"
+              @click="refresh"
+            />
+          </Tooltip>
+          <Tooltip
+            text="Download CSV"
+            class="shrink-0"
+          >
+            <IconButton
+              icon="pi pi-download"
+              kind="outlined"
+              size="medium"
+              :disabled="!tableRef"
+              aria-label="Download CSV"
+              data-testid="export-button"
+              @click="exportCsv"
+            />
+          </Tooltip>
+        </div>
+      </header>
+
+      <div
+        v-if="filterChips.length"
+        class="relative flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+        data-testid="filter-chips"
+      >
+        <TransitionGroup
+          move-class="transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+          enter-from-class="scale-90 opacity-0"
+          leave-from-class="scale-100 opacity-100"
+          leave-to-class="scale-90 opacity-0"
+          leave-active-class="pointer-events-none absolute duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+        >
+          <span
+            v-for="field in filterChips"
+            :key="field.id"
+            class="inline-flex w-fit max-w-full transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+          >
+            <Chip
+              :data-filter-chip="field.id"
+              :label="field.label"
+              kind="filled"
+              size="medium"
+              clickable
+              removable
+              @click="enterFilterField(field.id)"
+              @remove="clearFilterField(field)"
+            >
+              <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                <span class="truncate text-(--text-muted)">{{ field.label }}</span>
+                <span class="truncate">{{ summarizeFilter(field)?.label }}</span>
+                <span
+                  v-if="summarizeFilter(field)?.extra"
+                  class="shrink-0 text-(--text-muted)"
+                >
+                  +{{ summarizeFilter(field).extra }}
+                </span>
+              </span>
+            </Chip>
+          </span>
+        </TransitionGroup>
       </div>
-    </div>
+    </header>
+
+    <section
+      ref="explorerEl"
+      class="animate-content-enter motion-reduce:animate-none relative flex min-h-0 min-w-0 flex-1 overflow-hidden"
+    >
+      <div
+        v-if="showFieldsPanel"
+        key="fields-panel"
+        class="contents [--sidebar-width:var(--container-2xs)]"
+      >
+        <Sidebar
+          v-model:collapsed="fieldsCollapsed"
+          v-model:width="fieldsWidth"
+          resizable
+          collapsible
+          aria-label="Fields"
+          collapse-aria-label="Hide the fields panel"
+          expand-aria-label="Show the fields panel"
+          resize-aria-label="Resize the fields panel"
+        >
+          <template #header>
+            <div class="px-(--spacing-xs)">
+              <Input
+                v-model="fieldSearch"
+                size="medium"
+                class="w-full"
+                placeholder="Search fields"
+                aria-label="Search fields"
+              >
+                <template #iconLeft>
+                  <i
+                    class="pi pi-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Input>
+            </div>
+          </template>
+
+          <div>
+            <div
+              class="flex items-baseline justify-between gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xxs) pt-(--spacing-xxs)"
+            >
+              <span class="text-label-sm text-(--text-muted)">Shown</span>
+              <span class="text-label-sm text-(--text-muted)">Values</span>
+            </div>
+
+            <div
+              v-for="field in shownFields"
+              :key="field.id"
+              class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+            >
+              <div class="min-w-0 flex-1">
+                <Field
+                  orientation="horizontal"
+                  :disabled="field.locked"
+                >
+                  <Checkbox
+                    binary
+                    :model-value="true"
+                    :input-id="`event-field-${field.id}`"
+                    @update:model-value="toggleColumn(field.id)"
+                  />
+                  <Field.Label>
+                    <span class="truncate">{{ field.label }}</span>
+                  </Field.Label>
+                </Field>
+              </div>
+
+              <Popover
+                v-if="canFilterField(field) && fieldCounts[field.id]"
+                placement="right-start"
+              >
+                <div
+                  class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
+                >
+                  <Popover.Trigger
+                    role="button"
+                    tabindex="0"
+                    :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
+                  >
+                    {{ fieldCounts[field.id] }}
+                  </Popover.Trigger>
+                </div>
+
+                <Popover.Content>
+                  <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
+                    <p
+                      class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                    >
+                      {{ field.label }} · top values
+                    </p>
+
+                    <button
+                      v-for="entry in topFieldValues(field.id)"
+                      :key="String(entry.value)"
+                      type="button"
+                      role="menuitemcheckbox"
+                      :aria-checked="isValueApplied(field.id, entry.value)"
+                      :data-applied="isValueApplied(field.id, entry.value) || null"
+                      class="flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-applied:bg-(--bg-selected) motion-reduce:transition-none"
+                      @click="toggleFieldValue(field.id, entry.value)"
+                    >
+                      <span
+                        class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
+                      >
+                        {{ formatEventValue(field, entry.value) }}
+                      </span>
+                      <span
+                        class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
+                      >
+                        {{ entry.count }}
+                      </span>
+                      <i
+                        v-if="isValueApplied(field.id, entry.value)"
+                        class="pi pi-check shrink-0 text-(--primary)"
+                        aria-hidden="true"
+                      />
+                    </button>
+
+                    <p
+                      v-if="fieldValueOverflow(field.id)"
+                      class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                    >
+                      {{ fieldValueOverflow(field.id) }} more values in this window.
+                    </p>
+                  </div>
+                </Popover.Content>
+              </Popover>
+
+              <span
+                v-else
+                class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                :data-empty="fieldCounts[field.id] ? null : true"
+                :aria-label="`${fieldCounts[field.id]} distinct values`"
+              >
+                {{ fieldCounts[field.id] }}
+              </span>
+            </div>
+
+            <div
+              v-if="fieldCategories.length"
+              class="mt-(--spacing-xs)"
+            >
+              <Accordion
+                v-model="openCategories"
+                type="multiple"
+                size="medium"
+                arrow-position="left"
+              >
+                <Accordion.Item
+                  v-for="category in fieldCategories"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  <Accordion.Trigger>
+                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <span class="truncate text-label-sm text-(--text-default)">
+                        {{ category.label }}
+                      </span>
+                      <Tag
+                        v-if="categoryFilterCount(category)"
+                        :label="String(categoryFilterCount(category))"
+                        severity="info"
+                        size="small"
+                      />
+                    </span>
+                  </Accordion.Trigger>
+
+                  <Accordion.Content>
+                    <div
+                      v-for="field in category.fields"
+                      :key="field.id"
+                      class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                    >
+                      <div class="min-w-0 flex-1">
+                        <Field orientation="horizontal">
+                          <Checkbox
+                            binary
+                            :model-value="false"
+                            :input-id="`event-field-${field.id}`"
+                            @update:model-value="toggleColumn(field.id)"
+                          />
+                          <Field.Label>
+                            <span class="truncate">{{ field.label }}</span>
+                          </Field.Label>
+                        </Field>
+                      </div>
+
+                      <Popover
+                        v-if="canFilterField(field) && fieldCounts[field.id]"
+                        placement="right-start"
+                      >
+                        <div
+                          class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
+                        >
+                          <Popover.Trigger
+                            role="button"
+                            tabindex="0"
+                            :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
+                          >
+                            {{ fieldCounts[field.id] }}
+                          </Popover.Trigger>
+                        </div>
+
+                        <Popover.Content>
+                          <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
+                            <p
+                              class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                            >
+                              {{ field.label }} · top values
+                            </p>
+
+                            <button
+                              v-for="entry in topFieldValues(field.id)"
+                              :key="String(entry.value)"
+                              type="button"
+                              role="menuitemcheckbox"
+                              :aria-checked="isValueApplied(field.id, entry.value)"
+                              :data-applied="isValueApplied(field.id, entry.value) || null"
+                              class="flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-applied:bg-(--bg-selected) motion-reduce:transition-none"
+                              @click="toggleFieldValue(field.id, entry.value)"
+                            >
+                              <span
+                                class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
+                              >
+                                {{ formatEventValue(field, entry.value) }}
+                              </span>
+                              <span
+                                class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
+                              >
+                                {{ entry.count }}
+                              </span>
+                              <i
+                                v-if="isValueApplied(field.id, entry.value)"
+                                class="pi pi-check shrink-0 text-(--primary)"
+                                aria-hidden="true"
+                              />
+                            </button>
+
+                            <p
+                              v-if="fieldValueOverflow(field.id)"
+                              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                            >
+                              {{ fieldValueOverflow(field.id) }} more values in this window.
+                            </p>
+                          </div>
+                        </Popover.Content>
+                      </Popover>
+
+                      <span
+                        v-else
+                        class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                        :data-empty="fieldCounts[field.id] ? null : true"
+                        :aria-label="`${fieldCounts[field.id]} distinct values`"
+                      >
+                        {{ fieldCounts[field.id] }}
+                      </span>
+                    </div>
+                  </Accordion.Content>
+                </Accordion.Item>
+              </Accordion>
+            </div>
+
+            <p
+              v-if="!hasFieldMatches"
+              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+            >
+              No fields match "{{ fieldSearch }}".
+            </p>
+          </div>
+        </Sidebar>
+      </div>
+
+      <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <section
+          class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+        >
+          <div class="flex flex-wrap items-end gap-(--spacing-md)">
+            <dl class="flex flex-wrap items-end gap-(--spacing-xl)">
+              <div class="flex flex-col">
+                <dt class="text-label-sm text-(--text-muted)">Events</dt>
+                <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
+                  {{ summary.total.toLocaleString('en-US') }}
+                </dd>
+              </div>
+              <div class="flex flex-col">
+                <dt class="text-label-sm text-(--text-muted)">Errors</dt>
+                <dd
+                  class="m-0 text-heading-xs tabular-nums text-(--text-default) data-raised:text-(--danger-contrast)"
+                  :data-raised="summary.errors ? true : null"
+                  :aria-label="`${summary.errors} errors, ${errorShareLabel}`"
+                >
+                  {{ summary.errors.toLocaleString('en-US') }}
+                </dd>
+              </div>
+              <div class="flex flex-col">
+                <dt class="text-label-sm text-(--text-muted)">Avg request time</dt>
+                <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
+                  {{
+                    summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms`
+                  }}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <Chart
+            :range="null"
+            :series="volumeSeries"
+            :labels="volumeLabels"
+            :format-label="formatEventClock"
+            :height="80"
+            :aria-label="chartLabel"
+            @update:range="selectVolume"
+          >
+            <Chart.Axis
+              kind="x"
+              :ticks="3"
+            />
+            <Chart.Brush />
+            <Chart.Bar
+              kind="histogram"
+              stacked
+            />
+            <Chart.Crosshair />
+            <Chart.Tooltip />
+          </Chart>
+        </section>
+
+        <section class="flex min-h-0 min-w-0 flex-1 flex-col">
+          <div class="flex min-h-0 flex-1">
+            <TableRoot
+              ref="tableRef"
+              v-model:pagination="pagination"
+              :data="matchedEvents"
+              :columns="columns"
+              row-key="id"
+              enable-sorting
+              paginated
+              :page-size="25"
+              :bordered="false"
+              header-kind="compact"
+              max-height="100%"
+              class="w-full"
+              :loading="loading"
+              @row-click="openDocument"
+            >
+              <template #header-detail>
+                <span class="sr-only">Open the event document</span>
+              </template>
+
+              <template #cell-detail="{ row }">
+                <i
+                  class="pi pi-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none"
+                  :data-open="row.id === selectedId || null"
+                  aria-hidden="true"
+                />
+              </template>
+
+              <template #cell-time="{ value }">
+                <span
+                  class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)"
+                >
+                  {{ value }}
+                </span>
+              </template>
+
+              <template #cell-level="{ value }">
+                <Table.CellStatus
+                  :label="value"
+                  :severity="eventLevelSeverity(value)"
+                />
+              </template>
+
+              <template #cell-message="{ value }">
+                <span class="min-w-0 truncate text-(--text-default)">{{ value }}</span>
+              </template>
+
+              <template #cell-status="{ value }">
+                <span
+                  class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[tone=error]:text-(--danger-contrast) data-[tone=warn]:text-(--warning-contrast)"
+                  :data-tone="statusTone(value)"
+                >
+                  {{ formatEventValue(statusField, value) }}
+                </span>
+              </template>
+
+              <template
+                v-for="field in genericColumns"
+                :key="field.id"
+                #[`cell-${field.id}`]="{ value }"
+              >
+                <span
+                  class="min-w-0 truncate text-(--text-default) data-mono:text-label-code-sm data-numeric:tabular-nums"
+                  :data-mono="field.mono || null"
+                  :data-numeric="field.align === 'end' || null"
+                >
+                  {{ formatEventValue(field, value) }}
+                </span>
+              </template>
+
+              <template #empty>
+                <EmptyState
+                  v-if="!events.length"
+                  key="no-traffic"
+                  size="small"
+                  icon="pi pi-inbox"
+                  title="No events yet"
+                  description="Events appear here as soon as traffic reaches this workspace's resources."
+                />
+                <EmptyState
+                  v-else-if="search.trim()"
+                  key="no-match"
+                  size="small"
+                  icon="pi pi-search"
+                  title="No events match this search"
+                  description="Clear the search, or widen the period to cover more of the log."
+                />
+                <EmptyState
+                  v-else
+                  key="no-events"
+                  size="small"
+                  icon="pi pi-filter-slash"
+                  title="No events in this window"
+                  description="Widen the period or clear a filter to see more of the log."
+                />
+              </template>
+            </TableRoot>
+          </div>
+        </section>
+      </div>
+
+      <Sidebar
+        v-if="isWide"
+        key="event-document-panel"
+        v-model:width="documentWidth"
+        v-model:collapsed="documentCollapsed"
+        side="end"
+        resizable
+        aria-label="Event document"
+        resize-aria-label="Resize the event panel"
+        min-width-token="--container-xs"
+        max-width-token="--container-lg"
+      >
+        <template #header>
+          <div class="flex items-center justify-between gap-(--spacing-xs)">
+            <span class="min-w-0 truncate text-heading-xxs text-(--text-default)">
+              Event
+            </span>
+            <Tooltip text="Close">
+              <IconButton
+                icon="pi pi-times"
+                kind="transparent"
+                size="small"
+                aria-label="Close the event document"
+                @click="closeDocument"
+              />
+            </Tooltip>
+          </div>
+        </template>
+
+        <div
+          v-if="documentEvent"
+          class="-m-(--spacing-md)"
+        >
+          <div class="flex min-w-0 flex-col">
+            <div
+              class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
+            >
+              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                  <Tag
+                    :label="documentEvent.level"
+                    :severity="eventLevelSeverity(documentEvent.level)"
+                    size="medium"
+                  />
+                  <Tag
+                    :label="documentEvent.sourceLabel"
+                    severity="secondary"
+                    size="medium"
+                  />
+                </div>
+                <p class="text-body-md text-(--text-default)">{{ documentEvent.message }}</p>
+                <p class="text-label-code-sm tabular-nums text-(--text-muted)">
+                  {{ documentEvent.time }}
+                </p>
+              </div>
+
+              <dl
+                class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+              >
+                <template
+                  v-for="row in documentRows"
+                  :key="row.id"
+                >
+                  <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                  <dd
+                    class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
+                  >
+                    {{ row.value }}
+                  </dd>
+                </template>
+              </dl>
+            </div>
+
+            <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
+                Event document
+              </h3>
+              <div class="min-w-0">
+                <CodeBlock
+                  :tabs="documentTabs"
+                  :bordered="false"
+                  show-line-numbers
+                  copy-aria-label="Copy the event document as JSON"
+                  class="w-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </Sidebar>
+    </section>
 
     <Drawer
-      v-model:open="navOpen"
+      v-model:open="documentDrawerOpen"
+      size="medium"
       side="right"
-      size="small"
     >
       <DrawerPortal>
         <DrawerOverlay />
-        <DrawerContent aria-label="Navigation">
-          <Sidebar aria-label="Main navigation">
-            <template #header>
-              <div class="-m-(--spacing-md) flex flex-col">
-                <div
-                  class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
-                >
-                  <a
-                    href="/home"
-                    aria-label="Azion home"
-                    class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                  >
-                    <Brand
-                      kind="default"
-                      size="small"
+        <DrawerContent>
+          <PanelHeader class="w-full">
+            <DrawerTitle>Event</DrawerTitle>
+            <DrawerClose />
+          </PanelHeader>
+          <div class="min-h-0 flex-1 overflow-auto">
+            <div
+              v-if="documentEvent"
+              class="flex min-w-0 flex-col"
+            >
+              <div
+                class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
+              >
+                <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                    <Tag
+                      :label="documentEvent.level"
+                      :severity="eventLevelSeverity(documentEvent.level)"
+                      size="medium"
                     />
-                  </a>
+                    <Tag
+                      :label="documentEvent.sourceLabel"
+                      severity="secondary"
+                      size="medium"
+                    />
+                  </div>
+                  <p class="text-body-md text-(--text-default)">
+                    {{ documentEvent.message }}
+                  </p>
+                  <p class="text-label-code-sm tabular-nums text-(--text-muted)">
+                    {{ documentEvent.time }}
+                  </p>
+                </div>
+
+                <dl
+                  class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+                >
+                  <template
+                    v-for="row in documentRows"
+                    :key="row.id"
+                  >
+                    <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                    <dd
+                      class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
+                    >
+                      {{ row.value }}
+                    </dd>
+                  </template>
+                </dl>
+              </div>
+
+              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
+                  Event document
+                </h3>
+                <div class="min-w-0">
+                  <CodeBlock
+                    :tabs="documentTabs"
+                    :bordered="false"
+                    show-line-numbers
+                    copy-aria-label="Copy the event document as JSON"
+                    class="w-full"
+                  />
                 </div>
               </div>
-            </template>
-
-            <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
-              <Menu
-                :groups="navGroups"
-                :active-id="activeId"
-                role="presentation"
-                @navigate="onMobileNavigate"
-              >
-                <Menu.Back />
-              </Menu>
             </div>
-
-            <template #footer>
-              <div class="flex items-center gap-(--spacing-xs)">
-                <Avatar
-                  label="alex@example.com"
-                  size="small"
-                  kind="square"
-                />
-                <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
-                  >alex</span
-                >
-                <DropdownMenu placement="top-end">
-                  <DropdownMenu.Trigger>
-                    <Tooltip text="Account menu">
-                      <IconButton
-                        icon="pi pi-ellipsis-v"
-                        aria-label="Account menu"
-                        kind="outlined"
-                        size="small"
-                      />
-                    </Tooltip>
-                  </DropdownMenu.Trigger>
-                  <DropdownMenu.Group>
-                    <template #top>
-                      <div class="flex min-w-0 flex-col">
-                        <span class="truncate text-label-md text-(--text-default)">alex</span>
-                        <span class="truncate text-body-xs text-(--text-muted)"
-                          >alex@example.com</span
-                        >
-                      </div>
-                    </template>
-                    <DropdownMenu.Option
-                      value="settings"
-                      label="Account settings"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-cog"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="personal-tokens"
-                      label="Personal tokens"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-key"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <div
-                      class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
-                    >
-                      <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
-                        >Theme</span
-                      >
-                      <ThemeSwitcher
-                        v-model="theme"
-                        aria-label="Theme"
-                      />
-                    </div>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Option
-                      value="home"
-                      label="Home page"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-home"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="changelog"
-                      label="Changelog"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-pencil"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="feedback"
-                      label="Feedback"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-comment"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="docs"
-                      label="Docs"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-book"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Option
-                      value="logout"
-                      label="Log out"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-sign-out"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <div
-                      class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
-                    >
-                      <Button
-                        label="Upgrade to Pro"
-                        kind="secondary"
-                        size="medium"
-                        class="w-full"
-                      />
-                      <div class="flex justify-center px-(--spacing-xs)">
-                        <StatusIndicator
-                          severity="success"
-                          label="All systems normal"
-                        />
-                      </div>
-                    </div>
-                  </DropdownMenu.Group>
-                </DropdownMenu>
-              </div>
-            </template>
-          </Sidebar>
+          </div>
         </DrawerContent>
       </DrawerPortal>
     </Drawer>

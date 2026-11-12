@@ -5,6 +5,8 @@ twelve-month trend behind each one, progress on the quarter's goals and the note
 they reviewed it. It favours a few numbers read in seconds over detail; every figure links back to its
 own dashboard for the breakdown.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - A recurring review (quarterly, monthly) where readers need results, trends, goals and context together.

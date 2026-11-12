@@ -325,8 +325,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex min-h-full flex-col">
       <PageHeader
         title="Rules"
         :description="PAGE_DESCRIPTION"
@@ -570,7 +570,7 @@
           />
         </template>
       </SaveBar>
-    </main>
+    </div>
 
     <Dialog
       v-model:open="reviewOpen"

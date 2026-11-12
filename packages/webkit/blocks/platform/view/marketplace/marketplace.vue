@@ -282,8 +282,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex min-h-full flex-col">
       <PageHeader
         title="Marketplace"
         description="Find integrations and templates that run on your applications."
@@ -477,7 +477,7 @@
           </Tabs.Content>
         </Tabs.Root>
       </div>
-    </main>
+    </div>
 
     <Drawer
       v-model:open="detailOpen"

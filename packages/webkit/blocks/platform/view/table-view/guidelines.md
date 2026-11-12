@@ -2,6 +2,8 @@
 
 The first-level index of one resource type, in rows. The user lands here from the sidebar to find a resource among many, narrow the list by its attributes, compare records column by column, and act on one: open it, deploy it, clone it, delete it, or create a new one. One `useCollection` call holds the filter, the sort, the page and the saved preferences, so the page is one heading over one band: the controls row and the table it narrows.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - The module the sidebar routes to lists resources of one type (applications, workloads, users, tokens, environments, activity history).
@@ -96,7 +98,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 
 ## Accessibility
 
-- One `main` landmark; the `PageHeader` title is the page's only `h1`.
+- The layout owns the one `main` landmark; the `PageHeader` title is the page's only `h1`.
 - The `PropertyFilter` has an `aria-label` that matches its placeholder; each token's remove button names the token, and the match count is announced after each change.
 - Every icon-only button has an `aria-label`; decorative icons carry `aria-hidden="true"`.
 - Focus order follows reading order: heading actions, filter, Refresh, Download CSV, Preferences, table, pagination.

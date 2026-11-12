@@ -2,6 +2,8 @@
 
 The contents of one storage resource. The user opens a bucket to find a file, walk into a folder and back out, upload something or add a folder, and download or delete what is there. The table's toolbar is the whole page header, so the storage name, search, the folder path and Add to files all sit on the one surface the files live on.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - A storage resource (an Object Storage bucket, a build output) opens on its files and folders.
@@ -116,7 +118,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
 ## Accessibility
 
-- One `main` landmark holds the card; the storage name is the visible title of the surface.
+- The card sits in the layout's one `main` landmark; the storage name is the visible title of the surface.
 - Every icon-only button has an `aria-label`; file and folder glyphs carry `aria-hidden="true"`, so the name cell reads as the name alone.
 - The `Breadcrumb` crumbs are links the keyboard reaches in order; the last crumb is the current folder.
 - Folder rows open on click and the Open option in the row menu gives the same action to keyboard users.

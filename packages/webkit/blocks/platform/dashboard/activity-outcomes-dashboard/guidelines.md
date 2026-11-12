@@ -6,6 +6,8 @@ how those outcomes moved over time, breaks them down by actor, category and dest
 the request log, where each row names the rule that decided it. Every region reads the same filters,
 so narrowing the time range or the actor moves the whole page at once.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - A policy or rule engine decides on requests made by a known set of actors (agents, users, service

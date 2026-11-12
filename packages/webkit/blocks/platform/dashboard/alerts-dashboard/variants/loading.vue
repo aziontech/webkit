@@ -470,8 +470,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex flex-col gap-(--layout-group-gap)">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col gap-(--layout-group-gap)">
       <PageHeader
         title="Alerts"
         description="What is open, how severe it is, what kind it is and who is involved."
@@ -723,6 +723,6 @@
           </ChartCard.Content>
         </ChartCard>
       </div>
-    </main>
+    </div>
   </div>
 </template>

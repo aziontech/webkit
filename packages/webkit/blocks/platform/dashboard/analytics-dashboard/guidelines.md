@@ -6,6 +6,8 @@ charts and the table that explain those totals. Every tile, chart and the table 
 so one change of range moves every region together. It is the reference grammar for the other
 dashboards: KPI row first, a 12-column grid of `ChartCard`s below, one shared card header.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - The reader monitors volume and quality of traffic (requests, bytes, status codes) over a period.

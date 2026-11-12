@@ -135,8 +135,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex min-h-full flex-col">
       <PageHeader
         title="Tuning"
         description="Requests this rule set matched, grouped by rule. Review them, then allow the ones that are legitimate."
@@ -310,7 +310,7 @@
           </template>
         </Card>
       </section>
-    </main>
+    </div>
 
     <Dialog
       v-model:open="allowOpen"

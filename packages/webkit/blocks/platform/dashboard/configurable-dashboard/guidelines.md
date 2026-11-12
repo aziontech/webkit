@@ -6,6 +6,8 @@ different cards than the default puts first. The page owns the layout (an array 
 height, in order) and binds it to `Board`, which moves, resizes, clamps and announces; the
 `ChartCard` inside each `Board.Item` provides the drag handle and the resize corner.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - The same dashboard serves readers with different priorities, and each comes back often.

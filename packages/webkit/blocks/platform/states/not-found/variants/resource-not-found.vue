@@ -6,8 +6,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-w-0 flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex min-w-0 flex-col">
       <h1 class="sr-only">Error 404</h1>
       <EmptyState
         :title="`Service ${resourceId} not found`"
@@ -24,6 +24,6 @@
           />
         </template>
       </EmptyState>
-    </main>
+    </div>
   </div>
 </template>

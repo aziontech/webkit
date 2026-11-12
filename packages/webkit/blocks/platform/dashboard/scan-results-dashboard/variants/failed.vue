@@ -72,8 +72,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex flex-col gap-(--layout-group-gap)">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col gap-(--layout-group-gap)">
       <PageHeader
         title="Scan results"
         description="Items sent for analysis inline and through the API, their verdicts, the deliveries held for a verdict and the items delivered before they were flagged."
@@ -182,6 +182,6 @@
           </ChartCard.Content>
         </ChartCard>
       </div>
-    </main>
+    </div>
   </div>
 </template>

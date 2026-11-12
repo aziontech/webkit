@@ -99,8 +99,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
+  <div class="layout-boundary">
+    <div class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
       <PageHeader
         title="Analytics"
         description="Requests, data transferred and errors your services handled in the period."
@@ -387,6 +387,6 @@
           </ChartCard.Content>
         </ChartCard>
       </div>
-    </main>
+    </div>
   </div>
 </template>

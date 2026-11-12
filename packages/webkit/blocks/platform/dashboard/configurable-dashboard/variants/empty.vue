@@ -129,8 +129,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
+  <div class="layout-boundary">
+    <div class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
       <PageHeader
         title="Traffic overview"
         description="Requests, regions, errors and response time for the period, in the layout you set."
@@ -251,6 +251,6 @@
       >
         {{ announcement }}
       </p>
-    </main>
+    </div>
   </div>
 </template>

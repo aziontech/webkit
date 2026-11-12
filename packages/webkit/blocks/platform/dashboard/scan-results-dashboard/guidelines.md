@@ -5,6 +5,8 @@ verdict. The reader checks what was submitted, what is still waiting, what was f
 two exceptions: deliveries held until a verdict arrives, and items that were delivered before they
 were flagged. It ends in the submissions table, where the reader finds a specific item.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - Items get a verdict from an asynchronous analysis (Clean, Suspicious, Flagged, Pending).

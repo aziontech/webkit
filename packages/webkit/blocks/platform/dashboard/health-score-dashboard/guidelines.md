@@ -6,6 +6,8 @@ Poor under 50). The page shows the overall score and its trend, ranks applicatio
 lowest first with the top cause of poor samples, gives each application an hour-by-hour strip, and ends
 in the open incidents that need someone's attention.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - Many raw signals (latency, packet loss, DNS time, Wi-Fi signal) are combined into one score the

@@ -5,6 +5,8 @@ and inspected, how blocking moved over time, which attack categories and countri
 source addresses sent the most, and the short list of settings and traffic that need a decision now.
 Needs attention is what makes it more than a report: every entry ends in one action.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - Security rules (firewall, WAF, bot rules) inspect and block requests, and the reader owns those rules.

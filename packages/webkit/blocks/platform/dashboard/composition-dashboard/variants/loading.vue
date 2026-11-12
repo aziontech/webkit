@@ -331,8 +331,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex flex-col gap-(--spacing-lg)">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col gap-(--spacing-lg)">
       <PageHeader
         title="Cost breakdown"
         description="How the organization’s spend splits across categories and the resources that drive it."
@@ -595,6 +595,6 @@
           </ChartCard.Content>
         </ChartCard>
       </div>
-    </main>
+    </div>
   </div>
 </template>

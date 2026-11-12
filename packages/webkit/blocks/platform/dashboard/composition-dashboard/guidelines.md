@@ -5,6 +5,8 @@ the organization's monthly spend: the total and its three largest categories fir
 12 months, the current month's split, and the resources that drive it, ranked. The same shape fits any
 total that breaks down into exclusive parts (storage by type, requests by product, seats by team).
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - One total splits into a small number of exclusive categories (up to six, plus Other).

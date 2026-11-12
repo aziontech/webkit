@@ -2,6 +2,8 @@
 
 The skeleton wires an app paints while a page is still arriving. The user's job does not change while they wait: they need to see the shape of the page they asked for, so the wire draws the real page's grid with `Skeleton` bands inside the same `Card` frames, and nothing shifts when the content lands. The set covers the Home overview, the first-access Home, and the whole shell while an expired session signs out, drawn over the family of page it covers (list, detail, create form or Home).
 
+Overview and Onboarding are page bodies for the default slot of `ConsoleLayout` (`shells/console`); the Session wires stand in for the whole app, layout included.
+
 ## When to use
 
 - The first paint of a page whose data is still loading, when the layout is known.

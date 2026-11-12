@@ -2,6 +2,8 @@
 
 The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: while a folder hovers over the page, a dashed drop target fills it and says what will happen; once it is dropped, a full-screen Initializing overlay reads like the deploy logs, one row per received file, until the upload is done and the deploy takes over.
 
+DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shells/console`); Initializing covers the whole screen.
+
 ## When to use
 
 - Pages where dropping a project is a shortcut to deploying it: Home, its empty state, a creation hub, and a project detail page.

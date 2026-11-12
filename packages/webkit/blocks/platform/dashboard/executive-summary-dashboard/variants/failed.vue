@@ -168,8 +168,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex flex-col gap-(--layout-group-gap)">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col gap-(--layout-group-gap)">
       <PageHeader
         title="Executive summary"
         description="Headline results for the quarter, progress on its goals, twelve-month trends and notes from the leads."
@@ -287,6 +287,6 @@
           </Card>
         </div>
       </div>
-    </main>
+    </div>
   </div>
 </template>

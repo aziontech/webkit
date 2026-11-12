@@ -5,6 +5,8 @@ opens it before a stand-up or a review to see completion, the sprint burndown, t
 what is at risk and who carries the open work. The page heading (`Project status`) sits over a filter
 row that picks the project and the sprint; every region reads that pair.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - Work is tracked as tasks with status, estimates, owners and due dates, grouped in sprints.
