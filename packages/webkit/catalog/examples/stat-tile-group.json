@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "An overview's usage strip: four StatTiles in one card, split by dividers, each delta aligned to the end of its cell. One cell per row in a narrow box, two from the group's medium size, all four in a row on a wide one.",
+   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n  import StatTileGroup from '@aziontech/webkit/stat-tile-group'\n</script>\n\n<template>\n  <StatTileGroup aria-label=\"Usage\">\n    <StatTile\n      label=\"Data transferred\"\n      :value=\"842\"\n      unit=\"GB\"\n      :delta=\"12.4\"\n    />\n    <StatTile\n      label=\"Requests / second\"\n      :value=\"1240\"\n      unit=\"/s\"\n      :delta=\"3.8\"\n    />\n    <StatTile\n      label=\"Bandwidth saving\"\n      :value=\"588\"\n      unit=\"GB\"\n      :delta=\"6.2\"\n    />\n    <StatTile\n      label=\"Data offload\"\n      :value=\"70\"\n      unit=\"%\"\n      :delta=\"-1.5\"\n      inverse\n    />\n  </StatTileGroup>\n</template>"
+  }
+ ]
+}

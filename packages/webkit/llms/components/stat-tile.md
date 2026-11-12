@@ -1,6 +1,6 @@
 # Stat Tile
 
-> A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses.
+> A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses. Inside a `StatTileGroup` the tiles become the cells of one card, split by dividers, with the delta aligned to the cell's end. `kind` picks the figure face: `mono` (the big-number mono figure of a usage strip) or `sans` (the large heading figure of a traffic summary).
 
 - Import: `import StatTile from '@aziontech/webkit/stat-tile'`
 - Category: chart · Surface: product · Structure: monolithic
@@ -19,6 +19,9 @@
 - Put the unit in `unit` ("GB", "ms", "%"), not inside `formatValue`, so it reads muted beside the figure.
 - Leave `trend` out for a strip of figures with no history; the tile then has no chart band.
 - Give the sparkline the same buckets as the chart below it, about twelve points.
+- For a KPI strip that reads as one band (an overview's usage row), put the tiles in a `StatTileGroup`; do not hand-build the card, the grid or the dividers. Separate tiles are for figures that stand alone.
+- Use `kind="mono"` (default) for usage figures with a delta, `kind="sans"` for a summary row of plain figures (requests, data transferred, error rate) above its charts. Keep one kind per row.
+- Pass the delta as the raw percentage (`12.4`); the tile prints at most two decimals and drops trailing zeros (`+12.4%`, `+3%`).
 
 ## Don’t
 
@@ -35,6 +38,7 @@
 - [spark-chart](spark-chart.md) — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
 - [tag](tag.md) — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.
 - divider` — carries the "No data" `Tag` across the empty band.
+- [stat-tile-group](stat-tile-group.md) — one card split into cells, one per tile: the KPI strip of an overview.
 
 ## Props
 
@@ -43,8 +47,9 @@
 | `label` | `string` | `''` | false | Metric name, in sentence case. Fallback for the default slot. |
 | `value` | `number \| null` | `null` | false | The current value. It counts up from the previous value on change; null renders a dash. |
 | `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats the figure. |
-| `unit` | `string` | `''` | false | Unit read after the figure, in a muted tone. Empty hides it. |
-| `delta` | `number \| null` | `null` | false | Signed change against the named period, in percent. Null hides the delta. |
+| `kind` | `StatTileKind` | `'mono'` | false | Figure face: `mono` is the big-number mono figure, `sans` the large heading figure. |
+| `unit` | `string` | `''` | false | Unit read after the figure, smaller and in a muted sans tone. Empty hides it. |
+| `delta` | `number \| null` | `null` | false | Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta. |
 | `deltaLabel` | `string` | `''` | false | The comparison period, read after the delta. |
 | `inverse` | `boolean` | `false` | false | A rise is bad for this metric; flips the delta between success and danger. |
 | `trend` | `number[]` | `[]` | false | Sparkline values, oldest first. Empty hides the sparkline. |
@@ -61,7 +66,8 @@
 
 - Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a muted placeholder `spark-chart` under a `Separator` carrying a "No data" `Tag`)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `secondary` when flat
-- `data-loading` mirrors `loading`
+- `data-loading` mirrors `loading`; `data-kind` mirrors `kind` (`mono` | `sans`)
+- `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
 - Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value.
@@ -134,28 +140,26 @@
 </template>
 ```
 
-### CountUp
+### Kinds
 
 ```vue
 <script setup>
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Button from '@aziontech/webkit/button'
-  import { ref } from 'vue'
-
-  const value = ref(48210)
 </script>
 
 <template>
-  <div class="flex max-w-(--container-xs) flex-col gap-(--spacing-sm)">
+  <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2">
     <StatTile
-      label="Blocked threats"
-      :value="value"
+      label="Data transferred"
+      :value="842"
+      unit="GB"
+      :delta="12.4"
     />
-    <Button
-      kind="secondary"
-      size="medium"
-      label="Refresh"
-      @click="value += 4210"
+    <StatTile
+      kind="sans"
+      label="Requests"
+      :value="48.2"
+      unit="M"
     />
   </div>
 </template>

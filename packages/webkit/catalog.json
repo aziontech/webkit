@@ -3611,7 +3611,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Folds to the magnifier alone below the nearest container's `2xl` size; the label stays the accessible name."
+     "doc": "Folds to the magnifier alone while the nearest container is narrower than 47rem (752px, the `--container-2xl` token); the label stays the accessible name and shows as a tooltip on hover and focus."
     },
     {
      "name": "disabled",
@@ -5144,18 +5144,25 @@
      "doc": "Formats the figure."
     },
     {
+     "name": "kind",
+     "type": "StatTileKind",
+     "default": "'mono'",
+     "required": "false",
+     "doc": "Figure face: `mono` is the big-number mono figure, `sans` the large heading figure."
+    },
+    {
      "name": "unit",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Unit read after the figure, in a muted tone. Empty hides it."
+     "doc": "Unit read after the figure, smaller and in a muted sans tone. Empty hides it."
     },
     {
      "name": "delta",
      "type": "number | null",
      "default": "null",
      "required": "false",
-     "doc": "Signed change against the named period, in percent. Null hides the delta."
+     "doc": "Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta."
     },
     {
      "name": "deltaLabel",
@@ -5201,6 +5208,33 @@
    "surface": "product",
    "examplesFile": "catalog/examples/stat-tile.json",
    "docsFile": "catalog/components/stat-tile.json"
+  },
+  "stat-tile-group": {
+   "import": "@aziontech/webkit/stat-tile-group",
+   "target": "./src/components/chart/stat-tile-group/stat-tile-group.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/stat-tile-group",
+   "category": "chart",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the strip, such as Usage; empty leaves the group unnamed."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The StatTile cells, in reading order."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/stat-tile-group.json",
+   "docsFile": "catalog/components/stat-tile-group.json"
   },
   "bar-list": {
    "import": "@aziontech/webkit/bar-list",
@@ -11872,7 +11906,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Marks the field read-only: value is visible, focusable and copyable but not editable. Renders transparent with a dashed border and no hover (`data-readonly`), distinct from both the editable and the disabled field."
+     "doc": "Marks the field read-only: value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`); distinct from the disabled field."
     },
     {
      "name": "required",
@@ -11887,6 +11921,13 @@
      "default": "false",
      "required": "false",
      "doc": "Applies the invalid border + ring tokens and sets `aria-invalid`."
+    },
+    {
+     "name": "monospace",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for CLI commands, IDs, tokens and hashes (`data-monospace`)."
     }
    ],
    "events": [
@@ -12974,7 +13015,7 @@
      "type": "'filled' | 'outlined' | 'dashed'",
      "default": "'filled'",
      "required": "false",
-     "doc": "Visual variant. Filled is an applied value, outlined an available one, dashed the control that adds one."
+     "doc": "Visual variant. Filled (grey fill) is an applied value, outlined an available one, dashed the control that adds one."
     },
     {
      "name": "size",

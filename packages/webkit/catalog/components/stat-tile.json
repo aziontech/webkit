@@ -1,5 +1,5 @@
 {
- "purpose": "A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses.",
+ "purpose": "A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses. Inside a `StatTileGroup` the tiles become the cells of one card, split by dividers, with the delta aligned to the cell's end. `kind` picks the figure face: `mono` (the big-number mono figure of a usage strip) or `sans` (the large heading figure of a traffic summary).",
  "useWhen": [
   "The headline numbers of a dashboard: total requests, blocked threats, cache hit ratio, error rate.",
   "A single value whose change matters more than its history; the sparkline adds the shape of that history."
@@ -15,7 +15,8 @@
   "big-numbers` — the marketing figure band, with no delta and no live data.",
   "spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.",
   "tag` — the delta renders as a `Tag`; the empty band's \"No data\" is a `Tag` too.",
-  "divider` — carries the \"No data\" `Tag` across the empty band."
+  "divider` — carries the \"No data\" `Tag` across the empty band.",
+  "stat-tile-group` — one card split into cells, one per tile: the KPI strip of an overview."
  ],
  "bestPractices": [
   "Name the comparison period in `deltaLabel` (\"vs previous 24 hours\"); a bare percentage is ambiguous.",
@@ -23,6 +24,9 @@
   "Keep the label in sentence case with no trailing colon.",
   "Put the unit in `unit` (\"GB\", \"ms\", \"%\"), not inside `formatValue`, so it reads muted beside the figure.",
   "Leave `trend` out for a strip of figures with no history; the tile then has no chart band.",
-  "Give the sparkline the same buckets as the chart below it, about twelve points."
+  "Give the sparkline the same buckets as the chart below it, about twelve points.",
+  "For a KPI strip that reads as one band (an overview's usage row), put the tiles in a `StatTileGroup`; do not hand-build the card, the grid or the dividers. Separate tiles are for figures that stand alone.",
+  "Use `kind=\"mono\"` (default) for usage figures with a delta, `kind=\"sans\"` for a summary row of plain figures (requests, data transferred, error rate) above its charts. Keep one kind per row.",
+  "Pass the delta as the raw percentage (`12.4`); the tile prints at most two decimals and drops trailing zeros (`+12.4%`, `+3%`)."
  ]
 }

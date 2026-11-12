@@ -1036,7 +1036,7 @@ scrolls sideways inside its own viewport; `stackable` opts a short list into lab
 `PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingRow` (keeps its
 two columns, the description clamped; `stackable` moves a field under its copy), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
 `Card` (its content is `@container/card`), `Alert` (the action takes its own line), `EmptyState`,
-`Pagination` (only previous / current / next in a narrow box), `Wizard` (the rail hides when the
+`Pagination` (the strip and page-size control wrap under the info text; the page list stays whole), `Wizard` (the rail hides when the
 wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every dialog and drawer
 (`@container/panel`). `KeyValuePairs` picks its column count from its own width, and
 `Field orientation="responsive"` follows whichever container encloses it.
@@ -13351,7 +13351,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 # Search Trigger
 
-> The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads "you can search here", but it is one `<button>` that emits `open` — on click and on the shortcut itself, which it binds on the window unless a mounted `Command` already listens for it. The consumer opens `Command` (or its own search) from `open`. Every app header — console, demo, docs and site — carries one: it is the single way search is offered in a top bar. With `collapsible` it folds to the magnifier alone inside a narrow container, so one element serves the wide and the narrow bar.
+> The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads "you can search here", but it is one `<button>` that emits `open` — on click and on the shortcut itself, which it binds on the window unless a mounted `Command` already listens for it. The consumer opens `Command` (or its own search) from `open`. Every app header — console, demo, docs and site — carries one: it is the single way search is offered in a top bar. With `collapsible` it folds to the magnifier alone inside a narrow container (with its label as a tooltip), so one element serves the wide and the narrow bar.
 
 - Import: `import SearchTrigger from '@aziontech/webkit/search-trigger'`
 - Category: actions · Surface: product · Structure: monolithic
@@ -13367,7 +13367,8 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - Wire `@open` to the same state the shortcut opens (`<Command v-model:open="open">`), so the button and ⌘K never disagree. Without a `Command` on the page, `@open` also fires on ⌘K / Ctrl K, so a custom search dialog gets the shortcut for free.
 - Keep `shortcut` equal to the key the `Command` root listens for (`K`), or clear it (`shortcut=""`) when no shortcut exists.
 - Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `webkit/header-search-trigger` lint rule flags both.
-- With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds below the container's `2xl` size and without a container it stays folded.
+- With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds while that container is narrower than 47rem (752 px, the `--container-2xl` token) and without a container it stays folded. Do not add your own breakpoint around it: 47rem is the one threshold every header uses.
+- With `collapsible`, the button sits inside the `Tooltip` wrapper, so put layout classes (`ms-auto`, `order-*`) on a parent, not on the trigger.
 - Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name.
 
 ## Don’t
@@ -13382,6 +13383,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - Command` — the palette this button opens; when it is mounted it owns the global ⌘K / Ctrl+K listener and `v-model:open`, and the trigger stands its own listener down.
 - Kbd` — draws the keycap with the OS-aware modifier glyph.
 - IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.
+- Tooltip` — shows the label over the folded magnifier on hover and focus.
 - GlobalHeader` — the bar it sits in, usually in `GlobalHeader.Right`.
 
 ## Props
@@ -13390,7 +13392,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Visible muted text and accessible name; empty uses the catalog's `Search`. |
 | `shortcut` | `string` | `'K'` | false | Key that opens search with ⌘ or Ctrl: drawn in the keycap, announced through `aria-keyshortcuts` and bound on the window unless a mounted `Command` already listens for it; empty removes all three. |
-| `collapsible` | `boolean` | `false` | false | Folds to the magnifier alone below the nearest container's `2xl` size; the label stays the accessible name. |
+| `collapsible` | `boolean` | `false` | false | Folds to the magnifier alone while the nearest container is narrower than 47rem (752px, the `--container-2xl` token); the label stays the accessible name and shows as a tooltip on hover and focus. |
 | `disabled` | `boolean` | `false` | false | Disables the button and its shortcut; `open` is not emitted. |
 
 ## Events
@@ -13403,6 +13405,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 - Visual states: `default`, `hover` (border strengthens), `focus-visible` (ring), `disabled`.
 - `data-disabled` mirrors `disabled`; `data-collapsible` mirrors `collapsible`.
+- Folded (`collapsible` in a container narrower than 47rem): a `Tooltip` (`placement="bottom"`, test id `<testid>__tooltip`) shows the label on hover and focus. It is disabled while the trigger is unfolded or `disabled`; the trigger measures its own label with a `ResizeObserver` to know which form is drawn.
 - Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed` (the palette owns open state).
 
 ## Accessibility
@@ -13414,7 +13417,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - Disabled: native `disabled` (out of the tab order, not announced as actionable); text and border keep ≥ 3:1 against the surface.
 - Contrast: muted label ≥ 4.5:1 on `--bg-surface` in light and dark; magnifier ≥ 3:1.
 - `motion-reduce:transition-none` on the colour transition.
-- Touch target: 32 px tall in the wide form and 32 × 32 px folded on fine pointers (the `IconButton` medium it replaces); on coarse pointers `pointer-coarse:min-h-11` (and `pointer-coarse:min-w-11` folded) raises it to 44 px.
+- Touch target: drawn 32 px tall in the wide form and 32 × 32 px folded on every pointer, the same box as the header's `IconButton` medium neighbours. On a coarse pointer an invisible `aria-hidden` span (`data-slot="touch-target"`, `inset-[min(0rem,calc(50%-22px))]`, the `IconButton` technique) grows the hit area to at least 44 × 44 px without changing the drawn size.
 
 ## Right-to-left
 
@@ -13433,9 +13436,9 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## Responsive
 
-- Container queries: with `collapsible`, below `@2xl` (the nearest `@container`) the label and keycap hide and the button becomes a 32 × 32 px square; from `@2xl` it is the field (`w-56`, shrinkable).
+- Container queries: with `collapsible`, while the nearest `@container` is narrower than 47rem (`@min-[47rem]`, 752 px, equal to the `--container-2xl` token) the label and keycap hide and the button becomes a 32 × 32 px square with a tooltip; from 47rem it is the field (`w-56`). The threshold is the design sample's measured one (the console bar with breadcrumb, Create, Agent and avatar runs out of room at 740 px of content box). It is written as `@min-[47rem]` and not `@2xl` because the theme ships its container scale in `:root`, not in `@theme`, so Tailwind's `@2xl` still compiles to its own 42rem.
 - Narrow: without `collapsible` the label truncates with an ellipsis and the keycap stays.
-- Touch: ≥ 32 px on fine pointers, 44 px on `pointer: coarse`; no hover-only affordance (hover only strengthens the border).
+- Touch: drawn at 32 px everywhere; the hit area grows invisibly to 44 px on `pointer: coarse`; no hover-only affordance (hover only strengthens the border; the folded tooltip also opens on focus).
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the field shrinks to its content.
 
 ## Examples
@@ -17199,7 +17202,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 
 # Stat Tile
 
-> A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses.
+> A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses. Inside a `StatTileGroup` the tiles become the cells of one card, split by dividers, with the delta aligned to the cell's end. `kind` picks the figure face: `mono` (the big-number mono figure of a usage strip) or `sans` (the large heading figure of a traffic summary).
 
 - Import: `import StatTile from '@aziontech/webkit/stat-tile'`
 - Category: chart · Surface: product · Structure: monolithic
@@ -17218,6 +17221,9 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 - Put the unit in `unit` ("GB", "ms", "%"), not inside `formatValue`, so it reads muted beside the figure.
 - Leave `trend` out for a strip of figures with no history; the tile then has no chart band.
 - Give the sparkline the same buckets as the chart below it, about twelve points.
+- For a KPI strip that reads as one band (an overview's usage row), put the tiles in a `StatTileGroup`; do not hand-build the card, the grid or the dividers. Separate tiles are for figures that stand alone.
+- Use `kind="mono"` (default) for usage figures with a delta, `kind="sans"` for a summary row of plain figures (requests, data transferred, error rate) above its charts. Keep one kind per row.
+- Pass the delta as the raw percentage (`12.4`); the tile prints at most two decimals and drops trailing zeros (`+12.4%`, `+3%`).
 
 ## Don’t
 
@@ -17234,6 +17240,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 - [spark-chart](spark-chart.md) — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
 - [tag](tag.md) — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.
 - divider` — carries the "No data" `Tag` across the empty band.
+- [stat-tile-group](stat-tile-group.md) — one card split into cells, one per tile: the KPI strip of an overview.
 
 ## Props
 
@@ -17242,8 +17249,9 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 | `label` | `string` | `''` | false | Metric name, in sentence case. Fallback for the default slot. |
 | `value` | `number \| null` | `null` | false | The current value. It counts up from the previous value on change; null renders a dash. |
 | `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats the figure. |
-| `unit` | `string` | `''` | false | Unit read after the figure, in a muted tone. Empty hides it. |
-| `delta` | `number \| null` | `null` | false | Signed change against the named period, in percent. Null hides the delta. |
+| `kind` | `StatTileKind` | `'mono'` | false | Figure face: `mono` is the big-number mono figure, `sans` the large heading figure. |
+| `unit` | `string` | `''` | false | Unit read after the figure, smaller and in a muted sans tone. Empty hides it. |
+| `delta` | `number \| null` | `null` | false | Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta. |
 | `deltaLabel` | `string` | `''` | false | The comparison period, read after the delta. |
 | `inverse` | `boolean` | `false` | false | A rise is bad for this metric; flips the delta between success and danger. |
 | `trend` | `number[]` | `[]` | false | Sparkline values, oldest first. Empty hides the sparkline. |
@@ -17260,7 +17268,8 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 
 - Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a muted placeholder `spark-chart` under a `Separator` carrying a "No data" `Tag`)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `secondary` when flat
-- `data-loading` mirrors `loading`
+- `data-loading` mirrors `loading`; `data-kind` mirrors `kind` (`mono` | `sans`)
+- `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
 - Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value.
@@ -17296,6 +17305,130 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 ```
 
 2 more example(s) in [components/stat-tile.md](https://github.com/aziontech/webkit/blob/main/.specs/components/stat-tile.md).
+
+---
+
+<!-- components/stat-tile-group.md -->
+
+# Stat Tile Group
+
+> One card split into cells, one `StatTile` per cell: the KPI strip at the top of an overview (data transferred, requests per second, bandwidth saving, data offload). The group draws the card (surface, border, radius) and the grid; each tile inside it drops its own card and draws its end and bottom edges as the dividers, with its delta aligned to the end of the figure row. The cells sit one per row in a narrow box, two per row from the group's `@md`, and all in one row from its `@3xl`.
+
+- Import: `import StatTileGroup from '@aziontech/webkit/stat-tile-group'`
+- Category: chart · Surface: product · Structure: monolithic
+- API as JSON: [stat-tile-group.json](https://github.com/aziontech/webkit/blob/main/.specs/stat-tile-group.json)
+
+## When to use
+
+- The usage or KPI row of an overview, where the figures read as one band.
+- Two to six related figures for the same period.
+
+## Do
+
+- Put only `StatTile`s in the default slot, in reading order.
+- Name the strip with `ariaLabel` when the page has more than one (`Usage`, `Traffic`).
+- Give every tile in a strip the same `kind` and the same period.
+- Prefer four cells: they fill one row on a desktop and two rows of two on a tablet.
+
+## Don’t
+
+- Figures that stand alone or carry their own sparkline history at different periods → separate `StatTile`s in a grid.
+- Marketing figures on a site band → use `big-numbers`.
+- Label/value details of one resource → use `key-value-pairs`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [stat-tile](stat-tile.md) — the cell; the group changes its chrome through an injected context, so the tiles take no extra prop.
+- [card](card.md) — a plain surface; do not hand-build a strip by putting tiles in a `Card` grid.
+- [key-value-pairs](key-value-pairs.md) — static label/value details.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the strip, such as Usage; empty leaves the group unnamed. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The StatTile cells, in reading order. |
+
+## States
+
+- Visual states: `default` only; loading and empty are each tile's own (`loading`, a null `value`).
+- The group provides an injected context (`StatTileGroupInjectionKey`); a `StatTile` inside it sets `data-grouped`, drops its border, radius and surface, and draws `border-e` + `border-b` as dividers. The inner grid is pulled out by `-me-px -mb-px` and the root clips it (`overflow-hidden`), so the last column's end edge and the last row's bottom edge fall under the card border and every column count gets correct dividers with no `nth-child` rules.
+- Not applicable: `disabled`, `readonly`, `invalid`, `open`/`closed`, `error`.
+
+## Accessibility
+
+- Pattern: a `role="group"` container named by `ariaLabel` when set; each cell stays a `StatTile` `<section>` named by its label, so the reading order is the slot order.
+- Keyboard map: none of its own; focusable content inside the tiles (an info `Tooltip` in `aside`) keeps its own.
+- Dividers are borders, not content; they carry no meaning.
+- Contrast: the divider and card border use `--border-default`, the same as a separate tile.
+
+## Right-to-left
+
+- Layout: logical utilities only (`-me-px`, `border-e`), so the dividers sit between the cells under `dir="rtl"` too.
+- Icons: none.
+- Keyboard: no arrow keys.
+- User data: none.
+
+## Internationalization
+
+| Key    | English source | Override prop |
+| ------ | -------------- | ------------- |
+| _none_ | —              | —             |
+
+- No built-in strings: the name comes from `ariaLabel`; the tiles carry their own.
+
+## Responsive
+
+- Container queries: the root is the `@container/stat-tile-group`; one cell per row below its `@md`, two per row from `@md`, every cell in one row (`grid-flow-col auto-cols-fr`) from `@3xl`.
+- Touch: no targets of its own.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; the cells stack.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+</script>
+
+<template>
+  <StatTileGroup aria-label="Usage">
+    <StatTile
+      label="Data transferred"
+      :value="842"
+      unit="GB"
+      :delta="12.4"
+    />
+    <StatTile
+      label="Requests / second"
+      :value="1240"
+      unit="/s"
+      :delta="3.8"
+    />
+    <StatTile
+      label="Bandwidth saving"
+      :value="588"
+      unit="GB"
+      :delta="6.2"
+    />
+    <StatTile
+      label="Data offload"
+      :value="70"
+      unit="%"
+      :delta="-1.5"
+      inverse
+    />
+  </StatTileGroup>
+</template>
+```
 
 ---
 
@@ -21956,8 +22089,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - `data-selected` on PaginationButton mirrors the current-page `selected` prop; `aria-current="page"` set when selected.
 - `data-disabled` on PaginationButton mirrors the `disabled` prop; `disabled` attribute and `aria-disabled` set.
 - Data-driven mode: `Previous` is disabled on the first page, `Next` on the last; the current page button is `selected` (`aria-current="page"`); the overflow ellipsis (`more`) is non-interactive: an `aria-hidden` `span`, out of the tab order, that emits nothing.
-- Responsive: the root is the `@container/pagination`. Below `@sm` of its box only Previous, the current page and Next stay visible (the other page numbers and the ellipsis hide); the page-size control wraps under them.
-- Touch: on a coarse pointer (`pointer-coarse:`) every page button and the page-size select grow to 44 px.
+- Responsive: the root is the `@container/pagination`. The page list stays whole at every width (`siblingCount` already caps it at seven slots, e.g. `1 2 3 4 5 … 60`), so a phone footer reads the same numbered strip as a desktop one, as in the design sample; when the box is too narrow for the info text and the controls on one line, the strip and the page-size control wrap together under the info text, aligned to the end.
+- Touch: the buttons and the page-size select are drawn at 28 px on every pointer. On a coarse pointer (`pointer-coarse:`) each button carries an invisible, `aria-hidden` hit area that extends it to 44 px tall (vertical only: the buttons are butted, so the width stays the drawn 28 px), and the select itself grows to 44 px tall inside its 28 px frame, which draws the border, surface and focus ring.
 
 ## Accessibility
 
@@ -21966,7 +22099,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - ARIA: root `<nav>` with `aria-label` (the `ariaLabel` prop); current-page button sets `aria-current="page"`; disabled buttons set the `disabled` attribute and `aria-disabled`; icon glyphs and the overflow ellipsis are `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target: each button is 28×28, a justified deviation from 44×44 — the design is a compact segmented strip sized to sit inside a table footer, and the buttons are butted with no gap, so there is no room to pad the hit area without breaking the strip.
+- Touch target: each button is drawn 28×28 (above the 24×24 minimum of WCAG 2.5.8) so the strip stays compact in a table footer; on a coarse pointer its hit area grows to 28×44 invisibly and the page-size select's to its full width × 44. The width cannot grow because the buttons are butted with no gap; growing the drawn size instead was rejected because it turned the phone footer into an oversized strip that no longer matched the design sample.
 
 ## Right-to-left
 
@@ -22089,6 +22222,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
 - `data-selected` is present when `selected` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
 - `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the kind's own surface.
+- Coarse pointer: a `number`, `previous` or `next` button renders an empty `aria-hidden` `span` (`data-slot="touch-target"`) that is shown only under `pointer-coarse:` and extends the hit area vertically to 44 px; the drawn button does not grow.
 - Test ids: `<pagination testId>__button` when rendered inside a `pagination` (`data-pagination__button` by default), `data-pagination__button` outside one; a consumer `data-testid` wins.
 
 ## Accessibility
@@ -22098,7 +22232,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - ARIA: `aria-current="page"` when `selected`; `disabled` attribute and `aria-disabled="true"` when `disabled`; the chevron icons are `aria-hidden="true"`, so `previous` and `next` take their accessible name from a consumer `aria-label` (data-driven `pagination` sets one on both); the `more` ellipsis root is `aria-hidden="true"` and decorative, so it needs no name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): `var(--text-default)` on `var(--bg-surface)` / `var(--bg-selected)`; disabled uses `var(--text-disabled)`.
 - `motion-reduce:transition-none`, `motion-reduce:before:transition-none` and `motion-reduce:after:transition-none` on the state transitions.
-- Touch target: 28×28, a justified deviation — the buttons are butted into the compact pagination strip that sits in a table footer, with no room to pad the hit area (see `pagination`).
+- Touch target: drawn 28×28 on every pointer (above the 24×24 minimum of WCAG 2.5.8); on a coarse pointer an invisible `aria-hidden` child (`data-slot="touch-target"`) extends the hit area to 28×44. The width stays 28 because the buttons are butted into the strip (see `pagination`). The inert `more` span has no hit area.
 
 ## Right-to-left
 
@@ -27084,7 +27218,7 @@ The imperative API is backed by a small reactive store composable, declared here
 
 # Chip
 
-> A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label="f.label" removable @remove="dropFilter(f)" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator. `kind` covers the three jobs a chip does in a filter surface, so a consumer never restyles the component to get one of them: - **`filled`** — a value that IS applied. The shared surface and border plus `--shadow-sm`: the loudest of the three, because it is state. - **`outlined`** — a value the user COULD apply. Same surface and border, no shadow: it recedes to an offer without becoming disabled, so a filter vocabulary can stay on screen instead of hiding inside a menu. - **`dashed`** — the control that CREATES a chip ("Add filter"). A dashed outline is the standing convention for "add another one of these", which is what separates the thing that makes filters from the things that are filters. **Selected is a mode, not a kind.** `selectable` turns the chip into a toggle: activating it flips the `selected` model (`v-model:selected`), and the state stays after the click until the chip is activated again. It is independent of `kind` — `filled` marks an applied filter and never means "selected", so a selectable chip of any kind paints its selected state the same way (`--bg-selected` fill, `--border-selected` outline) and announces it as `aria-pressed`. Reach for `selectable` when a set of chips is a row of toggles (quick filters, facets); keep `clickable` when activation opens or does something without holding a state. **Presence is the consumer's, not the chip's.** `remove` fires the moment the control is activated; the chip does not animate itself away or unmount itself. A chip that hid itself on remove could only ever serve the one case where removing it also destroys it — a filter bar where a removed value stays on screen as an `outlined` offer was impossible, because the instance stayed invisible forever. Exit motion, if wanted, belongs to whatever owns the list (a `TransitionGroup` around the group).
+> A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label="f.label" removable @remove="dropFilter(f)" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator. `kind` covers the three jobs a chip does in a filter surface, so a consumer never restyles the component to get one of them: - **`filled`** — a value that IS applied. The grey `--bg-selected` fill on the shared border, plus `--shadow-sm`: the loudest of the three, because it is state. This is the applied-filter chip of the console's filter bar. - **`outlined`** — a value the user COULD apply. The `--bg-surface` fill and the shared border, no shadow: it recedes to an offer without becoming disabled, so a filter vocabulary can stay on screen instead of hiding inside a menu. - **`dashed`** — the control that CREATES a chip ("Add filter"). A dashed outline is the standing convention for "add another one of these", which is what separates the thing that makes filters from the things that are filters. **Selected is a mode, not a kind.** `selectable` turns the chip into a toggle: activating it flips the `selected` model (`v-model:selected`), and the state stays after the click until the chip is activated again. It is independent of `kind` — `filled` marks an applied filter and never means "selected", so a selectable chip of any kind paints its selected state the same way (`--bg-selected` fill, `--border-selected` outline) and announces it as `aria-pressed`. Because `filled` already wears the `--bg-selected` fill, a `filled` toggle shows its on state by the outline alone; a row of toggles is `outlined`. Reach for `selectable` when a set of chips is a row of toggles (quick filters, facets); keep `clickable` when activation opens or does something without holding a state. **Presence is the consumer's, not the chip's.** `remove` fires the moment the control is activated; the chip does not animate itself away or unmount itself. A chip that hid itself on remove could only ever serve the one case where removing it also destroys it — a filter bar where a removed value stays on screen as an `outlined` offer was impossible, because the instance stayed invisible forever. Exit motion, if wanted, belongs to whatever owns the list (a `TransitionGroup` around the group).
 
 - Import: `import Chip from '@aziontech/webkit/chip'`
 - Category: inputs · Surface: product · Structure: monolithic
@@ -27102,6 +27236,10 @@ The imperative API is backed by a small reactive store composable, declared here
 
 - When removable, expose an accessible remove control with a clear label.
 - Group related chips in a `chip-group` rather than ad-hoc layout.
+- Do: draw an applied filter as `kind="filled"` (the default) — the grey fill is what says "this narrows the view"; draw the values it could still take as `outlined`, and "Add filter" as `dashed`.
+- Do: make a row of toggles `outlined` + `selectable`, so off reads as surface and on as the selected fill and outline.
+- Don't: restyle a chip's fill with a class (`bg-(--bg-muted)`, `bg-(--bg-surface)`) to get the applied or the available look; pick the `kind`.
+- Don't: use `filled` for a value that is merely offered; the fill would claim it is applied.
 
 ## Don’t
 
@@ -27120,7 +27258,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `kind` | `'filled' \| 'outlined' \| 'dashed'` | `'filled'` | false | Visual variant. Filled is an applied value, outlined an available one, dashed the control that adds one. |
+| `kind` | `'filled' \| 'outlined' \| 'dashed'` | `'filled'` | false | Visual variant. Filled (grey fill) is an applied value, outlined an available one, dashed the control that adds one. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `small` is a fixed 24px, `medium` a fixed 32px. |
 | `removable` | `boolean` | `false` | false | When true, renders a trailing remove button that emits `remove`. |
 | `clickable` | `boolean` | `false` | false | When true, the chip body becomes interactive (`role="button"`, focusable) and emits `click` on activation (click / Enter / Space). |
@@ -27160,8 +27298,8 @@ The imperative API is backed by a small reactive store composable, declared here
 - When `disabled`, the root is not focusable, activation, toggling and removal are suppressed, the text drops to `--text-disabled` with `cursor-not-allowed`, and the remove button is a disabled `<button>`. An interactive chip keeps `role="button"` and adds `aria-disabled="true"`.
 - When `clickable`, the root is an interactive `role="button"` with `tabindex="0"`: it shows `cursor-pointer`, a `::before` ghost-layer darkening overlay (`--bg-hover`) on `hover` and `active`, a `--border-strong` border on `active` (the pressed state, per Figma), and a visible focus ring on `focus-visible`. When not clickable, the root stays a non-interactive container.
 - The remove button (when `removable`) is always independently focusable and shows its own focus ring on `focus-visible`. It carries a **`tooltip`** naming what it removes, shown on hover and on keyboard focus — in a row of chips four identical `×` controls sit side by side, and the field name is what tells them apart.
-- All three kinds share the same `--bg-surface` fill and `--border-default` border at rest, so a row of chips reads as one family; the kinds differ only in **elevation** (and, for `dashed`, the dash). When `clickable`, hover raises the border to `--border-strong` — the same rest→hover pair `input` and `select-trigger` use. That pair is what makes the outline read as interactive at all: `--border-default` is 8% black, the _same value_ as `--border-muted` in the light theme, so a static border of either token is indistinguishable. `filled` adds `--shadow-sm`; `outlined` drops it, which is what makes an applied value louder than an available one without changing the surface or the outline it is drawn with. `dashed` is `outlined` with a dashed border.
-- **Fill is not the applied/available distinction.** It was, nominally — `filled` specified `--bg-surface-raised` and the other two were transparent — and it worked in neither theme: `--bg-surface-raised` resolves to the _same value_ as `--bg-surface` in the light theme, so the contrast it was meant to carry existed only in dark, and the utility was authored with a stray space inside the paren shorthand, which terminates the Tailwind candidate so it compiled to no CSS at all. Every `filled` chip was transparent in both themes. One shared surface is what makes a chip read as a raised object against `--bg-canvas`; `--shadow-sm` then carries the state on its own, which is what it was already doing.
+- All three kinds share the `--border-default` border at rest, so a row of chips reads as one family. `filled` fills with `--bg-selected` (grey: `#E5E5E5` on the light theme's white surface, `#1A1A1A` on the dark theme's `#0A0A0A`) and adds `--shadow-sm`; `outlined` and `dashed` fill with `--bg-surface` and carry no shadow, so an applied value is louder than an available one in both themes. `dashed` is `outlined` with a dashed border. When `clickable`, hover raises the border to `--border-strong` — the same rest→hover pair `input` and `select-trigger` use. That pair is what makes the outline read as interactive at all: `--border-default` is 8% black, the _same value_ as `--border-muted` in the light theme, so a static border of either token is indistinguishable.
+- **Why `--bg-selected` and not `--bg-surface-raised`.** `filled` once specified `--bg-surface-raised`, which resolves to the _same value_ as `--bg-surface` in the light theme (the contrast existed only in dark), and the utility carried a stray space inside the paren shorthand, so it compiled to no CSS at all; for a while every chip then shared `--bg-surface` and `--shadow-sm` alone carried the state, which read as a white pill on white cards. The design sample's filter bar draws the applied chip on `--bg-selected`, which differs from `--bg-surface` in both themes; that is the fill.
 - The remove control's glyph sits at `--text-muted` at rest and rises to `--text-default` on hover: at rest it is punctuation after a label, and on hover it is the thing being aimed at. It stays above the 3:1 non-text contrast minimum in both themes (3.95:1 light, 5.02:1 dark).
 
 ## Accessibility
@@ -28134,6 +28272,10 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 - Prefer the `field-*` wrapper when you need a label, helper text, or validation message.
 - Set an appropriate `type`/`inputmode` for the content (email, url, …).
+- Set `monospace` on a field whose value is code-like: a CLI command, an ID, a token, a hash, a path. Pair it with `:spellcheck="false"`.
+- A read-only command or ID the user copies: `readonly` + `monospace` inside an `InputGroup` with a `CopyButton`, and a description saying why it cannot change.
+- Do not set `monospace` on prose values (names, titles, e-mails, domains typed by the user).
+- Do not restyle a read-only field (dashed border, transparent fill): it is the same filled field, made non-editable; the reason belongs in the field's description.
 
 ## Don’t
 
@@ -28160,9 +28302,10 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 | `spellcheck` | `boolean \| undefined` | `undefined` | false | Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck="false"` on every field. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | false | Marks the field read-only: value is visible, focusable and copyable but not editable. Renders transparent with a dashed border and no hover (`data-readonly`), distinct from both the editable and the disabled field. |
+| `readonly` | `boolean` | `false` | false | Marks the field read-only: value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`); distinct from the disabled field. |
 | `required` | `boolean` | `false` | false | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid`. |
+| `monospace` | `boolean` | `false` | false | Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for CLI commands, IDs, tokens and hashes (`data-monospace`). |
 
 ## Events
 
@@ -28181,7 +28324,8 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 - Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `readonly`, `invalid`
 - Password managers: the `<input>` carries `data-1p-ignore`, `data-lpignore`, `data-bwignore` and `data-form-type="other"` unless it is a credential or identity field — `autocomplete` set to any token but `off`, or `type="email"`. A read-only field always carries them. This keeps 1Password, LastPass, Bitwarden and Dashlane from offering a sign-in on ordinary fields (names, IDs, searches) while login fields stay fillable. A consumer attr (e.g. `data-1p-ignore="false"`) wins.
-- `data-readonly` mirrors the `readonly` prop: a read-only field drops its fill (`bg-transparent`), draws a dashed border and gets no hover border, so it never looks editable. The value keeps `var(--text-default)` (readable and copyable, unlike `disabled`) and the field stays focusable.
+- `data-readonly` mirrors the `readonly` prop: a read-only field keeps the editable field's fill (`var(--bg-surface)`) and solid `var(--border-default)` border, as the design sample draws it; it only drops the hover border and takes a default cursor. The value keeps `var(--text-default)` (readable and copyable, unlike `disabled`) and the field stays focusable. Why the value cannot change is said by the field's description, not by a different chrome.
+- `data-monospace` mirrors the `monospace` prop: the value and the placeholder render in `.text-label-code-sm` instead of `.text-label-sm`.
 - `data-size` mirrors the `size` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop

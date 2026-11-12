@@ -153,8 +153,7 @@
       {
         icon: 'pi pi-ban',
         title: 'Bad actor tracking and security lists',
-        description:
-          'Store IP addresses and threat signatures to block attackers in real time.'
+        description: 'Store IP addresses and threat signatures to block attackers in real time.'
       },
       {
         icon: 'pi pi-shopping-cart',

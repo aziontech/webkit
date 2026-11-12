@@ -1,0 +1,59 @@
+{
+ "name": "stat-tile-group",
+ "binding": "StatTileGroup",
+ "import": "@aziontech/webkit/stat-tile-group",
+ "treeShakeableImport": "@aziontech/webkit/stat-tile-group",
+ "category": "chart",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One card split into cells, one `StatTile` per cell: the KPI strip at the top of an overview (data transferred, requests per second, bandwidth saving, data offload). The group draws the card (surface, border, radius) and the grid; each tile inside it drops its own card and draws its end and bottom edges as the dividers, with its delta aligned to the end of the figure row. The cells sit one per row in a narrow box, two per row from the group's `@md`, and all in one row from its `@3xl`.",
+ "setup": null,
+ "useWhen": [
+  "The usage or KPI row of an overview, where the figures read as one band.",
+  "Two to six related figures for the same period."
+ ],
+ "avoidWhen": [
+  "Figures that stand alone or carry their own sparkline history at different periods → separate `StatTile`s in a grid.",
+  "Marketing figures on a site band → use `big-numbers`.",
+  "Label/value details of one resource → use `key-value-pairs`."
+ ],
+ "related": [
+  "stat-tile` — the cell; the group changes its chrome through an injected context, so the tiles take no extra prop.",
+  "card` — a plain surface; do not hand-build a strip by putting tiles in a `Card` grid.",
+  "key-value-pairs` — static label/value details."
+ ],
+ "bestPractices": [
+  "Put only `StatTile`s in the default slot, in reading order.",
+  "Name the strip with `ariaLabel` when the page has more than one (`Usage`, `Traffic`).",
+  "Give every tile in a strip the same `kind` and the same period.",
+  "Prefer four cells: they fill one row on a desktop and two rows of two on a tablet."
+ ],
+ "props": [
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the strip, such as Usage; empty leaves the group unnamed."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The StatTile cells, in reading order."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n  import StatTileGroup from '@aziontech/webkit/stat-tile-group'\n</script>\n\n<template>\n  <StatTileGroup aria-label=\"Usage\">\n    <StatTile\n      label=\"Data transferred\"\n      :value=\"842\"\n      unit=\"GB\"\n      :delta=\"12.4\"\n    />\n    <StatTile\n      label=\"Requests / second\"\n      :value=\"1240\"\n      unit=\"/s\"\n      :delta=\"3.8\"\n    />\n    <StatTile\n      label=\"Bandwidth saving\"\n      :value=\"588\"\n      unit=\"GB\"\n      :delta=\"6.2\"\n    />\n    <StatTile\n      label=\"Data offload\"\n      :value=\"70\"\n      unit=\"%\"\n      :delta=\"-1.5\"\n      inverse\n    />\n  </StatTileGroup>\n</template>"
+  }
+ ],
+ "docs": "components/stat-tile-group.md"
+}

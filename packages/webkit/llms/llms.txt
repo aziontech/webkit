@@ -154,6 +154,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [MapChart](components/map-chart.md): Values by place on the dotted world map of `NetworkMap`: countries shaded on a five-step sequential scale (a choropleth on the dot grid) and locations drawn as bubbles whose area follows the value.
 - [SparkChart](components/spark-chart.md): A word-sized chart: one series drawn as an area, a line or bars, with no axes, grid, legend or tooltip, filling the width of its container at a fixed height.
 - [StatTile](components/stat-tile.md): A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom.
+- [StatTileGroup](components/stat-tile-group.md): One card split into cells, one `StatTile` per cell: the KPI strip at the top of an overview (data transferred, requests per second, bandwidth saving, data offload).
 - [Tracker](components/tracker.md): A status strip: one block per period — a day, an hour, a deployment — colored by its severity, with a readout of the period's label on hover or keyboard focus.
 
 ## Components: Code

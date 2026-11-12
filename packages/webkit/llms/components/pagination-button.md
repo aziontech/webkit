@@ -63,6 +63,7 @@
 - `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
 - `data-selected` is present when `selected` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
 - `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the kind's own surface.
+- Coarse pointer: a `number`, `previous` or `next` button renders an empty `aria-hidden` `span` (`data-slot="touch-target"`) that is shown only under `pointer-coarse:` and extends the hit area vertically to 44 px; the drawn button does not grow.
 - Test ids: `<pagination testId>__button` when rendered inside a `pagination` (`data-pagination__button` by default), `data-pagination__button` outside one; a consumer `data-testid` wins.
 
 ## Accessibility
@@ -72,7 +73,7 @@
 - ARIA: `aria-current="page"` when `selected`; `disabled` attribute and `aria-disabled="true"` when `disabled`; the chevron icons are `aria-hidden="true"`, so `previous` and `next` take their accessible name from a consumer `aria-label` (data-driven `pagination` sets one on both); the `more` ellipsis root is `aria-hidden="true"` and decorative, so it needs no name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): `var(--text-default)` on `var(--bg-surface)` / `var(--bg-selected)`; disabled uses `var(--text-disabled)`.
 - `motion-reduce:transition-none`, `motion-reduce:before:transition-none` and `motion-reduce:after:transition-none` on the state transitions.
-- Touch target: 28×28, a justified deviation — the buttons are butted into the compact pagination strip that sits in a table footer, with no room to pad the hit area (see `pagination`).
+- Touch target: drawn 28×28 on every pointer (above the 24×24 minimum of WCAG 2.5.8); on a coarse pointer an invisible `aria-hidden` child (`data-slot="touch-target"`) extends the hit area to 28×44. The width stays 28 because the buttons are butted into the strip (see `pagination`). The inert `more` span has no hit area.
 
 ## Right-to-left
 

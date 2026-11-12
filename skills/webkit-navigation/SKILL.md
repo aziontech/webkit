@@ -547,7 +547,8 @@ With Vue Router, keep the rows real links and let the router do the navigation:
 ```vue
 <script setup lang="ts">
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import Menu, { type MenuNode } from '@aziontech/webkit/menu'
+  import type { MenuNode } from '@aziontech/webkit/menu'
+  import Menu from '@aziontech/webkit/menu-root'
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 

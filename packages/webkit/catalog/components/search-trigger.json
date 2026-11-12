@@ -1,5 +1,5 @@
 {
- "purpose": "The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads \"you can search here\", but it is one `<button>` that emits `open` — on click and on the shortcut itself, which it binds on the window unless a mounted `Command` already listens for it. The consumer opens `Command` (or its own search) from `open`. Every app header — console, demo, docs and site — carries one: it is the single way search is offered in a top bar. With `collapsible` it folds to the magnifier alone inside a narrow container, so one element serves the wide and the narrow bar.",
+ "purpose": "The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads \"you can search here\", but it is one `<button>` that emits `open` — on click and on the shortcut itself, which it binds on the window unless a mounted `Command` already listens for it. The consumer opens `Command` (or its own search) from `open`. Every app header — console, demo, docs and site — carries one: it is the single way search is offered in a top bar. With `collapsible` it folds to the magnifier alone inside a narrow container (with its label as a tooltip), so one element serves the wide and the narrow bar.",
  "useWhen": [
   "The search entry of every app header — console, demo, docs or site top bar (`GlobalHeader.Right`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.",
   "Anywhere a shortcut-backed launcher should look like a field without being one."
@@ -13,13 +13,15 @@
   "Command` — the palette this button opens; when it is mounted it owns the global ⌘K / Ctrl+K listener and `v-model:open`, and the trigger stands its own listener down.",
   "Kbd` — draws the keycap with the OS-aware modifier glyph.",
   "IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.",
+  "Tooltip` — shows the label over the folded magnifier on hover and focus.",
   "GlobalHeader` — the bar it sits in, usually in `GlobalHeader.Right`."
  ],
  "bestPractices": [
   "Wire `@open` to the same state the shortcut opens (`<Command v-model:open=\"open\">`), so the button and ⌘K never disagree. Without a `Command` on the page, `@open` also fires on ⌘K / Ctrl K, so a custom search dialog gets the shortcut for free.",
   "Keep `shortcut` equal to the key the `Command` root listens for (`K`), or clear it (`shortcut=\"\"`) when no shortcut exists.",
   "Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `webkit/header-search-trigger` lint rule flags both.",
-  "With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds below the container's `2xl` size and without a container it stays folded.",
+  "With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds while that container is narrower than 47rem (752 px, the `--container-2xl` token) and without a container it stays folded. Do not add your own breakpoint around it: 47rem is the one threshold every header uses.",
+  "With `collapsible`, the button sits inside the `Tooltip` wrapper, so put layout classes (`ms-auto`, `order-*`) on a parent, not on the trigger.",
   "Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name."
  ]
 }

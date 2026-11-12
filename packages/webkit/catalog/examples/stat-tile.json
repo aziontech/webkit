@@ -11,9 +11,9 @@
    "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2 lg:grid-cols-4\">\n    <StatTile\n      label=\"Data transferred\"\n      :value=\"842\"\n      unit=\"GB\"\n      :delta=\"8.2\"\n      delta-label=\"vs previous 24 hours\"\n    />\n    <StatTile\n      label=\"Blocked threats\"\n      :value=\"48210\"\n      :delta=\"12.4\"\n      delta-label=\"vs previous 24 hours\"\n      inverse\n    />\n    <StatTile\n      label=\"Cache hit ratio\"\n      :value=\"96.2\"\n      unit=\"%\"\n      :delta=\"0\"\n      delta-label=\"vs previous 24 hours\"\n    />\n    <StatTile\n      label=\"Edge locations\"\n      :value=\"120\"\n    />\n  </div>\n</template>"
   },
   {
-   "name": "CountUp",
-   "summary": "Press Refresh to count the figure up from its previous value. Timer driven, so it is excluded from visual regression; Default is its static sibling. Reduced motion renders the final value at once.",
-   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n  import Button from '@aziontech/webkit/button'\n  import { ref } from 'vue'\n\n  const value = ref(48210)\n</script>\n\n<template>\n  <div class=\"flex max-w-(--container-xs) flex-col gap-(--spacing-sm)\">\n    <StatTile\n      label=\"Blocked threats\"\n      :value=\"value\"\n    />\n    <Button\n      kind=\"secondary\"\n      size=\"medium\"\n      label=\"Refresh\"\n      @click=\"value += 4210\"\n    />\n  </div>\n</template>"
+   "name": "Kinds",
+   "summary": "kind=\"mono\" (default) draws the big-number mono figure of a usage strip; kind=\"sans\" draws the large heading figure of a traffic summary. The unit is always smaller, muted and sans.",
+   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2\">\n    <StatTile\n      label=\"Data transferred\"\n      :value=\"842\"\n      unit=\"GB\"\n      :delta=\"12.4\"\n    />\n    <StatTile\n      kind=\"sans\"\n      label=\"Requests\"\n      :value=\"48.2\"\n      unit=\"M\"\n    />\n  </div>\n</template>"
   }
  ]
 }

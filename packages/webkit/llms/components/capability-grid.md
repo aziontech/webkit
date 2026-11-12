@@ -169,7 +169,8 @@
     {
       icon: 'pi pi-check',
       title: 'Sell together',
-      description: 'Work joint accounts with our sales engineers, from the first call to production.'
+      description:
+        'Work joint accounts with our sales engineers, from the first call to production.'
     }
   ]
 </script>
