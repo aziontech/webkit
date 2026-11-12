@@ -15,10 +15,11 @@ export function siteAssets(): Record<string, string> {
   if (!existsSync(SITE_ASSETS)) return {}
   const table = JSON.parse(readFileSync(SITE_ASSETS, 'utf8')) as Record<string, string>
   const exportsMap = JSON.parse(readFileSync(join(WEBKIT, 'package.json'), 'utf8'))
-    .exports as Record<string, string>
+    .exports as Record<string, string | { default: string }>
   const out: Record<string, string> = {}
   for (const [url, specifier] of Object.entries(table)) {
-    const file = exportsMap[specifier.replace('@aziontech/webkit/', './')]
+    const entry = exportsMap[specifier.replace('@aziontech/webkit/', './')]
+    const file = typeof entry === 'string' ? entry : entry?.default
     if (file && existsSync(join(WEBKIT, file))) out[url] = join(WEBKIT, file)
   }
   return out

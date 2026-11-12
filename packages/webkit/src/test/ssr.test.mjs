@@ -20,7 +20,8 @@ const selfExports = {
   enforce: 'pre',
   resolveId(id) {
     if (!id.startsWith('@aziontech/webkit/')) return null
-    const target = EXPORTS[`./${id.slice('@aziontech/webkit/'.length)}`]
+    const entry = EXPORTS[`./${id.slice('@aziontech/webkit/'.length)}`]
+    const target = typeof entry === 'string' ? entry : entry?.default
     return target ? join(PKG, target) : null
   }
 }

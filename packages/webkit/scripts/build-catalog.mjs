@@ -9,6 +9,7 @@ import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.
 import { missingComponentDocs } from './lib/component-docs.mjs'
 import { readBlocks, readExamples } from './lib/blocks.mjs'
 import { summary as llmsSummary, writeLlms } from './build-llms.mjs'
+import { exportTarget } from './lib/exports.mjs'
 import { buildAliases, retiredNames } from './lib/naming.mjs'
 import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
 import {
@@ -229,7 +230,9 @@ function _readSpec(subpath) {
 
 export async function build() {
   const pkg = JSON.parse(readFileSync(PKG_PATH, 'utf-8'))
-  const exportsMap = pkg.exports || {}
+  const exportsMap = Object.fromEntries(
+    Object.entries(pkg.exports || {}).map(([key, entry]) => [key, exportTarget(entry)])
+  )
   const subpaths = Object.keys(exportsMap)
     .filter((k) => k.startsWith('./'))
     .map((k) => k.slice(2))

@@ -45,7 +45,7 @@ type ToasterProps = InstanceType<typeof Toaster>['$props']
 export const ToastPlugin: Plugin = {
   install(app: App, options?: ToasterProps) {
     app.component('Toaster', Toaster)
-    ;(app.config.globalProperties as { $toast: typeof toast }).$toast = toast
+    app.config.globalProperties['$toast'] = toast
     app.provide('webkit-toast', toast)
     if (typeof document === 'undefined') return
     const host = document.createElement('div')

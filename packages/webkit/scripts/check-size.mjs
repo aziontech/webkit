@@ -7,6 +7,8 @@ import { gzipSync } from 'node:zlib'
 import vuePlugin from '@vitejs/plugin-vue'
 import { build } from 'vite'
 
+import { exportTarget } from './lib/exports.mjs'
+
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const PKG = join(SCRIPT_DIR, '..')
 
@@ -61,8 +63,8 @@ for (const e of entries) {
 }
 
 const exportsMap = JSON.parse(readFileSync(join(PKG, 'package.json'), 'utf-8')).exports ?? {}
-const componentExports = Object.values(exportsMap).filter((t) =>
-  String(t).startsWith('./src/components/')
+const componentExports = Object.values(exportsMap).filter((entry) =>
+  exportTarget(entry).startsWith('./src/components/')
 ).length
 console.log(
   `\n${entries.length} budgeted entr${entries.length === 1 ? 'y' : 'ies'} of ${componentExports} component export paths — unbudgeted paths are gated by review (bundle-budget.md).`
