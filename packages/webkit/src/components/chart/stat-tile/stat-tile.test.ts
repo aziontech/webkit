@@ -51,7 +51,8 @@ describe('StatTile', () => {
     const good = mount({ delta: 12.4, deltaLabel: 'vs previous 24 hours' })
     const rise = good.getByTestId('chart-stat-tile__delta')
     expect(rise.querySelector('[data-trend]')?.getAttribute('data-trend')).toBe('good')
-    expect(rise.textContent).toContain('+12.40%')
+    expect(rise.textContent).toContain('+12.4%')
+    expect(rise.textContent).not.toContain('+12.40%')
     expect(rise.textContent).toContain('better')
     expect(rise.textContent).toContain('vs previous 24 hours')
     expect(good.getByTestId('chart-stat-tile__delta-tag').getAttribute('data-severity')).toBe(
@@ -75,6 +76,35 @@ describe('StatTile', () => {
         .querySelector('[data-trend]')
         ?.getAttribute('data-trend')
     ).toBe('flat')
+  })
+
+  it('prints the delta with at most two decimals and no trailing zeros', () => {
+    const cases: [number, string][] = [
+      [3, '+3%'],
+      [3.8, '+3.8%'],
+      [-1.5, '-1.5%'],
+      [2.456, '+2.46%'],
+      [0.001, '0%']
+    ]
+    for (const [delta, text] of cases) {
+      const view = mount({ delta })
+      const tag = view.getByTestId('chart-stat-tile__delta-tag')
+      expect(tag.textContent?.replace('\u2212', '-')).toContain(text)
+      view.unmount()
+    }
+  })
+
+  it('maps kind to data-kind, mono by default', () => {
+    const mono = mount()
+    expect(mono.getByTestId('chart-stat-tile')).toHaveAttribute('data-kind', 'mono')
+    mono.unmount()
+    const sans = mount({ kind: 'sans', unit: 'M', value: 48.2 })
+    expect(sans.getByTestId('chart-stat-tile')).toHaveAttribute('data-kind', 'sans')
+    expect(sans.getByTestId('chart-stat-tile__unit').textContent?.trim()).toBe('M')
+  })
+
+  it('is not grouped outside a StatTileGroup', () => {
+    expect(mount().getByTestId('chart-stat-tile')).not.toHaveAttribute('data-grouped')
   })
 
   it('hides the delta and the sparkline when they have no data', () => {

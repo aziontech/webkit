@@ -2,7 +2,7 @@
 name: webkit-data-viz
 description: The token adapter that maps charts onto @aziontech/theme — every series color derived from the --color-* families (never hex), computed tokens re-read on a data-theme change so a canvas re-themes (SVG re-themes for free), and the chart's loading/empty/error surface rendered with webkit components. For chart-form and palette theory, use the generic dataviz skill; this skill covers only mapping that onto theme tokens. Use when building or reviewing a chart, dashboard, or KPI tile in a webkit app.
 status: active
-last_updated: 2026-10-20
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-tokens, webkit-component-states, ui-verify]
 ---
@@ -121,6 +121,34 @@ a rise is bad.
 </template>
 ```
 
+### KPI strips — one card, `StatTileGroup`
+
+An overview's usage row reads as **one card split into cells**, not as separate tiles. Put the tiles in
+a `StatTileGroup`: it draws the card and the dividers, stacks the cells in a narrow box and puts them
+in one row in a wide one, and each tile aligns its delta to the end of its cell. Never hand-build the
+card, the grid or the `nth-child` dividers.
+
+```vue
+<script setup lang="ts">
+  import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+</script>
+
+<template>
+  <StatTileGroup aria-label="Usage">
+    <StatTile label="Data transferred" :value="842" unit="GB" :delta="12.4" />
+    <StatTile label="Requests / second" :value="1240" unit="/s" :delta="3.8" />
+    <StatTile label="Data offload" :value="70" unit="%" :delta="-1.5" inverse />
+  </StatTileGroup>
+</template>
+```
+
+- Pass the delta as the raw percentage (`12.4`): the tile prints at most two decimals and drops
+  trailing zeros (`+12.4%`). Put the unit in `unit` (`GB`, `/s`, `%`): it renders smaller, muted and
+  sans beside the figure, never in the figure's face.
+- `kind` picks the figure face: `mono` (default, the big-number figure of a usage strip) or `sans`
+  (the large heading figure of a summary row of plain figures above its charts). One kind per row.
+
 ## Theme
 
 Because every color is a token, the chart works in light **and** dark with no per-theme branch. SVG
@@ -138,7 +166,8 @@ above rather than eyeballing one mode.
 
 ## Hard rules
 
-- Use `Chart` / `DonutChart` / `StatTile` / `ChartCard` before a charting library.
+- Use `Chart` / `DonutChart` / `StatTile` / `StatTileGroup` / `ChartCard` before a charting library.
+- A KPI row that reads as one band is a `StatTileGroup`, never tiles in a hand-built card with dividers.
 - Every chart color is a `--chart-*` token — **never** a hex, rgb/hsl, Tailwind-palette literal, or a
   hand-picked `--color-*` step.
 - SVG marks take the `var()` string directly; canvas marks resolve computed values and **re-read on a

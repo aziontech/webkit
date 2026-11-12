@@ -819,6 +819,11 @@
     "limit": "9.25 KB"
   },
   {
+    "name": "stat-tile-group",
+    "path": "src/components/chart/stat-tile-group/stat-tile-group.vue",
+    "limit": "0.75 KB"
+  },
+  {
     "name": "chart-card",
     "path": "src/components/chart/chart-card/index.ts",
     "limit": "4.95 KB"

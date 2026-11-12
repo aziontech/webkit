@@ -13,6 +13,11 @@
       "file": "deltas.vue"
     },
     {
+      "name": "Kinds",
+      "summary": "kind=\"mono\" (default) draws the big-number mono figure of a usage strip; kind=\"sans\" draws the large heading figure of a traffic summary. The unit is always smaller, muted and sans.",
+      "file": "kinds.vue"
+    },
+    {
       "name": "CountUp",
       "summary": "Press Refresh to count the figure up from its previous value. Timer driven, so it is excluded from visual regression; Default is its static sibling. Reduced motion renders the final value at once.",
       "file": "count-up.vue"

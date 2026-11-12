@@ -50,7 +50,7 @@
     folded.value = (labelRef.value?.getClientRects().length ?? 0) === 0
   })
 
-  const Bare: FunctionalComponent = (_, { slots }) => slots.default?.()
+  const Bare: FunctionalComponent = (_, { slots }) => slots['default']?.()
 
   const keyShortcuts = computed(() => {
     const key = props.shortcut.trim().toUpperCase()

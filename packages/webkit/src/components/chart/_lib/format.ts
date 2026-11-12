@@ -36,7 +36,7 @@ export function formatSignedPercent(value: number, digits = 2, locale = DEFAULT_
   const fixed = Number(Math.abs(value).toFixed(digits))
   const format = numberFormat(locale, {
     style: 'percent',
-    minimumFractionDigits: digits,
+    minimumFractionDigits: 0,
     maximumFractionDigits: digits,
     signDisplay: fixed === 0 ? 'never' : 'always'
   })
