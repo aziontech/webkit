@@ -24,8 +24,13 @@
     },
     {
       "name": "ReadOnly",
-      "summary": "A read-only textarea keeps the filled look and drops the hover border; the field description says why the value cannot change.",
+      "summary": "A read-only certificate keeps the filled look, drops the hover border and reads in the code face (`monospace`); the field description says why the value cannot change.",
       "file": "read-only.vue"
+    },
+    {
+      "name": "Monospace",
+      "summary": "A zone-file paste box: `monospace` draws the records in the code face, so columns and characters read as code; `:spellcheck=\"false\"` keeps the browser from flagging record names.",
+      "file": "monospace.vue"
     },
     {
       "name": "Resizable",

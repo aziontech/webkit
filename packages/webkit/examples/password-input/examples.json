@@ -14,7 +14,7 @@
     },
     {
       "name": "IconLeft",
-      "summary": "Leading `iconLeft` slot — the only icon slot honored when `toggleable=true`.",
+      "summary": "Leading `iconLeft` slot \u2014 the only icon slot honored when `toggleable=true`.",
       "file": "icon-left.vue"
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "name": "Invalid",
-      "summary": "Invalid state — applies danger border/ring tokens and `aria-invalid`.",
+      "summary": "Invalid state \u2014 applies danger border/ring tokens and `aria-invalid`.",
       "file": "invalid.vue"
     },
     {
@@ -33,8 +33,13 @@
       "file": "max-length.vue"
     },
     {
+      "name": "Monospace",
+      "summary": "An API token field: `monospace` draws the value in the code face, so the revealed token reads character by character; `autocomplete=\"off\"` keeps password managers away.",
+      "file": "monospace.vue"
+    },
+    {
       "name": "Disabled",
-      "summary": "Disabled state — the toggle button inherits the disabled state.",
+      "summary": "Disabled state \u2014 the toggle button inherits the disabled state.",
       "file": "disabled.vue"
     }
   ]

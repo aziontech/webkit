@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 8e76703711631bdd424e320fe0f205fc34686593ad49126687532f068e3cc0a3
+checksum: ec320f3e8e36c62b7cc6a68943cd553d392eff13ac5029f846bba39c446f6f42
 created: 2026-06-16
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Input Password — Component Spec
@@ -43,6 +43,8 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 - Leave `toggleable` on; turn it off only when you need the `iconRight` slot, which is ignored while the toggle is shown.
 - The field is a fixed 40px tall with no `size` prop; align it with `size="large"` siblings in the same row.
 - Give it an accessible name: a `label` whose `for` matches an `id` passed to the input, or `aria-label`.
+- Set `monospace` on a secret that is code-like: an API token, a client secret, a signing key. Pair it with `autocomplete="off"` and `:spellcheck="false"`, so a revealed token reads character by character (`0`/`O`, `l`/`1`).
+- Do not set `monospace` on a person's own password: they typed it and never read it back character by character.
 
 ## Usage
 
@@ -76,6 +78,7 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 | `invalid`      | `boolean`                                       | `false`              | false    | Applies the invalid border + ring tokens and sets `aria-invalid`.                                                                                                                                     |
 | `toggleable`   | `boolean`                                       | `true`               | false    | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `iconRight` slot becomes available. |
 | `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | false    | Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows.                                                                                           |
+| `monospace`    | `boolean`                                       | `false`              | false    | Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for API tokens, client secrets and keys (`data-monospace`). Same prop as on `Input`.                                |
 
 ## Events
 
@@ -100,6 +103,7 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 - `data-has-icon-left` mirrors `$slots.iconLeft` presence
 - `data-has-icon-right` mirrors `$slots.iconRight` presence (only relevant when `toggleable=false`)
 - `data-toggleable` mirrors the `toggleable` prop
+- `data-monospace` mirrors the `monospace` prop: the value (masked or revealed) and the placeholder render in `.text-label-code-sm` instead of `.text-label-sm`.
 - `data-visible` on the root mirrors the internal visibility state (`true` when the password is revealed as plain text)
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
@@ -115,6 +119,7 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 | Region                               | Token (DESIGN.md)                                                          |
 | ------------------------------------ | -------------------------------------------------------------------------- |
 | typography                           | `.text-label-sm`                                                           |
+| typography (`monospace`)             | `.text-label-code-sm`                                                      |
 | surface                              | `var(--bg-surface)`                                                        |
 | surface (disabled)                   | `var(--bg-disabled)`                                                       |
 | text                                 | `var(--text-default)`                                                      |
@@ -163,6 +168,7 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 - Filled — justification: pre-populated `modelValue` shows the filled visual state and the masked rendering; not visible from the Default story.
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
 - MaxLength — justification: documents `maxLength` as a hard character cap; behavior is invisible from props alone and only observable while typing.
+- Monospace — justification: the code face is only visible once the value is revealed; shows an API token field (`monospace`, `autocomplete="off"`) whose toggle reveals the token.
 - Disabled
 
 ## Constraints — DO NOT

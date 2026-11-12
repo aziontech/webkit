@@ -32,6 +32,8 @@
     toggleable?: boolean
     /** Native autocomplete hint for password managers. */
     autocomplete?: PasswordInputAutocomplete
+    /** Sets the value and placeholder in the monospace code face, for API tokens, client secrets and keys. */
+    monospace?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -43,7 +45,8 @@
     required: false,
     invalid: false,
     toggleable: true,
-    autocomplete: 'current-password'
+    autocomplete: 'current-password',
+    monospace: false
   })
 
   const emit = defineEmits<{
@@ -111,6 +114,7 @@
     :data-has-icon-right="hasIconRight() || null"
     :data-toggleable="toggleable || null"
     :data-visible="visible || null"
+    :data-monospace="monospace || null"
     :class="[
       'group relative inline-flex items-center w-full h-10',
       'gap-(--spacing-xs) pe-(--spacing-xs)',
@@ -148,7 +152,7 @@
       :aria-required="isRequired || undefined"
       :data-testid="testId"
       dir="auto"
-      class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent py-0 pe-0 ps-(--spacing-md) group-data-[has-icon-left]:ps-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
+      class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent py-0 pe-0 ps-(--spacing-md) group-data-[has-icon-left]:ps-0 outline-none text-label-sm group-data-[monospace]:text-label-code-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
       v-bind="passthroughAttrs"
       @input="handleInput"
     />
