@@ -3,6 +3,7 @@
 
   import NetworkMap from '../../content/network-map/network-map.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import type { CardGridColumns } from '../../marketing/card-grid/card-grid.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import Quote from '../../marketing/quote/quote.vue'
@@ -56,13 +57,13 @@
     lead?: string
     /** Short figures rendered as chips under the lead, in order. */
     claims?: string[]
-    /** Client results for the `outcomes` floor, in order; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. */
+    /** Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. */
     outcomes?: NetworkSectionOutcome[]
-    /** Topics for the `benefits` floor, in order; each is `{ icon, title, description }`. */
+    /** Topics for the `benefits` floor, in order, one column each up to four; each is `{ icon, title, description }`. */
     benefits?: NetworkSectionBenefit[]
   }
 
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     kind: 'outcomes',
     eyebrow: '',
     title: '',
@@ -73,6 +74,12 @@
   })
 
   const attrs = useAttrs()
+
+  const floorColumns = (count: number): CardGridColumns => (count <= 2 ? 2 : count === 3 ? 3 : 4)
+
+  const outcomeColumns = computed<CardGridColumns>(() => floorColumns(props.outcomes.length))
+
+  const benefitColumns = computed<CardGridColumns>(() => floorColumns(props.benefits.length))
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-network-section'
@@ -166,7 +173,7 @@
             v-if="kind === 'outcomes' && outcomes.length"
             flush
             kind="frame"
-            :columns="4"
+            :columns="outcomeColumns"
             class="border-t border-(--border-default)"
           >
             <CardGridCell
@@ -197,7 +204,7 @@
             v-else-if="kind === 'benefits' && benefits.length"
             flush
             kind="frame"
-            :columns="3"
+            :columns="benefitColumns"
             class="border-t border-(--border-default)"
           >
             <CardGridCell

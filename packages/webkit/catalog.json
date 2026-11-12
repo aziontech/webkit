@@ -1,6 +1,6 @@
 {
  "package": "@aziontech/webkit",
- "webkitVersion": "5.11.0",
+ "webkitVersion": "5.12.0",
  "deniedPrefixes": [
   "@aziontech/webkit/src/"
  ],
@@ -21150,6 +21150,75 @@
    "examplesFile": "catalog/examples/closing-call-to-action-newsletter.json",
    "docsFile": "catalog/components/closing-call-to-action-newsletter.json"
   },
+  "closing-call-to-action-templates": {
+   "import": "@aziontech/webkit/closing-call-to-action-templates",
+   "target": "./src/components/sections/closing-call-to-action-templates/closing-call-to-action-templates.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/closing-call-to-action-templates",
+   "category": "sections",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Headline of the band, rendered as its `h2` and naming its region; the band renders nothing when empty."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Sentence under the headline."
+    },
+    {
+     "name": "primaryAction",
+     "type": "ClosingCallToActionTemplatesAction",
+     "default": "undefined",
+     "required": "false",
+     "doc": "The white button under the copy; `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent."
+    },
+    {
+     "name": "secondaryAction",
+     "type": "ClosingCallToActionTemplatesAction",
+     "default": "undefined",
+     "required": "false",
+     "doc": "The outlined button beside the primary one; `{ label, href, trailing?, target? }`. Omitted when absent."
+    },
+    {
+     "name": "templates",
+     "type": "ClosingCallToActionTemplatesTemplate[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The template cards of the scrolling grid beside the copy, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped and the grid is omitted when none is left."
+    },
+    {
+     "name": "deployLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set."
+    },
+    {
+     "name": "templatesAriaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the scrolling grid of templates."
+    }
+   ],
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/closing-call-to-action-templates.json",
+   "docsFile": "catalog/components/closing-call-to-action-templates.json"
+  },
   "code-split": {
    "import": "@aziontech/webkit/code-split",
    "target": "./src/components/sections/code-split/code-split.vue",
@@ -22919,14 +22988,14 @@
      "type": "NetworkSectionOutcome[]",
      "default": "[]",
      "required": "false",
-     "doc": "Client results for the `outcomes` floor, in order; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent."
+     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent."
     },
     {
      "name": "benefits",
      "type": "NetworkSectionBenefit[]",
      "default": "[]",
      "required": "false",
-     "doc": "Topics for the `benefits` floor, in order; each is `{ icon, title, description }`."
+     "doc": "Topics for the `benefits` floor, in order, one column each up to four; each is `{ icon, title, description }`."
     }
    ],
    "surface": "marketing",

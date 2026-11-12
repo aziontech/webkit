@@ -4,7 +4,7 @@ The last ask at the end of a landing page, after a hatched gap. A closing frame 
 
 Almost every page ends with the split form, and only its copy changes per page. Careers ends with the single-action panel. The primary form is the loud close, for a page that ends on its one ask.
 
-The split, panel and primary forms are the `ClosingCallToAction` component from `@aziontech/webkit/closing-call-to-action`; it composes `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on the closing frame (and behind the copy in `primary`), and `kind` picks the form (`split`, `panel` or `primary`). The newsletter form is its own component, `ClosingCallToActionNewsletter` from `@aziontech/webkit/closing-call-to-action-newsletter`, since its ask is a subscribe form. The agents form is its own component too, `ClosingCallToActionAgents` from `@aziontech/webkit/closing-call-to-action-agents`, since it carries an audience switch and a typed line; it composes `CallToAction` in its `primary` register with `ToggleGroup`, `InputGroup`, `CopyButton` and `Button`.
+The split, panel and primary forms are the `ClosingCallToAction` component from `@aziontech/webkit/closing-call-to-action`; it composes `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on the closing frame (and behind the copy in `primary`), and `kind` picks the form (`split`, `panel` or `primary`). The newsletter form is its own component, `ClosingCallToActionNewsletter` from `@aziontech/webkit/closing-call-to-action-newsletter`, since its ask is a subscribe form. The agents form is its own component too, `ClosingCallToActionAgents` from `@aziontech/webkit/closing-call-to-action-agents`, since it carries an audience switch and a typed line; it composes `CallToAction` in its `primary` register with `ToggleGroup`, `InputGroup`, `CopyButton` and `Button`. The templates form is its own component as well, `ClosingCallToActionTemplates` from `@aziontech/webkit/closing-call-to-action-templates`, since it splits the `primary` ask and a scrolling grid of deployable templates side by side; it composes `SectionTitle`, `ScrollArea`, `CardGrid`, `TextureMaterial` and `Button`.
 
 ## Examples
 
@@ -136,3 +136,30 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 Example:
 
 Site JSON: [`site-agents.json`](./site-agents.json)
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Templates
+
+The close that starts from a template. A framed split: the ask on the left, headline, sentence and two actions over the waving pixelated texture of the `primary` close, and a two-column grid of deployable template cards on the right that scrolls inside a fixed height, its top and bottom fading out, the same wall as `TemplateGallery`. Below `lg` the two stack, the ask first. The tall closing frame follows.
+
+Example: [`site-templates.vue`](./site-templates.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor` is the band's id for in-page links, `contact` by convention.
+- `title` is the headline and `description` the sentence under it.
+- `primaryAction` is the white button and `secondaryAction` the outlined one beside it. Each takes a `label`, an `href`, `trailing` for the chevron and an optional `target`.
+- `templates` are the cards of the grid, six to eight so it overflows and scrolls. Each takes a `title`, a one-line `description`, an `icon` class for its mark, `invertInDark` for a mark drawn in dark ink only, and the `href` of its deploy button. `deployLabel` labels every deploy button, and `templatesAriaLabel` names the scrolling grid for assistive tech.
+
+Example:
+
+Site JSON: [`site-templates.json`](./site-templates.json)

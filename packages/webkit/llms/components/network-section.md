@@ -1,6 +1,6 @@
 # Network Section
 
-> The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and the client's mark) or benefits (icon-led topics). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders four quotes, `benefits` three topics; the band above is the same.
+> The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and the client's mark) or benefits (icon-led topics). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders the quotes, `benefits` the topics, and either floor takes one column per entry — two at least, four at most; the band above is the same.
 
 - Import: `import NetworkSection from '@aziontech/webkit/network-section'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -13,7 +13,7 @@
 ## Do
 
 - Four short `claims`; they are chips, not sentences.
-- Four `outcomes` or three `benefits`, so the floor closes the grid.
+- Two to four `outcomes` or `benefits`: the floor sets one column per entry, so it closes the grid; a fifth entry wraps to a second row.
 - Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `as-is` for a colour mark.
 
 ## Don’t
@@ -36,8 +36,8 @@
 | `title` | `string` | `''` | false | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty. |
 | `lead` | `string` | `''` | false | Overline-set line above the claims. |
 | `claims` | `string[]` | `[]` | false | Short figures rendered as chips under the lead, in order. |
-| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. |
-| `benefits` | `NetworkSectionBenefit[]` | `[]` | false | Topics for the `benefits` floor, in order; each is `{ icon, title, description }`. |
+| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. |
+| `benefits` | `NetworkSectionBenefit[]` | `[]` | false | Topics for the `benefits` floor, in order, one column each up to four; each is `{ icon, title, description }`. |
 
 ## States
 
@@ -192,6 +192,106 @@
             'Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run.'
         }
       ]"
+    />
+  </div>
+</template>
+```
+
+### Columns
+
+```vue
+<script setup>
+  import NetworkSection from '@aziontech/webkit/network-section'
+
+  const claims = [
+    '100+ data centers',
+    '100+ Tbps network capacity',
+    '30 ms median latency',
+    '100% availability'
+  ]
+
+  const outcomes = [
+    {
+      logo: '/marketing-components/logos/dafiti-extended-mono.svg',
+      logoAlt: 'Dafiti',
+      logoTreatment: 'monochrome',
+      text: '86% faster load times, with a 45% cost reduction in data transfer.',
+      highlights: ['86% faster load times', '45% cost reduction']
+    },
+    {
+      logo: '/marketing-components/clients/madeiramadeira.svg',
+      logoAlt: 'MadeiraMadeira',
+      logoTreatment: 'as-is',
+      text: '90% lower cloud costs and faster applications at scale.',
+      highlights: ['90% lower cloud costs']
+    },
+    {
+      logo: '/marketing-components/clients/renner-color.svg',
+      logoAlt: 'Renner',
+      logoTreatment: 'as-is',
+      text: '67% saved on data transfer, even during massive traffic spikes.',
+      highlights: ['67% saved']
+    },
+    {
+      logo: '/marketing-components/clients/fourbank.svg',
+      logoAlt: 'Fourbank',
+      logoTreatment: 'monochrome',
+      text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
+      highlights: ['DDoS mitigated']
+    }
+  ]
+
+  const benefits = [
+    {
+      icon: 'pi pi-globe',
+      title: 'Global resilience beyond anycast',
+      description:
+        'Traffic is steered around failures and network degradation faster than BGP can reconverge.'
+    },
+    {
+      icon: 'pi pi-stopwatch',
+      title: 'Low latency everywhere',
+      description:
+        'Compute, AI, databases, and security run in every data center, close to your users.'
+    },
+    {
+      icon: 'pi pi-arrows-v',
+      title: 'Zero-ops autoscaling and failover',
+      description:
+        'Absorbs any traffic spike with no cold starts, no capacity planning and no provisioning.'
+    },
+    {
+      icon: 'pi pi-shield',
+      title: 'Always-on protection',
+      description:
+        'DDoS mitigation and a programmable security layer run in front of every application.'
+    }
+  ]
+
+  const counts = [2, 3, 4]
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-xl)">
+    <NetworkSection
+      v-for="count in counts"
+      :key="`outcomes-${count}`"
+      kind="outcomes"
+      eyebrow="Region: Earth."
+      :title="`${count} outcomes set the floor in ${count} columns`"
+      lead="Built around your users. Distributed around your data."
+      :claims="claims"
+      :outcomes="outcomes.slice(0, count)"
+    />
+    <NetworkSection
+      v-for="count in counts"
+      :key="`benefits-${count}`"
+      kind="benefits"
+      eyebrow="Region: Earth."
+      :title="`${count} benefits set the floor in ${count} columns`"
+      lead="Built around your users. Distributed around your data."
+      :claims="claims"
+      :benefits="benefits.slice(0, count)"
     />
   </div>
 </template>

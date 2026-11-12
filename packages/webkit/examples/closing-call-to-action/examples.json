@@ -43,6 +43,12 @@
       "summary": "The close for a reader who may be a person or an agent: the `primary` register with a switch under the title. For humans opens on two actions; For agents swaps in a copyable prompt and the agent docs. The typed word loops under both.",
       "file": "site-agents.vue",
       "json": "site-agents.json"
+    },
+    {
+      "name": "Templates",
+      "summary": "The close that starts from a template: the ask on the start side over the waving `primary` texture, a scrolling grid of templates to deploy on the end side, then the tall closing frame.",
+      "file": "site-templates.vue",
+      "json": "site-templates.json"
     }
   ],
   "siteTitle": "Templates/Marketing/Closing CTAs/ClosingCallToAction",
@@ -60,6 +66,8 @@
     "Primary",
     "PrimaryJson",
     "Agents",
-    "AgentsJson"
+    "AgentsJson",
+    "Templates",
+    "TemplatesJson"
   ]
 }

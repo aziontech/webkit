@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "5.11.0",
+  "version": "5.12.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "type": "module",
@@ -894,6 +894,7 @@
     "./closing-call-to-action": "./src/components/sections/closing-call-to-action/closing-call-to-action.vue",
     "./closing-call-to-action-agents": "./src/components/sections/closing-call-to-action-agents/closing-call-to-action-agents.vue",
     "./closing-call-to-action-newsletter": "./src/components/sections/closing-call-to-action-newsletter/closing-call-to-action-newsletter.vue",
+    "./closing-call-to-action-templates": "./src/components/sections/closing-call-to-action-templates/closing-call-to-action-templates.vue",
     "./code-split": "./src/components/sections/code-split/code-split.vue",
     "./compare-plans": "./src/components/sections/compare-plans/compare-plans.vue",
     "./compare-support-tiers": "./src/components/sections/compare-support-tiers/compare-support-tiers.vue",

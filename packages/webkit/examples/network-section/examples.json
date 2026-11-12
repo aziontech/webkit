@@ -9,8 +9,13 @@
     },
     {
       "name": "Types",
-      "summary": "Both floors stacked: the `outcomes` kind closes the band with four client quotes, the `benefits` kind with three icon-led topics. The map, title, lead and claims above are the same in both.",
+      "summary": "Both floors stacked: the `outcomes` kind closes the band with four client quotes, the `benefits` kind with three icon-led topics — each floor sets its columns from its entry count. The map, title, lead and claims above are the same in both.",
       "file": "types.vue"
+    },
+    {
+      "name": "Columns",
+      "summary": "The floor takes one column per entry, two at least and four at most, on either kind: two, three and four `outcomes`, then two, three and four `benefits`. No entry count leaves an empty cell in the row.",
+      "file": "columns.vue"
     }
   ],
   "site": [

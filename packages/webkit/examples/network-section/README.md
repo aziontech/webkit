@@ -22,7 +22,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `title` is the headline over the map.
 - `lead` is the overline sentence above the claims.
 - `claims` are the network figures drawn as pills.
-- `outcomes[]` fill the floor; four fill the row. `highlights` are phrases of `text` kept in full color, copied exactly.
+- `outcomes[]` fill the floor, one column each: two to four fill the row. `highlights` are phrases of `text` kept in full color, copied exactly.
 - `logoTreatment` is `as-is` or `monochrome` (one ink that follows the theme). Empty means as-is.
 
 Example:
@@ -47,7 +47,7 @@ Example: [`site-benefits.vue`](./site-benefits.vue)
 
 Same entry, with `kind` set to `benefits` and `benefits[]` in place of `outcomes[]`:
 
-- `benefits[]` fill the floor; three fill the row. Each has an `icon`, a `title` and a `description`.
+- `benefits[]` fill the floor, one column each: two to four fill the row. Each has an `icon`, a `title` and a `description`.
 
 Example:
 

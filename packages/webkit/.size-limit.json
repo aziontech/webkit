@@ -1301,5 +1301,10 @@
     "name": "upload-progress",
     "path": "src/components/feedback/upload-progress/upload-progress.vue",
     "limit": "8.25 KB"
+  },
+  {
+    "name": "closing-call-to-action-templates",
+    "path": "src/components/sections/closing-call-to-action-templates/closing-call-to-action-templates.vue",
+    "limit": "21 KB"
   }
 ]
