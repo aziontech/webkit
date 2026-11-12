@@ -65,7 +65,7 @@ const VITE_CONFIG_CANDIDATES = [
   'vite.config.mjs'
 ]
 
-function usesTailwindVitePlugin(projectDir) {
+export function usesTailwindVitePlugin(projectDir) {
   const pkg = read(join(projectDir, 'package.json'))
   if (pkg) {
     try {

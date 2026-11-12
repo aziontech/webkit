@@ -1,15 +1,12 @@
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Tooltip from '@aziontech/webkit/tooltip'
-
-  const crumbs = [{ label: 'Applications' }]
 </script>
 
 <template>
@@ -40,12 +37,6 @@
               size="small"
             />
           </a>
-          <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
-            <Breadcrumb
-              :items="crumbs"
-              class="w-full"
-            />
-          </div>
         </div>
       </GlobalHeader.Left>
       <GlobalHeader.Middle />

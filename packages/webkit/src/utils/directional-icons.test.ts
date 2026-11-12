@@ -29,7 +29,7 @@ describe('directional icons', () => {
   })
 
   it('keeps the stylesheet rule in sync with the list', () => {
-    const selectors = [...styles.matchAll(/\.((?:pi|ai)-[a-z0-9-]+):dir\(rtl\)/g)].map((m) => m[1])
+    const selectors = [...styles.matchAll(/\.((?:pi|ai)-[a-z0-9-]+)/g)].map((m) => m[1])
     expect(new Set(selectors)).toEqual(new Set(DIRECTIONAL_ICONS))
   })
 

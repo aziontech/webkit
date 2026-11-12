@@ -38,7 +38,8 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   followed with the app's router, no `@navigate` wiring needed) and the active row follows the
   route; `actions`, `account-menu`, `search`, `header-start`, `breadcrumbs`, `notifications` and `tools` slots. A page
   opens the shared palette with `useConsoleLayout().openSearch()`
-  (`@aziontech/webkit/use-console-layout`). Bind `v-model:navigation-expanded` to persist the rail or
+  (`@aziontech/webkit/use-console-layout`); a body that also renders on its own calls
+  `useConsoleLayout({ optional: true })`, which returns `null` outside a layout. Bind `v-model:navigation-expanded` to persist the rail or
   to offer `Collapse sidebar` in the palette (`search` slot + `@search-select`). A page sets its own
   trail, control crumb included, with `ConsoleLayout.Breadcrumbs`, and a full-height workspace puts
   `data-layout-fill` on its root (never `calc(100dvh - …)`).

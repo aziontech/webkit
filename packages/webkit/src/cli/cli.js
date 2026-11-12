@@ -10,7 +10,7 @@ import { planInit } from './plan.js'
 import { formatSearch, formatView, runSearch, runView } from './query.js'
 import { FAIL_MODES, FORMATS, runReport } from './report.js'
 import { catalogFor, resolveWebkit } from './source.js'
-import { planSync } from './sync.js'
+import { planSync, resolveBundleRoot } from './sync.js'
 import { colorize, diffStats } from './text-diff.js'
 
 const HELP = `@aziontech/webkit — adopt the design system in one command
@@ -42,7 +42,8 @@ Commands:
   report          Measure webkit adoption via this project's own ESLint.
   canary          Prove the design-system lint rules still reach this project.
   sync            Reconcile the copied .claude/ bundle + CLAUDE.md fragment against
-                   this webkit version's templates.
+                   this webkit version's templates. In a monorepo app with no agent
+                   files of its own, works on the repository root that has them.
   migrate v6      Rewrite this project for the v6 major: renamed imports and components,
                    renamed props and values; lists removed components to replace by hand.
                    --from <major> sets the version the project is on (read from
@@ -259,9 +260,19 @@ function printSyncTable(plan) {
   )
 }
 
-function runSync(projectDir, { check, dryRun, force, json }) {
+function runSync(appDir, { check, dryRun, force, json }) {
   const applyNothing = check || dryRun
   try {
+    const bundleRoot = resolveBundleRoot(appDir)
+    if (bundleRoot.kind === 'source') {
+      process.stdout.write(
+        json
+          ? `${JSON.stringify({ drift: false, source: bundleRoot.dir, entries: [] }, null, 2)}\n`
+          : `\n@aziontech/webkit sync\n${bundleRoot.dir} holds the bundle sources (skills/, rules/, adapters/) — nothing to sync.\n`
+      )
+      return 0
+    }
+    const projectDir = bundleRoot.dir
     const plan = planSync(projectDir, { force })
 
     if (json) {
@@ -282,7 +293,7 @@ function runSync(projectDir, { check, dryRun, force, json }) {
       )
     } else {
       process.stdout.write(
-        `\n@aziontech/webkit sync${applyNothing ? ' (no changes applied)' : ''}\nproject: ${projectDir}\n\n`
+        `\n@aziontech/webkit sync${applyNothing ? ' (no changes applied)' : ''}\nproject: ${projectDir}${bundleRoot.kind === 'ancestor' ? ' (the repository root that owns the agent files)' : ''}\n\n`
       )
       printSyncTable(plan)
     }

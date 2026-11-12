@@ -9,7 +9,7 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import unusedImports from 'eslint-plugin-unused-imports'
 import vuejsAccessibility from 'eslint-plugin-vuejs-accessibility'
 
-import noPhysicalDirection from './packages/webkit/src/eslint-plugin/rules/no-physical-direction.js'
+import webkitPlugin from './packages/webkit/src/eslint-plugin/index.js'
 
 export default [
   {
@@ -144,7 +144,7 @@ export default [
   },
   {
     files: ['**/*.vue'],
-    plugins: { webkit: { rules: { 'no-physical-direction': noPhysicalDirection } } },
+    plugins: { webkit: webkitPlugin },
     rules: { 'webkit/no-physical-direction': 'error' }
   }
 ]

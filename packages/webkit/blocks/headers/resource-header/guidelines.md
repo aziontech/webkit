@@ -24,7 +24,7 @@ Below `md` an outlined `pi-bars` icon button opens the rail as a drawer. In the 
 
 ### C. Brand — `Brand` (required)
 
-Linked to the home route with `aria-label="Azion home"`, before the breadcrumb.
+Linked to the home route with `aria-label="Azion home"`. At the first level nothing follows it: the rail's active row names the module and the page opens on its own `PageHeader`, so the bar carries no breadcrumb, never a single crumb. From the second level (`SecondLevel`) a `Breadcrumb` follows it from `md`: the module with an `href`, then the resource's own name with no link. A tab is never a crumb.
 
 ### D. Create — `Button` (required)
 
@@ -38,15 +38,11 @@ The AI assistant entry, medium, `ai-ask-azion` icon. It is the only highlight bu
 
 Inside a button labelled `Account settings`, always last.
 
-### G. Location — `Breadcrumb` (required)
-
-Shows from `md`, from the second level on. First level: no breadcrumb — the rail's active row names the module and the page opens on its own `PageHeader`; an empty trail, never a single crumb. Second level: the module with an `href`, then the resource's own name with no link. A tab is never a crumb.
-
-### H. Search — `SearchTrigger` (required)
+### G. Search — `SearchTrigger` (required)
 
 The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
 
-### I. Hints — `Tooltip` (required)
+### H. Hints — `Tooltip` (required)
 
 Names every icon-only control: the navigation trigger, and Create and Agent below `md`.
 
