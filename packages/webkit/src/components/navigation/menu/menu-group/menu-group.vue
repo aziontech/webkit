@@ -36,7 +36,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-group'
   )
 
-  const hasLabel = computed(() => Boolean(props.label) || Boolean(slots.label))
+  const hasLabel = () => Boolean(props.label) || Boolean(slots.label)
 
   const isNested = inject(MenuSubInjectionKey, null) !== null
   const isCurrent = computed(() => isNested || ctx.levels.value.length === 0)
@@ -78,13 +78,13 @@
       :data-motion="ctx.motion.value"
       :aria-hidden="isCurrent ? undefined : 'true'"
       :inert="isCurrent ? undefined : true"
-      :aria-labelledby="hasLabel ? labelId : undefined"
-      :aria-label="hasLabel ? undefined : ariaLabel || undefined"
+      :aria-labelledby="hasLabel() ? labelId : undefined"
+      :aria-label="hasLabel() ? undefined : ariaLabel || undefined"
       :class="rootClass"
       :style="levelStyle"
     >
       <div
-        v-if="hasLabel"
+        v-if="hasLabel()"
         :id="labelId"
         :data-testid="`${testId}__label`"
         class="flex min-h-8 w-full shrink-0 items-center px-(--spacing-sm) text-label-sm text-(--text-muted)"

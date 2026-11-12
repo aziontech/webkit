@@ -73,9 +73,7 @@
   const isOption = computed(() => props.kind === 'option')
   const isGroup = computed(() => props.kind === 'group')
   const isAnchor = computed(() => isOption.value && Boolean(props.href) && !props.disabled)
-  const showTag = computed(
-    () => isOption.value && (Boolean(props.tagValue) || Boolean(slots['tag']))
-  )
+  const showTag = () => isOption.value && (Boolean(props.tagValue) || Boolean(slots['tag']))
 
   const listItemClasses = computed(() => cn('relative w-full shrink-0', attrs.class))
 
@@ -171,7 +169,7 @@
         <slot>{{ label }}</slot>
       </span>
       <span
-        v-if="showTag"
+        v-if="showTag()"
         class="shrink-0"
         :data-testid="`${testId}__tag`"
       >
@@ -212,7 +210,7 @@
         <slot>{{ label }}</slot>
       </span>
       <span
-        v-if="showTag"
+        v-if="showTag()"
         class="shrink-0"
         :data-testid="`${testId}__tag`"
       >

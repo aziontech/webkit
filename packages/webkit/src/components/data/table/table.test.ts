@@ -1127,3 +1127,29 @@ describe('Table (composition + data-driven)', () => {
     })
   })
 })
+
+describe('Table slot presence', () => {
+  it('names the table by a v-if caption slot that appears and disappears after mount', async () => {
+    const shown = ref(false)
+    const { getByTestId, queryByTestId } = render({
+      components: { Table },
+      setup: () => ({ shown, rows, columns }),
+      template: `<Table :data="rows" :columns="columns"><template v-if="shown" #caption><span data-testid="probe">Three domains</span></template></Table>`
+    })
+    const table = getByTestId('data-table__table')
+    expect(queryByTestId('data-table__caption')).toBeNull()
+    expect(table.hasAttribute('aria-labelledby')).toBe(false)
+
+    shown.value = true
+    await nextTick()
+    const caption = getByTestId('data-table__caption')
+    expect(queryByTestId('probe')).not.toBeNull()
+    expect(table.getAttribute('aria-labelledby')).toBe(caption.id)
+
+    shown.value = false
+    await nextTick()
+    expect(queryByTestId('data-table__caption')).toBeNull()
+    expect(queryByTestId('probe')).toBeNull()
+    expect(table.hasAttribute('aria-labelledby')).toBe(false)
+  })
+})

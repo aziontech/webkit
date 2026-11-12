@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { h } from 'vue'
+import { h, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../../test/axe'
 import MenuItem from './menu-item.vue'
@@ -273,5 +273,27 @@ describe('MenuItem', () => {
 
     expect(getByTestId('navigation-menu-item')).toBeTruthy()
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('MenuItem slot presence', () => {
+  it('follows a v-if tag slot that appears and disappears after mount', async () => {
+    const shown = ref(false)
+    const { queryByTestId } = render({
+      components: { MenuItem },
+      setup: () => ({ shown }),
+      template: `<ul><MenuItem label="Home"><template v-if="shown" #tag><span data-testid="probe">New</span></template></MenuItem></ul>`
+    })
+    expect(queryByTestId('navigation-menu-item__tag')).toBeNull()
+
+    shown.value = true
+    await nextTick()
+    expect(queryByTestId('navigation-menu-item__tag')).not.toBeNull()
+    expect(queryByTestId('probe')).not.toBeNull()
+
+    shown.value = false
+    await nextTick()
+    expect(queryByTestId('navigation-menu-item__tag')).toBeNull()
+    expect(queryByTestId('probe')).toBeNull()
   })
 })
