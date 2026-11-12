@@ -131,6 +131,7 @@
    "--chart-tooltip-border",
    "--chart-tooltip-muted",
    "--chart-tooltip-text",
+   "--code-editor-line-height",
    "--code-sintax-comment",
    "--code-sintax-function",
    "--code-sintax-identifier",
@@ -987,6 +988,7 @@
     "--chart-tooltip-text"
    ],
    "code": [
+    "--code-editor-line-height",
     "--code-sintax-comment",
     "--code-sintax-function",
     "--code-sintax-identifier",

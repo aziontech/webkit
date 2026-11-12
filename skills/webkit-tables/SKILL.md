@@ -175,7 +175,10 @@ surface (a drawer, a panel) and does not page through a collection.
 
 The toolbar is a fixed, ordered set of compound `Table.*` controls in the `#toolbar` slot; the
 applied-filter chips render in `#filters` via `Table.AppliedFilters`. `filterFields` (`{ id, label,
-type, options? }`) drives the `Table.Filter` builder.
+type, options? }`) drives the `Table.Filter` builder. Its funnel trigger counts the applied filters
+itself (a small badge, and an accessible name such as `Filters, 3 applied`); pass `count` only when
+the filters live outside the table, such as a custom builder in its `default` slot. Do not add your
+own `Badge` to a filter button: `Button` takes no count.
 An applied filter is a `Chip` of the default `kind="filled"` (the grey `--bg-selected` fill),
 `clickable` to edit it and `removable` to drop it; a value it could still take is `outlined`, and
 "Add filter" is `dashed`. Never restyle a chip's fill with a class to get one of those looks.

@@ -22,7 +22,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Filter popover — `Popover`, `Button`, `Badge`, `CalendarRoot`, `Input` (required)
 
-An outlined medium Filter `Button` opens one `Popover` placed `bottom-start`: the field list first, then the values of the chosen field with their counts. A small `Badge` on the trigger counts applied fields. The period offers presets and a `CalendarRoot` range; the popover stays open while the calendar is open. Long value lists get their own search `Input`.
+An outlined medium Filter `Button` opens one `Popover` placed `bottom-start`: the field list first, then the values of the chosen field with their counts. A small `Badge` on the trigger counts applied fields. This drill-down popover is the one place the count stays composed: `Table.Filter`, whose trigger carries the count, opens its own field, operator and value builder and has no labelled trigger, controlled open state or nested calendar, so it cannot host this panel. A filter in a table toolbar uses `Table.Filter` and its `count`, never a hand-built `Badge`. The period offers presets and a `CalendarRoot` range; the popover stays open while the calendar is open. Long value lists get their own search `Input`.
 
 ### B. Search and toolbar — `Input`, `Tooltip`, `IconButton` (required)
 

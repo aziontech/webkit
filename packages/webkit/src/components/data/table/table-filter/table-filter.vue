@@ -7,6 +7,7 @@
   import * as en from '../../../../i18n/messages/en'
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import Badge from '../../../content/badge/badge.vue'
   import Input from '../../../inputs/input/input.vue'
   import {
     type AppliedFilter,
@@ -26,10 +27,13 @@
       fields?: FilterField[]
       /** Popover heading. Empty uses the locale catalog (`Filters`). */
       title?: string
+      /** Applied filters shown on the trigger; 0 counts the table's applied filters. */
+      count?: number
     }>(),
     {
       fields: () => [],
-      title: ''
+      title: '',
+      count: 0
     }
   )
 
@@ -102,7 +106,12 @@
     props.fields.length ? props.fields : (ctx?.filterFields.value ?? [])
   )
   const applied = computed<AppliedFilter[]>(() => ctx?.appliedFilters.value ?? [])
-  const count = computed<number>(() => applied.value.length)
+  const count = computed<number>(() => (props.count > 0 ? props.count : applied.value.length))
+  const triggerName = computed<string>(() =>
+    count.value > 0
+      ? t('tableFilter.triggerCount', { title: heading.value, count: count.value })
+      : heading.value
+  )
 
   const DEFAULT_OPERATORS: Record<FilterField['type'], FilterOperator[]> = {
     text: ['contains', 'eq', 'neq', 'starts-with', 'ends-with', 'is-empty', 'is-not-empty'],
@@ -211,7 +220,7 @@
   <div class="relative inline-flex">
     <span
       ref="triggerRef"
-      class="inline-flex"
+      class="relative inline-flex"
     >
       <slot
         name="trigger"
@@ -221,12 +230,25 @@
         <IconButton
           :data-testid="testId"
           icon="pi pi-filter"
-          :ariaLabel="heading"
+          :ariaLabel="triggerName"
           kind="outlined"
           size="medium"
           :aria-expanded="open"
           @click="toggle"
         />
+        <span
+          v-if="count > 0"
+          aria-hidden="true"
+          class="pointer-events-none absolute -top-2 -end-2 min-w-5"
+        >
+          <Badge
+            :data-testid="`${testId}__count`"
+            :label="String(count)"
+            severity="primary"
+            size="small"
+            class="w-full"
+          />
+        </span>
       </slot>
     </span>
 
