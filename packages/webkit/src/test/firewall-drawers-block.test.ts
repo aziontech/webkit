@@ -1,5 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 
 import Certificate from '../../blocks/platform/create/create-in-drawer/variants/certificate.vue'
 import NetworkList from '../../blocks/platform/edit/attribute-editor/variants/network-list.vue'
@@ -16,7 +17,7 @@ const openDrawer = async (label: RegExp) => {
   const trigger = Array.from(document.querySelectorAll('button')).find((button) =>
     label.test(button.textContent ?? '')
   ) as HTMLButtonElement
-  await fireEvent.click(trigger)
+  await userEvent.click(trigger)
   await waitFor(() => expect(dialog()).not.toBeNull())
   return dialog() as HTMLElement
 }
