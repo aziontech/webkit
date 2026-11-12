@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 5430b10e2e1f076130ba65816d2f3329165c8f3e66aa0a821574c6ade3795c41
+checksum: 082917215150ba23c4f44ef41fc33cd8c4bf59f55bce767b85ed88e9e0f1476f
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -144,7 +144,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 3 KB gzip for `./search-trigger` in `.size-limit.json` (measured + ~0.5 KB headroom; includes `Kbd` and the translate composable).
+- Bundle budget: 4 KB gzip for `./search-trigger` in `.size-limit.json` (3.78 KB measured; includes `Kbd`, the translate composable and the window `keydown` listener with the shared shortcut registry).
 - Runtime budget: one `keydown` listener on the window while mounted.
 - Heavy parts: none.
 

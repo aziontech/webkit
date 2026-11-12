@@ -1335,7 +1335,8 @@ export async function handleRequest(request, args = {}) {
                                                       severity="info"
                                                       size="small"
                                                     />
-                                                    <Tag key="tag-2"
+                                                    <Tag
+                                                      key="tag-2"
                                                       v-if="keyError(field)"
                                                       label="Needs a name"
                                                       severity="warning"
@@ -1605,7 +1606,8 @@ export async function handleRequest(request, args = {}) {
                                                             aria-label="Minimum length"
                                                           />
                                                         </SettingRow>
-                                                        <SettingRow key="setting-row-2"
+                                                        <SettingRow
+                                                          key="setting-row-2"
                                                           v-if="field.type === 'string'"
                                                           title="Maximum length"
                                                         >
@@ -1618,7 +1620,8 @@ export async function handleRequest(request, args = {}) {
                                                             aria-label="Maximum length"
                                                           />
                                                         </SettingRow>
-                                                        <SettingRow key="setting-row-3"
+                                                        <SettingRow
+                                                          key="setting-row-3"
                                                           v-if="field.type === 'string'"
                                                           title="Pattern"
                                                           description="A regular expression the value has to match."
@@ -1636,7 +1639,8 @@ export async function handleRequest(request, args = {}) {
                                                             />
                                                           </div>
                                                         </SettingRow>
-                                                        <SettingRow key="setting-row-4"
+                                                        <SettingRow
+                                                          key="setting-row-4"
                                                           v-if="
                                                             field.type === 'integer' ||
                                                             field.type === 'number'
@@ -1652,7 +1656,8 @@ export async function handleRequest(request, args = {}) {
                                                             aria-label="Minimum"
                                                           />
                                                         </SettingRow>
-                                                        <SettingRow key="setting-row-5"
+                                                        <SettingRow
+                                                          key="setting-row-5"
                                                           v-if="
                                                             field.type === 'integer' ||
                                                             field.type === 'number'
@@ -1668,7 +1673,8 @@ export async function handleRequest(request, args = {}) {
                                                             aria-label="Maximum"
                                                           />
                                                         </SettingRow>
-                                                        <SettingRow key="setting-row-6"
+                                                        <SettingRow
+                                                          key="setting-row-6"
                                                           v-if="field.type === 'select'"
                                                           title="Choices"
                                                           description="One per line. These are the values the form offers."
@@ -1689,7 +1695,8 @@ export async function handleRequest(request, args = {}) {
                                                             />
                                                           </div>
                                                         </SettingRow>
-                                                        <SettingRow key="setting-row-7"
+                                                        <SettingRow
+                                                          key="setting-row-7"
                                                           v-if="field.type === 'array'"
                                                           title="List of"
                                                           description="The type of every value in the list."

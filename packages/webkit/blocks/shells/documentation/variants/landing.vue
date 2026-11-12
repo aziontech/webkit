@@ -346,7 +346,7 @@
               <div class="flex flex-col gap-(--spacing-xxl)">
                 <section
                   aria-labelledby="start-by-interface"
-                  class="flex flex-col gap-(--spacing-md)"
+                  class="flex flex-col"
                 >
                   <DocHeading
                     id="start-by-interface"
@@ -376,7 +376,7 @@
 
                 <section
                   aria-labelledby="start-by-objective"
-                  class="flex flex-col gap-(--spacing-md)"
+                  class="flex flex-col"
                 >
                   <DocHeading
                     id="start-by-objective"
@@ -408,7 +408,7 @@
 
                 <section
                   aria-labelledby="templates"
-                  class="flex flex-col gap-(--spacing-md)"
+                  class="flex flex-col"
                 >
                   <DocHeading
                     id="templates"
@@ -436,7 +436,7 @@
 
                 <section
                   aria-labelledby="stop-attacks"
-                  class="flex flex-col gap-(--spacing-md)"
+                  class="flex flex-col"
                 >
                   <DocHeading
                     id="stop-attacks"
@@ -465,7 +465,7 @@
 
                 <section
                   aria-labelledby="compliance"
-                  class="flex flex-col gap-(--spacing-md)"
+                  class="flex flex-col"
                 >
                   <DocHeading
                     id="compliance"
@@ -490,7 +490,7 @@
 
                 <section
                   aria-labelledby="follow-along"
-                  class="flex flex-col gap-(--spacing-md)"
+                  class="flex flex-col"
                 >
                   <DocHeading
                     id="follow-along"

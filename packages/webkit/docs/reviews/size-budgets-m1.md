@@ -383,3 +383,15 @@ New entry `artifact-canvas`: 6.32 KB initial chunk (`entryOnly`; `CopyButton`'s 
 | table-root      | 52.35         | 53.61        | 53.8       | Raised: tree rows.                   |
 | listing-browser | 67.5          | 68.68        | 68.9       | Raised: carries `Table` (tree rows). |
 | listing-table   | 58.6          | 59.75        | 59.95      | Raised: carries `Table` (tree rows). |
+
+## M2.7 owner items 3 and 6 (2026-11-12)
+
+| Entry              | Budget before | Measured now | New budget | Note                                                                                                |
+| ------------------ | ------------- | ------------ | ---------- | --------------------------------------------------------------------------------------------------- |
+| search-trigger     | 3             | 3.78         | 4          | Raised: binds ⌘K / Ctrl K on the window (`@vueuse/core` listener + shortcut registry).              |
+| copy-prompt-button | —             | 2.18         | 2.5        | New entry, initial chunk only (clipboard fallback is async).                                        |
+| doc-hero           | —             | 0.73         | 1          | New entry.                                                                                          |
+| doc-agent-card     | —             | 6.79         | 7          | New entry, initial chunk only; carries `Button`, `CopyPromptButton`, `FrameBox`, `TextureMaterial`. |
+| webkit-provider    | 8.93          | 8.96         | 9.16       | New strings: `copyPromptButton`, `docAgentCard` (measured + 0.2).                                   |
+| locales-pt-BR      | 8.32          | 8.34         | 8.54       | Same strings (measured + 0.2).                                                                      |
+| locales-es         | 8.41          | 8.44         | 8.64       | Same strings (measured + 0.2).                                                                      |

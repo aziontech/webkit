@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: a277db8e08eb76d94c7054173435511ae4390183dede1d112543f4b6b46c11df
+checksum: 9ede1a095a5c7d9df882529776926f3e654c7c7ec102bb30513865dc794408ad
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -151,7 +151,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 3 KB gzip for `./copy-prompt-button` in `.size-limit.json` (the clipboard fallback is loaded on demand).
+- Bundle budget: 2.5 KB gzip for `./copy-prompt-button` in `.size-limit.json`, initial chunk only (2.18 KB measured; the clipboard fallback is loaded on demand).
 - Runtime budget: none; one timer while the copied state shows.
 - Heavy parts: the copy fallback popover is an async component, requested only when the clipboard write is refused.
 

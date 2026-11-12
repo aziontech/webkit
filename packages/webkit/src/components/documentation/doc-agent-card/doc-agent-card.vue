@@ -101,8 +101,9 @@
             <TextureMaterial
               kind="dither"
               size="small"
+              fade="top"
               :data-testid="`${testId}__art`"
-              class="[--texture-direction:to_bottom_right] [--texture-ink:color-mix(in_srgb,var(--primary)_70%,transparent)] rtl:[--texture-direction:to_bottom_left]"
+              class="[--texture-direction:to_bottom_right] [--texture-fade-start:15%] [--texture-fade-end:80%] [--texture-ink:color-mix(in_srgb,var(--primary)_70%,transparent)] rtl:[--texture-direction:to_bottom_left]"
             />
           </div>
           <p class="m-0 max-w-(--container-3xs) text-heading-md text-(--text-default)">

@@ -46,21 +46,21 @@
       <slot name="title">{{ title }}</slot>
     </h1>
     <p
-      v-if="description || $slots.default"
+      v-if="description || $slots['default']"
       :data-testid="`${testId}__description`"
       class="m-0 mt-(--spacing-md) max-w-(--container-xl) text-body-lg text-(--text-muted)"
     >
       <slot>{{ description }}</slot>
     </p>
     <div
-      v-if="$slots.actions"
+      v-if="$slots['actions']"
       :data-testid="`${testId}__actions`"
       class="mt-(--spacing-xl) flex flex-wrap items-center gap-(--spacing-sm)"
     >
       <slot name="actions" />
     </div>
     <p
-      v-if="$slots.note"
+      v-if="$slots['note']"
       :data-testid="`${testId}__note`"
       class="m-0 mt-(--spacing-lg) text-body-sm text-(--text-muted)"
     >

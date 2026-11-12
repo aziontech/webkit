@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 730bab9ffbe87952eb29ba47ccc7bc6e457e8a75809696a29f6d313980097485
+checksum: 2def95135935d50b990ca2a7d6090dd58ed606609249fb090b71623fa1f88d92
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -136,7 +136,7 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 
 ## Performance
 
-- Bundle budget: 6 KB gzip for `./doc-agent-card` in `.size-limit.json` (includes `Button`, `CopyPromptButton`, `FrameBox` and `TextureMaterial`).
+- Bundle budget: 7 KB gzip for `./doc-agent-card` in `.size-limit.json`, initial chunk only (6.79 KB measured; includes `Button`, `CopyPromptButton`, `FrameBox` and `TextureMaterial`).
 - Runtime budget: none; static apart from the copy button's timer.
 
 ## Examples
