@@ -9,7 +9,7 @@
     },
     {
       "name": "Types",
-      "summary": "The three kinds in the order they read in a filter surface: an applied value, an available one, and the control that adds one.",
+      "summary": "The three kinds in the order they read in a filter surface: an applied value (the grey `filled` fill), an available one, and the control that adds one.",
       "file": "types.vue"
     },
     {

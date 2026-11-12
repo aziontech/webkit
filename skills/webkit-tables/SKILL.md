@@ -2,7 +2,7 @@
 name: webkit-tables
 description: Data tables on @aziontech/webkit — one data-driven <Table> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, enableSorting, kind:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — Table.CellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), Table.CellId, Table.CellStatus (one chip per row), Table.CellTags, Table.CellTime (avatar + relative time) and Table.CellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-tokens, ui-verify]
 ---
@@ -152,6 +152,9 @@ surface (a drawer, a panel) and does not page through a collection.
 The toolbar is a fixed, ordered set of compound `Table.*` controls in the `#toolbar` slot; the
 applied-filter chips render in `#filters` via `Table.AppliedFilters`. `filterFields` (`{ id, label,
 type, options? }`) drives the `Table.Filter` builder.
+An applied filter is a `Chip` of the default `kind="filled"` (the grey `--bg-selected` fill),
+`clickable` to edit it and `removable` to drop it; a value it could still take is `outlined`, and
+"Add filter" is `dashed`. Never restyle a chip's fill with a class to get one of those looks.
 
 ```vue
 <template #toolbar>

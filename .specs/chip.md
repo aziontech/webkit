@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: 2370df72a350d63ebfb50be0e5f3bbea8edee16b681db3751e2bf1cbd434ff1a
+checksum: fe098badda99ad66a9d41995bb9c1e53adc23a17f1db5a0038c8a941a882575e
 created: 2026-06-23
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Chip — Component Spec
@@ -20,11 +20,11 @@ A Chip is a compact, pill-shaped token that labels a discrete value the user has
 
 `kind` covers the three jobs a chip does in a filter surface, so a consumer never restyles the component to get one of them:
 
-- **`filled`** — a value that IS applied. The shared surface and border plus `--shadow-sm`: the loudest of the three, because it is state.
-- **`outlined`** — a value the user COULD apply. Same surface and border, no shadow: it recedes to an offer without becoming disabled, so a filter vocabulary can stay on screen instead of hiding inside a menu.
+- **`filled`** — a value that IS applied. The grey `--bg-selected` fill on the shared border, plus `--shadow-sm`: the loudest of the three, because it is state. This is the applied-filter chip of the console's filter bar.
+- **`outlined`** — a value the user COULD apply. The `--bg-surface` fill and the shared border, no shadow: it recedes to an offer without becoming disabled, so a filter vocabulary can stay on screen instead of hiding inside a menu.
 - **`dashed`** — the control that CREATES a chip ("Add filter"). A dashed outline is the standing convention for "add another one of these", which is what separates the thing that makes filters from the things that are filters.
 
-**Selected is a mode, not a kind.** `selectable` turns the chip into a toggle: activating it flips the `selected` model (`v-model:selected`), and the state stays after the click until the chip is activated again. It is independent of `kind` — `filled` marks an applied filter and never means "selected", so a selectable chip of any kind paints its selected state the same way (`--bg-selected` fill, `--border-selected` outline) and announces it as `aria-pressed`. Reach for `selectable` when a set of chips is a row of toggles (quick filters, facets); keep `clickable` when activation opens or does something without holding a state.
+**Selected is a mode, not a kind.** `selectable` turns the chip into a toggle: activating it flips the `selected` model (`v-model:selected`), and the state stays after the click until the chip is activated again. It is independent of `kind` — `filled` marks an applied filter and never means "selected", so a selectable chip of any kind paints its selected state the same way (`--bg-selected` fill, `--border-selected` outline) and announces it as `aria-pressed`. Because `filled` already wears the `--bg-selected` fill, a `filled` toggle shows its on state by the outline alone; a row of toggles is `outlined`. Reach for `selectable` when a set of chips is a row of toggles (quick filters, facets); keep `clickable` when activation opens or does something without holding a state.
 
 **Presence is the consumer's, not the chip's.** `remove` fires the moment the control is activated; the chip does not animate itself away or unmount itself. A chip that hid itself on remove could only ever serve the one case where removing it also destroys it — a filter bar where a removed value stays on screen as an `outlined` offer was impossible, because the instance stayed invisible forever. Exit motion, if wanted, belongs to whatever owns the list (a `TransitionGroup` around the group).
 
@@ -53,6 +53,10 @@ A Chip is a compact, pill-shaped token that labels a discrete value the user has
 
 - When removable, expose an accessible remove control with a clear label.
 - Group related chips in a `chip-group` rather than ad-hoc layout.
+- Do: draw an applied filter as `kind="filled"` (the default) — the grey fill is what says "this narrows the view"; draw the values it could still take as `outlined`, and "Add filter" as `dashed`.
+- Do: make a row of toggles `outlined` + `selectable`, so off reads as surface and on as the selected fill and outline.
+- Don't: restyle a chip's fill with a class (`bg-(--bg-muted)`, `bg-(--bg-surface)`) to get the applied or the available look; pick the `kind`.
+- Don't: use `filled` for a value that is merely offered; the fill would claim it is applied.
 
 ## Usage
 
@@ -127,7 +131,7 @@ Without `v-model:selected` the chip is uncontrolled and holds its own state, sta
 | Prop         | Type                                 | Default    | Required | JSDoc                                                                                                                              |
 | ------------ | ------------------------------------ | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `label`      | `string`                             | `''`       | false    | Fallback text when the default slot is empty.                                                                                      |
-| `kind`       | `'filled' \| 'outlined' \| 'dashed'` | `'filled'` | false    | Visual variant. Filled is an applied value, outlined an available one, dashed the control that adds one.                           |
+| `kind`       | `'filled' \| 'outlined' \| 'dashed'` | `'filled'` | false    | Visual variant. Filled (grey fill) is an applied value, outlined an available one, dashed the control that adds one.               |
 | `size`       | `'small' \| 'medium'`                | `'medium'` | false    | Size token; `small` is a fixed 24px, `medium` a fixed 32px.                                                                        |
 | `removable`  | `boolean`                            | `false`    | false    | When true, renders a trailing remove button that emits `remove`.                                                                   |
 | `clickable`  | `boolean`                            | `false`    | false    | When true, the chip body becomes interactive (`role="button"`, focusable) and emits `click` on activation (click / Enter / Space). |
@@ -166,8 +170,8 @@ Without `v-model:selected` the chip is uncontrolled and holds its own state, sta
 - When `disabled`, the root is not focusable, activation, toggling and removal are suppressed, the text drops to `--text-disabled` with `cursor-not-allowed`, and the remove button is a disabled `<button>`. An interactive chip keeps `role="button"` and adds `aria-disabled="true"`.
 - When `clickable`, the root is an interactive `role="button"` with `tabindex="0"`: it shows `cursor-pointer`, a `::before` ghost-layer darkening overlay (`--bg-hover`) on `hover` and `active`, a `--border-strong` border on `active` (the pressed state, per Figma), and a visible focus ring on `focus-visible`. When not clickable, the root stays a non-interactive container.
 - The remove button (when `removable`) is always independently focusable and shows its own focus ring on `focus-visible`. It carries a **`tooltip`** naming what it removes, shown on hover and on keyboard focus — in a row of chips four identical `×` controls sit side by side, and the field name is what tells them apart.
-- All three kinds share the same `--bg-surface` fill and `--border-default` border at rest, so a row of chips reads as one family; the kinds differ only in **elevation** (and, for `dashed`, the dash). When `clickable`, hover raises the border to `--border-strong` — the same rest→hover pair `input` and `select-trigger` use. That pair is what makes the outline read as interactive at all: `--border-default` is 8% black, the _same value_ as `--border-muted` in the light theme, so a static border of either token is indistinguishable. `filled` adds `--shadow-sm`; `outlined` drops it, which is what makes an applied value louder than an available one without changing the surface or the outline it is drawn with. `dashed` is `outlined` with a dashed border.
-- **Fill is not the applied/available distinction.** It was, nominally — `filled` specified `--bg-surface-raised` and the other two were transparent — and it worked in neither theme: `--bg-surface-raised` resolves to the _same value_ as `--bg-surface` in the light theme, so the contrast it was meant to carry existed only in dark, and the utility was authored with a stray space inside the paren shorthand, which terminates the Tailwind candidate so it compiled to no CSS at all. Every `filled` chip was transparent in both themes. One shared surface is what makes a chip read as a raised object against `--bg-canvas`; `--shadow-sm` then carries the state on its own, which is what it was already doing.
+- All three kinds share the `--border-default` border at rest, so a row of chips reads as one family. `filled` fills with `--bg-selected` (grey: `#E5E5E5` on the light theme's white surface, `#1A1A1A` on the dark theme's `#0A0A0A`) and adds `--shadow-sm`; `outlined` and `dashed` fill with `--bg-surface` and carry no shadow, so an applied value is louder than an available one in both themes. `dashed` is `outlined` with a dashed border. When `clickable`, hover raises the border to `--border-strong` — the same rest→hover pair `input` and `select-trigger` use. That pair is what makes the outline read as interactive at all: `--border-default` is 8% black, the _same value_ as `--border-muted` in the light theme, so a static border of either token is indistinguishable.
+- **Why `--bg-selected` and not `--bg-surface-raised`.** `filled` once specified `--bg-surface-raised`, which resolves to the _same value_ as `--bg-surface` in the light theme (the contrast existed only in dark), and the utility carried a stray space inside the paren shorthand, so it compiled to no CSS at all; for a while every chip then shared `--bg-surface` and `--shadow-sm` alone carried the state, which read as a white pill on white cards. The design sample's filter bar draws the applied chip on `--bg-selected`, which differs from `--bg-surface` in both themes; that is the fill.
 - The remove control's glyph sits at `--text-muted` at rest and rises to `--text-default` on hover: at rest it is punctuation after a label, and on hover it is the thing being aimed at. It stays above the 3:1 non-text contrast minimum in both themes (3.95:1 light, 5.02:1 dark).
 
 ## Motion & Animations
@@ -184,7 +188,8 @@ Without `v-model:selected` the chip is uncontrolled and holds its own state, sta
 
 | Region                                         | Token (DESIGN.md)                                    |
 | ---------------------------------------------- | ---------------------------------------------------- |
-| surface (all kinds)                            | `var(--bg-surface)`                                  |
+| surface (`filled`)                             | `var(--bg-selected)`                                 |
+| surface (`outlined` / `dashed`)                | `var(--bg-surface)`                                  |
 | border (all kinds, rest)                       | `var(--border-default)`                              |
 | border (clickable, hover)                      | `var(--border-strong)`                               |
 | shape                                          | fully rounded (pill)                                 |
@@ -221,7 +226,7 @@ Without `v-model:selected` the chip is uncontrolled and holds its own state, sta
 ## Examples
 
 - Default — the baseline Chip with `label`.
-- Types — composite story rendering `filled`, `outlined` and `dashed` side by side, justified because `kind` is a real axis with three values that carry different meanings (applied / available / adds one).
+- Types — composite story rendering `filled` (the grey applied-filter chip), `outlined` and `dashed` side by side, justified because `kind` is a real axis with three values that carry different meanings (applied / available / adds one).
 - Sizes — composite story rendering `small` and `medium` side by side, justified because `size` is a real axis with two values.
 - Removable — args delta `removable: true`, wiring the `remove` event to the Actions panel; justified because `removable` is a real boolean state that changes the rendered anatomy (adds the trailing remove button) and the emitted event.
 - Clickable — args delta `clickable: true`, wiring the `click` event to the Actions panel; justified because `clickable` is a real boolean state that turns the chip body into an interactive `role="button"` and emits a distinct event.
