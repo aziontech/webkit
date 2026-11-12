@@ -7,6 +7,8 @@ pnpm-debug.log*
 
 # Compiled output (dist is generated but tracked — see root .gitignore)
 build/
+# The CSS entry's declaration (an empty module) is tracked with the CSS it types
+!dist/v4/globals.d.ts
 # Source-controlled token build helpers (not a build output directory)
 !src/tokens/build/
 !src/tokens/build/**
