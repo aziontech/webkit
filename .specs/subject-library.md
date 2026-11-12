@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: d108e1d8992a6f76887af93942f93397514a0ae189d08038291532343f1c1f75
+last_updated: 2026-11-12
+checksum: 4be688f7aa3c2a85dc3af39fe13209e8117623b6cb72b7e51bd71131c08654e0
 ---
 
 # SubjectLibrary — Component Spec
@@ -86,7 +86,7 @@ import SubjectLibrary from '@aziontech/webkit/subject-library'
 ## States
 
 - Visual states: `default`
-- Three columns from the large breakpoint, one below the small one; the closing cell spans two columns from the small breakpoint up
+- Three columns from the large breakpoint, one below the small one, on `card-grid`'s `fixed` layout (equal tracks whatever the count), so the closing cell really spans two columns from the small breakpoint up and takes two thirds of the last row on desktop, as on azion.com's learning page
 - Empty: when no subject carries a title and a linked article the band renders nothing — not the grid, not the closing cell
 
 ## Motion & Animations

@@ -2,7 +2,7 @@
   import CardGrid from '@aziontech/webkit/card-grid'
   import CardGridCell from '@aziontech/webkit/card-grid-cell'
 
-  const counts = [2, 4, 5]
+  const counts = [2, 4, 5, 7]
 </script>
 
 <template>

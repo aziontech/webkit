@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-12
-checksum: dd8ec74008471929305ce4a596e6885332ea1484c4bfe9cbb88f6d3385ab823e
+checksum: d85a992f4be59d280816a04f923d9d554ca02885cbb8ef2394a3c59dbdb8d3d6
 ---
 # UseCaseLinks — Component Spec
 
@@ -78,6 +78,7 @@ import UseCaseLinks from '@aziontech/webkit/use-case-links'
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set; `eyebrow` and `description` ride with it
+- The items sit on `card-grid`'s balanced divider grid, three across from `lg`: a count that splits evenly fills every row (4 → 2 × 2), and a short last row keeps the column width with its trailing cell left empty, as on azion.com (5 → 3 + 2)
 - An item with an `href` is a link (the whole cell, with the topic's link cue); an item without one is a plain topic, so a band with no `href` at all has no links
 
 ## Motion & Animations

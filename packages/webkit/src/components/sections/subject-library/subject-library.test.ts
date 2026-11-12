@@ -130,6 +130,14 @@ describe('SubjectLibrary', () => {
     )
   })
 
+  it('lays the subjects on fixed tracks so the closing cell can span two of them', () => {
+    const { getByTestId } = band()
+
+    const grid = getByTestId(TESTID).querySelector('[data-testid="marketing-card-grid"]')
+    expect(grid).toHaveAttribute('data-layout', 'fixed')
+    expect(grid).toHaveAttribute('data-columns', '3')
+  })
+
   it('renders no closing cell when closing is omitted', () => {
     const { queryByRole } = band({ closing: undefined })
 

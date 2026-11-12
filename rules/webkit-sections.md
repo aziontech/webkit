@@ -36,9 +36,10 @@ JSON. Never rebuild a band from primitives when a section exists.
 - Close the page with `SiteFooter` as the last child of the page shell, unwrapped. It draws its own
   top rule, its frame and its closing bottom rule, and ends on its bottom bar at every width.
 - Give a grid section (contact channels, features, use cases, articles) as many items as the content
-  has. Its card grid balances the rows itself — the fewest rows the column cap allows, a short last
-  row sharing the width evenly: under three columns 2 → halves, 4 → 2 × 2, 5 → 3 + 2. No row ends
-  on an empty cell.
+  has. Its card grid balances the rows itself — the fewest rows the column cap allows on the
+  narrowest track count that keeps them, so an even count fills every row (under three columns
+  2 → halves, 4 → 2 × 2), and a short last row keeps the column width with its trailing cells left
+  empty, as azion.com does (5 → 3 + 2, 7 → 3 + 3 + 1). Never stretch the last row yourself.
 - Import the logos, badges and illustrations a section shows from
   `@aziontech/webkit/assets/<file>` (`import zoop from '@aziontech/webkit/assets/zoop-extended-color.svg'`)
   and pass the import as the item's `logo` / `src`; `catalog.json` lists the files under `imports`

@@ -91,6 +91,9 @@ describe('CardGrid', () => {
     expect(getByTestId(TESTID)).toHaveAttribute('data-flush', 'true')
   })
 
+  const cells = (count: number) =>
+    Array.from({ length: count }, (_, i) => `<div>c${i}</div>`).join('')
+
   it('balances its rows by default and fixes them on request', () => {
     const { getByTestId, unmount } = render(framed())
     expect(getByTestId(TESTID)).toHaveAttribute('data-layout', 'balanced')
@@ -98,11 +101,57 @@ describe('CardGrid', () => {
 
     const fixed = render(framed({ layout: 'fixed' }))
     expect(fixed.getByTestId(TESTID)).toHaveAttribute('data-layout', 'fixed')
-    expect(fixed.getByTestId(TESTID).style.getPropertyValue('--card-grid-cols-lg')).toBe('')
+    expect(fixed.getByTestId(TESTID).style.getPropertyValue('--card-grid-cols-lg')).toBe('3')
   })
 
-  const cells = (count: number) =>
-    Array.from({ length: count }, (_, i) => `<div>c${i}</div>`).join('')
+  it('keeps the declared track counts in the fixed layout whatever the count', () => {
+    const { getByTestId } = render(CardGrid, {
+      props: { columns: 4, mobileColumns: 2, layout: 'fixed' },
+      slots: { default: cells(5) }
+    })
+    const root = getByTestId(TESTID)
+    expect(root.style.getPropertyValue('--card-grid-cols-base')).toBe('2')
+    expect(root.style.getPropertyValue('--card-grid-cols-sm')).toBe('2')
+    expect(root.style.getPropertyValue('--card-grid-cols-lg')).toBe('4')
+    expect(root).not.toHaveAttribute('data-fill-trailing')
+  })
+
+  it('fans five cells out to five columns', () => {
+    const { getByTestId } = render(CardGrid, {
+      props: { columns: 5 },
+      slots: { default: cells(5) }
+    })
+    expect(getByTestId(TESTID).style.getPropertyValue('--card-grid-cols-lg')).toBe('5')
+  })
+
+  it('fills the trailing tracks of a short last row in a balanced divider grid', () => {
+    const { getByTestId } = render(CardGrid, {
+      props: { kind: 'divider', columns: 3 },
+      slots: { default: cells(5) }
+    })
+    const root = getByTestId(TESTID)
+    expect(root).toHaveAttribute('data-fill-trailing')
+    expect(root.style.getPropertyValue('--card-grid-rest-lg')).toBe('1')
+    expect(root.style.getPropertyValue('--card-grid-fill-lg')).toBe('block')
+    expect(root.style.getPropertyValue('--card-grid-rest-sm')).toBe('1')
+    expect(root.style.getPropertyValue('--card-grid-fill-sm')).toBe('block')
+    expect(root.style.getPropertyValue('--card-grid-fill-base')).toBe('none')
+  })
+
+  it('draws no trailing fill when the rows are full or the grid is not divided', () => {
+    const full = render(CardGrid, {
+      props: { kind: 'divider', columns: 3 },
+      slots: { default: cells(6) }
+    })
+    expect(full.getByTestId(TESTID).style.getPropertyValue('--card-grid-fill-lg')).toBe('none')
+    full.unmount()
+
+    const framed = render(CardGrid, {
+      props: { kind: 'frame', columns: 3 },
+      slots: { default: cells(5) }
+    })
+    expect(framed.getByTestId(TESTID)).not.toHaveAttribute('data-fill-trailing')
+  })
 
   it.each([
     [1, 3, 1, '1', '1', '1'],

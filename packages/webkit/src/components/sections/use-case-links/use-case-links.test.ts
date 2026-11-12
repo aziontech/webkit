@@ -44,6 +44,16 @@ const band = (props: Record<string, unknown> = {}) =>
   })
 
 describe('UseCaseLinks', () => {
+  it('leaves the trailing cell of a short last row empty instead of stretching it', () => {
+    const five = [...items, { ...items[0], title: 'Fourth' }, { ...items[1], title: 'Fifth' }]
+    const { getByTestId } = band({ items: five })
+
+    const grid = getByTestId(TESTID).querySelector('[data-testid="marketing-card-grid"]')
+    expect(grid).toHaveAttribute('data-layout', 'balanced')
+    expect(grid).toHaveAttribute('data-fill-trailing')
+    expect((grid as HTMLElement).style.getPropertyValue('--card-grid-fill-lg')).toBe('block')
+  })
+
   it('renders the band under the default testid', () => {
     const { getByTestId } = band()
 

@@ -19,7 +19,7 @@
     },
     {
       "name": "Balanced",
-      "summary": "Two, four and five cells under `columns: 3`. Every row is full: two split in halves, four make a 2 × 2, five make 3 + 2 with the last row sharing the width evenly. Pass `layout=\"fixed\"` only for tiles whose width must not change from row to row.",
+      "summary": "Two, four, five and seven cells under `columns: 3`. A count that splits evenly fills every row: two split in halves, four make a 2 × 2. A short last row keeps the column width and leaves its trailing tracks empty, as azion.com does: five make 3 + 2, seven make 3 + 3 + 1. Pass `layout=\"fixed\"` only for tiles whose width must not change from row to row.",
       "file": "balanced.vue"
     },
     {

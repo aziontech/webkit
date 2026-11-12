@@ -116,6 +116,7 @@
       >
         <CardGrid
           kind="divider"
+          layout="fixed"
           :columns="3"
           :mobile-columns="1"
         >
