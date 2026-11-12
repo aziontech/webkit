@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="TItem extends object = Record<string, unknown>">
   import { computed, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
@@ -7,43 +7,40 @@
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Checkbox from '../../inputs/checkbox/checkbox.vue'
   import RadioButton from '../../inputs/radio-button/radio-button.vue'
-
-  /** How many cards can be selected. */
-  export type CardsSelectionMode = 'none' | 'single' | 'multi'
-
-  type CardItem = Record<string, unknown>
+  import type { CardsItemSlotProps, CardsSelectionMode } from './types'
 
   defineOptions({
     name: 'Cards',
     inheritAttrs: false
   })
 
-  interface Props {
-    /** The items, one card each. */
-    items?: CardItem[]
-    /** Field that identifies an item; selection keys read it. */
-    trackBy?: string
-    /** No selection, one card, or several cards with a select-all above them. */
-    selectionMode?: CardsSelectionMode
-    /** Shows placeholder cards and sets aria-busy while true. */
-    loading?: boolean
-    /** Accessible name of the list. Empty uses the locale catalog. */
-    ariaLabel?: string
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    items: () => [],
-    trackBy: 'id',
-    selectionMode: 'none',
-    loading: false,
-    ariaLabel: ''
-  })
+  const props = withDefaults(
+    defineProps<{
+      /** The items, one card each. */
+      items?: TItem[]
+      /** Field that identifies an item; selection keys read it. */
+      trackBy?: string
+      /** No selection, one card, or several cards with a select-all above them. */
+      selectionMode?: CardsSelectionMode
+      /** Shows placeholder cards and sets aria-busy while true. */
+      loading?: boolean
+      /** Accessible name of the list. Empty uses the locale catalog. */
+      ariaLabel?: string
+    }>(),
+    {
+      items: () => [],
+      trackBy: 'id',
+      selectionMode: 'none',
+      loading: false,
+      ariaLabel: ''
+    }
+  )
 
   defineSlots<{
     /** Card title; names the card and its selection control. */
-    header(props: { item: CardItem; index: number; selected: boolean }): unknown
+    header(props: CardsItemSlotProps<TItem>): unknown
     /** Card body: the item's fields. */
-    default(props: { item: CardItem; index: number; selected: boolean }): unknown
+    default(props: CardsItemSlotProps<TItem>): unknown
     /** Shown when there are no items. */
     empty(): unknown
   }>()
@@ -59,7 +56,8 @@
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'data-testid'))
   )
 
-  const keyOf = (item: CardItem): string => String(item[props.trackBy] ?? '')
+  const keyOf = (item: TItem): string =>
+    String((item as Record<string, unknown>)[props.trackBy] ?? '')
 
   const selectedKeys = defineModel<string[]>('selectedKeys', { default: () => [] })
   const selected = computed<string[]>(() => selectedKeys.value)
@@ -68,9 +66,9 @@
     selectedKeys.value = next
   }
 
-  const isSelected = (item: CardItem): boolean => selected.value.includes(keyOf(item))
+  const isSelected = (item: TItem): boolean => selected.value.includes(keyOf(item))
 
-  const toggle = (item: CardItem, value: boolean): void => {
+  const toggle = (item: TItem, value: boolean): void => {
     const key = keyOf(item)
     if (props.selectionMode === 'single') {
       setSelected(value ? [key] : [])
@@ -94,6 +92,10 @@
 
   const headerId = (index: number): string => `${uid}-card-${index}`
   const SKELETONS = 6
+</script>
+
+<script lang="ts">
+  export type { CardsItemSlotProps, CardsSelectionMode } from './types'
 </script>
 
 <template>
