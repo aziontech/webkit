@@ -2,6 +2,9 @@
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import ArticleCards from '@aziontech/webkit/article-cards'
+  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
+  import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
+  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
 
   const items = [
     {
@@ -13,7 +16,7 @@
       meta: 'FEB 4, 2022 • 4 min read',
       mark: {
         name: 'Netshoes',
-        logo: '/marketing-components/logos/netshoes-extended-reversed.svg'
+        logo: netshoesExtendedReversed
       }
     },
     {
@@ -25,7 +28,7 @@
       meta: 'AUG 10, 2021 • 4 min read',
       mark: {
         name: 'Renner',
-        logo: '/marketing-components/logos/renner-extended-color.svg'
+        logo: rennerExtendedColor
       }
     },
     {
@@ -37,7 +40,7 @@
       meta: 'MAY 6, 2025 • 4 min read',
       mark: {
         name: 'GPA',
-        logo: '/marketing-components/logos/gpa-extended-reversed.svg'
+        logo: gpaExtendedReversed
       }
     }
   ]

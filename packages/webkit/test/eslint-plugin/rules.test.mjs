@@ -47,6 +47,9 @@ const noWrappedPageChrome = (
 ).default
 const noOutputInCommand = (await import('../../src/eslint-plugin/rules/no-output-in-command.js'))
   .default
+const noRootRelativeAsset = (
+  await import('../../src/eslint-plugin/rules/no-root-relative-asset.js')
+).default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -967,6 +970,96 @@ test('no-output-in-command', () => {
         code: `<template><DocCodeGroup :samples="[{ language: 'bash', code: 'curl -I https://x\\n# HTTP/2 200' }]" /></template>`,
         filename: 'b.vue',
         errors: [{ messageId: 'output' }]
+      }
+    ]
+  })
+})
+
+test('no-root-relative-asset', () => {
+  js.run('no-root-relative-asset', noRootRelativeAsset, {
+    valid: [
+      "import logo from '@aziontech/webkit/assets/magalu-extended-color.svg'",
+      "const item = { logo, href: '/customers/magalu' }",
+      "const doc = '/docs/edge-application'",
+      "const remote = 'https://www.azion.com/media/careers/office-desks.jpg'",
+      'const own = `${base}/media/careers/office-desks.jpg`',
+      "const text = 'See /media/ for the press kit'",
+      {
+        code: "const own = '/media/hero.jpg'",
+        options: [{ prefixes: ['/marketing-components/'] }]
+      }
+    ],
+    invalid: [
+      {
+        code: "const logo = '/marketing-components/logos/magalu-extended-color.svg'",
+        errors: [
+          {
+            messageId: 'known',
+            data: {
+              url: '/marketing-components/logos/magalu-extended-color.svg',
+              specifier: '@aziontech/webkit/assets/magalu-extended-color.svg',
+              binding: 'magaluExtendedColor'
+            }
+          }
+        ]
+      },
+      {
+        code: "const badge = '/marketing-components/badges/soc.svg'",
+        errors: [
+          {
+            messageId: 'known',
+            data: {
+              url: '/marketing-components/badges/soc.svg',
+              specifier: '@aziontech/webkit/assets/soc-symbol-color.svg',
+              binding: 'socSymbolColor'
+            }
+          }
+        ]
+      },
+      {
+        code: "const photo = { src: '/media/careers/office-desks.jpg' }",
+        errors: [{ messageId: 'unknown' }]
+      },
+      { code: 'const cover = `/media/blog/${slug}.png`', errors: [{ messageId: 'unknown' }] },
+      {
+        code: "const hero = 'bg-[url(/media/hero.jpg)] bg-cover'",
+        errors: [{ messageId: 'unknown' }]
+      },
+      {
+        code: "const own = '/images/hero.jpg'",
+        options: [{ prefixes: ['/images/'] }],
+        errors: [{ messageId: 'unknown' }]
+      }
+    ]
+  })
+  vue.run('no-root-relative-asset', noRootRelativeAsset, {
+    valid: [
+      {
+        code: `<script setup>
+  import banner from '@aziontech/webkit/assets/placeholder-image.svg'
+</script>
+<template><ArticleBody :banner="banner" href="/media" /></template>`,
+        filename: 'a.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: '<template><ArticleBody banner="/media/blog/banner.svg" /></template>',
+        filename: 'b.vue',
+        errors: [{ messageId: 'unknown' }]
+      },
+      {
+        code: `<template><ClientQuotes :items="[{ logo: '/marketing-components/logos/zoop-extended-color.svg' }]" /></template>`,
+        filename: 'c.vue',
+        errors: [{ messageId: 'known' }]
+      },
+      {
+        code: `<script setup>
+  const photos = [{ src: '/media/careers/team-talk.jpg' }]
+</script>
+<template><PhotoMarquee :photos="photos" /></template>`,
+        filename: 'd.vue',
+        errors: [{ messageId: 'unknown' }]
       }
     ]
   })

@@ -6,7 +6,6 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [vue({ template: { transformAssetUrls: { includeAbsolute: false } } }), tailwindcss()],
-  publicDir: fileURLToPath(new URL('../docs/public', import.meta.url)),
   resolve: {
     alias: [
       {

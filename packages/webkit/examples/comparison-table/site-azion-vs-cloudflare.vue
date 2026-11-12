@@ -2,11 +2,13 @@
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import ComparisonTable from '@aziontech/webkit/comparison-table'
+  import cloudflareExtendedColor from '@aziontech/webkit/assets/cloudflare-extended-color.svg'
+  import cloudflareExtendedReversed from '@aziontech/webkit/assets/cloudflare-extended-reversed.svg'
 
   const competitor = {
     name: 'Cloudflare',
-    logo: '/marketing-components/competitors/cloudflare-extended-reversed.svg',
-    logoLight: '/marketing-components/competitors/cloudflare-extended-color.svg'
+    logo: cloudflareExtendedReversed,
+    logoLight: cloudflareExtendedColor
   }
 
   const groups = [

@@ -1,5 +1,7 @@
 <script setup>
   import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
+  import agibankExtendedColor from '@aziontech/webkit/assets/agibank-extended-color.svg'
+  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
 </script>
 
 <template>
@@ -10,7 +12,7 @@
         text: 'We stopped planning capacity for campaigns. Traffic peaks just work now.',
         name: 'Ana Souza',
         jobTitle: 'Head of Platform, Agibank',
-        logo: '/marketing-components/logos/agibank-extended-color.svg',
+        logo: agibankExtendedColor,
         logoAlt: 'Agibank'
       }"
       :primary-action="{ label: 'Read the story', href: '/customers/agibank', trailing: true }"
@@ -22,7 +24,7 @@
         text: 'Our checkout got faster in every country on the first deploy.',
         name: 'Rafael Lima',
         jobTitle: 'CTO, Netshoes',
-        logo: '/marketing-components/logos/netshoes-extended-color.svg',
+        logo: netshoesExtendedColor,
         logoAlt: 'Netshoes'
       }"
     />

@@ -180,6 +180,18 @@ const Dialog = defineAsyncComponent(() => import('@aziontech/webkit/dialog'))
   nodes are centred, connectors run through the centre of each node and an edge label sits on its
   line. Do not offset nodes or labels to fake that.
 
+### Logos, badges and photos
+
+Logos, compliance badges and illustrations ship in the package: import the file and pass the URL
+(`import magalu from '@aziontech/webkit/assets/magalu-extended-color.svg'`, then
+`logo: magalu`). Names follow `<brand>-<extended|symbol>-<color|mono|reversed>` (`extended` is the
+wordmark, `symbol` the mark; `color` for light surfaces, `reversed` for dark ones, `mono` in one
+ink); `catalog.json` lists every file under `imports` with `"kind": "asset"`. Photos, covers,
+banners and clips are your content: pass URLs your app serves, or
+`@aziontech/webkit/assets/placeholder-image.svg` / `placeholder-clip.webm` until you have them.
+Never copy a root-relative `/marketing-components/…` or `/media/…` URL from azion.com or the docs
+site: your app does not serve it (lint `webkit/no-root-relative-asset`).
+
 ### Large data and server rendering
 
 - Pass the whole list: `Select`, `MultiSelect`, `LogView` and `CodeBlock` mount long lists (over 300 rows) in chunks as they scroll into view, and `Tree` renders collapsed children only when expanded. Do not page or slice the data yourself to make them fast.

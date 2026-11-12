@@ -2,11 +2,13 @@
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import ComparisonTable from '@aziontech/webkit/comparison-table'
+  import vercelExtendedMono from '@aziontech/webkit/assets/vercel-extended-mono.svg'
+  import vercelExtendedReversed from '@aziontech/webkit/assets/vercel-extended-reversed.svg'
 
   const competitor = {
     name: 'Vercel',
-    logo: '/marketing-components/competitors/vercel-extended-reversed.svg',
-    logoLight: '/marketing-components/competitors/vercel-extended-mono.svg'
+    logo: vercelExtendedReversed,
+    logoLight: vercelExtendedMono
   }
 
   const groups = [

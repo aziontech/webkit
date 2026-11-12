@@ -25,6 +25,11 @@ JSON. Never rebuild a band from primitives when a section exists.
   has. Its card grid balances the rows itself — the fewest rows the column cap allows, a short last
   row sharing the width evenly: under three columns 2 → halves, 4 → 2 × 2, 5 → 3 + 2. No row ends
   on an empty cell.
+- Import the logos, badges and illustrations a section shows from
+  `@aziontech/webkit/assets/<file>` (`import zoop from '@aziontech/webkit/assets/zoop-extended-color.svg'`)
+  and pass the import as the item's `logo` / `src`; `catalog.json` lists the files under `imports`
+  with `"kind": "asset"`. Photos, covers and banners are the site's content: pass URLs the app
+  serves, or `@aziontech/webkit/assets/placeholder-image.svg` until it has them.
 
 ## Do not
 
@@ -40,6 +45,9 @@ JSON. Never rebuild a band from primitives when a section exists.
   make a grid "fit"; and do not compose a fixed `grid-cols-3` of cards yourself — `CardGrid` with its
   default `layout="balanced"` is the grid.
 - Do not let the form section fetch, and do not fake a success state in the component.
+- Do not copy a root-relative `/marketing-components/…` or `/media/…` URL from azion.com or the
+  WebKit docs site into another app: it does not serve it and the image breaks (lint
+  `webkit/no-root-relative-asset`).
 
 ## Correct
 

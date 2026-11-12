@@ -1,5 +1,15 @@
 <script setup>
   import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
+  import agibankExtendedColor from '@aziontech/webkit/assets/agibank-extended-color.svg'
+  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
+  import bancoDeLaNacionExtendedMono from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
+  import crefisaExtendedReversed from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
+  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
+  import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import marisaExtendedColor from '@aziontech/webkit/assets/marisa-extended-color.svg'
+  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
+  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
+  import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
 </script>
 
 <template>
@@ -10,51 +20,51 @@
     :logos="[
       {
         name: 'Magalu',
-        logo: '/marketing-components/logos/magalu-extended-color.svg',
+        logo: magaluExtendedColor,
         href: 'https://www.azion.com/en/success-case/magalu/'
       },
       {
         name: 'Banco de la Nación',
-        logo: '/marketing-components/logos/banco-de-la-nacion-extended-mono.svg',
+        logo: bancoDeLaNacionExtendedMono,
         logoTreatment: 'monochrome',
         href: 'https://www.azion.com/en/success-case/banco-de-la-nacion-achieves-speed-and-reduces-costs/'
       },
       {
         name: 'Netshoes',
-        logo: '/marketing-components/logos/netshoes-extended-color.svg',
+        logo: netshoesExtendedColor,
         href: 'https://www.azion.com/en/success-case/netshoes/'
       },
       {
         name: 'Agibank',
-        logo: '/marketing-components/logos/agibank-extended-reversed.svg',
-        logoLight: '/marketing-components/logos/agibank-extended-color.svg',
+        logo: agibankExtendedReversed,
+        logoLight: agibankExtendedColor,
         href: 'https://www.azion.com/en/success-case/agibank/'
       },
       {
         name: 'Zoop',
-        logo: '/marketing-components/logos/zoop-extended-color.svg',
+        logo: zoopExtendedColor,
         href: 'https://www.azion.com/en/success-case/zoop-case-performance-at-scale/'
       },
       {
         name: 'Crefisa',
-        logo: '/marketing-components/logos/crefisa-extended-reversed.svg',
+        logo: crefisaExtendedReversed,
         logoTreatment: 'invert-light',
         href: 'https://www.azion.com/en/success-case/crefisa/'
       },
       {
         name: 'Renner',
-        logo: '/marketing-components/logos/renner-extended-color.svg',
+        logo: rennerExtendedColor,
         href: 'https://www.azion.com/en/success-case/renner/'
       },
       {
         name: 'Fourbank',
-        logo: '/marketing-components/logos/fourbank-extended-reversed.svg',
+        logo: fourbankExtendedReversed,
         logoTreatment: 'invert-light',
         href: 'https://www.azion.com/en/success-case/fourbank/'
       },
       {
         name: 'Marisa',
-        logo: '/marketing-components/logos/marisa-extended-color.svg',
+        logo: marisaExtendedColor,
         href: 'https://www.azion.com/en/success-case/marisa/'
       }
     ]"
@@ -62,7 +72,7 @@
       text: '&quot;Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.&quot;',
       name: 'Ismael Aguilar',
       jobTitle: 'Information Security Manager at Zoop',
-      logo: '/marketing-components/logos/zoop-extended-color.svg',
+      logo: zoopExtendedColor,
       logoAlt: 'Zoop'
     }"
     :primary-action="{

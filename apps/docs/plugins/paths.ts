@@ -9,20 +9,6 @@ export const THEME = join(REPO, 'packages/theme')
 export const CATALOG = join(WEBKIT, 'catalog.json')
 export const SPECS = join(REPO, '.specs')
 export const LLMS = join(WEBKIT, 'llms')
-export const SITE_ASSETS = join(WEBKIT, 'src/assets/site-assets.json')
-
-export function siteAssets(): Record<string, string> {
-  if (!existsSync(SITE_ASSETS)) return {}
-  const table = JSON.parse(readFileSync(SITE_ASSETS, 'utf8')) as Record<string, string>
-  const exportsMap = JSON.parse(readFileSync(join(WEBKIT, 'package.json'), 'utf8'))
-    .exports as Record<string, string>
-  const out: Record<string, string> = {}
-  for (const [url, specifier] of Object.entries(table)) {
-    const file = exportsMap[specifier.replace('@aziontech/webkit/', './')]
-    if (file && existsSync(join(WEBKIT, file))) out[url] = join(WEBKIT, file)
-  }
-  return out
-}
 
 export function walk(dir: string, match: (name: string) => boolean, out: string[] = []): string[] {
   if (!existsSync(dir)) return out

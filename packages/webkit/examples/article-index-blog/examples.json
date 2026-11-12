@@ -4,14 +4,14 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The Blog list at rest. Pick a category or type in the search field to narrow it; when nothing matches, the list and its button are left out.",
+      "summary": "The Blog list at rest. Pick a category or type in the search field to narrow it; when nothing matches, the list and its button are left out. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
       "file": "default.vue"
     }
   ],
   "site": [
     {
       "name": "AllArticles",
-      "summary": "The Blog page's list at rest: All articles selected and no search, rows in the byline layout, and the load-more button.",
+      "summary": "The Blog page's list at rest: All articles selected and no search, rows in the byline layout, and the load-more button. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
       "file": "site-all-articles.vue",
       "json": "site-all-articles.json"
     }

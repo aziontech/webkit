@@ -1,5 +1,10 @@
 <script setup>
   import ComplianceBadges from '@aziontech/webkit/compliance-badges'
+  import ccpaSymbolColor from '@aziontech/webkit/assets/ccpa-symbol-color.svg'
+  import gdprSymbolColor from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
+  import lgpdSymbolColor from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
+  import pciDssSymbolColor from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
+  import socSymbolColor from '@aziontech/webkit/assets/soc-symbol-color.svg'
 </script>
 
 <template>
@@ -11,27 +16,27 @@
     :certifications="[
       {
         label: 'SOC 2 & 3',
-        badge: '/marketing-components/badges/soc.svg',
+        badge: socSymbolColor,
         alt: 'AICPA SOC 2 Type 2 and SOC 3 badge'
       },
       {
         label: 'PCI DSS',
-        badge: '/marketing-components/badges/pci-dss.svg',
+        badge: pciDssSymbolColor,
         alt: 'PCI DSS badge'
       },
       {
         label: 'LGPD',
-        badge: '/marketing-components/badges/lgpd.svg',
+        badge: lgpdSymbolColor,
         alt: 'LGPD badge'
       },
       {
         label: 'GDPR',
-        badge: '/marketing-components/badges/gdpr.svg',
+        badge: gdprSymbolColor,
         alt: 'GDPR badge'
       },
       {
         label: 'CCPA',
-        badge: '/marketing-components/badges/ccpa.svg',
+        badge: ccpaSymbolColor,
         alt: 'CCPA badge'
       }
     ]"

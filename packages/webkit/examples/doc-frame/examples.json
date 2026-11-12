@@ -9,17 +9,17 @@
     },
     {
       "name": "Media",
-      "summary": "One `src` covers both: a still renders as an image with its `alt`, and a source ending in a clip extension (`.mp4`, `.webm`, `.mov`, …) renders as a player, labelled from the same `alt`. A clip the reader chooses to play ships controls.",
+      "summary": "One `src` covers both: a still renders as an image with its `alt`, and a source ending in a clip extension (`.mp4`, `.webm`, `.mov`, …) renders as a player, labelled from the same `alt`. A clip the reader chooses to play ships controls. WebKit ships no screenshots or recordings, so the sources here are the neutral `@aziontech/webkit/assets/placeholder-image.svg` and `placeholder-clip.webm`; pass your own.",
       "file": "media.vue"
     },
     {
       "name": "Autoplay",
-      "summary": "A clip that plays on its own is decoration, so it must not seize the reader's speakers or take over an iOS viewport, and — with nobody there to replay it — it loops. `autoplay` therefore implies muted, inline and looping, and drops the controls. The frame applies the rule on both authoring paths: to the `autoplay` prop, and to a clip written by hand in the slot.",
+      "summary": "A clip that plays on its own is decoration, so it must not seize the reader's speakers or take over an iOS viewport, and — with nobody there to replay it — it loops. `autoplay` therefore implies muted, inline and looping, and drops the controls. The frame applies the rule on both authoring paths: to the `autoplay` prop, and to a clip written by hand in the slot. WebKit ships no recordings, so the clip here is the neutral `@aziontech/webkit/assets/placeholder-clip.webm`; pass your own.",
       "file": "autoplay.vue"
     },
     {
       "name": "Prose",
-      "summary": "The hint precedes the frame and stays on the left edge of the text, because it is read in the flow of the sentence above it. The caption belongs to the picture, so it centers under it. The plain case is the string prop; a caption that carries a bold run, a link or a code chip fills the slot of the same name, and the prop stays as its fallback.",
+      "summary": "The hint precedes the frame and stays on the left edge of the text, because it is read in the flow of the sentence above it. The caption belongs to the picture, so it centers under it. The plain case is the string prop; a caption that carries a bold run, a link or a code chip fills the slot of the same name, and the prop stays as its fallback. WebKit ships no screenshots, so the image here is the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own.",
       "file": "prose.vue"
     }
   ]

@@ -44,7 +44,8 @@ export const STANDARDS = [
       { surface: 'lint', by: 'no-barrel-import' },
       { surface: 'lint', by: 'no-deep-internal-import' },
       { surface: 'lint', by: 'prefer-tree-shakeable-root' },
-      { surface: 'lint', by: 'no-whole-icon-set-import' }
+      { surface: 'lint', by: 'no-whole-icon-set-import' },
+      { surface: 'lint', by: 'no-root-relative-asset' }
     ]
   },
   {

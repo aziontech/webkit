@@ -44,9 +44,7 @@ node ../../packages/webkit/src/cli/cli.js add platform/account/onboarding-form -
 
 Outside this repository the same commands are `npx @aziontech/webkit add <block>`. The shared
 pieces are small: `src/lib/store.ts` (the resources), `src/lib/deploy.ts` (the deploy run and its
-toast), `src/lib/settings.ts` (theme, direction, language) and `src/router.ts`. Images that blocks
-reference by absolute path (`/media/…`, `/logos/…`) come from `apps/docs/public`, which the demos
-use as their public folder.
+toast), `src/lib/settings.ts` (theme, direction, language) and `src/router.ts`. Blocks import their images from `@aziontech/webkit/assets/<file>`, so the demos have no public folder.
 
 Every route is screenshotted by the styled visual suite (`apps/visual`, `tests/demos.spec.ts`),
 which also runs the flows end to end (create, edit, delete, deploy toast, onboarding, assistant).
