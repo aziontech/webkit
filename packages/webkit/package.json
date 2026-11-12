@@ -941,6 +941,7 @@
     "./subject-library": "./src/components/sections/subject-library/subject-library.vue",
     "./template-gallery": "./src/components/sections/template-gallery/template-gallery.vue",
     "./use-case-links": "./src/components/sections/use-case-links/use-case-links.vue",
+    "./card-carousel": "./src/components/sections/card-carousel/card-carousel.vue",
     "./use-cases": "./src/components/sections/use-cases/use-cases.vue",
     "./svg/illustration-layers": "./src/svg/illustration-layers/illustration-layers.vue",
     "./utils/cn": "./src/utils/cn.js",

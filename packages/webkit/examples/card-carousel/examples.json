@@ -1,0 +1,16 @@
+{
+  "component": "card-carousel",
+  "title": "Components/Marketing/Sections/CardCarousel",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The \"See how to use\" band of a product page: the title at the start of the row, the previous and next controls at its end, and six cards in a track that scrolls past the row. Each card is an overline, a heading, a sentence and a mono \"See example\" label; the heading is the link and the whole card is its hit area, so hovering anywhere nudges the arrow.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Plain cards",
+      "summary": "Industries with no overline and no link: each card is a heading and a sentence, with no hover state and no link label. The band takes an eyebrow above its own title.",
+      "file": "plain.vue"
+    }
+  ]
+}

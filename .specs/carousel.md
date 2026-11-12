@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 2
 template: 2
-checksum: 5ec1b3948b100ff6794f2818144af6a7b5b6525b5d4de659d46bb4466d86c95e
+checksum: ee8065eb67b6165dadf899de2b8df7a71e9f1406b9eda67ec823cf99205a6d1c
 created: 2026-09-22
 last_updated: 2026-11-12
 ---
@@ -86,10 +86,10 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 
 ## Props
 
-| Prop        | Type     | Default | Required | JSDoc                                                                    |
-| ----------- | -------- | ------- | -------- | ------------------------------------------------------------------------ |
-| `ariaLabel` | `string` | `''`    | false    | Accessible name for the scrollable track, announced before its contents. |
-| `kind`      | `CarouselKind` | `'strip'` | false | Layout of the row: `strip` sets the cards edge to edge as one ruled strip, `cards` separates them with a gutter and rounds each card. |
+| Prop        | Type           | Default   | Required | JSDoc                                                                                                                                 |
+| ----------- | -------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel` | `string`       | `''`      | false    | Accessible name for the scrollable track, announced before its contents.                                                              |
+| `kind`      | `CarouselKind` | `'strip'` | false    | Layout of the row: `strip` sets the cards edge to edge as one ruled strip, `cards` separates them with a gutter and rounds each card. |
 
 ## Events
 
@@ -97,11 +97,11 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 
 ## Slots
 
-| Slot       | Scope | Notes                                                                                             |
-| ---------- | ----- | ------------------------------------------------------------------------------------------------- |
-| `default`  | —     | The slides, composed as `Carousel.Item` elements in reading order.                                |
+| Slot       | Scope | Notes                                                                                                                                    |
+| ---------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `default`  | —     | The slides, composed as `Carousel.Item` elements in reading order.                                                                       |
 | `controls` | —     | The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track, at the row's end when a header is set. |
-| `header`   | —     | Content at the start of the controls row, usually the band's title; the controls move to the row's end. |
+| `header`   | —     | Content at the start of the controls row, usually the band's title; the controls move to the row's end.                                  |
 
 ## States
 
@@ -127,23 +127,23 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 
 ## Tokens
 
-| Region                      | Token (DESIGN.md)       |
-| --------------------------- | ----------------------- |
-| control surface             | `var(--bg-surface)`     |
-| control border              | `var(--border-default)` |
-| control glyph               | `var(--text-muted)`     |
-| control glyph (hover)       | `var(--text-default)`   |
-| control shape               | `var(--shape-button)`   |
-| card surface                | `var(--bg-surface)`     |
-| card border                 | `var(--border-default)` |
-| card padding                | `var(--spacing-xl)`     |
-| card shape (`cards`)        | `var(--shape-card)`     |
-| gutter (`cards`)            | `var(--spacing-md)`     |
+| Region                      | Token (DESIGN.md)                                                      |
+| --------------------------- | ---------------------------------------------------------------------- |
+| control surface             | `var(--bg-surface)`                                                    |
+| control border              | `var(--border-default)`                                                |
+| control glyph               | `var(--text-muted)`                                                    |
+| control glyph (hover)       | `var(--text-default)`                                                  |
+| control shape               | `var(--shape-button)`                                                  |
+| card surface                | `var(--bg-surface)`                                                    |
+| card border                 | `var(--border-default)`                                                |
+| card padding                | `var(--spacing-xl)`                                                    |
+| card shape (`cards`)        | `var(--shape-card)`                                                    |
+| gutter (`cards`)            | `var(--spacing-md)`                                                    |
 | card width                  | `var(--container-2xs)` / `var(--container-sm)` / `var(--container-md)` |
-| spacing (controls gap)      | `var(--spacing-sm)`     |
-| spacing (controls to track) | `var(--spacing-lg)`     |
-| ring                        | `var(--ring-color)`     |
-| focus ring offset           | `var(--bg-canvas)`      |
+| spacing (controls gap)      | `var(--spacing-sm)`                                                    |
+| spacing (controls to track) | `var(--spacing-lg)`                                                    |
+| ring                        | `var(--ring-color)`                                                    |
+| focus ring offset           | `var(--bg-canvas)`                                                     |
 
 ## Theme gaps
 
@@ -180,7 +180,7 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 ## Performance
 
 - Native scrolling and CSS scroll snap; one scroll listener (passive), one `ResizeObserver` and three window pointer listeners, all released on scope dispose.
-- Bundle budget: `carousel-root` 3.65 KB gzip in `.size-limit.json`.
+- Bundle budget: `carousel-root` 3.85 KB gzip in `.size-limit.json`.
 
 ## Examples
 
