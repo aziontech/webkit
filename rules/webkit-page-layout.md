@@ -72,14 +72,18 @@ follows the nearest container.
 - Never write a literal length (`px`, `rem`) for a layout width; every measure is a token.
 - Never use a viewport breakpoint (`md:`, `lg:`) for a layout that lives inside a band; it breaks
   the moment the band moves into a drawer or a split view.
+- Never render a `<main>`, `AppLayout`, `Sidebar` or `GlobalHeader` in a page: the app layout,
+  composed once in `App.vue`, owns them, and the page is the body of its default slot.
 
 ## Correct
 
+A page body inside the app layout (`ConsoleLayout`, `SiteLayout`, `DocLayout` own the `<main>`):
+
 ```html
-<main class="layout-column-form layout-boundary flex flex-col gap-(--layout-section-gap)">
+<div class="layout-column-form layout-boundary flex flex-col gap-(--layout-section-gap)">
   <section class="flex flex-col gap-(--layout-group-gap)">…</section>
   <section class="flex flex-col gap-(--layout-group-gap)">…</section>
-</main>
+</div>
 ```
 
 ## Wrong

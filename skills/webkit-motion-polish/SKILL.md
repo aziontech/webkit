@@ -2,7 +2,7 @@
 name: webkit-motion-polish
 description: Make motion smooth using only @aziontech/theme animate tokens — animate-* utilities, duration-*/ease-*/curve tokens, compositor-props-only, ≤150ms interaction feedback, and a mandatory motion-reduce escape on every motion class. No external animation library, no inline cubic-bezier, no hardcoded ms.
 status: active
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-motion, webkit-accessibility, ui-verify]
 ---
@@ -239,8 +239,11 @@ per-app copy is a copy that drifts, and the reasoning below is already baked int
 | `animate-page-enter`    | A page arriving on a route change. Travels in from the LEFT — navigation lives on that edge, so a page arriving from it reads as coming FROM the row that was clicked; a plain fade has no origin and a right-side arrival reads as going back. | The **content zone only**, keyed on the route path. Never the shell. |
 | `animate-content-enter` | Content settling inside a page that is already on screen — a load resolving, a list swapping, a step changing. Rises a hair rather than travelling: the page is in place and only its contents changed.                                         | The block that changed.                                              |
 
+`ConsoleLayout` already carries `animate-page-enter` on its `<main>`; write it yourself only on the
+content zone of a shell you own (the focused creation shell):
+
 ```vue
-<!-- the content zone, in the shell -->
+<!-- the content zone of a shell you own -->
 <div :key="route.path" class="animate-page-enter motion-reduce:animate-none overflow-auto">
   <slot />
 </div>

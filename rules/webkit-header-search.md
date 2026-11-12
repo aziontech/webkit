@@ -5,6 +5,11 @@ offers search the same way: one `SearchTrigger` (`@aziontech/webkit/search-trigg
 `GlobalHeader.Right`, opening a `Command` palette, with `⌘K` on macOS and `Ctrl K` elsewhere.
 A header without it is incomplete, even when nobody asked for search.
 
+`ConsoleLayout`, `SiteLayout` and `DocLayout` already render the trigger and the palette, wired to
+`⌘K` / `Ctrl K` and listing their navigation: an app built on them has nothing to add (extra palette
+groups go in their `search` slot; a page opens the console palette with
+`useConsoleLayout().openSearch()`). The sample below is for a header you compose yourself.
+
 ## Do
 
 - Put the trigger first in `GlobalHeader.Right` and wire it to the palette:
@@ -55,15 +60,17 @@ A header without it is incomplete, even when nobody asked for search.
   (`<SiteNav @search="searchOpen = true" />`) and mount the `Command` beside it.
 - Without a `Command` on the page, `@open` still fires on `⌘K` / `Ctrl K`, so a custom search
   dialog gets the shortcut for free.
-- Start from a header or shell block (`headers/docs-header`, `headers/site-header`,
-  `headers/resource-header`, `shells/console`, `shells/documentation`, `shells/website`): each
-  already carries the trigger and the palette.
+- Start from a shell block (`shells/console`, `shells/documentation`, `shells/website`: the app
+  layouts) or a header block (`headers/docs-header`, `headers/site-header`,
+  `headers/resource-header`): each already carries the trigger and the palette.
 
 ## Do not
 
 - Do not hand-roll the field (`<button>` or a read-only `Input` with a magnifier and a `Kbd`), and
   do not put a bare magnifier `IconButton` in a header.
 - Do not bind `⌘K` yourself with a `keydown` listener: `Command` (or the trigger) owns it.
+- Do not mount a second `SearchTrigger` or `Command` inside a page rendered by an app layout: the
+  layout's palette is the one palette.
 - Do not add search to a focused task header (sign-in, a create flow: back, brand, breadcrumb,
   avatar). It has no navigation and stays on the task.
 
