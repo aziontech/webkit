@@ -17,7 +17,7 @@ The application shell every signed-in page renders inside. The user browses and 
 
 ### A. Shell — `ConsoleLayout` (required)
 
-Composed once in `App.vue` around `RouterView`. `navigation` is the console tree as data: groups of rows `{ id, label, icon, to }` (`to` is followed with the app's router; `href` for plain URLs; `kind: 'drill'` with `groups` for Settings; `tagValue` for a `Preview` badge). The active row follows the current route; leave `active-id` empty in the app (this block sets it only because its preview has no router). `breadcrumbs` takes the trail from the route meta (`{ label, to }`; empty on a first-level page). `account` is the signed-in user. The layout renders the rail (resizable and collapsible, a drawer below 768 px of its own width), the header, the `SearchTrigger` wired to the ⌘K `Command` palette (every navigation page is listed), the avatar, and the single `<main>`; a page opens the same palette with `useConsoleLayout().openSearch()`.
+Composed once in `App.vue` around `RouterView`. `navigation` is the console tree as data: groups of rows `{ id, label, icon, href }` (an in-app `href` is followed with the app's router, an external one loads normally; `kind: 'drill'` with `groups` for Settings; `tagValue` for a `Preview` badge). The active row follows the current route; leave `active-id` empty in the app (this block sets it only because its preview has no router). `breadcrumbs` takes the trail from the route meta (`{ label, to }`; empty on a first-level page). `account` is the signed-in user. The layout renders the rail (resizable and collapsible, a drawer below 768 px of its own width), the header, the `SearchTrigger` wired to the ⌘K `Command` palette (every navigation page is listed), the avatar, and the single `<main>`; a page opens the same palette with `useConsoleLayout().openSearch()`.
 
 ### B. Actions — `Button` (required)
 
@@ -67,7 +67,7 @@ Flush (`:padded="false"`), holding the table; the card is the only border.
 
 - Compose `ConsoleLayout` once in `App.vue` and render every browse page through its default slot; replace this block's stand-in body with `<RouterView />`.
 - Keep the navigation in one data file shared by the app; the rail and the palette both read it.
-- Give every row `to` for in-app routes; derive `breadcrumbs` from the route.
+- Give every row an `href` (never `to` or `path`); derive `breadcrumbs` from the route.
 - Frame a list or form body with `layout-boundary` + `layout-column`; open a detail body flush on `PageTabs`.
 
 ## Don't

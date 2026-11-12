@@ -12,8 +12,8 @@ import ConsoleLayout, { type ConsoleLayoutNavGroup } from './console-layout.vue'
 const navigation: ConsoleLayoutNavGroup[] = [
   {
     items: [
-      { id: 'home', label: 'Home', icon: 'pi pi-home', to: '/' },
-      { id: 'workloads', label: 'Workloads', icon: 'pi pi-box', to: '/workloads' }
+      { id: 'home', label: 'Home', icon: 'pi pi-home', href: '/' },
+      { id: 'workloads', label: 'Workloads', icon: 'pi pi-box', href: '/workloads' }
     ]
   },
   {
@@ -31,8 +31,8 @@ const navigation: ConsoleLayoutNavGroup[] = [
           {
             label: 'Settings',
             items: [
-              { id: 'settings-general', label: 'General', to: '/account' },
-              { id: 'settings-users', label: 'Users management', to: '/account/users' }
+              { id: 'settings-general', label: 'General', href: '/account' },
+              { id: 'settings-users', label: 'Users management', href: '/account/users' }
             ]
           }
         ]
@@ -43,9 +43,6 @@ const navigation: ConsoleLayoutNavGroup[] = [
 
 const fakeRouter = (path: string) => ({
   push: vi.fn(),
-  resolve: (to: string | Record<string, unknown>) => ({
-    href: typeof to === 'string' ? to : '/resolved'
-  }),
   currentRoute: ref({ path })
 })
 
@@ -106,7 +103,7 @@ describe('ConsoleLayout', () => {
     expect(row.getAttribute('aria-current')).toBe('page')
   })
 
-  it('follows a `to` row with the router and emits navigate with the row', async () => {
+  it('follows an in-app row with the router and emits navigate with the row', async () => {
     const router = fakeRouter('/')
     const onNavigate = vi.fn()
     const { getByRole } = mount({ onNavigate }, { router })
@@ -137,16 +134,32 @@ describe('ConsoleLayout', () => {
     expect(router.push).not.toHaveBeenCalled()
   })
 
-  it('renders `to` rows as anchors with the resolved address', () => {
+  it('renders rows as anchors to their href', () => {
     const { getByRole } = mount()
     expect(getByRole('link', { name: 'Workloads' }).getAttribute('href')).toBe('/workloads')
     expect(getByRole('link', { name: /Firewall/ }).getAttribute('href')).toBe('/firewall')
   })
 
+  it('follows an external row the browser way, not with the router', async () => {
+    const router = fakeRouter('/')
+    const { getByRole } = mount(
+      {
+        navigation: [
+          {
+            items: [{ id: 'docs', label: 'Docs', href: 'https://www.azion.com/en/documentation/' }]
+          }
+        ]
+      },
+      { router }
+    )
+    await fireEvent.click(getByRole('link', { name: 'Docs' }))
+    expect(router.push).not.toHaveBeenCalled()
+  })
+
   it('shows the breadcrumbs and follows a crumb route with the router', async () => {
     const router = fakeRouter('/workloads/42')
     const { getByRole } = mount(
-      { breadcrumbs: [{ label: 'Workloads', to: '/workloads' }, { label: 'edge-app' }] },
+      { breadcrumbs: [{ label: 'Workloads', href: '/workloads' }, { label: 'edge-app' }] },
       { router }
     )
     const header = within(getByRole('banner'))

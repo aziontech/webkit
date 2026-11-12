@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: eb829c2b760bb780dca3181f7b8857ae302afaf20a0b4627a13a5e983a00d7a8
+checksum: 1144c940caf1fb61c969f41d419ef6ebd1c35245694151998771ce9f226e2031
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -65,7 +65,7 @@ The marketing site's chrome, composed once in the app: `SiteNav` on top, the pag
 
 | Prop                | Type                   | Default     | Required | JSDoc                                                                                                                                                    |
 | ------------------- | ---------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `navigation`        | `SiteLayoutNavigation` | `—`         | true     | The bar, bound onto `SiteNav`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction? }`.                                                   |
+| `navigation`        | `SiteLayoutNavigation` | `—`         | true     | The bar, bound onto `SiteNav`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`.                         |
 | `footer`            | `SiteLayoutFooter`     | `undefined` | false    | The footer, bound onto `SiteFooter`: `{ kind?, home?, columns?, socials?, statusLabel?, languages? }`; `kind` defaults to `site`. No footer when absent. |
 | `searchPlaceholder` | `string`               | `''`        | false    | Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`).                                                                   |
 

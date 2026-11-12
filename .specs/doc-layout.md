@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: b1d4a8474057dc06e50a86f50edce416c5620fde8e7126a8be9e0c786e6e33a7
+checksum: 2de0b57f4dcb0ee241a332b5586fdb62f0b78fe2c8d8dccc3d9d143a1d6d1653
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -38,7 +38,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 ## Best practices
 
 - Compose the layout once, in the app's root; each route renders only its article. Never put a header, a rail or an inner scroll area in a page.
-- Give every navigation row an `id` and `to` (router) or `href`; leave `activeId` empty so the current page follows the route.
+- Give every navigation row an `id` and an `href` (an in-app path is followed with the router; never `to`); leave `activeId` empty so the current page follows the route.
 - Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.
 - Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCta`) in `aside`, and the site footer (`Footer kind="content"`) in `footer`.
 - The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls.
@@ -52,7 +52,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
   const navigation: DocLayoutNavGroup[] = [
     {
       label: 'Get started',
-      items: [{ id: 'first-deploy', label: 'First deploy', to: '/get-started/first-deploy' }]
+      items: [{ id: 'first-deploy', label: 'First deploy', href: '/get-started/first-deploy' }]
     }
   ]
 </script>
@@ -69,39 +69,39 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## Props
 
-| Prop            | Type                  | Default | Required | JSDoc                                                                                                                                                         |
-| --------------- | --------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `navigation`    | `DocLayoutNavGroup[]` | `[]`    | false    | The docs tree: groups of rows, each `{ id, label, icon?, href?, to?, tagValue?, disabled?, kind?, defaultOpen?, children? }`; `to` is followed with the router. |
-| `activeId`      | `string`              | `''`    | false    | Id of the current row. Empty matches the current route against each row's `to` or `href`.                                                                   |
-| `sections`      | `DocLayoutSection[]`  | `[]`    | false    | The header's section links (`Reference`, `Guides`), each `{ label, href?, to? }`; shown from `lg`.                                                           |
-| `home`          | `string`              | `'/'`   | false    | Where the Azion Docs mark links.                                                                                                                              |
-| `outline`       | `DocTocItem[]`        | `[]`    | false    | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused.           |
-| `outlineGroups` | `DocTocGroup[]`       | `[]`    | false    | Complementary link groups under the outline (GitHub, Community).                                                                                              |
-| `ariaLabel`     | `string`              | `''`    | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`).                                                                 |
+| Prop            | Type                  | Default | Required | JSDoc                                                                                                                                                                  |
+| --------------- | --------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `navigation`    | `DocLayoutNavGroup[]` | `[]`    | false    | The docs tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, defaultOpen?, children? }`; an in-app `href` is followed with the router. |
+| `activeId`      | `string`              | `''`    | false    | Id of the current row. Empty matches the current route against each row's `href`.                                                                                      |
+| `sections`      | `DocLayoutSection[]`  | `[]`    | false    | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`.                                                                          |
+| `home`          | `string`              | `'/'`   | false    | Where the Azion Docs mark links.                                                                                                                                       |
+| `outline`       | `DocTocItem[]`        | `[]`    | false    | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused.                    |
+| `outlineGroups` | `DocTocGroup[]`       | `[]`    | false    | Complementary link groups under the outline (GitHub, Community).                                                                                                       |
+| `ariaLabel`     | `string`              | `''`    | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`).                                                                           |
 
 ## v-model
 
-| Model                 | Type      | Default | Emits               | Notes                                                                       |
-| --------------------- | --------- | ------- | ------------------- | --------------------------------------------------------------------------- |
+| Model                 | Type      | Default | Emits               | Notes                                                                         |
+| --------------------- | --------- | ------- | ------------------- | ----------------------------------------------------------------------------- |
 | `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the header search and ⌘K / Ctrl K set it. |
 
 ## Events
 
-| Event           | Payload                                                          | Notes                                                                                                                                           |
-| --------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `navigate`      | `(event: MouseEvent \| KeyboardEvent, item: DocLayoutNavItem)`   | Fired when a navigation row or a palette page is chosen; the layout then follows it (`to` with the router, else `href`). Event first.           |
-| `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fired when a palette item from the `search` slot is chosen. Event first.                                                                        |
+| Event           | Payload                                                         | Notes                                                                                                                                      |
+| --------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `navigate`      | `(event: MouseEvent \| KeyboardEvent, item: DocLayoutNavItem)`  | Fired when a navigation row or a palette page is chosen; the layout then follows its `href` (an in-app path with the router). Event first. |
+| `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fired when a palette item from the `search` slot is chosen. Event first.                                                                   |
 
 ## Slots
 
-| Slot                | Scope               | Notes                                                                                     |
-| ------------------- | ------------------- | ----------------------------------------------------------------------------------------- |
-| `default`           | —                   | The article, rendered inside the layout's `<main>`.                                       |
-| `actions`           | —                   | The header's end actions after the search (GitHub, Console).                              |
-| `navigation-footer` | —                   | The foot of the navigation rail and of the drawer (the theme switch).                     |
-| `aside`             | —                   | Content under the outline in the end rail (a `DocCta`).                                   |
-| `footer`            | —                   | The footer under the article (`Footer kind="content"`).                                   |
-| `search`            | `{ query: string }` | Extra `Command.Group`s listed before the navigation pages.                                |
+| Slot                | Scope               | Notes                                                                 |
+| ------------------- | ------------------- | --------------------------------------------------------------------- |
+| `default`           | —                   | The article, rendered inside the layout's `<main>`.                   |
+| `actions`           | —                   | The header's end actions after the search (GitHub, Console).          |
+| `navigation-footer` | —                   | The foot of the navigation rail and of the drawer (the theme switch). |
+| `aside`             | —                   | Content under the outline in the end rail (a `DocCta`).               |
+| `footer`            | —                   | The footer under the article (`Footer kind="content"`).               |
+| `search`            | `{ query: string }` | Extra `Command.Group`s listed before the navigation pages.            |
 
 ## States
 
@@ -111,23 +111,24 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition                   | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                       |
-| ------------------ | ---------------------------------------- | ------------------------------------------------- | --------------------------------------------- |
-| outline jump       | smooth window scroll                     | browser                                           | instant scroll under `prefers-reduced-motion` |
-| brand hover        | `transition-opacity` on the mark link    | `duration-fast-02` · `ease-productive-entrance`   | `motion-reduce:transition-none`               |
-| drawer, palette    | `Drawer`, `Command`                      | component                                         | handled by those components                   |
+| Trigger         | Animation / Transition                | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                       |
+| --------------- | ------------------------------------- | ------------------------------------------------- | --------------------------------------------- |
+| outline jump    | smooth window scroll                  | browser                                           | instant scroll under `prefers-reduced-motion` |
+| brand hover     | `transition-opacity` on the mark link | `duration-fast-02` · `ease-productive-entrance`   | `motion-reduce:transition-none`               |
+| drawer, palette | `Drawer`, `Command`                   | component                                         | handled by those components                   |
 
 ## Tokens
 
-| Region              | Token (DESIGN.md)                                                    |
-| ------------------- | -------------------------------------------------------------------- |
-| canvas              | `var(--bg-canvas)`, `var(--text-default)`                            |
-| rail widths         | `var(--container-2xs)` (navigation), `var(--container-3xs)` (outline) |
-| rail rules          | `var(--border-default)`                                              |
-| badge               | `.text-overline-sm`, `var(--text-muted)`, `var(--border-muted)`      |
-| end rail padding    | `var(--spacing-md)`, `var(--spacing-lg)`                             |
-| gaps                | `var(--spacing-xs)`, `var(--spacing-lg)`                             |
-| ring                | `var(--ring-color)`, offset `var(--bg-canvas)`                       |
+| Region             | Token (DESIGN.md)                                                     |
+| ------------------ | --------------------------------------------------------------------- |
+| canvas             | `var(--bg-canvas)`, `var(--text-default)`                             |
+| sticky rail offset | `var(--layout-header-height)`                                         |
+| rail widths        | `var(--container-2xs)` (navigation), `var(--container-3xs)` (outline) |
+| rail rules         | `var(--border-default)`                                               |
+| badge              | `.text-overline-sm`, `var(--text-muted)`, `var(--border-muted)`       |
+| end rail padding   | `var(--spacing-md)`, `var(--spacing-lg)`                              |
+| gaps               | `var(--spacing-xs)`, `var(--spacing-lg)`                              |
+| ring               | `var(--ring-color)`, offset `var(--bg-canvas)`                        |
 
 ## Theme gaps
 
@@ -144,16 +145,16 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## Internationalization
 
-| Key                        | English source                   | Override prop |
-| -------------------------- | -------------------------------- | ------------- |
-| `docLayout.navigation`     | `Documentation`                  | `ariaLabel`   |
-| `docLayout.sections`       | `Documentation sections`         | —             |
-| `docLayout.home`           | `Azion Docs home`                | —             |
-| `docLayout.badge`          | `Docs`                           | —             |
-| `docLayout.openNavigation` | `Open documentation navigation`  | —             |
-| `docLayout.search`         | `Search docs`                    | —             |
-| `docLayout.searchEmpty`    | `No page matches your search.`   | —             |
-| `docLayout.pages`          | `Pages`                          | —             |
+| Key                        | English source                  | Override prop |
+| -------------------------- | ------------------------------- | ------------- |
+| `docLayout.navigation`     | `Documentation`                 | `ariaLabel`   |
+| `docLayout.sections`       | `Documentation sections`        | —             |
+| `docLayout.home`           | `Azion Docs home`               | —             |
+| `docLayout.badge`          | `Docs`                          | —             |
+| `docLayout.openNavigation` | `Open documentation navigation` | —             |
+| `docLayout.search`         | `Search docs`                   | —             |
+| `docLayout.searchEmpty`    | `No page matches your search.`  | —             |
+| `docLayout.pages`          | `Pages`                         | —             |
 
 - Formatting: none. Navigation and outline text is consumer data.
 

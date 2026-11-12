@@ -11,13 +11,13 @@ const navigation: DocLayoutNavGroup[] = [
   {
     label: 'Fundamentals',
     items: [
-      { id: 'overview', label: 'Overview', to: '/docs' },
+      { id: 'overview', label: 'Overview', href: '/docs' },
       {
         id: 'get-started',
         label: 'Get started',
         children: [
-          { id: 'create-account', label: 'Create an account', to: '/docs/create-account' },
-          { id: 'first-deploy', label: 'First deploy', to: '/docs/first-deploy' }
+          { id: 'create-account', label: 'Create an account', href: '/docs/create-account' },
+          { id: 'first-deploy', label: 'First deploy', href: '/docs/first-deploy' }
         ]
       }
     ]
@@ -31,7 +31,6 @@ const outline = [
 
 const fakeRouter = (path: string) => ({
   push: vi.fn(),
-  resolve: (to: string) => ({ href: to }),
   currentRoute: ref({ path })
 })
 
@@ -59,7 +58,7 @@ const mount = (
             {
               navigation,
               outline,
-              sections: [{ label: 'Guides', to: '/docs/guides' }],
+              sections: [{ label: 'Guides', href: '/docs/guides' }],
               ...props
             },
             { default: article, ...slots }

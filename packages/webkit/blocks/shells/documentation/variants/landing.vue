@@ -16,9 +16,9 @@
   import { ref } from 'vue'
 
   const sections = [
-    { label: 'Reference', to: '/docs/reference' },
-    { label: 'Guides', to: '/docs/guides' },
-    { label: 'Dev tools', to: '/docs/dev-tools' }
+    { label: 'Reference', href: '/docs/reference' },
+    { label: 'Guides', href: '/docs/guides' },
+    { label: 'Dev tools', href: '/docs/dev-tools' }
   ]
 
   const gettingStarted = ['Fundamentals', 'Agent setup', 'Use cases', 'Support', 'Marketplace']
@@ -39,13 +39,13 @@
     {
       label: 'Getting started',
       items: [
-        { id: 'overview', label: 'Overview', to: '/docs' },
-        ...gettingStarted.map((label) => ({ id: slug(label), label, to: `/docs/${slug(label)}` }))
+        { id: 'overview', label: 'Overview', href: '/docs' },
+        ...gettingStarted.map((label) => ({ id: slug(label), label, href: `/docs/${slug(label)}` }))
       ]
     },
     {
       label: 'Platform resources',
-      items: platform.map((label) => ({ id: slug(label), label, to: `/docs/${slug(label)}` }))
+      items: platform.map((label) => ({ id: slug(label), label, href: `/docs/${slug(label)}` }))
     }
   ]
 

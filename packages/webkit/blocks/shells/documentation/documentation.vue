@@ -14,34 +14,38 @@
   import { ref } from 'vue'
 
   const sections = [
-    { label: 'Reference', to: '/docs/reference' },
-    { label: 'Guides', to: '/docs/guides' },
-    { label: 'Dev tools', to: '/docs/dev-tools' }
+    { label: 'Reference', href: '/docs/reference' },
+    { label: 'Guides', href: '/docs/guides' },
+    { label: 'Dev tools', href: '/docs/dev-tools' }
   ]
 
   const navigation = [
     {
       label: 'Functions',
       items: [
-        { id: 'functions-overview', label: 'Overview', to: '/docs/functions' },
+        { id: 'functions-overview', label: 'Overview', href: '/docs/functions' },
         {
           id: 'functions-getting-started',
           label: 'Getting started',
-          to: '/docs/functions/getting-started'
+          href: '/docs/functions/getting-started'
         },
-        { id: 'functions-how-it-works', label: 'How it works', to: '/docs/functions/how-it-works' },
-        { id: 'functions-examples', label: 'Examples', to: '/docs/functions/examples' },
-        { id: 'functions-reference', label: 'Reference', to: '/docs/functions/reference' },
-        { id: 'functions-limits', label: 'Limits', to: '/docs/functions/limits' },
+        {
+          id: 'functions-how-it-works',
+          label: 'How it works',
+          href: '/docs/functions/how-it-works'
+        },
+        { id: 'functions-examples', label: 'Examples', href: '/docs/functions/examples' },
+        { id: 'functions-reference', label: 'Reference', href: '/docs/functions/reference' },
+        { id: 'functions-limits', label: 'Limits', href: '/docs/functions/limits' },
         {
           id: 'functions-best-practices',
           label: 'Best practices',
-          to: '/docs/functions/best-practices'
+          href: '/docs/functions/best-practices'
         },
         {
           id: 'functions-troubleshooting',
           label: 'Troubleshooting',
-          to: '/docs/functions/troubleshooting'
+          href: '/docs/functions/troubleshooting'
         }
       ]
     }

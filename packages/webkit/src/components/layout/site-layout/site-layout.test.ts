@@ -43,7 +43,6 @@ const footer: SiteLayoutFooter = {
 
 const fakeRouter = () => ({
   push: vi.fn(),
-  resolve: (to: string) => ({ href: to }),
   currentRoute: ref({ path: '/' })
 })
 

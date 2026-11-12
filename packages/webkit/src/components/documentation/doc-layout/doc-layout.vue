@@ -4,7 +4,6 @@
   import {
     type AppNavGroup,
     type AppNavItem,
-    type AppRouteTarget,
     matchActiveId,
     navLeaves,
     navPaletteGroups,
@@ -55,7 +54,7 @@
     inheritAttrs: false
   })
 
-  /** One row of the docs tree: `to` for an in-app route, `href` for a plain URL. */
+  /** One row of the docs tree; an in-app `href` is followed with the app's router. */
   export type DocLayoutNavItem = AppNavItem
 
   /** A titled section of the docs tree. */
@@ -65,16 +64,14 @@
   export type DocLayoutSection = {
     /** Visible text. */
     label: string
-    /** A plain URL. */
+    /** Where the segment leads; an in-app path is followed with the app's router. */
     href?: string
-    /** An in-app route, followed with the app's router. */
-    to?: AppRouteTarget
   }
 
   interface Props {
-    /** The docs tree: groups of rows, each with an id, a label and a `to` route or an `href`. */
+    /** The docs tree: groups of rows, each with an id, a label and an `href`. */
     navigation?: DocLayoutNavGroup[]
-    /** Id of the current row. Empty matches the current route against each row's `to` or `href`. */
+    /** Id of the current row. Empty matches the current route against each row's `href`. */
     activeId?: string
     /** The header's section links, shown from `lg`. */
     sections?: DocLayoutSection[]
@@ -99,7 +96,7 @@
   })
 
   const emit = defineEmits<{
-    /** A navigation row or a palette page was chosen; the layout then follows its `to` or `href`. */
+    /** A navigation row or a palette page was chosen; the layout then follows its `href`. */
     navigate: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, item: DocLayoutNavItem]
     /** A palette item from the `search` slot was chosen. */
     'search-select': [
@@ -255,7 +252,7 @@
   }
 
   const onSection = (event: globalThis.MouseEvent, section: DocLayoutSection) => {
-    if (section.to !== undefined) follow(event, section)
+    follow(event, section)
   }
 
   const onQuery = (value: unknown) => {
@@ -356,7 +353,9 @@
         v-if="navigation.length || $slots['navigation-footer']"
         class="hidden w-(--container-2xs) shrink-0 lg:block"
       >
-        <div class="sticky top-14 flex h-[calc(100dvh-3.5rem)]">
+        <div
+          class="sticky top-(--layout-header-height) flex h-[calc(100dvh-var(--layout-header-height))]"
+        >
           <Sidebar
             :aria-label="ariaLabel || t('docLayout.navigation')"
             :data-testid="`${testId}__navigation`"
@@ -398,7 +397,7 @@
         class="hidden w-(--container-3xs) shrink-0 border-s border-(--border-default) xl:block"
       >
         <div
-          class="sticky top-14 flex max-h-[calc(100dvh-3.5rem)] flex-col gap-(--spacing-lg) overflow-y-auto px-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg)"
+          class="sticky top-(--layout-header-height) flex max-h-[calc(100dvh-var(--layout-header-height))] flex-col gap-(--spacing-lg) overflow-y-auto px-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg)"
         >
           <DocOnThisPage
             v-if="outline.length"

@@ -34,9 +34,9 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
 </template>
 ```
 
-- **Console:** `ConsoleLayout` — navigation rows `{ id, label, icon, to }` (`to` is followed with
-  the app's router; `href` for plain URLs) and the active row follows the route; `actions`,
-  `account-menu`, `search`, `header-start`, `breadcrumbs`, `notifications` and `tools` slots. A page
+- **Console:** `ConsoleLayout` — navigation rows `{ id, label, icon, href }` (an in-app `href` is
+  followed with the app's router, no `@navigate` wiring needed) and the active row follows the
+  route; `actions`, `account-menu`, `search`, `header-start`, `breadcrumbs`, `notifications` and `tools` slots. A page
   opens the shared palette with `useConsoleLayout().openSearch()`
   (`@aziontech/webkit/use-console-layout`).
 - **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteNav` and `SiteFooter` data. The

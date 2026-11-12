@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, watch } from 'vue'
 
-  import { type AppLinkTarget, useAppNavigation } from '../../../composables/use-app-navigation'
+  import { useAppNavigation } from '../../../composables/use-app-navigation'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Command from '../../overlay/command/command.vue'
@@ -36,6 +36,8 @@
     primaryAction?: SiteNavLink
     /** The login button. */
     secondaryAction?: SiteNavLink
+    /** Keeps the login button in the bar on phones too. */
+    secondaryActionOnPhones?: boolean
   }
 
   /** The site footer, bound onto `SiteFooter`. */
@@ -178,9 +180,7 @@
       return
     }
     emit('navigate', event, page)
-    const inSite = page.href.startsWith('/') && !page.href.startsWith('//')
-    const link: AppLinkTarget = inSite ? { to: page.href } : { href: page.href }
-    follow(event, link)
+    follow(event, page)
   }
 </script>
 

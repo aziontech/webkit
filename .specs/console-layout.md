@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 395767db00384b439d2cc0bcb3fce7e2bcf535fd394d421fb86872bb0f3d5d15
+checksum: af9e74cd9ef68404f51ae9e45e286de1a8371feac5a9041ce36557c3bf8c8aec
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-12
 
 ## Purpose
 
-The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `Menu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with `href` or a router `to`), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
+The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `Menu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
 
 ## When to use
 
@@ -38,7 +38,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 ## Best practices
 
 - Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.
-- Give every navigation row an `id` and either `to` (a router route, followed with the app's router) or `href` (a plain URL); a row with neither is handled by your `navigate` handler alone. Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
+- Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/menu-node-href`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
 - Pass the page's trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
@@ -56,8 +56,8 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'home', label: 'Home', icon: 'pi pi-home', to: '/' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', to: '/workloads' }
+        { id: 'home', label: 'Home', icon: 'pi pi-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' }
       ]
     }
   ]
@@ -76,16 +76,16 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 ## Props
 
-| Prop                | Type                      | Default     | Required | JSDoc                                                                                                                                                                  |
-| ------------------- | ------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `navigation`        | `ConsoleLayoutNavGroup[]` | `[]`        | false    | The navigation tree: groups of rows, each `{ id, label, icon?, href?, to?, tagValue?, disabled?, kind?, children?, groups? }`; `to` is followed with the app's router. |
-| `activeId`          | `string`                  | `''`        | false    | Id of the current row. Empty matches the current route against each row's `to` or `href`.                                                                              |
-| `breadcrumbs`       | `ConsoleLayoutCrumb[]`    | `[]`        | false    | The trail shown in the header on wide layouts; each is `{ label, href?, to? }` and the last one is the current page.                                                   |
-| `home`              | `string`                  | `'/'`       | false    | Where the brand mark links.                                                                                                                                            |
-| `account`           | `ConsoleLayoutAccount`    | `undefined` | false    | The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent.                              |
-| `ariaLabel`         | `string`                  | `''`        | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`).                                                                         |
-| `searchPlaceholder` | `string`                  | `''`        | false    | Placeholder of the palette's input. Empty uses the locale catalog (`Search pages and commands`).                                                                       |
-| `toolsLabel`        | `string`                  | `''`        | false    | Title of the tools region (help, notifications). Empty uses `AppLayout`'s catalog (`Help`).                                                                            |
+| Prop                | Type                      | Default     | Required | JSDoc                                                                                                                                                                         |
+| ------------------- | ------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `navigation`        | `ConsoleLayoutNavGroup[]` | `[]`        | false    | The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router. |
+| `activeId`          | `string`                  | `''`        | false    | Id of the current row. Empty matches the current route against each row's `href`.                                                                                             |
+| `breadcrumbs`       | `ConsoleLayoutCrumb[]`    | `[]`        | false    | The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page.                                                               |
+| `home`              | `string`                  | `'/'`       | false    | Where the brand mark links.                                                                                                                                                   |
+| `account`           | `ConsoleLayoutAccount`    | `undefined` | false    | The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent.                                     |
+| `ariaLabel`         | `string`                  | `''`        | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`).                                                                                |
+| `searchPlaceholder` | `string`                  | `''`        | false    | Placeholder of the palette's input. Empty uses the locale catalog (`Search pages and commands`).                                                                              |
+| `toolsLabel`        | `string`                  | `''`        | false    | Title of the tools region (help, notifications). Empty uses `AppLayout`'s catalog (`Help`).                                                                                   |
 
 ## v-model
 
@@ -96,10 +96,10 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 ## Events
 
-| Event           | Payload                                                            | Notes                                                                                                                                                                                   |
-| --------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `navigate`      | `(event: MouseEvent \| KeyboardEvent, item: ConsoleLayoutNavItem)` | Fired when a navigation row or a palette page is chosen; the layout then follows it (`to` with the app's router, else `href`). A row with neither is left to this handler. Event first. |
-| `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)`    | Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first.                                                                                  |
+| Event           | Payload                                                            | Notes                                                                                                                                                                                          |
+| --------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `navigate`      | `(event: MouseEvent \| KeyboardEvent, item: ConsoleLayoutNavItem)` | Fired when a navigation row or a palette page is chosen; the layout then follows its `href` (an in-app path with the app's router). A row without `href` is left to this handler. Event first. |
+| `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)`    | Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first.                                                                                         |
 
 ## Slots
 

@@ -20,9 +20,14 @@
   const navigation = [
     {
       items: [
-        { id: 'overview', label: 'Overview', icon: 'ai ai-home', to: '/' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', to: '/workloads' },
-        { id: 'deployments', label: 'Deployments', icon: 'ai ai-deploy-pillar', to: '/deployments' }
+        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' },
+        {
+          id: 'deployments',
+          label: 'Deployments',
+          icon: 'ai ai-deploy-pillar',
+          href: '/deployments'
+        }
       ]
     },
     {
@@ -32,36 +37,41 @@
           id: 'applications',
           label: 'Applications',
           icon: 'ai ai-edge-application',
-          to: '/applications'
+          href: '/applications'
         },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', to: '/functions' },
-        { id: 'variables', label: 'Variables', icon: 'ai ai-variables', to: '/variables' },
-        { id: 'connectors', label: 'Connectors', icon: 'ai ai-edge-connectors', to: '/connectors' },
+        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' },
+        { id: 'variables', label: 'Variables', icon: 'ai ai-variables', href: '/variables' },
+        {
+          id: 'connectors',
+          label: 'Connectors',
+          icon: 'ai ai-edge-connectors',
+          href: '/connectors'
+        },
         {
           id: 'custom-pages',
           label: 'Custom Pages',
           icon: 'ai ai-custom-pages',
-          to: '/custom-pages'
+          href: '/custom-pages'
         }
       ]
     },
     {
       label: 'Secure',
       items: [
-        { id: 'firewall', label: 'Firewall', icon: 'ai ai-edge-firewall', to: '/firewall' },
-        { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', to: '/edge-dns' },
-        { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules', to: '/waf-rules' },
+        { id: 'firewall', label: 'Firewall', icon: 'ai ai-edge-firewall', href: '/firewall' },
+        { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', href: '/edge-dns' },
+        { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules', href: '/waf-rules' },
         {
           id: 'certificate-manager',
           label: 'Certificate Manager',
           icon: 'ai ai-certificate-manager',
-          to: '/certificate-manager'
+          href: '/certificate-manager'
         },
         {
           id: 'network-lists',
           label: 'Network Lists',
           icon: 'ai ai-network-lists',
-          to: '/network-lists'
+          href: '/network-lists'
         }
       ]
     },
@@ -72,13 +82,13 @@
           id: 'object-storage',
           label: 'Object Storage',
           icon: 'ai ai-edge-storage',
-          to: '/object-storage'
+          href: '/object-storage'
         },
         {
           id: 'sql-database',
           label: 'SQL Database',
           icon: 'ai ai-edge-sql',
-          to: '/sql-database',
+          href: '/sql-database',
           tagValue: 'Preview'
         }
       ]
@@ -86,32 +96,42 @@
     {
       label: 'Observe',
       items: [
-        { id: 'data-stream', label: 'Data Stream', icon: 'ai ai-data-stream', to: '/data-stream' },
-        { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse', to: '/edge-pulse' },
+        {
+          id: 'data-stream',
+          label: 'Data Stream',
+          icon: 'ai ai-data-stream',
+          href: '/data-stream'
+        },
+        { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse', href: '/edge-pulse' },
         {
           id: 'real-time-metrics',
           label: 'Real-Time Metrics',
           icon: 'ai ai-real-time-metrics',
-          to: '/real-time-metrics'
+          href: '/real-time-metrics'
         },
         {
           id: 'real-time-events',
           label: 'Real-Time Events',
           icon: 'ai ai-real-time-events',
-          to: '/real-time-events'
+          href: '/real-time-events'
         },
         {
           id: 'real-time-purge',
           label: 'Real-Time Purge',
           icon: 'ai ai-real-time-purge',
-          to: '/real-time-purge'
+          href: '/real-time-purge'
         }
       ]
     },
     {
       label: 'More',
       items: [
-        { id: 'marketplace', label: 'Marketplace', icon: 'ai ai-marketplace', to: '/marketplace' },
+        {
+          id: 'marketplace',
+          label: 'Marketplace',
+          icon: 'ai ai-marketplace',
+          href: '/marketplace'
+        },
         {
           id: 'settings',
           label: 'Settings',
@@ -121,36 +141,36 @@
             {
               label: 'Settings',
               items: [
-                { id: 'settings-general', label: 'General', to: '/settings' },
+                { id: 'settings-general', label: 'General', href: '/settings' },
                 {
                   id: 'settings-build',
                   label: 'Build and deployment',
-                  to: '/settings/build-deployment'
+                  href: '/settings/build-deployment'
                 },
                 {
                   id: 'settings-environments',
                   label: 'Environments',
-                  to: '/settings/environments'
+                  href: '/settings/environments'
                 },
-                { id: 'settings-users', label: 'Users management', to: '/settings/users' },
-                { id: 'settings-teams', label: 'Teams and permissions', to: '/settings/teams' }
+                { id: 'settings-users', label: 'Users management', href: '/settings/users' },
+                { id: 'settings-teams', label: 'Teams and permissions', href: '/settings/teams' }
               ]
             },
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal tokens', to: '/settings/tokens' },
-                { id: 'settings-credentials', label: 'Credentials', to: '/settings/credentials' },
-                { id: 'settings-mfa', label: 'Multi-factor auth', to: '/settings/mfa' },
-                { id: 'settings-sessions', label: 'Active sessions', to: '/settings/sessions' },
-                { id: 'settings-activity', label: 'Activity history', to: '/settings/activity' }
+                { id: 'settings-tokens', label: 'Personal tokens', href: '/settings/tokens' },
+                { id: 'settings-credentials', label: 'Credentials', href: '/settings/credentials' },
+                { id: 'settings-mfa', label: 'Multi-factor auth', href: '/settings/mfa' },
+                { id: 'settings-sessions', label: 'Active sessions', href: '/settings/sessions' },
+                { id: 'settings-activity', label: 'Activity history', href: '/settings/activity' }
               ]
             },
             {
               label: 'Billing',
               items: [
-                { id: 'settings-billing', label: 'Billing and plan', to: '/settings/billing' },
-                { id: 'settings-invoices', label: 'Invoices', to: '/settings/invoices' }
+                { id: 'settings-billing', label: 'Billing and plan', href: '/settings/billing' },
+                { id: 'settings-invoices', label: 'Invoices', href: '/settings/invoices' }
               ]
             }
           ]

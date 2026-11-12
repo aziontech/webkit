@@ -14,7 +14,7 @@ The documentation shell. A reader comes to learn one task and leave, so the shel
 
 ### A. Layout — `DocLayout` (required)
 
-Composed once around the router view. `navigation` is the docs tree as data (groups of rows with `id`, `label` and `to`; an inline subsection is a row with `children` and `defaultOpen`), `sections` the header's section links, `home` where the Azion Docs mark links, `outline` the article's headings (`{ id, text, depth }`) and `outline-groups` the GitHub and Community links under them. It renders the single main landmark, the rail from `lg` (a drawer below it), the outline from `xl`, and the ⌘K palette of every navigation page. In an app leave `active-id` empty so the current row follows the route; the preview has no router, so it passes the current row's id.
+Composed once around the router view. `navigation` is the docs tree as data (groups of rows with `id`, `label` and `href`; an inline subsection is a row with `children` and `defaultOpen`), `sections` the header's section links, `home` where the Azion Docs mark links, `outline` the article's headings (`{ id, text, depth }`) and `outline-groups` the GitHub and Community links under them. It renders the single main landmark, the rail from `lg` (a drawer below it), the outline from `xl`, and the ⌘K palette of every navigation page. In an app leave `active-id` empty so the current row follows the route; the preview has no router, so it passes the current row's id.
 
 ### B. Header actions — `IconButton` (required)
 
@@ -66,7 +66,7 @@ In the footer's language slot, trigger labelled `Language`.
 - For a real page, start from a variant (Article, Reference, Landing): the variants build the article from the `Doc*` parts only.
 - Give every `DocHeading` an `id` and pass the same ids, in document order, as `outline`.
 - Put everything under `DocPageHeader` in one `DocProse`.
-- Give every navigation row an `id` and a `to` route; keep the rail scoped to the current product; the header section links switch products.
+- Give every navigation row an `id` and an `href` (an in-app path is followed with the router); keep the rail scoped to the current product; the header section links switch products.
 - Build a docs home from the Landing variant: `DocHero` with `CopyPromptButton`, then `DocAgentCard` above the Console / CLI / API cards; pass no `outline`.
 - Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocStep`, with its command as a `CodeBlock` inside the same step.
 

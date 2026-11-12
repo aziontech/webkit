@@ -19,32 +19,32 @@
   import { ref } from 'vue'
 
   const sections = [
-    { label: 'Reference', to: '/docs/reference' },
-    { label: 'Guides', to: '/docs/guides' },
-    { label: 'Dev tools', to: '/docs/dev-tools' }
+    { label: 'Reference', href: '/docs/reference' },
+    { label: 'Guides', href: '/docs/guides' },
+    { label: 'Dev tools', href: '/docs/dev-tools' }
   ]
 
   const navigation = [
     {
       label: 'Applications',
       items: [
-        { id: 'applications-overview', label: 'Overview', to: '/docs/applications' },
+        { id: 'applications-overview', label: 'Overview', href: '/docs/applications' },
         {
           id: 'applications-quickstart',
           label: 'Quickstart',
-          to: '/docs/applications/quickstart'
+          href: '/docs/applications/quickstart'
         },
         {
           id: 'applications-how-it-works',
           label: 'How it works',
-          to: '/docs/applications/how-it-works'
+          href: '/docs/applications/how-it-works'
         },
-        { id: 'applications-cache', label: 'Cache', to: '/docs/applications/cache' },
-        { id: 'applications-limits', label: 'Limits', to: '/docs/applications/limits' },
+        { id: 'applications-cache', label: 'Cache', href: '/docs/applications/cache' },
+        { id: 'applications-limits', label: 'Limits', href: '/docs/applications/limits' },
         {
           id: 'applications-troubleshooting',
           label: 'Troubleshooting',
-          to: '/docs/applications/troubleshooting'
+          href: '/docs/applications/troubleshooting'
         }
       ]
     }

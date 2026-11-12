@@ -2,10 +2,8 @@
   import { computed, provide, readonly, ref, useAttrs, watch } from 'vue'
 
   import {
-    type AppLinkTarget,
     type AppNavGroup,
     type AppNavItem,
-    type AppRouteTarget,
     matchActiveId,
     navLeaves,
     navPaletteGroups,
@@ -45,23 +43,18 @@
     inheritAttrs: false
   })
 
-  /** One row of the console navigation: `to` for an in-app route, `href` for a plain URL. */
+  /** One row of the console navigation; an in-app `href` is followed with the app's router. */
   export type ConsoleLayoutNavItem = AppNavItem
 
   /** A titled section of the console navigation. */
   export type ConsoleLayoutNavGroup = AppNavGroup
 
-  /** An in-app route, a path or a router location object. */
-  export type ConsoleLayoutRoute = AppRouteTarget
-
   /** One segment of the header trail; the last one is the current page. */
   export type ConsoleLayoutCrumb = {
     /** Visible segment text. */
     label: string
-    /** A plain URL. */
+    /** Where the segment leads; an in-app path is followed with the app's router. */
     href?: string
-    /** An in-app route, followed with the app's router. */
-    to?: AppRouteTarget
   }
 
   /** The signed-in account. */
@@ -75,9 +68,9 @@
   }
 
   interface Props {
-    /** The navigation tree: groups of rows, each with an id, a label and a `to` route or an `href`. */
+    /** The navigation tree: groups of rows, each with an id, a label and an `href`. */
     navigation?: ConsoleLayoutNavGroup[]
-    /** Id of the current row. Empty matches the current route against each row's `to` or `href`. */
+    /** Id of the current row. Empty matches the current route against each row's `href`. */
     activeId?: string
     /** The trail shown in the header on wide layouts; the last one is the current page. */
     breadcrumbs?: ConsoleLayoutCrumb[]
@@ -105,7 +98,7 @@
   })
 
   const emit = defineEmits<{
-    /** A navigation row or a palette page was chosen; the layout then follows its `to` or `href`. */
+    /** A navigation row or a palette page was chosen; the layout then follows its `href`. */
     navigate: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, item: ConsoleLayoutNavItem]
     /** A palette item from the `search` slot was chosen. */
     'search-select': [
@@ -228,7 +221,7 @@
 
   const onCrumbNavigate = (event: globalThis.MouseEvent, href: string) => {
     const crumb = props.breadcrumbs.find((entry) => hrefOf(entry) === href)
-    if (crumb) follow(event, crumb as AppLinkTarget)
+    if (crumb) follow(event, crumb)
   }
 
   const onPaletteSelect = (

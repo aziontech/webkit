@@ -12,14 +12,14 @@
     {
       label: 'Fundamentals',
       items: [
-        { id: 'overview', label: 'Overview', to: '/docs' },
+        { id: 'overview', label: 'Overview', href: '/docs' },
         {
           id: 'get-started',
           label: 'Get started',
           defaultOpen: true,
           children: [
-            { id: 'create-account', label: 'Create an account', to: '/docs/create-account' },
-            { id: 'first-deploy', label: 'First deploy', to: '/docs/first-deploy' }
+            { id: 'create-account', label: 'Create an account', href: '/docs/create-account' },
+            { id: 'first-deploy', label: 'First deploy', href: '/docs/first-deploy' }
           ]
         }
       ]
@@ -39,8 +39,8 @@
   <DocLayout
     :navigation="navigation"
     :sections="[
-      { label: 'Guides', to: '/docs' },
-      { label: 'Reference', to: '/docs/reference' }
+      { label: 'Guides', href: '/docs' },
+      { label: 'Reference', href: '/docs/reference' }
     ]"
     :outline="outline"
     active-id="first-deploy"

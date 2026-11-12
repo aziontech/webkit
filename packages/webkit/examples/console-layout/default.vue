@@ -12,8 +12,8 @@
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'overview', label: 'Overview', icon: 'ai ai-home', to: '/' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', to: '/workloads' }
+        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' }
       ]
     },
     {
@@ -23,9 +23,9 @@
           id: 'applications',
           label: 'Applications',
           icon: 'ai ai-edge-application',
-          to: '/applications'
+          href: '/applications'
         },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', to: '/functions' }
+        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' }
       ]
     },
     {
@@ -35,7 +35,7 @@
           id: 'sql-database',
           label: 'SQL Database',
           icon: 'ai ai-edge-sql',
-          to: '/sql-database',
+          href: '/sql-database',
           tagValue: 'Preview'
         }
       ]
@@ -52,8 +52,8 @@
             {
               label: 'Settings',
               items: [
-                { id: 'settings-general', label: 'General', to: '/settings' },
-                { id: 'settings-users', label: 'Users management', to: '/settings/users' }
+                { id: 'settings-general', label: 'General', href: '/settings' },
+                { id: 'settings-users', label: 'Users management', href: '/settings/users' }
               ]
             }
           ]
@@ -66,7 +66,7 @@
 <template>
   <ConsoleLayout
     :navigation="navigation"
-    :breadcrumbs="[{ label: 'Workloads', to: '/workloads' }, { label: 'edge-shop' }]"
+    :breadcrumbs="[{ label: 'Workloads', href: '/workloads' }, { label: 'edge-shop' }]"
     :account="{ name: 'Ana Souza', email: 'ana.souza@example.com' }"
     active-id="workloads"
   >

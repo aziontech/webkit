@@ -14,9 +14,6 @@ import type {
   MenuSubKind
 } from '../../components/navigation/menu/injection-key'
 
-/** An in-app route: a path string or a router location object, resolved by the app's router. */
-export type AppRouteTarget = string | Record<string, unknown>
-
 /** One row of a layout's navigation tree. */
 export interface AppNavItem {
   /** Stable identity of the row; the active row is matched by it. */
@@ -25,10 +22,8 @@ export interface AppNavItem {
   label: string
   /** Leading glyph class. */
   icon?: string
-  /** A plain URL; the row is an anchor to it. */
+  /** Where the row leads; an in-app path (starting with a slash) is followed with the app's router when one is installed. */
   href?: string
-  /** An in-app route; followed with the app's router when one is installed, otherwise used as the URL. */
-  to?: AppRouteTarget
   /** Link target when the row is an anchor. */
   target?: '_self' | '_blank'
   /** Short text in the row's trailing badge (`Preview`). */
@@ -53,17 +48,14 @@ export interface AppNavGroup {
   items: AppNavItem[]
 }
 
-/** A link with a plain URL or an in-app route. */
+/** A link target. */
 export interface AppLinkTarget {
-  /** A plain URL. */
+  /** Where the link leads; an in-app path is followed with the app's router. */
   href?: string
-  /** An in-app route. */
-  to?: AppRouteTarget
 }
 
 interface AppRouter {
-  push: (to: AppRouteTarget) => unknown
-  resolve: (to: AppRouteTarget) => { href: string }
+  push: (to: string) => unknown
   currentRoute: Ref<{ path: string }>
 }
 
@@ -74,11 +66,7 @@ export interface UseAppNavigationReturn {
 }
 
 const isRouter = (value: unknown): value is AppRouter =>
-  typeof value === 'object' &&
-  value !== null &&
-  'push' in value &&
-  'resolve' in value &&
-  'currentRoute' in value
+  typeof value === 'object' && value !== null && 'push' in value && 'currentRoute' in value
 
 export function useAppNavigation(): UseAppNavigationReturn {
   const instance = getCurrentInstance()
@@ -100,12 +88,9 @@ export function useAppNavigation(): UseAppNavigationReturn {
 
   const currentPath = computed(() => (router ? router.currentRoute.value.path : locationPath.value))
 
-  const hrefOf = (link: AppLinkTarget): string | undefined => {
-    if (link.href) return link.href
-    if (link.to === undefined) return undefined
-    if (router) return router.resolve(link.to).href
-    return typeof link.to === 'string' ? link.to : undefined
-  }
+  const hrefOf = (link: AppLinkTarget): string | undefined => link.href || undefined
+
+  const inApp = (href: string) => href.startsWith('/') && !href.startsWith('//')
 
   const follow = (event: Event, link: AppLinkTarget) => {
     const onAnchor =
@@ -116,14 +101,15 @@ export function useAppNavigation(): UseAppNavigationReturn {
       event instanceof globalThis.MouseEvent &&
       (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0)
     if (onAnchor && newTab) return
-    if (link.to !== undefined && router) {
+    const href = hrefOf(link)
+    if (!href) return
+    if (router && inApp(href)) {
       event.preventDefault()
-      void router.push(link.to)
+      void router.push(href)
       return
     }
     if (onAnchor) return
-    const href = hrefOf(link)
-    if (href) globalThis.location?.assign(href)
+    globalThis.location?.assign(href)
   }
 
   return { currentPath: readonly(currentPath), hrefOf, follow }
@@ -227,7 +213,7 @@ export const navPaletteGroups = (groups: AppNavGroup[]): NavPaletteGroup[] =>
     const blocks: NavPaletteGroup[] = []
     let run: AppNavItem[] = []
     const flush = () => {
-      const items = navLeaves(run).filter((item) => !item.disabled && (item.href || item.to))
+      const items = navLeaves(run).filter((item) => !item.disabled && item.href)
       if (items.length) {
         blocks.push({
           key: `group-${groupIndex}-${blocks.length}`,
@@ -240,7 +226,7 @@ export const navPaletteGroups = (groups: AppNavGroup[]): NavPaletteGroup[] =>
     for (const item of group.items) {
       if (item.groups || item.children) {
         flush()
-        const items = navLeaves([item]).filter((leaf) => !leaf.disabled && (leaf.href || leaf.to))
+        const items = navLeaves([item]).filter((leaf) => !leaf.disabled && leaf.href)
         if (items.length) blocks.push({ key: `item-${item.id}`, heading: item.label, items })
       } else run.push(item)
     }

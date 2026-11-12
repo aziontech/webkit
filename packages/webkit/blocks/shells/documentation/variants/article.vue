@@ -23,20 +23,20 @@
   import { ref } from 'vue'
 
   const sections = [
-    { label: 'Reference', to: '/docs/reference' },
-    { label: 'Guides', to: '/docs/guides' },
-    { label: 'Dev tools', to: '/docs/dev-tools' }
+    { label: 'Reference', href: '/docs/reference' },
+    { label: 'Guides', href: '/docs/guides' },
+    { label: 'Dev tools', href: '/docs/dev-tools' }
   ]
 
   const navigation = [
     {
       label: 'Fundamentals',
       items: [
-        { id: 'overview', label: 'Overview', to: '/docs/fundamentals' },
+        { id: 'overview', label: 'Overview', href: '/docs/fundamentals' },
         {
           id: 'how-azion-works',
           label: 'How Azion works',
-          to: '/docs/fundamentals/how-azion-works'
+          href: '/docs/fundamentals/how-azion-works'
         },
         {
           id: 'get-started',
@@ -47,18 +47,18 @@
             {
               id: 'create-an-account',
               label: 'Create an account',
-              to: '/docs/get-started/create-an-account'
+              href: '/docs/get-started/create-an-account'
             },
-            { id: 'first-deploy', label: 'First deploy', to: '/docs/get-started/first-deploy' },
+            { id: 'first-deploy', label: 'First deploy', href: '/docs/get-started/first-deploy' },
             {
               id: 'migrate-to-azion',
               label: 'Migrate to Azion',
-              to: '/docs/get-started/migrate-to-azion'
+              href: '/docs/get-started/migrate-to-azion'
             }
           ]
         },
-        { id: 'billing', label: 'Billing', to: '/docs/fundamentals/billing' },
-        { id: 'security', label: 'Security', to: '/docs/fundamentals/security' }
+        { id: 'billing', label: 'Billing', href: '/docs/fundamentals/billing' },
+        { id: 'security', label: 'Security', href: '/docs/fundamentals/security' }
       ]
     }
   ]
