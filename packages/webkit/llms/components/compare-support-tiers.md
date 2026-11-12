@@ -44,7 +44,7 @@
 - Visual states: `default`
 - The highlighted tier carries the accent bar and the secondary button; the others carry an outlined button
 - The header row is sticky under `--layout-header-height` (the SiteNav bar's token), so the tier names and buttons stay in view under the site header; the service column's label sits at the start of its corner cell, as on azion.com's Support page
-- Below `md` the band titles are set one step larger (`text-heading-xl`) and the header cells take `--spacing-md`, so a band title breaks over two lines and the picker row has the site's height
+- Below `md` the band titles are set one step larger (`text-heading-xl`) and the header cells take `--spacing-md` top and bottom (their sides stay `--spacing-sm`, see Reflow below), so a band title breaks over two lines and the picker row has the site's height
 - Below the large breakpoint only the picked tier's column shows (`data-folded` on the others); the picker opens on the highlighted tier, or the first
 - A group row (`group: true`) reads in the default text colour and draws a top rule unless it opens its band
 - Empty: when no tier has a name the band renders nothing but its root
