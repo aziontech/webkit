@@ -2,7 +2,7 @@
 name: webkit-lists
 description: The list page — the one shape every resource index takes on @aziontech/webkit, and the collection model behind it. Every list runs on `useCollection` (`@aziontech/webkit/use-collection`), in client mode (in-memory items) or server mode (a `fetch` that returns one page and the total) — it owns the text and property filters, sorting, pagination, selection across pages, the empty vs no-match states, the filter, sort and page in the URL and the saved preferences, and hands back props to bind on `Table`, `Pagination`, `PropertyFilter`, `CollectionPreferences` and `Cards`. Fixes the page skeleton (shell → page heading carrying the create action → controls row with the PropertyFilter and CollectionPreferences → card-wrapped Table, or Cards), which columns become filter properties, and the two empty states. Use when building or reviewing any resource index, list, card view or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
 status: active
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-styling, ui-verify, review]
 ---
@@ -74,11 +74,9 @@ the band is one `useCollection` call:
 </script>
 
 <template>
-  <AppShell
-    active="applications"
-    :breadcrumb="[{ label: 'Applications' }]"
-  >
-    <main class="layout-column flex min-h-full flex-col">
+  <!-- a page body in ConsoleLayout's default slot: no main, no shell -->
+  <div class="layout-boundary">
+    <div class="layout-column flex min-h-full min-w-0 flex-col">
       <!-- THE PAGE HEADING. At first level this is the only place the module's name
            appears. The create action lives HERE, and it is the page's one `large` control. -->
       <PageHeader
@@ -130,15 +128,17 @@ the band is one `useCollection` call:
           </section>
         </section>
       </section>
-    </main>
-  </AppShell>
+    </div>
+  </div>
 </template>
 ```
 
 **A first-level module index opens with a `PageHeader` (`@aziontech/webkit/page-header`), and the module's
-create action lives in it.** The shell draws the breadcrumb only from the **second** crumb up
-(`/webkit-navigation`), so the heading is the only place the module's name appears in the content. Title,
-one line of what the module is, `size="medium"`, and the create button in `#actions`.
+create action lives in it.** `ConsoleLayout` passes no breadcrumb on a first-level page; the trail
+starts at the **second** level (`/webkit-navigation`), so the heading is the only place the module's
+name appears. Title, one line of what the module is, `size="medium"`, and the create button in
+`#actions`. The page is only a body in the layout's default slot: it sets its own `layout-boundary` and
+column, and renders no `<main>` (`/webkit-layout`).
 
 **The size ladder is what makes the two rows read as two rows.** The heading's action is the page's only
 `large` (40px) control; **everything** on the controls row is `medium` (32px) — the property filter, the
@@ -356,7 +356,7 @@ Close with `List sound` or `N gaps — fix before polish`.
 
 ## Definition of Done
 
-- [ ] Page is shell → column → heading → section → one band holding the controls and the card.
+- [ ] Page body (in the app layout's slot, no `<main>`) is boundary → column → heading → section → one band holding the controls and the card.
 - [ ] First-level index carries a `size="medium"` `PageHeader` with the create action in `#actions`.
 - [ ] Heading action `large`; every control on the controls row `medium`.
 - [ ] One `useCollection` call holds filter, sort, page, selection and preferences; `tableProps` /

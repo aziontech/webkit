@@ -47,6 +47,9 @@ Two consequences you have to actively remember:
 
 ## The three-layer skeleton
 
+The page renders inside `SiteLayout` (or `DocLayout`), composed once in `App.vue`: the layout owns
+`SiteNav`, the `<main>` and `SiteFooter`, so the page is only the hero and the framed column.
+
 ```vue
 <Hero kind="screen" max-width="7xl">     <!-- 1. fluid hero band, full-bleed, owns border-b -->
   <template #background> … </template>
@@ -60,13 +63,12 @@ Two consequences you have to actively remember:
     <CardGrid variant="divider" :columns="3">…</CardGrid>
   </SectionModule>
 </SectionContainer>
-
-<SiteFooter />
-<!-- owns border-t -->
+<!-- SiteLayout renders SiteFooter after the page; it owns border-t -->
 ```
 
-Live: [`website.vue:198-262`](../../packages/webkit/blocks/shells/website/website.vue#L198-L262) (hero band, framed column,
-footer) and [`documentation.vue:225`](../../packages/webkit/blocks/shells/documentation/documentation.vue#L225) (the docs column).
+Live: [`website.vue:450-511`](../../packages/webkit/blocks/shells/website/website.vue#L450-L511) (the hero band and the framed
+column inside `SiteLayout`, which adds the footer) and
+[`documentation.vue:154`](../../packages/webkit/blocks/shells/documentation/documentation.vue#L154) (the docs column inside `DocLayout`).
 
 ---
 

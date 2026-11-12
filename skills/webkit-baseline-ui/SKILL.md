@@ -2,7 +2,7 @@
 name: webkit-baseline-ui
 description: Fast deslop pass for UI built on @aziontech/webkit — enforce components-only, tokens-only (typography/color/shape/spacing/shadow), correct typography hierarchy, and consistent spacing rhythm. Use for a quick cleanup or polish review.
 status: active
-last_updated: 2026-09-21
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-tokens, webkit-prefer-over-custom, webkit-styling]
 ---
@@ -125,8 +125,8 @@ Two rules from that system are worth repeating here because they are the ones a 
 - **MUST** carry a **column class** (`layout-column`, `layout-column-form`, …) on a page, never a
   hand-rolled `mx-auto max-w-(--container-*)`. Full-bleed is the **absence** of a column class, not
   a `w-full`.
-- **MUST** keep the **app shell fluid** — the sidebar, the global header and the content zone's own
-  inset stretch with the viewport. These are chrome; a max-width on them only creates dead gutters.
+- **MUST** keep the **app layout fluid** — `ConsoleLayout`'s rail, its header and its content region
+  stretch with the viewport. These are chrome; a max-width on them only creates dead gutters.
   The cap lives on the page's own column.
 
 **Inside a page, capping a control or a reading column is still a local decision:**
@@ -190,6 +190,6 @@ End with a one-line verdict: `clean` or `N violations across <sections>`.
 - [ ] Typography uses `text-*` tokens with correct hierarchy; spacing uses only `--spacing-*`.
 - [ ] Section titles use `text-heading-xxs text-(--text-default)` with a `px-(--spacing-xs)` optical inset (and `--spacing-sm` above the card) — not `text-overline-*`, which is reserved for menu/popover group labels.
 - [ ] `h-dvh` not `h-screen`; one accent per view; empty states have an action.
-- [ ] Shell (sidebar, global header, content-zone spacing) is fluid; the page carries a column class from `/webkit-layout` rather than a hand-rolled cap; field and reading widths are capped via `max-w-(--container-*)`.
+- [ ] The app layout (`ConsoleLayout`'s rail, header and content region) is fluid; the page carries a column class from `/webkit-layout` rather than a hand-rolled cap; field and reading widths are capped via `max-w-(--container-*)`.
 - [ ] Buttons and fields on the same horizontal line share one `size` token and a common baseline.
 - [ ] (File mode) Every violation has a quoted line, a why, and a concrete fix.

@@ -30,8 +30,10 @@ Start the layout from its shell block (`npx @aziontech/webkit add shells/console
 replace its stand-in body with `<RouterView />`. Every other block is then **only the page body**
 that renders inside the layout's default slot: it renders no `<main>`, `AppLayout`, `Sidebar`,
 `GlobalHeader`, `SiteNav`, `SiteFooter`, `Command` or navigation data of its own. If a block you
-copied still carries an inline shell (older platform blocks wrap their body in `AppLayout` with a
-`Sidebar` and a `GlobalHeader`), keep only what is inside its `<main>` and drop the rest.
+copied still carries an inline shell (some platform blocks wrap their body in a `GlobalHeader` and a
+rail), keep only what is inside its `<main>` and drop the rest. The one exception is a screen with
+no rail — a create / edit / deploy flow (`platform/create/*`, headed by `headers/creation-header`) or
+a signed-out screen (`platform/auth`): route it outside the layout; it keeps its own bar and `<main>`.
 
 ### Start every screen from a pattern
 

@@ -22,7 +22,8 @@ Pick the path by what you are about to do.
    (`npx @aziontech/webkit add shells/console`, `shells/website`, `shells/documentation`) and
    replace the stand-in body with `<RouterView />`. Every screen below is only a page body in that
    layout's slot: no `<main>`, sidebar, header, footer or ⌘K palette of its own (a page opens the
-   console palette with `useConsoleLayout().openSearch()`).
+   console palette with `useConsoleLayout().openSearch()`). Only a screen with no rail (a create,
+   edit or deploy flow, sign-in) is routed outside the layout and keeps its own bar and `<main>`.
 3. A whole screen (login, signup, settings, a list, a create flow): start from a block.
    `npx @aziontech/webkit search <the screen in plain words>`, then
    `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state). It copies the

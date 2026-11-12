@@ -66,14 +66,15 @@ another's.
 
 ```vue
 <template>
-  <main class="layout-column layout-boundary flex min-w-0 flex-col">
+  <!-- the page body, in the layout's <main> -->
+  <div class="layout-column layout-boundary flex min-w-0 flex-col">
     <PageHeader title="Applications" />
 
     <section class="layout-section-start flex flex-col gap-(--layout-section-gap)">
       <section class="flex flex-col gap-(--layout-group-gap)">…</section>
       <form class="flex flex-col gap-(--layout-group-gap)">…</form>
     </section>
-  </main>
+  </div>
 </template>
 ```
 
@@ -155,9 +156,10 @@ height, not a page boundary).
 
 Who carries it depends on the shell:
 
-- A **padded** page gets its boundary from the app shell, on the scroll box _outside_ the capped
-  block, so the measure lands as content width.
-- A page that carries the boundary **itself** puts it on the same block as the measure.
+- Inside `ConsoleLayout` (and every app layout) the page carries the boundary **itself**: the layout
+  pads nothing, so the body puts `layout-boundary` on the same block as the measure.
+- A **padded** container you own (a split view's pane, a scroll box around a capped block) can carry
+  the boundary _outside_ the capped block instead, so the measure lands as content width.
 
 Those two would normally disagree. With `box-sizing: border-box`, 1620px of cap minus 24px a side is
 a 1572px content column — 48px narrower than the same measure gives a padded page. That is the
@@ -171,11 +173,11 @@ This is automatic, and it is the reason a sticky bar works:
 
 ```vue
 <template>
-  <main class="overflow-auto">
+  <div class="overflow-auto">
     <form class="layout-column-form layout-boundary-inline flex flex-col pt-(--layout-section-gap)">
       …
     </form>
-  </main>
+  </div>
 
   <footer
     class="layout-column-form layout-boundary-inline sticky bottom-0 flex justify-end gap-(--spacing-sm) py-(--spacing-md)"
@@ -396,7 +398,7 @@ truncating text `min-w-0`.
 - **NEVER** wrap `SiteFooter` or `SiteNav` in a bordered or padded `div`; they draw their own rules.
 - **NEVER** compose the chrome in a page: one `ConsoleLayout` / `SiteLayout` / `DocLayout` in
   `App.vue`, and every page is only the body of its default slot.
-- **NEVER** cap the app shell — the sidebar, the global header, the content zone's own inset stay
+- **NEVER** cap the app layout — `ConsoleLayout`'s rail, its header and its content region stay
   fluid. The cap lives on the page's own column.
 
 ## Review output
@@ -406,9 +408,10 @@ Per gap:
 ```
 ✗ ApplicationsList.vue:12
   quoted: <main class="mx-auto w-full max-w-(--container-7xl) p-(--spacing-lg)">
-  rule:   a page carries a column class and a boundary, never a hand-rolled cap
-  fix:    class="layout-column layout-boundary flex min-w-0 flex-col" — the cap then grows by
-          the inset it contains, so this page and a padded sibling land on the same column
+  rule:   a page carries a column class and a boundary, never a hand-rolled cap — and no main,
+          which the app layout owns
+  fix:    <div class="layout-column layout-boundary flex min-w-0 flex-col"> — the cap then grows
+          by the inset it contains, so this page and a padded sibling land on the same column
 
 ✗ CreateWorkload.vue:84
   quoted: <footer class="sticky bottom-0 mx-auto max-w-(--container-4xl) px-(--spacing-lg)">
@@ -434,7 +437,7 @@ Close with `Layout sound` or `N gaps — fix before polish`.
 
 - `/webkit-lists` — the index page this shape carries, and the controls-row band.
 - `/webkit-create-surface` — where a create lives, and the commit bar that must align with its form.
-- `/webkit-navigation` — the app shell, and who owns the boundary on a padded page.
+- `/webkit-navigation` — the app layout (`ConsoleLayout`) and the focused creation shell, and the page body inside them.
 - `/webkit-baseline-ui` — tokens, typography hierarchy, the spacing scale these derive from.
 - **Foundations → Layout and devices** on the docs site (`pnpm docs:dev`) — every measure and utility.
 - `semantic/layouts` in `@aziontech/theme` — the tokens and utilities themselves, with the reasoning
@@ -445,7 +448,8 @@ Close with `Layout sound` or `N gaps — fix before polish`.
 - [ ] The page carries a column class chosen by its payload — or none at all, deliberately, for
       full-bleed.
 - [ ] No `mx-auto`, `max-w-*`, or `w-full` standing in for the container system.
-- [ ] The boundary is on the page or on the shell, as padding, and the cap absorbs it either way.
+- [ ] The boundary is on the page body (the app layout pads nothing), as padding, and the cap absorbs it.
+- [ ] The page renders no `<main>`, shell or chrome of its own: it is the body of the app layout's slot.
 - [ ] Exactly one `layout-section-start` per page stack; no vertical `gap` on the page stack.
 - [ ] Rhythm is the two steps only — section between sections, group inside one.
 - [ ] A controls row and the thing it narrows sit in one band at the group step.
