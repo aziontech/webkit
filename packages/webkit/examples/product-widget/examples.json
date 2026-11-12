@@ -13,6 +13,11 @@
       "file": "types.vue"
     },
     {
+      "name": "Still fragment",
+      "summary": "The same fragment with its collaborator cursor, as a feature grid shows it, and with `:cursor=\"false\"`, as a product band that reads like a screenshot wants it. Fragments are drawn bare at their own width: `kind`, `chrome`, `width` and `fade` re-plate only the workload screens, and setting them on a fragment warns in development.",
+      "file": "still-fragment.vue"
+    },
+    {
       "name": "Library",
       "summary": "Every registered widget in the cell that hosts it on the site: full screens in wide panels, fragments in grid cells that play their beat on hover. These are the only values `name` accepts.",
       "file": "library.vue"

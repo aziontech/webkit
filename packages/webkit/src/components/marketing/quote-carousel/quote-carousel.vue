@@ -80,7 +80,7 @@
     <CarouselItem
       v-for="card in cards"
       :key="card.key"
-      class="w-[85vw] max-w-(--container-md) sm:w-(--container-md)"
+      size="large"
     >
       <Quote
         :text="card.text"

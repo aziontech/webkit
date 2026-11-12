@@ -18,6 +18,8 @@
 - Give the host a size (a height or an aspect ratio). A widget fills its host and scales its design width to fit.
 - Host a framed widget (a full screen) in a wide panel, and a fragment in a grid cell with its own padding. Fragments are drawn bare and float on the cell's surface, so set `--mockup-fade-color` on the cell when it is not `--bg-canvas`.
 - Leave `kind`, `chrome`, `width`, `tab` and `interval` unset unless the host needs a different value: unset keeps the widget's own.
+- Never expect a fragment to become a console window. `kind`, `chrome`, `width` and `fade` re-plate only the workload screens listed under Props; a fragment is drawn bare at its own design width and ignores them, and the root warns in development when one is set on a widget that does not read it. For a framed console window pick a workload screen; for a fragment, give its host cell the padding and surface (a media split's inset media cell does).
+- Turn `cursor` off when the widget stands for a screen the reader uses alone. Fragments act their beat with a named collaborator cursor; that is right in a feature grid that plays on hover, and a fake second person in a product band that reads as a screenshot.
 - Keep the copy beside the widget saying what it shows. Every widget but `function-code` and the coding-agent switch of `functions-start` is hidden from assistive technology.
 
 ## Don’t
@@ -41,12 +43,13 @@
 | `name` | `'ai-inference-function' \| 'ai-inference-model' \| 'ai-inference-template' \| 'application-accelerator-cookie' \| 'application-accelerator-method' \| 'application-accelerator-query-string' \| 'application-cache' \| 'application-function' \| 'application-rule' \| 'application-version' \| 'applications-create-method' \| 'applications-device-group' \| 'applications-rule-phases' \| 'bot-manager-metrics' \| 'bot-manager-rule' \| 'bot-manager-traffic' \| 'cli-terminal-deploy' \| 'cli-terminal-start' \| 'data-stream-connector' \| 'data-stream-sampling' \| 'data-stream-source' \| 'ddos-firewall-modules' \| 'ddos-http-events' \| 'ddos-requests-metric' \| 'edge-dns-dnssec' \| 'edge-dns-nameserver' \| 'edge-dns-record' \| 'firewall-function' \| 'firewall-modules' \| 'firewall-rules-order' \| 'function-code' \| 'functions-start' \| 'image-processor-events' \| 'image-processor-module' \| 'image-processor-rule' \| 'kv-store-function' \| 'kv-store-key' \| 'kv-store-security-list' \| 'load-balancer-address' \| 'load-balancer-method' \| 'load-balancer-origins' \| 'network-shield-ip-list' \| 'network-shield-lists' \| 'network-shield-rule' \| 'object-storage-access' \| 'object-storage-browser' \| 'object-storage-buckets' \| 'real-time-events-filter' \| 'real-time-events-log' \| 'real-time-events-volume' \| 'real-time-metrics-dashboard' \| 'real-time-metrics-filter' \| 'real-time-metrics-panel' \| 'sql-database-query' \| 'sql-database-row' \| 'sql-database-table' \| 'waf-allowed-rule' \| 'waf-firewall-rule' \| 'waf-threat' \| 'workload-deploy' \| 'workload-deploy-logs' \| 'workload-deployments' \| 'workload-domain' \| 'workload-domains' \| 'workload-overview' \| 'workload-rollout-rows' \| 'workload-topology-chain' \| 'workload-topology' \| 'workload-topology-flow' \| 'workloads-list'` | `—` | true | Name of the console widget to draw. |
 | `active` | `boolean` | `true` | false | Whether this widget is the one showing; it replays its entrance each time it becomes active. |
 | `hover` | `boolean` | `false` | false | Whether the pointer is over the host; a fragment plays its beat while it is. |
-| `kind` | `'window' \| 'bare'` | `undefined` | false | How a framed widget is plated; unset keeps the widget's own plating. |
-| `chrome` | `boolean` | `undefined` | false | Draws the console bar on a framed widget; unset keeps the widget's own bar. |
-| `width` | `number` | `undefined` | false | Design width of a framed widget from md up; unset keeps the widget's own width. |
-| `fade` | `'none' \| 'bottom' \| 'top' \| 'left' \| 'right' \| 'y'` | `'none'` | false | Edge a framed widget fades out along. |
+| `kind` | `'window' \| 'bare'` | `undefined` | false | How a workload screen is plated (window or bare); fragments are always bare and ignore it, and unset keeps the widget's own plating. |
+| `chrome` | `boolean` | `undefined` | false | Draws the console bar on a workload screen; fragments have no bar and ignore it, and unset keeps the widget's own bar. |
+| `width` | `number` | `undefined` | false | Design width of a workload screen from md up; fragments keep their own width, and unset keeps the widget's own. |
+| `fade` | `'none' \| 'bottom' \| 'top' \| 'left' \| 'right' \| 'y'` | `'none'` | false | Edge a workload screen, workload-overview or application-version fades out along; fragments keep their own fade. |
 | `texture` | `'dots' \| 'grid' \| 'lines' \| 'dither' \| 'pixelate' \| 'none'` | `'none'` | false | Texture a full-screen widget is grounded with. |
 | `tab` | `'agents' \| 'console' \| 'cli' \| 'overview' \| 'topology' \| 'deploy' \| 'main-settings' \| 'cache-settings' \| 'device-groups' \| 'functions' \| 'rules-engine'` | `undefined` | false | Tab a tabbed widget plays (`workload-overview`, `application-version`, `functions-start`); other widgets ignore it, and unset plays the first tab. |
+| `cursor` | `boolean` | `true` | false | Draws the named collaborator cursor a fragment acts its beat with; turn it off for a still console picture. Widgets without a cursor ignore it. |
 | `interval` | `number` | `undefined` | false | Milliseconds between revealed log lines in the deploy logs widget; unset keeps its own pace. |
 
 ## States
@@ -57,6 +60,8 @@
 - `data-name` mirrors `name` on the root.
 - Loading: the widget's code is loaded on demand. The root keeps its size while it loads and draws nothing until the widget arrives. A `name` change clears the current widget at once, so the root never shows the earlier widget under the new `data-name`, whether the new load is still in flight or has failed.
 - A `name` outside the registry (from untyped code), or a widget chunk that fails to load, warns in development only (`import.meta.env.DEV`) and leaves the root empty; it never throws.
+- A plating prop the loaded widget does not read warns in development only, once per load, and changes nothing.
+- `cursor` off: no collaborator cursor or name tag is drawn; the fragment's controls still open, highlight and settle on their beat.
 - Each widget owns its entrance (a `shell-mockup` replay when `active` turns on) and, for fragments, its beat while `hover` is set or the device cannot hover. Under reduced motion every widget is drawn in its settled state.
 
 ## Accessibility
@@ -75,6 +80,18 @@
 - Icons: every chevron and angle inside the widget fragments mirrors (`rtl:-scale-x-100`), the pagination angles included.
 - Keyboard: no horizontal arrow-key logic.
 - User data: domains, IDs and code samples in the mock data keep their own direction.
+
+## Internationalization
+
+- No built-in strings in the root. Widget text is console UI copy drawn as part of the picture (hidden from assistive technology), and the collaborator names on the cursors are mock data.
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none; every widget scales its design width to fit its host (`shell-mockup`), with a narrower design width below `md`.
+- Narrow: the host sets the size; the widget scales down with it.
+- Touch: a fragment shows its finished beat on a device that cannot hover.
+- Reflow: no horizontal scroll; the frame scales instead.
 
 ## Examples
 
@@ -117,125 +134,23 @@
 </template>
 ```
 
-### Library
+### Still fragment
 
 ```vue
 <script setup>
   import ProductWidget from '@aziontech/webkit/product-widget'
-  import { ref } from 'vue'
-
-  const FRAMED = [
-    'application-version',
-    'cli-terminal-deploy',
-    'cli-terminal-start',
-    'workload-deploy-logs',
-    'workload-deployments',
-    'workload-domains',
-    'workload-overview',
-    'workload-rollout-rows',
-    'workload-topology',
-    'workload-topology-chain',
-    'workload-topology-flow',
-    'workloads-list'
-  ]
-  const FRAGMENTS = [
-    'ai-inference-function',
-    'ai-inference-model',
-    'ai-inference-template',
-    'application-accelerator-cookie',
-    'application-accelerator-method',
-    'application-accelerator-query-string',
-    'application-cache',
-    'application-function',
-    'application-rule',
-    'applications-create-method',
-    'applications-device-group',
-    'applications-rule-phases',
-    'bot-manager-metrics',
-    'bot-manager-rule',
-    'bot-manager-traffic',
-    'data-stream-connector',
-    'data-stream-sampling',
-    'data-stream-source',
-    'ddos-firewall-modules',
-    'ddos-http-events',
-    'ddos-requests-metric',
-    'edge-dns-dnssec',
-    'edge-dns-nameserver',
-    'edge-dns-record',
-    'firewall-function',
-    'firewall-modules',
-    'firewall-rules-order',
-    'function-code',
-    'functions-start',
-    'image-processor-events',
-    'image-processor-module',
-    'image-processor-rule',
-    'kv-store-function',
-    'kv-store-key',
-    'kv-store-security-list',
-    'load-balancer-address',
-    'load-balancer-method',
-    'load-balancer-origins',
-    'network-shield-ip-list',
-    'network-shield-lists',
-    'network-shield-rule',
-    'object-storage-access',
-    'object-storage-browser',
-    'object-storage-buckets',
-    'real-time-events-filter',
-    'real-time-events-log',
-    'real-time-events-volume',
-    'real-time-metrics-dashboard',
-    'real-time-metrics-filter',
-    'real-time-metrics-panel',
-    'sql-database-query',
-    'sql-database-row',
-    'sql-database-table',
-    'waf-allowed-rule',
-    'waf-firewall-rule',
-    'waf-threat',
-    'workload-deploy',
-    'workload-domain'
-  ]
-  const hovered = ref('')
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xl)">
-    <div class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-2">
-      <div
-        v-for="name in FRAMED"
-        :key="name"
-        class="flex flex-col gap-(--spacing-xs)"
-      >
-        <span class="text-label-sm text-(--text-muted)">{{ name }}</span>
-        <div class="aspect-[1.9/1] w-full">
-          <ProductWidget
-            :name="name"
-            fade="bottom"
-          />
-        </div>
-      </div>
+  <div class="grid w-full grid-cols-1 gap-(--spacing-lg) md:grid-cols-2">
+    <div class="h-80 w-full p-(--spacing-xl)">
+      <ProductWidget name="data-stream-source" />
     </div>
-    <div class="grid grid-cols-1 gap-(--spacing-lg) md:grid-cols-2 lg:grid-cols-3">
-      <div
-        v-for="name in FRAGMENTS"
-        :key="name"
-        class="flex flex-col gap-(--spacing-xs)"
-      >
-        <span class="text-label-sm text-(--text-muted)">{{ name }}</span>
-        <div
-          class="h-80 w-full min-w-0 overflow-x-visible overflow-y-clip rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) pt-(--spacing-xl) [--mockup-fade-color:var(--bg-surface)]"
-          @pointerenter="hovered = name"
-          @pointerleave="hovered = ''"
-        >
-          <ProductWidget
-            :name="name"
-            :hover="hovered === name"
-          />
-        </div>
-      </div>
+    <div class="h-80 w-full p-(--spacing-xl)">
+      <ProductWidget
+        name="data-stream-source"
+        :cursor="false"
+      />
     </div>
   </div>
 </template>

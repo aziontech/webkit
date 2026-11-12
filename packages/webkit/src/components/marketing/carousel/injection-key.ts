@@ -1,6 +1,11 @@
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
+/** Layout of the row: one ruled strip, or standalone cards with a gutter. */
+export type CarouselLayout = 'strip' | 'cards'
+
 export interface CarouselContext {
+  /** Layout of the row the items render in. */
+  kind: ComputedRef<CarouselLayout>
   /** The scrollable track element, or null before the root mounts. */
   track: Readonly<Ref<globalThis.HTMLUListElement | null>>
   /** Whether the track has room left to step back toward its start. */

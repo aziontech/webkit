@@ -1,6 +1,7 @@
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import ProductMedia from '../../../../examples/media-split-band/product-media.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import MediaSplitBand from './media-split-band.vue'
 
@@ -141,6 +142,52 @@ describe('MediaSplitBand', () => {
   it('has no a11y violations when the band links', async () => {
     const { container } = band({ primaryAction })
 
+    await expectNoA11yViolations(container)
+  })
+
+  it('draws a product widget, inset, instead of the image', async () => {
+    const { container, findByTestId, getByTestId } = band({ widget: 'data-stream-source' })
+
+    const widget = await findByTestId('content-product-widget', {}, { timeout: 5000 })
+    expect(widget.getAttribute('data-name')).toBe('data-stream-source')
+    expect(container.querySelector(`img[src="${image.src}"]`)).toBeNull()
+    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(true)
+  })
+
+  it('draws a diagram, inset, when no widget is set', async () => {
+    const { findByTestId, getByTestId, queryByTestId } = band({ diagram: 'cache' })
+
+    const diagram = await findByTestId('marketing-diagram', {}, { timeout: 5000 })
+    expect(diagram.getAttribute('data-name')).toBe('cache')
+    expect(queryByTestId('content-product-widget')).toBeNull()
+    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(true)
+  })
+
+  it('prefers the widget over the diagram', async () => {
+    const { findByTestId, queryByTestId } = band({ widget: 'kv-store-key', diagram: 'cache' })
+
+    await findByTestId('content-product-widget', {}, { timeout: 5000 })
+    expect(queryByTestId('marketing-diagram')).toBeNull()
+  })
+
+  it('frames an image whole on a plate when image.framed is set', () => {
+    const { getByRole, getByTestId } = band({ image: { ...image, framed: true } })
+
+    expect(getByRole('img', { name: image.alt }).getAttribute('src')).toBe(image.src)
+    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(true)
+  })
+
+  it('lets a plain image run flush', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(false)
+  })
+
+  it('has no a11y violations with a widget and with a diagram', async () => {
+    const { container, findByTestId } = render(ProductMedia)
+
+    await findByTestId('content-product-widget', {}, { timeout: 5000 })
+    await findByTestId('marketing-diagram', {}, { timeout: 5000 })
     await expectNoA11yViolations(container)
   })
 })

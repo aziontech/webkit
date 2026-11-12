@@ -3,10 +3,11 @@ name: carousel
 category: marketing
 structure: composition
 status: implemented
-spec_version: 1
-checksum: 38f3a3438c14b62803b55a5d96f633280ff0e2780b0be765d1086a708997c7c0
+spec_version: 2
+template: 2
+checksum: ee8065eb67b6165dadf899de2b8df7a71e9f1406b9eda67ec823cf99205a6d1c
 created: 2026-09-22
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Carousel — Component Spec
@@ -15,7 +16,9 @@ last_updated: 2026-11-11
 
 A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own.
 
-The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote`. The cards sit edge to edge with no gutter: each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip. The track fades at whichever end still has cards past it.
+The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote` or a `topic`. Two layouts, set on the root with `kind`: `strip` (the default) sets the cards edge to edge with no gutter — each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip; `cards` separates them with a gutter and rounds each one, so the row reads as a set of standalone cards. Each card takes its width from its own `size`, never from a class. The track fades at whichever end still has cards past it.
+
+An optional `header` slot shares the row the step controls sit in: the band's title goes at the start and the controls move to the end, so a titled carousel needs no hand-built row around it.
 
 ## When to use
 
@@ -40,9 +43,10 @@ The unit is Carousel, then a `Carousel.Item` card, then its content — usually 
 ## Best practices
 
 - Never put essential content in a carousel. A slide past the first is content a reader may never see.
-- Size the cards on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one card on mobile and three on desktop.
+- Size the cards with `size` on `Carousel.Item` (`small` `var(--container-2xs)`, `medium` `var(--container-sm)`, `large` `var(--container-md)`; each capped at 85% of the viewport on phones). Never put width classes on the item: they fight its own width and the `no-style-override` lint rejects them.
 - Put content straight into `Carousel.Item`, not inside another framed box. The item is already the card (border, surface, padding), and a second frame inside it draws two rules.
-- The row has no gutter by design. Space between cards would break the ruled strip into floating tiles; a band that needs air between its items wants a grid, not this track.
+- Pick the layout with `kind`: `strip` for a ruled row of quotes or figures that reads as one surface, `cards` for standalone cards with a gutter (use-case cards, articles). Never add margins to the items to fake a gutter.
+- Put the band's title in the `header` slot when the controls belong on the title row; the controls then sit at the row's end. For a whole titled band of overline/title/text cards use the `card-carousel` section instead of composing one.
 - Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.
 - The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.
 - Always name the carousel with `ariaLabel`. "Customer stories" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.
@@ -56,29 +60,36 @@ The unit is Carousel, then a `Carousel.Item` card, then its content — usually 
 </script>
 
 <template>
-  <Carousel aria-label="Customer stories">
+  <Carousel
+    kind="cards"
+    aria-label="Customer stories"
+  >
+    <template #header>
+      <h2>Customer stories</h2>
+    </template>
     <template #controls>
       <Carousel.Previous />
       <Carousel.Next />
     </template>
-    <Carousel.Item class="w-72">First slide</Carousel.Item>
-    <Carousel.Item class="w-72">Second slide</Carousel.Item>
-    <Carousel.Item class="w-72">Third slide</Carousel.Item>
+    <Carousel.Item size="small">First slide</Carousel.Item>
+    <Carousel.Item size="small">Second slide</Carousel.Item>
+    <Carousel.Item size="small">Third slide</Carousel.Item>
   </Carousel>
 </template>
 ```
 
 ## Sub-components
 
-- `carousel-item/carousel-item.vue` — one card; a bordered, padded surface that is a snap point in the track, does not shrink, stretches its content to the row's tallest card, and takes its width from the consumer.
+- `carousel-item/carousel-item.vue` — one card; a bordered, padded surface that is a snap point in the track, does not shrink and stretches its content to the row's tallest card. Prop `size?: CarouselItemSize` (`'small' | 'medium' | 'large'`, default `'medium'`) sets its width: `small` `var(--container-2xs)`, `medium` `var(--container-sm)`, `large` `var(--container-md)`, each at most 85% of the viewport below `sm`; carried as `data-size`. It reads the root's `kind` from the carousel context and carries it as `data-kind`: under `cards` it rounds its corners (`var(--shape-card)`) and drops the one-pixel overlap. `CarouselItemSize` is an exported type.
 - `carousel-previous/carousel-previous.vue` — context-aware control that steps the track back; disables itself at the start.
 - `carousel-next/carousel-next.vue` — context-aware control that steps the track forward; disables itself at the end.
 
 ## Props
 
-| Prop        | Type     | Default | Required | JSDoc                                                                    |
-| ----------- | -------- | ------- | -------- | ------------------------------------------------------------------------ |
-| `ariaLabel` | `string` | `''`    | false    | Accessible name for the scrollable track, announced before its contents. |
+| Prop        | Type           | Default   | Required | JSDoc                                                                                                                                 |
+| ----------- | -------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel` | `string`       | `''`      | false    | Accessible name for the scrollable track, announced before its contents.                                                              |
+| `kind`      | `CarouselKind` | `'strip'` | false    | Layout of the row: `strip` sets the cards edge to edge as one ruled strip, `cards` separates them with a gutter and rounds each card. |
 
 ## Events
 
@@ -86,14 +97,17 @@ The unit is Carousel, then a `Carousel.Item` card, then its content — usually 
 
 ## Slots
 
-| Slot       | Scope | Notes                                                                                             |
-| ---------- | ----- | ------------------------------------------------------------------------------------------------- |
-| `default`  | —     | The slides, composed as `Carousel.Item` elements in reading order.                                |
-| `controls` | —     | The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track. |
+| Slot       | Scope | Notes                                                                                                                                    |
+| ---------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `default`  | —     | The slides, composed as `Carousel.Item` elements in reading order.                                                                       |
+| `controls` | —     | The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track, at the row's end when a header is set. |
+| `header`   | —     | Content at the start of the controls row, usually the band's title; the controls move to the row's end.                                  |
 
 ## States
 
 - Visual states: `default`, plus `hover` / `focus-visible` / `disabled` on each step control
+- `data-kind` (`strip` | `cards`) is on the root, the track and every item; under `cards` the track gaps its items by `var(--spacing-md)` and each item is rounded
+- The row above the track renders only when `header` or `controls` is filled; with a header it spreads the header to the start and the controls to the end, without one the controls sit at the start
 - `data-scrollable` is present on the root while the track overflows its row; a track that fits renders no controls to press
 - `data-can-scroll-prev` / `data-can-scroll-next` are on the root and the track while the track has content past its start / end edge. The track fades only the edge that continues, over 12% of its own width, so the row at rest fades on the right alone
 - The fade stands down while the track has keyboard focus, so the focus ring it would otherwise mask is fully visible
@@ -113,20 +127,23 @@ The unit is Carousel, then a `Carousel.Item` card, then its content — usually 
 
 ## Tokens
 
-| Region                      | Token (DESIGN.md)       |
-| --------------------------- | ----------------------- |
-| control surface             | `var(--bg-surface)`     |
-| control border              | `var(--border-default)` |
-| control glyph               | `var(--text-muted)`     |
-| control glyph (hover)       | `var(--text-default)`   |
-| control shape               | `var(--shape-button)`   |
-| card surface                | `var(--bg-surface)`     |
-| card border                 | `var(--border-default)` |
-| card padding                | `var(--spacing-xl)`     |
-| spacing (controls gap)      | `var(--spacing-sm)`     |
-| spacing (controls to track) | `var(--spacing-lg)`     |
-| ring                        | `var(--ring-color)`     |
-| focus ring offset           | `var(--bg-canvas)`      |
+| Region                      | Token (DESIGN.md)                                                      |
+| --------------------------- | ---------------------------------------------------------------------- |
+| control surface             | `var(--bg-surface)`                                                    |
+| control border              | `var(--border-default)`                                                |
+| control glyph               | `var(--text-muted)`                                                    |
+| control glyph (hover)       | `var(--text-default)`                                                  |
+| control shape               | `var(--shape-button)`                                                  |
+| card surface                | `var(--bg-surface)`                                                    |
+| card border                 | `var(--border-default)`                                                |
+| card padding                | `var(--spacing-xl)`                                                    |
+| card shape (`cards`)        | `var(--shape-card)`                                                    |
+| gutter (`cards`)            | `var(--spacing-md)`                                                    |
+| card width                  | `var(--container-2xs)` / `var(--container-sm)` / `var(--container-md)` |
+| spacing (controls gap)      | `var(--spacing-sm)`                                                    |
+| spacing (controls to track) | `var(--spacing-lg)`                                                    |
+| ring                        | `var(--ring-color)`                                                    |
+| focus ring offset           | `var(--bg-canvas)`                                                     |
 
 ## Theme gaps
 
@@ -151,10 +168,25 @@ The unit is Carousel, then a `Carousel.Item` card, then its content — usually 
 - Edge fades: the start/end masks follow the reading direction.
 - User data: none.
 
+## Internationalization
+
+- Built-in strings: the root's `aria-roledescription` and the two controls' default names come from the `carousel` locale group (en, pt-BR, es). Slide content arrives through slots in the page's language.
+
+## Responsive
+
+- The track scrolls at every width; below `sm` every item size is capped at 85% of the viewport, so one card fills a phone with the next one peeking.
+- The header row keeps the controls on the same line as the header at every width; a long header wraps inside its own cell.
+
+## Performance
+
+- Native scrolling and CSS scroll snap; one scroll listener (passive), one `ResizeObserver` and three window pointer listeners, all released on scope dispose.
+- Bundle budget: `carousel-root` 3.85 KB gzip in `.size-limit.json`.
+
 ## Examples
 
 - Default
 - Peek — narrow quote cards that overflow the row so one lands under the trailing fade (justified: a carousel whose content fits shows no scrolling and no enabled control, so the default alone never exercises the component's purpose)
+- Titled cards — `kind="cards"` with the band's title in the `header` slot and the controls at the end of the title row (justified: the header slot and the card layout are the two behaviours the default does not show)
 
 ## Constraints — DO NOT
 

@@ -270,10 +270,95 @@ describe('Carousel (composition)', () => {
   it('throws a clear error when a control is used outside a carousel', () => {
     expect(() => render(CarouselPrevious)).toThrow(/must be used within Carousel/)
     expect(() => render(CarouselNext)).toThrow(/must be used within Carousel/)
+    expect(() => render(CarouselItem)).toThrow(/must be used within Carousel/)
+  })
+
+  it('lays the row out as a ruled strip by default', () => {
+    const { container, getByTestId, getAllByTestId } = render(host())
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'strip')
+    expect(container.querySelector('ul')).toHaveAttribute('data-kind', 'strip')
+    for (const item of getAllByTestId(ITEM_TESTID)) {
+      expect(item).toHaveAttribute('data-kind', 'strip')
+    }
+  })
+
+  it('hands the cards layout down to every item', () => {
+    const { container, getByTestId, getAllByTestId } = render(host({ kind: 'cards' }))
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'cards')
+    expect(container.querySelector('ul')).toHaveAttribute('data-kind', 'cards')
+    for (const item of getAllByTestId(ITEM_TESTID)) {
+      expect(item).toHaveAttribute('data-kind', 'cards')
+    }
+  })
+
+  it('sizes every item medium unless it sets its own size', () => {
+    const sized = defineComponent({
+      components: { Carousel, CarouselItem },
+      template: `
+        <Carousel>
+          <CarouselItem>Default</CarouselItem>
+          <CarouselItem size="small">Small</CarouselItem>
+          <CarouselItem size="large">Large</CarouselItem>
+        </Carousel>
+      `
+    })
+    const { getAllByTestId } = render(sized)
+
+    expect(getAllByTestId(ITEM_TESTID).map((item) => item.getAttribute('data-size'))).toEqual([
+      'medium',
+      'small',
+      'large'
+    ])
+  })
+
+  it('puts the header and the step controls on one row, header first', () => {
+    const titled = defineComponent({
+      components: { Carousel, CarouselItem, CarouselNext, CarouselPrevious },
+      template: `
+        <Carousel aria-label="Use cases">
+          <template #header><h2>See how to use</h2></template>
+          <template #controls>
+            <CarouselPrevious />
+            <CarouselNext />
+          </template>
+          <CarouselItem>One</CarouselItem>
+        </Carousel>
+      `
+    })
+    const { getByRole, getByTestId } = render(titled)
+
+    const heading = getByRole('heading', { level: 2, name: 'See how to use' })
+    const row = heading.closest('[data-header]') as globalThis.HTMLElement
+    expect(row).not.toBeNull()
+    expect(row.contains(getByTestId(PREVIOUS_TESTID))).toBe(true)
+    expect(row.contains(getByTestId(NEXT_TESTID))).toBe(true)
+    expect(
+      heading.compareDocumentPosition(getByTestId(PREVIOUS_TESTID)) &
+        globalThis.Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy()
+  })
+
+  it('renders no header row when neither a header nor controls are given', () => {
+    const bare = defineComponent({
+      components: { Carousel, CarouselItem },
+      template: `<Carousel><CarouselItem>One</CarouselItem></Carousel>`
+    })
+    const { getByTestId } = render(bare)
+
+    expect(getByTestId(TESTID).children).toHaveLength(1)
+    expect(getByTestId(TESTID).firstElementChild?.tagName).toBe('UL')
   })
 
   it('has no a11y violations with a named, filled carousel', async () => {
     const { container } = render(host({ ariaLabel: 'Customer stories' }))
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no a11y violations as titled cards', async () => {
+    const { container } = render(host({ ariaLabel: 'Customer stories', kind: 'cards' }))
 
     await expectNoA11yViolations(container)
   })

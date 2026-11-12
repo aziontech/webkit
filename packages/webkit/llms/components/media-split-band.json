@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene, an image or an illustration; with one action the whole band links to it, with two the band stays unlinked.",
+ "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `product-widget`, `diagram` and the webkit scene assets. The media is a scene, a product console widget, a request-flow diagram, an image (cover or framed) or an illustration; with one action the whole band links to it, with two the band stays unlinked.",
  "setup": null,
  "useWhen": [
   "To make one point beside one picture and move on (a values statement, a single product claim)."
@@ -22,7 +22,9 @@
   "media-split-stack` — the stacked sibling for a run of claims."
  ],
  "bestPractices": [
-  "Give the band exactly one media: `scene`, `image` or `illustration`; when several are set the first of that order wins.",
+  "Give the band exactly one media: `scene`, `widget` (a `ProductWidget` name), `diagram` (a `Diagram` name), `image` or `illustration`; when several are set the first of that order wins.",
+  "On a product page prefer `widget` or `diagram`: they show the product itself. Do not drop to `media-split` and its `media` slot to place one.",
+  "Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.",
   "Use `size=\"large\"` for a band that carries only its headline and description.",
   "Give an `image` its `width` and `height` so the page reserves its box before it loads."
  ],
@@ -60,21 +62,35 @@
    "type": "MediaSplitBandScene",
    "default": "undefined",
    "required": "false",
-   "doc": "Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`."
+   "doc": "Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over every other media."
+  },
+  {
+   "name": "widget",
+   "type": "ProductWidgetName",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Name of the product console widget drawn in the media cell when no scene is set."
+  },
+  {
+   "name": "diagram",
+   "type": "DiagramName",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Name of the request-flow diagram drawn in the media cell when neither a scene nor a widget is set."
   },
   {
    "name": "image",
    "type": "MediaSplitBandImage",
    "default": "undefined",
    "required": "false",
-   "doc": "Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`."
+   "doc": "Picture drawn in the media cell when no scene, widget or diagram is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell."
   },
   {
    "name": "illustration",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Registry name of the illustration drawn in the media cell when neither a scene nor an image is set."
+   "doc": "Registry name of the illustration drawn in the media cell when no other media is set."
   },
   {
    "name": "illustrationAriaLabel",
@@ -105,12 +121,20 @@
   {
    "kind": "illustrations",
    "page": "foundations/illustrations.md"
+  },
+  {
+   "kind": "diagrams",
+   "page": "foundations/diagrams.md"
   }
  ],
  "examples": [
   {
    "name": "Default",
    "sfc": "<script setup>\n  import MediaSplitBand from '@aziontech/webkit/media-split-band'\n</script>\n\n<template>\n  <MediaSplitBand\n    eyebrow=\"Our values\"\n    title=\"Four values shape every role at Azion\"\n    description=\"Quality, Drive, Accountability, and Innovation. They guide how we work every day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in new ways. Together, they help us earn and keep the trust of our customers.\"\n    size=\"large\"\n    :scene=\"{ component: 'BrandGlobeScene' }\"\n  />\n</template>"
+  },
+  {
+   "name": "Product media",
+   "sfc": "<script setup>\n  import MediaSplitBand from '@aziontech/webkit/media-split-band'\n</script>\n\n<template>\n  <MediaSplitBand\n    eyebrow=\"Real-Time Events\"\n    title=\"Filter every request as it happens\"\n    description=\"Narrow the event stream by status, path or country, and read the matching requests seconds after they arrive.\"\n    widget=\"real-time-events-filter\"\n    :primary-action=\"{\n      label: 'Learn more',\n      href: '/en/products/real-time-events/',\n      trailing: true\n    }\"\n  />\n  <MediaSplitBand\n    eyebrow=\"Cache\"\n    title=\"Serve repeat requests from the nearest location\"\n    description=\"Cached responses never travel back to your origin, so it handles a fraction of the traffic.\"\n    diagram=\"cache\"\n  />\n</template>"
   }
  ],
  "docs": "components/media-split-band.md"

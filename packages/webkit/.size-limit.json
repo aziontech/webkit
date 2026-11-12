@@ -269,7 +269,7 @@
   {
     "name": "carousel-root",
     "path": "src/components/marketing/carousel/carousel.vue",
-    "limit": "3.65 KB"
+    "limit": "3.85 KB"
   },
   {
     "name": "banner",
@@ -587,6 +587,11 @@
     "name": "use-case-links",
     "path": "src/components/sections/use-case-links/use-case-links.vue",
     "limit": "5 KB"
+  },
+  {
+    "name": "card-carousel",
+    "path": "src/components/sections/card-carousel/card-carousel.vue",
+    "limit": "7.5 KB"
   },
   {
     "name": "client-mosaic",

@@ -1,6 +1,6 @@
 # Media Split Stack
 
-> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration` and `button`. `kind` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.
+> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration`, `product-widget`, `diagram` and `button`. A band's picture is one of four things: a `ProductWidget` console mock (`widget`), a `Diagram` request-flow figure (`diagram`), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. `kind` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.
 
 - Import: `import MediaSplitStack from '@aziontech/webkit/media-split-stack'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -12,7 +12,9 @@
 
 ## Do
 
-- Give a band either `image` (a URL, with `imageAlt` when it says something) or `illustration` (a registry name, with `illustrationLabel`), not both; a band with neither renders without its media cell.
+- Give a band one picture: `widget` (a `ProductWidget` name — the product's console screen), `diagram` (a `Diagram` name — its request flow), `illustration` (a registry name, with `illustrationLabel`) or `image` (a URL, with `imageAlt` when it says something). When several are set the first in that order wins; a band with none renders without its media cell.
+- Prefer `widget` or `diagram` on a product page: they show the product itself, where an illustration only evokes it. Do not drop to `media-split` and its `media` slot to place one.
+- Set `imageFramed` for a picture that is an object rather than a scene — a badge, a logo, a screenshot: it sits whole on a rounded, bordered plate inset in the cell. A plain `image` is scaled to fit the cell and never overflows it.
 - Give every band an `action`; it is both the button and the link the whole band follows.
 
 ## Don’t
@@ -33,11 +35,12 @@
 | `kind` | `MediaSplitStackKind` | `'media-end'` | false | Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty. |
-| `bands` | `MediaSplitStackBand[]` | `[]` | false | The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows. |
+| `bands` | `MediaSplitStackBand[]` | `[]` | false | The bands, in order; each is `{ title, description, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `widget` is a `ProductWidget` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows. |
 
 ## Assets
 
 - Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+- Diagrams: every valid name is in [diagrams.md](../foundations/diagrams.md) (MCP `list_assets({ kind: "diagrams" })`). An unknown name draws nothing.
 
 ## States
 
@@ -45,15 +48,37 @@
 - `data-kind` mirrors the `kind` prop
 - Empty: when `bands` is empty the run renders nothing — not the header, not the stack
 - The header renders only when `title` is set; a band renders its button and its link only when it has an `action`, and its media cell only when it has a picture
+- Media precedence per band: `widget`, then `diagram`, then `illustration`, then `image`. A widget or a diagram is inset from the cell's edges (`media-split`'s `mediaPadded`), and so is a framed image; an illustration and a plain image run flush
+- A widget plays its beat while the pointer is over its band (`hover`), and shows its finished state on touch and under reduced motion (owned by `product-widget`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
+- Widget and diagram load on demand (`defineAsyncComponent`): a run that uses neither never downloads them
 
 ## Accessibility
 
 - Visible focus: owned by `button` and `media-split`'s media link.
 - Keyboard map: `Tab` reaches each band's media link and button; `Enter` follows them.
-- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h2`; illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty.
+- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h2`; illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty; a diagram is a `figure` named by the description its library entry carries; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the run adds no motion.
 - Touch target ≥40×40 px: the medium buttons and the band links.
+
+## Right-to-left
+
+- Layout: logical utilities only; `alternating` swaps the media side with the reading direction (owned by `media-split`).
+- Icons: the button's trailing chevron mirrors (owned by `button`).
+- Keyboard: unchanged.
+- User data: none.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props in the page's language. Widget and diagram text is product UI copy owned by `product-widget` and `diagram`.
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none; `media-split` stacks the media under the copy below `lg`.
+- Narrow (≤ 640 px): one column per band; a widget, a diagram and a framed image scale down with the cell.
+- Touch: a widget shows its finished state instead of the hover beat; the whole band stays one link.
+- Reflow: no horizontal scroll at 320 px.
 
 ## Examples
 
@@ -245,5 +270,46 @@
       :bands="networkBands"
     />
   </div>
+</template>
+```
+
+### Product media
+
+```vue
+<script setup>
+  import g2Symbol from '@aziontech/webkit/assets/g2-symbol-color.svg'
+  import MediaSplitStack from '@aziontech/webkit/media-split-stack'
+
+  const bands = [
+    {
+      widget: 'data-stream-source',
+      title: 'Unified data collection',
+      description:
+        'Collect event data from Applications, Functions, WAF Events, and Activity History from one configuration.',
+      action: { label: 'Learn more', href: '/en/products/data-stream/' }
+    },
+    {
+      diagram: 'load-balancer',
+      title: 'Failover and error handling',
+      description:
+        'Route around an unhealthy origin in real time, and retry on the next one before the request fails.',
+      action: { label: 'Learn more', href: '/en/products/load-balancer/' }
+    },
+    {
+      image: g2Symbol,
+      imageAlt: 'G2',
+      imageFramed: true,
+      title: 'Recognized by the people who use it',
+      description: 'Rated a Leader in Edge Computing by G2 users, season after season.',
+      action: { label: 'Read the reviews', href: '/en/about-us/' }
+    }
+  ]
+</script>
+
+<template>
+  <MediaSplitStack
+    kind="alternating"
+    :bands="bands"
+  />
 </template>
 ```

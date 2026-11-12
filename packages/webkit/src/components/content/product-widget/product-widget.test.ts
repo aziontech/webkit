@@ -150,6 +150,41 @@ describe('ProductWidget', () => {
     warn.mockRestore()
   })
 
+  it('draws a fragment collaborator cursor by default', async () => {
+    const view = render(host({ name: 'data-stream-source' }))
+    const frame = await frameOf(view)
+
+    expect(frame.textContent).toContain('Bianca')
+  })
+
+  it('hides the collaborator cursor when cursor is off, and still draws the fragment', async () => {
+    const view = render(host({ name: 'data-stream-source', cursor: false }))
+    const frame = await frameOf(view)
+
+    expect(frame.textContent).toContain('Data Source')
+    expect(frame.textContent).not.toContain('Bianca')
+  })
+
+  it('warns in development when a plating prop is set on a fragment that ignores it', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const view = render(host({ name: 'data-stream-source', kind: 'window', chrome: true }))
+    await frameOf(view)
+
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('kind, chrome have no effect'))
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('name="data-stream-source"'))
+    warn.mockRestore()
+  })
+
+  it('does not warn when the widget reads every plating prop it is given', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const view = render(host({ name: 'workloads-list', kind: 'bare', fade: 'bottom', width: 720 }))
+    await frameOf(view)
+
+    expect(warn.mock.calls.flat().join(' ')).not.toContain('has no effect')
+    expect(warn.mock.calls.flat().join(' ')).not.toContain('have no effect')
+    warn.mockRestore()
+  })
+
   it('warns and draws nothing for a name outside the registry', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const view = render(host({ name: 'not-a-widget' }))

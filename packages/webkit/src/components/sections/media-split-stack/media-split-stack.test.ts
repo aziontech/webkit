@@ -1,6 +1,7 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import ProductMedia from '../../../../examples/media-split-stack/product-media.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import MediaSplitStack from './media-split-stack.vue'
 
@@ -140,6 +141,53 @@ describe('MediaSplitStack', () => {
   it('has no a11y violations with the alternating kind and a header', async () => {
     const { container } = run({ kind: 'alternating', eyebrow: EYEBROW, title: TITLE })
 
+    await expectNoA11yViolations(container)
+  })
+
+  it('draws a widget, a diagram and a framed image, each inset from the cell', async () => {
+    const { container, findByTestId, getByRole } = render(ProductMedia)
+
+    const widget = await findByTestId('content-product-widget', {}, { timeout: 5000 })
+    expect(widget.getAttribute('data-name')).toBe('data-stream-source')
+    const diagram = await findByTestId('marketing-diagram', {}, { timeout: 5000 })
+    expect(diagram.getAttribute('data-name')).toBe('load-balancer')
+    expect(getByRole('img', { name: 'G2' })).toBeInTheDocument()
+    await expect.poll(() => widget.textContent).toContain('Data Source')
+    expect(widget.textContent).not.toContain('Bianca')
+    const splits = Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`))
+    expect(splits.map((split) => split.hasAttribute('data-media-padded'))).toEqual([
+      true,
+      true,
+      true
+    ])
+  })
+
+  it('runs an illustration and a plain image flush', () => {
+    const { container } = run()
+
+    const splits = Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`))
+    expect(splits.map((split) => split.hasAttribute('data-media-padded'))).toEqual([
+      false,
+      false,
+      false
+    ])
+  })
+
+  it('prefers a widget over the illustration and the image of the same band', async () => {
+    const { container, findByTestId } = run({
+      bands: [{ ...bands[0], illustration: 'ai-applications', widget: 'kv-store-key' }]
+    })
+
+    await findByTestId('content-product-widget', {}, { timeout: 5000 })
+    expect(container.querySelector(`img[src="${bands[0].image}"]`)).toBeNull()
+    expect(container.querySelector('[data-testid="content-illustration"]')).toBeNull()
+  })
+
+  it('has no a11y violations with product media', async () => {
+    const { container, findByTestId } = render(ProductMedia)
+
+    await findByTestId('content-product-widget', {}, { timeout: 5000 })
+    await findByTestId('marketing-diagram', {}, { timeout: 5000 })
     await expectNoA11yViolations(container)
   })
 })

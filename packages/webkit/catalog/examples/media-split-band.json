@@ -4,6 +4,11 @@
    "name": "Default",
    "summary": "The Careers values band: a large, centred copy cell with no actions beside the turning brand globe. Edit the props in the Controls panel — give it one action and the whole band becomes a link, two and it stays unlinked.",
    "sfc": "<script setup>\n  import MediaSplitBand from '@aziontech/webkit/media-split-band'\n</script>\n\n<template>\n  <MediaSplitBand\n    eyebrow=\"Our values\"\n    title=\"Four values shape every role at Azion\"\n    description=\"Quality, Drive, Accountability, and Innovation. They guide how we work every day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in new ways. Together, they help us earn and keep the trust of our customers.\"\n    size=\"large\"\n    :scene=\"{ component: 'BrandGlobeScene' }\"\n  />\n</template>"
+  },
+  {
+   "name": "Product media",
+   "summary": "The band with a ProductWidget console screen as its picture (`widget`), then with a Diagram request flow (`diagram`). Both sit inset in the media cell, and the widget plays its beat while the pointer is over the band.",
+   "sfc": "<script setup>\n  import MediaSplitBand from '@aziontech/webkit/media-split-band'\n</script>\n\n<template>\n  <MediaSplitBand\n    eyebrow=\"Real-Time Events\"\n    title=\"Filter every request as it happens\"\n    description=\"Narrow the event stream by status, path or country, and read the matching requests seconds after they arrive.\"\n    widget=\"real-time-events-filter\"\n    :primary-action=\"{\n      label: 'Learn more',\n      href: '/en/products/real-time-events/',\n      trailing: true\n    }\"\n  />\n  <MediaSplitBand\n    eyebrow=\"Cache\"\n    title=\"Serve repeat requests from the nearest location\"\n    description=\"Cached responses never travel back to your origin, so it handles a fraction of the traffic.\"\n    diagram=\"cache\"\n  />\n</template>"
   }
  ]
 }

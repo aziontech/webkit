@@ -1447,7 +1447,7 @@ Pass the name to `Diagram` (`name`) or to a section that shows one; the label is
 
 28 names. These are the only values the components accept. An unknown name draws nothing. The MCP tool `list_assets({ kind: "diagrams" })` returns the same list (with a `query` to filter), and `catalog.json#assets.diagrams` points at it as data.
 
-Used by: [ArchitectureTabs](../components/architecture-tabs.md), [Diagram](../components/diagram.md).
+Used by: [ArchitectureTabs](../components/architecture-tabs.md), [Diagram](../components/diagram.md), [MediaSplitBand](../components/media-split-band.md), [MediaSplitStack](../components/media-split-stack.md).
 
 ## Names
 
@@ -20695,6 +20695,8 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 - Give the host a size (a height or an aspect ratio). A widget fills its host and scales its design width to fit.
 - Host a framed widget (a full screen) in a wide panel, and a fragment in a grid cell with its own padding. Fragments are drawn bare and float on the cell's surface, so set `--mockup-fade-color` on the cell when it is not `--bg-canvas`.
 - Leave `kind`, `chrome`, `width`, `tab` and `interval` unset unless the host needs a different value: unset keeps the widget's own.
+- Never expect a fragment to become a console window. `kind`, `chrome`, `width` and `fade` re-plate only the workload screens listed under Props; a fragment is drawn bare at its own design width and ignores them, and the root warns in development when one is set on a widget that does not read it. For a framed console window pick a workload screen; for a fragment, give its host cell the padding and surface (a media split's inset media cell does).
+- Turn `cursor` off when the widget stands for a screen the reader uses alone. Fragments act their beat with a named collaborator cursor; that is right in a feature grid that plays on hover, and a fake second person in a product band that reads as a screenshot.
 - Keep the copy beside the widget saying what it shows. Every widget but `function-code` and the coding-agent switch of `functions-start` is hidden from assistive technology.
 
 ## Don’t
@@ -20718,12 +20720,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 | `name` | `'ai-inference-function' \| 'ai-inference-model' \| 'ai-inference-template' \| 'application-accelerator-cookie' \| 'application-accelerator-method' \| 'application-accelerator-query-string' \| 'application-cache' \| 'application-function' \| 'application-rule' \| 'application-version' \| 'applications-create-method' \| 'applications-device-group' \| 'applications-rule-phases' \| 'bot-manager-metrics' \| 'bot-manager-rule' \| 'bot-manager-traffic' \| 'cli-terminal-deploy' \| 'cli-terminal-start' \| 'data-stream-connector' \| 'data-stream-sampling' \| 'data-stream-source' \| 'ddos-firewall-modules' \| 'ddos-http-events' \| 'ddos-requests-metric' \| 'edge-dns-dnssec' \| 'edge-dns-nameserver' \| 'edge-dns-record' \| 'firewall-function' \| 'firewall-modules' \| 'firewall-rules-order' \| 'function-code' \| 'functions-start' \| 'image-processor-events' \| 'image-processor-module' \| 'image-processor-rule' \| 'kv-store-function' \| 'kv-store-key' \| 'kv-store-security-list' \| 'load-balancer-address' \| 'load-balancer-method' \| 'load-balancer-origins' \| 'network-shield-ip-list' \| 'network-shield-lists' \| 'network-shield-rule' \| 'object-storage-access' \| 'object-storage-browser' \| 'object-storage-buckets' \| 'real-time-events-filter' \| 'real-time-events-log' \| 'real-time-events-volume' \| 'real-time-metrics-dashboard' \| 'real-time-metrics-filter' \| 'real-time-metrics-panel' \| 'sql-database-query' \| 'sql-database-row' \| 'sql-database-table' \| 'waf-allowed-rule' \| 'waf-firewall-rule' \| 'waf-threat' \| 'workload-deploy' \| 'workload-deploy-logs' \| 'workload-deployments' \| 'workload-domain' \| 'workload-domains' \| 'workload-overview' \| 'workload-rollout-rows' \| 'workload-topology-chain' \| 'workload-topology' \| 'workload-topology-flow' \| 'workloads-list'` | `—` | true | Name of the console widget to draw. |
 | `active` | `boolean` | `true` | false | Whether this widget is the one showing; it replays its entrance each time it becomes active. |
 | `hover` | `boolean` | `false` | false | Whether the pointer is over the host; a fragment plays its beat while it is. |
-| `kind` | `'window' \| 'bare'` | `undefined` | false | How a framed widget is plated; unset keeps the widget's own plating. |
-| `chrome` | `boolean` | `undefined` | false | Draws the console bar on a framed widget; unset keeps the widget's own bar. |
-| `width` | `number` | `undefined` | false | Design width of a framed widget from md up; unset keeps the widget's own width. |
-| `fade` | `'none' \| 'bottom' \| 'top' \| 'left' \| 'right' \| 'y'` | `'none'` | false | Edge a framed widget fades out along. |
+| `kind` | `'window' \| 'bare'` | `undefined` | false | How a workload screen is plated (window or bare); fragments are always bare and ignore it, and unset keeps the widget's own plating. |
+| `chrome` | `boolean` | `undefined` | false | Draws the console bar on a workload screen; fragments have no bar and ignore it, and unset keeps the widget's own bar. |
+| `width` | `number` | `undefined` | false | Design width of a workload screen from md up; fragments keep their own width, and unset keeps the widget's own. |
+| `fade` | `'none' \| 'bottom' \| 'top' \| 'left' \| 'right' \| 'y'` | `'none'` | false | Edge a workload screen, workload-overview or application-version fades out along; fragments keep their own fade. |
 | `texture` | `'dots' \| 'grid' \| 'lines' \| 'dither' \| 'pixelate' \| 'none'` | `'none'` | false | Texture a full-screen widget is grounded with. |
 | `tab` | `'agents' \| 'console' \| 'cli' \| 'overview' \| 'topology' \| 'deploy' \| 'main-settings' \| 'cache-settings' \| 'device-groups' \| 'functions' \| 'rules-engine'` | `undefined` | false | Tab a tabbed widget plays (`workload-overview`, `application-version`, `functions-start`); other widgets ignore it, and unset plays the first tab. |
+| `cursor` | `boolean` | `true` | false | Draws the named collaborator cursor a fragment acts its beat with; turn it off for a still console picture. Widgets without a cursor ignore it. |
 | `interval` | `number` | `undefined` | false | Milliseconds between revealed log lines in the deploy logs widget; unset keeps its own pace. |
 
 ## States
@@ -20734,6 +20737,8 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 - `data-name` mirrors `name` on the root.
 - Loading: the widget's code is loaded on demand. The root keeps its size while it loads and draws nothing until the widget arrives. A `name` change clears the current widget at once, so the root never shows the earlier widget under the new `data-name`, whether the new load is still in flight or has failed.
 - A `name` outside the registry (from untyped code), or a widget chunk that fails to load, warns in development only (`import.meta.env.DEV`) and leaves the root empty; it never throws.
+- A plating prop the loaded widget does not read warns in development only, once per load, and changes nothing.
+- `cursor` off: no collaborator cursor or name tag is drawn; the fragment's controls still open, highlight and settle on their beat.
 - Each widget owns its entrance (a `shell-mockup` replay when `active` turns on) and, for fragments, its beat while `hover` is set or the device cannot hover. Under reduced motion every widget is drawn in its settled state.
 
 ## Accessibility
@@ -20752,6 +20757,18 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 - Icons: every chevron and angle inside the widget fragments mirrors (`rtl:-scale-x-100`), the pagination angles included.
 - Keyboard: no horizontal arrow-key logic.
 - User data: domains, IDs and code samples in the mock data keep their own direction.
+
+## Internationalization
+
+- No built-in strings in the root. Widget text is console UI copy drawn as part of the picture (hidden from assistive technology), and the collaborator names on the cursors are mock data.
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none; every widget scales its design width to fit its host (`shell-mockup`), with a narrower design width below `md`.
+- Narrow: the host sets the size; the widget scales down with it.
+- Touch: a fragment shows its finished beat on a device that cannot hover.
+- Reflow: no horizontal scroll; the frame scales instead.
 
 ## Examples
 
@@ -33532,7 +33549,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Carousel
 
-> A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote`. The cards sit edge to edge with no gutter: each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip. The track fades at whichever end still has cards past it.
+> A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote` or a `topic`. Two layouts, set on the root with `kind`: `strip` (the default) sets the cards edge to edge with no gutter — each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip; `cards` separates them with a gutter and rounds each one, so the row reads as a set of standalone cards. Each card takes its width from its own `size`, never from a class. The track fades at whichever end still has cards past it. An optional `header` slot shares the row the step controls sit in: the band's title goes at the start and the controls move to the end, so a titled carousel needs no hand-built row around it.
 
 - Import: `import CarouselRoot from '@aziontech/webkit/carousel-root'`
 - Compound import (dot notation, not tree-shakeable): `import Carousel from '@aziontech/webkit/carousel'`
@@ -33548,9 +33565,10 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Do
 
 - Never put essential content in a carousel. A slide past the first is content a reader may never see.
-- Size the cards on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one card on mobile and three on desktop.
+- Size the cards with `size` on `Carousel.Item` (`small` `var(--container-2xs)`, `medium` `var(--container-sm)`, `large` `var(--container-md)`; each capped at 85% of the viewport on phones). Never put width classes on the item: they fight its own width and the `no-style-override` lint rejects them.
 - Put content straight into `Carousel.Item`, not inside another framed box. The item is already the card (border, surface, padding), and a second frame inside it draws two rules.
-- The row has no gutter by design. Space between cards would break the ruled strip into floating tiles; a band that needs air between its items wants a grid, not this track.
+- Pick the layout with `kind`: `strip` for a ruled row of quotes or figures that reads as one surface, `cards` for standalone cards with a gutter (use-case cards, articles). Never add margins to the items to fake a gutter.
+- Put the band's title in the `header` slot when the controls belong on the title row; the controls then sit at the row's end. For a whole titled band of overline/title/text cards use the `card-carousel` section instead of composing one.
 - Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.
 - The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.
 - Always name the carousel with `ariaLabel`. "Customer stories" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.
@@ -33576,13 +33594,15 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the scrollable track, announced before its contents. |
+| `kind` | `CarouselKind` | `'strip'` | false | Layout of the row: `strip` sets the cards edge to edge as one ruled strip, `cards` separates them with a gutter and rounds each card. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | The slides, composed as `Carousel.Item` elements in reading order. |
-| `controls` | — | The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track. |
+| `controls` | — | The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track, at the row's end when a header is set. |
+| `header` | — | Content at the start of the controls row, usually the band's title; the controls move to the row's end. |
 
 ## Sub-component imports
 
@@ -33592,13 +33612,15 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Sub-components
 
-- `carousel-item/carousel-item.vue` — one card; a bordered, padded surface that is a snap point in the track, does not shrink, stretches its content to the row's tallest card, and takes its width from the consumer.
+- `carousel-item/carousel-item.vue` — one card; a bordered, padded surface that is a snap point in the track, does not shrink and stretches its content to the row's tallest card. Prop `size?: CarouselItemSize` (`'small' | 'medium' | 'large'`, default `'medium'`) sets its width: `small` `var(--container-2xs)`, `medium` `var(--container-sm)`, `large` `var(--container-md)`, each at most 85% of the viewport below `sm`; carried as `data-size`. It reads the root's `kind` from the carousel context and carries it as `data-kind`: under `cards` it rounds its corners (`var(--shape-card)`) and drops the one-pixel overlap. `CarouselItemSize` is an exported type.
 - `carousel-previous/carousel-previous.vue` — context-aware control that steps the track back; disables itself at the start.
 - `carousel-next/carousel-next.vue` — context-aware control that steps the track forward; disables itself at the end.
 
 ## States
 
 - Visual states: `default`, plus `hover` / `focus-visible` / `disabled` on each step control
+- `data-kind` (`strip` | `cards`) is on the root, the track and every item; under `cards` the track gaps its items by `var(--spacing-md)` and each item is rounded
+- The row above the track renders only when `header` or `controls` is filled; with a header it spreads the header to the start and the controls to the end, without one the controls sit at the start
 - `data-scrollable` is present on the root while the track overflows its row; a track that fits renders no controls to press
 - `data-can-scroll-prev` / `data-can-scroll-next` are on the root and the track while the track has content past its start / end edge. The track fades only the edge that continues, over 12% of its own width, so the row at rest fades on the right alone
 - The fade stands down while the track has keyboard focus, so the focus ring it would otherwise mask is fully visible
@@ -33625,6 +33647,15 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Edge fades: the start/end masks follow the reading direction.
 - User data: none.
 
+## Internationalization
+
+- Built-in strings: the root's `aria-roledescription` and the two controls' default names come from the `carousel` locale group (en, pt-BR, es). Slide content arrives through slots in the page's language.
+
+## Responsive
+
+- The track scrolls at every width; below `sm` every item size is capped at 85% of the viewport, so one card fills a phone with the next one peeking.
+- The header row keeps the controls on the same line as the header at every width; a long header wraps inside its own cell.
+
 ## Examples
 
 ### Default
@@ -33632,58 +33663,55 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ```vue
 <script setup>
   import Carousel from '@aziontech/webkit/carousel'
-  import CarouselItem from '@aziontech/webkit/carousel-item'
-  import CarouselNext from '@aziontech/webkit/carousel-next'
-  import CarouselPrevious from '@aziontech/webkit/carousel-previous'
   import Quote from '@aziontech/webkit/quote'
 </script>
 
 <template>
   <Carousel aria-label="Customer testimonials">
     <template #controls>
-      <CarouselPrevious />
-      <CarouselNext />
+      <Carousel.Previous />
+      <Carousel.Next />
     </template>
-    <CarouselItem class="w-[85vw] max-w-120 sm:w-120">
+    <Carousel.Item size="large">
       <Quote
         text="With Azion, we scale proprietary AI models without managing infrastructure — inspecting millions of websites daily and automating the fastest threat takedown in the market."
         name="Fabio Ramos"
         job-title="CEO, Axur"
       />
-    </CarouselItem>
-    <CarouselItem class="w-[85vw] max-w-120 sm:w-120">
+    </Carousel.Item>
+    <Carousel.Item size="large">
       <Quote
         text="Filing season triples our traffic in a week. Azion absorbs it without a capacity conversation, and we ship changes to the edge in minutes."
         name="Vitor Torres"
         job-title="CEO, Contabilizei"
       />
-    </CarouselItem>
-    <CarouselItem class="w-[85vw] max-w-120 sm:w-120">
+    </Carousel.Item>
+    <Carousel.Item size="large">
       <Quote
         text="Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks."
         name="Allan Monteiro"
         job-title="CISO & Head of Technology, Magalu"
       />
-    </CarouselItem>
-    <CarouselItem class="w-[85vw] max-w-120 sm:w-120">
+    </Carousel.Item>
+    <Carousel.Item size="large">
       <Quote
         text="One of the best CDN and WAF solutions I have ever used. Easy to implement and integrate, with the speed and low latency that make a real difference for our customers."
         name="Julian H"
         job-title="IT OPS, SRE & SEC Manager, Dafiti"
       />
-    </CarouselItem>
-    <CarouselItem class="w-[85vw] max-w-120 sm:w-120">
+    </Carousel.Item>
+    <Carousel.Item size="large">
       <Quote
         text="We block more than four million threats in six months without a single rule running on our own servers, and the security team reads one dashboard instead of five."
         name="Renata Alves"
         job-title="Head of Information Security, Netshoes"
       />
-    </CarouselItem>
+    </Carousel.Item>
   </Carousel>
 </template>
 ```
 
-1 more example(s) in [components/carousel.md](https://github.com/aziontech/webkit/blob/main/.specs/components/carousel.md).
+2 more example(s) in [components/carousel.md](https://github.com/aziontech/webkit/blob/main/.specs/components/carousel.md).
 
 ---
 
@@ -40007,6 +40035,165 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ---
 
+<!-- components/card-carousel.md -->
+
+# Card Carousel
+
+> The titled card-carousel band of a product or solution page: a section title on the start of the row with the previous/next controls at its end, over a horizontally scrolling track of standalone cards. Each card is an optional overline (the category), a heading, a sentence and, when it links somewhere, a mono link label closed by an arrow ("See example", "See solution"). The band answers "see how to use", "industries", "orchestration with control" on azion.com product pages, where the cases outnumber the row. It is a page section — the site places it from a `{ _id: 'card-carousel', props }` entry and binds `props` straight onto it — so its whole API is the props below. It composes `carousel` (`kind="cards"`, its `header` slot, `size="medium"` items and its step controls), `section-title` and `overline`, and owns only the card's inner layout.
+
+- Import: `import CardCarousel from '@aziontech/webkit/card-carousel'`
+- Category: sections · Surface: marketing · Structure: monolithic
+- API as JSON: [card-carousel.json](https://github.com/aziontech/webkit/blob/main/.specs/card-carousel.json)
+
+## When to use
+
+- Four or more cases, industries or examples of equal weight that do not all need to be seen: the reader steps through them.
+- When each case is a short card (overline, heading, one or two sentences) that may link to its own page or example.
+
+## Do
+
+- Give the band a `title`; its arrows sit on the title row, and the title names the row for assistive technology.
+- Keep each card to a heading and one or two sentences, so the row height stays even.
+- Use `eyebrow` on every card or on none; a row where some cards carry an overline reads as ragged.
+- Give every card a `linkLabel` when every card has an `href`, and none when none does. The label is a visual cue; the card heading is the link.
+- Pass as many cards as the content has; the track scrolls, so the count never has to fill the row.
+
+## Don’t
+
+- When every case must be visible, or there are three or six of equal weight → use `use-case-links` (linked grid) or `use-cases` (grid with one action).
+- For a quote or testimonial row → use `quote-carousel` or `client-quotes`.
+- For numbered principles pinned while the page scrolls → use `sticky-carousel`.
+- For articles with images → use `article-cards`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [carousel](carousel.md) — the primitive this band composes; reach for it directly only for a non-card row.
+- [use-case-links](use-case-links.md) — the same content as a static, fully visible grid.
+- [sticky-carousel](sticky-carousel.md) — numbered dark cards pinned on scroll.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
+| `eyebrow` | `string` | `''` | false | Overline above the band title. |
+| `title` | `string` | `''` | false | Headline of the band, rendered as its `h2` at the start of the row the step controls end; the band renders no title when empty. |
+| `description` | `string` | `''` | false | Supporting sentence under the headline. |
+| `items` | `CardCarouselItem[]` | `[]` | false | The cards, in order; each is `{ eyebrow?, title, description, href?, linkLabel? }`, and a card with `href` links to it. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the card row; defaults to the title. |
+
+## States
+
+- Visual states: `default`; each linked card has `hover` (the arrow nudges toward the end edge, the label brightens) and `focus-visible` (an inset ring on the whole card).
+- Empty: with no `items` the band renders nothing — no title, no controls.
+- Untitled: with no `title` the controls sit alone at the start of the row (the carousel's own layout) and the row is named by `ariaLabel` only.
+- Unlinked card: without `href` the card is a plain card with no hover state and no link label.
+- The step controls carry `disabled` at each end of the track, from the carousel; a row that fits shows both disabled.
+- `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`: the band cannot be in these states; it renders static content from props.
+
+## Accessibility
+
+- Pattern: the WAI-ARIA APG carousel (`aria-roledescription="carousel"`, named region) from `carousel`; the band root is a plain container so the row is the one named region, named by `ariaLabel` or the title.
+- Outline: the title is the section title's `h2`; each card heading is an `h3`.
+- Links: on a linked card the `h3` holds the anchor, so the link's name is the card title; a stretched `::after` makes the whole card its hit area. The link label and its arrow are `aria-hidden` decoration.
+- Keyboard map: `Tab` reaches the previous control, the next control, the track (arrow keys scroll it natively) and each card link in order; `Enter` / `Space` on a control steps one card; `Enter` on a card link follows it. A card that scrolls into focus is brought into view by the browser.
+- Visible focus: card links draw `focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)` around the whole card; the controls and track carry the carousel's ring.
+- Contrast ≥4.5:1: copy is `var(--text-muted)` on `var(--bg-surface)`; the link label is `var(--text-muted)` at rest; the arrow is `var(--text-primary)` (≥3:1 as a graphic).
+- `motion-reduce:transition-none` on every transition; the track never auto-advances (WCAG 2.2.2 does not apply).
+- Touch target ≥40×40 px: the controls are 40×40; a card link spans its whole card.
+
+## Right-to-left
+
+- Layout: logical utilities only; the title row keeps the title at the start edge and the controls at the end edge.
+- Icons: the link arrow (`pi pi-arrow-right`) mirrors under `rtl:-scale-x-100` and its hover nudge runs toward the end edge (`rtl:group-hover/card:-translate-x-0.5`); the carousel's chevrons mirror in `carousel`.
+- Keyboard: the next control steps toward the end edge in both directions (`carousel`).
+- User data: none.
+
+## Internationalization
+
+- No built-in strings: every visible string is marketing copy and arrives through props in the page's language. The control names and the `carousel` role description come from `carousel`'s own locale group (en, pt-BR, es).
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none; the cards have a fixed width (`size="medium"`, `var(--container-sm)`) and the track scrolls.
+- Narrow (≤ 640 px): each card is 85% of the viewport wide, so one card fills a phone and the next peeks; the title wraps inside its cell while the controls stay on its row.
+- Touch: the track swipes natively; the hover nudge is decoration only, and every card stays a full-card link on touch.
+- Reflow: the page never scrolls sideways at 320 px; only the track does, which is the component's purpose (WCAG 1.4.10 exception for a carousel).
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import CardCarousel from '@aziontech/webkit/card-carousel'
+
+  const items = [
+    {
+      eyebrow: 'E-commerce',
+      title: 'E-commerce product image optimization',
+      description:
+        'Optimize product images for faster page loads and better conversion rates. Automatically deliver responsive images at the right size and format for each device.',
+      href: '/docs/products/build/applications/image-processor',
+      linkLabel: 'See example'
+    },
+    {
+      eyebrow: 'Media',
+      title: 'News and media site responsive images',
+      description:
+        'Deliver optimized images for news articles and media content that load instantly on any device. Automatic format conversion ensures the best experience.',
+      href: '/docs/products/build/applications/image-processor',
+      linkLabel: 'See example'
+    },
+    {
+      eyebrow: 'UGC',
+      title: 'User-generated content optimization',
+      description:
+        'Optimize user-uploaded images on-the-fly from your storage. Apply consistent sizing, quality, and format standards without preprocessing.',
+      href: '/docs/products/build/applications/image-processor',
+      linkLabel: 'See example'
+    },
+    {
+      eyebrow: 'Marketplace',
+      title: 'Marketplace listing thumbnails',
+      description:
+        'Crop and compress every seller photo to the same frame and quality, whatever size it was uploaded at.',
+      href: '/docs/products/build/applications/image-processor',
+      linkLabel: 'See example'
+    },
+    {
+      eyebrow: 'SaaS',
+      title: 'Avatars and workspace logos',
+      description:
+        'Resize profile pictures and logos for every place your product shows them, from one original in your bucket.',
+      href: '/docs/products/build/applications/image-processor',
+      linkLabel: 'See example'
+    },
+    {
+      eyebrow: 'Travel',
+      title: 'Destination galleries',
+      description:
+        'Serve large hotel and destination photos as WebP or AVIF, so galleries stay sharp without slowing the booking flow.',
+      href: '/docs/products/build/applications/image-processor',
+      linkLabel: 'See example'
+    }
+  ]
+</script>
+
+<template>
+  <CardCarousel
+    title="See how to use"
+    :items="items"
+  />
+</template>
+```
+
+1 more example(s) in [components/card-carousel.md](https://github.com/aziontech/webkit/blob/main/.specs/components/card-carousel.md).
+
+---
+
 <!-- components/cli-terminal.md -->
 
 # Cli Terminal
@@ -43891,7 +44078,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 # Media Split Band
 
-> One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene, an image or an illustration; with one action the whole band links to it, with two the band stays unlinked.
+> One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `product-widget`, `diagram` and the webkit scene assets. The media is a scene, a product console widget, a request-flow diagram, an image (cover or framed) or an illustration; with one action the whole band links to it, with two the band stays unlinked.
 
 - Import: `import MediaSplitBand from '@aziontech/webkit/media-split-band'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -43903,7 +44090,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ## Do
 
-- Give the band exactly one media: `scene`, `image` or `illustration`; when several are set the first of that order wins.
+- Give the band exactly one media: `scene`, `widget` (a `ProductWidget` name), `diagram` (a `Diagram` name), `image` or `illustration`; when several are set the first of that order wins.
+- On a product page prefer `widget` or `diagram`: they show the product itself. Do not drop to `media-split` and its `media` slot to place one.
+- Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.
 - Use `size="large"` for a band that carries only its headline and description.
 - Give an `image` its `width` and `height` so the page reserves its box before it loads.
 
@@ -43926,9 +44115,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `title` | `string` | `''` | false | Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Paragraph under the headline. |
 | `size` | `MediaSplitBandSize` | `'medium'` | false | Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media. |
-| `scene` | `MediaSplitBandScene` | `undefined` | false | Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`. |
-| `image` | `MediaSplitBandImage` | `undefined` | false | Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`. |
-| `illustration` | `string` | `''` | false | Registry name of the illustration drawn in the media cell when neither a scene nor an image is set. |
+| `scene` | `MediaSplitBandScene` | `undefined` | false | Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over every other media. |
+| `widget` | `ProductWidgetName` | `undefined` | false | Name of the product console widget drawn in the media cell when no scene is set. |
+| `diagram` | `DiagramName` | `undefined` | false | Name of the request-flow diagram drawn in the media cell when neither a scene nor a widget is set. |
+| `image` | `MediaSplitBandImage` | `undefined` | false | Picture drawn in the media cell when no scene, widget or diagram is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell. |
+| `illustration` | `string` | `''` | false | Registry name of the illustration drawn in the media cell when no other media is set. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible name of the illustration; empty keeps it decorative. |
 | `primaryAction` | `MediaSplitBandAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action, the whole band links to it. |
 | `secondaryAction` | `MediaSplitBandAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. With two actions the band stays unlinked. |
@@ -43936,6 +44127,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ## Assets
 
 - Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+- Diagrams: every valid name is in [diagrams.md](../foundations/diagrams.md) (MCP `list_assets({ kind: "diagrams" })`). An unknown name draws nothing.
 
 ## States
 
@@ -43943,15 +44135,37 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - `size` is forwarded to the media split and drives its type scale and copy alignment
 - Empty: when `title` is empty the band renders nothing but its root; with no media set the media cell is omitted
 - With exactly one action the band is a link to that action's `href`; with none or two it is not a link
+- Media precedence: `scene`, `widget`, `diagram`, `image`, `illustration`. A widget, a diagram and a framed image are inset from the cell's edges (`media-split`'s `mediaPadded`); a scene, a plain image (which covers the cell) and an illustration run flush
+- A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `product-widget`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
+- Scenes, widget and diagram load on demand (`defineAsyncComponent`)
 
 ## Accessibility
 
 - Visible focus: owned by `button` and `media-split`.
 - Keyboard map: `Tab` moves through the actions, and through the media link when the band links.
-- ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an image is named by `alt`, an illustration by `illustrationAriaLabel`, and both are decorative when empty.
+- ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an image is named by `alt`, an illustration by `illustrationAriaLabel`, and both are decorative when empty; a diagram is a `figure` named by the description its library entry carries; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the scenes stop under reduced motion on their own.
 - Touch target ≥40×40 px — the medium buttons meet it.
+
+## Right-to-left
+
+- Layout: logical utilities only (owned by `media-split`).
+- Icons: a trailing chevron on an action mirrors (owned by `button`).
+- Keyboard: unchanged.
+- User data: none.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props in the page's language. Widget and diagram text is product UI copy owned by `product-widget` and `diagram`.
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none; `media-split` stacks the media under the copy below `lg`.
+- Narrow (≤ 640 px): one column; a widget, a diagram and a framed image scale down with the cell.
+- Touch: a widget shows its finished state instead of the hover beat.
+- Reflow: no horizontal scroll at 320 px.
 
 ## Examples
 
@@ -43973,13 +44187,15 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 </template>
 ```
 
+1 more example(s) in [components/media-split-band.md](https://github.com/aziontech/webkit/blob/main/.specs/components/media-split-band.md).
+
 ---
 
 <!-- components/media-split-stack.md -->
 
 # Media Split Stack
 
-> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration` and `button`. `kind` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.
+> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration`, `product-widget`, `diagram` and `button`. A band's picture is one of four things: a `ProductWidget` console mock (`widget`), a `Diagram` request-flow figure (`diagram`), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. `kind` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.
 
 - Import: `import MediaSplitStack from '@aziontech/webkit/media-split-stack'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -43991,7 +44207,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ## Do
 
-- Give a band either `image` (a URL, with `imageAlt` when it says something) or `illustration` (a registry name, with `illustrationLabel`), not both; a band with neither renders without its media cell.
+- Give a band one picture: `widget` (a `ProductWidget` name — the product's console screen), `diagram` (a `Diagram` name — its request flow), `illustration` (a registry name, with `illustrationLabel`) or `image` (a URL, with `imageAlt` when it says something). When several are set the first in that order wins; a band with none renders without its media cell.
+- Prefer `widget` or `diagram` on a product page: they show the product itself, where an illustration only evokes it. Do not drop to `media-split` and its `media` slot to place one.
+- Set `imageFramed` for a picture that is an object rather than a scene — a badge, a logo, a screenshot: it sits whole on a rounded, bordered plate inset in the cell. A plain `image` is scaled to fit the cell and never overflows it.
 - Give every band an `action`; it is both the button and the link the whole band follows.
 
 ## Don’t
@@ -44012,11 +44230,12 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `kind` | `MediaSplitStackKind` | `'media-end'` | false | Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty. |
-| `bands` | `MediaSplitStackBand[]` | `[]` | false | The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows. |
+| `bands` | `MediaSplitStackBand[]` | `[]` | false | The bands, in order; each is `{ title, description, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `widget` is a `ProductWidget` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows. |
 
 ## Assets
 
 - Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+- Diagrams: every valid name is in [diagrams.md](../foundations/diagrams.md) (MCP `list_assets({ kind: "diagrams" })`). An unknown name draws nothing.
 
 ## States
 
@@ -44024,15 +44243,37 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - `data-kind` mirrors the `kind` prop
 - Empty: when `bands` is empty the run renders nothing — not the header, not the stack
 - The header renders only when `title` is set; a band renders its button and its link only when it has an `action`, and its media cell only when it has a picture
+- Media precedence per band: `widget`, then `diagram`, then `illustration`, then `image`. A widget or a diagram is inset from the cell's edges (`media-split`'s `mediaPadded`), and so is a framed image; an illustration and a plain image run flush
+- A widget plays its beat while the pointer is over its band (`hover`), and shows its finished state on touch and under reduced motion (owned by `product-widget`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
+- Widget and diagram load on demand (`defineAsyncComponent`): a run that uses neither never downloads them
 
 ## Accessibility
 
 - Visible focus: owned by `button` and `media-split`'s media link.
 - Keyboard map: `Tab` reaches each band's media link and button; `Enter` follows them.
-- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h2`; illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty.
+- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h2`; illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty; a diagram is a `figure` named by the description its library entry carries; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the run adds no motion.
 - Touch target ≥40×40 px: the medium buttons and the band links.
+
+## Right-to-left
+
+- Layout: logical utilities only; `alternating` swaps the media side with the reading direction (owned by `media-split`).
+- Icons: the button's trailing chevron mirrors (owned by `button`).
+- Keyboard: unchanged.
+- User data: none.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props in the page's language. Widget and diagram text is product UI copy owned by `product-widget` and `diagram`.
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none; `media-split` stacks the media under the copy below `lg`.
+- Narrow (≤ 640 px): one column per band; a widget, a diagram and a framed image scale down with the cell.
+- Touch: a widget shows its finished state instead of the hover beat; the whole band stays one link.
+- Reflow: no horizontal scroll at 320 px.
 
 ## Examples
 
@@ -44104,7 +44345,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 </template>
 ```
 
-1 more example(s) in [components/media-split-stack.md](https://github.com/aziontech/webkit/blob/main/.specs/components/media-split-stack.md).
+2 more example(s) in [components/media-split-stack.md](https://github.com/aziontech/webkit/blob/main/.specs/components/media-split-stack.md).
 
 ---
 

@@ -6782,28 +6782,28 @@
      "type": "'window' | 'bare'",
      "default": "undefined",
      "required": "false",
-     "doc": "How a framed widget is plated; unset keeps the widget's own plating."
+     "doc": "How a workload screen is plated (window or bare); fragments are always bare and ignore it, and unset keeps the widget's own plating."
     },
     {
      "name": "chrome",
      "type": "boolean",
      "default": "undefined",
      "required": "false",
-     "doc": "Draws the console bar on a framed widget; unset keeps the widget's own bar."
+     "doc": "Draws the console bar on a workload screen; fragments have no bar and ignore it, and unset keeps the widget's own bar."
     },
     {
      "name": "width",
      "type": "number",
      "default": "undefined",
      "required": "false",
-     "doc": "Design width of a framed widget from md up; unset keeps the widget's own width."
+     "doc": "Design width of a workload screen from md up; fragments keep their own width, and unset keeps the widget's own."
     },
     {
      "name": "fade",
      "type": "'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'",
      "default": "'none'",
      "required": "false",
-     "doc": "Edge a framed widget fades out along."
+     "doc": "Edge a workload screen, workload-overview or application-version fades out along; fragments keep their own fade."
     },
     {
      "name": "texture",
@@ -6818,6 +6818,13 @@
      "default": "undefined",
      "required": "false",
      "doc": "Tab a tabbed widget plays (`workload-overview`, `application-version`, `functions-start`); other widgets ignore it, and unset plays the first tab."
+    },
+    {
+     "name": "cursor",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Draws the named collaborator cursor a fragment acts its beat with; turn it off for a still console picture. Widgets without a cursor ignore it."
     },
     {
      "name": "interval",
@@ -15953,6 +15960,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the scrollable track, announced before its contents."
+    },
+    {
+     "name": "kind",
+     "type": "CarouselKind",
+     "default": "'strip'",
+     "required": "false",
+     "doc": "Layout of the row: `strip` sets the cards edge to edge as one ruled strip, `cards` separates them with a gutter and rounds each card."
     }
    ],
    "slots": [
@@ -15964,7 +15978,12 @@
     {
      "name": "controls",
      "scope": "—",
-     "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track."
+     "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track, at the row's end when a header is set."
+    },
+    {
+     "name": "header",
+     "scope": "—",
+     "notes": "Content at the start of the controls row, usually the band's title; the controls move to the row's end."
     }
    ],
    "surface": "marketing",
@@ -15986,6 +16005,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the scrollable track, announced before its contents."
+    },
+    {
+     "name": "kind",
+     "type": "CarouselKind",
+     "default": "'strip'",
+     "required": "false",
+     "doc": "Layout of the row: `strip` sets the cards edge to edge as one ruled strip, `cards` separates them with a gutter and rounds each card."
     }
    ],
    "slots": [
@@ -15997,7 +16023,12 @@
     {
      "name": "controls",
      "scope": "—",
-     "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track."
+     "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track, at the row's end when a header is set."
+    },
+    {
+     "name": "header",
+     "scope": "—",
+     "notes": "Content at the start of the controls row, usually the band's title; the controls move to the row's end."
     }
    ],
    "surface": "marketing",
@@ -23653,21 +23684,35 @@
      "type": "MediaSplitBandScene",
      "default": "undefined",
      "required": "false",
-     "doc": "Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`."
+     "doc": "Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over every other media."
+    },
+    {
+     "name": "widget",
+     "type": "ProductWidgetName",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Name of the product console widget drawn in the media cell when no scene is set."
+    },
+    {
+     "name": "diagram",
+     "type": "DiagramName",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Name of the request-flow diagram drawn in the media cell when neither a scene nor a widget is set."
     },
     {
      "name": "image",
      "type": "MediaSplitBandImage",
      "default": "undefined",
      "required": "false",
-     "doc": "Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`."
+     "doc": "Picture drawn in the media cell when no scene, widget or diagram is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell."
     },
     {
      "name": "illustration",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Registry name of the illustration drawn in the media cell when neither a scene nor an image is set."
+     "doc": "Registry name of the illustration drawn in the media cell when no other media is set."
     },
     {
      "name": "illustrationAriaLabel",
@@ -23729,7 +23774,7 @@
      "type": "MediaSplitStackBand[]",
      "default": "[]",
      "required": "false",
-     "doc": "The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows."
+     "doc": "The bands, in order; each is `{ title, description, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `widget` is a `ProductWidget` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows."
     }
    ],
    "surface": "marketing",
@@ -25784,6 +25829,61 @@
    "surface": "product",
    "examplesFile": "catalog/examples/feature-list.json",
    "docsFile": "catalog/components/feature-list.json"
+  },
+  "card-carousel": {
+   "import": "@aziontech/webkit/card-carousel",
+   "target": "./src/components/sections/card-carousel/card-carousel.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/card-carousel",
+   "category": "sections",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "anchor",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "In-page id set on the band so a hash link can target it."
+    },
+    {
+     "name": "eyebrow",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Overline above the band title."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Headline of the band, rendered as its `h2` at the start of the row the step controls end; the band renders no title when empty."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Supporting sentence under the headline."
+    },
+    {
+     "name": "items",
+     "type": "CardCarouselItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The cards, in order; each is `{ eyebrow?, title, description, href?, linkLabel? }`, and a card with `href` links to it."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the card row; defaults to the title."
+    }
+   ],
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/card-carousel.json",
+   "docsFile": "catalog/components/card-carousel.json"
   }
  },
  "assets": {
@@ -25812,7 +25912,9 @@
    "registry": "src/assets/diagrams/registry.ts",
    "usedBy": [
     "architecture-tabs",
-    "diagram"
+    "diagram",
+    "media-split-band",
+    "media-split-stack"
    ],
    "count": 28,
    "file": "catalog/assets/diagrams.json"

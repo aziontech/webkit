@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed } from 'vue'
 
+  import { useProductWidgetContext } from '../composables/use-product-widget-context'
+
   defineOptions({ name: 'MockupCursor' })
 
   interface Props {
@@ -16,11 +18,14 @@
 
   const props = withDefaults(defineProps<Props>(), { x: 0, y: 0, pressed: false })
 
+  const context = useProductWidgetContext()
+
   const placement = computed(() => ({ translate: `${props.x}px ${props.y}px` }))
 </script>
 
 <template>
   <span
+    v-if="context.cursor.value"
     :style="placement"
     :data-pressed="pressed || null"
     class="group pointer-events-none absolute top-0 start-0 z-2 flex items-start transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"

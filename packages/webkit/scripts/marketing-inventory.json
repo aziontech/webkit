@@ -1562,6 +1562,10 @@
       "surface": "marketing"
     },
     {
+      "id": "card-carousel",
+      "surface": "marketing"
+    },
+    {
       "id": "card-grid",
       "surface": "marketing"
     },

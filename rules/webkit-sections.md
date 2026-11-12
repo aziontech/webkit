@@ -35,6 +35,13 @@ JSON. Never rebuild a band from primitives when a section exists.
   `external`, `UseCaseLinks` items without `href` for a link-less grid.
 - Close the page with `SiteFooter` as the last child of the page shell, unwrapped. It draws its own
   top rule, its frame and its closing bottom rule, and ends on the bottom bar from `lg`.
+- A titled row of cards that scrolls sideways, with the previous/next arrows on the title row ("See
+  how to use", "Industries"), is `CardCarousel` (`card-carousel`): each card takes `eyebrow`,
+  `title`, `description`, `href` and `linkLabel`. Do not compose it from `Carousel` and `Overline`.
+- A media split whose picture is a product console widget or a request-flow diagram stays a
+  `MediaSplitStack` band or a `MediaSplitBand`: set the band's `widget` (a `ProductWidget` name) or
+  `diagram` (a `Diagram` name) instead of an illustration. Do not drop to `MediaSplit` and its
+  `media` slot for that.
 - Give a grid section (contact channels, features, use cases, articles) as many items as the content
   has. Its card grid balances the rows itself — the fewest rows the column cap allows, a short last
   row sharing the width evenly: under three columns 2 → halves, 4 → 2 × 2, 5 → 3 + 2. No row ends
