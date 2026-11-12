@@ -259,8 +259,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col">
       <PageHeader
         title="Personal tokens"
         description="Tokens let scripts and tools call the API as you. Each one is shown only once, right after you create it."
@@ -454,7 +454,7 @@
           </template>
         </Card>
       </section>
-    </main>
+    </div>
 
     <Drawer
       v-model:open="createOpen"

@@ -156,7 +156,7 @@
 
 <template>
   <Toaster position="bottom-right" />
-  <main class="flex h-screen flex-col bg-(--bg-canvas)">
+  <div class="flex flex-1 flex-col">
     <div class="flex min-h-0 flex-1 flex-col">
       <form
         class="flex min-h-0 flex-1 flex-col"
@@ -164,7 +164,7 @@
         novalidate
         @submit.prevent="save"
       >
-        <div class="min-h-0 flex-1 overflow-auto">
+        <div class="flex-1">
           <div
             class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
           >
@@ -591,5 +591,5 @@
         </Transition>
       </form>
     </div>
-  </main>
+  </div>
 </template>

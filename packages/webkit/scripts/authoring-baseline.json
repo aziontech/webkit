@@ -1,13 +1,4 @@
 [
-  "packages/webkit/blocks/platform/account/activity-history/activity-history.vue::clock:no-clock-in-setup",
-  "packages/webkit/blocks/platform/account/activity-history/variants/empty.vue::clock:no-clock-in-setup",
-  "packages/webkit/blocks/platform/account/activity-history/variants/failed.vue::clock:no-clock-in-setup",
-  "packages/webkit/blocks/platform/account/activity-history/variants/loading.vue::clock:no-clock-in-setup",
-  "packages/webkit/blocks/platform/account/tokens/tokens.vue::clock:no-clock-in-setup",
-  "packages/webkit/blocks/platform/account/tokens/variants/created.vue::clock:no-clock-in-setup",
-  "packages/webkit/blocks/platform/account/tokens/variants/empty.vue::clock:no-clock-in-setup",
-  "packages/webkit/blocks/platform/account/tokens/variants/failed.vue::clock:no-clock-in-setup",
-  "packages/webkit/blocks/platform/account/tokens/variants/loading.vue::clock:no-clock-in-setup",
   "packages/webkit/blocks/platform/create/create-in-drawer/variants/certificate.vue::clock:no-clock-in-setup",
   "packages/webkit/examples/table/refresh.vue::clock:no-clock-in-setup",
   "packages/webkit/src/components/actions/button-highlight/button-highlight.vue::token:js-class-preset",

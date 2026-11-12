@@ -1,6 +1,6 @@
 # Activity history
 
-The account's audit log. An admin or a security reviewer answers "who did this, from where, and when": a token that was revoked, a role that changed, a sign-in that failed, a plan that was upgraded. They narrow the log by period, category, person and address, read the newest events first, copy an IP address into another tool, and export what they found.
+The account's audit log. An admin or a security reviewer answers "who did this, from where, and when": a token that was revoked, a role that changed, a sign-in that failed, a plan that was upgraded. They narrow the log by period, category, person and address, read the newest events first, copy an IP address into another tool, and export what they found. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -66,7 +66,7 @@ A danger `Alert` with Retry takes the table's place; the controls stay so the re
 
 ## Accessibility
 
-- One `main`; the `PageHeader` title is the only `h1`; the table is named `Activity history`.
+- No `main` of its own (the layout's is the only one); the `PageHeader` title is the only `h1`; the table is named `Activity history`.
 - The filter and the period picker carry `aria-label`s; icon buttons have names that match their tooltips.
 - Category is text in a tag, never colour alone; the relative date has the exact time on its tooltip.
 - User and IP cells keep their own direction (`dir="auto"`, `dir="ltr"`) inside a right-to-left page.

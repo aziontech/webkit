@@ -232,8 +232,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col">
       <PageHeader
         title="Users"
         description="The people who can sign in to this account. What each one can do comes from their teams."
@@ -443,7 +443,7 @@
           </template>
         </EmptyState>
       </section>
-    </main>
+    </div>
 
     <Drawer
       v-model:open="inviteOpen"

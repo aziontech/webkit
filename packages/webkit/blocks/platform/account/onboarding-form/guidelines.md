@@ -1,6 +1,6 @@
 # Onboarding form
 
-The `/signup/onboarding` screen, frame included. A new user has an account but no organization yet, and needs to create one with as few questions as possible: one step at a time in a card (organization, plan, profile), with a live wireframe beside it from `lg` showing the app the organization will open into, named and colored by what they type.
+The `/signup/onboarding` screen, frame included. A new user has an account but no organization yet, and needs to create one with as few questions as possible: one step at a time in a card (organization, plan, profile), with a live wireframe beside it from `lg` showing the app the organization will open into, named and colored by what they type. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.
 
 ## When to use
 

@@ -209,7 +209,7 @@
 <template>
   <section
     aria-labelledby="ai-chat-title"
-    class="flex h-dvh w-full flex-col bg-(--bg-canvas)"
+    class="flex min-h-0 w-full grow basis-0 flex-col"
   >
     <header
       class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"

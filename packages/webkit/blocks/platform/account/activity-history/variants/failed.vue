@@ -17,7 +17,7 @@
   const MINUTE = 60_000
   const HOUR = 60 * MINUTE
   const DAY = 24 * HOUR
-  const referenceTime = Math.floor(Date.now() / MINUTE) * MINUTE
+  const referenceTime = Date.UTC(2026, 10, 10, 12)
   const ago = (ms) => new Date(referenceTime - ms)
 
   const seedEvents = [
@@ -180,8 +180,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col">
       <PageHeader
         title="Activity history"
         description="Who did what in this account, from where and when. Events are kept for 90 days."
@@ -348,6 +348,6 @@
           </template>
         </Card>
       </section>
-    </main>
+    </div>
   </div>
 </template>

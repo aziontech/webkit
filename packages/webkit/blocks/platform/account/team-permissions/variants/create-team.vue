@@ -131,15 +131,15 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <main class="flex min-h-0 flex-1 flex-col">
+  <div class="flex flex-1 flex-col">
+    <div class="flex flex-1 flex-col">
       <form
         class="flex min-h-0 flex-1 flex-col"
         aria-labelledby="create-team-title"
         novalidate
         @submit.prevent="submit"
       >
-        <div class="min-h-0 flex-1 overflow-auto">
+        <div class="flex-1">
           <div
             class="layout-column-form layout-boundary-inline flex flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
           >
@@ -376,7 +376,7 @@
           </SaveBar>
         </div>
       </form>
-    </main>
+    </div>
 
     <Toaster position="bottom-right" />
   </div>
