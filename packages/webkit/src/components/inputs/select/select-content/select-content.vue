@@ -30,7 +30,7 @@
     isOpen: ctx.open,
     placement: 'bottom-start',
     offset: 4,
-    matchTriggerWidth: true
+    matchTriggerWidth: ctx.kind.value !== 'transparent'
   })
 
   const onKeydown = (event: globalThis.KeyboardEvent) => {
@@ -154,7 +154,8 @@
         :data-mode="ctx.multiple.value ? 'multiple' : 'single'"
         :class="attrs.class"
         :style="panelStyle"
-        class="fixed z-(--z-input-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs)"
+        :data-kind="ctx.kind.value"
+        class="fixed z-(--z-input-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs) data-[kind=transparent]:min-w-(--container-3xs)"
         @keydown="onKeydown"
       >
         <div

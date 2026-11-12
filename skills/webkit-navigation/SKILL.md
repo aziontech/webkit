@@ -2,7 +2,7 @@
 name: webkit-navigation
 description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell (full sidebar + in-content GlobalHeader, always shown) for hub/browse pages, and the focused creation shell (no sidebar, GlobalHeader with back + brand + breadcrumb) for create/edit/deploy flows. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes second-level navigation and the content layout inside the persistent shell: a --spacing-md inset matching the header, a first-level module list with NO PageHeader (the crumb names it) opening on a controls row over a flush borderless Card table, tabbed pages putting the primary button on the TAB ROW (medium) while untabbed pages put it on the CONTROLS ROW (large), and the breadcrumb levels — one unlinked crumb at first level, `module › resource name` at second level, and never a tab. Built on @aziontech/webkit/global-header, /sidebar, /breadcrumb, /tabs.
 status: active
-last_updated: 2026-08-13
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-accessibility, webkit-prefer-over-custom, ui-verify]
 ---
@@ -515,7 +515,7 @@ are_; it is not the page's title block.
 | **Third level** — a typed sub-collection           | `[{ label: 'Edge DNS', href: '/edge-dns' }, { label: 'Zone', href: '/edge-dns' }, { label: zone.name }]` |
 | **Focused creation flow**                          | `[{ label: 'Applications', href: '/applications' }, { label: 'Create' }]`                                |
 
-Four rules hold across every row:
+These rules hold across every row:
 
 1. **First-level pages are not special-cased to hide the crumb.** One crumb is still a breadcrumb —
    it is what names the module now that there is no `PageHeader`.
@@ -527,6 +527,12 @@ Four rules hold across every row:
 4. **A tab is never a crumb.** Switching tabs does not change the breadcrumb — the tab is second-level
    _navigation within one page_, and it already has its own visible bar. It travels in `?tab=`, not in
    the trail.
+5. **A switcher that ends the trail reads as a crumb.** A resource that lives in several environments
+   (or versions) ends its trail on the current one as a switcher: `Workloads › workload_01 ›
+Production ⌄`. It is `<Select kind="transparent" size="small">` with `aria-label` on
+   `Select.Trigger` ("Switch environment") in the last `<li>` of `Breadcrumb.List`: no border or fill
+   until hover, sized to its value. Never a bordered `Select` in the header, and never a trigger
+   restyled with `!` overrides.
 
 ## Hard rules
 

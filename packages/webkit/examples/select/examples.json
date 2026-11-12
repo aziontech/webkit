@@ -13,6 +13,11 @@
       "file": "sizes.vue"
     },
     {
+      "name": "Transparent",
+      "summary": "`kind=\"transparent\"`: no border or fill until hover, sized to its value and set like a breadcrumb crumb. The environment switcher that ends a resource's breadcrumb; the panel keeps a readable minimum width instead of the trigger's.",
+      "file": "transparent.vue"
+    },
+    {
       "name": "Multiple",
       "summary": "Multi-select mode: options toggle on click and `modelValue` is an array.",
       "file": "multiple.vue"
