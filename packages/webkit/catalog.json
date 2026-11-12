@@ -7664,6 +7664,20 @@
      "default": "undefined",
      "required": "false",
      "doc": "With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys."
+    },
+    {
+     "name": "getSubRows",
+     "type": "(row: Record<string, unknown>) => Record<string, unknown>[] | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Data-driven mode: tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role=\"treegrid\"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode."
+    },
+    {
+     "name": "expanded",
+     "type": "ExpandedState",
+     "default": "undefined",
+     "required": "false",
+     "doc": "v-model:expanded (TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }`). Uncontrolled it starts collapsed."
     }
    ],
    "events": [
@@ -7736,6 +7750,11 @@
      "name": "reorder",
      "payload": "payload: { from: number; to: number; row: Record<string, unknown> }",
      "notes": "reorderable`: a row moved from index `from` to index `to` of `data`."
+    },
+    {
+     "name": "update:expanded",
+     "payload": "value: ExpandedState",
+     "notes": "Tree rows: v-model:expanded, after a toggle by pointer or keyboard."
     }
    ],
    "slots": [
@@ -8046,6 +8065,20 @@
      "default": "undefined",
      "required": "false",
      "doc": "With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys."
+    },
+    {
+     "name": "getSubRows",
+     "type": "(row: Record<string, unknown>) => Record<string, unknown>[] | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Data-driven mode: tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role=\"treegrid\"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode."
+    },
+    {
+     "name": "expanded",
+     "type": "ExpandedState",
+     "default": "undefined",
+     "required": "false",
+     "doc": "v-model:expanded (TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }`). Uncontrolled it starts collapsed."
     }
    ],
    "events": [
@@ -8118,6 +8151,11 @@
      "name": "reorder",
      "payload": "payload: { from: number; to: number; row: Record<string, unknown> }",
      "notes": "reorderable`: a row moved from index `from` to index `to` of `data`."
+    },
+    {
+     "name": "update:expanded",
+     "payload": "value: ExpandedState",
+     "notes": "Tree rows: v-model:expanded, after a toggle by pointer or keyboard."
     }
    ],
    "slots": [
@@ -25194,6 +25232,113 @@
     }
    ],
    "file": "catalog/patterns/platform/account/change-plan-drawer.json"
+  },
+  "platform/account/manage-resources": {
+   "name": "ManageResources",
+   "title": "Templates/Platform/Account/ManageResources",
+   "source": "blocks/platform/account/manage-resources/manage-resources.vue",
+   "surface": "product",
+   "summary": "The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Refresh and Hide details, a toolbar with Create workspace, Create group and the bulk Move, Labels and Delete that act on the selection, and a details panel with Permissions (role bindings of the one selected resource) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo.",
+   "intents": [
+    "manage resources",
+    "resource hierarchy",
+    "account hierarchy",
+    "organizations and workspaces",
+    "resource tree",
+    "tree table",
+    "move resources",
+    "bulk actions on a tree",
+    "gerenciar recursos",
+    "hierarquia de contas",
+    "organizações e workspaces",
+    "árvore de recursos",
+    "mover recursos"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Avatar",
+    "Button",
+    "Card",
+    "ConfirmDialog",
+    "Dialog",
+    "DialogContent",
+    "DialogDescription",
+    "DialogOverlay",
+    "DialogPortal",
+    "DialogTitle",
+    "DropdownMenu",
+    "EmptyState",
+    "Field",
+    "IconButton",
+    "Link",
+    "MultiSelect",
+    "PageHeader",
+    "PanelContent",
+    "PanelFooter",
+    "PanelHeader",
+    "Select",
+    "Table",
+    "Tabs",
+    "Tag",
+    "toast",
+    "Tooltip"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/dialog",
+    "@aziontech/webkit/dialog-content",
+    "@aziontech/webkit/dialog-description",
+    "@aziontech/webkit/dialog-overlay",
+    "@aziontech/webkit/dialog-portal",
+    "@aziontech/webkit/dialog-title",
+    "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/link",
+    "@aziontech/webkit/multi-select",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/table",
+    "@aziontech/webkit/tabs",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/tooltip"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "Where an account admin arranges the account's hierarchy. Workspaces sit under groups, groups under organizations, and a role binding set on a parent applies to everything under it, so where a workspace lives decides who can reach it. The page shows the whole hierarchy as one tree table, lets the admin select across levels and act on the selection (move, label, delete), and shows the role bindings and labels of the one resource selected.",
+   "variants": [
+    {
+     "name": "Selected",
+     "summary": "One workspace selected: the bulk actions are enabled, Clear selection shows, and the details panel lists its role bindings and labels."
+    },
+    {
+     "name": "Empty",
+     "summary": "No resource yet: a flush EmptyState with Create workspace replaces the table; the toolbar stays with the bulk actions disabled."
+    },
+    {
+     "name": "Loading",
+     "summary": "The first load: the table's loading rows under its headers."
+    },
+    {
+     "name": "Failed",
+     "summary": "The hierarchy did not load: a danger Alert with Retry replaces the table; Retry loads it."
+    }
+   ],
+   "file": "catalog/patterns/platform/account/manage-resources.json"
   },
   "platform/account/mfa-management": {
    "name": "MfaManagement",

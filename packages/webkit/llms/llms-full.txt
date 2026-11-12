@@ -2103,6 +2103,138 @@ The code of every state is in [blocks/platform/account/change-plan-drawer.md](bl
 
 ---
 
+<!-- blocks/platform/account/manage-resources.md -->
+
+# ManageResources (`platform/account/manage-resources`)
+
+> The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Refresh and Hide details, a toolbar with Create workspace, Create group and the bulk Move, Labels and Delete that act on the selection, and a details panel with Permissions (role bindings of the one selected resource) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo.
+
+- Surface: product
+- Source: `blocks/platform/account/manage-resources/manage-resources.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/account/manage-resources")`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Link](../../../components/link.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
+
+## Asked as
+
+manage resources; resource hierarchy; account hierarchy; organizations and workspaces; resource tree; tree table; move resources; bulk actions on a tree; gerenciar recursos; hierarquia de contas; organizações e workspaces; árvore de recursos; mover recursos
+
+Where an account admin arranges the account's hierarchy. Workspaces sit under groups, groups under organizations, and a role binding set on a parent applies to everything under it, so where a workspace lives decides who can reach it. The page shows the whole hierarchy as one tree table, lets the admin select across levels and act on the selection (move, label, delete), and shows the role bindings and labels of the one resource selected.
+
+## When to use
+
+- Any parent and child structure of billable or permission-bearing resources: organizations, groups, folders, projects, workspaces.
+- Bulk changes where the position in the hierarchy matters (moving under a new parent, deleting a branch).
+
+## When not to use
+
+- A flat list of one resource type: use `platform/view/table-view`.
+- Switching the current account: use the account switcher in `shells/console`.
+- Editing who belongs to a team: use `platform/account/team-permissions`.
+- A read-only file or folder browser: use `platform/view/file-browser`.
+
+## Building blocks
+
+### A. Page heading — `PageHeader`, `Tooltip`, `IconButton`, `Button` (required)
+
+Title `Manage resources` and one sentence on what the hierarchy decides. Actions: Refresh (spins while the table reloads) and a transparent `Hide details` / `Show details` that toggles the details panel (`aria-expanded`, `aria-controls`).
+
+### B. Toolbar — `Button` (required)
+
+A `role="toolbar"` row: Create workspace (primary) and Create group, a divider, then Move, Labels and Delete. The three bulk actions are disabled until something is selected and act on every selected row, at any depth.
+
+### C. Resource tree — `Card`, `Table`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
+
+A flush `Card` holding `Table` (tree rows) with `:get-sub-rows="(row) => row.children"`, `v-model:expanded` (the first organization and its first group open) and `v-model:row-selection`. The table turns into a treegrid: chevrons in the Name column, one indent step per level, and `aria-level` and `aria-expanded` on rows. Name: a square `Avatar` for organizations and groups, the type glyph for workspaces, and a check for the current workspace. ID as `Table.CellId` with copy for workspaces. Type as a `Tag` with icon and severity (Organization accent, Group info, Workspace secondary). Last accessed, Status (`Table.CellStatus`: Active, Pending, Suspended), Charges right-aligned in tabular figures with a help tooltip on the header, Labels as `Table.CellTags` with `+N`, and `Table.CellActions` (View details, Move, Edit labels, then Delete on its own). A dash stands in for any empty value. Below the card, a `Link` to Resources pending deletion.
+
+The data stays flat (`parentId`) and the page builds the tree for the table, so a move only changes one field.
+
+### D. Details panel — `Card`, `Tabs`, `Alert`, `Tag` (required)
+
+An `aside` beside the table on wide screens and under it on narrow ones. Its heading says what is selected (`No resource selected`, `1 resource selected`, `3 resources selected`) and is polite live. Tabs: Permissions lists the role bindings of the one selected resource (role and member count); Labels shows its labels and an Edit labels button. With none or several selected, an info `Alert` says what to do.
+
+### E. Move — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Select` (required)
+
+Title `Move <name>` or `Move 3 resources`. The description says that everything inside moves too and that inherited bindings stop applying. One `Select` of organizations and groups, excluding the moving resources and everything inside them. Move without a choice shows `Choose where to move the resources.` under the field. The new parent opens after the move.
+
+### F. Labels — `Dialog`, `Field`, `MultiSelect` (required)
+
+The same dialog frame as Move.
+
+Add labels (every label in use in the account) and Remove labels (only those on the selection). Save labels is disabled until one of them has a value.
+
+### G. Delete — `ConfirmDialog` (required)
+
+Title `Delete <name>` or `Delete 3 resources`. The description counts what is inside the selection and says it stays recoverable for 30 days. Confirming clears the selection.
+
+### H. Empty and failure — `EmptyState`, `Alert` (conditional)
+
+No resource: a flush `EmptyState` with Create workspace replaces the table. Load failure: a danger `Alert` with Retry takes the table's place; the heading and toolbar stay.
+
+### I. Outcomes — `Toaster` (required)
+
+Every action ends in a success toast. Move and Delete carry Undo. Hierarchy changes are not deploys, so no toast offers Edit or Redeploy.
+
+## Do
+
+- Keep selection per row: selecting a group does not select its workspaces; Delete then says how many are inside.
+- Open the destination after a move so the moved rows are visible.
+- Say what moves with a resource, and what happens to its inherited bindings, before the move.
+- Keep deleted resources recoverable and link to where they wait.
+
+## Don't
+
+- Don't offer a resource, or anything inside it, as its own new parent.
+- Don't hide the chevron behind hover; leaves keep a blank space of the same width so names align.
+- Don't put a separate expand button in the tab order; the row is the tab stop and Arrow Right and Arrow Left open and close it.
+- Don't delete a branch without counting what is inside it.
+
+## Copy
+
+- **Title:** `Manage resources`. **Create:** `Create workspace`, `Create group`.
+- **Bulk:** `Move`, `Labels`, `Delete`; row menu `View details`, `Move`, `Edit labels`, `Delete`.
+- **Panel:** `No resource selected`, `1 resource selected`; `Select a resource to see its role bindings and labels.`; `Select a single resource to see its role bindings.`; `This resource has no labels.`
+- **Toasts:** `2 resources moved to Digital services.`; `3 resources scheduled for deletion.` with `They stay in Resources pending deletion for 30 days.`; `Labels updated on 1 resource.`
+- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- The table is a `treegrid` labelled by the Resources heading. Rows carry `aria-level`, `aria-setsize`, `aria-posinset`, `aria-expanded` when they have children, and `aria-selected` when selected.
+- One row is in the tab order. Arrow Up and Arrow Down move between rows, Home and End go to the first and last, Arrow Right opens a row or moves into it, Arrow Left closes it or goes to its parent (mirrored right to left), Enter toggles it and Space selects it. Tab reaches the checkbox, ID copy and row menu of the focused row.
+- The chevron is pointer-only and hidden from assistive technology; the row's `aria-expanded` is the state.
+- The toolbar is a `role="toolbar"` named `Resource actions`; disabled bulk buttons stay visible so the actions are discoverable.
+- The details heading is a polite live region, so a change of selection is announced.
+- Dialogs trap focus and return it to the button that opened them.
+
+## States
+
+- Default: two organizations, three groups and six workspaces; the first organization and its first group open, nothing selected, and every action wired.
+- Selected: one workspace selected; bulk actions enabled and the details panel filled.
+- Empty: no resource; an empty state with Create workspace.
+- Loading: the first load; the table's loading rows.
+- Failed: the hierarchy did not load; a danger Alert with Retry.
+
+## Related
+
+- `platform/account/team-permissions` — what a role binding grants.
+- `platform/account/users` — who the members of a binding are.
+- `platform/view/table-view` — the flat list page this one extends with tree rows.
+- `platform/view/file-browser` — moving objects between folders with the same Move dialog pattern.
+
+## Variants
+
+- `Default` — primary (the code below)
+- `Selected` — One workspace selected: the bulk actions are enabled, Clear selection shows, and the details panel lists its role bindings and labels.
+- `Empty` — No resource yet: a flush EmptyState with Create workspace replaces the table; the toolbar stays with the bulk actions disabled.
+- `Loading` — The first load: the table's loading rows under its headers.
+- `Failed` — The hierarchy did not load: a danger Alert with Retry replaces the table; Retry loads it.
+
+Each variant is the same screen in another state: `get_pattern("platform/account/manage-resources", { variant })`, or the file under `blocks/platform/account/manage-resources/variants/`.
+
+The code of every state is in [blocks/platform/account/manage-resources.md](blocks/platform/account/manage-resources.md) and `blocks/platform/account/manage-resources/manage-resources.vue`.
+
+---
+
 <!-- blocks/platform/account/mfa-management.md -->
 
 # MfaManagement (`platform/account/mfa-management`)
@@ -21323,6 +21455,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `estimateRowHeight` | `number` | `48` | false | Row height (px) assumed in `virtual` mode until a row is measured. |
 | `reorderable` | `boolean` | `false` | false | Data-driven mode: a leading grip column lets people drag rows, or move the focused grip's row with Arrow Up, Arrow Down, Home and End, into a new order. Emits `update:data` (bind `v-model:data`) and `reorder`; locked while a sort is applied. |
 | `rowReorderable` | `(row: Record<string, unknown>) => boolean` | `undefined` | false | With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys. |
+| `getSubRows` | `(row: Record<string, unknown>) => Record<string, unknown>[] \| undefined` | `undefined` | false | Data-driven mode: tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role="treegrid"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode. |
+| `expanded` | `ExpandedState` | `undefined` | false | v-model:expanded (TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }`). Uncontrolled it starts collapsed. |
 
 ## Events
 
@@ -21342,6 +21476,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `export` | `rows: Record<string, unknown>[]` | Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads). |
 | `update:data` | `value: Record<string, unknown>[]` | reorderable`: the records in their new order; bind `v-model:data`. |
 | `reorder` | `payload: { from: number; to: number; row: Record<string, unknown> }` | reorderable`: a row moved from index `from` to index `to` of `data`. |
+| `update:expanded` | `value: ExpandedState` | Tree rows: v-model:expanded, after a toggle by pointer or keyboard. |
 
 ## Slots
 
@@ -21424,6 +21559,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
 - Hover-free devices: a sortable header shows its sort affordance where the pointer cannot hover (`@media (hover: none)`).
 - Reorderable rows (`reorderable`): a 40 px leading column holds a grip `IconButton` per row (`data-reorder-handle`), frozen at the start edge when other columns are; the row being dragged sets `data-dragging` (dashed accent outline, 60% opacity) and the row under the pointer `data-drop="before" | "after"` (a 2 px accent line on that edge). While a sort is applied every grip is disabled and its description says to clear the sort.
+- Tree rows (`getSubRows`): the grid element is `role="treegrid"` and sets `data-tree`. Each body row carries `aria-level` (1-based depth), `aria-setsize` and `aria-posinset` among its siblings, `aria-expanded` when it has children, and `data-depth`; the principal cell starts with a 28 px chevron toggle (`__expand-toggle`, `pi-chevron-right` mirrored in RTL, `pi-chevron-down` when open) or a spacer of the same width on leaves, after a `calc(var(--spacing-md) * depth)` indent on the inline-start side. Rows use a roving tab stop (one row has `tabindex="0"`, the rest `-1`) and draw an inset `var(--ring-color)` outline on `focus-visible`.
 
 ## Accessibility
 
@@ -21432,6 +21568,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - ARIA: `role="table"` sits on the grid element inside the scroll viewport (testid `<testid>__table`), not on the root: the root also holds the toolbar, applied filters, the focusable scroll viewport, the stacked select-all, the empty state and the pagination, and any of those inside a `table` is an unallowed child (`aria-required-children`). Every `aria-*` attribute passed to `Table` (`aria-label`, `aria-labelledby`, `aria-describedby`…) is forwarded to that element, as are `aria-busy` (loading) and `aria-rowcount` (windowed); every other attribute stays on the root. The data-driven pagination is a plain region under the viewport (`<testid>__footer`), not a `rowgroup`, and the `caption` slot renders as the table's first child. `table-caption` is a plain element (no `role`) that names the table through `aria-labelledby` unless the consumer names it with `aria-label`/`aria-labelledby`. In composition mode the default slot is the table's content, so it holds rowgroups (and a caption) only; anything else goes in `footer` or around the `Table`. `table-header`/`table-body` `role="rowgroup"`; `table-footer` has no role (it hosts pagination or an action, not rows); `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
 - Virtual rows keep their position for assistive technology: `aria-rowcount` on the `role="table"` element (rows + header) and `aria-rowindex` on each rendered row.
 - Reorderable rows: each grip is a button named `Reorder <row name>, position <n> of <total>` and described by a visually hidden hint (`Drag, or press Arrow Up or Arrow Down to move.`, or the lock reason). Arrow Up / Arrow Down / Home / End move the row and keep focus on its grip; `Esc` cancels a drag. A polite `role="status"` region announces `Moved <name> to position <n> of <total>.` (keyboard) or `Dropped …` (pointer). Dragging is never the only way to reorder (WCAG 2.5.7).
+- Tree rows follow the APG treegrid row-focus pattern: `Tab` enters the grid on one row (the last one focused, else the first); `Arrow Down` / `Arrow Up` move between visible rows; `Home` / `End` go to the first / last row; `Arrow Right` (inline end, mirrored in RTL) opens a closed row or moves to the first child of an open one; `Arrow Left` closes an open row or moves to the parent; `Enter` toggles the row; `Space` toggles its selection when `enableRowSelection` allows it. Interactive content inside the row (checkbox, menus) stays reachable with `Tab`. The pointer toggle is `aria-hidden` (the row's `aria-expanded` is the accessible state), and when a row collapses while one of its descendants holds focus, focus moves to that row.
 - Stacked layout: the select-all is a visible checkbox with a `<label>`, not a screen-reader-only header cell (WCAG 2.5.3, label in name).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including muted header text.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.

@@ -457,3 +457,25 @@ Scope: new component `ArtifactCanvas` (spec, examples Default and Table) and its
 - The reference chip list is an async chunk; the shortcut menu stays synchronous because the text area drives it through `aria-activedescendant` on every keystroke. No visual change.
 
 Not verified by the unit tests: styled geometry (the tests run without CSS), the canvas width limits in a real layout.
+
+## M2.10 last leftovers (rows 46, 50, 38)
+
+Scope: `Table` tree rows (additive: `getSubRows`, `v-model:expanded`, treegrid), its `TreeRows` example and the new block `platform/account/manage-resources` (primary, Selected, Empty, Loading, Failed). Source order: the design sample's `ManageResources.vue` decides the layout (heading with Refresh and the details toggle, the create and bulk toolbar, tree table, details panel with Permissions and Labels tabs, the pending-deletion link); the data is fictional. A mechanical pass over the new SFCs found no raw colours, palette classes or physical direction utilities.
+
+### Table tree rows
+
+- Structure: the tree lives in the data-driven `Table` (TanStack `getSubRows` and the expanded row model), so sorting, filtering, selection, frozen columns, stacking and virtual rows keep working; a hand-rolled tree inside a composition table (the sample's approach) was the alternative and was rejected because every product list would re-type it.
+- Keyboard: one row is the tab stop; the APG treegrid row-focus map (arrows, Home, End, Enter, Space) mirrors Left and Right under RTL, ignores keys typed inside a cell control, and moves focus to a row that collapses over a focused descendant.
+- Finding (rule 5, one content column): the first cut drew the chevron, and on leaves an empty box of the same width, after a separate indent span, so a leaf reserved an empty glyph box. Fixed: one `aria-hidden` gutter `calc(var(--spacing-md) * depth + var(--size-7))` wide holds the chevron at its end only when the row has children, so names at one depth start on one column and each level shifts it by one step; both values are tokens and `--spacing-md` is not redefined at a breakpoint.
+- The chevron is pointer-only and hidden from assistive technology; the row's `aria-expanded` is the state, so there is no second expand control in the tab order (the sample's outlined `IconButton` with a Tooltip per row would have added one tab stop per parent).
+
+### manage-resources
+
+- From the sample: Create Project and Create Folder became Create workspace and Create group (the hierarchy here is organization, group, workspace); Tags became Labels to match the column and the details tab.
+- Flows the sample stubbed with toasts are real: Move (a `Select` of organizations and groups that excludes the moving rows and everything inside them; an error under the field when nothing is chosen; the new parent opens), Labels (add from labels in use, remove from labels on the selection; Save disabled until something changes) and Delete (`ConfirmDialog` that counts what is inside and says it stays recoverable for 30 days). Outcomes are toasts with Undo for Move and Delete; none offers Edit or Redeploy because nothing is deployed.
+- Finding: the sample hid the details panel below `lg`. Fixed: it stacks under the table on narrow screens, so 320 px keeps role bindings reachable.
+- Finding: `Tabs.Content` carried `pt-(--spacing-md)`, a style override on a WebKit tag (pattern lint). Fixed with a wrapper that spaces the tab list and the panels.
+- Finding: the details toggle pointed `aria-controls` at a panel removed with `v-if`. Fixed: the panel uses `v-show`, so the id always resolves.
+- The details heading is a polite live region, so changing the selection is announced; the bulk buttons stay visible and disabled with no selection.
+
+Not verified by the unit tests: styled geometry (they run without CSS); the indent, chevron and stacked layout are checked in the visual suite.

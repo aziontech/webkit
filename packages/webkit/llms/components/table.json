@@ -315,6 +315,20 @@
    "default": "undefined",
    "required": "false",
    "doc": "With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys."
+  },
+  {
+   "name": "getSubRows",
+   "type": "(row: Record<string, unknown>) => Record<string, unknown>[] | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Data-driven mode: tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role=\"treegrid\"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode."
+  },
+  {
+   "name": "expanded",
+   "type": "ExpandedState",
+   "default": "undefined",
+   "required": "false",
+   "doc": "v-model:expanded (TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }`). Uncontrolled it starts collapsed."
   }
  ],
  "events": [
@@ -387,6 +401,11 @@
    "name": "reorder",
    "payload": "payload: { from: number; to: number; row: Record<string, unknown> }",
    "notes": "reorderable`: a row moved from index `from` to index `to` of `data`."
+  },
+  {
+   "name": "update:expanded",
+   "payload": "value: ExpandedState",
+   "notes": "Tree rows: v-model:expanded, after a toggle by pointer or keyboard."
   }
  ],
  "slots": [

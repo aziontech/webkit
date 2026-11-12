@@ -1865,16 +1865,17 @@
                       class="w-2/5 shrink-0 truncate text-label-sm text-(--text-muted)"
                       >{{ stackedLabelOf(cell.column) }}</span
                     >
-                    <template v-if="treeActive && viewOf(cell.column.id).principal">
-                      <span
-                        v-if="row.depth"
-                        aria-hidden="true"
-                        class="shrink-0"
-                        :style="{ inlineSize: `calc(var(--spacing-md) * ${row.depth})` }"
-                      />
+                    <span
+                      v-if="treeActive && viewOf(cell.column.id).principal"
+                      aria-hidden="true"
+                      data-tree-gutter
+                      class="flex shrink-0 justify-end"
+                      :style="{
+                        inlineSize: `calc(var(--spacing-md) * ${row.depth} + var(--size-7))`
+                      }"
+                    >
                       <span
                         v-if="row.getCanExpand()"
-                        aria-hidden="true"
                         :data-testid="`${testId}__expand-toggle`"
                         class="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-(--shape-button) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-canvas) motion-reduce:transition-none"
                         @click.stop="toggleTreeRow(row)"
@@ -1888,12 +1889,7 @@
                           "
                         />
                       </span>
-                      <span
-                        v-else
-                        aria-hidden="true"
-                        class="size-7 shrink-0"
-                      />
-                    </template>
+                    </span>
                     <slot
                       v-if="hasSlot('cell-' + cell.column.id)"
                       :name="'cell-' + cell.column.id"

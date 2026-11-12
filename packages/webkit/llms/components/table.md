@@ -77,6 +77,8 @@
 | `estimateRowHeight` | `number` | `48` | false | Row height (px) assumed in `virtual` mode until a row is measured. |
 | `reorderable` | `boolean` | `false` | false | Data-driven mode: a leading grip column lets people drag rows, or move the focused grip's row with Arrow Up, Arrow Down, Home and End, into a new order. Emits `update:data` (bind `v-model:data`) and `reorder`; locked while a sort is applied. |
 | `rowReorderable` | `(row: Record<string, unknown>) => boolean` | `undefined` | false | With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys. |
+| `getSubRows` | `(row: Record<string, unknown>) => Record<string, unknown>[] \| undefined` | `undefined` | false | Data-driven mode: tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role="treegrid"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode. |
+| `expanded` | `ExpandedState` | `undefined` | false | v-model:expanded (TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }`). Uncontrolled it starts collapsed. |
 
 ## Events
 
@@ -96,6 +98,7 @@
 | `export` | `rows: Record<string, unknown>[]` | Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads). |
 | `update:data` | `value: Record<string, unknown>[]` | reorderable`: the records in their new order; bind `v-model:data`. |
 | `reorder` | `payload: { from: number; to: number; row: Record<string, unknown> }` | reorderable`: a row moved from index `from` to index `to` of `data`. |
+| `update:expanded` | `value: ExpandedState` | Tree rows: v-model:expanded, after a toggle by pointer or keyboard. |
 
 ## Slots
 
@@ -178,6 +181,7 @@
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
 - Hover-free devices: a sortable header shows its sort affordance where the pointer cannot hover (`@media (hover: none)`).
 - Reorderable rows (`reorderable`): a 40 px leading column holds a grip `IconButton` per row (`data-reorder-handle`), frozen at the start edge when other columns are; the row being dragged sets `data-dragging` (dashed accent outline, 60% opacity) and the row under the pointer `data-drop="before" | "after"` (a 2 px accent line on that edge). While a sort is applied every grip is disabled and its description says to clear the sort.
+- Tree rows (`getSubRows`): the grid element is `role="treegrid"` and sets `data-tree`. Each body row carries `aria-level` (1-based depth), `aria-setsize` and `aria-posinset` among its siblings, `aria-expanded` when it has children, and `data-depth`; the principal cell starts with a 28 px chevron toggle (`__expand-toggle`, `pi-chevron-right` mirrored in RTL, `pi-chevron-down` when open) or a spacer of the same width on leaves, after a `calc(var(--spacing-md) * depth)` indent on the inline-start side. Rows use a roving tab stop (one row has `tabindex="0"`, the rest `-1`) and draw an inset `var(--ring-color)` outline on `focus-visible`.
 
 ## Accessibility
 
@@ -186,6 +190,7 @@
 - ARIA: `role="table"` sits on the grid element inside the scroll viewport (testid `<testid>__table`), not on the root: the root also holds the toolbar, applied filters, the focusable scroll viewport, the stacked select-all, the empty state and the pagination, and any of those inside a `table` is an unallowed child (`aria-required-children`). Every `aria-*` attribute passed to `Table` (`aria-label`, `aria-labelledby`, `aria-describedby`…) is forwarded to that element, as are `aria-busy` (loading) and `aria-rowcount` (windowed); every other attribute stays on the root. The data-driven pagination is a plain region under the viewport (`<testid>__footer`), not a `rowgroup`, and the `caption` slot renders as the table's first child. `table-caption` is a plain element (no `role`) that names the table through `aria-labelledby` unless the consumer names it with `aria-label`/`aria-labelledby`. In composition mode the default slot is the table's content, so it holds rowgroups (and a caption) only; anything else goes in `footer` or around the `Table`. `table-header`/`table-body` `role="rowgroup"`; `table-footer` has no role (it hosts pagination or an action, not rows); `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
 - Virtual rows keep their position for assistive technology: `aria-rowcount` on the `role="table"` element (rows + header) and `aria-rowindex` on each rendered row.
 - Reorderable rows: each grip is a button named `Reorder <row name>, position <n> of <total>` and described by a visually hidden hint (`Drag, or press Arrow Up or Arrow Down to move.`, or the lock reason). Arrow Up / Arrow Down / Home / End move the row and keep focus on its grip; `Esc` cancels a drag. A polite `role="status"` region announces `Moved <name> to position <n> of <total>.` (keyboard) or `Dropped …` (pointer). Dragging is never the only way to reorder (WCAG 2.5.7).
+- Tree rows follow the APG treegrid row-focus pattern: `Tab` enters the grid on one row (the last one focused, else the first); `Arrow Down` / `Arrow Up` move between visible rows; `Home` / `End` go to the first / last row; `Arrow Right` (inline end, mirrored in RTL) opens a closed row or moves to the first child of an open one; `Arrow Left` closes an open row or moves to the parent; `Enter` toggles the row; `Space` toggles its selection when `enableRowSelection` allows it. Interactive content inside the row (checkbox, menus) stays reachable with `Tab`. The pointer toggle is `aria-hidden` (the row's `aria-expanded` is the accessible state), and when a row collapses while one of its descendants holds focus, focus moves to that row.
 - Stacked layout: the select-all is a visible checkbox with a `<label>`, not a screen-reader-only header cell (WCAG 2.5.3, label in name).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including muted header text.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
