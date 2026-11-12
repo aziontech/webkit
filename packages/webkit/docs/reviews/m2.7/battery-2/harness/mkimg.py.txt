@@ -1,0 +1,30 @@
+import json, os, sys
+from PIL import Image
+
+Image.MAX_IMAGE_PIXELS = None
+profile, out = sys.argv[1], sys.argv[2]
+os.makedirs(f'{out}/img', exist_ok=True)
+REF, AI = '/data/eval-m27b/ref/shots', '/data/eval-m27b/ai-shots'
+MAXW = 1100 if profile == 'desktop' else 393
+dims = {}
+
+
+def conv(src, dst):
+    im = Image.open(src).convert('RGB')
+    s = min(1.0, MAXW / im.width, 16000 / im.height)
+    if s < 1:
+        im = im.resize((round(im.width * s), round(im.height * s)), Image.LANCZOS)
+    im.save(dst, 'WEBP', quality=68, method=4)
+    return [im.width, im.height]
+
+
+ids = sorted({f.split('--')[0] for f in os.listdir(REF) if f.endswith(f'--{profile}.png')})
+for i in ids:
+    d = {'ref': conv(f'{REF}/{i}--{profile}.png', f'{out}/img/{i}--ref.webp')}
+    a = f'{AI}/{i}--{profile}.png'
+    if os.path.exists(a):
+        d['ai'] = conv(a, f'{out}/img/{i}--ai.webp')
+    dims[i] = d
+json.dump(dims, open(f'{out}/dims.json', 'w'))
+tot = sum(os.path.getsize(f'{out}/img/{f}') for f in os.listdir(f'{out}/img'))
+print(profile, len(ids), 'pages', round(tot / 1e6, 1), 'MB')

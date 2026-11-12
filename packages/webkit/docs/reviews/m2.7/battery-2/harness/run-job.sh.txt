@@ -1,0 +1,21 @@
+#!/bin/bash
+# usage: run-job.sh <JOB>   — renders the brief and runs one headless builder session for that job.
+set -uo pipefail
+J=$1; D=/data/eval-m27b/jobs/$J
+cd "$D" || exit 2
+if [ -f "$D/.finished" ]; then echo "$J already finished"; exit 0; fi
+node /data/eval-m27b/bin/render-brief.mjs "$J" > "$D/BRIEF.md"
+date -u +%FT%TZ > "$D/.started"
+PROMPT="Read $D/BRIEF.md and do exactly what it says, end to end, without stopping to ask. Your working folder is $D."
+if [ -s "$D/.session" ]; then
+  RESUME=(--resume "$(cat "$D/.session")")
+  PROMPT="Continue the task in $D/BRIEF.md from where you stopped: check $D/app (git log), JOURNAL.md and DONE.md first, then finish every page."
+else RESUME=(); fi
+[ -n "${RESUME_PROMPT:-}" ] && PROMPT="$RESUME_PROMPT"
+timeout 18000 claude -p "$PROMPT" "${RESUME[@]}" --model claude-opus-5-5 --dangerously-skip-permissions \
+  --output-format stream-json --verbose --add-dir "$D" >> "$D/session.jsonl" 2>> "$D/session.err"
+rc=$?
+S=$(grep -o "\"session_id\":\"[^\"]*\"" "$D/session.jsonl" | tail -1 | cut -d\" -f4); [ -n "$S" ] && echo "$S" > "$D/.session"
+echo "$rc $(date -u +%FT%TZ)" > "$D/.exit"
+[ -f "$D/DONE.md" ] && touch "$D/.finished"
+exit $rc
