@@ -59,4 +59,5 @@ export type {
   ChartSeverity,
   ChartStatus
 } from '../_lib'
+export type { ChartBarKind } from './chart-bar/chart-bar.vue'
 export type { ChartAxisKind, ChartOrientation } from './injection-key'

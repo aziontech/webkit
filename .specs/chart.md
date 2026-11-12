@@ -3,11 +3,11 @@ name: chart
 category: chart
 structure: composition
 status: approved
-checksum: cb3ae06af906dde5e419257cc373f598f735134b72b3411d4e4471a441e6a129
+checksum: 7b22a47f0d24cd27c293c584a857b12e48612368fde5707ce73d416630311d53
 spec_version: 3
 template: 2
 created: 2026-10-20
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Chart — Component Spec
@@ -53,6 +53,7 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
 - While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).
 - Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.
 - Use `labelScale="linear"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.
+- Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar kind="histogram"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another.
 
 ## Usage
 
@@ -125,8 +126,8 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `curve?: 'linear' | 'monotone'` (default `'linear'`).
   - Events: _none_.
   - Slots: _none_.
-- `chart-bar/chart-bar.vue` — bars at most 24px thick, a rounded data end and a square baseline, a 2px surface gap between touching bars; grouped or stacked; horizontal when the root is horizontal.
-  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `labeled?: boolean` (default `false` — the formatted value at each bar end, for ordered bars).
+- `chart-bar/chart-bar.vue` — bars at most 24px thick, a rounded data end and a square baseline, a 2px surface gap between touching bars; grouped or stacked; horizontal when the root is horizontal. `kind="histogram"` draws solid columns instead: each column fills its category band less a 1px gap, stacked segments touch with no surface gap, both ends are square, and the value axis ends at the tallest column (no nice-ceiling headroom) unless the root sets `max`.
+  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `labeled?: boolean` (default `false` — the formatted value at each bar end, for ordered bars), `kind?: 'default' | 'histogram'` (default `'default'` — `histogram` for event volume over contiguous time buckets).
   - Events: _none_.
   - Slots: _none_.
 - `chart-scatter/chart-scatter.vue` — one dot per value (r 4, a 1.5px `var(--bg-surface)` ring), r 6 at the active index; no connecting line. With `labelScale="linear"` the dots sit at their label value, so it reads as a scatter plot.
@@ -331,7 +332,7 @@ The stories share one WAF fixture so every canvas tells the same story.
 - Horizontal — ordered horizontal bars with value labels (top countries).
 - Mixed — requests as bars and cached requests as a line on one axis.
 - Scatter — response time by object size on a linear label scale.
-- Brush — a stacked event-volume histogram whose selected span filters a log.
+- Brush — a stacked event-volume histogram (`Chart.Bar kind="histogram" stacked`) whose selected span filters a log.
 - Loading — `loading`.
 - Empty — composite: the three reasons a range comes back empty, each with its own copy: nothing in the range, filters that match nothing (with a Clear filters action), and a source not set up yet (with a setup link).
 - Error — `error` set.

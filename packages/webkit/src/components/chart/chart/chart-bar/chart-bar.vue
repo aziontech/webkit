@@ -7,6 +7,9 @@
 
   defineOptions({ name: 'ChartBar', inheritAttrs: false })
 
+  /** Bar form: `default` draws separate rounded bars, `histogram` solid columns that fill their bucket. */
+  export type ChartBarKind = 'default' | 'histogram'
+
   interface Props {
     /** Ids of the series drawn as bars; empty draws every visible series. */
     ids?: string[]
@@ -14,12 +17,15 @@
     stacked?: boolean
     /** Draws the formatted value at each bar end, for ordered bars. */
     labeled?: boolean
+    /** Bar form. `histogram` fills each category band less 1px, stacks segments with no gap, squares both ends and ends the value axis at the tallest column, for event volume over time buckets. */
+    kind?: ChartBarKind
   }
 
   const props = withDefaults(defineProps<Props>(), {
     ids: () => [],
     stacked: false,
-    labeled: false
+    labeled: false,
+    kind: 'default'
   })
 
   const attrs = useAttrs()
@@ -30,7 +36,8 @@
       kind: 'bar',
       stacked: props.stacked,
       labeled: props.labeled,
-      ids: props.ids
+      ids: props.ids,
+      fit: props.kind === 'histogram'
     }))
   )
 
@@ -43,6 +50,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__bar`
   )
   const vertical = computed(() => ctx.orientation.value === 'vertical')
+  const histogram = computed(() => props.kind === 'histogram')
 
   interface BarMark {
     key: string
@@ -70,20 +78,24 @@
     const bars: BarMark[] = []
     const labels: BarLabel[] = []
     const isVertical = vertical.value
+    const solid = histogram.value
+    const radius = solid ? 0 : RADIUS
+    const segmentGap = solid ? 0 : GAP
+    const solidThickness = Math.max(1, band - 1)
 
     const place = (center: number, offset: number, thickness: number, from: number, to: number) => {
       const start = center + offset
       const low = Math.min(from, to)
       const length = Math.abs(to - from)
       return isVertical
-        ? barPath(start, low, thickness, length, RADIUS, 'top')
-        : barPath(low, start, length, thickness, RADIUS, ctx.rtl.value ? 'left' : 'right')
+        ? barPath(start, low, thickness, length, radius, 'top')
+        : barPath(low, start, length, thickness, radius, ctx.rtl.value ? 'left' : 'right')
     }
 
     const delayOf = (index: number) => `calc(${duration['fast-01']} * ${Math.min(index, 12) / 2})`
 
     if (props.stacked) {
-      const thickness = Math.max(2, Math.min(MAX_THICKNESS, band * 0.6))
+      const thickness = solid ? solidThickness : Math.max(2, Math.min(MAX_THICKNESS, band * 0.6))
       const layers = stackValues(
         list.map((entry) => entry.values),
         count
@@ -100,7 +112,7 @@
           if (upper <= lower) return
           const entry = list[order]
           if (!entry) return
-          const gap = lower > 0 ? GAP : 0
+          const gap = lower > 0 ? segmentGap : 0
           const from = isVertical ? scale(lower) - gap : scale(lower) + gap
           const to = scale(upper)
           if (Math.abs(to - from) <= 0) return
@@ -124,10 +136,9 @@
       }
     } else {
       const series = Math.max(1, list.length)
-      const thickness = Math.max(
-        2,
-        Math.min(MAX_THICKNESS, (band * 0.72 - (series - 1) * GAP) / series)
-      )
+      const thickness = solid
+        ? Math.max(1, (solidThickness - (series - 1) * GAP) / series)
+        : Math.max(2, Math.min(MAX_THICKNESS, (band * 0.72 - (series - 1) * GAP) / series))
       const group = series * thickness + (series - 1) * GAP
       for (let index = 0; index < count; index += 1) {
         const center = category.position(index)
@@ -180,6 +191,7 @@
   <svg
     v-bind="$attrs"
     :data-testid="testId"
+    :data-kind="kind"
     aria-hidden="true"
     direction="ltr"
     :width="ctx.size.value.width"
