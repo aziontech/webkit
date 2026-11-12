@@ -41,7 +41,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 
 ### F. Commit bar — `SaveBar`, `Button` (required)
 
-`SaveBar kind="plain"`, fixed under the scrolling region on the form's measure. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar as a full-bleed sticky footer; the Import from Git form instead ends with one Deploy `Button` at the end of the column.
+`SaveBar kind="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar; the Import from Git form instead ends with one Deploy `Button` at the end of the column.
 
 ## Do
 
@@ -55,6 +55,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 ## Don't
 
 - Don't show the sidebar on this page, or open it as a modal over the list.
+- Don't stretch the commit bar across the page or build the centred card by hand; it is `SaveBar kind="centered"`.
 - Don't print the band's guidance as a paragraph under its title; use the `hint`.
 - Don't mark fields required or invalid before the first submit, or show both states on one field.
 - Don't make Save deploy, publish or charge as a side effect; creating is not deploying.
@@ -85,7 +86,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 
 - Default: the Create Domain page at rest; General holds Name and Domain name, Advanced is collapsed, the bar shows Import, Cancel and Save.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
-- CreateService: a long create in five groups of rows over a full-bleed sticky `SaveBar` with Cancel and Save.
+- CreateService: a long create in five groups of rows under the same centred `SaveBar` with Cancel and Save.
 - RequiredFields: Create Service after Save on the empty form; Name and Address show "This field is required." until edited.
 - ImportFromGit: the same job inside the platform shell with standalone field stacks under plain headings, an acknowledgement checkbox and one Deploy button at the end of the column.
 - ImportFromGitSubmitted: Import from Git after Deploy on the untouched form; every required field shows its required state and message.

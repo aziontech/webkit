@@ -433,18 +433,20 @@
                         <SettingRow
                           title="Nameservers"
                           description="Make this zone the authoritative DNS for the domain by copying the nameserver values."
+                          stackable
                         >
                           <div class="flex w-full flex-col gap-(--spacing-xs)">
                             <InputGroupRoot
                               v-for="(ns, index) in nameservers"
                               :key="ns"
                             >
-                              <div class="flex flex-1 font-code">
+                              <div class="flex flex-1">
                                 <Input
                                   :model-value="ns"
                                   size="large"
                                   class="w-full"
                                   :aria-label="'Nameserver ' + (index + 1)"
+                                  monospace
                                   readonly
                                 />
                               </div>
@@ -492,14 +494,16 @@
                             :key="key.label"
                             :title="key.label"
                             :description="key.description"
+                            stackable
                           >
                             <InputGroupRoot class="w-full">
-                              <div class="flex flex-1 font-code">
+                              <div class="flex flex-1">
                                 <Input
                                   :model-value="key.value"
                                   size="large"
                                   class="w-full"
                                   :aria-label="key.label"
+                                  monospace
                                   readonly
                                 />
                               </div>

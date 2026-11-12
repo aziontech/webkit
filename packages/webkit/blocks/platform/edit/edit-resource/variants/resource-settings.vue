@@ -34,33 +34,33 @@
   const navGroups = [
     {
       items: [
-        { id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' },
-        { id: 'projects', label: 'Projects', icon: 'pi pi-folder', path: '/projects' },
+        { id: 'home', label: 'Home', icon: 'pi pi-home', href: '/home' },
+        { id: 'projects', label: 'Projects', icon: 'pi pi-folder', href: '/projects' },
         {
           id: 'deployments',
           label: 'Deployments',
           icon: 'pi pi-cloud-upload',
-          path: '/deployments'
+          href: '/deployments'
         }
       ]
     },
     {
       label: 'Build',
       items: [
-        { id: 'resources', label: 'Resources', icon: 'pi pi-box', path: '/resources' },
-        { id: 'services', label: 'Services', icon: 'pi pi-server', path: '/services' },
-        { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', path: '/variables' },
-        { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', path: '/integrations' },
-        { id: 'templates', label: 'Templates', icon: 'pi pi-clone', path: '/templates' }
+        { id: 'resources', label: 'Resources', icon: 'pi pi-box', href: '/resources' },
+        { id: 'services', label: 'Services', icon: 'pi pi-server', href: '/services' },
+        { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', href: '/variables' },
+        { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', href: '/integrations' },
+        { id: 'templates', label: 'Templates', icon: 'pi pi-clone', href: '/templates' }
       ]
     },
     {
       label: 'Security',
       items: [
-        { id: 'domains', label: 'Domains', icon: 'pi pi-globe', path: '/domains' },
-        { id: 'policies', label: 'Policies', icon: 'pi pi-shield', path: '/policies' },
-        { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', path: '/rule-sets' },
-        { id: 'keys', label: 'Keys', icon: 'pi pi-key', path: '/keys' }
+        { id: 'domains', label: 'Domains', icon: 'pi pi-globe', href: '/domains' },
+        { id: 'policies', label: 'Policies', icon: 'pi pi-shield', href: '/policies' },
+        { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', href: '/rule-sets' },
+        { id: 'keys', label: 'Keys', icon: 'pi pi-key', href: '/keys' }
       ]
     },
     {
@@ -70,16 +70,16 @@
           id: 'databases',
           label: 'Databases',
           icon: 'pi pi-database',
-          path: '/databases',
+          href: '/databases',
           tagValue: 'Preview'
         },
-        { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', path: '/storage' }
+        { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', href: '/storage' }
       ]
     },
     {
       label: 'Observability',
       items: [
-        { id: 'logs', label: 'Logs', icon: 'pi pi-file', path: '/logs' },
+        { id: 'logs', label: 'Logs', icon: 'pi pi-file', href: '/logs' },
         {
           id: 'metrics-module',
           label: 'Metrics',
@@ -88,7 +88,7 @@
           href: '/metrics',
           groups: [
             {
-              items: [{ id: 'metrics', label: 'Overview', path: '/metrics' }]
+              items: [{ id: 'metrics', label: 'Overview', href: '/metrics' }]
             },
             {
               label: 'Build',
@@ -96,19 +96,19 @@
                 {
                   id: 'metrics-resources',
                   label: 'Resources',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'resources' }
                 },
                 {
                   id: 'metrics-services',
                   label: 'Services',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'services' }
                 },
                 {
                   id: 'metrics-cache',
                   label: 'Cache',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'cache' }
                 }
               ]
@@ -119,19 +119,19 @@
                 {
                   id: 'metrics-domains',
                   label: 'Domains',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'domains' }
                 },
                 {
                   id: 'metrics-policies',
                   label: 'Policies',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'policies' }
                 },
                 {
                   id: 'metrics-rule-sets',
                   label: 'Rule sets',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'rule-sets' }
                 }
               ]
@@ -142,26 +142,26 @@
                 {
                   id: 'metrics-databases',
                   label: 'Databases',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'databases' }
                 },
                 {
                   id: 'metrics-storage',
                   label: 'Storage',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'storage' }
                 }
               ]
             }
           ]
         },
-        { id: 'events', label: 'Events', icon: 'pi pi-bolt', path: '/events' }
+        { id: 'events', label: 'Events', icon: 'pi pi-bolt', href: '/events' }
       ]
     },
     {
       label: 'More',
       items: [
-        { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', path: '/catalog' },
+        { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', href: '/catalog' },
         {
           id: 'settings',
           label: 'Settings',
@@ -171,35 +171,35 @@
             {
               label: 'Settings',
               items: [
-                { id: 'settings-general', label: 'General', path: '/account' },
+                { id: 'settings-general', label: 'General', href: '/account' },
                 {
                   id: 'settings-build-deployment',
                   label: 'Build and deployment',
-                  path: '/account/build-deployment'
+                  href: '/account/build-deployment'
                 },
                 {
                   id: 'settings-environments',
                   label: 'Environments',
-                  path: '/account/environments'
+                  href: '/account/environments'
                 },
-                { id: 'settings-users', label: 'Users management', path: '/account/users' },
-                { id: 'settings-teams', label: 'Teams and permissions', path: '/account/teams' }
+                { id: 'settings-users', label: 'Users management', href: '/account/users' },
+                { id: 'settings-teams', label: 'Teams and permissions', href: '/account/teams' }
               ]
             },
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
-                { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
+                { id: 'settings-tokens', label: 'Personal tokens', href: '/personal-tokens' },
+                { id: 'settings-credentials', label: 'Credentials', href: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', href: '/account/activity' }
               ]
             },
             {
               label: 'Billing',
               items: [
-                { id: 'settings-billing', label: 'Billing and plan', path: '/account/billing' },
+                { id: 'settings-billing', label: 'Billing and plan', href: '/account/billing' },
                 { id: 'settings-invoices', label: 'Invoices' }
               ]
             }
@@ -309,6 +309,7 @@
   ])
 
   const onNavigate = (event, node) => {
+    event.preventDefault()
     activeId.value = node.id
   }
 

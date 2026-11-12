@@ -158,9 +158,9 @@
         novalidate
         @submit.prevent="submit"
       >
-        <div class="min-h-0 flex-1 overflow-auto">
+        <div class="flex min-h-0 flex-1 flex-col overflow-auto">
           <div
-            class="layout-column-form layout-boundary-inline flex flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
+            class="layout-column-form layout-boundary-inline flex flex-1 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
           >
             <PageHeader
               title="Create Purge"
@@ -305,24 +305,23 @@
               </SettingsSection>
             </fieldset>
           </div>
+          <SaveBar kind="centered">
+            <template #actions>
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+              />
+              <Button
+                label="Purge"
+                kind="primary"
+                size="medium"
+                type="submit"
+              />
+            </template>
+          </SaveBar>
         </div>
-
-        <SaveBar kind="plain">
-          <template #actions>
-            <Button
-              type="button"
-              label="Cancel"
-              kind="outlined"
-              size="medium"
-            />
-            <Button
-              label="Purge"
-              kind="primary"
-              size="medium"
-              type="submit"
-            />
-          </template>
-        </SaveBar>
       </form>
     </main>
   </div>

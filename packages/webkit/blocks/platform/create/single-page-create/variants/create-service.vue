@@ -519,7 +519,7 @@
           </fieldset>
         </div>
 
-        <SaveBar kind="plain">
+        <SaveBar kind="centered">
           <template #actions>
             <Button
               type="button"
