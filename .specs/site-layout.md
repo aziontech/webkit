@@ -2,10 +2,10 @@
 name: site-layout
 category: layout
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
-checksum: c2002ff1e3fa05d62c1abb5aed818efbc5ff7bc027d5fe05cfb77eb8d6307ea1
+checksum: eb829c2b760bb780dca3181f7b8857ae302afaf20a0b4627a13a5e983a00d7a8
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -144,7 +144,7 @@ The marketing site's chrome, composed once in the app: `SiteNav` on top, the pag
 
 ## Performance
 
-- Bundle budget: 70 KB gzip for `./site-layout` in `.size-limit.json` (it pulls `SiteNav`, `SiteFooter` and `Command`).
+- Bundle budget: 71 KB gzip for `./site-layout` in `.size-limit.json` (69.1 KB measured; it pulls `SiteNav`, `SiteFooter` and `Command`).
 - Runtime budget: the palette destinations are a computed list over the menus.
 - Heavy parts: none beyond the composed components; the palette content renders only while open.
 

@@ -2,10 +2,10 @@
 name: console-layout
 category: layout
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
-checksum: b6e8299a8af5b68b02cd9f360f75310e27c520b2bcf33b79de5252fe17f4db4f
+checksum: 9432faca3779c33bef6a10076d17145c92ff15c3a13a763f0ab883165bd243f3
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -180,7 +180,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 ## Performance
 
-- Bundle budget: 60 KB gzip for `./console-layout` in `.size-limit.json` (it pulls `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`).
+- Bundle budget: 66 KB gzip for `./console-layout` in `.size-limit.json` (64.3 KB measured; it pulls `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`).
 - Runtime budget: one `popstate` listener when no router is installed; the active row is a computed match over the navigation leaves.
 - Heavy parts: none beyond the composed components; the palette content renders only while open (`Command`).
 

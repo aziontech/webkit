@@ -2,10 +2,10 @@
 name: doc-layout
 category: documentation
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
-checksum: 4d3c007cccb1129756dd22926d3542dcc735bbeb42429036a36b2bff780667cb
+checksum: b1d4a8474057dc06e50a86f50edce416c5620fde8e7126a8be9e0c786e6e33a7
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -173,7 +173,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## Performance
 
-- Bundle budget: 60 KB gzip for `./doc-layout` in `.size-limit.json` (it pulls `GlobalHeader`, `NavigationMenu`, `Sidebar`, `Menu`, `Drawer`, `DocOnThisPage` and `Command`).
+- Bundle budget: 65 KB gzip for `./doc-layout` in `.size-limit.json` (62.8 KB measured; it pulls `GlobalHeader`, `NavigationMenu`, `Sidebar`, `Menu`, `Drawer`, `DocOnThisPage` and `Command`).
 - Runtime budget: one passive `scroll` listener (throttled to one read per animation frame) while `outline` is not empty; one `popstate` listener without a router.
 - Heavy parts: none beyond the composed components.
 
