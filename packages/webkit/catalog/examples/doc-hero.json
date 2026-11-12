@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The docs-home masthead: a display-size title with room above it, the deck at a readable measure, `Get started` then `CopyPromptButton`, and one muted line on what the prompt does.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n  import DocHero from '@aziontech/webkit/doc-hero'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <DocHero\n    title=\"Welcome to Azion Docs\"\n    description=\"We make every application fast and reliable. Deploy on a global network with enterprise-grade security and no cold starts.\"\n  >\n    <template #actions>\n      <Button\n        label=\"Get started\"\n        kind=\"primary\"\n        size=\"large\"\n        href=\"#\"\n      />\n      <CopyPromptButton :value=\"prompt\" />\n    </template>\n    <template #note>\n      The prompt hands your coding agent the CLI, live docs over MCP, and this project linked.\n    </template>\n  </DocHero>\n</template>"
+  },
+  {
+   "name": "Title only",
+   "summary": "A section landing with a title and a deck and no actions; the parts it does not receive are not rendered.",
+   "sfc": "<script setup>\n  import DocHero from '@aziontech/webkit/doc-hero'\n</script>\n\n<template>\n  <DocHero\n    title=\"Guides\"\n    description=\"Step-by-step walkthroughs, from a first deploy to a hardened production setup.\"\n  />\n</template>"
+  }
+ ]
+}

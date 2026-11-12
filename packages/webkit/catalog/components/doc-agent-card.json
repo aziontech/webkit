@@ -1,0 +1,23 @@
+{
+ "purpose": "The \"Your AI agent, fluent in Azion\" card that opens the first section of a documentation home. Two columns in one framed card: on the left the title, one or two sentences on what the prompt gives the agent, and the inline `CopyPromptButton` with the agent marks; on the right, behind a vertical divider, the question \"Prefer the guided route?\" over an orange `Agent setup` button, set on an orange halftone panel that fades in from the bottom corner. Below the card's `@3xl` container size the columns stack and the divider turns horizontal. All four strings default to the catalog, so `<DocAgentCard :prompt=\"…\" />` is the whole reference card.",
+ "useWhen": [
+  "The first block under \"Start by interface\" (or the hero) of a documentation home, to hand the reader's coding agent the platform in one prompt and offer the guided setup next to it."
+ ],
+ "avoidWhen": [
+  "To show the prompt text itself → use `DocPrompt`.",
+  "As a generic two-column banner → use `DocCard`, `DocCta` or a marketing `Banner`.",
+  "On an article page → put `CopyPromptButton` in `DocPageHeader`'s meta actions instead."
+ ],
+ "related": [
+  "CopyPromptButton` — the left column's action.",
+  "DocHero` — the masthead above it on a docs home.",
+  "DocCardGroup` — the Console / CLI / API cards that follow it; both share `FrameBox`'s corner marks.",
+  "TextureMaterial` — the `dither` halftone behind the guided action."
+ ],
+ "bestPractices": [
+  "Pass the exact prompt in `prompt`; leave the strings to the catalog unless the product differs.",
+  "Point `action-href` at the agent setup guide.",
+  "Follow it with a three-column `DocCardGroup` (Console, CLI, API) in the same section.",
+  "Do not add an overline or an eyebrow above the title; the card has none."
+ ]
+}

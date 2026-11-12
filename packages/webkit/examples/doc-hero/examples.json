@@ -1,0 +1,16 @@
+{
+  "component": "doc-hero",
+  "title": "Components/Documentation/DocHero",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The docs-home masthead: a display-size title with room above it, the deck at a readable measure, `Get started` then `CopyPromptButton`, and one muted line on what the prompt does.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Title only",
+      "summary": "A section landing with a title and a deck and no actions; the parts it does not receive are not rendered.",
+      "file": "title-only.vue"
+    }
+  ]
+}

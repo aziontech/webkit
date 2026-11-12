@@ -63,7 +63,7 @@ A page picks **exactly one**. The choice is not stylistic — it follows from wh
 | What it is     | A shell **you** compose (e.g. `components/AppShell.vue`) around a full `Sidebar` + one in-content `GlobalHeader` | A shell **you** compose (e.g. `components/CreationShell.vue`): one `GlobalHeader` (back + brand + breadcrumb + avatar), no sidebar |
 | Use for        | Hubs, lists, dashboards, settings — anywhere the user _browses_ and moves laterally                              | Create / edit / deploy / wizard — a single task with a start and an end                                                            |
 | Sidebar        | **Yes** — full console nav, always present                                                                       | **No** — removed so the task is the only focus                                                                                     |
-| Header         | `GlobalHeader` inside the content zone: breadcrumb + Create/Docs actions + account avatar                        | `GlobalHeader`: back button + Azion brand + breadcrumb + account avatar                                                            |
+| Header         | `GlobalHeader` inside the content zone: breadcrumb + `SearchTrigger` (⌘K) + Create/Docs actions + avatar         | `GlobalHeader`: back button + Azion brand + breadcrumb + account avatar                                                            |
 | Way out        | Lateral — pick any other module from the sidebar                                                                 | Linear — the **back** button (and breadcrumb) returns to where the flow started                                                    |
 | Signed-in user | Sidebar footer (avatar + account menu) **and** header avatar                                                     | Header avatar (right)                                                                                                              |
 | Typical pages  | dashboards, list / index pages, settings hubs, resource-detail pages                                             | create / edit forms, multi-step wizards, deploy / publish flows                                                                    |
@@ -89,12 +89,17 @@ the webkit primitives and reuse it on every browse page:
   import SidebarFooter from '@aziontech/webkit/sidebar-footer'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Command from '@aziontech/webkit/command'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import { ref } from 'vue'
 
   defineProps<{
     active: string
     breadcrumb: { label: string; href?: string }[]
     collapsible?: boolean // default true — the sidebar toggle in GlobalHeader.Left
   }>()
+
+  const searchOpen = ref(false)
 </script>
 
 <template>
@@ -114,9 +119,14 @@ the webkit primitives and reuse it on every browse page:
           <Breadcrumb :items="breadcrumb" />
         </GlobalHeader.Left>
         <GlobalHeader.Right>
-          <!-- Create / Docs actions + the account avatar (always visible) -->
+          <!-- SearchTrigger FIRST (rule webkit-header-search), then Create / Docs + avatar -->
+          <SearchTrigger
+            collapsible
+            @open="searchOpen = true"
+          />
         </GlobalHeader.Right>
       </GlobalHeader>
+      <Command v-model:open="searchOpen"><!-- palette: pages, resources, actions --></Command>
 
       <!-- The shell owns the --spacing-md inset ONCE; pages never re-pad -->
       <main class="min-h-0 flex-1 overflow-auto p-(--spacing-md)">
@@ -148,6 +158,15 @@ A browse page then imports **your** shell — not a webkit path — and renders 
   browse page.
 - The breadcrumb names where the user is on **every** level: a single crumb at the first level
   (`[{ label: 'Applications' }]`), a full trail (`Applications › New Application`) once nested.
+
+#### Every browse header carries search (`SearchTrigger`, ⌘K / Ctrl K)
+
+The persistent shell's header — and every docs or site header — puts `SearchTrigger` first in
+`GlobalHeader.Right`, opening a `Command` palette. Wrap the header in `@container` and set
+`collapsible`: a wide bar shows the field (`Search … ⌘K`), a narrow one the magnifier. Never
+hand-roll the field or use a bare magnifier `IconButton`; never bind ⌘K yourself. The focused
+creation shell has no search: it stays on the task. Enforced by `webkit/header-search-trigger`
+(rule `webkit-header-search`).
 
 #### The header always names the location (breadcrumb) + the sidebar toggle (`collapsible`)
 

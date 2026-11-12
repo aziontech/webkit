@@ -1,5 +1,6 @@
 import authoringStandards from './rules/authoring-standards.js'
 import containerNeedsWidth from './rules/container-needs-width.js'
+import headerSearchTrigger from './rules/header-search-trigger.js'
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
@@ -30,6 +31,7 @@ const rules = {
   'no-style-override': noStyleOverride,
   'authoring-standards': authoringStandards,
   'container-needs-width': containerNeedsWidth,
+  'header-search-trigger': headerSearchTrigger,
   'no-wrapped-page-chrome': noWrappedPageChrome,
   'no-output-in-command': noOutputInCommand
 }
@@ -78,6 +80,7 @@ const RECOMMENDED = {
   'no-style-override': 'error',
   'authoring-standards': 'error',
   'container-needs-width': 'warn',
+  'header-search-trigger': 'error',
   'no-wrapped-page-chrome': 'error',
   'no-output-in-command': 'warn'
 }

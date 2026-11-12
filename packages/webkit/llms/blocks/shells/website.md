@@ -5,7 +5,7 @@
 - Surface: marketing
 - Source: `blocks/shells/website/website.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/website")`
-- Components: [BigNumbers](../../components/big-numbers.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [GlobalHeader](../../components/global-header.md), [Hero](../../components/hero.md), [IconButton](../../components/icon-button.md), [NavigationMenu](../../components/navigation-menu.md), [SectionContainer](../../components/section-container.md), [SectionGap](../../components/section-gap.md), [SectionModule](../../components/section-module.md), [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [TextureMaterial](../../components/texture-material.md)
+- Components: [BigNumbers](../../components/big-numbers.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Command](../../components/command.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [GlobalHeader](../../components/global-header.md), [Hero](../../components/hero.md), [IconButton](../../components/icon-button.md), [NavigationMenu](../../components/navigation-menu.md), [SearchTrigger](../../components/search-trigger.md), [SectionContainer](../../components/section-container.md), [SectionGap](../../components/section-gap.md), [SectionModule](../../components/section-module.md), [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [TextureMaterial](../../components/texture-material.md)
 - Skills: `webkit-layout`
 
 ## Asked as
@@ -30,7 +30,7 @@ The marketing shell. A visitor scans to decide whether Azion fits, so the page i
 
 ### B. Icon actions — `IconButton` (required)
 
-The navigation trigger below `xl` and Search in the header; the small `transparent` social links in the footer.
+The navigation trigger below `xl` in the header; the small `transparent` social links in the footer.
 
 ### C. Brand — `Brand` (required)
 
@@ -84,6 +84,14 @@ In the footer's status slot.
 
 In the footer's language slot, trigger labelled `Language`.
 
+### P. Search — `SearchTrigger` (required)
+
+The header search, last in the end cluster as on azion.com: `collapsible` with no `@container` around the bar, so it stays the magnifier at every width. It still announces and binds ⌘K / Ctrl K and emits `open`, which opens the `Command` palette. Never a bare magnifier `IconButton` (rule `webkit-header-search`).
+
+### Q. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
+
 ## Do
 
 - Keep every band on the site measure; one off-measure section breaks the side rules.
@@ -129,12 +137,14 @@ Each variant is the same screen in another state: `get_pattern("shells/website",
   import BigNumbers from '@aziontech/webkit/big-numbers'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
+  import Command from '@aziontech/webkit/command'
   import Footer from '@aziontech/webkit/footer'
   import FrameBox from '@aziontech/webkit/frame-box'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import Hero from '@aziontech/webkit/hero'
   import IconButton from '@aziontech/webkit/icon-button'
   import NavigationMenu from '@aziontech/webkit/navigation-menu'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
@@ -222,6 +232,8 @@ Each variant is the same screen in another state: `get_pattern("shells/website",
     window.removeEventListener('resize', syncBrand)
     lgProbe?.remove()
   })
+  const searchPages = ['Functions', 'Applications', 'Firewall', 'Pricing', 'Documentation']
+  const searchOpen = ref(false)
 </script>
 
 <template>
@@ -310,15 +322,26 @@ Each variant is the same screen in another state: `get_pattern("shells/website",
             class="shrink-0"
             href="#"
           />
-          <IconButton
-            icon="pi pi-search"
-            kind="outlined"
-            size="medium"
-            aria-label="Search"
-            class="shrink-0"
+          <SearchTrigger
+            collapsible
+            @open="searchOpen = true"
           />
         </GlobalHeader.Right>
       </GlobalHeader>
+      <Command v-model:open="searchOpen">
+        <Command.Input placeholder="Search azion.com" />
+        <Command.List>
+          <Command.Empty>No page matches your search.</Command.Empty>
+          <Command.Group heading="Pages">
+            <Command.Item
+              v-for="page in searchPages"
+              :key="page"
+              :value="page"
+              >{{ page }}</Command.Item
+            >
+          </Command.Group>
+        </Command.List>
+      </Command>
     </div>
 
     <main class="flex-1">

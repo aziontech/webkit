@@ -479,3 +479,13 @@ Scope: `Table` tree rows (additive: `getSubRows`, `v-model:expanded`, treegrid),
 - The details heading is a polite live region, so changing the selection is announced; the bulk buttons stay visible and disabled with no selection.
 
 Not verified by the unit tests: styled geometry (they run without CSS); the indent, chevron and stacked layout are checked in the visual suite.
+
+## M2.7 owner items 3 and 6 — SearchTrigger everywhere, docs home pieces (2026-11-12)
+
+Reviewed from the styled visual suite (docs pages at 1440 and 390, light and dark; agent card scrolled into view) against `eval-m27/ref/shots/docs-home--*`.
+
+- `SearchTrigger` migration: every console/platform block and the site header matched its previous baseline within tolerance, so the shared component reproduces the hand-built field; `docs-header` changed on purpose (field instead of a bare magnifier).
+- `CopyPromptButton`: dark in both themes through `data-theme="dark"` on the chip, framed by the page's `--border-default` so it reads on the light canvas as in the reference; accent hairlines top and bottom stand in for the reference glow. Label swap to `Copied` keeps the width (both labels share one grid cell).
+- `DocAgentCard`: (fixed) the halftone first covered the whole aside, behind the question; it now fades in from the bottom corner (`fade="top"`, ramp toward the bottom end). No overline or eyebrow, as in the reference.
+- Landing: (fixed) sections stacked their own `gap` on top of `DocProse`'s paragraph and block spacing, so heading → lead → card ran ~55 px against ~40 px in the reference; the gap is gone and prose spacing alone sets the rhythm.
+- Open: the folded `SearchTrigger` has no visual tooltip (M2.10 row 55).

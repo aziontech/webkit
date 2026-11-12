@@ -22,6 +22,7 @@
 
 - For an application screen's title — that is `PageHeading`, which carries console actions rather than a Copy Page control.
 - For a section heading inside a page — the content's own `h2` does that, and the masthead's `h1` is chrome.
+- The documentation home → use `DocHero` (display title, `Get started` and `CopyPromptButton`), then `DocAgentCard`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

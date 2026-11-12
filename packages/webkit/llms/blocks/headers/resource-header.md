@@ -1,11 +1,11 @@
 # ResourceHeader (`headers/resource-header`)
 
-> The console bar for every page inside the persistent shell, at its first and second level of resource. A `GlobalHeader` in its default `content` placement, sitting in the content zone beside the navigation rail. Start: the navigation trigger below `md`, the brand, and the breadcrumb on every level from `md`. End: search first, then Create, the Agent button and the account avatar. The first level carries one unlinked crumb, the module; the second level names the module and the resource. Below `md` the sample collapses Create and Agent into icon buttons, and from a bar width of `--container-2xl` it widens the search into a field with the ⌘K shortcut. Both thresholds are read from the theme tokens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `Kbd`, `Button`, `ButtonHighlight`, `Avatar` and `Brand`.
+> The console bar for every page inside the persistent shell, at its first and second level of resource. A `GlobalHeader` in its default `content` placement, sitting in the content zone beside the navigation rail. Start: the navigation trigger below `md`, the brand, and the breadcrumb on every level from `md`. End: search first, then Create, the Agent button and the account avatar. The first level carries one unlinked crumb, the module; the second level names the module and the resource. Below `md` the sample collapses Create and Agent into icon buttons, and from a bar width of `--container-2xl` the `SearchTrigger` widens into the field with its ⌘K / Ctrl K keycap. Both thresholds are read from the theme tokens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `SearchTrigger`, `Button`, `ButtonHighlight`, `Avatar` and `Brand`.
 
 - Surface: product
 - Source: `blocks/headers/resource-header/resource-header.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("headers/resource-header")`
-- Components: [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Kbd](../../components/kbd.md), [Tooltip](../../components/tooltip.md)
+- Components: [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [SearchTrigger](../../components/search-trigger.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -30,9 +30,9 @@ The top bar of every page inside the persistent console shell. It sits in the co
 
 Default `content` placement, `aria-label="Azion Console"`, in the content zone, never above the rail. Start cluster in `GlobalHeader.Left`, empty `GlobalHeader.Middle`, actions in `GlobalHeader.Right`.
 
-### B. Navigation trigger and search — `IconButton` (required)
+### B. Navigation trigger — `IconButton` (required)
 
-Below `md` an outlined `pi-bars` icon button opens the rail as a drawer. In the end cluster, Search comes first. From a bar width of `--container-2xl` (the `@2xl:` container variant) the search widens into a field-button with the ⌘K shortcut; both thresholds come from theme tokens, never raw px. Below `md`, Create and Agent also collapse into icon buttons.
+Below `md` an outlined `pi-bars` icon button opens the rail as a drawer. In the end cluster, `SearchTrigger` comes first. Below `md`, Create and Agent also collapse into icon buttons.
 
 ### C. Brand — `Brand` (required)
 
@@ -54,13 +54,13 @@ Inside a button labelled `Account settings`, always last.
 
 Shows from `md`, on every level. First level: one crumb, the module, with no link (`Applications`). Second level: the module with an `href`, then the resource's own name with no link. A tab is never a crumb.
 
-### H. Shortcut — `Kbd` (required)
+### H. Search — `SearchTrigger` (required)
 
-`meta` + `K` inside the search field-button shown while the bar is at least `--container-2xl` wide.
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
 
 ### I. Hints — `Tooltip` (required)
 
-Names every icon-only control: the navigation trigger, the collapsed search, and Create and Agent below `md`.
+Names every icon-only control: the navigation trigger, and Create and Agent below `md`.
 
 ## Do
 
@@ -115,7 +115,7 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Kbd from '@aziontech/webkit/kbd'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Tooltip from '@aziontech/webkit/tooltip'
 
   const crumbs = [{ label: 'Applications' }]
@@ -159,41 +159,7 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
       </GlobalHeader.Left>
       <GlobalHeader.Middle />
       <GlobalHeader.Right>
-        <span class="contents @2xl:hidden">
-          <Tooltip
-            text="Search"
-            placement="bottom"
-          >
-            <IconButton
-              icon="pi pi-search"
-              kind="outlined"
-              size="medium"
-              aria-label="Search"
-              aria-keyshortcuts="Meta+K"
-              class="shrink-0"
-            />
-          </Tooltip>
-        </span>
-        <button
-          type="button"
-          aria-label="Search"
-          aria-keyshortcuts="Meta+K"
-          class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @2xl:flex"
-        >
-          <span
-            class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
-            aria-hidden="true"
-          >
-            <i class="pi pi-search" />
-          </span>
-          <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-muted)">Search</span>
-          <Kbd
-            meta
-            size="small"
-            class="shrink-0"
-            >K</Kbd
-          >
-        </button>
+        <SearchTrigger collapsible />
         <span class="contents md:hidden">
           <Tooltip
             text="Create"

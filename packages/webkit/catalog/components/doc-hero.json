@@ -1,0 +1,20 @@
+{
+ "purpose": "The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt does. It carries the air the home needs — `--spacing-xxl` above and below, `--spacing-xl` between the deck and the actions — so the front door reads as a front door and not as one more article. An article page uses `DocPageHeader` instead.",
+ "useWhen": [
+  "The top of a documentation home or a docs section landing (`shells/documentation`, variant `Landing`)."
+ ],
+ "avoidWhen": [
+  "On an article or reference page → use `DocPageHeader` (breadcrumb, last updated, page actions).",
+  "On the marketing site → use `Hero` or a page section."
+ ],
+ "related": [
+  "DocPageHeader` — the article masthead.",
+  "CopyPromptButton` — the second action of the row.",
+  "DocAgentCard` — the agent card that usually opens the first section under the hero."
+ ],
+ "bestPractices": [
+  "Keep the title short (`Welcome to Azion Docs`) and the deck to one or two sentences.",
+  "Put `Button kind=\"primary\" size=\"large\"` first and `CopyPromptButton` second in `#actions`; say what the prompt does in `#note`.",
+  "Do not wrap it in `DocProse`; it is page chrome (`data-doc-chrome`)."
+ ]
+}

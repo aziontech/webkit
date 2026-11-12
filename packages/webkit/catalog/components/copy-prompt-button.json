@@ -1,0 +1,24 @@
+{
+ "purpose": "The \"Copy prompt\" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip is dark in both themes (it renders under `data-theme=\"dark\"`) with a faint accent glow on its top and bottom edges, so it reads as the AI entry point next to a primary button. The marks are single-colour and decorative; their names reach screen readers as the button's description (\"Works with Claude, ChatGPT, Gemini, Cursor\").",
+ "useWhen": [
+  "The hero of a documentation home or a product landing, beside the primary action (`Get started`), when the page hands its reader a prompt for their agent.",
+  "Inside `DocAgentCard`, the \"Your AI agent, fluent in Azion\" card of a docs home (it renders this button by default)."
+ ],
+ "avoidWhen": [
+  "To show the prompt text itself on the page → use `DocPrompt` (it renders the text with its own copy control).",
+  "To copy a value, a token or a code snippet → use `CopyButton`.",
+  "As a generic dark button → use `Button kind=\"secondary\"`."
+ ],
+ "related": [
+  "DocPrompt` — the prompt rendered in full, with a copy control.",
+  "DocAgentCard` — the docs-home card that places this button in its left column.",
+  "DocHero` — the docs-home masthead whose `actions` slot holds `Get started` and this button.",
+  "CopyButton` — the icon-only copy control; this button shares its clipboard fallback."
+ ],
+ "bestPractices": [
+  "Put it second, after the primary `Button` (`Get started`), and explain what the prompt does in one line below the row (`DocHero`'s `note` slot).",
+  "Keep the default agents unless the product supports a different set; pass `:agents=\"[]\"` to draw the label alone.",
+  "Pass the exact prompt in `value`; the button copies it as it stands.",
+  "Do not recolour the marks: they are single-colour by design and follow the chip's ink."
+ ]
+}

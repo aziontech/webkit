@@ -5,7 +5,8 @@
  ],
  "avoidWhen": [
   "For an application screen's title — that is `PageHeading`, which carries console actions rather than a Copy Page control.",
-  "For a section heading inside a page — the content's own `h2` does that, and the masthead's `h1` is chrome."
+  "For a section heading inside a page — the content's own `h2` does that, and the masthead's `h1` is chrome.",
+  "The documentation home → use `DocHero` (display title, `Get started` and `CopyPromptButton`), then `DocAgentCard`."
  ],
  "related": [
   "DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.",

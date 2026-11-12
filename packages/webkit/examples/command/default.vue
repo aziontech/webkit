@@ -1,42 +1,18 @@
 <script setup>
-  import { ref } from 'vue'
   import Command from '@aziontech/webkit/command'
-  import CommandInput from '@aziontech/webkit/command-input'
-  import CommandList from '@aziontech/webkit/command-list'
   import CommandGroup from '@aziontech/webkit/command-group'
+  import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
+  import CommandList from '@aziontech/webkit/command-list'
   import CommandSeparator from '@aziontech/webkit/command-separator'
-  import Input from '@aziontech/webkit/input'
-  import Kbd from '@aziontech/webkit/kbd'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import { ref } from 'vue'
 
   const open = ref(false)
 </script>
 
 <template>
-  <Input
-    model-value=""
-    placeholder="Search…"
-    size="large"
-    readonly
-    aria-keyshortcuts="Meta+K"
-    class="max-w-[360px] cursor-pointer"
-    @click="open = true"
-    @keydown.enter="open = true"
-  >
-    <template #iconLeft>
-      <span
-        class="pi pi-search"
-        aria-hidden="true"
-      />
-    </template>
-    <template #iconRight>
-      <Kbd
-        meta
-        size="small"
-        >K</Kbd
-      >
-    </template>
-  </Input>
+  <SearchTrigger @open="open = true" />
 
   <Command
     v-model:open="open"

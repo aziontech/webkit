@@ -1,0 +1,16 @@
+{
+  "component": "doc-agent-card",
+  "title": "Components/Documentation/DocAgentCard",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The reference card from the catalog strings: the title, what the prompt gives the agent and the inline `CopyPromptButton` on the left; \"Prefer the guided route?\" and the orange `Agent setup` over the halftone on the right, behind a vertical divider.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Narrow",
+      "summary": "The same card in a phone-width container: the columns stack and the divider turns horizontal; the halftone stays in the guided row's corner.",
+      "file": "narrow.vue"
+    }
+  ]
+}

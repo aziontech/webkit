@@ -29,6 +29,22 @@ matches your case, switch to the block it names. Then change only the content of
 keeping to the guidelines. Only when no pattern fits, compose from components (below). A marketing band is a page section, not a pattern (rule
 `webkit-sections`).
 
+## Headers and the docs home — never hand-build these
+
+- **Every app header has search.** A console, demo, docs or site header puts `SearchTrigger`
+  (`@aziontech/webkit/search-trigger`) first in `GlobalHeader.Right`, opening a `Command` palette;
+  it draws `Search … ⌘K` (`Ctrl K` off macOS) on a wide bar and the magnifier on a narrow one, and
+  binds the shortcut. Start from a header or shell block and it is already there (rule
+  `webkit-header-search`, lint `webkit/header-search-trigger`).
+- **A docs home is `shells/documentation --variant Landing`.** It opens on `DocHero` (display
+  title with air above it, deck, `Get started` then `CopyPromptButton` — the dark "Copy prompt"
+  chip carrying the Claude, ChatGPT, Gemini and Cursor marks — and a note), then the first section
+  opens on `DocAgentCard` ("Your AI agent, fluent in Azion" with the inline Copy prompt; "Prefer the
+  guided route?" with the orange Agent setup over a halftone) above the Console, CLI and API
+  `DocCard`s (`ai ai-azion`, `ai ai-azion-cli`, `ai ai-azion-api`). Framework templates use the
+  brand-colour icons (`ai-cor ai-react`). Do not substitute `DocPageHeader`, a `DocPrompt` or a
+  `DocCard` with an overline for these.
+
 ## Which skill for which task
 
 Structure and states first, polish last:

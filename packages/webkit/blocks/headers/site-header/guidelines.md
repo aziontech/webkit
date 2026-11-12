@@ -16,9 +16,9 @@ The sticky top bar of the marketing site. A visitor is deciding whether to try A
 
 `kind="site"`, `aria-label="Azion"`, in a `sticky top-0` wrapper. Start in `GlobalHeader.Left`, navigation in `GlobalHeader.Middle`, actions in `GlobalHeader.Right`.
 
-### B. Navigation trigger and search — `IconButton` (required)
+### B. Navigation trigger — `IconButton` (required)
 
-Below `xl`, an outlined `pi-bars` icon button opens the navigation sheet. Search is the last control in the end cluster.
+Below `xl`, an outlined `pi-bars` icon button opens the navigation sheet.
 
 ### C. Brand — `Brand` (required)
 
@@ -31,6 +31,14 @@ Five top-level links (`Solutions`, `Products`, `Developer`, `Resources`, `Pricin
 ### E. Actions — `Button` (required)
 
 Contact (`transparent`, from `xl` only), Login (`secondary`) and Start for free (`primary`). One primary in the bar.
+
+### F. Search — `SearchTrigger` (required)
+
+The header search, last in the end cluster as on azion.com: `collapsible` with no `@container` around the bar, so it stays the magnifier at every width. It still announces and binds ⌘K / Ctrl K and emits `open`, which opens the `Command` palette. Never a bare magnifier `IconButton` (rule `webkit-header-search`).
+
+### G. Search palette — `Command` (required)
+
+The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 

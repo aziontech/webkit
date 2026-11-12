@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 5542144fe8dc786082ebf0c54e3539755dbd4038cfd11f8f510205451feb2623
+checksum: fd928028f50dd669148a3cc4fbacb4cdf3fd9b73b0d72a791d93e49355f29222
 created: 2026-08-22
 last_updated: 2026-11-10
 ---
@@ -23,6 +23,7 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 
 - For an application screen's title — that is `PageHeading`, which carries console actions rather than a Copy Page control.
 - For a section heading inside a page — the content's own `h2` does that, and the masthead's `h1` is chrome.
+- The documentation home → use `DocHero` (display title, `Get started` and `CopyPromptButton`), then `DocAgentCard`.
 
 ## Related
 

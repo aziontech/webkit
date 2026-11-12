@@ -1,0 +1,21 @@
+{
+  "component": "copy-prompt-button",
+  "title": "Components/Primitives/Actions/CopyPromptButton",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The dark chip beside the primary action of a docs home: the label, then the marks of the agents the prompt works with. It stays dark in both themes, so it reads as the AI entry point next to `Get started`.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Agents",
+      "summary": "A custom agent list, and the label alone with `:agents=\"[]\"`. The marks are single-colour and decorative; their names reach screen readers as the description.",
+      "file": "agents.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled`: the chip greys out and copies nothing.",
+      "file": "disabled.vue"
+    }
+  ]
+}

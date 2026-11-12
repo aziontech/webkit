@@ -2,12 +2,14 @@
   import BigNumbers from '@aziontech/webkit/big-numbers'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
+  import Command from '@aziontech/webkit/command'
   import Footer from '@aziontech/webkit/footer'
   import FrameBox from '@aziontech/webkit/frame-box'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import Hero from '@aziontech/webkit/hero'
   import IconButton from '@aziontech/webkit/icon-button'
   import NavigationMenu from '@aziontech/webkit/navigation-menu'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
@@ -95,6 +97,8 @@
     window.removeEventListener('resize', syncBrand)
     lgProbe?.remove()
   })
+  const searchPages = ['Functions', 'Applications', 'Firewall', 'Pricing', 'Documentation']
+  const searchOpen = ref(false)
 </script>
 
 <template>
@@ -183,15 +187,26 @@
             class="shrink-0"
             href="#"
           />
-          <IconButton
-            icon="pi pi-search"
-            kind="outlined"
-            size="medium"
-            aria-label="Search"
-            class="shrink-0"
+          <SearchTrigger
+            collapsible
+            @open="searchOpen = true"
           />
         </GlobalHeader.Right>
       </GlobalHeader>
+      <Command v-model:open="searchOpen">
+        <Command.Input placeholder="Search azion.com" />
+        <Command.List>
+          <Command.Empty>No page matches your search.</Command.Empty>
+          <Command.Group heading="Pages">
+            <Command.Item
+              v-for="page in searchPages"
+              :key="page"
+              :value="page"
+              >{{ page }}</Command.Item
+            >
+          </Command.Group>
+        </Command.List>
+      </Command>
     </div>
 
     <main class="flex-1">

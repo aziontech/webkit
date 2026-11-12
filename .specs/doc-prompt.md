@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 771501c9bb2180d79aacb8a139b4cf4204b18b51b8df4284971d99a31ef9455b
+checksum: 6772c71d0dfa9643eff6da4db36f389dbf4e7f9398a85d6cbf4bc0899fd47a91
 created: 2026-08-22
 last_updated: 2026-11-11
 ---
@@ -26,6 +26,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 - The payload is source code, a shell command, or configuration → use a code viewer, which owns languages, gutters, and highlighting; a prompt has none of them.
 - The payload is a short inline token (a key, a flag, a variable name) → use `kbd` or inline code in prose.
 - The block needs to run the prompt itself, or route it to a named vendor → out of scope; this component only puts the text on the clipboard.
+- The "Copy prompt" action of a docs home hero or agent card, where the prompt is copied and not shown → use `CopyPromptButton` (inside `DocHero` or `DocAgentCard`).
 
 ## Related
 

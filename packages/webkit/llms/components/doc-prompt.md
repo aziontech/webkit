@@ -24,6 +24,7 @@
 - The payload is source code, a shell command, or configuration → use a code viewer, which owns languages, gutters, and highlighting; a prompt has none of them.
 - The payload is a short inline token (a key, a flag, a variable name) → use `kbd` or inline code in prose.
 - The block needs to run the prompt itself, or route it to a named vendor → out of scope; this component only puts the text on the clipboard.
+- The "Copy prompt" action of a docs home hero or agent card, where the prompt is copied and not shown → use `CopyPromptButton` (inside `DocHero` or `DocAgentCard`).
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

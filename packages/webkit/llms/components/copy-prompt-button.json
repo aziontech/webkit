@@ -1,0 +1,95 @@
+{
+ "name": "copy-prompt-button",
+ "binding": "CopyPromptButton",
+ "import": "@aziontech/webkit/copy-prompt-button",
+ "treeShakeableImport": "@aziontech/webkit/copy-prompt-button",
+ "category": "actions",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The \"Copy prompt\" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip is dark in both themes (it renders under `data-theme=\"dark\"`) with a faint accent glow on its top and bottom edges, so it reads as the AI entry point next to a primary button. The marks are single-colour and decorative; their names reach screen readers as the button's description (\"Works with Claude, ChatGPT, Gemini, Cursor\").",
+ "setup": null,
+ "useWhen": [
+  "The hero of a documentation home or a product landing, beside the primary action (`Get started`), when the page hands its reader a prompt for their agent.",
+  "Inside `DocAgentCard`, the \"Your AI agent, fluent in Azion\" card of a docs home (it renders this button by default)."
+ ],
+ "avoidWhen": [
+  "To show the prompt text itself on the page → use `DocPrompt` (it renders the text with its own copy control).",
+  "To copy a value, a token or a code snippet → use `CopyButton`.",
+  "As a generic dark button → use `Button kind=\"secondary\"`."
+ ],
+ "related": [
+  "DocPrompt` — the prompt rendered in full, with a copy control.",
+  "DocAgentCard` — the docs-home card that places this button in its left column.",
+  "DocHero` — the docs-home masthead whose `actions` slot holds `Get started` and this button.",
+  "CopyButton` — the icon-only copy control; this button shares its clipboard fallback."
+ ],
+ "bestPractices": [
+  "Put it second, after the primary `Button` (`Get started`), and explain what the prompt does in one line below the row (`DocHero`'s `note` slot).",
+  "Keep the default agents unless the product supports a different set; pass `:agents=\"[]\"` to draw the label alone.",
+  "Pass the exact prompt in `value`; the button copies it as it stands.",
+  "Do not recolour the marks: they are single-colour by design and follow the chip's ink."
+ ],
+ "props": [
+  {
+   "name": "value",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "The prompt copied to the clipboard on activation."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`."
+  },
+  {
+   "name": "copiedLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Visible text announced after a copy; empty uses the catalog's `Copied`."
+  },
+  {
+   "name": "agents",
+   "type": "CopyPromptAgent[]",
+   "default": "Claude, ChatGPT, Gemini, Cursor",
+   "required": "false",
+   "doc": "The agents whose marks follow the label, in order; an empty list draws no marks."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the button; `copy` is not emitted."
+  }
+ ],
+ "events": [
+  {
+   "name": "copy",
+   "payload": "string",
+   "notes": "Fires with `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <Button\n      label=\"Get started\"\n      kind=\"primary\"\n      size=\"large\"\n      href=\"#\"\n    />\n    <CopyPromptButton :value=\"prompt\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Agents",
+   "sfc": "<script setup>\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n\n  const prompt = 'Deploy this repository to Azion with the Azion CLI.'\n  const agents = [\n    { name: 'Claude', icon: 'ai ai-claude' },\n    { name: 'GitHub Copilot', icon: 'ai ai-microsoft-copilot' },\n    { name: 'Windsurf', icon: 'ai ai-windsurf' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <CopyPromptButton\n      :value=\"prompt\"\n      :agents=\"agents\"\n    />\n    <CopyPromptButton\n      :value=\"prompt\"\n      :agents=\"[]\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n</script>\n\n<template>\n  <CopyPromptButton\n    value=\"Set up the Azion CLI.\"\n    disabled\n  />\n</template>"
+  }
+ ],
+ "docs": "components/copy-prompt-button.md"
+}

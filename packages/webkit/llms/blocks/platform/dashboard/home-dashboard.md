@@ -1,11 +1,11 @@
 # HomeDashboard (`platform/dashboard/home-dashboard`)
 
-> The whole Home page inside the platform shell, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles (each label explained in a Tooltip in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card, and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a full-width link with a hover-revealed actions DropdownMenu. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the shell’s palette on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). The first-access content on its own is the Onboarding template; while either screen arrives, the PageWires Overview and Onboarding wires hold the page. Built from `StatTile`, `Card`, `Tooltip`, `IconButton`, `Item`, `DropdownMenu`, `Input`, `Kbd`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets.
+> The whole Home page inside the platform shell, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles (each label explained in a Tooltip in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card, and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a full-width link with a hover-revealed actions DropdownMenu. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the shell’s palette on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). The first-access content on its own is the Onboarding template; while either screen arrives, the PageWires Overview and Onboarding wires hold the page. Built from `StatTile`, `Card`, `Tooltip`, `IconButton`, `Item`, `DropdownMenu`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/home-dashboard/home-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/home-dashboard")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Kbd](../../../components/kbd.md), [Menu](../../../components/menu.md), [Popover](../../../components/popover.md), [Sidebar](../../../components/sidebar.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
+- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Menu](../../../components/menu.md), [Popover](../../../components/popover.md), [SearchTrigger](../../../components/search-trigger.md), [Sidebar](../../../components/sidebar.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -90,9 +90,9 @@ Inside the account menu, labelled `Theme`.
 The header labelled `Console`: navigation toggle on small screens, wordmark, search, `Create`,
 `Agent` and the account button.
 
-### M. Search shortcut — `Kbd` (required)
+### M. Search — `SearchTrigger` (required)
 
-Shows ⌘K on the search affordance so the shortcut is discoverable.
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
 
 ### N. Agent — `ButtonHighlight` (optional)
 
@@ -160,7 +160,7 @@ The labelled panel (`Navigation`) that contains the `Sidebar`.
 - The header is labelled `Console`, the rail `Main navigation`, the usage band `Usage`, the panels `Resources`, the drawer `Navigation`.
 - Every icon-only control has an `aria-label` and a `Tooltip`.
 - Row actions are reachable by keyboard: the menu trigger appears on focus as well as hover.
-- The command palette opens with ⌘K and from the search affordance; the shortcut is shown with `Kbd`.
+- The command palette opens with ⌘K and from the search affordance; the shortcut is shown by `SearchTrigger`.
 - Entrance animations and the card's dismiss transition honour `prefers-reduced-motion`.
 
 ## States
@@ -204,8 +204,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -983,37 +983,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </GlobalHeader.Left>
           <GlobalHeader.Middle />
           <GlobalHeader.Right>
-            <span class="contents @min-[47rem]:hidden">
-              <IconButton
-                icon="pi pi-search"
-                kind="outlined"
-                size="medium"
-                aria-label="Search"
-                aria-keyshortcuts="Meta+K"
-                @click="paletteOpen = true"
-              />
-            </span>
-            <button
-              type="button"
-              aria-label="Search"
-              aria-keyshortcuts="Meta+K"
-              class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
-              @click="paletteOpen = true"
-            >
-              <span
-                class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
-                aria-hidden="true"
-              >
-                <i class="pi pi-search" />
-              </span>
-              <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-muted)">Search</span>
-              <Kbd
-                meta
-                size="small"
-                class="shrink-0"
-                >K</Kbd
-              >
-            </button>
+            <SearchTrigger
+              collapsible
+              @open="paletteOpen = true"
+            />
 
             <span class="contents md:hidden">
               <Tooltip

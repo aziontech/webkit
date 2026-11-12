@@ -1132,6 +1132,24 @@ export const sectionCommand = {
   copyPrompt: 'Copy prompt'
 } as const
 
+export const searchTrigger = {
+  label: 'Search'
+} as const
+
+export const copyPromptButton = {
+  label: 'Copy prompt',
+  copied: 'Copied',
+  worksWith: 'Works with {agents}'
+} as const
+
+export const docAgentCard = {
+  title: 'Your AI agent, fluent in Azion',
+  description:
+    'One prompt teaches any coding agent the platform: current product names, live docs through the Azion MCP server, and real deploys with the CLI.',
+  asideTitle: 'Prefer the guided route?',
+  action: 'Agent setup'
+} as const
+
 export const en = {
   actionConfirmation,
   aiLoading,
@@ -1263,5 +1281,8 @@ export const en = {
   otpInput,
   consolePanel,
   customerSpotlight,
-  sectionCommand
+  sectionCommand,
+  searchTrigger,
+  copyPromptButton,
+  docAgentCard
 }

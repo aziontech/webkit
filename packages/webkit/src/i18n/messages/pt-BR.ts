@@ -1008,5 +1008,20 @@ export const ptBR: Messages = {
     prompt: 'Prompt',
     copyCommand: 'Copiar comando',
     copyPrompt: 'Copiar prompt'
+  },
+  searchTrigger: {
+    label: 'Buscar'
+  },
+  copyPromptButton: {
+    label: 'Copiar prompt',
+    copied: 'Copiado',
+    worksWith: 'Funciona com {agents}'
+  },
+  docAgentCard: {
+    title: 'Seu agente de IA, fluente em Azion',
+    description:
+      'Um prompt ensina a plataforma a qualquer agente de código: os nomes atuais dos produtos, a documentação ao vivo pelo servidor MCP da Azion e deploys reais com a CLI.',
+    asideTitle: 'Prefere o caminho guiado?',
+    action: 'Configurar agente'
   }
 }

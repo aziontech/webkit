@@ -11,6 +11,28 @@
     "entryOnly": true
   },
   {
+    "name": "search-trigger",
+    "path": "src/components/actions/search-trigger/search-trigger.vue",
+    "limit": "4 KB"
+  },
+  {
+    "name": "copy-prompt-button",
+    "path": "src/components/actions/copy-prompt-button/copy-prompt-button.vue",
+    "limit": "2.5 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "doc-hero",
+    "path": "src/components/documentation/doc-hero/doc-hero.vue",
+    "limit": "1 KB"
+  },
+  {
+    "name": "doc-agent-card",
+    "path": "src/components/documentation/doc-agent-card/doc-agent-card.vue",
+    "limit": "7 KB",
+    "entryOnly": true
+  },
+  {
     "name": "button",
     "path": "src/components/actions/button/button.vue",
     "limit": "2.5 KB"
@@ -1050,17 +1072,17 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "8.93 KB"
+    "limit": "9.16 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "8.32 KB"
+    "limit": "8.54 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "8.41 KB"
+    "limit": "8.64 KB"
   },
   {
     "name": "phone-input",

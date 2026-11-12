@@ -44,7 +44,7 @@ Names every icon-only control: the account menu, the navigation trigger, the col
 
 ### H. Icon actions — `IconButton` (required)
 
-The account menu trigger, the navigation trigger while compact, search below `--container-2xl` (the `@2xl:` container variant), Create and Agent while compact, and the page toolbar (Refresh, Download CSV, Columns).
+The account menu trigger, the navigation trigger while compact, Create and Agent while compact, and the page toolbar (Refresh, Download CSV, Columns).
 
 ### I. Theme — `ThemeSwitcher` (required)
 
@@ -62,9 +62,9 @@ At the foot of the account menu: `All systems normal` with `success` severity; s
 
 One header, inside the content zone (an `@container`), `aria-label="Console"`. The breadcrumb names the location on every level while not compact: one unlinked crumb on a first-level page, the module and the resource from the second level (see the DetailPage state).
 
-### M. Shortcut — `Kbd` (required)
+### M. Search — `SearchTrigger` (required)
 
-`meta` + `K` inside the search field-button shown while the bar is at least `--container-2xl` wide.
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
 
 ### N. Agent — `ButtonHighlight` (required)
 

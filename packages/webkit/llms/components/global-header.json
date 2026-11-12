@@ -31,7 +31,8 @@
   "Group the menu trigger and the brand in `GlobalHeader.Container` so they stay together and never shrink; `GlobalHeader.Nav` is the same component as `GlobalHeader.Middle`.",
   "Wrap the logo in `GlobalHeader.Brand` inside a link with its own accessible name (for example `aria-label=\"Azion home\"`).",
   "Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.",
-  "Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region."
+  "Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.",
+  "Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.Right`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/header-search-trigger`)."
  ],
  "props": [
   {

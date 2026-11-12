@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The dark chip beside the primary action of a docs home: the label, then the marks of the agents the prompt works with. It stays dark in both themes, so it reads as the AI entry point next to `Get started`.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <Button\n      label=\"Get started\"\n      kind=\"primary\"\n      size=\"large\"\n      href=\"#\"\n    />\n    <CopyPromptButton :value=\"prompt\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Agents",
+   "summary": "A custom agent list, and the label alone with `:agents=\"[]\"`. The marks are single-colour and decorative; their names reach screen readers as the description.",
+   "sfc": "<script setup>\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n\n  const prompt = 'Deploy this repository to Azion with the Azion CLI.'\n  const agents = [\n    { name: 'Claude', icon: 'ai ai-claude' },\n    { name: 'GitHub Copilot', icon: 'ai ai-microsoft-copilot' },\n    { name: 'Windsurf', icon: 'ai ai-windsurf' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <CopyPromptButton\n      :value=\"prompt\"\n      :agents=\"agents\"\n    />\n    <CopyPromptButton\n      :value=\"prompt\"\n      :agents=\"[]\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "summary": "`disabled`: the chip greys out and copies nothing.",
+   "sfc": "<script setup>\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n</script>\n\n<template>\n  <CopyPromptButton\n    value=\"Set up the Azion CLI.\"\n    disabled\n  />\n</template>"
+  }
+ ]
+}
