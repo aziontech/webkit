@@ -8,6 +8,7 @@ import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/authori
 import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/token-checks.js'
 import noClockInSetup from '../src/eslint-plugin/rules/no-clock-in-setup.js'
 import noPhysicalDirection from '../src/eslint-plugin/rules/no-physical-direction.js'
+import noViewportHeightCalc from '../src/eslint-plugin/rules/no-viewport-height-calc.js'
 import { Linter } from 'eslint'
 import * as vueParser from 'vue-eslint-parser'
 import tsParser from '@typescript-eslint/parser'
@@ -21,6 +22,7 @@ import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-complian
 const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES, ...STRING_MESSAGES }
 const DIRECTION_DIRS = ['src/components', 'blocks', 'examples']
 const CLOCK_DIRS = ['blocks', 'examples']
+const PAGE_BODY_DIRS = ['blocks', 'examples']
 const DETAILS = new Map()
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
@@ -104,8 +106,39 @@ function clockViolations() {
   return keys
 }
 
+function viewportHeightViolations() {
+  const linter = new Linter({ configType: 'flat' })
+  const config = [
+    {
+      files: ['**/*.vue', '**/*.ts', '**/*.js'],
+      languageOptions: {
+        parser: vueParser,
+        parserOptions: { parser: tsParser, ecmaVersion: 'latest', sourceType: 'module' }
+      },
+      plugins: { webkit: { rules: { 'no-viewport-height-calc': noViewportHeightCalc } } },
+      rules: { 'webkit/no-viewport-height-calc': 'error' }
+    }
+  ]
+  const keys = []
+  for (const dir of PAGE_BODY_DIRS) {
+    for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
+      if (!/\.(vue|ts|js)$/.test(abs) || /\.(test|stories)\.ts$/.test(abs)) continue
+      const source = readFileSync(abs, 'utf-8')
+      if (!/100[dsl]?vh/.test(source)) continue
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      for (const m of linter.verify(source, config, { filename: abs })) {
+        if (m.ruleId !== 'webkit/no-viewport-height-calc') continue
+        const key = `${rel}::layout:no-viewport-height-calc`
+        keys.push(key)
+        DETAILS.set(key, `line ${m.line}: ${m.message}`)
+      }
+    }
+  }
+  return keys
+}
+
 function currentViolations() {
-  const keys = [...directionViolations(), ...clockViolations()]
+  const keys = [...directionViolations(), ...clockViolations(), ...viewportHeightViolations()]
   for (const abs of walk(SRC)) {
     const rel = relative(ROOT, abs).split('\\').join('/')
     if (rel.startsWith(WIP_PREFIX) || rel.endsWith('.d.ts')) continue
@@ -202,7 +235,7 @@ if (introduced.length) {
     console.error(`  ${file}`)
     if (id.startsWith('spec:')) {
       console.error(`    [spec] ${id.slice(5)}`)
-    } else if (id.startsWith('direction:') || id.startsWith('clock:')) {
+    } else if (id.startsWith('direction:') || id.startsWith('clock:') || id.startsWith('layout:')) {
       console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(id.indexOf(':') + 1)}`)
     } else {
       console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^(token|i18n):/, '')] ?? id}`)
