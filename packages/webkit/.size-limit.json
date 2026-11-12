@@ -1293,6 +1293,11 @@
     "limit": "1.75 KB"
   },
   {
+    "name": "use-pinned-row",
+    "path": "src/composables/use-pinned-row/index.ts",
+    "limit": "1 KB"
+  },
+  {
     "name": "overflow-count",
     "path": "src/components/content/overflow-count/overflow-count.vue",
     "limit": "12.5 KB"

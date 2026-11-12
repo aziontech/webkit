@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
+  import { usePinnedRow } from '../../../composables/use-pinned-row'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
@@ -54,61 +55,9 @@
   const viewport = ref<HTMLElement | null>(null)
   const track = ref<HTMLElement | null>(null)
 
-  const runwayHeight = ref('')
-  const offset = ref(0)
-
-  let frame: number | null = null
-  let observer: ResizeObserver | null = null
-
-  function measure() {
-    frame = null
-    const runwayEl = runway.value
-    const pinnedEl = pinned.value
-    const viewportEl = viewport.value
-    const trackEl = track.value
-    if (!runwayEl || !pinnedEl || !viewportEl || !trackEl) return
-
-    if (getComputedStyle(pinnedEl).position !== 'sticky') {
-      runwayHeight.value = ''
-      offset.value = 0
-      return
-    }
-
-    const overflow = Math.max(0, trackEl.offsetWidth - viewportEl.clientWidth)
-    runwayHeight.value = `${pinnedEl.offsetHeight + overflow}px`
-    const travelled = pinnedEl.getBoundingClientRect().top - runwayEl.getBoundingClientRect().top
-    offset.value = Math.min(overflow, Math.max(0, travelled))
-  }
-
-  function schedule() {
-    if (frame === null) frame = requestAnimationFrame(measure)
-  }
-
-  const SCROLL_OPTIONS = { capture: true, passive: true }
-
-  onMounted(() => {
-    document.addEventListener('scroll', schedule, SCROLL_OPTIONS)
-    window.addEventListener('resize', schedule, { passive: true })
-    observer = new ResizeObserver(schedule)
-    if (pinned.value) observer.observe(pinned.value)
-    if (track.value) observer.observe(track.value)
-    measure()
-  })
-
-  onBeforeUnmount(() => {
-    if (frame !== null) cancelAnimationFrame(frame)
-    document.removeEventListener('scroll', schedule, SCROLL_OPTIONS)
-    window.removeEventListener('resize', schedule)
-    observer?.disconnect()
-  })
+  const { runwayHeight, shift } = usePinnedRow({ runway, pinned, viewport, track }, true)
 
   const rowName = computed(() => props.ariaLabel || props.title)
-
-  const shift = computed(() => {
-    if (!offset.value) return undefined
-    const rtl = runway.value?.closest('[dir]')?.getAttribute('dir') === 'rtl'
-    return `${rtl ? offset.value : -offset.value}px 0`
-  })
 
   const TEXTURE = {
     '--texture-pool-a': '50% 112%',

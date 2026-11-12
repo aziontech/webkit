@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { usePinnedRow } from '../../../composables/use-pinned-row'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type {
@@ -9,7 +10,6 @@
   } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
-  import { usePinnedRow } from './composables/use-pinned-row'
 
   defineOptions({ name: 'ProcessScroll', inheritAttrs: false })
 
