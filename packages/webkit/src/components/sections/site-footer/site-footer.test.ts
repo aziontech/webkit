@@ -102,12 +102,24 @@ describe('SiteFooter', () => {
     })
   })
 
-  it('renders the Azion mark once, linking home', () => {
-    const { getAllByRole } = footer({ homeAriaLabel: 'Go home' })
+  it('places the Azion mark in CSS: the social row from lg, the signature band below it', () => {
+    const { getAllByRole, getByTestId } = footer({ homeAriaLabel: 'Go home' })
 
     const marks = getAllByRole('link', { name: 'Go home' })
-    expect(marks).toHaveLength(1)
-    expect(marks[0]?.getAttribute('href')).toBe('/')
+    expect(marks).toHaveLength(2)
+    for (const mark of marks) expect(mark.getAttribute('href')).toBe('/')
+    const inSocial = marks.find((mark) => getByTestId('layout-footer__social').contains(mark))
+    const inSignature = marks.find((mark) => getByTestId('layout-footer__signature').contains(mark))
+    expect(inSocial?.className).toMatch(/(^| )hidden( |$)/)
+    expect(inSocial?.className).toContain('lg:inline-flex')
+    expect(inSignature).toBeDefined()
+    expect(getByTestId('layout-footer')).toHaveAttribute('data-signature', 'compact')
+  })
+
+  it('renders no signature band at all when home is empty', () => {
+    const { queryByTestId } = footer({ home: '' })
+
+    expect(queryByTestId('layout-footer__signature')).toBeNull()
   })
 
   it('renders no Azion mark when home is empty', () => {

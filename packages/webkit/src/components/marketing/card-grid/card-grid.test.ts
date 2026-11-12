@@ -91,6 +91,57 @@ describe('CardGrid', () => {
     expect(getByTestId(TESTID)).toHaveAttribute('data-flush', 'true')
   })
 
+  it('balances its rows by default and fixes them on request', () => {
+    const { getByTestId, unmount } = render(framed())
+    expect(getByTestId(TESTID)).toHaveAttribute('data-layout', 'balanced')
+    unmount()
+
+    const fixed = render(framed({ layout: 'fixed' }))
+    expect(fixed.getByTestId(TESTID)).toHaveAttribute('data-layout', 'fixed')
+    expect(fixed.getByTestId(TESTID).style.getPropertyValue('--card-grid-cols-lg')).toBe('')
+  })
+
+  const cells = (count: number) =>
+    Array.from({ length: count }, (_, i) => `<div>c${i}</div>`).join('')
+
+  it.each([
+    [1, 3, 1, '1', '1', '1'],
+    [2, 3, 1, '1', '2', '2'],
+    [3, 3, 1, '1', '2', '3'],
+    [4, 3, 1, '1', '2', '2'],
+    [5, 3, 1, '1', '2', '3'],
+    [6, 3, 1, '1', '2', '3'],
+    [7, 3, 1, '1', '2', '3'],
+    [4, 4, 2, '2', '2', '4'],
+    [5, 4, 2, '2', '2', '3'],
+    [6, 4, 2, '2', '2', '3'],
+    [7, 4, 2, '2', '2', '4'],
+    [3, 2, 2, '2', '2', '2']
+  ] as const)(
+    '%i cells under %i columns (%i on a phone) fill rows of %s / %s / %s',
+    (count, columns, mobileColumns, base, sm, lg) => {
+      const { getByTestId } = render(CardGrid, {
+        props: { columns, mobileColumns },
+        slots: { default: cells(count) }
+      })
+      const root = getByTestId(TESTID)
+      expect(root).toHaveAttribute('data-count', String(count))
+      expect(root.style.getPropertyValue('--card-grid-cols-base')).toBe(base)
+      expect(root.style.getPropertyValue('--card-grid-cols-sm')).toBe(sm)
+      expect(root.style.getPropertyValue('--card-grid-cols-lg')).toBe(lg)
+    }
+  )
+
+  it('counts the cells a v-for renders, skipping comments', () => {
+    const { getByTestId } = render({
+      components: { CardGrid },
+      setup: () => ({ items: ['a', 'b', 'c', 'd'] }),
+      template: `<CardGrid :columns="3"><!-- x --><div v-for="item in items" :key="item">{{ item }}</div></CardGrid>`
+    })
+    expect(getByTestId(TESTID)).toHaveAttribute('data-count', '4')
+    expect(getByTestId(TESTID).style.getPropertyValue('--card-grid-cols-lg')).toBe('2')
+  })
+
   it('resolves the Cell through the compound root', () => {
     expect(CardGrid.Cell).toBe(CardGridCell)
   })

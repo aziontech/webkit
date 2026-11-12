@@ -46,6 +46,13 @@
    "doc": "Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`)."
   },
   {
+   "name": "signature",
+   "type": "'always' | 'compact'",
+   "default": "'always'",
+   "required": "false",
+   "doc": "Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same."
+  },
+  {
    "name": "kind",
    "type": "'content' | 'site'",
    "default": "'content'",

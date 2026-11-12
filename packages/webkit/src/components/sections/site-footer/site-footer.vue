@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { useMediaQuery, useMounted } from '@vueuse/core'
   import { computed, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
@@ -85,10 +84,6 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ siteFooter: en.siteFooter })
 
-  const wideQuery = useMediaQuery('(min-width: 1024px)')
-  const mounted = useMounted()
-  const wide = computed(() => mounted.value && wideQuery.value)
-
   const language = ref<string>(props.languages[0] ?? '')
 
   const testId = computed(
@@ -96,10 +91,6 @@
   )
 
   const hasHome = computed(() => props.home.length > 0)
-
-  const brandLeadsSocialRow = computed(() => hasHome.value && wide.value)
-
-  const brandInSignature = computed(() => hasHome.value && !wide.value)
 </script>
 
 <template>
@@ -111,6 +102,7 @@
   >
     <Footer
       :kind="kind"
+      signature="compact"
       :aria-label="ariaLabel || t('siteFooter.label')"
     >
       <FooterColumn
@@ -129,10 +121,10 @@
 
       <template #social>
         <a
-          v-if="brandLeadsSocialRow"
+          v-if="hasHome"
           :href="home"
           :aria-label="homeAriaLabel || t('siteFooter.home')"
-          class="me-(--spacing-xs) inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+          class="me-(--spacing-xs) hidden w-fit lg:inline-flex items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         >
           <Brand size="small" />
         </a>
@@ -188,7 +180,7 @@
       </template>
 
       <template
-        v-if="brandInSignature"
+        v-if="hasHome"
         #brand
       >
         <a

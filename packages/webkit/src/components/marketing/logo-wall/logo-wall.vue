@@ -70,7 +70,7 @@
 
   const hasItems = computed(() => props.items.length > 0)
 
-  const hasAside = computed(() => Boolean(slots.aside))
+  const hasAside = () => Boolean(slots.aside)
 
   const onItemClick = (event: MouseEvent, item: LogoItem) => {
     emit('item-click', event, item)
@@ -83,12 +83,13 @@
     class="group/logo-wall grid data-[aside]:lg:grid-cols-2"
     :data-testid="testId"
     :data-kind="kind"
-    :data-aside="hasAside || null"
+    :data-aside="hasAside() || null"
     :aria-label="ariaLabel || undefined"
   >
     <CardGrid
       v-if="hasItems"
       kind="frame"
+      layout="fixed"
       flush
       :columns="3"
       :mobile-columns="2"
@@ -160,7 +161,7 @@
     </CardGrid>
 
     <FrameBox
-      v-if="hasAside"
+      v-if="hasAside()"
       borders="none"
       marks="all"
       :data-seam="hasItems || null"

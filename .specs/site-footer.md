@@ -5,15 +5,15 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-11
-checksum: 6f94a7c20bbf79e7d8807e5c9ba0c7066b086693521e5dadb1c829f51cf0813d
+last_updated: 2026-11-12
+checksum: 3d32efe88998cd8bdc26e9ddb133b404127f0039edb4e22230adc8b8694c51e4
 ---
 
 # SiteFooter — Component Spec
 
 ## Purpose
 
-The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row; below it the mark moves to the footer's signature band, so the icons get the row to themselves. The language select keeps its own value locally; its options are the labels the reader sees.
+The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row; below it the mark moves to the footer's signature band, so the icons get the row to themselves. The move is CSS only (`footer`'s `signature: 'compact'` hides the band from `lg`; the social-row mark shows from `lg`), so the page ends on the bottom bar from `lg` both in the server HTML and after hydration. The language select keeps its own value locally; its options are the labels the reader sees.
 
 ## When to use
 
@@ -31,6 +31,8 @@ The footer under every marketing page: the link columns, then the social row bes
 
 ## Best practices
 
+- **Do** render it as the last child of the page shell, as is: it draws its own top rule, its frame and its closing bottom rule.
+- **Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double and the frame drifts off the page column.
 - Use `kind: 'site'` under a framed marketing page, so the footer draws the page frame and closes on its bottom rule; the page above must not draw a bottom rule of its own.
 - Keep four link columns so the grid fills at `md`.
 - Give every social link a `label` that names the network, since the button shows only the glyph.
@@ -82,9 +84,9 @@ The footer under every marketing page: the link columns, then the social row bes
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop on the footer
-- From `lg` the Azion mark leads the social row; below `lg` it renders in the footer's signature band
+- From `lg` the Azion mark leads the social row and no signature band renders, so the footer ends on its bottom bar; below `lg` the mark renders in the footer's signature band
 - The status indicator, the language select and the Azion mark each render only when their prop is set
-- Server render and hydration: the `lg` check runs only after mount, so the server HTML and the first client render both place the Azion mark in the signature band and match; from `lg` it moves to the social row on mount.
+- Server render and hydration: both marks are always in the DOM and CSS shows one of them per width, so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Motion & Animations
 

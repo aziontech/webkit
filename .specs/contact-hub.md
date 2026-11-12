@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-11
-checksum: 7b46ab04ba8d3fb7060acd4d5ec695dd3d36643594575d96786495726da5d32b
+last_updated: 2026-11-12
+checksum: 1c1353129624e15ee6c12dc4e13fe0b0f47ec4b3c7a03a15986de76a6b12d25e
 ---
 
 # ContactHub — Component Spec
@@ -31,7 +31,8 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 ## Best practices
 
-- Keep two lanes so they split the frame evenly, and three channels for the three-column row.
+- Give it as many lanes and channels as the page has: both rows balance themselves (`card-grid` `layout: 'balanced'`), so two channels split the row in halves, three in thirds, four into 2 × 2 and five into 3 + 2, with no empty cell.
+- Don't pad `channels` to three or drop one to make the row fit.
 - Keep each lane's description to one sentence that states what that team handles.
 - Set `target: '_blank'` on a channel or status link that leaves the site.
 
@@ -85,6 +86,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 - Visual states: `default`
 - Empty: the lanes frame renders only when `lanes` is set and the channels frame only when `channels` is set; with neither the band renders nothing but its root
 - A lane's action and status link render only when given
+- Lanes fill rows of up to two and channels rows of up to three, each balanced so every row is full
 
 ## Motion & Animations
 

@@ -47,7 +47,7 @@
     statusLink?: ContactHubStatusLink
   }
 
-  /** One self-serve channel, rendered as a linked topic of the three-column row. */
+  /** One self-serve channel, rendered as a linked topic of the channel row. */
   export type ContactHubChannel = {
     /** Icon class for the glyph that leads the channel's heading. */
     icon: string

@@ -86,6 +86,7 @@
         <CardGrid
           flush
           kind="frame"
+          layout="fixed"
           :columns="3"
         >
           <CardGridCell

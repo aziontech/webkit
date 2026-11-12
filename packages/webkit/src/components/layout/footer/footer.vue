@@ -13,17 +13,22 @@
 
   /** Where the footer sits. */
   export type FooterKind = 'content' | 'site'
+  /** Widths at which the signature band renders. */
+  export type FooterSignature = 'always' | 'compact'
 
   interface Props {
     /** Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`). */
     ariaLabel?: string
     /** Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. */
     kind?: FooterKind
+    /** Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same. */
+    signature?: FooterSignature
   }
 
   withDefaults(defineProps<Props>(), {
     ariaLabel: '',
-    kind: 'content'
+    kind: 'content',
+    signature: 'always'
   })
 
   const slots = defineSlots<{
@@ -46,9 +51,9 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-footer')
 
-  const hasStatusBar = computed(() => Boolean(slots.status || slots.language))
+  const hasStatusBar = () => Boolean(slots.status || slots.language)
 
-  const hasSignature = computed(() => Boolean(slots.brand || slots.tagline))
+  const hasSignature = () => Boolean(slots.brand || slots.tagline)
 
   provide(FooterInjectionKey, {
     testId: testId.value
@@ -61,6 +66,7 @@
     :aria-label="ariaLabel || t('footer.label')"
     :data-testid="testId"
     :data-kind="kind"
+    :data-signature="signature"
     class="group flex w-full flex-col bg-(--bg-canvas)"
   >
     <div
@@ -90,7 +96,7 @@
           </div>
 
           <div
-            v-if="hasStatusBar"
+            v-if="hasStatusBar()"
             :data-testid="`${testId}__status`"
             class="order-2 flex min-w-0 flex-row-reverse items-center justify-between gap-(--spacing-lg) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:order-none md:col-start-2 md:row-start-2 md:min-h-14 md:flex-row md:justify-end md:py-0"
           >
@@ -99,12 +105,12 @@
           </div>
 
           <FrameBox
-            v-if="hasSignature"
+            v-if="hasSignature()"
             borders="top"
             marks="all"
             flush="x"
             :data-testid="`${testId}__signature`"
-            class="order-3 w-full px-(--spacing-sm) py-(--spacing-xl) md:order-none md:col-span-2 md:row-start-3"
+            class="order-3 w-full px-(--spacing-sm) py-(--spacing-xl) md:order-none md:col-span-2 md:row-start-3 group-data-[signature=compact]:lg:hidden"
           >
             <div
               class="flex flex-col items-start gap-(--spacing-md) p-(--spacing-lg) md:flex-row md:items-center md:justify-between md:gap-(--spacing-lg)"

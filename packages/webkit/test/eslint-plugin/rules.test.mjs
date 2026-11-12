@@ -40,6 +40,9 @@ const authoringStandards = (await import('../../src/eslint-plugin/rules/authorin
   .default
 const containerNeedsWidth = (await import('../../src/eslint-plugin/rules/container-needs-width.js'))
   .default
+const noWrappedPageChrome = (
+  await import('../../src/eslint-plugin/rules/no-wrapped-page-chrome.js')
+).default
 const noOutputInCommand = (await import('../../src/eslint-plugin/rules/no-output-in-command.js'))
   .default
 
@@ -404,6 +407,50 @@ test('no-physical-direction (template + script + fix)', () => {
   })
 })
 
+test('no-wrapped-page-chrome', () => {
+  const sfc = (template, from = '@aziontech/webkit/site-footer', name = 'SiteFooter') =>
+    `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
+  vue.run('no-wrapped-page-chrome', noWrappedPageChrome, {
+    valid: [
+      { code: sfc('<div class="flex flex-col"><main /><SiteFooter /></div>'), filename: 'a.vue' },
+      {
+        code: sfc(
+          '<div class="sticky top-0 z-40"><SiteNav /></div>',
+          '@aziontech/webkit/site-nav',
+          'SiteNav'
+        ),
+        filename: 'b.vue'
+      },
+      {
+        code: '<template><div class="border-t"><SiteFooter /></div></template>',
+        filename: 'c.vue'
+      },
+      { code: sfc('<div class="border-t"><Footer /></div>'), filename: 'd.vue' }
+    ],
+    invalid: [
+      {
+        code: sfc('<div class="w-full border-t border-(--border-default)"><SiteFooter /></div>'),
+        filename: 'e.vue',
+        errors: [{ messageId: 'wrapped' }]
+      },
+      {
+        code: sfc('<div class="md:py-8"><site-footer /></div>'),
+        filename: 'f.vue',
+        errors: [{ messageId: 'wrapped' }]
+      },
+      {
+        code: sfc(
+          '<header class="border-b"><SiteNav /></header>',
+          '@aziontech/webkit/site-nav',
+          'SiteNav'
+        ),
+        filename: 'g.vue',
+        errors: [{ messageId: 'wrapped' }]
+      }
+    ]
+  })
+})
+
 test('container-needs-width', () => {
   const sfc = (template, from = '@aziontech/webkit/card', name = 'Card') =>
     `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
@@ -716,6 +763,14 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         code: sfc('const a = 1', '<div><slot /></div>'),
         filename: 'e.vue',
         errors: [{ messageId: 'slot-without-defineslots' }]
+      },
+      {
+        code: sfc(
+          "import { computed, useSlots } from 'vue'; defineSlots<{ /** Aside. */ aside(): unknown }>(); const slots = useSlots(); const hasAside = computed(() => Boolean(slots.aside))",
+          '<div><slot name="aside" /></div>'
+        ),
+        filename: 'h.vue',
+        errors: [{ messageId: 'computed-slot-presence' }]
       },
       {
         code: sfc('const a = 1 // explains a', '<div><!-- explains the div --></div>'),

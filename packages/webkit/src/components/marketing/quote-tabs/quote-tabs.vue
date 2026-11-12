@@ -363,6 +363,7 @@
 
     <CardGrid
       kind="frame"
+      layout="fixed"
       flush
       :columns="3"
       :mobile-columns="2"

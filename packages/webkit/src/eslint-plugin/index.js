@@ -9,6 +9,7 @@ import noOutputInCommand from './rules/no-output-in-command.js'
 import noPhysicalDirection from './rules/no-physical-direction.js'
 import noStyleOverride from './rules/no-style-override.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
+import noWrappedPageChrome from './rules/no-wrapped-page-chrome.js'
 import preferDefineModel from './rules/prefer-define-model.js'
 import preferTreeShakeableRoot from './rules/prefer-tree-shakeable-root.js'
 import preferWebkitComponent from './rules/prefer-webkit-component.js'
@@ -29,6 +30,7 @@ const rules = {
   'no-style-override': noStyleOverride,
   'authoring-standards': authoringStandards,
   'container-needs-width': containerNeedsWidth,
+  'no-wrapped-page-chrome': noWrappedPageChrome,
   'no-output-in-command': noOutputInCommand
 }
 
@@ -76,6 +78,7 @@ const RECOMMENDED = {
   'no-style-override': 'error',
   'authoring-standards': 'error',
   'container-needs-width': 'warn',
+  'no-wrapped-page-chrome': 'error',
   'no-output-in-command': 'warn'
 }
 
