@@ -79,15 +79,35 @@ to preview the plan. See [`docs/toolkit/cli.md`](./docs/toolkit/cli.md).
 
 ### 2 · Add the theme CSS
 
-In your app entry (e.g. `src/main.js`):
+`init` does this step for you. By hand: create `src/webkit.css` with the theme and the webkit
+source registration, and import it once at your app entry (e.g. `src/main.ts`) with the icon font:
 
-```js
-import '@aziontech/theme/globals.css' // design tokens (light/dark aware)
-import '@aziontech/icons' // the icon font
+```css
+/* src/webkit.css */
+@import '@aziontech/theme';
+@import '@aziontech/webkit/styles';
 ```
 
-Using Tailwind? The theme also ships a preset — `@aziontech/theme/tailwind-preset` — so
-the semantic utilities (`text-body-sm`, `bg-[var(--primary)]`, …) resolve in your build.
+```js
+import './webkit.css'
+import '@aziontech/icons'
+```
+
+`@aziontech/theme` brings the design tokens, Tailwind v4 and the fonts; `@aziontech/webkit/styles`
+registers WebKit's source with Tailwind so the component classes compile. Tailwind has to run in
+your build: `@tailwindcss/postcss` in `postcss.config.mjs` (what `init` writes) or `@tailwindcss/vite`.
+
+**Dark mode.** The theme is **light by default**. For an app that is always dark, set the attribute
+in `index.html`, so the first paint is already dark:
+
+<!-- prettier-ignore -->
+```html
+<html lang="en" data-theme="dark">
+```
+
+To switch at runtime, write the same attribute
+(`document.documentElement.dataset.theme = 'dark'` or `'light'`); a `.dark` class on an ancestor
+works too. Every token changes with it, so nothing else needs a dark variant.
 
 ### 3 · Add your first component
 
@@ -165,7 +185,7 @@ This package lives in the [`aziontech/webkit`](https://github.com/aziontech/webk
 | Package             | What it is                                                 |
 | ------------------- | ---------------------------------------------------------- |
 | `@aziontech/webkit` | The components + eslint-plugin, stylelint-config, MCP, CLI |
-| `@aziontech/theme`  | Design tokens, `globals.css`, Tailwind preset              |
+| `@aziontech/theme`  | Design tokens, Tailwind v4 theme, fonts (`@import`)        |
 | `@aziontech/icons`  | The icon font (CSS/woff2) + catalog                        |
 
 ## Requirements
