@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 2
 template: 2
-checksum: 2b06909998f64825e8dcd04996ec84a28a95bf471746a36b6f4ac3b4ac01b18b
+checksum: 0616367d0737b57b2c18a2198e86a4a8a9ba957f1a2ff0aa43b6228481ede414
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -45,9 +45,11 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
 - Put an account switcher in `header-start`, page-level flash messages in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
 - A page's control crumb is its `ConsoleLayout.Breadcrumbs`, never `App.vue`'s `breadcrumbs` slot.
-- A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))`.
+- A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))` (lint `webkit/no-viewport-height-calc`, also run by the authoring ratchet over blocks and examples).
 - Bind `v-model:navigation-expanded` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
-- Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`.
+- Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`. `useConsoleLayout()` throws outside a `ConsoleLayout`, so a misplaced call fails loudly.
+- A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.
+- The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
 
 ## Usage
@@ -184,17 +186,18 @@ packages/webkit/src/components/layout/console-layout/
 - Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the breadcrumbs give way to the brand), the palette `open` / `closed`.
 - `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
 - Fill: a direct child of the `<main>` with `data-layout-fill` makes the main `h-full overflow-hidden` and the child `flex-1 min-h-0`; pure CSS, right in the server render.
+- Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
 - Page trail: registered on mount, so the server render shows the layout's trail and the page trail replaces it after hydration (no mismatch); use `breadcrumbs` when the first server paint must show it.
 - Active navigation row: `Menu`'s `activeId`; a row inside a drill level opens that level, a row inside an inline row expands it.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the page body owns its states).
 
 ## Motion & Animations
 
-| Trigger         | Animation / Transition                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
-| --------------- | -------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| page body mount | `animate-page-enter` on the `<main>`   | semantic (`page-enter`)                           | `motion-reduce:animate-none`    |
-| brand hover     | `transition-opacity` on the brand link | `duration-fast-02` · `ease-productive-entrance`   | `motion-reduce:transition-none` |
-| palette, drawer | `Command`, `AppLayout` drawers         | component                                         | handled by those components     |
+| Trigger           | Animation / Transition                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ----------------- | ------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| route path change | `animate-page-enter` on the `<main>`, keyed on the path | semantic (`page-enter`)                           | `motion-reduce:animate-none`    |
+| brand hover       | `transition-opacity` on the brand link                  | `duration-fast-02` · `ease-productive-entrance`   | `motion-reduce:transition-none` |
+| palette, drawer   | `Command`, `AppLayout` drawers                          | component                                         | handled by those components     |
 
 ## Tokens
 
@@ -253,12 +256,14 @@ packages/webkit/src/components/layout/console-layout/
 ## Performance
 
 - Bundle budget: 66 KB gzip for the root `.vue` (`console-layout` in `.size-limit.json`; 65.0 KB measured, up from 64.3 KB for the page trail; it pulls `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`) and 1 KB for `./console-layout-breadcrumbs` (0.42 KB measured).
-- Runtime budget: one `popstate` listener when no router is installed; the active row is a computed match over the navigation leaves; the page trail is a short list of registrations.
+- Runtime budget: one `popstate` listener when no router is installed; one watcher on the route path that bumps the main's key; the active row is a computed match over the navigation leaves; the page trail is a short list of registrations.
 - Heavy parts: none beyond the composed components; the palette content renders only while open (`Command`).
 
 ## Decisions and open questions
 
 - **Page trail and fill mode (2026-11-12).** Platform detail pages need a crumb that is a control (an environment or version `Select`), and they had to put it in `App.vue`'s `breadcrumbs` slot, far from the page that owns it; workspace pages sized themselves with `calc(100dvh - var(--layout-header-height))`, which ignores the notifications region and breaks the moment the header changes. Decided: (1) a context-aware part, `ConsoleLayout.Breadcrumbs`, rendered by the page, over a `useConsoleLayout()` method — a template part takes reactive props and a slot for the control, and it cleans up with the page by construction; it registers on mount, not in setup, because the server renders the header before the page body, so a setup-time registration could never reach the server markup either and mount keeps the server and the hydrated markup identical. The structure moves from monolithic to composition (`spec_version` 2; the compound `./console-layout` re-exports the root's types, and `./console-layout-root` is the standalone root). Consequence: an `App.vue` that renders only `<ConsoleLayout>` now imports `console-layout-root` (`webkit/prefer-tree-shakeable-root`, as for every compound). (2) Fill mode is a `data-layout-fill` marker on the page's root read by the main through `:has()`, not a prop bound per route or a composable call: it is pure CSS, so it is right in the server render, needs no wiring in `App.vue`, and ends with the page. `AppLayout` is unchanged: `ConsoleLayout` renders its trail in the header, not in `AppLayout`'s breadcrumbs row, so the main's `h-full` is exactly the content area under the header.
+- **Optional page context (2026-11-12).** `.claude/rules/composables.md` has a context composable throw outside its provider. `useConsoleLayout` keeps that as its default, but takes `{ optional: true }` to return `null` instead: a console page body is also rendered alone (the block's docs preview, its test, the demo shell before the layout is wired) and must not crash there, and the home-dashboard empty variant had already reached for `try` / `catch` around the call. The exception is narrow and explicit at the call site — the bare call still fails loudly, and `ConsoleLayout.Breadcrumbs` already does nothing outside a layout for the same reason. A separate `useConsoleLayoutOptional` export was rejected: one entry, one name, typed by overload (`{ optional: true }` returns `ConsoleLayoutContext | null`).
+- **Page entrance on every route (2026-11-12).** The `<main>` played `animate-page-enter` once, on the first mount, because the page body changes inside a main that stays. Decided: key the `<main>` on the route path, the Vue idiom (`:key="$route.path"`) moved into the layout so no app has to remember it. The key is a counter bumped by a watcher on the path, not the path itself, so the no-router case (the path is read after mount) and a router's initial navigation from `/` do not remount the body the server rendered. Keyed on the path, not the full URL: a filter or a tab in the query must not replay the entrance or reset the page. Consequence: a `KeepAlive` around `RouterView` no longer keeps pages across routes; cache inside the page body instead. Restarting the CSS animation in place (the Web Animations API or a class toggle with a forced reflow) was rejected: a finished `page-enter` has no fill, so it is gone from `getAnimations()`, and a reflow toggle is timing code nothing can test without CSS.
 
 ## Examples
 

@@ -14,6 +14,7 @@ import noOutputInCommand from './rules/no-output-in-command.js'
 import noPhysicalDirection from './rules/no-physical-direction.js'
 import noRootRelativeAsset from './rules/no-root-relative-asset.js'
 import noStyleOverride from './rules/no-style-override.js'
+import noViewportHeightCalc from './rules/no-viewport-height-calc.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
 import noWrappedPageChrome from './rules/no-wrapped-page-chrome.js'
 import preferDefineModel from './rules/prefer-define-model.js'
@@ -43,7 +44,8 @@ const rules = {
   'menu-node-href': menuNodeHref,
   'no-gap-after-closing-section': noGapAfterClosingSection,
   'accessible-name': accessibleName,
-  'no-dropped-children': noDroppedChildren
+  'no-dropped-children': noDroppedChildren,
+  'no-viewport-height-calc': noViewportHeightCalc
 }
 
 const FILES = [
@@ -97,7 +99,8 @@ const RECOMMENDED = {
   'menu-node-href': 'error',
   'no-gap-after-closing-section': 'error',
   'accessible-name': 'error',
-  'no-dropped-children': 'error'
+  'no-dropped-children': 'error',
+  'no-viewport-height-calc': 'error'
 }
 
 export const HEURISTIC_RULES = Object.freeze(['container-needs-width', 'no-output-in-command'])

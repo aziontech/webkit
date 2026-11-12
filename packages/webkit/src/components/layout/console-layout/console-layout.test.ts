@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
-import { createSSRApp, defineComponent, h, KeepAlive, nextTick, ref } from 'vue'
+import { createSSRApp, defineComponent, h, KeepAlive, nextTick, onMounted, ref } from 'vue'
 import { renderToString, type SSRContext } from 'vue/server-renderer'
 
 import FillPageExample from '../../../../examples/console-layout/fill-page.vue'
@@ -246,6 +246,32 @@ describe('ConsoleLayout', () => {
     spy.mockRestore()
   })
 
+  it('returns null outside the layout with the optional form', () => {
+    let seen: unknown = 'unset'
+    const Loose = defineComponent({
+      setup() {
+        seen = useConsoleLayout({ optional: true })
+        return () => h('p', 'Standalone body')
+      }
+    })
+    const { getByText } = render(Loose)
+    expect(getByText('Standalone body')).toBeTruthy()
+    expect(seen).toBeNull()
+  })
+
+  it('opens the palette through the optional form inside the layout', async () => {
+    const Page = defineComponent({
+      setup() {
+        const layout = useConsoleLayout({ optional: true })
+        return () =>
+          h('button', { type: 'button', onClick: () => layout?.openSearch() }, 'Find a workload')
+      }
+    })
+    const { getByRole } = mount({}, {}, { default: () => h(Page) })
+    await userEvent.click(getByRole('button', { name: 'Find a workload' }))
+    expect(await waitFor(() => within(document.body).getByRole('dialog'))).toBeTruthy()
+  })
+
   it('shows the account and opens the account menu from the header avatar', async () => {
     const { getByRole, getByText } = mount(
       { account: { name: 'Ana Souza', email: 'ana@example.com' } },
@@ -335,6 +361,67 @@ describe('ConsoleLayout', () => {
     const { container, getByRole } = mount({}, { dir: 'rtl' })
     expect(getByRole('main')).toBeTruthy()
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('ConsoleLayout — page entrance on route change', () => {
+  const countingPage = () => {
+    const mounts = { count: 0 }
+    const Page = defineComponent({
+      setup() {
+        onMounted(() => {
+          mounts.count += 1
+        })
+        return () => h('h1', 'Page body')
+      }
+    })
+    return { mounts, Page }
+  }
+
+  it('remounts the main landmark and the page body when the route path changes', async () => {
+    const router = fakeRouter('/workloads')
+    const { mounts, Page } = countingPage()
+    const { getByRole } = mount({}, { router }, { default: () => h(Page) })
+    const first = getByRole('main')
+    expect(mounts.count).toBe(1)
+    router.currentRoute.value = { path: '/firewall' }
+    await nextTick()
+    await nextTick()
+    const second = getByRole('main')
+    expect(second).not.toBe(first)
+    expect(first.isConnected).toBe(false)
+    expect(mounts.count).toBe(2)
+    expect(within(second).getByText('Page body')).toBeTruthy()
+  })
+
+  it('keeps the page body while the route path stays the same', async () => {
+    const router = fakeRouter('/workloads')
+    const { mounts, Page } = countingPage()
+    const { getByRole } = mount({}, { router }, { default: () => h(Page) })
+    const first = getByRole('main')
+    router.currentRoute.value = { path: '/workloads' }
+    await nextTick()
+    await nextTick()
+    expect(getByRole('main')).toBe(first)
+    expect(mounts.count).toBe(1)
+  })
+
+  it('mounts the page body once without a router, then remounts it on popstate', async () => {
+    const original = `${location.pathname}${location.search}${location.hash}`
+    const { mounts, Page } = countingPage()
+    try {
+      const { getByRole } = mount({}, {}, { default: () => h(Page) })
+      await nextTick()
+      await nextTick()
+      const first = getByRole('main')
+      expect(mounts.count).toBe(1)
+      history.replaceState(history.state, '', '/console-layout-route-change')
+      dispatchEvent(new PopStateEvent('popstate'))
+      await waitFor(() => expect(mounts.count).toBe(2))
+      expect(getByRole('main')).not.toBe(first)
+    } finally {
+      history.replaceState(history.state, '', original)
+    }
   })
 })
 

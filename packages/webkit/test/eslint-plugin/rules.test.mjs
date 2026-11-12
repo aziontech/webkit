@@ -59,6 +59,9 @@ const noGapAfterClosingSection = (
 const noClockInSetup = (await import('../../src/eslint-plugin/rules/no-clock-in-setup.js')).default
 const noDroppedChildren = (await import('../../src/eslint-plugin/rules/no-dropped-children.js'))
   .default
+const noViewportHeightCalc = (
+  await import('../../src/eslint-plugin/rules/no-viewport-height-calc.js')
+).default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -1509,6 +1512,76 @@ const rows = [{ updatedAt: new Date(Date.now() - 7_200_000) }]
         code: `<template><span>{{ new Date().getFullYear() }}</span></template>`,
         filename: 'c.vue',
         errors: [{ messageId: 'clock', data: { call: 'new Date()' } }]
+      }
+    ]
+  })
+})
+
+test('no-viewport-height-calc', () => {
+  const sfc = (template, script = '') =>
+    `<script setup>${script}</script><template>${template}</template>`
+  const err = (value) => ({ messageId: 'viewportCalc', data: { value } })
+  vue.run('no-viewport-height-calc', noViewportHeightCalc, {
+    valid: [
+      { code: sfc('<div data-layout-fill class="flex min-h-0 flex-col" />'), filename: 'a.vue' },
+      { code: sfc('<div class="h-dvh" />'), filename: 'b.vue' },
+      {
+        code: sfc('<aside class="max-h-[calc(100dvh-var(--layout-header-height))]" />'),
+        filename: 'c.vue'
+      },
+      {
+        code: sfc(
+          '<aside class="sticky top-(--layout-header-height) h-[calc(100dvh-var(--layout-header-height))]" />'
+        ),
+        filename: 'd.vue'
+      },
+      {
+        code: sfc(
+          '<div class="lg:sticky lg:top-(--spacing-xl)"><div class="hidden h-[calc(100dvh-12rem)] lg:block" /></div>'
+        ),
+        filename: 'e.vue'
+      },
+      {
+        code: sfc('<div style="position: fixed; height: calc(100dvh - 3.5rem)" />'),
+        filename: 'f.vue'
+      },
+      { code: sfc('<div class="h-[calc(100%-3rem)] w-[calc(100vw-2rem)]" />'), filename: 'g.vue' },
+      {
+        code: sfc("<div :style=\"{ position: 'sticky', height: 'calc(100dvh - 4rem)' }\" />"),
+        filename: 'h.vue'
+      },
+      { code: "const label = 'calc(100dvh - 3rem) is a length'", filename: 'i.js' }
+    ],
+    invalid: [
+      {
+        code: sfc('<div class="flex h-[calc(100dvh-var(--layout-header-height))] flex-col" />'),
+        filename: 'j.vue',
+        errors: [err('h-[calc(100dvh-var(--layout-header-height))]')]
+      },
+      {
+        code: sfc('<div class="lg:min-h-[calc(100vh_-_3.5rem)]" />'),
+        filename: 'k.vue',
+        errors: [err('lg:min-h-[calc(100vh_-_3.5rem)]')]
+      },
+      {
+        code: sfc('<div style="display: flex; height: calc(100dvh - 3.5rem)" />'),
+        filename: 'l.vue',
+        errors: [err('height: calc(100dvh - 3.5rem)')]
+      },
+      {
+        code: sfc(`<div :class="cn('flex', 'h-[calc(100svh-4rem)]')" />`),
+        filename: 'm.vue',
+        errors: [err('h-[calc(100svh-4rem)]')]
+      },
+      {
+        code: sfc('<div :style="{ minHeight: \'calc(100dvh - 4rem)\' }" />'),
+        filename: 'n.vue',
+        errors: [err('minHeight: calc(100dvh - 4rem)')]
+      },
+      {
+        code: "const bodyClass = 'size-[calc(100dvh-56px)] overflow-auto'",
+        filename: 'o.js',
+        errors: [err('size-[calc(100dvh-56px)]')]
       }
     ]
   })
