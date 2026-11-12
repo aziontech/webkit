@@ -25,3 +25,9 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 Example:
 
 Site JSON: [`site-primitives.json`](./site-primitives.json)
+
+### Three groups
+
+The directory takes one column per group, up to four: three groups fan out to three columns, and between the small and the large breakpoints the third spans the row. A single group spans the whole row. No group count leaves an empty cell.
+
+Example: [`three-groups.vue`](./three-groups.vue)

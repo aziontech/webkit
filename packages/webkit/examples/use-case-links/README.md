@@ -20,8 +20,14 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `title` is the headline of the section.
 - `description` is the supporting sentence under the headline.
 - `items[]` are the use cases in reading order; three fill a row.
-- Each item takes an `icon` class, a `title`, a one-sentence `description` and the `href` the whole cell links to.
+- Each item takes an `icon` class, a `title`, a one-sentence `description` and the `href` the whole cell links to; without `href` the item is a plain topic.
 
 Example:
 
 Site JSON: [`site-topics.json`](./site-topics.json)
+
+### Without links
+
+Leave out every `href` and the same band is a plain use-case grid under a left-aligned title, as the KV Store page lists what teams keep in it. An item without `href` renders as a topic with no link and no arrow; link every item or none.
+
+Example: [`without-links.vue`](./without-links.vue)

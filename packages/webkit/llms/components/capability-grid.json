@@ -24,7 +24,8 @@
  ],
  "bestPractices": [
   "Three or six items at three columns, four or eight at four, so rows stay full.",
-  "Keep points to three short lines."
+  "Keep points to three short lines.",
+  "Set `titleKind: 'left'` for a band whose header sits at the start edge (the Partners page's \"Why you should be a partner\"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks."
  ],
  "props": [
   {
@@ -57,7 +58,7 @@
   },
   {
    "name": "columns",
-   "type": "3 \\ | 4",
+   "type": "CapabilityGridColumns",
    "default": "3",
    "required": "false",
    "doc": "Capabilities per row from the large breakpoint up."
@@ -75,6 +76,13 @@
    "default": "''",
    "required": "false",
    "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "titleKind",
+   "type": "SectionTitleKind",
+   "default": "'centered'",
+   "required": "false",
+   "doc": "Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns."
   }
  ],
  "events": [],
@@ -89,6 +97,10 @@
   {
    "name": "Points",
    "sfc": "<script setup>\n  import CapabilityGrid from '@aziontech/webkit/capability-grid'\n\n  const items = [\n    {\n      icon: 'pi pi-globe',\n      title: 'Global network',\n      description: 'Traffic lands on the nearest location.',\n      points: ['Anycast routing', 'Automatic failover']\n    },\n    {\n      icon: 'pi pi-lock',\n      title: 'Certificates',\n      description: 'TLS for every domain, renewed for you.',\n      points: ['Managed certificates', 'Bring your own']\n    },\n    {\n      icon: 'pi pi-chart-line',\n      title: 'Observability',\n      description: 'Metrics and logs in seconds.',\n      points: ['Real-time metrics', 'Log streaming']\n    },\n    {\n      icon: 'pi pi-sitemap',\n      title: 'Load balancing',\n      description: 'Spread requests across origins.',\n      points: ['Health checks', 'Weighted pools']\n    }\n  ]\n</script>\n\n<template>\n  <CapabilityGrid\n    title=\"Built for production\"\n    :items=\"items\"\n    :columns=\"4\"\n  />\n</template>"
+  },
+  {
+   "name": "Left title",
+   "sfc": "<script setup>\n  import CapabilityGrid from '@aziontech/webkit/capability-grid'\n\n  const items = [\n    {\n      icon: 'pi pi-check',\n      title: 'Grow with Azion',\n      description: 'Offer a platform your customers already trust, with pricing built for resale.'\n    },\n    {\n      icon: 'pi pi-check',\n      title: 'Get certified',\n      description: 'Train your team on the platform and earn the certifications your projects need.'\n    },\n    {\n      icon: 'pi pi-check',\n      title: 'Sell together',\n      description: 'Work joint accounts with our sales engineers, from the first call to production.'\n    }\n  ]\n</script>\n\n<template>\n  <CapabilityGrid\n    title-kind=\"left\"\n    title=\"Why you should be a partner\"\n    description=\"Build, sell and deliver modern applications with the Azion team beside you.\"\n    :items=\"items\"\n  />\n</template>"
   }
  ],
  "docs": "components/capability-grid.md"

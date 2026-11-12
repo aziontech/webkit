@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-11
-checksum: d82c4a507a7bacaf21cc13efbd421218e9ed1668c33f0eda41c9c977ce30d133
+last_updated: 2026-11-12
+checksum: f889958fa9570014627bd150aae2e10a645232d033a9d1400f96361450776b63
 ---
 
 # HeroBand — Component Spec
@@ -34,7 +34,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 
 - Use `title-band` with `size="large"` for a product page and `size="medium"` for a page whose bands start right under the headline.
 - Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.
-- Set `headerOffset` to the height of the site header so a band that fills a screen fills exactly the first screen with it.
+- Leave `headerOffset` at its default under `SiteNav`: it takes the bar's `--layout-header-height` out of a band that fills a screen, so the band fills exactly the first screen with it. Set it empty only on a page with no header above the band; never a literal length.
 
 ## Usage
 
@@ -72,7 +72,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 | `carouselMarks`         | `string[]`            | `[]`           | false    | Registry names of the client marks on the band floor, in order; the strip renders only when it has marks.                                                                                                                                                                                                                                               |
 | `illustration`          | `string`              | `''`           | false    | Registry name of the illustration set beside the copy in the `copy-beside-art` layout.                                                                                                                                                                                                                                                                  |
 | `illustrationAriaLabel` | `string`              | `''`           | false    | Accessible description of the illustration.                                                                                                                                                                                                                                                                                                             |
-| `headerOffset`          | `string`              | `''`           | false    | Height of the site header above the band, taken out of a band that fills a screen; any CSS length.                                                                                                                                                                                                                                                      |
+| `headerOffset`          | `string`              | `'var(--layout-header-height)'` | false    | Height of the site header above the band, taken out of a band that fills a screen; defaults to the `SiteNav` bar's token, any CSS length, empty for a page with no header above it. |
 | `titleLength`           | `HeroBandTitleLength` | `'short'`      | false    | Length of the headline; `long` widens its column so it breaks into two lines instead of three.                                                                                                                                                                                                                                                          |
 | `plain`                 | `boolean`             | `false`        | false    | Drops the dot texture of the `centered` layout.                                                                                                                                                                                                                                                                                                         |
 

@@ -15,6 +15,7 @@
 - Keep two audiences; the first one opens.
 - Keep each copyable line short enough to fit the field; the copy button copies exactly what it shows.
 - Keep `typedWords` to a few short words; screen readers and reduced motion get the whole list at once.
+- Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `FrameBox` + `TextureMaterial` (the `shells/website` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
 
 ## Don’t
 

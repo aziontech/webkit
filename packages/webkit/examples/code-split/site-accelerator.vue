@@ -1,7 +1,7 @@
 <script setup>
+  import CodeSplit from '@aziontech/webkit/code-split'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import CodeSplit from '@aziontech/webkit/code-split'
 
   const codeTabs = [
     {
@@ -17,7 +17,8 @@
   const primaryAction = {
     label: 'Learn more',
     href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',
-    trailing: true
+    trailing: true,
+    kind: 'transparent'
   }
 </script>
 

@@ -22,7 +22,7 @@
   "closing-call-to-action-newsletter` — the closing band whose ask is a subscribe form."
  ],
  "bestPractices": [
-  "Place it last on the page, right above `site-footer`, after a hatched `section-gap`.",
+  "Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `FrameBox` + `TextureMaterial` (the `shells/website` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.",
   "Set `anchor: 'contact'` so the page's contact links scroll to the close.",
   "In `split`, keep `title` and `titleMuted` to one short line each; `panel` and `primary` do not draw `titleMuted`, and `primary` does not draw `eyebrow`."
  ],

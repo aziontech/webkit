@@ -24,7 +24,8 @@
  "bestPractices": [
   "Keep the sample short enough to read in the cell; the frame cuts off whatever runs past it.",
   "Give every tab a `code`; a tab without one is skipped.",
-  "Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one."
+  "Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one.",
+  "Set an action's `kind` to `transparent` for a quiet text link such as \"Learn more\" (the product pages' Cache, Application Accelerator and Image Processor bands); leave it unset for the filled `secondary` first button and the `outlined` second one."
  ],
  "props": [
   {
@@ -60,14 +61,14 @@
    "type": "CodeSplitAction",
    "default": "undefined",
    "required": "false",
-   "doc": "First button under the copy; `{ label, href, trailing?, icon?, target? }`. Omitted when absent."
+   "doc": "First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `secondary`. Omitted when absent."
   },
   {
    "name": "secondaryAction",
    "type": "CodeSplitAction",
    "default": "undefined",
    "required": "false",
-   "doc": "Second, outlined button beside the first; `{ label, href, trailing?, icon?, target? }`. Omitted when absent."
+   "doc": "Second button beside the first; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `outlined`. Omitted when absent."
   }
  ],
  "events": [],
@@ -77,7 +78,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CodeSplit from '@aziontech/webkit/code-split'\n\n  const codeTabs = [\n    {\n      label: 'cache-settings.json',\n      value: 'cache-settings',\n      language: 'json',\n      code: '{\\n  \"cache_settings\": {\\n    \"name\": \"api-cache\",\\n    \"browser_cache_settings\": {\\n      \"ttl\": 60\\n    },\\n    \"cdn_cache_settings\": {\\n      \"ttl\": 30\\n    },\\n    \"cache_key\": {\\n      \"query_string\": \"whitelist\",\\n      \"query_string_fields\": [\"user_id\", \"category\"],\\n      \"cookie\": \"whitelist\",\\n      \"cookie_names\": [\"session_id\", \"region\"]\\n    },\\n    \"methods\": [\"GET\", \"POST\", \"OPTIONS\"],\\n    \"stale_cache\": true\\n  }\\n}',\n      fileName: 'cache-settings.json',\n      fileIcon: 'ai ai-json'\n    }\n  ]\n\n  const primaryAction = {\n    label: 'Learn more',\n    href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',\n    trailing: true\n  }\n</script>\n\n<template>\n  <CodeSplit\n    title=\"From basic caching to advanced acceleration\"\n    description=\"Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content.\"\n    :code-tabs=\"codeTabs\"\n    copy-aria-label=\"Copy the cache settings sample\"\n    :primary-action=\"primaryAction\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import CodeSplit from '@aziontech/webkit/code-split'\n\n  const codeTabs = [\n    {\n      label: 'cache-settings.json',\n      value: 'cache-settings',\n      language: 'json',\n      code: '{\\n  \"cache_settings\": {\\n    \"name\": \"api-cache\",\\n    \"browser_cache_settings\": {\\n      \"ttl\": 60\\n    },\\n    \"cdn_cache_settings\": {\\n      \"ttl\": 30\\n    },\\n    \"cache_key\": {\\n      \"query_string\": \"whitelist\",\\n      \"query_string_fields\": [\"user_id\", \"category\"],\\n      \"cookie\": \"whitelist\",\\n      \"cookie_names\": [\"session_id\", \"region\"]\\n    },\\n    \"methods\": [\"GET\", \"POST\", \"OPTIONS\"],\\n    \"stale_cache\": true\\n  }\\n}',\n      fileName: 'cache-settings.json',\n      fileIcon: 'ai ai-json'\n    }\n  ]\n\n  const primaryAction = {\n    label: 'Learn more',\n    href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',\n    trailing: true,\n    kind: 'transparent'\n  }\n</script>\n\n<template>\n  <CodeSplit\n    title=\"From basic caching to advanced acceleration\"\n    description=\"Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content.\"\n    :code-tabs=\"codeTabs\"\n    copy-aria-label=\"Copy the cache settings sample\"\n    :primary-action=\"primaryAction\"\n  />\n</template>"
   }
  ],
  "docs": "components/code-split.md"

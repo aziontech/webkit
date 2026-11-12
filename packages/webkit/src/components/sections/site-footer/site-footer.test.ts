@@ -92,6 +92,31 @@ describe('SiteFooter', () => {
       )
   })
 
+  it('opens an external link in a new tab and names it so, leaving internal links alone', async () => {
+    const { getByRole, container } = footer({
+      columns: [
+        {
+          title: 'Developer',
+          links: [
+            { label: 'Docs', href: '/docs' },
+            { label: 'Our Community', href: 'https://discord.gg/azion', external: true }
+          ]
+        }
+      ]
+    })
+
+    const external = getByRole('link', { name: 'Our Community (opens in a new tab)' })
+    expect(external.getAttribute('target')).toBe('_blank')
+    expect(external.getAttribute('rel')).toBe('noopener noreferrer')
+    expect(external).toHaveAttribute('data-external')
+
+    const internal = getByRole('link', { name: 'Docs' })
+    expect(internal.hasAttribute('target')).toBe(false)
+    expect(internal).not.toHaveAttribute('data-external')
+
+    await expectNoA11yViolations(container)
+  })
+
   it('renders one social button per profile, opening in a new tab', () => {
     const { getByRole } = footer()
 

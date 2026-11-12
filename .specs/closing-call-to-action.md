@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 2c9d7f12c2410c9360cb764d4c22dd802ddf40c383d553db3d16bb752792d1b4
+last_updated: 2026-11-12
+checksum: d93a60dd16ec63b321bf993ef18145265dd568f936e6486d59852c16707efa94
 ---
 # ClosingCallToAction — Component Spec
 
@@ -30,7 +30,7 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
 
 ## Best practices
 
-- Place it last on the page, right above `site-footer`, after a hatched `section-gap`.
+- Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `FrameBox` + `TextureMaterial` (the `shells/website` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
 - Set `anchor: 'contact'` so the page's contact links scroll to the close.
 - In `split`, keep `title` and `titleMuted` to one short line each; `panel` and `primary` do not draw `titleMuted`, and `primary` does not draw `eyebrow`.
 

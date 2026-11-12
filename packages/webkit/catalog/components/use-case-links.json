@@ -1,8 +1,9 @@
 {
- "purpose": "The use-case directory band of a solution page: a left-aligned section title over a divider grid of linked topics, one per use case, each an icon, a heading and a sentence that link to the page that explains it. It is a page section — the site places it from a `{ _id: 'use-case-links', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `card-grid` and `topic` rather than owning anatomy of its own.",
+ "purpose": "The use-case directory band of a solution page: a left-aligned section title over a divider grid of linked topics, one per use case, each an icon, a heading and a sentence that link to the page that explains it — or, when the items carry no `href`, a plain grid of the same topics with nothing to follow. It is a page section — the site places it from a `{ _id: 'use-case-links', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `card-grid` and `topic` rather than owning anatomy of its own.",
  "useWhen": [
   "When every use case has its own page and the band's job is to route the reader there.",
-  "For three or six use cases of equal weight, in a three-column grid."
+  "For three or six use cases of equal weight, in a three-column grid.",
+  "For a link-less use-case grid under a left-aligned title (the KV Store page's \"Use cases\"): leave out every `href`."
  ],
  "avoidWhen": [
   "When the use cases carry no link and the band leads with one call to action → use `use-cases`.",
@@ -14,7 +15,7 @@
  ],
  "bestPractices": [
   "Keep the count a multiple of three so the divider grid closes cleanly.",
-  "Give every item an `href`; a topic without one reads as a dead end in a band that promises links.",
+  "Link every item or none: an item without `href` renders as a plain topic (no link, no arrow), and a band that mixes both reads as broken.",
   "Keep `description` to one sentence; the row height follows the longest cell."
  ]
 }

@@ -62,6 +62,21 @@ describe('HeroBand', () => {
     expect(getByTestId(HERO_TESTID).getAttribute('data-size')).toBe('medium')
   })
 
+  it('takes the site header token out of a screen-filling band, and nothing out of a band', async () => {
+    const { getByTestId, rerender } = band({ kind: 'centered' })
+
+    expect(getByTestId(HERO_TESTID).getAttribute('data-kind')).toBe('screen')
+    expect(getByTestId(HERO_TESTID).style.getPropertyValue('--banner-offset')).toBe(
+      'var(--layout-header-height)'
+    )
+
+    await rerender({ headerOffset: '' })
+    expect(getByTestId(HERO_TESTID).style.getPropertyValue('--banner-offset')).toBe('')
+
+    await rerender({ kind: 'title-band', headerOffset: 'var(--layout-header-height)' })
+    expect(getByTestId(HERO_TESTID).style.getPropertyValue('--banner-offset')).toBe('')
+  })
+
   it('passes size to the hero rhythm', () => {
     const { getByTestId } = band({ size: 'large' })
 

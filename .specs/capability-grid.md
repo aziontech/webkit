@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 274e1fd037402f11d2c304a5e03d8d6d7d2f21a1e014d54684c429467d109a90
+checksum: 4f7d0194cec10a5c90f7dc39f153ab935da10b1cc9504c5a01e2b7f7fa169780
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # CapabilityGrid — Component Spec
@@ -35,6 +35,7 @@ A framed grid of product capabilities under an optional section title: each cell
 
 - Three or six items at three columns, four or eight at four, so rows stay full.
 - Keep points to three short lines.
+- Set `titleKind: 'left'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
 
 ## Usage
 
@@ -71,9 +72,10 @@ A framed grid of product capabilities under an optional section title: each cell
 | `title`       | `string`                 | `''`    | false    | Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`.                              |
 | `description` | `string`                 | `''`    | false    | One or two sentences under the title.                                                                                                               |
 | `items`       | `CapabilityGridItem[]`   | `[]`    | false    | The capabilities, in order; each is `{ title, description, icon?, points? }`. The band renders nothing when empty.                                  |
-| `columns`     | `3 \\                    | 4`      | `3`      | false                                                                                                                                               | Capabilities per row from the large breakpoint up. |
+| `columns`     | `CapabilityGridColumns`  | `3`     | false    | Capabilities per row from the large breakpoint up.                                                                                                  |
 | `actions`     | `CapabilityGridAction[]` | `[]`    | false    | Buttons under the section title; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined. |
 | `anchor`      | `string`                 | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                            |
+| `titleKind`   | `SectionTitleKind`       | `'centered'` | false | Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. |
 
 ## Events
 
@@ -87,6 +89,7 @@ A framed grid of product capabilities under an optional section title: each cell
 
 - Renders nothing without items.
 - Heading level drops to `h3` under a title and rises to `h2` without one.
+- `titleKind` is passed to the section title as its `kind`; it has no effect on a bare grid.
 
 ## Motion & Animations
 
@@ -137,6 +140,7 @@ _none_
 
 - Default — three capabilities with a title and an action.
 - Points — six capabilities with bullet points at four columns.
+- Left title — `titleKind: 'left'` sets the header at the start edge over the grid.
 
 ## Constraints — DO NOT
 

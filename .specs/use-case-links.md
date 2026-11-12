@@ -5,19 +5,20 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: cd90590f58ff7122ba98f65593fdb2edd5f99735d09a500541e2a0587378025b
+last_updated: 2026-11-12
+checksum: dd8ec74008471929305ce4a596e6885332ea1484c4bfe9cbb88f6d3385ab823e
 ---
 # UseCaseLinks — Component Spec
 
 ## Purpose
 
-The use-case directory band of a solution page: a left-aligned section title over a divider grid of linked topics, one per use case, each an icon, a heading and a sentence that link to the page that explains it. It is a page section — the site places it from a `{ _id: 'use-case-links', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `card-grid` and `topic` rather than owning anatomy of its own.
+The use-case directory band of a solution page: a left-aligned section title over a divider grid of linked topics, one per use case, each an icon, a heading and a sentence that link to the page that explains it — or, when the items carry no `href`, a plain grid of the same topics with nothing to follow. It is a page section — the site places it from a `{ _id: 'use-case-links', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `card-grid` and `topic` rather than owning anatomy of its own.
 
 ## When to use
 
 - When every use case has its own page and the band's job is to route the reader there.
 - For three or six use cases of equal weight, in a three-column grid.
+- For a link-less use-case grid under a left-aligned title (the KV Store page's "Use cases"): leave out every `href`.
 
 ## When NOT to use
 
@@ -32,7 +33,7 @@ The use-case directory band of a solution page: a left-aligned section title ove
 ## Best practices
 
 - Keep the count a multiple of three so the divider grid closes cleanly.
-- Give every item an `href`; a topic without one reads as a dead end in a band that promises links.
+- Link every item or none: an item without `href` renders as a plain topic (no link, no arrow), and a band that mixes both reads as broken.
 - Keep `description` to one sentence; the row height follows the longest cell.
 
 ## Usage
@@ -62,7 +63,7 @@ import UseCaseLinks from '@aziontech/webkit/use-case-links'
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `items` | `UseCaseLinksItem[]` | `[]` | false | The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href }`. |
+| `items` | `UseCaseLinksItem[]` | `[]` | false | The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href? }`; an item without `href` renders as a plain, unlinked topic. |
 
 ## Events
 
@@ -77,6 +78,7 @@ import UseCaseLinks from '@aziontech/webkit/use-case-links'
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set; `eyebrow` and `description` ride with it
+- An item with an `href` is a link (the whole cell, with the topic's link cue); an item without one is a plain topic, so a band with no `href` at all has no links
 
 ## Motion & Animations
 
@@ -108,6 +110,7 @@ _none_
 ## Examples
 
 - Default
+- Without links — the same grid with no `href`, plain topics under a left title.
 
 ## Constraints — DO NOT
 

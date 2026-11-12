@@ -14,6 +14,7 @@
  "bestPractices": [
   "Keep the sample short enough to read in the cell; the frame cuts off whatever runs past it.",
   "Give every tab a `code`; a tab without one is skipped.",
-  "Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one."
+  "Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one.",
+  "Set an action's `kind` to `transparent` for a quiet text link such as \"Learn more\" (the product pages' Cache, Application Accelerator and Image Processor bands); leave it unset for the filled `secondary` first button and the `outlined` second one."
  ]
 }

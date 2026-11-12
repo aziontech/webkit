@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 
 import Default from '../../../../examples/capability-grid/default.vue'
+import LeftTitle from '../../../../examples/capability-grid/left-title.vue'
 import Points from '../../../../examples/capability-grid/points.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CapabilityGrid from './capability-grid.vue'
@@ -24,6 +25,19 @@ describe('CapabilityGrid', () => {
       getByRole('region', { name: 'Everything an application needs, in one place' })
     ).toBeInTheDocument()
     expect(getAllByRole('heading', { level: 3 })).toHaveLength(3)
+  })
+
+  it('centers the title by default and sets it at the start edge with titleKind left', () => {
+    const { getByTestId, unmount } = render(Default)
+    expect(getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'centered')
+    unmount()
+
+    const left = render(LeftTitle)
+    expect(left.getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'left')
+    expect(left.getByRole('heading', { level: 2 }).textContent?.trim()).toBe(
+      'Why you should be a partner'
+    )
+    expect(left.getAllByRole('heading', { level: 3 })).toHaveLength(3)
   })
 
   it('raises capability headings to h2 in a bare grid', () => {

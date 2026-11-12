@@ -1,5 +1,11 @@
 <script setup>
+  import Command from '@aziontech/webkit/command'
   import SiteNav from '@aziontech/webkit/site-nav'
+  import { ref } from 'vue'
+
+  const searchOpen = ref(false)
+
+  const searchPages = ['Functions', 'Applications', 'Firewall', 'Pricing', 'Documentation']
 
   const menus = [
     {
@@ -328,5 +334,20 @@
     :contact="contact"
     :primary-action="primaryAction"
     :secondary-action="secondaryAction"
+    @search="searchOpen = true"
   />
+  <Command v-model:open="searchOpen">
+    <Command.Input placeholder="Search azion.com" />
+    <Command.List>
+      <Command.Empty>No page matches your search.</Command.Empty>
+      <Command.Group heading="Pages">
+        <Command.Item
+          v-for="page in searchPages"
+          :key="page"
+          :value="page"
+          >{{ page }}</Command.Item
+        >
+      </Command.Group>
+    </Command.List>
+  </Command>
 </template>

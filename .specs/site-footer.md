@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-12
-checksum: 3d32efe88998cd8bdc26e9ddb133b404127f0039edb4e22230adc8b8694c51e4
+checksum: 39448da707f642d15a72199a4004096e8fb874b76b646c1251a073f59f75ddb2
 ---
 
 # SiteFooter — Component Spec
@@ -35,6 +35,7 @@ The footer under every marketing page: the link columns, then the social row bes
 - **Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double and the frame drifts off the page column.
 - Use `kind: 'site'` under a framed marketing page, so the footer draws the page frame and closes on its bottom rule; the page above must not draw a bottom rule of its own.
 - Keep four link columns so the grid fills at `md`.
+- Set `external: true` on a link that leaves azion.com (Community, Status): it opens in a new tab, draws the external-link glyph after the label and tells assistive tech it opens a new tab. Never add the glyph or `target` yourself.
 - Give every social link a `label` that names the network, since the button shows only the glyph.
 
 ## Usage
@@ -66,7 +67,7 @@ The footer under every marketing page: the link columns, then the social row bes
 | `ariaLabel`         | `string`             | `''`     | false    | Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`).                                                              |
 | `home`              | `string`             | `''`     | false    | Destination of the Azion mark; the mark is not rendered when empty.                                                                            |
 | `homeAriaLabel`     | `string`             | `''`     | false    | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`).                                                          |
-| `columns`           | `SiteFooterColumn[]` | `[]`     | false    | The link columns, in order; each is `{ title, links }` where every link is `{ label, href }`.                                                  |
+| `columns`           | `SiteFooterColumn[]` | `[]`     | false    | The link columns, in order; each is `{ title, links }` where every link is `{ label, href, external? }`; an `external` link opens in a new tab and closes on the external-link glyph.                                                  |
 | `socials`           | `SiteFooterSocial[]` | `[]`     | false    | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab. |
 | `statusLabel`       | `string`             | `''`     | false    | Line of the system status indicator; the indicator is not rendered when empty.                                                                 |
 | `languages`         | `string[]`           | `[]`     | false    | Options of the language select, as the reader sees them; the first one is selected. The select is not rendered when empty.                     |
@@ -86,6 +87,7 @@ The footer under every marketing page: the link columns, then the social row bes
 - `data-kind` mirrors the `kind` prop on the footer
 - From `lg` the Azion mark leads the social row and no signature band renders, so the footer ends on its bottom bar; below `lg` the mark renders in the footer's signature band
 - The status indicator, the language select and the Azion mark each render only when their prop is set
+- An `external` link sets `target="_blank"` and `rel="noopener noreferrer"`, draws the `pi pi-external-link` glyph after its label (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
 - Server render and hydration: both marks are always in the DOM and CSS shows one of them per width, so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Motion & Animations
@@ -113,14 +115,14 @@ The footer under every marketing page: the link columns, then the social row bes
 
 - Visible focus: the mark link carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`; links, icon buttons and the select own theirs.
 - Keyboard map: `Tab` moves through the column links, the mark, the social buttons and the language select; the select opens with `Enter` / `Space` and moves with the arrows, owned by `select`.
-- ARIA: the `footer` is the `contentinfo` landmark named by `ariaLabel`; each column is titled; the mark link is named by `homeAriaLabel`, each social button by its `label`, the select by `languageAriaLabel`.
+- ARIA: the `footer` is the `contentinfo` landmark named by `ariaLabel`; each column is titled; the mark link is named by `homeAriaLabel`, each social button by its `label`, the select by `languageAriaLabel`; an external link's name ends with “(opens in a new tab)” from the locale catalog.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link's opacity transition.
 - Touch target ≥40×40 px — owned by `icon-button` and `select`.
 
 ## Examples
 
-- Default
+- Default — four link columns, one of them with an external link.
 
 ## Constraints — DO NOT
 

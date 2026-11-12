@@ -24,8 +24,15 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `clientName` names the card; it is required with a `logo` file.
 - An item without `text`, or with nothing to draw on its card, is skipped.
 - `primaryAction` is the button under the quote; it needs `label` and `href`, and `trailing` adds the chevron.
+- The band advances every `autoplayInterval` ms (5000) as on azion.com; `autoplay: false` holds the first quote (or the one bound with `v-model`, the selected index).
 - No site page uses this block yet, so this entry is built from the Retail story.
 
 Example:
 
 Site JSON: [`site-default.json`](./site-default.json)
+
+### Still
+
+`autoplay` off holds one quote, and `v-model` (the selected index) opens the band on the second client: for a page that must not move, or that leads with a given customer.
+
+Example: [`still.vue`](./still.vue)

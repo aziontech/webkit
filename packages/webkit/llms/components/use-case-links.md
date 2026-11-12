@@ -1,6 +1,6 @@
 # Use Case Links
 
-> The use-case directory band of a solution page: a left-aligned section title over a divider grid of linked topics, one per use case, each an icon, a heading and a sentence that link to the page that explains it. It is a page section — the site places it from a `{ _id: 'use-case-links', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `card-grid` and `topic` rather than owning anatomy of its own.
+> The use-case directory band of a solution page: a left-aligned section title over a divider grid of linked topics, one per use case, each an icon, a heading and a sentence that link to the page that explains it — or, when the items carry no `href`, a plain grid of the same topics with nothing to follow. It is a page section — the site places it from a `{ _id: 'use-case-links', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `card-grid` and `topic` rather than owning anatomy of its own.
 
 - Import: `import UseCaseLinks from '@aziontech/webkit/use-case-links'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -10,11 +10,12 @@
 
 - When every use case has its own page and the band's job is to route the reader there.
 - For three or six use cases of equal weight, in a three-column grid.
+- For a link-less use-case grid under a left-aligned title (the KV Store page's "Use cases"): leave out every `href`.
 
 ## Do
 
 - Keep the count a multiple of three so the divider grid closes cleanly.
-- Give every item an `href`; a topic without one reads as a dead end in a band that promises links.
+- Link every item or none: an item without `href` renders as a plain topic (no link, no arrow), and a band that mixes both reads as broken.
 - Keep `description` to one sentence; the row height follows the longest cell.
 
 ## Don’t
@@ -35,13 +36,14 @@
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `items` | `UseCaseLinksItem[]` | `[]` | false | The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href }`. |
+| `items` | `UseCaseLinksItem[]` | `[]` | false | The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href? }`; an item without `href` renders as a plain, unlinked topic. |
 
 ## States
 
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set; `eyebrow` and `description` ride with it
+- An item with an `href` is a link (the whole cell, with the topic's link cue); an item without one is a plain topic, so a band with no `href` at all has no links
 
 ## Accessibility
 
@@ -106,6 +108,58 @@
         description:
           'Cache user-specific content with session-based cookie variation for tailored delivery.',
         href: 'https://www.azion.com/en/documentation/'
+      }
+    ]"
+  />
+</template>
+```
+
+### Without links
+
+```vue
+<script setup>
+  import UseCaseLinks from '@aziontech/webkit/use-case-links'
+</script>
+
+<template>
+  <UseCaseLinks
+    eyebrow="Use Cases"
+    title="What teams keep in KV Store"
+    :items="[
+      {
+        icon: 'pi pi-lock',
+        title: 'Session management and authentication',
+        description:
+          'Store user sessions, authentication tokens, and login states close to users for fast authentication.'
+      },
+      {
+        icon: 'pi pi-sliders-h',
+        title: 'Feature flags and configuration',
+        description:
+          'Synchronize feature flags and application configuration globally with low latency.'
+      },
+      {
+        icon: 'pi pi-gauge',
+        title: 'API rate limiting and quotas',
+        description:
+          'Implement sliding window rate limits, token quotas, and access rules with fast lookups.'
+      },
+      {
+        icon: 'pi pi-chart-bar',
+        title: 'Global counters and analytics',
+        description:
+          'Count pageviews, inventory levels, and API usage in real time with distributed counters.'
+      },
+      {
+        icon: 'pi pi-ban',
+        title: 'Bad actor tracking and security lists',
+        description:
+          'Store IP addresses and threat signatures to block attackers in real time.'
+      },
+      {
+        icon: 'pi pi-shopping-cart',
+        title: 'Carts and personalization',
+        description: 'Keep carts and user preferences one fast read away from every visitor.'
       }
     ]"
   />

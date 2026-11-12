@@ -11,6 +11,11 @@
       "name": "Points",
       "summary": "Four capabilities at four columns, each with two bullet points under its sentence.",
       "file": "points.vue"
+    },
+    {
+      "name": "Left title",
+      "summary": "`titleKind: 'left'` sets the section title at the start edge over the grid; the capabilities stay `h3` under the band's `h2`.",
+      "file": "left-title.vue"
     }
   ]
 }

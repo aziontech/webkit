@@ -11,6 +11,9 @@
     inheritAttrs: false
   })
 
+  /** Button kind of a call to action under the band's copy. */
+  export type CodeSplitActionKind = 'secondary' | 'outlined' | 'transparent'
+
   /** A call to action under the band's copy. */
   export type CodeSplitAction = {
     /** Visible label of the action. */
@@ -23,6 +26,8 @@
     icon?: string
     /** Link target of the action. */
     target?: '_blank' | '_self'
+    /** Button kind; the first action defaults to secondary and the second to outlined, and transparent draws a quiet text button. */
+    kind?: CodeSplitActionKind
   }
 
   /** One file of the code sample. */
@@ -52,9 +57,9 @@
     codeTabs?: CodeSplitTab[]
     /** Accessible name of the sample's copy button; empty keeps the code block's own. */
     copyAriaLabel?: string
-    /** First button under the copy; `{ label, href, trailing?, icon?, target? }`. Omitted when absent. */
+    /** First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `secondary`. Omitted when absent. */
     primaryAction?: CodeSplitAction
-    /** Second, outlined button beside the first; `{ label, href, trailing?, icon?, target? }`. Omitted when absent. */
+    /** Second button beside the first; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `outlined`. Omitted when absent. */
     secondaryAction?: CodeSplitAction
   }
 
@@ -140,7 +145,7 @@
             v-if="primaryAction"
             :label="primaryAction.label"
             :href="primaryAction.href"
-            kind="secondary"
+            :kind="primaryAction.kind ?? 'secondary'"
             size="large"
             :target="primaryAction.target"
             :icon="actionIcon(primaryAction)"
@@ -152,7 +157,7 @@
             v-if="secondaryAction"
             :label="secondaryAction.label"
             :href="secondaryAction.href"
-            kind="outlined"
+            :kind="secondaryAction.kind ?? 'outlined'"
             size="large"
             :target="secondaryAction.target"
             :icon="actionIcon(secondaryAction)"

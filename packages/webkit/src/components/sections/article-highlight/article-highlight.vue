@@ -36,7 +36,7 @@
   interface Props {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** The highlight articles in wall order, the first selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`. */
+    /** The highlight articles in wall order, the one at the bound index (the first by default) selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`. */
     items?: ArticleHighlightItem[]
     /** Label of the button into the selected article; the button is omitted when empty. */
     actionLabel?: string
@@ -51,16 +51,21 @@
     ariaLabel: ''
   })
 
+  /** Index of the selected article, bound with v-model; left unbound the band starts on the first article. */
+  const model = defineModel<number>({ default: 0 })
+
   const attrs = useAttrs()
 
   const baseId = useId()
-
-  const selected = ref(0)
 
   const wall = ref<HTMLElement | null>(null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-article-highlight'
+  )
+
+  const selected = computed(() =>
+    Math.min(Math.max(Math.trunc(model.value) || 0, 0), Math.max(props.items.length - 1, 0))
   )
 
   const current = computed(() => props.items[selected.value] ?? props.items[0])
@@ -70,7 +75,7 @@
   const tabId = (index: number): string => `${baseId}-tab-${index}`
 
   const select = (index: number): void => {
-    selected.value = index
+    model.value = index
   }
 
   const focusTab = async (index: number): Promise<void> => {

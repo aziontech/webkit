@@ -8,11 +8,12 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The use-case directory band of a solution page: a left-aligned section title over a divider grid of linked topics, one per use case, each an icon, a heading and a sentence that link to the page that explains it. It is a page section — the site places it from a `{ _id: 'use-case-links', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `card-grid` and `topic` rather than owning anatomy of its own.",
+ "purpose": "The use-case directory band of a solution page: a left-aligned section title over a divider grid of linked topics, one per use case, each an icon, a heading and a sentence that link to the page that explains it — or, when the items carry no `href`, a plain grid of the same topics with nothing to follow. It is a page section — the site places it from a `{ _id: 'use-case-links', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `card-grid` and `topic` rather than owning anatomy of its own.",
  "setup": null,
  "useWhen": [
   "When every use case has its own page and the band's job is to route the reader there.",
-  "For three or six use cases of equal weight, in a three-column grid."
+  "For three or six use cases of equal weight, in a three-column grid.",
+  "For a link-less use-case grid under a left-aligned title (the KV Store page's \"Use cases\"): leave out every `href`."
  ],
  "avoidWhen": [
   "When the use cases carry no link and the band leads with one call to action → use `use-cases`.",
@@ -24,7 +25,7 @@
  ],
  "bestPractices": [
   "Keep the count a multiple of three so the divider grid closes cleanly.",
-  "Give every item an `href`; a topic without one reads as a dead end in a band that promises links.",
+  "Link every item or none: an item without `href` renders as a plain topic (no link, no arrow), and a band that mixes both reads as broken.",
   "Keep `description` to one sentence; the row height follows the longest cell."
  ],
  "props": [
@@ -54,7 +55,7 @@
    "type": "UseCaseLinksItem[]",
    "default": "[]",
    "required": "false",
-   "doc": "The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href }`."
+   "doc": "The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href? }`; an item without `href` renders as a plain, unlinked topic."
   }
  ],
  "events": [],
@@ -65,6 +66,10 @@
   {
    "name": "Default",
    "sfc": "<script setup>\n  import UseCaseLinks from '@aziontech/webkit/use-case-links'\n</script>\n\n<template>\n  <UseCaseLinks\n    eyebrow=\"Use Cases\"\n    title=\"What teams use Application Accelerator for\"\n    description=\"Cache what standard CDN caching cannot, with the methods, query strings and cookies you choose.\"\n    :items=\"[\n      {\n        icon: 'pi pi-code',\n        title: 'Accelerate REST and GraphQL APIs',\n        description:\n          'Cache API responses with query string and cookie-based segmentation for faster client applications.',\n        href: 'https://www.azion.com/en/solutions/api-gateway/'\n      },\n      {\n        icon: 'pi pi-shopping-cart',\n        title: 'Optimize product catalogs',\n        description:\n          'Segment listings by category, region, and user preferences with cache key rules.',\n        href: 'https://www.azion.com/en/solutions/application-acceleration/'\n      },\n      {\n        icon: 'ai ai-layers',\n        title: 'Personalize multi-tenant apps',\n        description: 'Serve tenant-specific content with cookie-based cache variation rules.',\n        href: 'https://www.azion.com/en/documentation/'\n      },\n      {\n        icon: 'ai ai-live-ingest',\n        title: 'Stream content faster',\n        description:\n          'Cache playlists and user preferences while serving browsing content efficiently.',\n        href: 'https://www.azion.com/en/documentation/'\n      },\n      {\n        icon: 'pi pi-bolt',\n        title: 'Reduce API latency',\n        description: 'Short TTLs for rapidly changing data endpoints and real-time applications.',\n        href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/'\n      },\n      {\n        icon: 'pi pi-user',\n        title: 'Deliver personalized experiences',\n        description:\n          'Cache user-specific content with session-based cookie variation for tailored delivery.',\n        href: 'https://www.azion.com/en/documentation/'\n      }\n    ]\"\n  />\n</template>"
+  },
+  {
+   "name": "Without links",
+   "sfc": "<script setup>\n  import UseCaseLinks from '@aziontech/webkit/use-case-links'\n</script>\n\n<template>\n  <UseCaseLinks\n    eyebrow=\"Use Cases\"\n    title=\"What teams keep in KV Store\"\n    :items=\"[\n      {\n        icon: 'pi pi-lock',\n        title: 'Session management and authentication',\n        description:\n          'Store user sessions, authentication tokens, and login states close to users for fast authentication.'\n      },\n      {\n        icon: 'pi pi-sliders-h',\n        title: 'Feature flags and configuration',\n        description:\n          'Synchronize feature flags and application configuration globally with low latency.'\n      },\n      {\n        icon: 'pi pi-gauge',\n        title: 'API rate limiting and quotas',\n        description:\n          'Implement sliding window rate limits, token quotas, and access rules with fast lookups.'\n      },\n      {\n        icon: 'pi pi-chart-bar',\n        title: 'Global counters and analytics',\n        description:\n          'Count pageviews, inventory levels, and API usage in real time with distributed counters.'\n      },\n      {\n        icon: 'pi pi-ban',\n        title: 'Bad actor tracking and security lists',\n        description:\n          'Store IP addresses and threat signatures to block attackers in real time.'\n      },\n      {\n        icon: 'pi pi-shopping-cart',\n        title: 'Carts and personalization',\n        description: 'Keep carts and user preferences one fast read away from every visitor.'\n      }\n    ]\"\n  />\n</template>"
   }
  ],
  "docs": "components/use-case-links.md"

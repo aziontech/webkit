@@ -14,6 +14,7 @@
  ],
  "bestPractices": [
   "Three or six items at three columns, four or eight at four, so rows stay full.",
-  "Keep points to three short lines."
+  "Keep points to three short lines.",
+  "Set `titleKind: 'left'` for a band whose header sits at the start edge (the Partners page's \"Why you should be a partner\"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks."
  ]
 }

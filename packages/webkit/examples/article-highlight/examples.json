@@ -6,6 +6,11 @@
       "name": "Default",
       "summary": "The Blog band with its four newest posts: the first is featured over a four-across wall of titles. Click a title, or move along the wall with the arrow, Home and End keys, to swap the featured article. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
       "file": "default.vue"
+    },
+    {
+      "name": "Selected",
+      "summary": "`v-model` (the selected index) opens the band on its second article; a click or an arrow key writes the new index back.",
+      "file": "selected.vue"
     }
   ],
   "site": [

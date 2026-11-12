@@ -27,14 +27,17 @@ export const RULE_PURPOSE = {
   'header-search-trigger': 'app header without SearchTrigger, or a hand-rolled ⌘K field',
   'no-wrapped-page-chrome': 'SiteFooter or SiteNav inside a bordered or padded wrapper',
   'no-output-in-command': 'shell code sample that mixes the command with what it prints',
-  'menu-node-href': 'navigation node naming its destination path/to/url instead of href'
+  'menu-node-href': 'navigation node naming its destination path/to/url instead of href',
+  'no-gap-after-closing-section':
+    'SectionGap or closing frame after a section that draws its own close'
 }
 
 const TEMPLATE_ONLY_RULES = [
   'no-style-override',
   'container-needs-width',
   'header-search-trigger',
-  'no-wrapped-page-chrome'
+  'no-wrapped-page-chrome',
+  'no-gap-after-closing-section'
 ]
 
 export const FORMATS = new Set(['markdown', 'json'])

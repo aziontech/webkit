@@ -115,6 +115,29 @@ describe('PlatformDirectory', () => {
     expect(queryByText('Empty')).toBeNull()
   })
 
+  it.each([
+    [1, '2', ['full']],
+    [2, '2', [null, null]],
+    [3, '3', [null, null, 'pair']],
+    [4, '4', [null, null, null, null]]
+  ])(
+    'fans %i groups out to %s tracks and spans the cell a missing column would leave',
+    (count, tracks, spans) => {
+      const many = Array.from({ length: count }, (_, index) => ({
+        title: `Group ${index + 1}`,
+        items: [{ title: `Product ${index + 1}`, href: `/products/${index + 1}` }]
+      }))
+      const { getByTestId, getAllByTestId } = band({ groups: many })
+
+      expect(getByTestId('marketing-column-navigation')).toHaveAttribute('data-columns', tracks)
+      expect(
+        getAllByTestId('marketing-column-navigation-column').map((column) =>
+          column.getAttribute('data-span')
+        )
+      ).toEqual(spans)
+    }
+  )
+
   it('renders no header and leaves the band unnamed without a title', () => {
     const { getByTestId, queryByRole } = band({ title: '' })
 

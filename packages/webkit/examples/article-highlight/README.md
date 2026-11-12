@@ -26,3 +26,9 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 Example:
 
 Site JSON: [`site-featured.json`](./site-featured.json)
+
+### Selected
+
+`v-model` (the selected index) opens the band on its second article instead of the first. The band never advances on its own; a click or an arrow key writes the new index back.
+
+Example: [`selected.vue`](./selected.vue)

@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-11
-checksum: 16bcf64d15bbbb44aa336265782157a86c3e7ca0ea1d7e6eefdac8fcb3b2f48b
+last_updated: 2026-11-12
+checksum: 702bd17ca7e94bd1bb436b292c9c8e7bc8d962e551d8e89f914d70221c0eac4b
 ---
 
 # ArticleHighlight — Component Spec
@@ -33,6 +33,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 
 - Feature three or four articles; four fill the wall four across.
 - Give a `highlightImage` cropped for the panel when the cover does not read at that size.
+- Bind `v-model` (the selected index) to open on an article other than the first; the band never advances on its own, so it holds whatever the reader or the page picked.
 
 ## Usage
 
@@ -66,9 +67,15 @@ The band that opens a blog under its hero. One article is shown large — its co
 | Prop          | Type                     | Default | Required | JSDoc                                                                                                                                                  |
 | ------------- | ------------------------ | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `anchor`      | `string`                 | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                         |
-| `items`       | `ArticleHighlightItem[]` | `[]`    | false    | The highlight articles in wall order, the first selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`. |
+| `items`       | `ArticleHighlightItem[]` | `[]`    | false    | The highlight articles in wall order, the one at the bound index (the first by default) selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`. |
 | `actionLabel` | `string`                 | `''`    | false    | Label of the button into the selected article; the button is omitted when empty.                                                                       |
 | `ariaLabel`   | `string`                 | `''`    | false    | Accessible name of the wall of titles.                                                                                                                 |
+
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+|---|---|---|---|---|
+| `v-model` | `number` | `0` | `update:modelValue` | Index of the selected article; left unbound the band starts on the first one. A click or an arrow key writes the new index back; an index past the ends is clamped to the wall. |
 
 ## Events
 
@@ -83,6 +90,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 - Visual states: `default`, `hover` (a wall title lights, the panel cover scales up), `focus-visible` (inset ring), `selected` (`data-active` on the selected wall title)
 - `data-columns` on the wall: four columns with four or more articles, three otherwise
 - Empty: when `items` is empty the band renders nothing
+- The band has no timer: the selected article changes only on a click, an arrow key or a bound `modelValue`
 - Reflow: the hidden layout sizer is `min-w-0`, so the panel never grows past a 320 px box.
 
 ## Motion & Animations
@@ -129,6 +137,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 ## Examples
 
 - Default
+- Selected — `v-model` opens the band on the second article.
 
 ## Constraints — DO NOT
 

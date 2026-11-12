@@ -12,6 +12,8 @@
  ],
  "bestPractices": [
   "Three to six items; the tabs need room for each client's mark.",
-  "Give each item either a registry `mark` or a `logo` URL with `clientName`, not both."
+  "Give each item either a registry `mark` or a `logo` URL with `clientName`, not both.",
+  "Every item needs its quotation (`text`): a card is a tab that features it, and an item without one is skipped. Do not invent a quotation to fill the wall; list the clients you have quotes for, or use `logo-wall-quote` for one quotation beside a logo wall.",
+  "The band advances on a timer like azion.com's. Set `:autoplay=\"false\"` when the page must hold one quote (a still capture, a page with other moving content), and bind `v-model` (the selected index) to open on a quote other than the first; never wrap or re-time the band yourself."
  ]
 }

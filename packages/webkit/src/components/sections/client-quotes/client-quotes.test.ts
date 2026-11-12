@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -59,6 +60,33 @@ describe('ClientQuotes', () => {
     const { getByTestId } = band()
 
     expect(getByTestId(QUOTE_TESTID).textContent).toContain(items[0].text)
+  })
+
+  it('runs the quote timer by default and stops it with autoplay off', async () => {
+    const { getByTestId, rerender } = band()
+
+    expect(getByTestId('marketing-quote-tabs')).toHaveAttribute('data-autoplay')
+
+    await rerender({ autoplay: false })
+
+    expect(getByTestId('marketing-quote-tabs')).not.toHaveAttribute('data-autoplay')
+  })
+
+  it('opens on the quote bound through v-model and writes a selection back', async () => {
+    const { getByTestId, getAllByRole, emitted } = band({ autoplay: false, modelValue: 1 })
+
+    expect(getByTestId(QUOTE_TESTID).textContent).toContain(items[1].text)
+    expect(getAllByRole('tab')[1]).toHaveAttribute('aria-selected', 'true')
+
+    await userEvent.click(getAllByRole('tab')[2])
+
+    expect(emitted<[number]>('update:modelValue').at(-1)).toEqual([2])
+  })
+
+  it('skips an item without a quotation', () => {
+    const { getAllByRole } = band({ items: [...items, { text: '', clientName: 'Hooli' }] })
+
+    expect(getAllByRole('tab')).toHaveLength(items.length)
   })
 
   it('renders one tab per item', () => {

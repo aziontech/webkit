@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 8064297850929c47ab506f1a328066fb447ed0306e67fa2d73765cacdf8fd082
+last_updated: 2026-11-12
+checksum: 94b5a09f7dc49c5d762a1861821c3f622ea099c06c402756f649cca57d75244e
 ---
 # CodeSplit — Component Spec
 
@@ -33,6 +33,7 @@ The claim-beside-its-code band of a product page: a framed media split whose cop
 - Keep the sample short enough to read in the cell; the frame cuts off whatever runs past it.
 - Give every tab a `code`; a tab without one is skipped.
 - Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one.
+- Set an action's `kind` to `transparent` for a quiet text link such as "Learn more" (the product pages' Cache, Application Accelerator and Image Processor bands); leave it unset for the filled `secondary` first button and the `outlined` second one.
 
 ## Usage
 
@@ -62,8 +63,8 @@ import CodeSplit from '@aziontech/webkit/code-split'
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `codeTabs` | `CodeSplitTab[]` | `[]` | false | The files of the code sample, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark drawn beside the tab label. A tab without `code` is skipped. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the sample's copy button; empty keeps the code block's own. |
-| `primaryAction` | `CodeSplitAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, icon?, target? }`. Omitted when absent. |
-| `secondaryAction` | `CodeSplitAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, icon?, target? }`. Omitted when absent. |
+| `primaryAction` | `CodeSplitAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `secondary`. Omitted when absent. |
+| `secondaryAction` | `CodeSplitAction` | `undefined` | false | Second button beside the first; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `outlined`. Omitted when absent. |
 
 ## Events
 
@@ -78,6 +79,7 @@ import CodeSplit from '@aziontech/webkit/code-split'
 - Visual states: `default`; the tab strip, copy button and buttons own their hover and focus states
 - Empty: when `title` is empty the band renders nothing; when no tab carries `code` the media cell is left out
 - One tab draws a filename bar, several draw a tab strip; a tab mark renders only when some tab carries an `icon`
+- An action's `kind` (`secondary`, `outlined` or `transparent`) picks its button; without it the first action is `secondary` and the second `outlined`
 
 ## Motion & Animations
 
@@ -111,6 +113,7 @@ _none_
 ## Examples
 
 - Default
+- Text action — `primaryAction.kind: 'transparent'` draws "Learn more" as a text button.
 
 ## Constraints — DO NOT
 

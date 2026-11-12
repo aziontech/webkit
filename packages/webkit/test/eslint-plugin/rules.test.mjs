@@ -51,6 +51,9 @@ const noRootRelativeAsset = (
   await import('../../src/eslint-plugin/rules/no-root-relative-asset.js')
 ).default
 const menuNodeHref = (await import('../../src/eslint-plugin/rules/menu-node-href.js')).default
+const noGapAfterClosingSection = (
+  await import('../../src/eslint-plugin/rules/no-gap-after-closing-section.js')
+).default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -408,6 +411,56 @@ test('no-physical-direction (template + script + fix)', () => {
         output: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-s-md', { 'me-1': true })</script><template><i :class="c" /></template>`,
         filename: 'g.vue',
         errors: [{ messageId: 'physical' }, { messageId: 'physical' }]
+      }
+    ]
+  })
+})
+
+test('no-gap-after-closing-section', () => {
+  const imports = `<script setup>
+import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
+import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
+import SectionGap from '@aziontech/webkit/section-gap'
+import FrameBox from '@aziontech/webkit/frame-box'
+import TextureMaterial from '@aziontech/webkit/texture-material'
+import FaqSection from '@aziontech/webkit/faq-section'
+</script>`
+  const sfc = (template) => `${imports}<template>${template}</template>`
+  vue.run('no-gap-after-closing-section', noGapAfterClosingSection, {
+    valid: [
+      { code: sfc('<SectionGap hatch /><ClosingCallToAction title="Go" />'), filename: 'a.vue' },
+      {
+        code: sfc(
+          '<FaqSection /><SectionGap hatch /><FrameBox borders="none"><TextureMaterial kind="lines" /></FrameBox>'
+        ),
+        filename: 'b.vue'
+      },
+      {
+        code: sfc('<ClosingCallToAction title="Go" /><FrameBox borders="y"><FaqSection /></FrameBox>'),
+        filename: 'c.vue'
+      },
+      {
+        code: '<template><ClosingCallToAction /><SectionGap hatch /></template>',
+        filename: 'd.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: sfc('<ClosingCallToAction title="Go" />\n  <SectionGap hatch />'),
+        filename: 'e.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc('<closing-call-to-action-newsletter /><!-- end --><section-gap hatch />'),
+        filename: 'f.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc(
+          '<ClosingCallToAction title="Go" /><FrameBox borders="none" marks="all"><TextureMaterial kind="lines" /></FrameBox>'
+        ),
+        filename: 'g.vue',
+        errors: [{ messageId: 'doubled' }]
       }
     ]
   })

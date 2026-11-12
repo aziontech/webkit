@@ -15,6 +15,7 @@
 - Keep the sample short enough to read in the cell; the frame cuts off whatever runs past it.
 - Give every tab a `code`; a tab without one is skipped.
 - Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one.
+- Set an action's `kind` to `transparent` for a quiet text link such as "Learn more" (the product pages' Cache, Application Accelerator and Image Processor bands); leave it unset for the filled `secondary` first button and the `outlined` second one.
 
 ## Don’t
 
@@ -35,14 +36,15 @@
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `codeTabs` | `CodeSplitTab[]` | `[]` | false | The files of the code sample, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark drawn beside the tab label. A tab without `code` is skipped. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the sample's copy button; empty keeps the code block's own. |
-| `primaryAction` | `CodeSplitAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, icon?, target? }`. Omitted when absent. |
-| `secondaryAction` | `CodeSplitAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, icon?, target? }`. Omitted when absent. |
+| `primaryAction` | `CodeSplitAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `secondary`. Omitted when absent. |
+| `secondaryAction` | `CodeSplitAction` | `undefined` | false | Second button beside the first; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `outlined`. Omitted when absent. |
 
 ## States
 
 - Visual states: `default`; the tab strip, copy button and buttons own their hover and focus states
 - Empty: when `title` is empty the band renders nothing; when no tab carries `code` the media cell is left out
 - One tab draws a filename bar, several draw a tab strip; a tab mark renders only when some tab carries an `icon`
+- An action's `kind` (`secondary`, `outlined` or `transparent`) picks its button; without it the first action is `secondary` and the second `outlined`
 
 ## Accessibility
 
@@ -75,7 +77,8 @@
   const primaryAction = {
     label: 'Learn more',
     href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',
-    trailing: true
+    trailing: true,
+    kind: 'transparent'
   }
 </script>
 

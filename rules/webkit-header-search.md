@@ -40,6 +40,8 @@ A header without it is incomplete, even when nobody asked for search.
   (`Search … ⌘K`) on a wide bar and folds to the magnifier on a narrow one. The site header keeps
   the folded form (no `@container` around it), as azion.com does.
 - Name the scope in `label` when it is narrow (`label="Search docs"`).
+- On the marketing site, `SiteNav` already carries the folded trigger: listen to its `search` event
+  (`<SiteNav @search="searchOpen = true" />`) and mount the `Command` beside it.
 - Without a `Command` on the page, `@open` still fires on `⌘K` / `Ctrl K`, so a custom search
   dialog gets the shortcut for free.
 - Start from a header or shell block (`headers/docs-header`, `headers/site-header`,

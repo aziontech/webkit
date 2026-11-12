@@ -457,6 +457,7 @@
    "--layout-boundary-start",
    "--layout-column-measure",
    "--layout-group-gap",
+   "--layout-header-height",
    "--layout-measure",
    "--layout-measure-content",
    "--layout-measure-control",
@@ -1333,6 +1334,7 @@
     "--layout-boundary-start",
     "--layout-column-measure",
     "--layout-group-gap",
+    "--layout-header-height",
     "--layout-measure",
     "--layout-measure-content",
     "--layout-measure-control",
@@ -21331,7 +21333,7 @@
      "type": "ArticleHighlightItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "The highlight articles in wall order, the first selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`."
+     "doc": "The highlight articles in wall order, the one at the bound index (the first by default) selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`."
     },
     {
      "name": "actionLabel",
@@ -21346,6 +21348,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the wall of titles."
+    },
+    {
+     "name": "modelValue",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "surface": "marketing",
@@ -21648,6 +21657,27 @@
      "default": "undefined",
      "required": "false",
      "doc": "Button under the quotes; `{ label, href, trailing? }`. Omitted when absent."
+    },
+    {
+     "name": "autoplay",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Advances to the next quote on a timer, as `quote-tabs` does; pauses under the pointer or keyboard focus and never runs under reduced motion."
+    },
+    {
+     "name": "autoplayInterval",
+     "type": "number",
+     "default": "5000",
+     "required": "false",
+     "doc": "Milliseconds each quote is held before the band advances."
+    },
+    {
+     "name": "modelValue",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "surface": "marketing",
@@ -21978,14 +22008,14 @@
      "type": "CodeSplitAction",
      "default": "undefined",
      "required": "false",
-     "doc": "First button under the copy; `{ label, href, trailing?, icon?, target? }`. Omitted when absent."
+     "doc": "First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `secondary`. Omitted when absent."
     },
     {
      "name": "secondaryAction",
      "type": "CodeSplitAction",
      "default": "undefined",
      "required": "false",
-     "doc": "Second, outlined button beside the first; `{ label, href, trailing?, icon?, target? }`. Omitted when absent."
+     "doc": "Second button beside the first; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `outlined`. Omitted when absent."
     }
    ],
    "surface": "marketing",
@@ -22637,9 +22667,9 @@
     {
      "name": "headerOffset",
      "type": "string",
-     "default": "''",
+     "default": "'var(--layout-header-height)'",
      "required": "false",
-     "doc": "Height of the site header above the band, taken out of a band that fills a screen; any CSS length."
+     "doc": "Height of the site header above the band, taken out of a band that fills a screen; defaults to the `SiteNav` bar's token, any CSS length, empty for a page with no header above it."
     },
     {
      "name": "titleLength",
@@ -22710,7 +22740,7 @@
     },
     {
      "name": "columns",
-     "type": "3 \\ | 4",
+     "type": "CapabilityGridColumns",
      "default": "3",
      "required": "false",
      "doc": "Capabilities per row from the large breakpoint up."
@@ -22728,6 +22758,13 @@
      "default": "''",
      "required": "false",
      "doc": "In-page id set on the band so a hash link can target it."
+    },
+    {
+     "name": "titleKind",
+     "type": "SectionTitleKind",
+     "default": "'centered'",
+     "required": "false",
+     "doc": "Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns."
     }
    ],
    "surface": "marketing",
@@ -23987,7 +24024,7 @@
      "type": "SiteFooterColumn[]",
      "default": "[]",
      "required": "false",
-     "doc": "The link columns, in order; each is `{ title, links }` where every link is `{ label, href }`."
+     "doc": "The link columns, in order; each is `{ title, links }` where every link is `{ label, href, external? }`; an `external` link opens in a new tab and closes on the external-link glyph."
     },
     {
      "name": "socials",
@@ -24070,7 +24107,21 @@
      "type": "SiteNavLink",
      "default": "undefined",
      "required": "false",
-     "doc": "The login button beside it, in the bar and in the sheet footer; `{ label, href }`."
+     "doc": "The login button beside it, in the bar from `sm` up and in the sheet footer; `{ label, href }`."
+    },
+    {
+     "name": "secondaryActionOnPhones",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Keeps the login button in the bar below `sm` too; off, it steps out on phones, as on azion.com, and stays in the sheet footer."
+    }
+   ],
+   "events": [
+    {
+     "name": "search",
+     "payload": "(event: MouseEvent | KeyboardEvent)",
+     "notes": ""
     }
    ],
    "surface": "marketing",
@@ -24364,7 +24415,7 @@
      "type": "UseCaseLinksItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href }`."
+     "doc": "The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href? }`; an item without `href` renders as a plain, unlinked topic."
     }
    ],
    "surface": "marketing",

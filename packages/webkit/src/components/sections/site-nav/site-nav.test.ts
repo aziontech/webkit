@@ -195,6 +195,40 @@ describe('SiteNav', () => {
     await waitFor(() => expect(document.activeElement).toBe(opener), { timeout: OPEN_TIMEOUT })
   })
 
+  it('emits search from the search trigger, which carries the ⌘K / Ctrl K shortcut', async () => {
+    const { getByRole, emitted } = nav()
+
+    const trigger = getByRole('button', { name: 'Search' })
+    expect(trigger).toHaveAttribute('aria-keyshortcuts', 'Meta+K Control+K')
+    await userEvent.click(trigger)
+
+    const events = emitted<[Event]>('search')
+    expect(events).toHaveLength(1)
+    expect(events[0]?.[0]).toBeInstanceOf(MouseEvent)
+  })
+
+  it('emits search on Ctrl K', async () => {
+    const { emitted } = nav()
+
+    await userEvent.keyboard('{Control>}k{/Control}')
+
+    const events = emitted<[Event]>('search')
+    expect(events).toHaveLength(1)
+    expect(events[0]?.[0]).toBeInstanceOf(KeyboardEvent)
+  })
+
+  it('lets the login button step out of the phone bar unless secondaryActionOnPhones is set', async () => {
+    const { getByTestId, rerender } = nav()
+
+    const slot = getByTestId(`${TESTID}__secondary-action`)
+    expect(slot).not.toHaveAttribute('data-on-phones')
+    expect(within(slot).getByRole('link', { name: 'Login' })).toBeInTheDocument()
+
+    await rerender({ secondaryActionOnPhones: true })
+
+    expect(getByTestId(`${TESTID}__secondary-action`)).toHaveAttribute('data-on-phones')
+  })
+
   it('has no a11y violations in the bar without menu entries', async () => {
     const { container } = nav({ menus: [], links: [] })
 

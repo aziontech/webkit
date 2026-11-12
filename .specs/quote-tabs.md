@@ -4,12 +4,12 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: c64bc4557e210a1ca8e9cb4c843cf74cbf2e412880a8fcc9b8a5e18e32ebe509
+checksum: 7cab82fb1a5e1cf2f8fee3628942e4e83c69635b1a293c0c95e91e4454aad7d7
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
 created: 2026-09-30
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Quote Tabs — Component Spec
@@ -48,6 +48,7 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 - Give every item a `logo` in the client's own colours; it is drawn as-is on its card and in the featured quotation, so pick artwork that carries its own contrast on both themes. Without one, `mark` names a one-ink mark from the brand registry instead.
 - Let `clientName` default to the registry's label for `mark`; set it when the item has only a `logo`, or a client the registry does not carry. It is the card's accessible name, so it is never optional in practice.
 - Keep each quotation to one or two sentences, verbatim, without typed quotation marks — `quote` draws its own glyph. The panel holds the tallest quotation's height for all of them and floors the attribution and the `actions` control, so one much longer quotation opens a wide gap under every shorter one.
+- Every card is a tab that features its client's quotation, so every item carries `text`. When the page has a quotation for only some clients, list only those: a logo with nothing to feature is not a tab. For a strip of client logos without quotations, use `logo-wall` (or `logo-wall-quote` for one quotation beside the logos).
 - Keep each quotation readable inside `autoplayInterval`; raise the interval before shortening a verbatim quotation, and turn `autoplay` off when the band sits beside other moving content.
 
 ## Usage

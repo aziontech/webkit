@@ -28,6 +28,8 @@
     label: string
     /** Destination the link points to. */
     href: string
+    /** Opens the link in a new tab and closes its label on the external-link glyph. */
+    external?: boolean
   }
 
   /** One titled column of footer links. */
@@ -57,7 +59,7 @@
     home?: string
     /** Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`). */
     homeAriaLabel?: string
-    /** The link columns, in order; each is `{ title, links }` where every link is `{ label, href }`. */
+    /** The link columns, in order; each is `{ title, links }` where every link is `{ label, href, external? }`; an `external` link opens in a new tab and closes on the external-link glyph. */
     columns?: SiteFooterColumn[]
     /** The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab. */
     socials?: SiteFooterSocial[]
@@ -114,8 +116,18 @@
           v-for="link in column.links"
           :key="link.label"
           :href="link.href"
+          :target="link.external ? '_blank' : undefined"
+          :rel="link.external ? 'noopener noreferrer' : undefined"
+          :data-external="link.external || null"
         >
           {{ link.label }}
+          <template v-if="link.external">
+            <i
+              class="pi pi-external-link text-(--text-muted)"
+              aria-hidden="true"
+            />
+            <span class="sr-only">{{ ` ${t('siteFooter.newTab')}` }}</span>
+          </template>
         </FooterLink>
       </FooterColumn>
 

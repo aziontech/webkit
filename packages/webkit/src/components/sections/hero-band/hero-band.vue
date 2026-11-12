@@ -58,7 +58,7 @@
     illustration?: string
     /** Accessible description of the illustration. */
     illustrationAriaLabel?: string
-    /** Height of the site header above the band, taken out of a band that fills a screen; any CSS length. */
+    /** Height of the site header above the band, taken out of a band that fills a screen; defaults to the SiteNav bar's token, any CSS length, empty for a page with no header above it. */
     headerOffset?: string
     /** Length of the headline; `long` widens its column so it breaks into two lines instead of three. */
     titleLength?: HeroBandTitleLength
@@ -79,7 +79,7 @@
     carouselMarks: () => [],
     illustration: '',
     illustrationAriaLabel: '',
-    headerOffset: '',
+    headerOffset: 'var(--layout-header-height)',
     titleLength: 'short',
     plain: false
   })

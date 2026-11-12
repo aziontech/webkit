@@ -16,6 +16,7 @@
   "**Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double and the frame drifts off the page column.",
   "Use `kind: 'site'` under a framed marketing page, so the footer draws the page frame and closes on its bottom rule; the page above must not draw a bottom rule of its own.",
   "Keep four link columns so the grid fills at `md`.",
+  "Set `external: true` on a link that leaves azion.com (Community, Status): it opens in a new tab, draws the external-link glyph after the label and tells assistive tech it opens a new tab. Never add the glyph or `target` yourself.",
   "Give every social link a `label` that names the network, since the button shows only the glyph."
  ]
 }

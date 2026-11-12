@@ -1,5 +1,5 @@
 {
- "purpose": "The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-nav', props }` entry and binds `props` straight onto it — and it composes `global-header`, `brand`, `navigation-menu`, `icon-button`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state.",
+ "purpose": "The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-nav', props }` entry and binds `props` straight onto it — and it composes `global-header`, `brand`, `navigation-menu`, `icon-button`, `search-trigger`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state. Search is the folded `search-trigger` last in the bar: the section owns no palette, it emits `search` (on a click and on ⌘K / Ctrl K) and the page opens its own `command`, as every header does under `rules/webkit-header-search.md`.",
  "useWhen": [
   "At the top of every marketing page, once."
  ],
@@ -15,6 +15,10 @@
  "bestPractices": [
   "Keep a panel to one, two or four columns; only the four-column panel is stretched to the page column.",
   "Stack a short group under another in the same column (Platform under Observe) instead of adding a fifth column.",
-  "Give every entry an `href`; an entry without one links to `#`."
+  "Give every entry an `href`; an entry without one links to `#`.",
+  "Listen to `search` and open the page's `Command` from it (`@search=\"searchOpen = true\"` beside `<Command v-model:open=\"searchOpen\">`); the trigger already carries ⌘K / Ctrl K.",
+  "Leave `secondaryActionOnPhones` off: on a phone the bar keeps the menu button, the mark, the call to action and search, as azion.com does, and Login stays in the sheet footer.",
+  "The bar is `--layout-header-height` tall: `HeroBand` already takes it out of a screen-filling band; a bare `Hero kind=\"screen\"` takes `offset=\"var(--layout-header-height)\"`, never a literal length.",
+  "Don't wrap the bar, add a second search button beside it, or bind ⌘K yourself."
  ]
 }

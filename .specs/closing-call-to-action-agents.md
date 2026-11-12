@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 7cb2ec37eda18491dbbb2604987a9485c2b659163d375494f74bfee89b11a09d
+last_updated: 2026-11-12
+checksum: f7c4db48cb0856c480c52c58a32b06ddf7c1b9080dd581596a04dcf614f8c9b2
 ---
 
 # ClosingCallToActionAgents — Component Spec
@@ -33,6 +33,7 @@ The close for a reader who may be a person or an agent: one centred ask in the l
 - Keep two audiences; the first one opens.
 - Keep each copyable line short enough to fit the field; the copy button copies exactly what it shows.
 - Keep `typedWords` to a few short words; screen readers and reduced motion get the whole list at once.
+- Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `FrameBox` + `TextureMaterial` (the `shells/website` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
 
 ## Usage
 

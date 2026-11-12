@@ -15,6 +15,7 @@
 - Give the grid six to eight templates so it overflows its height and reads as scrollable; an even count keeps its two columns full.
 - Keep each template line to one short sentence so the cards keep one height.
 - Give every card an `href` and set `deployLabel`, or no card shows its deploy button.
+- Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `FrameBox` + `TextureMaterial` (the `shells/website` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
 
 ## Don’t
 

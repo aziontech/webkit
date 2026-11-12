@@ -5,14 +5,14 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: b66e504876c5036af712975e4c9b2395b5f8f10d7f9be6d4d36daec86b4601b9
+last_updated: 2026-11-12
+checksum: f4d6d916ebca0e3b33bd43151c5af3513c528f79f29c00ab8d31a545d3801f0e
 ---
 # SiteNav — Component Spec
 
 ## Purpose
 
-The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-nav', props }` entry and binds `props` straight onto it — and it composes `global-header`, `brand`, `navigation-menu`, `icon-button`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state.
+The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-nav', props }` entry and binds `props` straight onto it — and it composes `global-header`, `brand`, `navigation-menu`, `icon-button`, `search-trigger`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state. Search is the folded `search-trigger` last in the bar: the section owns no palette, it emits `search` (on a click and on ⌘K / Ctrl K) and the page opens its own `command`, as every header does under `rules/webkit-header-search.md`.
 
 ## When to use
 
@@ -34,12 +34,20 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 - Keep a panel to one, two or four columns; only the four-column panel is stretched to the page column.
 - Stack a short group under another in the same column (Platform under Observe) instead of adding a fifth column.
 - Give every entry an `href`; an entry without one links to `#`.
+- Listen to `search` and open the page's `Command` from it (`@search="searchOpen = true"` beside `<Command v-model:open="searchOpen">`); the trigger already carries ⌘K / Ctrl K.
+- Leave `secondaryActionOnPhones` off: on a phone the bar keeps the menu button, the mark, the call to action and search, as azion.com does, and Login stays in the sheet footer.
+- The bar is `--layout-header-height` tall: `HeroBand` already takes it out of a screen-filling band; a bare `Hero kind="screen"` takes `offset="var(--layout-header-height)"`, never a literal length.
+- Don't wrap the bar, add a second search button beside it, or bind ⌘K yourself.
 
 ## Usage
 
 ```vue
 <script setup>
+import Command from '@aziontech/webkit/command'
 import SiteNav from '@aziontech/webkit/site-nav'
+import { ref } from 'vue'
+
+const searchOpen = ref(false)
 </script>
 
 <template>
@@ -56,7 +64,9 @@ import SiteNav from '@aziontech/webkit/site-nav'
     :contact="{ label: 'Contact', href: '/contact' }"
     :primary-action="{ label: 'Start for free', href: '/signup' }"
     :secondary-action="{ label: 'Login', href: '/login' }"
+    @search="searchOpen = true"
   />
+  <Command v-model:open="searchOpen"><!-- Command.Input, Command.List … --></Command>
 </template>
 ```
 
@@ -69,11 +79,14 @@ import SiteNav from '@aziontech/webkit/site-nav'
 | `links` | `SiteNavLink[]` | `[]` | false | Bar entries that open no panel, after the menus; each is `{ label, href }`. |
 | `contact` | `SiteNavLink` | `undefined` | false | Contact link set in the bar from `xl` up and last in the sheet's tree; `{ label, href }`. |
 | `primaryAction` | `SiteNavLink` | `undefined` | false | The sign-up button, filled, in the bar and in the sheet footer; `{ label, href }`. |
-| `secondaryAction` | `SiteNavLink` | `undefined` | false | The login button beside it, in the bar and in the sheet footer; `{ label, href }`. |
+| `secondaryAction` | `SiteNavLink` | `undefined` | false | The login button beside it, in the bar from `sm` up and in the sheet footer; `{ label, href }`. |
+| `secondaryActionOnPhones` | `boolean` | `false` | false | Keeps the login button in the bar below `sm` too; off, it steps out on phones, as on azion.com, and stays in the sheet footer. |
 
 ## Events
 
-| _none_ | — | — |
+| Event | Payload | Description |
+|---|---|---|
+| `search` | `(event: MouseEvent \| KeyboardEvent)` | Fired when the search trigger is clicked or ⌘K / Ctrl K is pressed with no mounted `Command` claiming it; open the page's `Command` from it. |
 
 ## Slots
 
@@ -86,6 +99,7 @@ import SiteNav from '@aziontech/webkit/site-nav'
 - The bar reads its own inline inset on mount and on resize, so the four-column panel's collision padding lands it on the page column's leading edge
 - Each panel's column count is mirrored on `data-columns` and drives its track count; only a four-column panel is stretched to the page column
 - An absent `contact`, `primaryAction` or `secondaryAction` is omitted from the bar and the sheet
+- The secondary action steps out of the bar below `sm` unless `secondaryActionOnPhones`; the sheet footer always carries it
 
 ## Motion & Animations
 
@@ -110,15 +124,15 @@ import SiteNav from '@aziontech/webkit/site-nav'
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the mark link draws the ring token; triggers, items and buttons own theirs.
-- Keyboard map: `Tab` moves through the bar; the mega-menu and the sheet own their keyboard models (arrows, `Enter`, `Esc` closes and restores focus to the trigger).
-- ARIA: the bar is the `global-header` landmark named "Azion", so the root is a plain `div`; the mark link is named "Azion home"; the menu button "Open navigation" and the search button "Search" are icon buttons with names; the sheet is titled "Menu".
+- Keyboard map: `Tab` moves through the bar; ⌘K / Ctrl K fires `search` (a mounted `Command` claims the shortcut first); the mega-menu and the sheet own their keyboard models (arrows, `Enter`, `Esc` closes and restores focus to the trigger).
+- ARIA: the bar is the `global-header` landmark named "Azion", so the root is a plain `div`; the mark link is named "Azion home"; the menu button "Open navigation" is an icon button with a name; the search trigger is named "Search" and announces `aria-keyshortcuts` (`Meta+K Control+K`); the sheet is titled "Menu".
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link; the sheet and the panels own their reduced-motion fallbacks.
 - Touch target ≥40×40 px — the medium buttons and icon buttons meet it.
 
 ## Examples
 
-- Default
+- Default — the site's navigation; `search` opens a `Command` palette on the page, and Login steps out of the bar on phones.
 
 ## Constraints — DO NOT
 

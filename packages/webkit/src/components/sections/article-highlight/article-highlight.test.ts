@@ -138,6 +138,19 @@ describe('ArticleHighlight', () => {
     expect(panelHeadline(getByRole)).toBe(items[0]?.title)
   })
 
+  it('opens on the article bound through v-model, clamps past the ends and writes a click back', async () => {
+    const { getByRole, getAllByRole, emitted, rerender } = band({ modelValue: 1 })
+
+    expect(panelHeadline(getByRole)).toBe(items[1]?.title)
+    expect(getAllByRole('tab')[1]?.getAttribute('aria-selected')).toBe('true')
+
+    await userEvent.click(getAllByRole('tab')[0] as HTMLElement)
+    expect(emitted<[number]>('update:modelValue').at(-1)).toEqual([0])
+
+    await rerender({ modelValue: 99 })
+    expect(getAllByRole('tab').at(-1)?.getAttribute('aria-selected')).toBe('true')
+  })
+
   it('runs the wall four across with four or more articles', () => {
     const fourth = { ...items[0], key: 'fourth', title: 'Fourth' }
     const three = band()

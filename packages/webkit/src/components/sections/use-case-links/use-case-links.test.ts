@@ -92,6 +92,15 @@ describe('UseCaseLinks', () => {
     )
   })
 
+  it('renders an item without href as a plain topic, so a band with no href has no links', async () => {
+    const plain = items.map(({ href: _href, ...item }) => item)
+    const { queryAllByRole, getAllByRole, container } = band({ items: plain })
+
+    expect(queryAllByRole('link')).toHaveLength(0)
+    expect(getAllByRole('heading', { level: 3 })).toHaveLength(items.length)
+    await expectNoA11yViolations(container)
+  })
+
   it('renders only the section when items is empty', () => {
     const { getByTestId, queryAllByRole, queryByRole, queryByTestId } = render(UseCaseLinks, {
       props: { eyebrow: EYEBROW, title: TITLE, description: DESCRIPTION, items: [] }
