@@ -14,3 +14,7 @@ const ColumnNavigationRoot = Object.assign(ColumnNavigation, {
 
 export default ColumnNavigationRoot
 export { ColumnNavigationColumn, ColumnNavigationItem }
+export type {
+  ColumnNavigationColumns,
+  ColumnNavigationMobileColumns
+} from './column-navigation.vue'

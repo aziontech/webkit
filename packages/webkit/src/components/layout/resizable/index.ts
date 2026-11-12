@@ -13,3 +13,4 @@ Resizable.Handle = ResizableHandle
 
 export default Resizable
 export { ResizableHandle, ResizablePane }
+export type { ResizableOrientation } from './resizable.vue'

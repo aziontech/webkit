@@ -10,3 +10,4 @@ const HeroRoot = Object.assign(Hero, {
 }) as CompoundHero
 
 export default HeroRoot
+export type { HeroAlign, HeroKind, HeroMediaAlign, HeroSize, HeroWidth } from './hero.vue'

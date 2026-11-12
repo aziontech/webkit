@@ -11,3 +11,10 @@ const CardGridRoot = Object.assign(CardGrid, {
 
 export default CardGridRoot
 export { CardGridCell }
+export type {
+  CardGridColumns,
+  CardGridDividerColor,
+  CardGridKind,
+  CardGridLayout,
+  CardGridMobileColumns
+} from './card-grid.vue'
