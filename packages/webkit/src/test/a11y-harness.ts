@@ -6,6 +6,11 @@
 // transition is settled to its end state first, so contrast is read on the final colours: a new finding fails, and so does a known one that
 // no longer fires (delete its entry). Set VITE_A11Y_RECORD=1 to print the current findings as
 // `A11Y_KNOWN {...}` lines instead of asserting, to rebuild the file.
+// Each case imports its SFC lazily, so the first case to reach a module graph compiles it
+// (the Table graph alone takes about 1.1 s on an idle machine and several times that under CPU
+// steal or parallel lanes), while render and axe stay under a second. A filtered run puts that
+// first compile on whichever block comes first, which timed out at the 15 s default
+// (account/activity-history, M2.10 row 38), so every case gets CASE_TIMEOUT instead.
 import './reflow.css'
 
 import { render } from '@testing-library/vue'
@@ -26,6 +31,8 @@ const modules: Record<A11yScope, Record<string, () => Promise<{ default: Compone
 }
 
 const RECORD = import.meta.env['VITE_A11Y_RECORD'] === '1'
+
+const CASE_TIMEOUT = 60_000
 
 const WCAG_21_AA = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
 
@@ -107,32 +114,42 @@ export function runA11ySuite(scope: A11yScope, pass: A11yPass): void {
       document.body.style.overflow = ''
     })
 
-    it.each(files.map((file) => [file.replace('../../', '')]))('%s', async (file) => {
-      const mod = await modules[scope][`../../${file}`]!()
-      render(mod.default)
-      await nextTick()
-      await settle()
+    it.each(files.map((file) => [file.replace('../../', '')]))(
+      '%s',
+      { timeout: CASE_TIMEOUT },
+      async (file) => {
+        const mod = await modules[scope][`../../${file}`]!()
+        render(mod.default)
+        await nextTick()
+        await settle()
 
-      const results = await axe.run(document.body, axeOptions(pass))
-      const findings = new Set(results.violations.map((violation) => violation.id))
-      const animations = pass === 'media' ? runningInfiniteAnimations(document.body) : []
-      if (animations.length) findings.add('reduced-motion-infinite-animation')
+        const results = await axe.run(document.body, axeOptions(pass))
+        const findings = new Set(results.violations.map((violation) => violation.id))
+        const animations = pass === 'media' ? runningInfiniteAnimations(document.body) : []
+        if (animations.length) findings.add('reduced-motion-infinite-animation')
 
-      if (RECORD) {
-        if (findings.size)
-          console.warn(`A11Y_KNOWN ${JSON.stringify({ pass, file, rules: [...findings].sort() })}`)
-        return
+        if (RECORD) {
+          if (findings.size)
+            console.warn(
+              `A11Y_KNOWN ${JSON.stringify({ pass, file, rules: [...findings].sort() })}`
+            )
+          return
+        }
+
+        const allowed = new Set(known[pass]?.[file] ?? [])
+        const fresh = results.violations.filter((violation) => !allowed.has(violation.id))
+        const freshAnimations = allowed.has('reduced-motion-infinite-animation') ? [] : animations
+        const stale = [...allowed].filter((rule) => !findings.has(rule))
+
+        expect(describeViolations(fresh), 'new axe violations').toBe('')
+        expect(freshAnimations, 'infinite animations still running under reduced motion').toEqual(
+          []
+        )
+        expect(stale, `fixed: remove these rules from a11y-known.json ${pass} › ${file}`).toEqual(
+          []
+        )
       }
-
-      const allowed = new Set(known[pass]?.[file] ?? [])
-      const fresh = results.violations.filter((violation) => !allowed.has(violation.id))
-      const freshAnimations = allowed.has('reduced-motion-infinite-animation') ? [] : animations
-      const stale = [...allowed].filter((rule) => !findings.has(rule))
-
-      expect(describeViolations(fresh), 'new axe violations').toBe('')
-      expect(freshAnimations, 'infinite animations still running under reduced motion').toEqual([])
-      expect(stale, `fixed: remove these rules from a11y-known.json ${pass} › ${file}`).toEqual([])
-    })
+    )
   })
 }
 
@@ -223,58 +240,62 @@ export function runA11yOpenSuite(scope: A11yScope, theme: 'light' | 'dark'): voi
       document.body.style.overflow = ''
     })
 
-    it.each(files.map((file) => [file.replace('../../', '')]))('%s', async (file) => {
-      ran += 1
-      const mod = await modules[scope][`../../${file}`]!()
-      let host: ComponentInternalInstance | null = null
-      render(
-        defineComponent({
-          setup() {
-            host = getCurrentInstance()
-            return () => h(mod.default)
-          }
-        })
-      )
-      await nextTick()
-      await settle()
-
-      const overlays: ComponentInternalInstance[] = []
-      collectOverlays((host as ComponentInternalInstance | null)?.subTree, overlays)
-      const failures: string[] = []
-
-      for (const [index, instance] of overlays.entries()) {
-        const ctx = overlayContext(instance)
-        if (!ctx || ctx.isOpen.value) continue
-        ctx.open()
+    it.each(files.map((file) => [file.replace('../../', '')]))(
+      '%s',
+      { timeout: CASE_TIMEOUT },
+      async (file) => {
+        ran += 1
+        const mod = await modules[scope][`../../${file}`]!()
+        let host: ComponentInternalInstance | null = null
+        render(
+          defineComponent({
+            setup() {
+              host = getCurrentInstance()
+              return () => h(mod.default)
+            }
+          })
+        )
         await nextTick()
         await settle()
-        const label = overlayLabel(instance, index)
-        if (!ctx.isOpen.value) continue
-        opened += 1
-        const results = await axe.run(document.body, axeOptions(theme))
-        if (RECORD && results.violations.length) {
-          console.warn(
-            `A11Y_OPEN ${JSON.stringify({ theme, file, overlay: label, rules: results.violations.map((v) => v.id) })}`
-          )
-        }
-        if (results.violations.length)
-          failures.push(
-            `${label}\n${results.violations
-              .map(
-                (violation) =>
-                  `${violation.id}: ${violation.nodes
-                    .slice(0, 3)
-                    .map((node) => `${node.target.join(' ')} ${node.html.slice(0, 160)}`)
-                    .join(' | ')}`
-              )
-              .join('\n')}`
-          )
-        await closeOverlay(instance, ctx)
-        if (ctx.isOpen.value) break
-      }
 
-      if (RECORD) return
-      expect(failures.join('\n\n'), 'axe violations with an overlay open').toBe('')
-    })
+        const overlays: ComponentInternalInstance[] = []
+        collectOverlays((host as ComponentInternalInstance | null)?.subTree, overlays)
+        const failures: string[] = []
+
+        for (const [index, instance] of overlays.entries()) {
+          const ctx = overlayContext(instance)
+          if (!ctx || ctx.isOpen.value) continue
+          ctx.open()
+          await nextTick()
+          await settle()
+          const label = overlayLabel(instance, index)
+          if (!ctx.isOpen.value) continue
+          opened += 1
+          const results = await axe.run(document.body, axeOptions(theme))
+          if (RECORD && results.violations.length) {
+            console.warn(
+              `A11Y_OPEN ${JSON.stringify({ theme, file, overlay: label, rules: results.violations.map((v) => v.id) })}`
+            )
+          }
+          if (results.violations.length)
+            failures.push(
+              `${label}\n${results.violations
+                .map(
+                  (violation) =>
+                    `${violation.id}: ${violation.nodes
+                      .slice(0, 3)
+                      .map((node) => `${node.target.join(' ')} ${node.html.slice(0, 160)}`)
+                      .join(' | ')}`
+                )
+                .join('\n')}`
+            )
+          await closeOverlay(instance, ctx)
+          if (ctx.isOpen.value) break
+        }
+
+        if (RECORD) return
+        expect(failures.join('\n\n'), 'axe violations with an overlay open').toBe('')
+      }
+    )
   })
 }
