@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: acf94aa4e0eb86c926b3e78b1a460ada00c44908152720e3169737fadc6c838e
+checksum: d571c4ec0da97d1f88d406d2893d63f73beff8e03232fbacd2700132a9cdaf44
 created: 2026-06-30
 last_updated: 2026-11-12
 ---
@@ -45,6 +45,8 @@ Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and 
 - Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.
 - Set `width` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.
 - Use `placement="auto"` for triggers that can sit near a viewport edge.
+- Use a side placement (`right-start`, `left-start`, …) for a trigger in a narrow column or a sidebar, where the panel should open beside the trigger instead of covering the content below it. Type a placement held in a variable with the exported `PopoverPlacement` (or `PopoverPlacementInput` when it can be `'auto'`), never a cast.
+- Bind the open state with `v-model:open` (or `:open` + `@update:open`, whose handler receives a `boolean`).
 - Set `dismissible` to `false` only when an outside click would discard input. Then give the user a way out: `Popover.Close` or a footer action.
 
 ## Usage
@@ -167,18 +169,23 @@ export default Object.assign(Popover, {
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled. |
-| `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | false | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on available viewport space. |
+| `placement` | `PopoverPlacementInput` | `'bottom-start'` | false | Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment. |
 | `offset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
 | `width` | `'small' \| 'medium' \| 'large'` | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
 
+Types (exported from `@aziontech/webkit/popover`): `PopoverPlacement` is `'top' | 'top-start' | 'top-end' | 'right' | 'right-start' | 'right-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end'`; `PopoverPlacementInput` is `PopoverPlacement | 'auto'`.
+
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+|---|---|---|---|---|
+| `v-model:open` | `boolean \| undefined` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void`. Fires on every open/closed transition: trigger toggle, `Popover.Close`, `Esc`, and outside-click. While unbound (`undefined`) the popover is uncontrolled and starts closed. |
+
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:open` | `boolean` | Fires on every open/closed transition; supports `v-model:open`. Emitted on trigger toggle, `Popover.Close`, `Esc`, and outside-click. |
+_No events of its own: `update:open` comes from `v-model:open` (see v-model above)._
 
 ## Slots
 
@@ -193,7 +200,7 @@ export default Object.assign(Popover, {
 - `data-disabled` mirrors the `disabled` prop on root and trigger
 - Cursor: the trigger wrapper shows `pointer`, and `not-allowed` with `data-disabled`
 - `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
-- `data-placement` on the floating panel mirrors the resolved placement (`'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
+- `data-placement` on the floating panel mirrors the resolved placement (any `PopoverPlacement`; `'auto'` resolves to one of `'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
 
 ## Motion & Animations
 
@@ -252,7 +259,7 @@ export default Object.assign(Popover, {
 Canonical layout — composite stories render every variant of one axis side-by-side in a single frame; state stories use the reusable `Template` with an args delta. Popover is a composition overlay whose visual identity lives in placement and optional regions, not in a `kind`/`size` axis, so the extra stories below are justified per axis.
 
 - Default — one `Button` trigger that opens the popover, and a `Popover.Content` with a `Popover.Header` (`Popover.Title` + `Popover.Close`) and a free-form body. The canonical minimal usage: a button that calls a popover whose contents are composed by part.
-- Placements — composite story rendering all four explicit `placement` values (`bottom-start`, `bottom-end`, `top-start`, `top-end`) side-by-side. Required because `placement` is a multi-value prop axis with no other coverage; consumers need to see how each placement anchors against its trigger.
+- Placements — composite story rendering the four vertical corners (`bottom-start`, `bottom-end`, `top-start`, `top-end`) and two side placements (`right-start`, `left-start`) side-by-side. Required because `placement` is a multi-value prop axis with no other coverage; consumers need to see how each placement anchors against its trigger.
 - AutoPlacement — composite story demonstrating `placement="auto"`: triggers anchored near viewport corners so the resolver opens the panel toward the corner with the most available space. Required because `'auto'` is the only `placement` value not covered by `Placements` and is the recommended default for consumer-positioned triggers.
 - Anatomy — composite story rendering panels with different region combinations side-by-side: header + body + footer, header (title only, no description) + body, and body-only (no header, no footer). Required because `Popover.Header`, `Popover.Description`, and `Popover.Footer` are optional composition that `Default` does not exercise on its own.
 - Disabled — trigger present, panel never opens. Required because the root declares a `disabled` prop.

@@ -9,7 +9,7 @@
     },
     {
       "name": "Placements",
-      "summary": "All four explicit `placement` values side-by-side. Click a trigger to open its panel and see how it anchors against the trigger.",
+      "summary": "The four vertical corners and two side placements (`right-start`, `left-start`) side-by-side; every side also takes `-end` or no alignment. Click a trigger to open its panel and see how it anchors against the trigger.",
       "file": "placements.vue"
     },
     {

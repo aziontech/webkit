@@ -1,8 +1,21 @@
 import { inject, type InjectionKey, type Ref } from 'vue'
 
-export type PopoverPlacement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'
+/** Side of the trigger the panel opens on, optionally aligned to its start or end. */
+export type PopoverPlacement =
+  | 'top'
+  | 'top-start'
+  | 'top-end'
+  | 'right'
+  | 'right-start'
+  | 'right-end'
+  | 'bottom'
+  | 'bottom-start'
+  | 'bottom-end'
+  | 'left'
+  | 'left-start'
+  | 'left-end'
 
-/** Prop-level placement; `'auto'` lets the popover pick the best fit at open time. */
+/** Prop-level placement; `'auto'` lets the popover pick the best-fitting vertical corner at open time. */
 export type PopoverPlacementInput = PopoverPlacement | 'auto'
 
 export interface PopoverContext {
