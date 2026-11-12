@@ -34,12 +34,10 @@
 
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <span class="cursor-pointer">
-          <Avatar
-            label="IB"
-            aria-label="Account menu"
-          />
-        </span>
+        <Avatar
+          label="IB"
+          aria-label="Account menu"
+        />
       </DropdownMenuTrigger>
       <DropdownMenuGroup label="Account">
         <DropdownMenuOption
